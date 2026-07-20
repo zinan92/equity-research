@@ -1,0 +1,27 @@
+{
+  "version": "3.9.1",
+  "files": [
+    ".claude-plugin/plugin.json",
+    ".cursor-plugin/plugin.json",
+    "package.json",
+    "gemini-extension.json",
+    "hooks/hooks.json",
+    "run.py",
+    "skills/deep-analysis/SKILL.md",
+    "skills/investor-panel/SKILL.md",
+    "skills/lhb-analyzer/SKILL.md",
+    "skills/trap-detector/SKILL.md"
+  ],
+  "patterns": {
+    ".claude-plugin/plugin.json": "\"version\": \"VERSION\"",
+    ".cursor-plugin/plugin.json": "\"version\": \"VERSION\"",
+    "package.json": "\"version\": \"VERSION\"",
+    "gemini-extension.json": "\"version\": \"VERSION\"",
+    "hooks/hooks.json": "Skills vVERSION_SHORT 已加载",
+    "run.py": "Skills vVERSION_SHORT · 深度分析引擎",
+    "skills/deep-analysis/SKILL.md": "version: VERSION",
+    "skills/investor-panel/SKILL.md": "version: VERSION",
+    "skills/lhb-analyzer/SKILL.md": "version: VERSION",
+    "skills/trap-detector/SKILL.md": "version: VERSION"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "uzi-skill",
+  "owner": {
+    "name": "wbh604"
+  },
+  "plugins": [
+    {
+      "name": "stock-deep-analyzer",
+      "source": "./",
+      "description": "A 股/港股/美股个股深度分析引擎 · 22 维数据 × 51 位大佬量化评委 · 17 种机构级分析方法 · 杀猪盘检测 · Bloomberg 风格报告 | A-share / HK / US deep-analysis engine with first-class Chinese-market coverage — the same names that cost Munger millions on Alibaba. 22 dims × 51-investor jury × 17 institutional methods · trap detection · Bloomberg-style report"
+    }
+  ]
+}

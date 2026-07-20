@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Runtime cache & reports (user-specific, regenerated per-run)
+.cache/
+*/.cache/
+**/.cache/
+**/reports/
+skills/deep-analysis/scripts/.cache/
+skills/deep-analysis/scripts/reports/
+skills/deep-analysis/.cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local agent/browser artifacts
+.playwright-mcp/
+.scatter/
+evidence/.tmp-*/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Debug / temp scripts (per-ticket, not for distribution)
+skills/deep-analysis/scripts/_*.py
+
+# Env (v2.3: 存放 MX_APIKEY 等敏感凭据，绝不 commit)
+.env
+.env.local
+.env.*.local
+*.local.env
+*.key
+
+# v3.4.1 · 防御性 ignore：cookies / session / 私人状态文件
+**/cookies.json
+**/.uzi-skill/
+*.pem
+*.p12
+id_rsa*
+.netrc
+
+docs/screenshots/full-page.png
+
+# Local-only drafts (not for remote)
+docs/wechat-article.md
+docs/*.local.md
+
+# Local product runtime database
+product/runtime/
+
+# v2.10.2 · prewarm_cache 生成的预热数据（release 附件，不进 repo）
+skills/deep-analysis/scripts/prewarm/
