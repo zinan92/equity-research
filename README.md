@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-127%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-156%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -107,7 +107,19 @@ curl -fsS http://127.0.0.1:8877/api/health
 
 ### 更新真实数据与研报
 
-统一刷新入口会先归档旧版本，再采集、执行质量门、生成不可变快照并计算差异：
+canonical 更新入口用独立交易日历选择最新已收盘交易日，把现有行情、日线和财务 collector 写入 M2 数据基座；只有 8/8 snapshot-bound `research-report-v1` 标准研报通过才切换 active：
+
+```bash
+python3 product/refresh_engine.py --canonical --timeout 12
+python3 product/refresh_engine.py --canonical --status
+python3 product/refresh_engine.py --canonical --dry-run
+# 可选：只在 primary 失败后启用显式冻结 bundle fallback
+python3 product/refresh_engine.py --canonical --fallback-bundle <bundle.json>
+```
+
+它具备显式 fallback 回执、跨进程锁与断点恢复；研究阶段在独立禁网子进程中只读 `SnapshotReader`。Web 的 `/api/reports/{ticker}` 优先读取并再次校验 canonical active，因此一次成功更新会直接进入产品研报页面。详细合同见 [research-refresh-v1](docs/architecture/research-refresh-v1.md)。
+
+旧版组合刷新入口继续负责组合首页、报告归档与版本差异；canonical active 已负责标准研报读取：
 
 ```bash
 python3 product/refresh_engine.py --timeout 12
@@ -224,6 +236,11 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 
     python3 scripts/verify_data_foundation.py
     python3 -m unittest product.tests.test_data_foundation -v
+
+自动更新状态机的两日增量、fallback、失败保留、断点恢复与 no-network replay：
+
+    python3 scripts/verify_research_refresh.py
+    python3 -m unittest product.tests.test_research_refresh_v1 -v
 
 产品测试：
 

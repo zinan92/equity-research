@@ -8,6 +8,7 @@
   <array>
     <string>/ABSOLUTE/PATH/TO/equity-research/.venv/bin/python3</string>
     <string>/ABSOLUTE/PATH/TO/equity-research/product/refresh_engine.py</string>
+    <string>--canonical</string>
     <string>--timeout</string>
     <string>12</string>
   </array>

@@ -389,3 +389,30 @@
 - 原始 payload hash 只能证明字节身份，不能单独证明来源权威或字段正确；还必须绑定 source manifest、run 和 quality result。
 - 前复权日线必须绑定 adjustment version；只存复权后的 OHLCV 而没有公司行动/因子版本，历史重放仍会漂移。
 - intelligence 缺失可以降级为 market-only，market 核心缺失必须阻断；两类失败不能混成一个 warning。
+
+## 2026-07-21 · Milestone 3：自动、可恢复的研究更新引擎（待评审）
+
+- Objective：Park 不再手工拼数据和逐股刷新；一次触发完成最新已收盘交易日的 canonical 更新、质量门、8 股标准研报与整体激活。
+- User outcome：primary/fallback、数据时点、质量结果、逐股状态和最终 active identity 都有回执；失败、中断或 7/8 不会覆盖上一份合格结果。
+- Reuse：直接把现有腾讯行情、腾讯 qfq 日线、东方财富 F10 collector 包在 `LegacyCollectorAdapter` 后面，并复用 AkShare 已采用的新浪交易日历解码逻辑，不另建行情抓取栈。
+- Decision：更新阶段固定为 `planned → collected → ingested → snapshotted → reports_built → activated`；每步原子落盘，唯一 `in_progress` 可从最后成功阶段恢复。
+- Decision：交易日由独立新浪交易日历和 Asia/Shanghai 15:30 收盘边界选择；当前生产 adapter 没有独立停牌源，因此目标日缺 bar 一律 fail closed，绝不把采集缺失猜成停牌。缺口按 canonical key 修复，qfq 版本以采集时点为主序、raw hash 为同刻后缀，变化时追加完整新版本序列。
+- Decision：fallback 必须在执行前显式配置；primary/fallback 每次尝试和最终选择都写回执，全部失败不创建 active。
+- Decision：canonical payload 的 `fixture/cached/real` 由 ingestion run 和幂等 identity 强绑定；REAL 只接受 allowlist source、HTTPS manifest、逐对象通过 SHA-256 的 provider raw bytes，以及绑定 normalized rows/provider hashes/source URLs 的 normalization receipt，fixture/cached 不能借既存 REAL run 晋升。
+- Decision：研究 builder 在独立 fork 子进程中只接收 `SnapshotReader`，用 CPython audit hook 与 child-local guard 阻断高低层 socket 与 external command；8 只各自生成完整 `research-report-v1`，只有 8/8 通过 schema、语义、内外层内容哈希和 identity 才原子更新 canonical publication 与 active pointer。
+- Decision：Web `/api/reports/{ticker}` 优先读取 canonical active，并在返回前重新校验 active、publication manifest、artifact 三层 identity/hash；active 存在但损坏时返回 conflict，绝不静默回退 legacy。旧组合数据库仍负责首页组合，不把两套 active 偷偷混成一个身份。
+- Decision：每个 candidate 在 quality gate 前先冻结 bundle；失败 attempt 也保留 bundle path/hash、checks/blockers 和 evaluation identity，不能只留下截断异常字符串。
+- Decision：无人值守生成确定性、snapshot-bound 的 `quantitative_baseline` 标准研报，不自动生成或批准 DeepSeek 正文。
+- Verification：29 项 M3 专项、156 项产品测试覆盖两连续交易日、按 key 补历史缺口、独立日历与缺 bar 阻断、按采集时点选择 qfq revision、同输入复用、primary 采集/质量失败后 fallback、失败质量审计、cached/REAL 隔离、错误 report hash、全部失败、单股失败、进程中断恢复、重复进程锁、旧版本回滚阻断、研报篡改、active 三层 identity、产品消费路径、真实 adapter 四分源和 no-network report/replay；稳定 receipt 明确 fixture 边界。
+- Evidence：`evidence/m3-research-refresh/verification-receipt.json`，明确标注 deterministic fixture acceptance，不冒充 live source run。
+- Live smoke：2026-07-21 临时运行拿到 8/8 quotes，但 klines 2/8、financials 3/8，腾讯/东财出现 SSL EOF/connection reset；系统按设计 failed closed 且未创建 active。证据见 `evidence/m3-research-refresh/live-smoke-2026-07-21.json`，不能表述为实时发布成功。
+- In scope：adapter、calendar/gap、fallback、lock/resume、8/8 gate、CLI/status/dry-run/schedule、receipt。Out of scope：线上 Supabase、第二个真实 provider、全市场、自动 DeepSeek、Telegram、支付和交易。
+
+### Gotchas · Milestone 3
+
+- 现有腾讯 qfq 数据没有独立公司行动/复权因子序列；v1 可作为 vendor-adjusted 内测源，但正式长期权威库仍需官方公司行动 adapter。
+- F10 更正若沿用同一报告期但没有显式 revision ID，canonical conflict 会 fail closed；不能静默覆盖旧财务事实。
+- snapshot 通过不代表公司级深研完成；M3 生成的是 M1 合同完整但明确标为 `quantitative_baseline / Missing evidence` 的标准研报，后续公司研究仍须经过公司证据门。
+- `plist` 有计划时间只证明模板可审计；未在目标机器实际触发并拿到退出回执前，不能声称自动任务已经运行。
+- gitleaks 的 generic-key 规则把 M2 的公开 fixture source key 误报为密钥；本轮只按原提交与 GitHub merge commit 的四条历史 fingerprint 精确忽略，不放宽任何规则或路径。
+- canonical 标准研报已经进入实际 `/api/reports`，但组合首页仍来自旧 publication DB；两者的统一 portfolio publication identity 属于后续 milestone，当前不得声称整套组合已切到 canonical。

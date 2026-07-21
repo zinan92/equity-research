@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import math
@@ -16,13 +17,14 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from data_store import DB_PATH, DEMO_POSITIONS, connect, initialize, publication_content_hash, validate_invariants
-from ingest_quotes import fetch_quotes, provider_symbol
+from ingest_quotes import fetch_quotes_bundle, provider_symbol
 
 
 FEATURE_VERSION = "a-share-core-v0.3"
 MODEL_VERSION = "long-horizon-portfolio-v0.4"
 KLINE_SOURCE = "tencent_qfq_daily"
 FINANCIAL_SOURCE = "eastmoney_f10_main"
+CALENDAR_SOURCE_URL = "https://finance.sina.com.cn/realstock/company/klc_td_sh.txt"
 
 
 def _retry(call: Any, *args: Any, attempts: int = 3, **kwargs: Any) -> Any:
@@ -52,17 +54,20 @@ def validate_real_input_coverage(
     return coverage
 
 
-def _json_request(url: str, timeout: float = 10.0) -> tuple[dict, str]:
+def _json_request(url: str, timeout: float = 10.0) -> tuple[dict, str, str]:
     request = Request(url, headers={"User-Agent": "ParkResearchDashboard/0.2"})
     with urlopen(request, timeout=timeout) as response:
         raw = response.read()
-    return json.loads(raw.decode("utf-8")), hashlib.sha256(raw).hexdigest()
+    return (
+        json.loads(raw.decode("utf-8")), hashlib.sha256(raw).hexdigest(),
+        base64.b64encode(raw).decode("ascii"),
+    )
 
 
 def fetch_daily_bars(ticker: str, limit: int = 320, timeout: float = 10.0) -> dict[str, Any]:
     symbol = provider_symbol(ticker)
     url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={symbol},day,,,{limit},qfq"
-    payload, raw_hash = _json_request(url, timeout)
+    payload, raw_hash, raw_payload_b64 = _json_request(url, timeout)
     stock = payload.get("data", {}).get(symbol, {})
     rows = stock.get("qfqday") or stock.get("day") or []
     bars = []
@@ -78,7 +83,10 @@ def fetch_daily_bars(ticker: str, limit: int = 320, timeout: float = 10.0) -> di
             continue
     if len(bars) < 250:
         raise RuntimeError(f"{ticker} daily bars incomplete: {len(bars)}")
-    return {"ticker": ticker, "bars": bars, "source_url": url, "raw_hash": raw_hash}
+    return {
+        "ticker": ticker, "bars": bars, "source_url": url, "raw_hash": raw_hash,
+        "raw_payload_b64": raw_payload_b64,
+    }
 
 
 def fetch_financials(ticker: str, timeout: float = 10.0) -> dict[str, Any]:
@@ -88,7 +96,7 @@ def fetch_financials(ticker: str, timeout: float = 10.0) -> dict[str, Any]:
         "sr": "-1", "st": "REPORT_DATE", "source": "HSF10", "client": "PC",
     }
     url = "https://datacenter.eastmoney.com/securities/api/data/get?" + urlencode(params)
-    payload, raw_hash = _json_request(url, timeout)
+    payload, raw_hash, raw_payload_b64 = _json_request(url, timeout)
     rows = payload.get("result", {}).get("data") or []
     normalized = []
     for row in rows:
@@ -108,12 +116,39 @@ def fetch_financials(ticker: str, timeout: float = 10.0) -> dict[str, Any]:
         })
     if not normalized:
         raise RuntimeError(f"{ticker} financial statements unavailable")
-    return {"ticker": ticker, "rows": normalized, "source_url": url, "raw_hash": raw_hash}
+    return {
+        "ticker": ticker, "rows": normalized, "source_url": url, "raw_hash": raw_hash,
+        "raw_payload_b64": raw_payload_b64,
+    }
+
+
+def fetch_exchange_calendar(timeout: float = 10.0) -> dict[str, Any]:
+    """Fetch the independent mainland exchange calendar used by AkShare."""
+    from akshare.tool.trade_date_hist import hk_js_decode, py_mini_racer
+
+    request = Request(CALENDAR_SOURCE_URL, headers={"User-Agent": "ParkResearchDashboard/0.2"})
+    with urlopen(request, timeout=timeout) as response:
+        raw = response.read()
+    text = raw.decode("utf-8")
+    encoded = text.split("=", 1)[1].split(";", 1)[0].replace('"', "")
+    js = py_mini_racer.MiniRacer()
+    js.eval(hk_js_decode)
+    values = sorted({str(item)[:10] for item in js.call("d", encoded)})
+    if len(values) < 250:
+        raise RuntimeError(f"exchange calendar incomplete: {len(values)}")
+    return {
+        "trade_dates": values,
+        "source_url": CALENDAR_SOURCE_URL,
+        "raw_hash": hashlib.sha256(raw).hexdigest(),
+        "raw_payload_b64": base64.b64encode(raw).decode("ascii"),
+    }
 
 
 def collect_real_inputs(timeout: float = 10.0) -> dict[str, Any]:
     started_at = datetime.now(timezone.utc).isoformat()
-    quotes = _retry(fetch_quotes, timeout=min(timeout, 8.0))
+    quote_bundle = _retry(fetch_quotes_bundle, timeout=min(timeout, 8.0))
+    exchange_calendar = _retry(fetch_exchange_calendar, timeout=min(timeout, 8.0))
+    quotes = quote_bundle["quotes"]
     tickers = [item["ticker"] for item in DEMO_POSITIONS]
     klines: dict[str, dict] = {}
     financials: dict[str, dict] = {}
@@ -135,7 +170,12 @@ def collect_real_inputs(timeout: float = 10.0) -> dict[str, Any]:
     validate_real_input_coverage(quotes, klines, financials, expected, errors)
     return {
         "quotes": {quote["ticker"]: quote for quote in quotes}, "klines": klines,
-        "financials": financials, "started_at": started_at, "finished_at": finished_at,
+        "financials": financials, "quote_raw": {
+            "source_url": quote_bundle["source_url"], "raw_hash": quote_bundle["raw_hash"],
+            "raw_payload_b64": quote_bundle["raw_payload_b64"],
+        },
+        "exchange_calendar": exchange_calendar,
+        "started_at": started_at, "finished_at": finished_at,
     }
 
 
