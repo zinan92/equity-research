@@ -31,6 +31,7 @@ from research_evidence import build_evidence_set, evidence_coverage, import_uzi_
 from report_versions import archive_report, compare_reports, report_version_history  # noqa: E402
 from portfolio_committee import committee_payload, validate_committee_payload  # noqa: E402
 from publication_pack import ARTIFACT_NAMES, validate_archive, validate_pack  # noqa: E402
+from report_contract import ReportContractError, validate_report_contract  # noqa: E402
 from auth_store import authenticate, create_invite, create_owner, create_session, has_entitlement, list_members, redeem_invite, session_member, set_member_status, verify_csrf  # noqa: E402
 
 
@@ -188,7 +189,7 @@ class DashboardContractTest(unittest.TestCase):
             "report.html": b"<html><body>verified report</body></html>",
             "report-long.png": b"\x89PNG\r\n\x1a\nverified",
             "report.pdf": b"%PDF-1.4\nverified",
-            "report.json": b"{}",
+            "report.json": json.dumps({"ticker": "TSLA", "name": "Tesla, Inc.", "report_hash": "bad", "report_contract": {}}, separators=(",", ":")).encode(),
             "render-receipt.json": b"{}",
         }
         for name, body in payloads.items():
@@ -199,6 +200,7 @@ class DashboardContractTest(unittest.TestCase):
         }
         (pack_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
         initial_errors = validate_pack(pack_dir)
+        self.assertTrue(any(error.startswith("report contract invalid:") for error in initial_errors))
         self.assertIn("report HTML content contract failed", initial_errors)
         self.assertIn("PDF structure or page count is invalid", initial_errors)
         self.assertIn("PNG structure or dimensions are invalid", initial_errors)
@@ -294,10 +296,22 @@ class DashboardContractTest(unittest.TestCase):
         self.assertEqual(len(report["serenity"]["penalties"]), 8)
         self.assertEqual(sum(item["weight"] for item in report["serenity"]["factors"]), 100)
         self.assertEqual(len(report["report_hash"]), 64)
+        self.assertEqual(report["report_contract"]["schema_version"], "research-report-v1")
+        self.assertEqual(validate_report_contract(report["report_contract"], report), [])
+        self.assertEqual(
+            [item["order"] for item in report["report_contract"]["module_manifest"]],
+            list(range(1, 9)),
+        )
         source_ids = {source["id"] for source in report["sources"]}
         for section in (report["thesis"], report["catalysts"], report["risks"]):
             for item in section:
                 self.assertTrue(set(item["source_ids"]).issubset(source_ids))
+
+    def test_final_api_payload_is_revalidated_after_version_diff_is_added(self) -> None:
+        self.promote_catl_fixture_to_real()
+        with patch("report_versions.latest_report_diff", return_value={"status": "tampered"}):
+            with self.assertRaisesRegex(ReportContractError, "final report payload rejected"):
+                report_payload("300750.SZ", self.db_path)
 
     def test_valid_deepseek_artifact_is_bound_to_snapshot_and_report(self) -> None:
         self.promote_catl_fixture_to_real()
@@ -461,6 +475,53 @@ class DashboardContractTest(unittest.TestCase):
         assert report is not None
         self.assertEqual(report["research_status"], "verified")
         self.assertNotIn("ai_narrative", report)
+
+    def test_unknown_ai_fields_cannot_be_approved_or_take_down_base_report(self) -> None:
+        self.promote_catl_fixture_to_real()
+        deterministic = report_payload("300750.SZ", self.db_path)
+        assert deterministic is not None
+        evidence_set, evidence_hash = self.catl_artifact_binding(deterministic)
+        narrative = self.valid_narrative()
+        narrative["harmless_extra"] = "editor note"
+        narrative["sections"]["business_quality"]["nested_extra"] = {"note": "not contracted"}
+        validation = validate_narrative(narrative, build_evidence_pack(deterministic, evidence_set))
+        self.assertEqual(validation["status"], "needs_review")
+        self.assertTrue(any("public narrative schema" in error for error in validation["errors"]))
+        narrative_hash = hashlib.sha256(json.dumps(narrative, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+        artifact = {
+            "artifact_version": "deepseek-narrative-v1", "validation_version": "metric-source-v2",
+            "prompt_version": "deepseek-equity-writer-v1", "provider": "DeepSeek", "model": "test-model",
+            "generated_at": "2026-07-17T12:00:00+00:00", "ticker": "300750.SZ", "snapshot_id": "snap_demo_20260717_v1",
+            "profile_hash": research_profile_hash(), "research_logic_hash": research_logic_hash(), "writer_logic_hash": writer_logic_hash(),
+            "evidence_set_id": evidence_set["evidence_set_id"], "evidence_manifest_hash": evidence_set["manifest_hash"],
+            "evidence_hash": evidence_hash, "narrative_hash": narrative_hash, "validation": {"status": "passed"},
+            "editorial_approval": {"status": "pending"}, "receipts": [], "narrative": narrative,
+        }
+        write_artifact(self.db_path, "300750.SZ", "snap_demo_20260717_v1", artifact)
+        with self.assertRaisesRegex(RuntimeError, "narrative validation is not passed"):
+            approve_artifact(
+                "300750.SZ", self.db_path, reviewer="independent editor",
+                expected_narrative_hash=narrative_hash,
+                expected_evidence_manifest_hash=evidence_set["manifest_hash"],
+            )
+        artifact["editorial_approval"] = {
+            "status": "approved", "approval_version": "human-editorial-v1", "approved_by": "legacy editor",
+            "narrative_hash": narrative_hash, "evidence_manifest_hash": evidence_set["manifest_hash"],
+        }
+        write_artifact(self.db_path, "300750.SZ", "snap_demo_20260717_v1", artifact)
+        safe_report = report_payload("300750.SZ", self.db_path)
+        assert safe_report is not None
+        self.assertEqual(safe_report["research_status"], "verified")
+        self.assertNotIn("ai_narrative", safe_report)
+        for invalid_narrative in ("not-an-object", ["not-an-object"], None):
+            artifact["narrative"] = invalid_narrative
+            artifact["narrative_hash"] = None
+            artifact["editorial_approval"]["narrative_hash"] = None
+            write_artifact(self.db_path, "300750.SZ", "snap_demo_20260717_v1", artifact)
+            safe_report = report_payload("300750.SZ", self.db_path)
+            assert safe_report is not None
+            self.assertEqual(safe_report["research_status"], "verified")
+            self.assertNotIn("ai_narrative", safe_report)
 
     def test_report_versions_are_immutable_and_diff_key_inputs(self) -> None:
         self.promote_catl_fixture_to_real()
@@ -782,6 +843,11 @@ class DashboardContractTest(unittest.TestCase):
         self.assertEqual(report["moat"], [])
         self.assertEqual(len(report["quant_signals"]), 4)
         self.assertEqual(report["valuation"]["status"], "pending_company_research")
+        self.assertEqual(report["report_contract"]["identity"]["currency"], "CNY")
+        states = {item["id"]: item["status"] for item in report["report_contract"]["module_manifest"]}
+        self.assertEqual(states["business_and_industry"], "missing_evidence")
+        self.assertEqual(states["valuation"], "missing_evidence")
+        self.assertEqual(validate_report_contract(report["report_contract"], report), [])
         for scenario in report["stress_test"]["scenarios"]:
             self.assertNotIn("eps", scenario)
             self.assertNotIn("pe", scenario)

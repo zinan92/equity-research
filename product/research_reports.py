@@ -10,6 +10,12 @@ from typing import Any
 from data_store import DB_PATH, DEMO_POSITIONS, stock_payload
 from research_artifact_store import PROMPT_VERSION, artifact_hash, load_artifact
 from research_evidence import load_evidence_set
+from report_contract import (
+    ReportContractError,
+    attach_report_contract,
+    public_ai_narrative,
+    validate_report_contract,
+)
 
 
 AI_VALIDATION_VERSION = "metric-source-v2"
@@ -364,7 +370,16 @@ def research_profile_tickers() -> tuple[str, ...]:
 
 def research_logic_hash() -> str:
     """Bind approvals to the exact report generator, including derived valuation logic."""
-    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    for path in (
+        Path(__file__),
+        Path(__file__).with_name("report_contract.py"),
+        Path(__file__).with_name("schemas") / "research-report-v1.schema.json",
+        Path(__file__).with_name("schemas") / "research-report-payload-v1.schema.json",
+    ):
+        digest.update(path.name.encode("utf-8"))
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
 
 
 def writer_logic_hash() -> str:
@@ -446,7 +461,11 @@ def _active_ai_artifact(
     if not artifact:
         return None
     narrative = artifact.get("narrative")
-    expected_narrative_hash = _report_hash(narrative) if isinstance(narrative, dict) else None
+    if not isinstance(narrative, dict):
+        return None
+    expected_narrative_hash = _report_hash(narrative)
+    if not expected_narrative_hash or not isinstance(artifact.get("narrative_hash"), str):
+        return None
     evidence_set = load_evidence_set(ticker, snapshot_id, db_path)
     if not evidence_set:
         return None
@@ -454,7 +473,7 @@ def _active_ai_artifact(
         _report_hash(build_evidence_pack(deterministic_report, evidence_set)) if deterministic_report is not None else artifact.get("evidence_hash")
     )
     current_validation = artifact.get("validation") or {}
-    if deterministic_report is not None and isinstance(narrative, dict):
+    if deterministic_report is not None:
         from deepseek_writer import validate_narrative
 
         current_validation = validate_narrative(narrative, build_evidence_pack(deterministic_report, evidence_set))
@@ -464,6 +483,7 @@ def _active_ai_artifact(
         or artifact.get("validation_version") != AI_VALIDATION_VERSION
         or approval.get("status") != "approved"
         or approval.get("approval_version") != "human-editorial-v1"
+        or not isinstance(approval.get("narrative_hash"), str)
         or approval.get("narrative_hash") != expected_narrative_hash
         or approval.get("evidence_manifest_hash") != evidence_set["manifest_hash"]
         or artifact.get("ticker") != ticker.upper()
@@ -478,7 +498,9 @@ def _active_ai_artifact(
         or artifact.get("narrative_hash") != expected_narrative_hash
     ):
         return None
-    return artifact
+    active = deepcopy(artifact)
+    active["validation"] = current_validation
+    return active
 
 
 def active_research_artifact_hash(db_path: Path, ticker: str, snapshot_id: str) -> str | None:
@@ -663,12 +685,14 @@ def _baseline_report(stock: dict[str, Any], db_path: Path) -> dict[str, Any]:
         "id": "market_snapshot", "document_id": f"market_{stock.get('snapshot_id')}_{stock['ticker']}",
         "title": "当前不可变行情、日线与因子快照", "kind": "market_snapshot", "strength": "强",
         "known_at": quote.get("quote_time"), "url": quote.get("source_url"),
+        "snapshot_id": stock.get("snapshot_id"), "provider": quote.get("source_key"), "quote_time": quote.get("quote_time"),
         "note": f"{quote.get('source_key')} 行情 · 250+ 前复权日线 · {features.get('feature_version')} 因子",
     }
     financial_source = {
         "id": "financial_snapshot", "document_id": f"financial_{stock.get('snapshot_id')}_{stock['ticker']}",
         "title": "东方财富 F10 主要财务指标快照", "kind": "primary", "strength": "中",
         "known_at": latest.get("notice_date"), "url": None,
+        "snapshot_id": stock.get("snapshot_id"), "provider": latest.get("source_key") or "financial_metrics_snapshot",
         "note": f"{len(stock.get('financials') or [])} 个报告期 · 原始行哈希已进入不可变快照",
     }
     sources = [market_source, financial_source]
@@ -787,6 +811,7 @@ def _baseline_report(stock: dict[str, Any], db_path: Path) -> dict[str, Any]:
 
 
 def _finalize_report(payload: dict[str, Any], stock: dict[str, Any], db_path: Path) -> dict[str, Any]:
+    payload = attach_report_contract(payload)
     ai_artifact = _active_ai_artifact(db_path, stock["ticker"], stock["snapshot_id"], payload)
     executive = payload.get("executive") or {}
     from data_store import publication_approval_state
@@ -814,15 +839,14 @@ def _finalize_report(payload: dict[str, Any], stock: dict[str, Any], db_path: Pa
             "editorial_approval": ai_artifact["editorial_approval"],
             "artifact_hash": artifact_hash(db_path, stock["ticker"], stock["snapshot_id"]),
         }
-        public_narrative = deepcopy(ai_artifact["narrative"])
-        public_narrative.pop("position_conclusion", None)
-        if isinstance(public_narrative.get("investment_committee"), dict):
-            public_narrative["investment_committee"].pop("decision", None)
-        payload["ai_narrative"] = public_narrative
+        payload["ai_narrative"] = public_ai_narrative(ai_artifact["narrative"])
     payload["report_hash"] = _report_hash(payload)
     from report_versions import latest_report_diff
 
     payload["update_diff"] = latest_report_diff(stock["ticker"], stock["snapshot_id"], payload, db_path)
+    final_errors = validate_report_contract(payload["report_contract"], payload)
+    if final_errors:
+        raise ReportContractError("final report payload rejected: " + "; ".join(final_errors))
     return payload
 
 
@@ -921,9 +945,15 @@ def report_payload(ticker: str, db_path: Path = DB_PATH, *, snapshot_id: str | N
         "strength": "强",
         "known_at": quote.get("quote_time"),
         "url": None,
+        "snapshot_id": stock.get("snapshot_id"),
+        "provider": quote.get("source_key"),
+        "quote_time": quote.get("quote_time"),
         "note": f"snapshot {stock.get('snapshot_id')} · {quote.get('source_key')} · {features.get('feature_version')}",
     }
-    sources = [market_source, *profile["sources"]]
+    sources = [market_source, *[
+        {**source, "evidence_manifest_hash": evidence_set["manifest_hash"]}
+        for source in profile["sources"]
+    ]]
     payload = {
         "report_version": "deep-research-v1.2",
         "research_profile_hash": research_profile_hash(stock["ticker"]),

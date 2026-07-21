@@ -339,3 +339,31 @@
 - 自动化 plist 提交到 Git 只能证明模板可审计，不证明新机器已安装或定时运行成功。
 - gitleaks 通过只证明未命中已知秘密规则；仍要同时审计 tracked file、环境变量样例、runtime/cookie/session 忽略规则。
 - 基线 smoke 使用演示数据库，只证明 UI/API 能恢复；不证明外部实时数据源在当前网络下可用。
+
+## 2026-07-21 · Milestone 1：标准研报结构 v1（待评审）
+
+- Objective：无论输入宁德时代、特斯拉或未来公司，用户都得到同一套专业、可验证的内容结构和格式；市场差异显式表达，证据不足不伪造。
+- User outcome：研究对象变化不再导致模板漂移。八个必需模块、顺序、单位、币种、声明和证据语义由 `research-report-v1` 统一约束。
+- Decision：复用现有确定性 report payload、证据门和 Playwright 发布链，不重写研究算法或渲染器；在其上增加版本化 contract adapter。
+- Decision：module manifest 是 Web、390px mobile 与 print/export 的唯一顺序来源。缺失、未知或乱序模块 fail closed，不能静默跳过。
+- Decision：`missing_evidence` 与 `not_applicable` 分开。前者表示适用但证据不够，必须可见；后者只用于真实的公司/市场不适用场景。
+- Decision：报告身份固定绑定公司、交易所、市场、币种和会计准则；发布 identity、HTML metadata 和 render receipt 同时绑定 schema/contract 版本。
+- Decision：事实/推断必须引用存在的 source ID，假设必须声明方法，风险必须有来源与可观察触发器；百分比与百分点不可互换。
+- Truth set：宁德时代与 Tesla fixture 只证明结构一致，不承诺实时数据、评级、估值或仓位。两者保持同一模块 ID、顺序、锚点和 content paths，仅市场语义不同。
+- Decision：contract envelope 与 renderable payload 都用 Draft 2020-12 JSON Schema 在运行时执行；语义 validator 继续负责交易所/市场、币种、时间顺序、source provenance 与跨字段身份。
+- Decision：外部 source URL 只允许 HTTPS；Web 再次做 scheme allowlist，独立 HTML 写入阻断脚本/连接的 CSP。发布包离线验收重新执行完整 contract validator。
+- Verification：102 项产品测试、fresh-clone smoke、Node 语法、JSON Schema 自检、Git diff 和 gitleaks 通过。真实产品渲染器在临时测试数据库上验证 desktop/390px/print 的 8 模块顺序一致，733px print overflow=0；receipt 明确 `is_live_research=false`。另有可重复运行的 Playwright DOM 正/负向验收脚本。
+- Adversarial follow-up：前端实际消费的行情、仓位、估值桥、护城河/量化信号、压力测试、AI 文本与版本差异字段已从“任意 object/array”收紧为可执行 schema；API 在追加批准状态、AI 补充、报告哈希和版本差异后再次运行完整合同校验，避免只校验中间态。
+- Evidence：`evidence/m1-catl-report-contract.*`、`evidence/m1-tesla-report-contract.*` 为双公司结构样张；`evidence/m1-catl-product-contract-receipt.json`、desktop/mobile PNG 与 print PDF 为实际产品渲染链验收。
+- In scope：JSON contract、现有 payload 适配、Web/移动/打印顺序、发布身份、CATL/Tesla 结构样张、攻击测试和迁移说明。
+- Out of scope：Tesla 实时采集或投资结论、数据库重建、研究算法改写、公网投产、支付和自动交易。
+
+### Gotchas · Milestone 1
+
+- “两家公司都有 JSON”不等于已证明真实研究可比；Tesla 当前样张必须永久标明 structure-only，直到其数据与公司证据门真实通过。
+- JSON Schema 只能检查外形，跨字段的市场/币种、引用存在性、状态原因和 payload 身份仍需 semantic validator。
+- 前端有固定八段 HTML 不等于结构标准化；目录、章节头、移动和导出必须从同一 manifest 取序并拒绝未知版本。
+- disclaimer 若继续硬编码在前端，就不属于报告 contract，也无法被版本和发布 identity 审计；因此它必须进入 payload。
+- schema 必须约束 renderer 真正解引用的嵌套字段，并且校验必须发生在最终返回对象上；否则“顶层八模块正确”仍可能因 `{}`、错误类型或后置 mutation 失效。
+- HK/US v1 只接受 security master 中已显式登记的发行人；未知代码必须 fail closed，不能从后缀猜测交易所和会计口径。
+- AI 正文的生成校验、人工批准、运行时激活和最终 payload 必须共享同一 public schema；遗留或异常 artifact 只能被视为 inactive，不能拖垮确定性研报。

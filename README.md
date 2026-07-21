@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-79%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-102%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -188,6 +188,8 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 | `GET /api/publication-packs/latest` | 最新发布包回执 |
 
 写接口（刷新、批准、发布、会员操作）在开启身份门后按 entitlement 拒绝越权请求。完整列表见 [product/README.md](product/README.md)。
+
+`GET /api/reports/{ticker}` 的完整报告使用 [`research-report-v1`](docs/product/research-report-v1.md)：固定 8 个必需模块、固定顺序和明确的公司/市场/币种/会计准则语义。证据不足的适用章节保持可见并标为 `missing_evidence`；不适用项标为 `not_applicable`。未知或乱序模块拒绝渲染和导出。
 
 ## 数据与证据边界
 

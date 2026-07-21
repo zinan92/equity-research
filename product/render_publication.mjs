@@ -20,8 +20,10 @@ const reportHash = arg("--report-hash");
 const reportPayloadHash = arg("--report-payload-hash");
 const expectedApiPayloadHash = arg("--api-payload-hash");
 const companyName = arg("--company-name");
-if (!baseUrl || !ticker || !outDir || !cssPath || !reportHash || !reportPayloadHash || !expectedApiPayloadHash || !companyName) {
-  throw new Error("--base-url, --ticker, --out-dir, --css, --report-hash, --report-payload-hash, --api-payload-hash and --company-name are required");
+const reportSchemaVersion = arg("--report-schema-version");
+const reportContractVersion = arg("--report-contract-version");
+if (!baseUrl || !ticker || !outDir || !cssPath || !reportHash || !reportPayloadHash || !expectedApiPayloadHash || !companyName || !reportSchemaVersion || !reportContractVersion) {
+  throw new Error("publication identity arguments, including report schema and contract versions, are required");
 }
 
 fs.mkdirSync(outDir, { recursive: true });
@@ -41,8 +43,13 @@ try {
   }, ticker);
   const apiPayloadHash = crypto.createHash("sha256").update(apiResponse.body).digest("hex");
   const apiReport = JSON.parse(apiResponse.body);
-  if (apiReport.report_hash !== reportHash || apiReport.ticker !== ticker || apiReport.name !== companyName || apiPayloadHash !== expectedApiPayloadHash) {
+  if (apiReport.report_hash !== reportHash || apiReport.ticker !== ticker || apiReport.name !== companyName || apiPayloadHash !== expectedApiPayloadHash || apiReport.report_contract?.schema_version !== reportSchemaVersion || apiReport.report_contract?.contract_version !== reportContractVersion) {
     throw new Error("rendered page API report does not match the requested publication identity");
+  }
+  const renderedModuleIds = await page.evaluate(() => [...document.querySelectorAll("#report-content .report-main > [data-report-module]")].map((node) => node.dataset.reportModule));
+  const expectedModuleIds = apiReport.report_contract.module_manifest.map((module) => module.id);
+  if (renderedModuleIds.join("|") !== expectedModuleIds.join("|")) {
+    throw new Error(`rendered module order differs from report contract: ${renderedModuleIds.join("|")}`);
   }
   await page.evaluate(async (expectedReportHash) => {
     if (document.fonts?.ready) await document.fonts.ready;
@@ -77,7 +84,7 @@ try {
   await page.evaluate((title) => { document.title = title; }, metadata.title);
   const css = fs.readFileSync(cssPath, "utf8");
   const escapeAttr = (value) => String(value).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-  const standalone = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="park-report-hash" content="${escapeAttr(reportHash)}"><meta name="park-report-payload-hash" content="${escapeAttr(reportPayloadHash)}"><meta name="park-report-ticker" content="${escapeAttr(ticker)}"><title>${escapeAttr(metadata.title)}</title><style>${css}</style></head><body class="report-export">${metadata.reportHtml}</body></html>`;
+  const standalone = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="park-report-hash" content="${escapeAttr(reportHash)}"><meta name="park-report-payload-hash" content="${escapeAttr(reportPayloadHash)}"><meta name="park-report-ticker" content="${escapeAttr(ticker)}"><meta name="park-report-schema-version" content="${escapeAttr(reportSchemaVersion)}"><meta name="park-report-contract-version" content="${escapeAttr(reportContractVersion)}"><title>${escapeAttr(metadata.title)}</title><style>${css}</style></head><body class="report-export">${metadata.reportHtml}</body></html>`;
   fs.writeFileSync(path.join(outDir, "report.html"), standalone);
   await page.screenshot({ path: path.join(outDir, "report-long.png"), fullPage: true, type: "png", animations: "disabled" });
   await page.emulateMedia({ media: "print" });
@@ -108,8 +115,8 @@ try {
     footerTemplate: '<div style="width:100%;font:8px Arial;color:#6b7280;text-align:center"><span class="pageNumber"></span> / <span class="totalPages"></span></div>',
   });
   fs.writeFileSync(path.join(outDir, "render-receipt.json"), JSON.stringify({
-    renderer: "playwright-chromium-v3", browserVersion: browser.version(), ticker, companyName, reportHash, reportPayloadHash, apiPayloadHash, url: url.toString(),
-    title: metadata.title, width: metadata.width, height: metadata.height,
+    renderer: "playwright-chromium-v3", browserVersion: browser.version(), ticker, companyName, reportHash, reportPayloadHash, apiPayloadHash, reportSchemaVersion, reportContractVersion, url: url.toString(),
+    title: metadata.title, width: metadata.width, height: metadata.height, renderedModuleIds,
     textLength: metadata.bodyText.length,
     bodyTextHash: crypto.createHash("sha256").update(metadata.bodyText).digest("hex"),
     printAudit,

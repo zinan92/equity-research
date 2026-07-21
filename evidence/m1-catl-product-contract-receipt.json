@@ -1,0 +1,58 @@
+{
+  "evidence_scope": "test_fixture_product_renderer",
+  "is_live_research": false,
+  "note": "Actual product Web/mobile/print renderer using a temporary test database; not a current investment conclusion.",
+  "schema_version": "research-report-v1",
+  "contract_version": "1.0.0",
+  "report_hash": "9e645b49ccc84c1ae3e84b2e523cf23230fb038a5bb240d2d0863494e2aaeb39",
+  "expected_module_ids": [
+    "executive_summary",
+    "investment_thesis",
+    "business_and_industry",
+    "financial_quality",
+    "framework_assessment",
+    "valuation",
+    "catalysts_risks",
+    "evidence_ledger"
+  ],
+  "desktop_module_ids": [
+    "executive_summary",
+    "investment_thesis",
+    "business_and_industry",
+    "financial_quality",
+    "framework_assessment",
+    "valuation",
+    "catalysts_risks",
+    "evidence_ledger"
+  ],
+  "mobile_module_ids": [
+    "executive_summary",
+    "investment_thesis",
+    "business_and_industry",
+    "financial_quality",
+    "framework_assessment",
+    "valuation",
+    "catalysts_risks",
+    "evidence_ledger"
+  ],
+  "mobile_viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "mobile_capture": {
+    "width": 390,
+    "height": 15331
+  },
+  "negative_missing_module_rejected": true,
+  "baseline_dom_verification": "passed via product/verify_report_contract_dom.mjs for 600519.SH",
+  "print_audit": {
+    "printableWidth": 733,
+    "overflowCount": 0,
+    "offenders": []
+  },
+  "artifacts": {
+    "desktop": "m1-catl-product-contract-desktop.png",
+    "mobile": "m1-catl-product-contract-mobile.png",
+    "print": "m1-catl-product-contract-print.pdf"
+  }
+}

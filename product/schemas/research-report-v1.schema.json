@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://park-research.local/schemas/research-report-v1.schema.json",
+  "title": "Park Equity Research Report Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "contract_version", "identity", "as_of", "measurement_policy",
+    "claim_policy", "absence_policy", "format_contract", "market_specific_disclosures",
+    "module_manifest", "truth_set"
+  ],
+  "properties": {
+    "schema_version": {"const": "research-report-v1"},
+    "contract_version": {"const": "1.0.0"},
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ticker", "name", "exchange", "market", "currency", "reporting_standard"],
+      "properties": {
+        "ticker": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "exchange": {"type": "string", "minLength": 1},
+        "market": {"enum": ["CN", "HK", "US"]},
+        "currency": {"enum": ["CNY", "HKD", "USD"]},
+        "reporting_standard": {"enum": ["PRC_GAAP", "HKFRS_IFRS", "US_GAAP"]}
+      }
+    },
+    "as_of": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["market_data_at", "research_cutoff"],
+      "properties": {
+        "market_data_at": {"type": ["string", "null"]},
+        "research_cutoff": {"type": ["string", "null"]}
+      }
+    },
+    "measurement_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "price_currency", "financial_presentation_currency", "money_unit", "price_unit", "financial_statement_scale", "financial_statement_unit_label", "percent_unit", "percentage_point_unit", "rule"],
+      "properties": {
+        "currency": {"enum": ["CNY", "HKD", "USD"]},
+        "price_currency": {"enum": ["CNY", "HKD", "USD"]},
+        "financial_presentation_currency": {"enum": ["CNY", "HKD", "USD"]},
+        "money_unit": {"const": "issuer_reporting_currency"},
+        "price_unit": {"const": "per_share"},
+        "financial_statement_scale": {"const": 100000000},
+        "financial_statement_unit_label": {"enum": ["亿元", "亿港元", "亿美元"]},
+        "percent_unit": {"const": "percent"},
+        "percentage_point_unit": {"const": "percentage_point"},
+        "rule": {"type": "string", "minLength": 1}
+      }
+    },
+    "claim_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_types", "fact_requires_source_ids", "inference_requires_source_ids", "assumption_requires_method", "risk_requires_trigger"],
+      "properties": {
+        "allowed_types": {"const": ["fact", "inference", "assumption", "risk"]},
+        "fact_requires_source_ids": {"const": true},
+        "inference_requires_source_ids": {"const": true},
+        "assumption_requires_method": {"const": true},
+        "risk_requires_trigger": {"const": true}
+      }
+    },
+    "absence_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["missing_evidence", "not_applicable"],
+      "properties": {
+        "missing_evidence": {"type": "string", "minLength": 1},
+        "not_applicable": {"type": "string", "minLength": 1}
+      }
+    },
+    "format_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["module_order_is_authoritative", "same_order_desktop_mobile_print", "unknown_modules_fail_closed"],
+      "properties": {
+        "module_order_is_authoritative": {"const": true},
+        "same_order_desktop_mobile_print": {"const": true},
+        "unknown_modules_fail_closed": {"const": true}
+      }
+    },
+    "market_specific_disclosures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cninfo_filings", "sec_filings"],
+      "properties": {
+        "cninfo_filings": {"$ref": "#/$defs/disclosure"},
+        "sec_filings": {"$ref": "#/$defs/disclosure"}
+      }
+    },
+    "module_manifest": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/module"}
+    },
+    "truth_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "is_live_research", "note"],
+      "properties": {
+        "scope": {"enum": ["runtime_report", "structure_only"]},
+        "is_live_research": {"type": "boolean"},
+        "note": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "$defs": {
+    "disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {
+        "status": {"enum": ["available", "not_applicable"]},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "order", "anchor", "title", "kicker", "required", "status", "status_reason", "content_paths"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "order": {"type": "integer", "minimum": 1, "maximum": 8},
+        "anchor": {"type": "string", "pattern": "^r-"},
+        "title": {"type": "string", "minLength": 1},
+        "kicker": {"type": "string", "minLength": 1},
+        "required": {"const": true},
+        "status": {"enum": ["available", "missing_evidence", "not_applicable"]},
+        "status_reason": {"type": ["string", "null"]},
+        "content_paths": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true}
+      }
+    }
+  }
+}
