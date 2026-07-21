@@ -1,0 +1,10 @@
+{
+  "name": "park-equity-research-renderer",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local Playwright renderer for audited equity-research publication packs",
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.42.0"
+  }
+}

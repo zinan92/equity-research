@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import crypto from "node:crypto";
 
 const require = createRequire(import.meta.url);
-const playwrightPath = process.env.PLAYWRIGHT_PATH || "/Users/wendy/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright";
+const playwrightPath = process.env.PLAYWRIGHT_PATH || "playwright";
 const { chromium } = require(playwrightPath);
 
 function arg(name, fallback = null) {
@@ -25,13 +25,8 @@ if (!baseUrl || !ticker || !outDir || !cssPath || !reportHash || !reportPayloadH
 }
 
 fs.mkdirSync(outDir, { recursive: true });
-const browserCandidates = [
-  process.env.CHROME_PATH,
-  "/Users/wendy/Library/Caches/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-mac-arm64/chrome-headless-shell",
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-].filter(Boolean);
-const executablePath = browserCandidates.find((candidate) => fs.existsSync(candidate));
-if (!executablePath) throw new Error("no compatible Chromium executable is installed");
+const executablePath = process.env.CHROME_PATH || null;
+if (executablePath && !fs.existsSync(executablePath)) throw new Error(`CHROME_PATH does not exist: ${executablePath}`);
 const browser = await chromium.launch({ headless: true, ...(executablePath ? { executablePath } : {}) });
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 });
@@ -113,7 +108,7 @@ try {
     footerTemplate: '<div style="width:100%;font:8px Arial;color:#6b7280;text-align:center"><span class="pageNumber"></span> / <span class="totalPages"></span></div>',
   });
   fs.writeFileSync(path.join(outDir, "render-receipt.json"), JSON.stringify({
-    renderer: "playwright-chromium-v3", ticker, companyName, reportHash, reportPayloadHash, apiPayloadHash, url: url.toString(),
+    renderer: "playwright-chromium-v3", browserVersion: browser.version(), ticker, companyName, reportHash, reportPayloadHash, apiPayloadHash, url: url.toString(),
     title: metadata.title, width: metadata.width, height: metadata.height,
     textLength: metadata.bodyText.length,
     bodyTextHash: crypto.createHash("sha256").update(metadata.bodyText).digest("hex"),

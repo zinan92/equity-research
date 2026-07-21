@@ -4,6 +4,19 @@
 
 ---
 
+## 本仓库的双入口边界（equity-research 必读）
+
+本仓库在 UZI-Skill 基础上增加了 `product/` 投研产品层。先按用户意图区分入口：
+
+| 用户意图 | 正确入口 | 主要验证 |
+|---|---|---|
+| 启动/修改投研面板、研报、会员、数据快照或发布包 | `python3 product/server.py` 与 `product/` | `python3 scripts/verify_baseline.py`、`python3 -m unittest discover -s product/tests -q` |
+| 用 UZI skill 分析一只股票 | 根 `run.py` 与 `skills/deep-analysis/` | 下文 UZI 流程与 pytest |
+
+产品运行态只允许写入 `product/runtime/`，不得提交数据库、报告包、session、cookie 或密钥。产品决策必须记录到 `decision-log.md` 并包含 Gotchas。产品当前只有宁德时代达到公司级 deep，另外 7 股是 quantitative baseline；不得扩大描述。
+
+---
+
 ## 🗺️ Repository Layout & Entrypoints (v3.2.0)
 
 **绝对路径约定 —— 不要自己瞎猜** · 避免 "scripts/run.py 缺失" 这类误解：

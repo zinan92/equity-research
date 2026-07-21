@@ -6,13 +6,13 @@
   <string>com.park.a-share-research-refresh</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/local/bin/python3</string>
-    <string>/Users/wendy/Documents/投研面板/product/refresh_engine.py</string>
+    <string>/ABSOLUTE/PATH/TO/equity-research/.venv/bin/python3</string>
+    <string>/ABSOLUTE/PATH/TO/equity-research/product/refresh_engine.py</string>
     <string>--timeout</string>
     <string>12</string>
   </array>
   <key>WorkingDirectory</key>
-  <string>/Users/wendy/Documents/投研面板</string>
+  <string>/ABSOLUTE/PATH/TO/equity-research</string>
   <key>StartCalendarInterval</key>
   <array>
     <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>30</integer></dict>
@@ -22,9 +22,9 @@
     <dict><key>Weekday</key><integer>6</integer><key>Hour</key><integer>17</integer><key>Minute</key><integer>30</integer></dict>
   </array>
   <key>StandardOutPath</key>
-  <string>/Users/wendy/Documents/投研面板/product/runtime/refresh-automation.log</string>
+  <string>/ABSOLUTE/PATH/TO/equity-research/product/runtime/refresh-automation.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/wendy/Documents/投研面板/product/runtime/refresh-automation.error.log</string>
+  <string>/ABSOLUTE/PATH/TO/equity-research/product/runtime/refresh-automation.error.log</string>
   <key>ProcessType</key>
   <string>Background</string>
   <key>ThrottleInterval</key>
