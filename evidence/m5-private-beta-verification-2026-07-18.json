@@ -1,0 +1,41 @@
+{
+  "objective": "少数朋友私域内测交付能力",
+  "status": "passed",
+  "auth_mode_default": "local_disabled",
+  "private_beta_switch": "PARK_AUTH_REQUIRED=1",
+  "tiers": {
+    "preview": ["dashboard"],
+    "member": ["dashboard", "deep_reports"],
+    "paid": ["dashboard", "deep_reports", "publication_downloads"],
+    "owner": ["dashboard", "deep_reports", "publication_downloads", "approve_publication", "manage_members"]
+  },
+  "http_contracts_verified": {
+    "anonymous_dashboard": 401,
+    "preview_deep_report": 403,
+    "paid_deep_report": 200,
+    "owner_write_without_csrf": 403
+  },
+  "security_controls": [
+    "PBKDF2-SHA256 310000 rounds with random salt",
+    "session and CSRF secrets stored only as SHA256 hashes",
+    "HttpOnly SameSite=Strict session cookie",
+    "server-side entitlement checks",
+    "member suspension revokes active sessions",
+    "download allowlist and current-pack identity gate"
+  ],
+  "tests": {
+    "count": 79,
+    "result": "passed"
+  },
+  "current_publication_pack": "pack_300750_SZ_b1ecd13db95491ac",
+  "adversarial_review": {
+    "code": {"p0": 0, "p1": 0, "status": "passed"},
+    "finance_evidence": {"p0": 0, "p1": 0, "status": "passed"},
+    "ui_robustness": {"p0": 0, "p1": 0, "status": "passed"}
+  },
+  "screenshots": [
+    "evidence/m5-private-beta-login-2026-07-18.png",
+    "evidence/m5-private-beta-login-mobile-2026-07-18.png",
+    "evidence/m5-private-beta-member-home-2026-07-18.png"
+  ]
+}

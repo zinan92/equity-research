@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#15352f">
+  <title>Park 投委会 · 本周决策</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <section id="auth-gate" class="auth-gate" hidden aria-labelledby="auth-title">
+    <div class="auth-panel">
+      <div class="auth-brand"><span class="brand-mark">P</span><div><strong>Park 投委会</strong><small>PRIVATE RESEARCH ACCESS</small></div></div>
+      <p class="eyebrow">MEMBER ACCESS / 私域内测</p>
+      <h1 id="auth-title">登录你的研究席位</h1>
+      <p class="auth-intro">面板、公司级深研和发布包按会员等级开放。所有建议仓位仍需经过 Park 的决策门。</p>
+      <div class="auth-tabs" role="tablist"><button id="auth-login-tab" class="is-active" type="button">登录</button><button id="auth-signup-tab" type="button">邀请码注册</button></div>
+      <form id="login-form" class="auth-form">
+        <label>邮箱<input name="email" type="email" autocomplete="email" required></label>
+        <label>密码<input name="password" type="password" autocomplete="current-password" minlength="12" required></label>
+        <button class="primary-button" type="submit">进入投委会</button>
+      </form>
+      <form id="signup-form" class="auth-form" hidden>
+        <label>邀请码<input name="invite_code" autocomplete="one-time-code" required></label>
+        <label>你的名字<input name="display_name" autocomplete="name" required></label>
+        <label>邮箱<input name="email" type="email" autocomplete="email" required></label>
+        <label>设置密码<input name="password" type="password" autocomplete="new-password" minlength="12" required></label>
+        <button class="primary-button" type="submit">领取研究席位</button>
+      </form>
+      <p id="auth-error" class="auth-error" role="alert"></p>
+    </div>
+  </section>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Park 投委会首页">
+        <span class="brand-mark">P</span>
+        <span><strong>Park 投委会</strong><small>A 股长期模型组合</small></span>
+      </a>
+      <nav class="primary-nav" aria-label="产品导航">
+        <button class="nav-item is-active" data-view="decision">本周决策</button>
+        <button class="nav-item" data-view="performance">组合与业绩</button>
+        <button class="nav-item" data-view="history">调整记录</button>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" id="refresh-button" aria-label="刷新数据" title="刷新数据">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6v5h-5M4 18v-5h5M6.1 9A7 7 0 0 1 18 6.2L20 9M4 15l2 2.8A7 7 0 0 0 17.9 15"/></svg>
+        </button>
+        <div class="member-chip" id="member-chip" aria-label="当前会员"><span class="avatar">P</span><span><strong id="member-name">Park</strong><small id="member-tier">本地模式</small></span></div>
+        <button class="logout-button" id="logout-button" hidden>退出</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <div id="loading" class="loading-state">
+        <div class="loader-seal">决</div>
+        <p>正在读取本期投委会快照…</p>
+      </div>
+
+      <section id="error-state" class="error-state" hidden>
+        <p class="eyebrow">DATA BLOCKED</p>
+        <h1>本期决策暂不可用</h1>
+        <p id="error-message">数据库或 API 未返回可验证快照。</p>
+        <button id="retry-button" class="primary-button">重新读取</button>
+      </section>
+
+      <div id="app" hidden>
+        <section id="view-decision" class="view is-active" aria-labelledby="decision-title">
+          <div class="decision-head">
+            <div>
+              <div class="status-line">
+                <span class="mode-badge" id="mode-badge">DEMO</span>
+                <span id="week-label">2026 W29 · 草稿</span>
+              </div>
+              <p class="eyebrow">WEEKLY MANDATE / 本周资金委托</p>
+              <h1 id="decision-title"><span id="regime-title">正在形成本期判断</span></h1>
+              <p class="decision-summary" id="regime-note"></p>
+            </div>
+            <aside class="approval-card" aria-label="发布状态">
+              <div class="seal">待审</div>
+              <div><span>当前状态</span><strong id="publication-status">草稿</strong><small id="approval-hint">Park 批准后方可发布</small><button id="approval-action" hidden>批准本期</button></div>
+            </aside>
+          </div>
+
+          <section class="committee-readiness-card" aria-labelledby="committee-readiness-title">
+            <div class="committee-readiness-head">
+              <div><p class="eyebrow">DECISION READINESS / 决策就绪度</p><h2 id="committee-readiness-title">先区分“模型看好”与“已经研究完成”</h2></div>
+              <span class="committee-state" id="committee-state">读取中</span>
+            </div>
+            <p class="committee-headline" id="committee-headline"></p>
+            <div class="committee-metrics" id="committee-metrics"></div>
+            <div class="committee-readiness-grid">
+              <div class="committee-table-wrap">
+                <table class="committee-table">
+                  <thead><tr><th>公司</th><th>研究状态</th><th>模型观察</th><th>建议复核仓位</th><th>下一道门</th></tr></thead>
+                  <tbody id="committee-body"></tbody>
+                </table>
+              </div>
+              <aside class="research-queue" aria-labelledby="research-queue-title">
+                <div><p class="eyebrow">RESEARCH QUEUE</p><h3 id="research-queue-title">下一步研究顺序</h3></div>
+                <ol id="research-queue-list"></ol>
+              </aside>
+            </div>
+          </section>
+
+          <section class="mandate-card" aria-labelledby="mandate-title">
+            <div class="section-heading compact">
+              <div><p class="eyebrow">MODEL OBSERVATION MAP</p><h2 id="mandate-title">模型观察配置</h2></div>
+              <div class="allocation-total"><span id="equity-weight">82%</span> 股票观察 <i></i> <span id="cash-weight">18%</span> 现金观察</div>
+            </div>
+            <div id="mandate-strip" class="mandate-strip" role="img" aria-label="模型组合仓位分配"></div>
+            <div class="mandate-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div>
+            <p class="data-warning" id="data-warning"><strong>当前为产品演示快照。</strong> 正在核对真实行情覆盖；组合动作、估值与文字判断不构成投资建议。</p>
+          </section>
+
+          <div class="content-grid">
+            <section class="portfolio-card" aria-labelledby="portfolio-title">
+              <div class="section-heading">
+                <div><p class="eyebrow">MODEL OBSERVATION POOL</p><h2 id="portfolio-title">本周研究观察池</h2></div>
+                <div class="filter-group" role="group" aria-label="筛选股票动作">
+                  <button class="filter is-active" data-filter="全部">全部</button>
+                  <button class="filter" data-filter="深研">深研</button>
+                  <button class="filter" data-filter="基线">基线</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>公司</th><th>研究门</th><th>模型观察权重</th><th>观察变化</th><th>综合评分</th><th><span class="sr-only">打开详情</span></th></tr></thead>
+                  <tbody id="portfolio-body"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="side-stack">
+              <section class="changes-card" aria-labelledby="changes-title">
+                <div class="section-heading"><div><p class="eyebrow">WHAT CHANGED</p><h2 id="changes-title">本周变化</h2></div></div>
+                <div id="change-list" class="change-list"></div>
+              </section>
+              <section class="risk-card" aria-labelledby="risk-title">
+                <div class="section-heading"><div><p class="eyebrow">RISK DESK</p><h2 id="risk-title">先看三件风险</h2></div></div>
+                <ol id="risk-list" class="risk-list"></ol>
+              </section>
+            </aside>
+          </div>
+
+          <section class="data-footer" aria-labelledby="data-title">
+            <div><p class="eyebrow">DATA RECEIPT</p><h2 id="data-title">这份结论基于什么</h2></div>
+            <dl>
+              <div><dt>数据模式</dt><dd id="data-mode">DEMO</dd></div>
+              <div><dt>截止日期</dt><dd id="data-as-of">—</dd></div>
+              <div><dt>质量状态</dt><dd id="quality-status">—</dd></div>
+              <div><dt>模型版本</dt><dd id="model-version">—</dd></div>
+              <div><dt>真实行情覆盖</dt><dd id="quote-coverage">—</dd></div>
+              <div><dt>日线记录</dt><dd id="bar-coverage">—</dd></div>
+              <div><dt>财务记录</dt><dd id="financial-coverage">—</dd></div>
+              <div><dt>快照 ID</dt><dd id="snapshot-id">—</dd></div>
+            </dl>
+          </section>
+          <section class="source-health-card" aria-labelledby="source-health-title">
+            <div><p class="eyebrow">SOURCE HEALTH</p><h2 id="source-health-title">数据源运行状态</h2></div>
+            <div id="source-health-list" class="source-health-list"></div>
+          </section>
+        </section>
+
+        <section id="view-performance" class="view" aria-labelledby="performance-title">
+          <div class="page-heading"><p class="eyebrow">MODEL LEDGER</p><h1 id="performance-title">组合与业绩</h1><p>只记录发布后真实可执行的模型账本；未发布之前不展示伪历史收益。</p></div>
+          <div class="metric-row">
+            <article><span>发布后收益</span><strong id="metric-return">—</strong><small>组合净值变化</small></article>
+            <article><span>相对基准</span><strong id="metric-alpha">—</strong><small>不含真实费用</small></article>
+            <article><span>股票仓位</span><strong id="metric-equity">—</strong><small>当前目标</small></article>
+            <article><span>现金仓位</span><strong id="metric-cash">—</strong><small>风险缓冲</small></article>
+          </div>
+          <section class="chart-card">
+            <div class="section-heading"><div><p class="eyebrow">NAV, AFTER PUBLISH</p><h2>组合净值 vs 沪深 300</h2></div><div class="chart-legend"><span><i class="portfolio-dot"></i>模型组合</span><span><i class="benchmark-dot"></i>沪深 300</span></div></div>
+            <div id="performance-chart" class="performance-chart"><div class="chart-empty">等待首个正式发布版本</div></div>
+          </section>
+          <section class="exposure-card">
+            <div class="section-heading"><div><p class="eyebrow">EXPOSURE</p><h2>行业暴露</h2></div><span>上限 30%</span></div>
+            <div id="industry-bars" class="industry-bars"></div>
+          </section>
+        </section>
+
+        <section id="view-history" class="view" aria-labelledby="history-title">
+          <div class="page-heading"><p class="eyebrow">DECISION TRAIL</p><h1 id="history-title">调整记录</h1><p>每次变化都保留当时的快照、动作和理由，不回写历史。</p></div>
+          <section class="timeline-card" id="timeline-list"></section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <aside id="stock-drawer" class="stock-drawer" aria-labelledby="drawer-title" aria-hidden="true" inert>
+    <button id="drawer-close" class="drawer-close" aria-label="关闭个股详情">×</button>
+    <div id="drawer-content"></div>
+  </aside>
+  <section id="research-report" class="research-report" role="dialog" aria-modal="true" aria-labelledby="report-title" aria-hidden="true" hidden>
+    <div class="report-topbar">
+      <button id="report-close" class="report-back" aria-label="返回组合面板">← 返回组合</button>
+      <span>PARK RESEARCH · EQUITY</span>
+      <span id="report-receipt">读取中</span>
+    </div>
+    <div id="report-content" class="report-content"></div>
+  </section>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

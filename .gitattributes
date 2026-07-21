@@ -1,0 +1,25 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Python
+*.py text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+hooks/session-start text eol=lf
+
+# Batch / polyglot
+*.cmd text eol=crlf
+hooks/run-hook.cmd text eol=crlf
+
+# JSON / Markdown
+*.json text eol=lf
+*.md text eol=lf
+
+# HTML
+*.html text eol=lf
+
+# Binary
+*.png binary
+*.jpg binary
+*.gif binary
