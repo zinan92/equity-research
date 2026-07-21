@@ -1,0 +1,25 @@
+{
+  "schema_version": "research-report-v1",
+  "contract_version": "1.0.0",
+  "identity": {"ticker": "TSLA", "name": "Tesla, Inc.", "exchange": "NASDAQ", "market": "US", "currency": "USD", "reporting_standard": "US_GAAP"},
+  "as_of": {"market_data_at": null, "research_cutoff": null},
+  "measurement_policy": {"currency": "USD", "price_currency": "USD", "financial_presentation_currency": "USD", "money_unit": "issuer_reporting_currency", "price_unit": "per_share", "financial_statement_scale": 100000000, "financial_statement_unit_label": "亿美元", "percent_unit": "percent", "percentage_point_unit": "percentage_point", "rule": "Every monetary field must inherit this currency or declare an explicit override; percent and percentage-point changes are never interchangeable."},
+  "claim_policy": {"allowed_types": ["fact", "inference", "assumption", "risk"], "fact_requires_source_ids": true, "inference_requires_source_ids": true, "assumption_requires_method": true, "risk_requires_trigger": true},
+  "absence_policy": {"missing_evidence": "The module applies, but current evidence is insufficient. It must remain visible with a reason.", "not_applicable": "The concept does not apply to this issuer or market. It must not be used as a synonym for missing data."},
+  "format_contract": {"module_order_is_authoritative": true, "same_order_desktop_mobile_print": true, "unknown_modules_fail_closed": true},
+  "market_specific_disclosures": {
+    "cninfo_filings": {"status": "not_applicable", "reason": "Not applicable to the issuer market; do not map it to Missing evidence."},
+    "sec_filings": {"status": "available", "reason": "This disclosure regime applies to the issuer market."}
+  },
+  "module_manifest": [
+    {"id": "executive_summary", "order": 1, "anchor": "r-overview", "title": "决策摘要", "kicker": "INVESTMENT COMMITTEE", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["executive"]},
+    {"id": "investment_thesis", "order": 2, "anchor": "r-thesis", "title": "核心投资逻辑", "kicker": "THESIS", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["thesis"]},
+    {"id": "business_and_industry", "order": 3, "anchor": "r-business", "title": "经营、行业与竞争", "kicker": "BUSINESS / INDUSTRY", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["business_model", "industry_position", "management"]},
+    {"id": "financial_quality", "order": 4, "anchor": "r-financial", "title": "财务质量", "kicker": "FINANCIAL QUALITY", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["financials"]},
+    {"id": "framework_assessment", "order": 5, "anchor": "r-serenity", "title": "研究框架评分", "kicker": "FRAMEWORK", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["serenity"]},
+    {"id": "valuation", "order": 6, "anchor": "r-valuation", "title": "估值框架", "kicker": "VALUATION", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["valuation"]},
+    {"id": "catalysts_risks", "order": 7, "anchor": "r-risks", "title": "催化剂、风险与反证", "kicker": "CATALYSTS / RISKS", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["catalysts", "risks", "falsification", "watchlist"]},
+    {"id": "evidence_ledger", "order": 8, "anchor": "r-evidence", "title": "证据台账与方法", "kicker": "EVIDENCE / METHOD", "required": true, "status": "missing_evidence", "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.", "content_paths": ["sources", "evidence_summary", "source_contract", "disclaimer"]}
+  ],
+  "truth_set": {"scope": "structure_only", "is_live_research": false, "note": "Contract and format fixture only; not current data, valuation, rating, or position advice."}
+}

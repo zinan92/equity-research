@@ -137,7 +137,9 @@ python3 -m py_compile product/*.py
 node --check product/render_publication.mjs
 ```
 
-当前产品测试共 79 项，覆盖数据完整性、时点、版本身份、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
+当前产品测试共 102 项，覆盖数据完整性、时点、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、危险来源链接、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
+
+标准化报告接口遵循 [`research-report-v1`](../docs/product/research-report-v1.md)。`report_contract.module_manifest` 是 Web、移动和发布包的唯一章节顺序来源；客户端遇到未知或乱序版本必须 fail closed。
 
 ## 当前限制
 

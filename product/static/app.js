@@ -384,14 +384,29 @@ function reportRefs(ids = [], sources = []) {
   return ids.map((id) => index.has(id) ? `<a class="source-ref" href="#source-${escapeHtml(id)}" aria-label="跳到证据 ${index.get(id)}">${index.get(id)}</a>` : "").join("");
 }
 
-function reportSection(title, eyebrow, id, body) {
-  const meta = {
-    "r-update": ["02", "版本变化"], "r-thesis": ["03", "投资逻辑"],
-    "r-business": ["04", "经营与竞争"], "r-financial": ["05", "财务质量"],
-    "r-serenity": ["06", "结构评分"], "r-valuation": ["07", "估值框架"],
-    "r-risks": ["08", "风险控制"], "r-evidence": ["09", "证据与来源"],
-  }[id] || ["—", "研究章节"];
-  return `<section class="report-section" id="${id}"><div class="report-section-head"><span class="report-section-index">${meta[0]}</span><div><p class="report-section-kicker">${meta[1]}</p><h2>${title}</h2></div></div>${body}</section>`;
+function safeSourceUrl(value) {
+  if (!value) return null;
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" ? parsed.href : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function reportSection(title, eyebrow, id, body, module = null) {
+  const meta = module
+    ? [String(module.order).padStart(2, "0"), module.kicker]
+    : ({ "r-update": ["Δ", "版本变化"] }[id] || ["—", eyebrow || "研究章节"]);
+  const statusLabels = { available: "已覆盖", missing_evidence: "Missing evidence", not_applicable: "Not applicable" };
+  const status = module ? `<em class="report-module-status ${escapeHtml(module.status)}">${escapeHtml(statusLabels[module.status] || module.status)}</em>` : "";
+  const absence = module && module.status !== "available"
+    ? `<p class="method-warning report-module-absence"><strong>${escapeHtml(statusLabels[module.status] || module.status)}：</strong>${escapeHtml(module.status_reason)}</p>`
+    : "";
+  const contractAttribute = module
+    ? `data-report-module="${escapeHtml(module.id)}"`
+    : `data-report-supporting-block="${escapeHtml(id)}"`;
+  return `<section class="report-section" id="${id}" ${contractAttribute}><div class="report-section-head"><span class="report-section-index">${meta[0]}</span><div><p class="report-section-kicker">${escapeHtml(meta[1])}</p><h2>${escapeHtml(title)}</h2></div>${status}</div>${absence}${body}</section>`;
 }
 
 function renderAiNarrative(report, sources) {
@@ -447,6 +462,23 @@ function renderPendingReport(report) {
   return `<div class="report-pending"><p class="eyebrow">${pendingLabel}</p><h1 id="report-title">${escapeHtml(report.name)}</h1><p>${escapeHtml(report.message)}</p><div class="pending-known"><strong>已经有</strong><span>产品结构</span><span>数据接口</span><span>研究门禁</span></div><div class="pending-missing"><strong>还缺</strong>${report.available.missing_modules.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div><p class="data-warning"><strong>未通过门禁就不展示目标价与仓位。</strong>完成真实快照、完整覆盖和质量校验后，这里才会升级为完整研报。</p><button class="primary-button" data-report-back>返回组合</button><small>当前快照：${escapeHtml(stock.snapshot_id)} · ${escapeHtml(stock.data_mode)} · ${escapeHtml(stock.snapshot_quality || "unknown")}</small></div>`;
 }
 
+function orderReportMarkupFromManifest(markup, contract) {
+  const template = document.createElement("template");
+  template.innerHTML = markup.trim();
+  const main = template.content.querySelector(".report-main");
+  if (!main) throw new Error("研报正文容器缺失，已拒绝渲染");
+  const nodes = [...main.children].filter((node) => node.hasAttribute("data-report-module"));
+  const byId = new Map(nodes.map((node) => [node.dataset.reportModule, node]));
+  const expected = contract.module_manifest.map((module) => module.id);
+  if (nodes.length !== expected.length || byId.size !== expected.length || expected.some((id) => !byId.has(id))) {
+    throw new Error("研报正文模块与合同不一致，已拒绝渲染");
+  }
+  for (const id of expected) main.append(byId.get(id));
+  const actual = [...main.children].filter((node) => node.hasAttribute("data-report-module")).map((node) => node.dataset.reportModule);
+  if (actual.join("|") !== expected.join("|")) throw new Error("研报正文顺序校验失败，已拒绝渲染");
+  return template.innerHTML;
+}
+
 function renderDeepReport(report) {
   const s = report.sources;
   const exec = report.executive;
@@ -455,6 +487,24 @@ function renderDeepReport(report) {
   const financials = report.financials;
   const serenity = report.serenity;
   const ai = report.ai_narrative;
+  const contract = report.report_contract;
+  const expectedModules = ["executive_summary", "investment_thesis", "business_and_industry", "financial_quality", "framework_assessment", "valuation", "catalysts_risks", "evidence_ledger"];
+  const modules = contract?.module_manifest || [];
+  if (contract?.schema_version !== "research-report-v1" || contract?.contract_version !== "1.0.0" || modules.map((item) => item.id).join("|") !== expectedModules.join("|")) {
+    throw new Error("研报合同缺失或章节顺序不受支持，已拒绝渲染");
+  }
+  const moduleById = new Map(modules.map((item) => [item.id, item]));
+  const section = (moduleId, _title, eyebrow, anchor, body) => {
+    const module = moduleById.get(moduleId);
+    if (!module || module.anchor !== anchor) throw new Error(`研报章节合同不匹配：${moduleId}`);
+    return reportSection(module.title, eyebrow, anchor, body, module);
+  };
+  const marketLabels = { CN: "中国股票研究", HK: "香港股票研究", US: "美国股票研究" };
+  const currencySymbols = { CNY: "¥", HKD: "HK$", USD: "$" };
+  const currencySymbol = currencySymbols[contract.identity.currency] || `${contract.identity.currency} `;
+  const formatMoney = (value, digits = 1) => `${currencySymbol}${formatMaybe(value, "", digits)}`;
+  const financialUnit = contract.measurement_policy.financial_statement_unit_label;
+  const formatFinancialAmount = (value, digits = 1) => value === null || value === undefined ? "—" : `${formatMaybe(value, "", digits)} ${financialUnit}`;
   const isBaseline = report.research_depth === "quantitative_baseline";
   const stressTest = report.stress_test;
   const signalItems = isBaseline ? (report.quant_signals || []) : report.moat;
@@ -493,61 +543,57 @@ function renderDeepReport(report) {
     positionValue = "—";
     positionNote = "正文终审未通过，不展示建议仓位";
   }
-  const nav = [
-    ["r-overview", "决策摘要"], ["r-update", "本次变化"], ["r-thesis", "核心逻辑"], ["r-business", isBaseline ? "证据边界" : "经营与护城河"],
-    ["r-financial", "财务质量"], ["r-serenity", isBaseline ? "量化评分" : "卡位评分"], ["r-valuation", isBaseline ? "压力测试" : "三档估值"],
-    ["r-risks", "风险与反证"], ["r-evidence", "证据台账"],
-  ];
-  return `<article class="report-document">
+  const nav = modules.map((module) => [module.anchor, module.title, module.order, module.status]);
+  const executiveModule = moduleById.get("executive_summary");
+  const markup = `<article class="report-document">
     <header class="report-hero" id="r-overview">
-      <div class="report-hero-copy"><div class="report-masthead"><strong>PARK RESEARCH</strong><span>中国股票研究</span><time>${escapeHtml(report.as_of)}</time></div><p class="report-cover-line">${escapeHtml(report.industry)} · ${coverageLabel}</p><h1 id="report-title">${escapeHtml(companyName)}</h1><h2>${escapeHtml(thesisHeadline)}</h2><p class="report-deck">${escapeHtml(ai?.executive_summary?.conclusion || exec.summary)}</p><div class="report-meta"><span>${escapeHtml(report.ticker)}</span><span>${escapeHtml(report.exchange)}</span><span>${escapeHtml(report.data_mode)} DATA</span><span>${escapeHtml(report.report_version)}</span></div></div>
-      <aside class="report-rating-panel" aria-label="投资判断摘要"><div class="rating-primary"><span>${isBaseline ? "模型观察结论" : "投资判断"}</span><strong>${escapeHtml(exec.stance)}</strong></div><dl><div><dt>当前价</dt><dd>¥${formatMaybe(exec.current_price, "", 2)}</dd></div><div><dt>${escapeHtml(priceLabel)}</dt><dd>¥${formatMaybe(baseScenario.target_price, "", 1)}</dd></div><div><dt>${isBaseline ? "基准偏离" : "隐含空间"}</dt><dd>${Number(baseScenario.upside_pct) >= 0 ? "+" : ""}${formatMaybe(baseScenario.upside_pct, "%", 1)}</dd></div><div><dt>${isBaseline ? "模型观察权重" : "仓位上限"}</dt><dd>${formatWeight(isBaseline ? exec.model_observation_weight : exec.max_target_weight)}</dd></div></dl><div class="rating-range"><div><span>悲观 ¥${formatMaybe(targetMin, "", 0)}</span><span>乐观 ¥${formatMaybe(targetMax, "", 0)}</span></div><i><b style="left:${currentMarker}%"></b></i><small>现价在${isBaseline ? "压力" : "估值"}区间的位置</small></div></aside>
+      <div class="report-hero-copy"><div class="report-masthead"><strong>PARK RESEARCH</strong><span>${escapeHtml(marketLabels[contract.identity.market] || contract.identity.market)}</span><time>${escapeHtml(report.as_of)}</time></div><p class="report-cover-line">${escapeHtml(report.industry)} · ${coverageLabel}</p><h1 id="report-title">${escapeHtml(companyName)}</h1><h2>${escapeHtml(thesisHeadline)}</h2><p class="report-deck">${escapeHtml(ai?.executive_summary?.conclusion || exec.summary)}</p><div class="report-meta"><span>${escapeHtml(report.ticker)}</span><span>${escapeHtml(report.exchange)}</span><span>${escapeHtml(report.data_mode)} DATA</span><span>${escapeHtml(contract.schema_version)}</span></div></div>
+      <aside class="report-rating-panel" aria-label="投资判断摘要"><div class="rating-primary"><span>${isBaseline ? "模型观察结论" : "投资判断"}</span><strong>${escapeHtml(exec.stance)}</strong></div><dl><div><dt>当前价</dt><dd>${formatMoney(exec.current_price, 2)}</dd></div><div><dt>${escapeHtml(priceLabel)}</dt><dd>${formatMoney(baseScenario.target_price, 1)}</dd></div><div><dt>${isBaseline ? "基准偏离" : "隐含空间"}</dt><dd>${Number(baseScenario.upside_pct) >= 0 ? "+" : ""}${formatMaybe(baseScenario.upside_pct, "%", 1)}</dd></div><div><dt>${isBaseline ? "模型观察权重" : "仓位上限"}</dt><dd>${formatWeight(isBaseline ? exec.model_observation_weight : exec.max_target_weight)}</dd></div></dl><div class="rating-range"><div><span>悲观 ${formatMoney(targetMin, 0)}</span><span>乐观 ${formatMoney(targetMax, 0)}</span></div><i><b style="left:${currentMarker}%"></b></i><small>现价在${isBaseline ? "压力" : "估值"}区间的位置</small></div></aside>
     </header>
     <div class="report-layout">
-      <aside class="report-toc"><strong>报告目录</strong>${nav.map(([id, label], index) => `<a href="#${id}"><span>0${index + 1}</span>${label}</a>`).join("")}<div><span>版本</span><code>${escapeHtml(report.report_version)}</code></div></aside>
+      <aside class="report-toc"><strong>报告目录</strong>${nav.map(([id, label, order, status]) => `<a href="#${id}" class="${escapeHtml(status)}"><span>${String(order).padStart(2, "0")}</span>${escapeHtml(label)}</a>`).join("")}<div><span>合同</span><code>${escapeHtml(contract.schema_version)} · ${escapeHtml(contract.contract_version)}</code></div></aside>
       <main class="report-main">
-        <section class="ic-summary" aria-labelledby="ic-summary-title"><header><span>01</span><div><p>投资委员会摘要</p><h2 id="ic-summary-title">结论、仓位与验证条件</h2></div></header>${report.depth_disclosure ? `<p class="method-warning"><strong>研究深度说明：</strong>${escapeHtml(report.depth_disclosure)}</p>` : ""}<div class="ic-contradiction"><span>核心分歧</span><strong>${escapeHtml(exec.key_contradiction)}</strong></div><div class="ic-kpis"><article><span>${positionLabel}</span><strong>${positionValue}</strong><small>${positionNote}</small></article><article><span>执行观察区</span><strong>¥${formatMaybe(exec.current_price, "", 2)}</strong><small>${escapeHtml(exec.execution_range)}</small></article><article><span>${isBaseline ? "基准压力价" : "基准估值"}</span><strong>¥${formatMaybe(baseScenario.target_price, "", 1)}</strong><small>${Number(baseScenario.upside_pct) >= 0 ? "+" : ""}${formatMaybe(baseScenario.upside_pct, "%", 1)} 相对现价</small></article><article><span>证据覆盖</span><strong>${report.evidence_summary.document_count} 份</strong><small>${report.evidence_summary.claim_locator_count} 处定位 · ${report.evidence_summary.independent_document_count} 份独立行业源</small></article></div><div class="ic-execution"><div><span>${isBaseline ? "研究升级路径" : "分步执行"}</span><h3>${isBaseline ? `${formatWeight(exec.model_observation_weight)} 是模型观察权重，不是已批准仓位` : `${formatWeight(exec.target_weight)} 是条件上限，不是一次买完`}</h3></div><ol>${exec.position_plan.map((item, i) => `<li><span>${i + 1}</span><div><strong>${escapeHtml(item.stage)}${Number(item.weight) > 0 ? ` · ${formatWeight(item.weight)}` : ""}</strong><p>${escapeHtml(item.condition)}</p></div></li>`).join("")}</ol></div></section>
-        ${renderUpdateDiff(report.update_diff)}
-        ${reportSection("核心投资逻辑", "THESIS / 结论先行", "r-thesis", `<div class="thesis-list">${report.thesis.map((item, i) => `<article><span>0${i + 1}</span><div><h3>${escapeHtml(item.title)} <em class="claim-badge ${escapeHtml(item.claim_type)}">${escapeHtml(claimKind[item.claim_type] || item.claim_type)}</em> ${reportRefs(item.source_ids, s)}</h3><p>${escapeHtml(item.body)}</p></div></article>`).join("")}</div>`)}
-        ${renderAiNarrative(report, s)}
-        ${reportSection(isBaseline ? "经营证据边界与量化线索" : "经营链路与收入结构", "BUSINESS MODEL", "r-business", `
+        <section class="ic-summary" data-report-module="executive_summary" aria-labelledby="ic-summary-title"><header><span>${String(executiveModule.order).padStart(2, "0")}</span><div><p>${escapeHtml(executiveModule.kicker)}</p><h2 id="ic-summary-title">${escapeHtml(executiveModule.title)}</h2></div><em class="report-module-status ${escapeHtml(executiveModule.status)}">${escapeHtml(({ available: "已覆盖", missing_evidence: "Missing evidence", not_applicable: "Not applicable" })[executiveModule.status] || executiveModule.status)}</em></header>${report.depth_disclosure ? `<p class="method-warning"><strong>研究深度说明：</strong>${escapeHtml(report.depth_disclosure)}</p>` : ""}<div class="ic-contradiction"><span>核心分歧</span><strong>${escapeHtml(exec.key_contradiction)}</strong></div><div class="ic-kpis"><article><span>${positionLabel}</span><strong>${positionValue}</strong><small>${positionNote}</small></article><article><span>执行观察区</span><strong>${formatMoney(exec.current_price, 2)}</strong><small>${escapeHtml(exec.execution_range)}</small></article><article><span>${isBaseline ? "基准压力价" : "基准估值"}</span><strong>${formatMoney(baseScenario.target_price, 1)}</strong><small>${Number(baseScenario.upside_pct) >= 0 ? "+" : ""}${formatMaybe(baseScenario.upside_pct, "%", 1)} 相对现价</small></article><article><span>证据覆盖</span><strong>${report.evidence_summary.document_count} 份</strong><small>${report.evidence_summary.claim_locator_count} 处定位 · ${report.evidence_summary.independent_document_count} 份独立行业源</small></article></div><div class="ic-execution"><div><span>${isBaseline ? "研究升级路径" : "分步执行"}</span><h3>${isBaseline ? `${formatWeight(exec.model_observation_weight)} 是模型观察权重，不是已批准仓位` : `${formatWeight(exec.target_weight)} 是条件上限，不是一次买完`}</h3></div><ol>${exec.position_plan.map((item, i) => `<li><span>${i + 1}</span><div><strong>${escapeHtml(item.stage)}${Number(item.weight) > 0 ? ` · ${formatWeight(item.weight)}` : ""}</strong><p>${escapeHtml(item.condition)}</p></div></li>`).join("")}</ol></div>${renderUpdateDiff(report.update_diff)}</section>
+        ${section("investment_thesis", "核心投资逻辑", "THESIS / 结论先行", "r-thesis", `<div class="thesis-list">${report.thesis.map((item, i) => `<article><span>0${i + 1}</span><div><h3>${escapeHtml(item.title)} <em class="claim-badge ${escapeHtml(item.claim_type)}">${escapeHtml(claimKind[item.claim_type] || item.claim_type)}</em> ${reportRefs(item.source_ids, s)}</h3><p>${escapeHtml(item.body)}</p></div></article>`).join("")}</div>${renderAiNarrative(report, s)}`)}
+        ${section("business_and_industry", isBaseline ? "经营证据边界与量化线索" : "经营链路与收入结构", "BUSINESS MODEL", "r-business", `
           <p class="section-intro">${escapeHtml(report.business_model.description)} ${reportRefs(report.business_model.source_ids, s)}</p>
-          ${report.business_model.segments.length ? `<div class="segment-table"><div class="segment-head"><span>业务</span><span>收入</span><span>占比</span><span>增速</span><span>毛利率</span></div>${report.business_model.segments.map((item) => `<div><strong>${escapeHtml(item.name)}</strong><span>${formatMaybe(item.revenue_yi, "亿", 1)}</span><span>${formatMaybe(item.revenue_share, "%", 1)}</span><span class="${Number(item.growth) < 0 ? "negative" : "positive"}">${formatMaybe(item.growth, "%", 1)}</span><span>${formatMaybe(item.gross_margin, "%", 1)}</span></div>`).join("")}</div>` : ""}
+          ${report.business_model.segments.length ? `<div class="segment-table"><div class="segment-head"><span>业务</span><span>收入（${escapeHtml(financialUnit)}）</span><span>占比</span><span>增速</span><span>毛利率</span></div>${report.business_model.segments.map((item) => `<div><strong>${escapeHtml(item.name)}</strong><span>${formatFinancialAmount(item.revenue_yi, 1)}</span><span>${formatMaybe(item.revenue_share, "%", 1)}</span><span class="${Number(item.growth) < 0 ? "negative" : "positive"}">${formatMaybe(item.growth, "%", 1)}</span><span>${formatMaybe(item.gross_margin, "%", 1)}</span></div>`).join("")}</div>` : ""}
           <div class="value-chain">${report.business_model.value_chain.map((item, i) => `<article><span>0${i + 1}</span><h3>${escapeHtml(item.layer)}</h3><p>${escapeHtml(item.items)}</p><small>研究问题：${escapeHtml(item.question)}</small></article>`).join("")}</div>
           <div class="industry-position"><div><p class="report-block-label">行业位置</p><h3>${escapeHtml(report.industry_position.headline)} ${reportRefs(report.industry_position.source_ids, s)}</h3></div><div class="industry-metrics">${report.industry_position.metrics.map((item) => `<article><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong><small>${escapeHtml(item.note)}</small></article>`).join("")}</div></div>
           <h3 class="subsection-title">${isBaseline ? "四项量化线索（非护城河评分）" : "护城河不是一句话，要有证据"}</h3><div class="moat-grid">${signalItems.map((item) => `<article><header><strong>${escapeHtml(item.name)}</strong><b>${formatScore(item.score)}</b></header><div class="moat-track"><i style="width:${item.score * 10}%"></i></div><p>${escapeHtml(item.proof)} ${reportRefs(item.source_ids, s)}</p></article>`).join("")}</div>
           <div class="management-card"><div><p class="report-block-label">管理层评价</p><h3>${isBaseline ? "治理与资本配置 · 深度证据待补" : `管理层与资本配置 · ${formatScore(report.management.score)}/10`}</h3></div><div><strong>${isBaseline ? "当前边界" : "加分项"}</strong><ul>${report.management.strengths.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div><div><strong>需要盯住</strong><ul>${report.management.watchouts.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>${reportRefs(report.management.source_ids, s)}</div></div>`)}
-        ${reportSection(isBaseline ? "财务质量：先确认增长与资产负债表" : "财务质量：利润很好，现金转化要继续验证", "FINANCIAL QUALITY", "r-financial", `
+        ${section("financial_quality", isBaseline ? "财务质量：先确认增长与资产负债表" : "财务质量：利润很好，现金转化要继续验证", "FINANCIAL QUALITY", "r-financial", `
           <p class="section-intro">${escapeHtml(financials.headline)}</p>
           <div class="financial-kpis"><article><span>年度 ROE</span><strong>${formatMaybe(financials.annual_quality.roe, "%", 1)}</strong></article><article><span>年度毛利率</span><strong>${formatMaybe(financials.annual_quality.gross_margin, "%", 1)}</strong></article><article><span>年度净利率</span><strong>${formatMaybe(financials.annual_quality.net_margin, "%", 1)}</strong></article><article><span>资产负债率</span><strong>${formatMaybe(financials.annual_quality.debt_ratio, "%", 1)}</strong></article></div>
-          <div class="table-wrap report-table"><table><thead><tr><th>报告期</th><th>累计营收</th><th>累计净利润</th><th>营收同比</th><th>利润同比</th><th>毛利率</th></tr></thead><tbody>${financials.series.slice(0, 6).map((row) => `<tr><td data-label="报告期">${escapeHtml(row.report_date)}<small>${escapeHtml(row.report_type)}</small></td><td data-label="累计营收">${formatMaybe(row.revenue_yi, "亿", 1)}</td><td data-label="累计净利润">${formatMaybe(row.net_profit_yi, "亿", 1)}</td><td data-label="营收同比">${formatMaybe(row.revenue_yoy, "%", 1)}</td><td data-label="利润同比">${formatMaybe(row.net_profit_yoy, "%", 1)}</td><td data-label="毛利率">${formatMaybe(row.gross_margin, "%", 1)}</td></tr>`).join("")}</tbody></table></div>
+          <div class="table-wrap report-table"><table><thead><tr><th>报告期</th><th>累计营收（${escapeHtml(financialUnit)}）</th><th>累计净利润（${escapeHtml(financialUnit)}）</th><th>营收同比</th><th>利润同比</th><th>毛利率</th></tr></thead><tbody>${financials.series.slice(0, 6).map((row) => `<tr><td data-label="报告期">${escapeHtml(row.report_date)}<small>${escapeHtml(row.report_type)}</small></td><td data-label="累计营收">${formatFinancialAmount(row.revenue_yi, 1)}</td><td data-label="累计净利润">${formatFinancialAmount(row.net_profit_yi, 1)}</td><td data-label="营收同比">${formatMaybe(row.revenue_yoy, "%", 1)}</td><td data-label="利润同比">${formatMaybe(row.net_profit_yoy, "%", 1)}</td><td data-label="毛利率">${formatMaybe(row.gross_margin, "%", 1)}</td></tr>`).join("")}</tbody></table></div>
           <div class="quality-notes">${financials.quality_notes.map((note, i) => `<article><span>0${i + 1}</span><p>${escapeHtml(note)}</p></article>`).join("")}</div>`)}
-        ${reportSection(isBaseline ? "量化四维评分：只用于排序，不替代公司研究" : "产业链关键卡位评分：先看结构，再看公司", "", "r-serenity", `
+        ${section("framework_assessment", isBaseline ? "量化四维评分：只用于排序，不替代公司研究" : "产业链关键卡位评分：先看结构，再看公司", "", "r-serenity", `
           <div class="serenity-summary"><div><span>原始结构分</span><strong>${formatScore(serenity.raw_score)}</strong></div><b>− ${formatScore(serenity.penalty)} 风险扣分</b><div class="final"><span>最终研究分</span><strong>${formatScore(serenity.final_score)}</strong><small>${escapeHtml(serenity.label)}</small></div></div>
           <p class="method-warning">${escapeHtml(serenity.meaning)}</p>
           <div class="scorecard-table"><div class="scorecard-head"><span>维度</span><span>评分</span><span>权重贡献</span><span>为什么</span></div>${serenity.factors.map((item) => `<div><strong>${escapeHtml(item.label)}</strong><span>${formatScore(item.score)}/5</span><span>${formatScore(item.contribution)}</span><p>${escapeHtml(item.reason)} ${reportRefs(item.source_ids, s)}</p></div>`).join("")}</div>
           <h3 class="subsection-title">风险扣分</h3><div class="penalty-grid">${serenity.penalties.map((item) => `<article><header><strong>${escapeHtml(item.label)}</strong><b>−${formatScore(item.points)}</b></header><p>${escapeHtml(item.reason)}</p></article>`).join("")}</div>`)}
-        ${reportSection(isBaseline ? "三档价格压力测试：不伪造目标价" : "三档估值：公式比目标价更重要", "VALUATION", "r-valuation", `
+        ${section("valuation", isBaseline ? "三档价格压力测试：不伪造目标价" : "三档估值：公式比目标价更重要", "VALUATION", "r-valuation", `
           <div class="valuation-lead"><div><span>方法</span><strong>${escapeHtml(valuation.method)}</strong></div><div><span>当前</span><strong>PE ${formatMaybe(valuation.pe_ttm, "x", 1)} · PB ${formatMaybe(valuation.pb, "x", 1)}</strong></div></div>
           ${isBaseline ? `
             <p class="method-warning"><strong>估值状态：</strong>${escapeHtml(valuation.reason)}</p>
-            <div class="valuation-grid">${(stressTest?.scenarios || []).map((item) => `<article class="${scenarioClass(item)}"><span>${escapeHtml(item.label)}压力情景</span><strong>¥${formatMaybe(item.stress_price, "", 1)}</strong><b>${Number(item.change_pct) >= 0 ? "+" : ""}${formatMaybe(item.change_pct, "%", 1)}</b><dl><div><dt>当前价基数</dt><dd>¥${formatMaybe(item.price_basis, "", 1)}</dd></div><div><dt>压力倍数</dt><dd>${formatMaybe(item.stress_multiple, "x", 1)}</dd></div></dl><p>${escapeHtml(item.assumption)}</p></article>`).join("")}</div>
+            <div class="valuation-grid">${(stressTest?.scenarios || []).map((item) => `<article class="${scenarioClass(item)}"><span>${escapeHtml(item.label)}压力情景</span><strong>${formatMoney(item.stress_price, 1)}</strong><b>${Number(item.change_pct) >= 0 ? "+" : ""}${formatMaybe(item.change_pct, "%", 1)}</b><dl><div><dt>当前价基数</dt><dd>${formatMoney(item.price_basis, 1)}</dd></div><div><dt>压力倍数</dt><dd>${formatMaybe(item.stress_multiple, "x", 1)}</dd></div></dl><p>${escapeHtml(item.assumption)}</p></article>`).join("")}</div>
             <div class="valuation-formula"><code>${escapeHtml(stressTest?.formula || "")}</code><p>公司级盈利预测、同行比较与历史估值分位尚未完成。</p><small>${escapeHtml(stressTest?.warning || "")}</small></div>` : `
-            <div class="earnings-bridge"><div><span>${escapeHtml(valuation.earnings_bridge.base_period)} ${escapeHtml(earningsLabel)}</span><strong>¥${formatMaybe(valuation.earnings_bridge.base_eps, "", 2)}</strong><small>${escapeHtml(valuation.earnings_bridge.basis)}</small></div>${valuation.earnings_bridge.cases.map((item) => `<article><span>${escapeHtml(item.label)} ${escapeHtml(earningsLabel)}</span><strong>¥${formatMaybe(item.eps, "", 1)}</strong><small>${Number(item.growth_pct) >= 0 ? "+" : ""}${formatMaybe(item.growth_pct, "%", 1)} vs 2025A</small></article>`).join("")}</div>
-            <div class="valuation-grid">${valuation.scenarios.map((item) => `<article class="${scenarioClass(item)}"><span>${escapeHtml(item.label)}情景</span><strong>¥${formatMaybe(item.target_price, "", 1)}</strong><b>${Number(item.upside_pct) >= 0 ? "+" : ""}${formatMaybe(item.upside_pct, "%", 1)}</b><dl><div><dt>${escapeHtml(earningsLabel)}</dt><dd>¥${formatMaybe(item.eps, "", 1)}</dd></div><div><dt>${escapeHtml(multipleLabel)}</dt><dd>${formatMaybe(item.pe, "x", 1)}</dd></div></dl><p>${escapeHtml(item.assumption)}</p></article>`).join("")}</div>
+            <div class="earnings-bridge"><div><span>${escapeHtml(valuation.earnings_bridge.base_period)} ${escapeHtml(earningsLabel)}</span><strong>${formatMoney(valuation.earnings_bridge.base_eps, 2)}</strong><small>${escapeHtml(valuation.earnings_bridge.basis)}</small></div>${valuation.earnings_bridge.cases.map((item) => `<article><span>${escapeHtml(item.label)} ${escapeHtml(earningsLabel)}</span><strong>${formatMoney(item.eps, 1)}</strong><small>${Number(item.growth_pct) >= 0 ? "+" : ""}${formatMaybe(item.growth_pct, "%", 1)} vs 2025A</small></article>`).join("")}</div>
+            <div class="valuation-grid">${valuation.scenarios.map((item) => `<article class="${scenarioClass(item)}"><span>${escapeHtml(item.label)}情景</span><strong>${formatMoney(item.target_price, 1)}</strong><b>${Number(item.upside_pct) >= 0 ? "+" : ""}${formatMaybe(item.upside_pct, "%", 1)}</b><dl><div><dt>${escapeHtml(earningsLabel)}</dt><dd>${formatMoney(item.eps, 1)}</dd></div><div><dt>${escapeHtml(multipleLabel)}</dt><dd>${formatMaybe(item.pe, "x", 1)}</dd></div></dl><p>${escapeHtml(item.assumption)}</p></article>`).join("")}</div>
             <div class="valuation-formula"><code>${escapeHtml(formulaLabel)}</code><p>${escapeHtml(valuation.reverse_implied)}</p><small>${escapeHtml(valuation.warning)}</small></div>`}`)}
-        ${reportSection("催化剂、风险与反证", "RISK DESK", "r-risks", `
+        ${section("catalysts_risks", "催化剂、风险与反证", "RISK DESK", "r-risks", `
           <h3 class="subsection-title">未来 12 个月最值得跟踪的催化剂</h3><div class="catalyst-list">${report.catalysts.map((item) => `<article><time>${escapeHtml(item.date)}</time><div><h3>${escapeHtml(item.title)} ${reportRefs(item.source_ids, s)}</h3><p>${escapeHtml(item.body)}</p></div></article>`).join("")}</div>
           <h3 class="subsection-title">风险矩阵：写触发器，不写空话</h3><div class="risk-matrix"><div class="risk-head"><span>#</span><span>风险</span><span>影响/概率</span><span>触发信号</span></div>${report.risks.map((item) => `<article><span>0${item.rank}</span><div><strong>${escapeHtml(item.title)} ${reportRefs(item.source_ids, s)}</strong><small>${escapeHtml(item.evidence)}</small></div><b>${escapeHtml(item.impact)} / ${escapeHtml(item.probability)}</b><p>${escapeHtml(item.trigger)}</p></article>`).join("")}</div>
           <div class="falsification"><p class="report-block-label">反证条件 · 什么会证明我们错了</p><ol>${report.falsification.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ol></div>
           <h3 class="subsection-title">下次更新只盯这五个数</h3><div class="watchlist-table"><div><span>指标</span><span>当前</span><span>失效/验证阈值</span><span>频率</span></div>${report.watchlist.map((item) => `<div><strong>${escapeHtml(item.metric)}</strong><span>${escapeHtml(item.current)}</span><span>${escapeHtml(item.threshold)}</span><span>${escapeHtml(item.frequency)}</span></div>`).join("")}</div>`)}
-        ${reportSection("证据台账", "EVIDENCE LEDGER", "r-evidence", `
-          <p class="section-intro">${escapeHtml(report.evidence_summary.boundary)}</p><div class="source-ledger">${s.map((source, i) => { const isMarketSnapshot = source.kind === "market_snapshot"; const publicTitle = isMarketSnapshot ? "最新市场行情与因子数据" : source.title; const publicNote = isMarketSnapshot ? "经数据质量门核验的最新市场行情与因子数据" : source.note; return `<article id="source-${escapeHtml(source.id)}"><span>${String(i + 1).padStart(2, "0")}</span><div><header><strong>${escapeHtml(publicTitle)}</strong><em>${escapeHtml(sourceKind[source.kind] || source.kind)} · ${escapeHtml(source.strength)}</em></header><p>${escapeHtml(publicNote)}</p><small>资料时点 ${escapeHtml(source.known_at || "未披露")}</small>${source.url ? `<a href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer">打开原始来源 ↗</a>` : ""}</div></article>`; }).join("")}</div>
-          <p class="report-disclaimer">本报告用于研究框架与模型组合讨论，不构成投资建议。事实、推断和估值假设已分层；公司公告能证明公司披露了什么，但不自动证明未来一定兑现。</p>`)}
+        ${section("evidence_ledger", "证据台账", "EVIDENCE LEDGER", "r-evidence", `
+          <p class="section-intro">${escapeHtml(report.evidence_summary.boundary)}</p><div class="source-ledger">${s.map((source, i) => { const isMarketSnapshot = source.kind === "market_snapshot"; const publicTitle = isMarketSnapshot ? "最新市场行情与因子数据" : source.title; const publicNote = isMarketSnapshot ? "经数据质量门核验的最新市场行情与因子数据" : source.note; const safeUrl = safeSourceUrl(source.url); return `<article id="source-${escapeHtml(source.id)}"><span>${String(i + 1).padStart(2, "0")}</span><div><header><strong>${escapeHtml(publicTitle)}</strong><em>${escapeHtml(sourceKind[source.kind] || source.kind)} · ${escapeHtml(source.strength)}</em></header><p>${escapeHtml(publicNote)}</p><small>资料时点 ${escapeHtml(source.known_at || "未披露")}</small>${safeUrl ? `<a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">打开原始来源 ↗</a>` : ""}</div></article>`; }).join("")}</div>
+          <p class="report-disclaimer">${escapeHtml(report.disclaimer)}</p>`)}
       </main>
     </div>
     <footer class="report-publication"><strong>Park 投委会研究</strong><span>发布主体：Park 投委会 · 数据与证据门禁复核</span></footer>
   </article>`;
+  return orderReportMarkupFromManifest(markup, contract);
 }
 
 function setReportVisibility(visible) {

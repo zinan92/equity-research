@@ -677,6 +677,10 @@ def validate_narrative(narrative: dict[str, Any], evidence: dict[str, Any]) -> d
     errors: list[str] = []
     cited: set[str] = set()
 
+    from report_contract import validate_public_ai_narrative
+
+    errors.extend(validate_public_ai_narrative(narrative))
+
     if not isinstance(narrative.get("report_title"), str) or len(narrative["report_title"].strip()) < 8:
         errors.append("report_title is missing or too short")
 

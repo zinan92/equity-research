@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "description": "Local Playwright renderer for audited equity-research publication packs",
   "type": "module",
+  "scripts": {
+    "verify-report-contract-dom": "node verify_report_contract_dom.mjs"
+  },
   "dependencies": {
     "playwright": "^1.42.0"
   }

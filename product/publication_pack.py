@@ -25,6 +25,7 @@ from PIL import Image, UnidentifiedImageError
 from data_store import DB_PATH, dump_json
 from deepseek_writer import editorial_status
 from research_reports import report_payload
+from report_contract import validate_report_contract
 
 
 ROOT = Path(__file__).resolve().parent
@@ -112,6 +113,8 @@ def publication_identity(ticker: str, db_path: Path = DB_PATH) -> tuple[dict[str
         "evidence_set_id": report["generated_from"]["evidence_set_id"],
         "evidence_manifest_hash": report["generated_from"]["evidence_manifest_hash"],
         "narrative_hash": editorial["narrative_hash"], "render_version": RENDER_VERSION,
+        "report_schema_version": report["report_contract"]["schema_version"],
+        "report_contract_version": report["report_contract"]["contract_version"],
         "render_logic_hash": render_logic_hash(),
         "release_scope": "single_report_editorial_approved_not_portfolio_executed",
     }
@@ -235,9 +238,16 @@ def validate_pack(pack_dir: Path, *, expected_pack_id: str | None = None) -> lis
         report = {}
         errors.append("report JSON is unreadable")
     if report:
+        contract_errors = validate_report_contract(report.get("report_contract") or {}, report)
+        errors.extend(f"report contract invalid: {item}" for item in contract_errors)
         for key, actual in (("ticker", report.get("ticker")), ("name", report.get("name")), ("report_hash", report.get("report_hash"))):
             if identity.get(key) != actual:
                 errors.append(f"report identity mismatch: {key}")
+        contract = report.get("report_contract") or {}
+        if identity.get("report_schema_version") != contract.get("schema_version"):
+            errors.append("report identity mismatch: report_schema_version")
+        if identity.get("report_contract_version") != contract.get("contract_version"):
+            errors.append("report identity mismatch: report_contract_version")
     try:
         receipt = json.loads((pack_dir / "render-receipt.json").read_text(encoding="utf-8"))
     except Exception:
@@ -246,7 +256,11 @@ def validate_pack(pack_dir: Path, *, expected_pack_id: str | None = None) -> lis
     if receipt:
         if receipt.get("renderer") != "playwright-chromium-v3":
             errors.append("renderer version mismatch")
-        for key, expected in (("ticker", identity.get("ticker")), ("companyName", identity.get("name")), ("reportHash", identity.get("report_hash"))):
+        for key, expected in (
+            ("ticker", identity.get("ticker")), ("companyName", identity.get("name")),
+            ("reportHash", identity.get("report_hash")), ("reportSchemaVersion", identity.get("report_schema_version")),
+            ("reportContractVersion", identity.get("report_contract_version")),
+        ):
             if receipt.get(key) != expected:
                 errors.append(f"render receipt identity mismatch: {key}")
         expected_payload_hash = identity.get("report_payload_hash")
@@ -259,6 +273,9 @@ def validate_pack(pack_dir: Path, *, expected_pack_id: str | None = None) -> lis
         audit = receipt.get("printAudit") or {}
         if audit.get("overflowCount") != 0 or not 680 <= int(audit.get("printableWidth", 0)) <= 740:
             errors.append("print layout audit failed")
+        expected_modules = [item.get("id") for item in (report.get("report_contract") or {}).get("module_manifest", [])]
+        if receipt.get("renderedModuleIds") != expected_modules:
+            errors.append("rendered module order differs from report contract")
     try:
         html = (pack_dir / "report.html").read_text(encoding="utf-8")
     except Exception:
@@ -268,7 +285,10 @@ def validate_pack(pack_dir: Path, *, expected_pack_id: str | None = None) -> lis
         required_html = (
             identity.get("ticker", ""), identity.get("name", ""), identity.get("report_hash", ""),
             files.get("report.json", ""), f"报告指纹 {str(identity.get('report_hash', ''))[:12]}",
-            'name="park-report-hash"', 'name="park-report-payload-hash"', 'class="research-report"',
+            identity.get("report_schema_version", ""), identity.get("report_contract_version", ""),
+            'name="park-report-hash"', 'name="park-report-payload-hash"',
+            'name="park-report-schema-version"', 'name="park-report-contract-version"', 'class="research-report"',
+            'http-equiv="Content-Security-Policy"',
         )
         if len(html) < 20_000 or any(not value or str(value) not in html for value in required_html):
             errors.append("report HTML content contract failed")
@@ -356,6 +376,8 @@ def _default_renderer(base_url: str, ticker: str, output_dir: Path, report: dict
         "--report-hash", report["report_hash"], "--report-payload-hash", _hash_file(output_dir / "report.json"),
         "--api-payload-hash", _hash_bytes(dump_json(report)),
         "--company-name", report["name"],
+        "--report-schema-version", report["report_contract"]["schema_version"],
+        "--report-contract-version", report["report_contract"]["contract_version"],
     ], check=True, env=env, timeout=90)
 
 
