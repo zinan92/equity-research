@@ -1,0 +1,11 @@
+tunnel: <EQUITY_RESEARCH_TUNNEL_UUID>
+credentials-file: <ABSOLUTE_PATH_TO_TUNNEL_CREDENTIAL_JSON>
+metrics: 127.0.0.1:20389
+no-autoupdate: true
+
+ingress:
+  - hostname: research.park-ai-intel.com
+    service: http://127.0.0.1:8878
+    originRequest:
+      connectTimeout: 10s
+  - service: http_status:404

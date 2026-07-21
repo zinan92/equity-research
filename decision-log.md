@@ -467,3 +467,31 @@
 - 模拟 filled 不是交易回执，不能出现在“真实持仓”或“实际收益”表述中。
 - full-page 文件存在不代表移动端可读；首版八列表被裁切，第二版又隐藏非核心列，最终改为逐股卡片完整展示公司、行业、价格、仓位、动作、观察区间、置信度、研究深度和首要风险，并让 PNG 高度精确匹配 DOM scrollHeight。
 - 组合可以包含 quantitative baseline，但不能因此声称 8/8 都是公司级深研；研究深度必须逐股披露。
+
+## 2026-07-21 · Milestone 6：私有会员预览与反馈闭环（待评审）
+
+- Objective：Park 能把一个稳定 HTTPS 私有预览链接发给自己和少数朋友；匿名看不到研究数据，受邀用户按等级读取 canonical 组合/深研并提交反馈，Park 可停用成员。
+- User outcome：登录第一屏直接回答 8 只股票、82% 股票/18% 现金、建议动作、观察区间、研究深度和首要风险；不再把 localhost、样稿或旧组合当成可交付产品。
+- Reuse：复用 M5 content-addressed canonical portfolio、既有 invite/session/entitlement，以及成熟 Cloudflare named tunnel；不新建第二套研究、身份或反向代理框架。
+- Decision：`preview/member/paid/owner` 后端逐端点授权。匿名只见登录壳与最小 health；前端隐藏不构成权限控制。
+- Decision：部署 release 同时绑定研究库 attestation、组合/diff/ledger 和产品代码 hash；`current` 只在整包验真后原子切换。研究库与 mutable auth/feedback 库物理分离。
+- Decision：release 额外封装并哈希绑定 8 份 exact canonical report；服务返回前逐份重算 `_report_binding` 并与组合 position 精确比较。外部 runner 每次启动前验证 manifest、release identity、全部文件哈希、report bundle hash 和路径边界，拒绝 working-tree fallback。
+- Decision：反馈带 member、时间和 page identity，去重、每人每小时五条限流，并由 exact-SQL trigger 保证 append-only；Owner 可查看和导出。
+- Decision：公网 origin 只绑定 loopback，独立 named tunnel 和独立 LaunchAgent 不修改其他产品 tunnel。session 使用 `__Host-` Secure/HttpOnly/SameSite=Strict，写操作绑定 CSRF。
+- Decision：私有模式使用显式 route allowlist；legacy dashboard、canonical 内部 API、刷新、批准、发布和下载均返回 404，owner 也不能修改 immutable research release。登录失败同时按 identity 与 Cloudflare trusted client IP 限流，阻断轮换 email 的 PBKDF2 消耗攻击。
+- Truth boundary：当前是 `Private Preview Ready`，不收款、不接券商、不代表用户持仓，也不是 Production/Paid Pilot Ready；单机 Mac 必须保持在线。
+- Verification：15 项 M6 专项与 213 项产品全量测试通过；fresh-clone baseline 同样重跑 213 项并通过临时数据库 server smoke。最终 release `preview_581a1d3ffab5dd25` 从同样包含下载 fail-closed 安全修复的 `preview_355f39a78d2c1eb1` 实际回滚并 roll-forward，随后真实重启 dedicated tunnel；三个阶段外部 health 均为 200。运维回执还在重启前后枚举 Cloudflare tunnel identity/connector，证明另一条 tunnel 身份未变且始终 active。外部 HTTPS 验收核对 8/8 exact report hash、全 route allowlist、邀请注册/退出/停用、反馈、cookie/CSRF、独立 runner 与 dedicated connector；1440×2388 桌面和 390×6199 移动 full-page 截图通过无溢出、移动字号和触控目标检查。36 项对抗攻击全部被拒绝或检测，P0/P1/P2=0。
+- Evidence：`evidence/m6-private-preview/` 保存外部验证回执、对抗回执和 authenticated desktop/mobile 长图；密码、邀请码、cookie、session 和 tunnel credential 均不入回执或 Git。
+- In scope：私有 HTTPS、canonical first screen、邀请权限、反馈、隔离 runtime、restart/rollback。Out of scope：支付退款、公开注册、MFA、多地域、用户风险输入、券商连接。
+
+### Gotchas · Milestone 6
+
+- 运行 Python 会生成 `__pycache__`；release verifier 若把解释器缓存当产品代码，首次启动后会错误判定整包被篡改。身份只绑定源代码/静态资源，运行器同时禁止写 bytecode。
+- auth 初始化曾把会员表写进 research.db，破坏“研究只读、会员可变”的边界；私有模式必须显式使用独立 `PARK_AUTH_DB`，且 server 不能把 research DB 参数传给 auth/feedback initializer。
+- launchd `bootout` 后立即 `bootstrap` 偶发返回 5；安装器必须小幅重试并确认 label 是否已经加载，不能因为一次返回码留下 tunnel 停止。
+- `launchctl kickstart -k` 在服务切换瞬间也可能返回 113；运维演练必须复查 label/PID、有限重试并以外网 health 恢复作为成功条件，不能只信一次命令返回码。
+- HTTP 200 和 tunnel 进程都不是可分享证明；必须从外网登录、核对 canonical identity、执行权限负向路径，并生成真实 authenticated full-page 截图。
+- 只按 email 限流会允许攻击者轮换身份制造昂贵密码哈希；公网登录必须叠加 trusted client IP 全局预算。
+- 旧的 broad route dispatcher 会让 preview 或 owner 读到/调用私有产品不需要的 legacy API；外部预览采用 allowlist，新增路由必须先明确 entitlement 和 truth boundary。
+- 手工写“已回滚/已重启”JSON 不是运维证据；receipt 必须由实际切换 release、重启 tunnel、逐阶段外网探针的同一命令生成。
+- stable named tunnel 仍不是高可用：本机睡眠、断网或两个 LaunchAgent 同时失效都会让预览离线。

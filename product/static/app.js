@@ -1,4 +1,4 @@
-const state = { data: null, committee: null, history: [], refreshRuns: [], filter: "全部", activeView: "decision", reportOpener: null, reportPushed: false, auth: null };
+const state = { data: null, committee: null, history: [], refreshRuns: [], filter: "全部", activeView: "decision", reportOpener: null, reportPushed: false, auth: null, privatePreview: null };
 const colors = ["#17332d", "#245346", "#35685a", "#497a6b", "#5d8c7d", "#739c90", "#8caaa0", "#a7bcb4"];
 
 const $ = (selector) => document.querySelector(selector);
@@ -59,6 +59,7 @@ function applyAuth(payload) {
   $("#logout-button").hidden = !payload.auth_required;
   const entitlements = member.entitlements || ["approve_publication", "manage_members"];
   $("#refresh-button").hidden = !entitlements.includes("manage_members");
+  if (payload.private_preview) $("#refresh-button").hidden = true;
   return true;
 }
 
@@ -100,6 +101,7 @@ function refreshErrorLabel(run) {
 }
 
 async function loadDashboard({ announce = false } = {}) {
+  if (state.auth?.private_preview) return loadPrivatePreview({ announce });
   try {
     const [data, committee, historyPayload, refreshPayload] = await Promise.all([
       fetchJson("/api/dashboard"),
@@ -124,6 +126,125 @@ async function loadDashboard({ announce = false } = {}) {
     $("#app").hidden = true;
     $("#error-state").hidden = false;
     $("#error-message").textContent = `无法读取可用快照：${error.message}`;
+  }
+}
+
+async function loadPrivatePreview({ announce = false } = {}) {
+  try {
+    const payload = await fetchJson("/api/private-preview");
+    if (payload.schema_version !== "private-preview-v1") throw new Error("未知私有预览合同");
+    const portfolio = payload.portfolio;
+    if (portfolio.portfolio_role !== "canonical_current" || portfolio.snapshot?.data_mode !== "REAL") {
+      throw new Error("当前 canonical 组合身份未通过");
+    }
+    state.privatePreview = payload;
+    state.data = { snapshot: { id: portfolio.snapshot.snapshot_id } };
+    renderPrivatePreview(payload);
+    $("#loading").hidden = true;
+    $("#error-state").hidden = true;
+    $("#app").hidden = false;
+    if (announce) showToast("已重新核对 canonical 组合身份");
+  } catch (error) {
+    $("#loading").hidden = true;
+    $("#app").hidden = true;
+    $("#error-state").hidden = false;
+    $("#error-message").textContent = `私有预览已阻断：${error.message}`;
+  }
+}
+
+function renderPrivatePreview(payload) {
+  const portfolio = payload.portfolio;
+  const positions = portfolio.positions;
+  const deepCount = positions.filter((item) => item.report_binding?.research_depth === "deep").length;
+  const pendingCount = payload.ledger.orders.filter((item) => item.status === "pending").length;
+  const entitlements = state.auth?.member?.entitlements || [];
+  const canReadReports = entitlements.includes("deep_reports");
+  $("#legacy-decision-dashboard").hidden = true;
+  $("#private-preview-dashboard").hidden = false;
+  $("#canonical-title").textContent = `${portfolio.market_regime}配置：${portfolio.allocation.equity_weight.toFixed(0)}% 股票，${portfolio.allocation.cash_weight.toFixed(0)}% 现金`;
+  $("#canonical-summary").textContent = `${portfolio.regime_note} 所有权重由确定性约束引擎生成；本期动作是模型目标，不是已执行账户持仓。`;
+  $("#canonical-role").textContent = "CANONICAL CURRENT";
+  $("#canonical-as-of").textContent = portfolio.snapshot.as_of;
+  $("#canonical-identity").textContent = portfolio.portfolio_id;
+  $("#canonical-metrics").innerHTML = [
+    ["模型股票", `${positions.length} 只`, "固定 A 股观察池"],
+    ["公司级深研", `${deepCount}/${positions.length}`, `${positions.length - deepCount} 只仍为定量基线`],
+    ["本期明确变化", `${payload.diff.changes.length} 项`, "其余变化来自价格漂移"],
+    ["当前待观察动作", `${pendingCount} 笔`, "不是券商成交"],
+  ].map(([label, value, note]) => `<article><span>${label}</span><strong>${value}</strong><small>${note}</small></article>`).join("");
+  $("#canonical-total").innerHTML = `<strong>${portfolio.allocation.equity_weight.toFixed(0)}%</strong> 股票 · <strong>${portfolio.allocation.cash_weight.toFixed(0)}%</strong> 现金`;
+  const palette = ["#0b1f33", "#133b5c", "#1d577d", "#2b6f98", "#4d86a8", "#6d9db9", "#8fb4c8", "#b1cad7"];
+  $("#canonical-strip").innerHTML = positions.map((item, index) => `<span style="width:${item.target_weight}%;background:${palette[index % palette.length]}" title="${escapeHtml(item.name)} ${item.target_weight}%">${escapeHtml(item.name)} ${item.target_weight}%</span>`).join("")
+    + `<span class="cash" style="width:${portfolio.allocation.cash_weight}%" title="现金 ${portfolio.allocation.cash_weight}%">现金 ${portfolio.allocation.cash_weight}%</span>`;
+  $("#canonical-positions").innerHTML = positions.map((item) => {
+    const depth = item.report_binding.research_depth === "deep" ? "公司级深研" : "定量基线";
+    const reportLabel = canReadReports ? (item.report_binding.research_depth === "deep" ? "阅读全文" : "查看基线") : "研究会员解锁";
+    return `<article class="canonical-position">
+      <h3>${escapeHtml(item.name)}<small>${escapeHtml(item.ticker)} · ${escapeHtml(item.industry)} · ${escapeHtml(depth)}</small></h3>
+      <div class="position-field"><span>目标仓位</span><strong>${item.target_weight.toFixed(0)}%</strong></div>
+      <div class="position-field"><span>本期动作</span><b class="position-action ${escapeHtml(item.action)}">${escapeHtml(item.action)}</b></div>
+      <div class="position-field"><span>参考价</span><strong>¥${Number(item.reference_price).toFixed(2)}</strong></div>
+      <div class="position-thesis"><span>为什么在组合里</span><p>${escapeHtml(item.thesis)}<br><b>首要风险：</b>${escapeHtml(item.primary_risk)}</p></div>
+      <button class="research-link" data-ticker="${escapeHtml(item.ticker)}" ${canReadReports ? "" : "disabled"}>${reportLabel}<br><small>${escapeHtml(item.execution_observation_range)}</small></button>
+    </article>`;
+  }).join("");
+  $$("#canonical-positions .research-link:not([disabled])").forEach((button) => button.addEventListener("click", () => openResearchReport(button.dataset.ticker)));
+  $("#canonical-risks").innerHTML = portfolio.risks.map((risk) => `<li><span>0${risk.rank}</span><div><strong>${escapeHtml(risk.title)}</strong><p>${escapeHtml(risk.detail)}</p></div></li>`).join("");
+  const receiptRows = [
+    ["数据状态", `${portfolio.snapshot.data_mode} / ${portfolio.snapshot.quality_status}`],
+    ["快照", portfolio.snapshot.snapshot_id],
+    ["数据时点", portfolio.snapshot.known_at],
+    ["组合版本", portfolio.portfolio_id],
+    ["模型", portfolio.model_version],
+    ["约束配置", portfolio.allocation_config_version],
+    ["历史边界", "2026-07-17 · retrospective only"],
+    ["执行边界", "模型建议 · 非真实持仓"],
+  ];
+  $("#canonical-receipt").innerHTML = receiptRows.map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
+  renderPrivateLedger(payload);
+  renderPrivateHistory(payload);
+  const isOwner = state.auth?.member?.role === "owner";
+  $("#owner-preview-panel").hidden = !isOwner;
+  if (isOwner) loadOwnerPreview();
+}
+
+function renderPrivateLedger(payload) {
+  const portfolio = payload.portfolio;
+  const pending = payload.ledger.orders.filter((item) => item.status === "pending").length;
+  $("#metric-return").textContent = "不展示";
+  $("#metric-alpha").textContent = "无伪历史";
+  $("#metric-equity").textContent = `${portfolio.allocation.equity_weight.toFixed(0)}%`;
+  $("#metric-cash").textContent = `${portfolio.allocation.cash_weight.toFixed(0)}%`;
+  $("#performance-chart").innerHTML = `<div class="chart-empty"><div><strong>${pending} 笔模型动作仍为 pending</strong><br>只有下一已存交易日的权威开盘价才能进入模拟账本；这里不回填收益，也不把模拟成交写成真实持仓。</div></div>`;
+  $("#industry-bars").innerHTML = portfolio.industry_exposure.map((item) => `<div class="industry-row"><span>${escapeHtml(item.industry)}</span><div class="bar-track"><i style="width:${Math.min(100, item.weight / 30 * 100)}%"></i></div><b>${item.weight.toFixed(0)}%</b></div>`).join("");
+}
+
+function renderPrivateHistory(payload) {
+  const current = payload.portfolio;
+  const history = [...payload.history].reverse();
+  const diffHeadline = payload.diff.changes.length
+    ? payload.diff.changes.map((item) => `${item.name}${item.change > 0 ? "+" : ""}${item.change}%`).join("、")
+    : "目标仓位未发生变化";
+  $("#timeline-list").innerHTML = history.map((item, index) => {
+    const currentItem = item.portfolio_id === current.portfolio_id;
+    return `<article class="timeline-item ${currentItem ? "" : "muted"}"><time>${escapeHtml(item.snapshot.as_of)}</time><div><span class="timeline-badge">${currentItem ? "CANONICAL CURRENT" : "RETROSPECTIVE REFERENCE"}</span><h2>${escapeHtml(item.market_regime)} · ${item.allocation.equity_weight.toFixed(0)}% 股票 / ${item.allocation.cash_weight.toFixed(0)}% 现金</h2><p>${currentItem ? escapeHtml(diffHeadline) : "历史补算仅用于比较，不证明当时已经发布。"}</p><small>${escapeHtml(item.portfolio_id)}</small></div></article>`;
+  }).join("");
+}
+
+async function loadOwnerPreview() {
+  try {
+    const [membersPayload, feedbackPayload] = await Promise.all([fetchJson("/api/members"), fetchJson("/api/feedback")]);
+    $("#owner-members").innerHTML = membersPayload.members.map((member) => `<article><strong>${escapeHtml(member.display_name)} · ${escapeHtml(member.tier)}</strong><small>${escapeHtml(member.email)} · ${escapeHtml(member.status)}</small>${member.role === "owner" ? "" : `<button data-email="${escapeHtml(member.email)}" data-status="${member.status === "active" ? "suspended" : "active"}">${member.status === "active" ? "停用并撤销会话" : "恢复席位"}</button>`}</article>`).join("") || "<p>暂无成员</p>";
+    $("#owner-feedback").innerHTML = feedbackPayload.feedback.slice(0, 12).map((item) => `<article><strong>${escapeHtml(item.member_name)} · ${item.rating}/5 · ${escapeHtml(item.category)}</strong><small>${escapeHtml(item.message)}<br>${escapeHtml(formatBeijingTime(item.created_at))}</small></article>`).join("") || "<p>暂无反馈</p>";
+    $$("#owner-members button").forEach((button) => button.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        await fetchJson("/api/members/status", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: button.dataset.email, status: button.dataset.status }) });
+        await loadOwnerPreview();
+      } catch (error) { showToast(`成员更新失败：${error.message}`); }
+    }));
+  } catch (error) {
+    $("#owner-members").innerHTML = `<p>Owner 数据读取失败：${escapeHtml(error.message)}</p>`;
   }
 }
 
@@ -742,6 +863,43 @@ $("#auth-login-tab").addEventListener("click", () => showAuth("login"));
 $("#auth-signup-tab").addEventListener("click", () => showAuth("signup"));
 $("#login-form").addEventListener("submit", (event) => { event.preventDefault(); submitAuth(event.currentTarget, "/api/auth/login"); });
 $("#signup-form").addEventListener("submit", (event) => { event.preventDefault(); submitAuth(event.currentTarget, "/api/auth/signup"); });
+$("#feedback-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  $("#feedback-status").textContent = "";
+  try {
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.page_type = "portfolio";
+    await fetchJson("/api/feedback", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    form.reset();
+    $("#feedback-status").textContent = "已收到。反馈已绑定当前组合版本。";
+    if (state.auth?.member?.role === "owner") await loadOwnerPreview();
+  } catch (error) {
+    $("#feedback-status").textContent = `提交失败：${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
+$("#invite-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  $("#invite-output").textContent = "";
+  try {
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.max_uses = 1;
+    data.valid_days = Number(data.valid_days);
+    const invite = await fetchJson("/api/invites", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    $("#invite-output").textContent = `仅显示一次：${invite.code}`;
+  } catch (error) {
+    $("#invite-output").textContent = `生成失败：${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
 $("#logout-button").addEventListener("click", async () => {
   if (!state.auth?.auth_required || !state.auth.member) return;
   try { await fetchJson("/api/auth/logout", { method: "POST" }); } catch (_) { /* The local session is cleared even if the response is lost. */ }
@@ -779,6 +937,17 @@ window.addEventListener("popstate", () => {
 }());
 setInterval(async () => {
   if (document.hidden || !state.data) return;
+  if (state.auth?.private_preview) {
+    try {
+      const payload = await fetchJson("/api/private-preview");
+      if (payload.portfolio.portfolio_id !== state.privatePreview?.portfolio?.portfolio_id) {
+        renderPrivatePreview(payload);
+        state.privatePreview = payload;
+        showToast("canonical 组合已切换到新版本");
+      }
+    } catch (_) { /* 保留最后一次通过验证的 private preview。 */ }
+    return;
+  }
   try {
     const payload = await fetchJson("/api/refresh/status");
     state.refreshRuns = payload.runs || [];

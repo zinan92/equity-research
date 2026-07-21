@@ -1,0 +1,196 @@
+{
+  "schema_version": "private-preview-adversarial-review-v1",
+  "status": "passed",
+  "verified_at": "2026-07-21T16:10:31.275795+00:00",
+  "public_url": "https://research.park-ai-intel.com",
+  "release_id": "preview_581a1d3ffab5dd25",
+  "attacks": [
+    {
+      "attack": "anonymous:/api/private-preview",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "anonymous:/api/reports/300750.SZ",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "anonymous:/api/feedback/export",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "anonymous:/downloads/publication-packs/fake/fake.zip",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "forged_session",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "preview_reads_member_report",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "preview_reads_owner_members",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "preview_legacy_route:/api/dashboard",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/committee",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/publications",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/refresh/status",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/canonical/active",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/canonical/portfolio",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/canonical/portfolio/history",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/canonical/portfolio/ledger",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/canonical/portfolio/ledger/history",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/stocks/300750.SZ",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/research/batches/latest",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/api/publication-packs/latest",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "preview_legacy_route:/downloads/publication-packs/fake/fake.zip",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "feedback_without_csrf",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "owner_research_mutation:/api/refresh",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "owner_research_mutation:/api/research/batches",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "owner_research_mutation:/api/publications/legacy/approve",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "owner_legacy_download",
+      "status": "rejected",
+      "http": 404
+    },
+    {
+      "attack": "packaged_code_tamper",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "release_without_manifest",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "self_consistent_false_portfolio_diff",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "canonical_report_bundle_missing_member",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "attested_research_row_tamper",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "feedback_append_only_guard_replaced",
+      "status": "rejected",
+      "failure_class": "FeedbackError"
+    },
+    {
+      "attack": "runtime_inside_repository",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "insecure_private_preview_startup",
+      "status": "rejected",
+      "exit_code": 1
+    },
+    {
+      "attack": "shared_research_auth_database",
+      "status": "rejected",
+      "exit_code": 1
+    },
+    {
+      "attack": "modified_desktop_screenshot",
+      "status": "detected",
+      "original_sha256_matches": true
+    },
+    {
+      "attack": "modified_mobile_screenshot",
+      "status": "detected",
+      "original_sha256_matches": true
+    }
+  ],
+  "summary": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "attacks_rejected_or_detected": 36
+  },
+  "credential_values_recorded": false
+}

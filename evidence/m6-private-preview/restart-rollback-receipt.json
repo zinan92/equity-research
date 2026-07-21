@@ -1,0 +1,74 @@
+{
+  "schema_version": "private-preview-ops-rehearsal-v1",
+  "status": "passed",
+  "verified_at": "2026-07-21T16:07:12.138497+00:00",
+  "public_url": "https://research.park-ai-intel.com",
+  "before": {
+    "release_id": "preview_581a1d3ffab5dd25",
+    "app_pid": 44917,
+    "tunnel_pid": 44935
+  },
+  "rollback": {
+    "release_id": "preview_355f39a78d2c1eb1",
+    "release_identity_verified": true,
+    "external_health_http": 200,
+    "health_contract": {
+      "status": "ok",
+      "product": "park-equity-research-preview",
+      "auth_required": true
+    },
+    "transition_observations": [
+      200
+    ]
+  },
+  "roll_forward": {
+    "release_id": "preview_581a1d3ffab5dd25",
+    "release_identity_verified": true,
+    "external_health_http": 200,
+    "health_contract": {
+      "status": "ok",
+      "product": "park-equity-research-preview",
+      "auth_required": true
+    },
+    "app_pid": 45113,
+    "tunnel_pid": 45120
+  },
+  "tunnel_restart": {
+    "external_health_http": 200,
+    "health_contract": {
+      "status": "ok",
+      "product": "park-equity-research-preview",
+      "auth_required": true
+    },
+    "transition_observations": [
+      530,
+      200
+    ],
+    "pid": 45120,
+    "kickstart_codes": [
+      0
+    ]
+  },
+  "tunnel_isolation": {
+    "before": {
+      "dedicated_tunnel_id": "edb2db0b-b5c7-4870-825b-bd9203e37ea5",
+      "dedicated_connector_count": 1,
+      "other_tunnel_count": 1,
+      "other_tunnel_ids_sha256": "4d62ebeddd6e9e34bac924912784349acae41265dc6e79b88c4346c6fa033672",
+      "all_other_tunnels_active": true
+    },
+    "after": {
+      "dedicated_tunnel_id": "edb2db0b-b5c7-4870-825b-bd9203e37ea5",
+      "dedicated_connector_count": 1,
+      "other_tunnel_count": 1,
+      "other_tunnel_ids_sha256": "4d62ebeddd6e9e34bac924912784349acae41265dc6e79b88c4346c6fa033672",
+      "all_other_tunnels_active": true
+    },
+    "other_tunnels_unchanged_and_active": true
+  },
+  "runtime_runner": {
+    "external": true,
+    "path_recorded": false
+  },
+  "secrets_recorded": false
+}

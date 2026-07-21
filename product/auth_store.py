@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import os
 import secrets
 import sqlite3
 from contextlib import closing
@@ -10,7 +11,10 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from data_store import DB_PATH, connect, initialize
+from data_store import DB_PATH
+
+
+AUTH_DB_PATH = Path(os.environ.get("PARK_AUTH_DB", DB_PATH))
 
 
 PBKDF2_ROUNDS = 310_000
@@ -74,6 +78,15 @@ def _now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def connect(db_path: Path = AUTH_DB_PATH) -> sqlite3.Connection:
+    """Open the identity store without creating or seeding research tables."""
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    connection = sqlite3.connect(db_path)
+    connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA foreign_keys = ON")
+    return connection
+
+
 def _iso(value: datetime) -> str:
     return value.isoformat()
 
@@ -100,8 +113,7 @@ def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
-def initialize_auth(db_path: Path = DB_PATH) -> None:
-    initialize(db_path)
+def initialize_auth(db_path: Path = AUTH_DB_PATH) -> None:
     with closing(connect(db_path)) as conn:
         conn.executescript(AUTH_SCHEMA)
         conn.commit()
@@ -123,7 +135,7 @@ def _record(conn: sqlite3.Connection, member_id: str | None, event_type: str, de
     )
 
 
-def create_owner(email: str, password: str, display_name: str, db_path: Path = DB_PATH) -> dict[str, Any]:
+def create_owner(email: str, password: str, display_name: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
     initialize_auth(db_path)
     email = _normalize_email(email)
     _validate_password(password)
@@ -146,7 +158,7 @@ def create_owner(email: str, password: str, display_name: str, db_path: Path = D
     return _public_member(row)
 
 
-def authenticate(email: str, password: str, db_path: Path = DB_PATH) -> dict[str, Any] | None:
+def authenticate(email: str, password: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any] | None:
     initialize_auth(db_path)
     email = _normalize_email(email)
     invalid_password = not isinstance(password, str) or len(password) > 256
@@ -166,7 +178,7 @@ def authenticate(email: str, password: str, db_path: Path = DB_PATH) -> dict[str
         return _public_member(row)
 
 
-def create_session(member_id: str, db_path: Path = DB_PATH) -> dict[str, Any]:
+def create_session(member_id: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
     initialize_auth(db_path)
     token = secrets.token_urlsafe(48)
     csrf = secrets.token_urlsafe(32)
@@ -188,7 +200,7 @@ def create_session(member_id: str, db_path: Path = DB_PATH) -> dict[str, Any]:
     return {"token": token, "csrf_token": csrf, "expires_at": _iso(expires), "member": _public_member(member)}
 
 
-def session_member(token: str | None, db_path: Path = DB_PATH) -> dict[str, Any] | None:
+def session_member(token: str | None, db_path: Path = AUTH_DB_PATH) -> dict[str, Any] | None:
     if not token:
         return None
     initialize_auth(db_path)
@@ -215,7 +227,7 @@ def verify_csrf(member: dict[str, Any], csrf_token: str | None) -> bool:
     return bool(csrf_token) and hmac.compare_digest(member.get("csrf_hash", ""), _hash_token(csrf_token))
 
 
-def rotate_csrf(token: str | None, db_path: Path = DB_PATH) -> str | None:
+def rotate_csrf(token: str | None, db_path: Path = AUTH_DB_PATH) -> str | None:
     if not token:
         return None
     initialize_auth(db_path)
@@ -232,7 +244,7 @@ def rotate_csrf(token: str | None, db_path: Path = DB_PATH) -> str | None:
     return csrf
 
 
-def revoke_session(token: str | None, db_path: Path = DB_PATH) -> None:
+def revoke_session(token: str | None, db_path: Path = AUTH_DB_PATH) -> None:
     if not token:
         return
     initialize_auth(db_path)
@@ -247,7 +259,7 @@ def revoke_session(token: str | None, db_path: Path = DB_PATH) -> None:
 def create_invite(
     owner_id: str,
     tier: str,
-    db_path: Path = DB_PATH,
+    db_path: Path = AUTH_DB_PATH,
     *,
     max_uses: int = 1,
     valid_days: int = 7,
@@ -280,7 +292,7 @@ def redeem_invite(
     email: str,
     password: str,
     display_name: str,
-    db_path: Path = DB_PATH,
+    db_path: Path = AUTH_DB_PATH,
 ) -> dict[str, Any]:
     initialize_auth(db_path)
     if not isinstance(code, str):
@@ -317,7 +329,7 @@ def has_entitlement(member: dict[str, Any] | None, entitlement: str) -> bool:
     return bool(member) and entitlement in (member.get("entitlements") or [])
 
 
-def list_members(owner_id: str, db_path: Path = DB_PATH) -> list[dict[str, Any]]:
+def list_members(owner_id: str, db_path: Path = AUTH_DB_PATH) -> list[dict[str, Any]]:
     initialize_auth(db_path)
     with closing(connect(db_path)) as conn:
         owner = conn.execute("SELECT role,status FROM members WHERE id=?", (owner_id,)).fetchone()
@@ -327,7 +339,7 @@ def list_members(owner_id: str, db_path: Path = DB_PATH) -> list[dict[str, Any]]
     return [_public_member(row) for row in rows]
 
 
-def set_member_status(owner_id: str, email: str, status: str, db_path: Path = DB_PATH) -> dict[str, Any]:
+def set_member_status(owner_id: str, email: str, status: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
     initialize_auth(db_path)
     if status not in {"active", "suspended"}:
         raise ValueError("invalid member status")
@@ -351,7 +363,7 @@ def set_member_status(owner_id: str, email: str, status: str, db_path: Path = DB
     return _public_member(updated)
 
 
-def revoke_invite(owner_id: str, invite_id: str, db_path: Path = DB_PATH) -> dict[str, Any]:
+def revoke_invite(owner_id: str, invite_id: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
     initialize_auth(db_path)
     with closing(connect(db_path)) as conn:
         conn.execute("BEGIN IMMEDIATE")
