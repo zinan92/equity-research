@@ -31,12 +31,12 @@ ROOT = Path(__file__).resolve().parent
 RUNTIME_DIR = ROOT / "runtime"
 PACK_ROOT = RUNTIME_DIR / "publication_packs"
 RENDER_VERSION = "park-report-export-v3"
-NODE = Path("/Users/wendy/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node")
-NODE_MODULES = Path("/Users/wendy/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules")
-# Use stable Homebrew binaries for unattended LaunchAgent runs. Codex runtime
-# wrappers are session-scoped and may disappear after the desktop process exits.
-PDFINFO = Path("/opt/homebrew/bin/pdfinfo")
-PDFTOTEXT = Path("/opt/homebrew/bin/pdftotext")
+NODE = Path(os.environ.get("NODE_BINARY") or shutil.which("node") or "node")
+NODE_MODULES = Path(os.environ.get("NODE_MODULES") or ROOT / "node_modules")
+# LaunchAgents have a minimal PATH, so unattended installations can provide
+# stable absolute binaries without binding the repository to one machine.
+PDFINFO = Path(os.environ.get("PDFINFO_BINARY") or shutil.which("pdfinfo") or "pdfinfo")
+PDFTOTEXT = Path(os.environ.get("PDFTOTEXT_BINARY") or shutil.which("pdftotext") or "pdftotext")
 ARTIFACT_NAMES = ("report.html", "report-long.png", "report.pdf", "report.json", "render-receipt.json")
 
 
@@ -60,10 +60,20 @@ def render_logic_hash() -> str:
     digest = hashlib.sha256()
     for path in (
         ROOT / "render_publication.mjs", ROOT / "static" / "index.html",
-        ROOT / "static" / "app.js", ROOT / "static" / "styles.css",
+        ROOT / "static" / "app.js", ROOT / "static" / "styles.css", ROOT / "package-lock.json",
     ):
         digest.update(path.name.encode("utf-8"))
         digest.update(path.read_bytes())
+    chrome_path = os.environ.get("CHROME_PATH")
+    if chrome_path:
+        try:
+            version = subprocess.run(
+                [chrome_path, "--version"], check=True, capture_output=True, text=True, timeout=5,
+            ).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            version = "unavailable"
+        digest.update(b"chrome_override_version")
+        digest.update(version.encode("utf-8"))
     return digest.hexdigest()
 
 
@@ -338,7 +348,8 @@ def latest_pack() -> dict[str, Any] | None:
 
 def _default_renderer(base_url: str, ticker: str, output_dir: Path, report: dict[str, Any]) -> None:
     env = dict(os.environ)
-    env["NODE_PATH"] = str(NODE_MODULES)
+    if NODE_MODULES.is_dir():
+        env["NODE_PATH"] = str(NODE_MODULES)
     subprocess.run([
         str(NODE), str(ROOT / "render_publication.mjs"), "--base-url", base_url,
         "--ticker", ticker, "--out-dir", str(output_dir), "--css", str(ROOT / "static" / "styles.css"),

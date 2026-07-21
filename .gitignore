@@ -5,6 +5,10 @@ __pycache__/
 dist/
 build/
 .eggs/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Runtime cache & reports (user-specific, regenerated per-run)
 .cache/
@@ -25,6 +29,9 @@ skills/deep-analysis/.cache/
 .playwright-mcp/
 .scatter/
 evidence/.tmp-*/
+**/.auth/
+*session*.json
+*cookies*.json
 
 # OS
 .DS_Store
@@ -38,8 +45,15 @@ skills/deep-analysis/scripts/_*.py
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
 *.local.env
 *.key
+.secrets/
+secrets/
+.npmrc
+.pypirc
+.envrc
 
 # v3.4.1 · 防御性 ignore：cookies / session / 私人状态文件
 **/cookies.json
@@ -57,6 +71,11 @@ docs/*.local.md
 
 # Local product runtime database
 product/runtime/
+product/node_modules/
+
+# Node package caches
+node_modules/
+npm-debug.log*
 
 # v2.10.2 · prewarm_cache 生成的预热数据（release 附件，不进 repo）
 skills/deep-analysis/scripts/prewarm/

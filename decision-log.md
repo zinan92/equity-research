@@ -96,7 +96,7 @@
 
 - Objective：让 DeepSeek 提升中文投研叙事深度，但不允许其控制事实、行情、估值公式、仓位或发布状态。
 - Decision：采用 `证据包 → deepseek-v4-pro → JSON 正文 → 来源/数字校验 → 快照绑定 → 页面渲染`，而不是让模型自由搜索和自由生成完整研报。
-- Decision：Key 只在运行时从 `/Users/wendy/park-io/_secrets/deepseek-key` 读取，不复制到项目、不写日志、不进入环境样例。
+- Decision：Key 只在运行时从仓库外的受控密钥文件读取，不复制到项目、不写日志、不进入环境样例。
 - Decision：DeepSeek 稿件必须绑定 `snapshot_id + profile_hash + research_logic_hash`；任何一个变化，旧稿自动失效。稿件文件哈希进入 publication approval package。
 - Result：宁德时代 DeepSeek 正式稿使用 17/18 个可用来源，未知数字 0，结构校验通过；页面明确展示模型、生成时间和证据校验结果。
 - Verification：19 项测试通过；桌面与 390px 移动视口验证；DeepSeek 正文截图保存在 `evidence/deepseek-report-analysis-section-2026-07-17.png`。
@@ -317,3 +317,25 @@
 - HttpOnly session cookie 不能让前端读取 CSRF secret；登录或 `/api/auth/me` 必须下发轮换后的 CSRF token，数据库仍只保存 hash。
 - 本地测试如果默认强制身份门，会让无人值守报告渲染失效；渲染子进程必须明确使用本地无身份模式，公网服务才开启门禁。
 - 当前 SQLite 会员层只适合少量私域用户；多实例公网部署需迁移 PostgreSQL/Supabase、共享限流与 RLS。
+
+## 2026-07-21 · Gate 0：私有仓库可恢复基线
+
+- Objective：Park 能从 `zinan92/equity-research` fresh clone 当前投研产品，在不依赖 Wendy 本机路径、不携带密钥或运行时数据库的前提下启动、验证和继续迭代。
+- User outcome：仓库首页直接说明产品是什么、真实做到哪里、如何启动、失败时如何表现；新的执行者不再把根目录误认成纯 UZI-Skill。
+- Decision：保留 UZI-Skill 作为成熟的数据采集与多维分析基座，不重写 fetcher；产品入口明确固定为 `product/server.py`，根 `run.py` 只属于可复用 skill。
+- Decision：本地 dashboard 使用独立最小依赖 `product/requirements.txt`；完整 UZI 数据管道仍使用根 `requirements.txt`，避免只看产品也要安装整套量化依赖。
+- Decision：发布渲染器不再依赖 Codex/Wendy 的固定 Node、Playwright 或 Chromium 路径；按环境变量、项目本地 npm 依赖和系统 PATH 依次解析。
+- Decision：渲染 identity 绑定 `package-lock.json`；若显式覆盖 `CHROME_PATH`，同时绑定该浏览器的版本输出，避免渲染环境变化却复用旧 pack ID。
+- Decision：LaunchAgent 文件降格为可审计模板，仓库内只保留 `/ABSOLUTE/PATH/TO/equity-research` 占位符，安装前必须由执行者替换。
+- Decision：新增 `scripts/verify_baseline.py`，用临时数据库和临时端口执行 tracked-file audit、79 项产品测试、服务健康检查和 dashboard smoke；不得触碰用户 runtime。
+- Decision：根 README 如实披露当前只有宁德时代达到公司级 deep，另外 7 股只是量化 baseline；无公网生产、支付、全市场选股或自动交易。
+- In scope：仓库身份、README、最小依赖、路径可移植性、秘密/运行态边界、fresh-clone 验收与精选视觉证据。
+- Out of scope：标准研报结构 v1、研究算法重写、数据库迁移、付费、公网投产。
+
+### Gotchas · Gate 0
+
+- “代码已经 push”不等于“仓库可接手”；错误的根 README 和固定本机路径会让 fresh clone 仍然不可用。
+- 上游 UZI 的插件入口与本产品入口同时存在，必须在 README 和 Agent 指令中明确区分，不能把跑 skill 当成启动产品。
+- 自动化 plist 提交到 Git 只能证明模板可审计，不证明新机器已安装或定时运行成功。
+- gitleaks 通过只证明未命中已知秘密规则；仍要同时审计 tracked file、环境变量样例、runtime/cookie/session 忽略规则。
+- 基线 smoke 使用演示数据库，只证明 UI/API 能恢复；不证明外部实时数据源在当前网络下可用。

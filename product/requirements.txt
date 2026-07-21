@@ -1,0 +1,3 @@
+# Minimal dependencies for the local product dashboard and publication validation.
+# The full UZI data pipeline has its own broader requirements at repository root.
+Pillow>=10.0,<13

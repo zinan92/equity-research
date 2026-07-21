@@ -1,0 +1,29 @@
+{
+  "objective": "fresh-clone repository baseline",
+  "verified_at": "2026-07-21T02:46:06.504505+00:00",
+  "python": "3.13.7",
+  "tracked_file_audit": {
+    "tracked_files": 539,
+    "pending_untracked_files": 0,
+    "forbidden_tracked_or_pending": []
+  },
+  "unit_tests": {
+    "status": "passed",
+    "test_count": 79,
+    "summary": [
+      "Ran 79 tests in 4.433s",
+      "OK"
+    ]
+  },
+  "server_smoke": {
+    "status": "passed",
+    "health": {
+      "status": "ok",
+      "errors": [],
+      "data_mode": "DEMO"
+    },
+    "positions": 8,
+    "temporary_database": true
+  },
+  "status": "passed"
+}
