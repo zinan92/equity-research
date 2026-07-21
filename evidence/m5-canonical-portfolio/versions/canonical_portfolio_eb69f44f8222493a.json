@@ -1,0 +1,310 @@
+{
+  "allocation": {
+    "cash_weight": 18.0,
+    "equity_weight": 82.0,
+    "total": 100.0
+  },
+  "allocation_config_version": "long-horizon-allocation-v1",
+  "execution_boundary": "No broker connection. Suggested weights are not executed holdings until a separately approved publication and model-ledger event exist.",
+  "generated_at": "2026-07-17T15:21:32.239266+00:00",
+  "industry_exposure": [
+    {
+      "industry": "公用事业",
+      "weight": 13.0
+    },
+    {
+      "industry": "家用电器",
+      "weight": 12.0
+    },
+    {
+      "industry": "煤炭",
+      "weight": 11.0
+    },
+    {
+      "industry": "消费电子",
+      "weight": 10.0
+    },
+    {
+      "industry": "通信服务",
+      "weight": 10.0
+    },
+    {
+      "industry": "银行",
+      "weight": 10.0
+    },
+    {
+      "industry": "电力设备",
+      "weight": 8.0
+    },
+    {
+      "industry": "食品饮料",
+      "weight": 8.0
+    }
+  ],
+  "market_regime": "均衡",
+  "model_version": "long-horizon-portfolio-v0.4",
+  "payload_hash": "eb69f44f8222493a901ed23dc31d0c72e2c185263fb34cb8138d97c7876356d3",
+  "portfolio_id": "canonical_portfolio_eb69f44f8222493a",
+  "portfolio_role": "retrospective_reference_only",
+  "positions": [
+    {
+      "action": "新建",
+      "confidence": 76,
+      "drifted_weight": null,
+      "exchange": "上交所",
+      "execution_observation_range": "¥27.15–¥28.55（分批观察）",
+      "industry": "公用事业",
+      "name": "长江电力",
+      "previous_target_weight": null,
+      "primary_risk": "主要风险来自盈利增速、估值中枢或行业景气低于当前快照假设。",
+      "reference_price": 27.99,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "2e472e09ae6be07fa757b117fd0d00c39d18dcdf324943182d8933945464eb82",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "74382d004e1a7f1a58aa5ec5fd55820b46c51c1e0e8b875e0217f517b23e6bd5",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 13.0,
+      "thesis": "最新披露 ROE 3.0%，营收同比 6.4%，归母净利润同比 30.5%；当前价站上 200 日均线，综合评分 72.3/100。",
+      "ticker": "600900.SH",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 76,
+      "drifted_weight": null,
+      "exchange": "深交所",
+      "execution_observation_range": "¥80.23–¥84.36（分批观察）",
+      "industry": "家用电器",
+      "name": "美的集团",
+      "previous_target_weight": null,
+      "primary_risk": "主要风险来自盈利增速、估值中枢或行业景气低于当前快照假设。",
+      "reference_price": 82.71,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "4a58369808433c2dc9282b6fbc457d3ff837e6e56b63b1776e1bf58c59b127ad",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "c524f63b2d190e999065d63393fe69c9f8a7f84fb908d6de7e60e08bd33199f1",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 12.0,
+      "thesis": "最新披露 ROE 5.6%，营收同比 2.5%，归母净利润同比 2.0%；当前价站上 200 日均线，综合评分 71.8/100。",
+      "ticker": "000333.SZ",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 73,
+      "drifted_weight": null,
+      "exchange": "上交所",
+      "execution_observation_range": "¥42.63–¥44.83（分批观察）",
+      "industry": "煤炭",
+      "name": "中国神华",
+      "previous_target_weight": null,
+      "primary_risk": "利润同比下降",
+      "reference_price": 43.95,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "cf2945bea9095a77b6fec10e982a16ae60a505a80af8b28961ba8d4fb517299f",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "5f51cae454bc27b708c93c7f7cbc187f18f42608d1bf5e3e5a36da32615ada6d",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 11.0,
+      "thesis": "最新披露 ROE 2.4%，营收同比 1.2%，归母净利润同比 -10.7%；当前价站上 200 日均线，综合评分 66.5/100。",
+      "ticker": "601088.SH",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 70,
+      "drifted_weight": null,
+      "exchange": "上交所",
+      "execution_observation_range": "¥36.88–¥38.78（分批观察）",
+      "industry": "银行",
+      "name": "招商银行",
+      "previous_target_weight": null,
+      "primary_risk": "主要风险来自盈利增速、估值中枢或行业景气低于当前快照假设。",
+      "reference_price": 38.02,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "6995ed132f48c9c209a9b9f3551ebe5126e0f804614eb042b05cecef274ace8b",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "80a1f3312c107af65dc018c2a2cea76ea57165230b7826035c2ea21980490949",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 10.0,
+      "thesis": "最新披露 ROE 3.4%，营收同比 3.8%，归母净利润同比 1.5%；当前价低于 200 日均线，综合评分 62.8/100。",
+      "ticker": "600036.SH",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 71,
+      "drifted_weight": null,
+      "exchange": "上交所",
+      "execution_observation_range": "¥90.60–¥95.27（分批观察）",
+      "industry": "通信服务",
+      "name": "中国移动",
+      "previous_target_weight": null,
+      "primary_risk": "利润同比下降",
+      "reference_price": 93.4,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "6691856100275672818e27c68991ececc6f672011d6483abf410153672fd8e24",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "529f92745a32f9c67d2721860f84a4695e95c3ac0a28d12bd0ae1f9b38a84ec1",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 10.0,
+      "thesis": "最新披露 ROE 2.1%，营收同比 1.0%，归母净利润同比 -4.2%；当前价低于 200 日均线，综合评分 63.7/100。",
+      "ticker": "600941.SH",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 70,
+      "drifted_weight": null,
+      "exchange": "上交所",
+      "execution_observation_range": "¥60.41–¥63.53（分批观察）",
+      "industry": "消费电子",
+      "name": "传音控股",
+      "previous_target_weight": null,
+      "primary_risk": "波动率偏高",
+      "reference_price": 62.28,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "cdee82aa634a065168565ad7b1ac0b8269b67c8c69c732b0f25e1ba65298d3c0",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "060669f712ea6cc4bf49751665eb459b169a1ec9a84882d13d04c20bddf3fe39",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 10.0,
+      "thesis": "最新披露 ROE 3.4%，营收同比 24.6%，归母净利润同比 42.9%；当前价低于 200 日均线，综合评分 61.8/100。",
+      "ticker": "688036.SH",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 66,
+      "drifted_weight": null,
+      "exchange": "深交所",
+      "execution_observation_range": "¥349.20–¥367.20（分批观察）",
+      "industry": "电力设备",
+      "name": "宁德时代",
+      "previous_target_weight": null,
+      "primary_risk": "中期趋势仍弱；波动率偏高",
+      "reference_price": 360.0,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "6a80fdf97cf1bc5d326817834e0e34d7c828cdb010138d0600b74a1d129a3033",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "15d05b46f7af694af6f091996ba8639f7e09b38392d934cc550b46710e81deb1",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 8.0,
+      "thesis": "最新披露 ROE 6.0%，营收同比 52.4%，归母净利润同比 48.5%；当前价低于 200 日均线，综合评分 56.6/100。",
+      "ticker": "300750.SZ",
+      "weight_semantics": "model_suggested_non_executable"
+    },
+    {
+      "action": "新建",
+      "confidence": 67,
+      "drifted_weight": null,
+      "exchange": "上交所",
+      "execution_observation_range": "¥1215.41–¥1278.06（分批观察）",
+      "industry": "食品饮料",
+      "name": "贵州茅台",
+      "previous_target_weight": null,
+      "primary_risk": "主要风险来自盈利增速、估值中枢或行业景气低于当前快照假设。",
+      "reference_price": 1253.0,
+      "report_binding": {
+        "allocation_config_version": "long-horizon-allocation-v1",
+        "contract_version": "1.0.0",
+        "evidence_identity": "c667ec50a20c52d15d81e493a8a81caaed790c8d572877aa127e08c88f4a3a88",
+        "evidence_status": "verified",
+        "is_live_research": true,
+        "model_version": "long-horizon-portfolio-v0.4",
+        "report_hash": "ab5f5003fdf90b9ca833e93282649f93c8abcda7054aee87ec342b11759ca672",
+        "research_depth": "quantitative_baseline",
+        "research_status": "baseline",
+        "snapshot_id": "snap_real_b0bac1135776"
+      },
+      "target_weight": 8.0,
+      "thesis": "最新披露 ROE 10.6%，营收同比 6.3%，归母净利润同比 1.5%；当前价低于 200 日均线，综合评分 57.7/100。",
+      "ticker": "600519.SH",
+      "weight_semantics": "model_suggested_non_executable"
+    }
+  ],
+  "previous_portfolio_id": null,
+  "publication_state": "retrospective_replay_not_publishable",
+  "regime_note": "市场信号分化，质量与估值共同决定仓位。",
+  "risks": [
+    {
+      "detail": "组合候选平均 PE(TTM) 17.3 倍；高估值公司必须用盈利兑现。",
+      "rank": 1,
+      "severity": "high",
+      "title": "估值分化"
+    },
+    {
+      "detail": "候选平均 60 日年化波动率 27.6%，分批执行而非单日完成。",
+      "rank": 2,
+      "severity": "medium",
+      "title": "波动与回撤"
+    },
+    {
+      "detail": "本次基于上一份通过质量门的快照重算；组合动作只反映确定性目标仓位的版本差异。",
+      "rank": 3,
+      "severity": "medium",
+      "title": "版本变动"
+    }
+  ],
+  "schema_version": "canonical-portfolio-v1",
+  "snapshot": {
+    "as_of": "2026-07-17",
+    "attestation_status": "retrospective_hash_only",
+    "data_mode": "REAL",
+    "known_at": "2026-07-17T16:14:59+08:00",
+    "manifest_hash": "b0bac1135776b4b396077443d200aa1731774c48ba9efb1b6eb91b9fa1b32b0b",
+    "normalized_content_hash": "65029c4ba165a0102e6ffdf47454b0cbeaaf9179ff95c86c6ad8748006cfe329",
+    "quality_status": "passed",
+    "snapshot_id": "snap_real_b0bac1135776"
+  },
+  "source_publication_id": "pub_real_b0bac1135776"
+}

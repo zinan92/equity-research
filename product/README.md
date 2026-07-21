@@ -67,6 +67,19 @@ python3 -m unittest product.tests.test_cross_company_research_v1 -v
 
 `evidence/m4-cross-company-research/` 根目录是 structure-only acceptance fixture；`live/` 是五家公司 REAL snapshot + 实际捕获文档的发布证明。live 稿件经过 DeepSeek 冻结输入、可追溯 evidence-editor 修订、四轮独立语义审查和 exact-hash 审批。详见 [`cross-company-research-v1`](../docs/architecture/cross-company-research-v1.md)。
 
+### 统一组合配置与调仓账本
+
+M5 把同一时点的 snapshot、标准研报和确定性仓位约束收敛成唯一 canonical portfolio identity。当前验收覆盖 `2026-07-17` 与 `2026-07-21` 两个 REAL snapshot；输出 8 只股票、现金、动作、期间差异和独立 append-only 模型账本：
+
+```bash
+python3 scripts/generate_canonical_portfolio.py
+python3 scripts/verify_canonical_portfolio.py
+python3 scripts/adversarial_verify_canonical_portfolio.py
+python3 -m unittest product.tests.test_canonical_portfolio_v1 -v
+```
+
+单股 5%–15%、行业不超过 30%、现金 10%–40%、总和 100% 均为读取前硬门。AI 不参与权重；模拟账本不连接券商。完整合同见 [`canonical-portfolio-v1`](../docs/architecture/canonical-portfolio-v1.md)。
+
 ### 单独构建真实组合草稿
 
 ```bash
@@ -137,6 +150,10 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 - `GET /api/reports/{ticker}`
 - `GET /api/publications`
 - `GET /api/refresh/status`
+- `GET /api/canonical/portfolio`
+- `GET /api/canonical/portfolio/history`
+- `GET /api/canonical/portfolio/ledger`
+- `GET /api/canonical/portfolio/ledger/history`
 - `GET /api/report-versions/{ticker}`
 - `GET /api/research/batches/latest`
 - `GET /api/research/evidence/{ticker}`
@@ -172,7 +189,7 @@ python3 -m py_compile product/*.py
 node --check product/render_publication.mjs
 ```
 
-当前产品测试共 185 项，覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、按 canonical key 修复缺口、独立交易日历与缺 bar 阻断、source manifest/run 绑定、provider raw bytes/hash、fixture→REAL 防升级、cached/REAL 身份隔离、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、两日自动更新、跨公司 adapter、冻结证据 identity、DeepSeek no-network boundary、evidence-editor provenance、五行业同八模块格式、危险 URL/未知引用阻断、分源 manifest、显式 cached fallback、失败来源完整质量审计、8/8 标准研报激活、错误 hash 阻断、断点恢复、子进程网络/命令逃逸阻断、旧版本回滚、研报篡改、产品 canonical 消费路径、调度失败退出码、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
+当前产品测试共 198 项，覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、按 canonical key 修复缺口、独立交易日历与缺 bar 阻断、source manifest/run 绑定、provider raw bytes/hash、fixture→REAL 防升级、cached/REAL 身份隔离、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、两日自动更新、跨公司 adapter、冻结证据 identity、DeepSeek no-network boundary、evidence-editor provenance、五行业同八模块格式、统一组合硬约束、组合/研报 identity、价格漂移、期间差异重算、append-only 模拟账本、成交源 bar 复核、组合 API 及空账本/损坏历史失败路径、危险 URL/未知引用阻断、分源 manifest、显式 cached fallback、失败来源完整质量审计、8/8 标准研报激活、错误 hash 阻断、断点恢复、子进程网络/命令逃逸阻断、旧版本回滚、研报篡改、产品 canonical 消费路径、调度失败退出码、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
 
 标准化报告接口遵循 [`research-report-v1`](../docs/product/research-report-v1.md)。`report_contract.module_manifest` 是 Web、移动和发布包的唯一章节顺序来源；客户端遇到未知或乱序版本必须 fail closed。
 

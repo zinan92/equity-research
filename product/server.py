@@ -25,6 +25,19 @@ from data_core import CanonicalPublicationError, canonical_active_report, canoni
 from refresh_engine import RefreshInProgressError, refresh_status, run_refresh
 from report_versions import report_version_history
 from portfolio_committee import committee_payload
+from portfolio_allocation import (
+    CanonicalPortfolioError,
+    load_portfolio_history,
+    load_portfolio_state,
+    portfolio_state_root,
+)
+from portfolio_ledger import (
+    PortfolioLedgerError,
+    verify_ledger_history,
+    verify_ledger_fills_against_source,
+    verify_ledger_matches_portfolio,
+    verify_ledger_payload,
+)
 from publication_pack import latest_pack
 from auth_store import (
     authenticate, create_session, has_entitlement, initialize_auth, redeem_invite,
@@ -40,6 +53,10 @@ LOGIN_ATTEMPTS: dict[str, list[float]] = {}
 AUTH_REQUIRED = os.getenv("PARK_AUTH_REQUIRED", "0") == "1"
 COOKIE_SECURE = os.getenv("PARK_COOKIE_SECURE", "0") == "1"
 SESSION_COOKIE = "__Host-park_session" if COOKIE_SECURE else "park_session"
+
+
+def canonical_portfolio_source_db() -> Path:
+    return Path(os.environ.get("PARK_CANONICAL_PORTFOLIO_SOURCE_DB", ROOT / "runtime" / "m4-live.db"))
 
 
 def product_report_payload(ticker: str) -> dict | None:
@@ -164,6 +181,48 @@ class DashboardHandler(BaseHTTPRequestHandler):
             return
         if route == "/api/canonical/active":
             self._json(canonical_active_summary())
+            return
+        if route == "/api/canonical/portfolio":
+            try:
+                self._json(load_portfolio_state())
+            except CanonicalPortfolioError as exc:
+                self._json({"error": "canonical_portfolio_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route == "/api/canonical/portfolio/history":
+            try:
+                self._json({"portfolios": load_portfolio_history()})
+            except CanonicalPortfolioError as exc:
+                self._json({"error": "canonical_portfolio_history_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route == "/api/canonical/portfolio/ledger/history":
+            path = portfolio_state_root() / "ledger-history.json"
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                current = load_portfolio_state()
+                verify_ledger_history(payload, expected_current_portfolio_id=current["portfolio_id"])
+                history = load_portfolio_history()
+                if len(history) != len(payload["versions"]):
+                    raise PortfolioLedgerError("model ledger history length mismatch")
+                for portfolio, ledger_version in zip(history, payload["versions"]):
+                    verify_ledger_matches_portfolio(ledger_version, portfolio)
+                verify_ledger_fills_against_source(payload, canonical_portfolio_source_db())
+            except (OSError, json.JSONDecodeError, CanonicalPortfolioError, PortfolioLedgerError):
+                self._json({"error": "canonical_portfolio_ledger_history_unavailable"}, HTTPStatus.CONFLICT)
+            else:
+                self._json(payload)
+            return
+        if route == "/api/canonical/portfolio/ledger":
+            path = portfolio_state_root() / "latest-ledger.json"
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                current = load_portfolio_state()
+                verify_ledger_payload(payload, expected_portfolio_id=current["portfolio_id"])
+                verify_ledger_matches_portfolio(payload, current)
+                verify_ledger_fills_against_source(payload, canonical_portfolio_source_db())
+            except (OSError, json.JSONDecodeError, CanonicalPortfolioError, PortfolioLedgerError):
+                self._json({"error": "canonical_portfolio_ledger_unavailable"}, HTTPStatus.CONFLICT)
+            else:
+                self._json(payload)
             return
         if route == "/api/research/batches/latest":
             payload = latest_batch()

@@ -446,3 +446,24 @@
 - 固定 3600px viewport 不是“长图”；页面内容超过视口时会无声截断。视觉证据必须记录 DOM scrollHeight，并要求 PNG 像素高度与之完全一致。
 - 本批修订链能通过内置 validator，但早期重试覆盖了原始 base artifact，留下一个不阻断发布的审计 P2。后续生成必须按公司永久保存 `base-narrative-draft.json`、draft receipt 与 revision receipt，禁止覆盖后才补 provenance。
 - provider manifest 只能证明采集输入身份，不能证明 SQLite normalized rows 没有被原地改写；REAL legacy snapshot 还必须在同一 SQLite read transaction 内通过 `snapshot_content_attestations` 重算。attestation 自身由 exact-SQL append-only trigger 保护，guard 缺失或被同名 no-op 替换也必须 fail closed。
+
+## 2026-07-21 · Canonical Milestone 5：统一组合配置与调仓账本（待评审）
+
+- Objective：把固定 8 股的研究结论收敛成一个可复算、可比较、可追责的长期模型组合，直接回答“买什么、建议多少、这期为什么变”。
+- User outcome：1000 万元长期资金基准下，产品同时展示股票名称、建议仓位、现金、本期动作、相对上期变化和模型账本，不再由多个页面拼接组合结论。
+- Reuse：直接消费 M2/M3 canonical snapshot 与 M1/M4 `research-report-v1` 身份；复用现有真实 replay、Chrome full-page 渲染和 SQLite append-only guard，不建立第二套数据采集或报告系统。
+- Decision：权重只由版本化确定性配置生成；DeepSeek 不能设置权重。硬门为 6–12 只、单股 5%–15%、行业不超过 30%、现金 10%–40%、总和 100%。
+- Decision：每个 position 绑定相同 snapshot 的 report hash、model/config version、evidence status 和 research depth；组合、指针、期间差异与账本全部内容寻址，读取时重新验证。
+- Decision：组合版本与调仓账本独立；账本显式区分上期正式目标、按两期参考价计算的漂移账面权重和本期目标，只允许 `planned → pending → filled | unfilled`。filled 必须是源库中下一已存交易日开盘价，并绑定 attested REAL snapshot 与 exact row hash。
+- Truth boundary：2026-07-17 是不可发布的 `retrospective_reference_only`，2026-07-21 才是 attested `canonical_current`；二者都不是券商持仓。当前 5 只为 deep、3 只为 quantitative baseline，逐股可见。
+- Verification：13 项 M5 专项与 198 项产品全量测试通过，覆盖约束、完整 report/model/config/evidence identity、研究语义伪造、真实价格漂移、diff 重算、账本 append-only exact guard/idempotence/状态机/空账本/虚构成交、current 回滚、API 200/409、历史补算可见标签和移动端全字段。生成器与独立验证器均通过两个 snapshot 的 8/8 replay；历史 8 笔 filled 与当前 8 笔 pending 均可复核。独立浏览器重渲染与 5 项攻击验收进一步阻断裁图+伪 receipt、自洽伪 diff、空 ledger、研究语义伪造和非有限权重。
+- Evidence：`evidence/m5-canonical-portfolio/` 保存两个 JSON 版本、diff、当前/历史 ledger、生成器回执、独立回执、攻击回执、终审回执、HTML、1440×2949 桌面长图、390×7046 移动长图和 4 页 PDF；独立验证器重新渲染 HTML，并要求两张 PNG 的高度与像素哈希完全一致。
+- In scope：固定 8 股、确定性权重、组合版本差异、模拟调仓账本、API 与发布级视觉证据。Out of scope：用户输入、全市场选股、券商/自动交易、真实持仓、公网、支付与个性化适当性。
+
+### Gotchas · Canonical Milestone 5
+
+- 历史 REAL snapshot 只能证明输入真实且可重放，不能倒推当时已发布；补算必须永久显示 retrospective。
+- 组合总和 100% 不是充分条件；任一单股、行业、现金或 report identity 失败都应阻断整个版本。
+- 模拟 filled 不是交易回执，不能出现在“真实持仓”或“实际收益”表述中。
+- full-page 文件存在不代表移动端可读；首版八列表被裁切，第二版又隐藏非核心列，最终改为逐股卡片完整展示公司、行业、价格、仓位、动作、观察区间、置信度、研究深度和首要风险，并让 PNG 高度精确匹配 DOM scrollHeight。
+- 组合可以包含 quantitative baseline，但不能因此声称 8/8 都是公司级深研；研究深度必须逐股披露。

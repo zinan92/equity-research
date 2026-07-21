@@ -1,0 +1,53 @@
+{
+  "schema_version": "canonical-portfolio-independent-verifier-v1",
+  "status": "passed",
+  "portfolio_count": 2,
+  "current_portfolio_id": "canonical_portfolio_ada3711195caaf90",
+  "snapshots": [
+    "snap_real_b0bac1135776",
+    "snap_real_a89a5113ef0f"
+  ],
+  "current_stock_count": 8,
+  "allocation": {
+    "cash_weight": 18.0,
+    "equity_weight": 82.0,
+    "total": 100.0
+  },
+  "constraints": {
+    "stock_count_6_12": true,
+    "single_stock_5_15": true,
+    "industry_max_30": true,
+    "cash_10_40": true,
+    "total_100": true
+  },
+  "report_identity_bound": true,
+  "deep_report_count": 5,
+  "diff_hash": "22d36c526012e22a37e76e3a4637083bb4aca7da031f172f10e32f892f9698a7",
+  "ledger_hash": "f2ee6aea89019927ad278b193ad9bad617c95e39c4dd94160b16b1d9b517058f",
+  "ledger_history_hash": "4fcd1416014fa98e696338690bf69cda553913bfc560df55ab90da8b28ca7c53",
+  "ledger_status_counts": {
+    "filled": 8,
+    "pending": 8,
+    "planned": 0,
+    "unfilled": 0
+  },
+  "ledger_source_bars_verified": true,
+  "diff_recomputed": true,
+  "retrospective_truth_marker_visible": true,
+  "full_page_dom_height_verified": true,
+  "independent_visual_rerender_match": true,
+  "artifacts": {
+    "index.html": {
+      "sha256": "d6cf01733d8b4427b825c069700755578740bd0acab0fd217c24d9f50a923059"
+    },
+    "portfolio-desktop.png": {
+      "sha256": "b04dd4313377f190d2f37d6a4708b46825073780502dda734f6cbf15b7e5a5fc"
+    },
+    "portfolio-mobile.png": {
+      "sha256": "09df2cbd1235975e5d9db503482a7c6552b5c285225f99fb0110bd53cf7cb5ae"
+    },
+    "portfolio.pdf": {
+      "sha256": "dc0116ffacdc8bcd2d7d7c6e1e6cf2ab6f0cefb678fd7c71a768b3421739c2c1"
+    }
+  }
+}

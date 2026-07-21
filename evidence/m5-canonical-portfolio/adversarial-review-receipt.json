@@ -1,0 +1,50 @@
+{
+  "schema_version": "canonical-portfolio-adversarial-review-v1",
+  "status": "passed",
+  "issue": "https://github.com/zinan92/equity-research/issues/20",
+  "reviewed_at": "2026-07-21T14:21:21Z",
+  "reviewed_content_sha256": "f220ff7ec8db9999ee1243799d50dd4b4bf19f141a617cb9578f928df480b31b",
+  "aggregate": {
+    "decision": "APPROVE",
+    "p0": 0,
+    "p1": 0,
+    "p2": 0
+  },
+  "reviews": [
+    {
+      "role": "code_and_integrity",
+      "decision": "APPROVE",
+      "p0": 0,
+      "p1": 0,
+      "p2": 0,
+      "checks": [
+        "198/198 product tests passed",
+        "13/13 focused M5 tests passed",
+        "independent Playwright full-page rerender matched both screenshot SHA-256 hashes",
+        "5/5 adversarial attacks were rejected",
+        "portfolio, report, snapshot, diff and ledger identities fail closed"
+      ]
+    },
+    {
+      "role": "product_contract_and_visual",
+      "decision": "APPROVE",
+      "p0": 0,
+      "p1": 0,
+      "p2": 0,
+      "success_criteria_met": 7,
+      "success_criteria_total": 7,
+      "checks": [
+        "desktop and 390px mobile artifacts expose all required decision fields",
+        "retrospective and canonical-current truth boundaries are visible",
+        "the stale PDF page-count note was corrected to the verified four-page artifact"
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "independent_verification_receipt": "fd70b75f990c202678482ce8cfff3f9b8703a521399c3003218fd34fdae4d97d",
+    "adversarial_verification_receipt": "7dabef6fa0ac4193dee6d7cc610b5aad2fbf16853a825cd71ebd7455c4e410ee",
+    "portfolio_desktop_png": "b04dd4313377f190d2f37d6a4708b46825073780502dda734f6cbf15b7e5a5fc",
+    "portfolio_mobile_png": "09df2cbd1235975e5d9db503482a7c6552b5c285225f99fb0110bd53cf7cb5ae",
+    "portfolio_pdf": "dc0116ffacdc8bcd2d7d7c6e1e6cf2ab6f0cefb678fd7c71a768b3421739c2c1"
+  }
+}
