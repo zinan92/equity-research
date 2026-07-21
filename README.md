@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-102%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-127%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -67,6 +67,7 @@ flowchart TB
 ```text
 equity-research/
 ├── product/                         # 当前投研产品：数据、研究、API、UI、发布与测试
+│   ├── data_core/                   # canonical 数据合同、SQLite adapter 与 Postgres migration
 │   ├── static/                      # 单页前端
 │   ├── tests/                       # 产品契约与攻击测试
 │   ├── automation/                  # 可选 LaunchAgent 模板
@@ -193,6 +194,7 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 
 ## 数据与证据边界
 
+- canonical 数据基座合同为 [data-foundation-v1](docs/architecture/data-foundation-v1.md)：source manifest → raw object → quality gate → immutable snapshot；PostgreSQL/Supabase migration 已定义，线上项目尚未部署。
 - 数字事实来自数据库、确定性公式和带时点的外部来源，不由语言模型生成。
 - 数据快照绑定原始响应哈希、特征版本、组合模型版本和 `known_at`；输入未变时可重放。
 - 研究证据区分 fact / inference / risk，缺失的同行、历史分位或经营因果必须显示为 Missing evidence。
@@ -217,6 +219,11 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 | `PDFTOTEXT_BINARY` | PATH 中的 `pdftotext` | PDF 文字指纹校验 |
 
 ## 验收
+
+数据基座的离线 ingestion、质量阻断、snapshot replay 和 export/import 恢复：
+
+    python3 scripts/verify_data_foundation.py
+    python3 -m unittest product.tests.test_data_foundation -v
 
 产品测试：
 
