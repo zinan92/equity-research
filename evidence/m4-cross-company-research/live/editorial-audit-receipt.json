@@ -1,0 +1,99 @@
+{
+  "schema_version": "cross-company-editorial-audit-receipt-v2",
+  "status": "passed",
+  "reviewer": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+  "review_method": "sentence-level comparison against the current integrity-checked frozen excerpts, limitations, input identity, narrative hash and revision chain",
+  "review_scope_percent": 100,
+  "blocking_findings": {
+    "p0": 0,
+    "p1": 0
+  },
+  "global_p2": [
+    "This batch predates permanent per-company base-artifact retention: the revised artifacts remain valid under the revision-chain validator, but five base_artifact_provenance_hash values cannot be independently recomputed from retained original base artifacts. The generator now preserves base-narrative-draft.json and per-company receipts for future batches."
+  ],
+  "companies": [
+    {
+      "ticker": "600519.SH",
+      "input_identity": "f1bc4225949b538816bcaa07a24165b656e16a4dd9806dcee65a22e32e877ae9",
+      "artifact_provenance_hash": "e93b6cab12133099bae876364cc9fa003874c84cf5a9600b13af14c70276d620",
+      "provider": "DeepSeek draft + evidence editor",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "cross-company-writer-v4",
+      "prompt_hash": "a7e06d6499d66ba4dd9e7a1f4836aca1d2d67c8430eb23b471fdfec7fcebf904",
+      "narrative_hash": "400ed7e33403412ab89c9ea9c0a2d921828eda7a6c8331a62451e8fddb42a238",
+      "evidence_manifest_hash": "cb7e964252fb433fe56b26c5d041ee7d5cb906cf0b3f646a4a452745b51a5da8",
+      "p0": 0,
+      "p1": 0,
+      "p2": 1,
+      "result": "approved"
+    },
+    {
+      "ticker": "600036.SH",
+      "input_identity": "3fc0abaa04e1ff898df60b83b90009fff19a5a62a7fa5b62dc16f8b08bd05ddc",
+      "artifact_provenance_hash": "fd4e570c5f57262d9570cf10cc17b7e2f39de2b35153550a5a86942c0eb9532e",
+      "provider": "DeepSeek draft + evidence editor",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "cross-company-writer-v4",
+      "prompt_hash": "2b9c1185d50a1d747238d2217803d2b9ef9ae5135c3df8d3afad42a51ee6f9a6",
+      "narrative_hash": "72cb160d631ed38afa51563146693c34683750cbe62aff71641ea35fa57caf20",
+      "evidence_manifest_hash": "182fcd16d7c5a337220b96bba2a8ac1888b219f1825fb1db879a168fb1488b6f",
+      "p0": 0,
+      "p1": 0,
+      "p2": 1,
+      "result": "approved"
+    },
+    {
+      "ticker": "600900.SH",
+      "input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+      "artifact_provenance_hash": "76893668a9bb591e2c10f3630bc6f9b69ce4edff3e625d294f877593dff0cc93",
+      "provider": "DeepSeek draft + evidence editor",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "cross-company-writer-v4",
+      "prompt_hash": "f821e8cbaabcc1c325bac6b43963f5e8b07cdb03e8ef795ea9621b0595849109",
+      "narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853",
+      "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+      "p0": 0,
+      "p1": 0,
+      "p2": 1,
+      "result": "approved"
+    },
+    {
+      "ticker": "000333.SZ",
+      "input_identity": "15f05bce2ffa6c607493aa875c9d33c7e7ddc445306b282019eac2c00f029a96",
+      "artifact_provenance_hash": "e5c5b9f25fb0165708a87b1af329ffa324a0ddfe845ba0dae1333000ba6b9024",
+      "provider": "DeepSeek draft + evidence editor",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "cross-company-writer-v4",
+      "prompt_hash": "5ef32ea051451f3c066fd6c39aab3bbda2062a7d2ea0cb04441c16b2b6db1b9f",
+      "narrative_hash": "295d54086008445378c64e16e425d14d4b1bcc0f925825550d0e7a0ad92cd81f",
+      "evidence_manifest_hash": "730197a846382d4127069fa7c024d57ab4481df18d728cbfe19dd3e92871971d",
+      "p0": 0,
+      "p1": 0,
+      "p2": 1,
+      "result": "approved"
+    },
+    {
+      "ticker": "300750.SZ",
+      "input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+      "artifact_provenance_hash": "adaf2457abc3c7fcd0792b1d839e8fd29f808e78296862e6b659ee063d5f4938",
+      "provider": "DeepSeek draft + evidence editor",
+      "model": "deepseek-v4-pro",
+      "prompt_version": "cross-company-writer-v4",
+      "prompt_hash": "8881d043b78c8b77608f021cd9c605cdf391e62f8fdf7342d8b7516f97356c99",
+      "narrative_hash": "b1b51c53a92e119bae80d446a4cea43b25e1c91d5ec2ffb5300ed1ef2831b5d9",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "p0": 0,
+      "p1": 0,
+      "p2": 1,
+      "result": "approved"
+    }
+  ],
+  "provenance": {
+    "provider": "DeepSeek draft + evidence editor",
+    "original_model": "deepseek-v4-pro",
+    "prompt_version": "cross-company-writer-v4",
+    "editorial_revision": "cross-company-editorial-revision-v1",
+    "approval": "cross-company-editorial-v2",
+    "raw_evidence_committed": false
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "companies": [
+    {
+      "artifacts": {
+        "html": "evidence/m4-cross-company-research/600519.SH/report.html",
+        "html_sha256": "12611c5c748251e90125559771757bef58c219f78253f812d1b50e3fa0a54ce5",
+        "json": "evidence/m4-cross-company-research/600519.SH/report.json",
+        "json_sha256": "925f6b25c15317da618d0c10d553e554ef6e315ac0c5dc5ff678d5093cd1641f",
+        "long_png": "evidence/m4-cross-company-research/600519.SH/report-long.png",
+        "long_png_full_page": true,
+        "long_png_sha256": "ac96a854f394bc00454c362232635c8dba23d47961af826c85939e2b1b242a84",
+        "mobile_png": "evidence/m4-cross-company-research/600519.SH/report-mobile.png",
+        "mobile_png_dimensions": [
+          390,
+          4049
+        ],
+        "mobile_png_full_page": true,
+        "mobile_png_sha256": "e198d7d1718380321e5ed1980f6f7637288a246c6c05c37f38ec697f4f39037f",
+        "pdf": "evidence/m4-cross-company-research/600519.SH/report.pdf",
+        "pdf_module_ids": [
+          "executive_summary",
+          "investment_thesis",
+          "business_and_industry",
+          "financial_quality",
+          "framework_assessment",
+          "valuation",
+          "catalysts_risks",
+          "evidence_ledger"
+        ],
+        "pdf_pages": 5,
+        "pdf_sha256": "c140acf292c80115ad67c7832c701ef14d4a6273f713a03cb83c81e837c8f030",
+        "png_dimensions": [
+          1440,
+          3492
+        ]
+      },
+      "industry": "白酒",
+      "industry_key": "consumer_brands",
+      "module_ids": [
+        "executive_summary",
+        "investment_thesis",
+        "business_and_industry",
+        "financial_quality",
+        "framework_assessment",
+        "valuation",
+        "catalysts_risks",
+        "evidence_ledger"
+      ],
+      "name": "贵州茅台",
+      "production_input_identity": "c82f1c9830e437f88ee96a9bf60e0ae5ff0bf594a14915e84174bca816d5cd06",
+      "report_hash": "ce614aaabecc5316d48e74e05dd1f96130689121a3c7446b94c69cd695ae9748",
+      "ticker": "600519.SH",
+      "truth_set": {
+        "is_live_research": false,
+        "note": "Contract and format fixture only; not current data, valuation, rating, or position advice.",
+        "scope": "structure_only"
+      }
+    },
+    {
+      "artifacts": {
+        "html": "evidence/m4-cross-company-research/600036.SH/report.html",
+        "html_sha256": "6f34257a8b4b99752c9730512fc28e09b3dc5533befa820fac89e5fc467bc020",
+        "json": "evidence/m4-cross-company-research/600036.SH/report.json",
+        "json_sha256": "c07383ea4bf005620cf66120fa81abf13daf56ab7265d01b71ccb581401f56f6",
+        "long_png": "evidence/m4-cross-company-research/600036.SH/report-long.png",
+        "long_png_full_page": true,
+        "long_png_sha256": "21e1fa42c20002d72e463276d88bd818676b373f2fbf90ac22d94fbf6ba53ceb",
+        "mobile_png": "evidence/m4-cross-company-research/600036.SH/report-mobile.png",
+        "mobile_png_dimensions": [
+          390,
+          4049
+        ],
+        "mobile_png_full_page": true,
+        "mobile_png_sha256": "507103a3669201cacfb481c8a13aeae8ed0bafdd7c02820f5e6edb0c72547efc",
+        "pdf": "evidence/m4-cross-company-research/600036.SH/report.pdf",
+        "pdf_module_ids": [
+          "executive_summary",
+          "investment_thesis",
+          "business_and_industry",
+          "financial_quality",
+          "framework_assessment",
+          "valuation",
+          "catalysts_risks",
+          "evidence_ledger"
+        ],
+        "pdf_pages": 5,
+        "pdf_sha256": "3c833baaf61c754f2e2bfbcfeb8dc9526f0b1dca5aedf01b19efd64db558fc6c",
+        "png_dimensions": [
+          1440,
+          3492
+        ]
+      },
+      "industry": "银行",
+      "industry_key": "commercial_bank",
+      "module_ids": [
+        "executive_summary",
+        "investment_thesis",
+        "business_and_industry",
+        "financial_quality",
+        "framework_assessment",
+        "valuation",
+        "catalysts_risks",
+        "evidence_ledger"
+      ],
+      "name": "招商银行",
+      "production_input_identity": "4dfcead246b25a30de2db222c270793a555610e2d96ab75c12192fd94e7c45a5",
+      "report_hash": "113686c47d7ff5ce2f220b7f0dec46c63614404179dc77e632b3984212e2b213",
+      "ticker": "600036.SH",
+      "truth_set": {
+        "is_live_research": false,
+        "note": "Contract and format fixture only; not current data, valuation, rating, or position advice.",
+        "scope": "structure_only"
+      }
+    },
+    {
+      "artifacts": {
+        "html": "evidence/m4-cross-company-research/600900.SH/report.html",
+        "html_sha256": "acfde90fc35a63fc41385877547e49722bcbdd7d0fbf4c8c7bfe0b82ec7be11d",
+        "json": "evidence/m4-cross-company-research/600900.SH/report.json",
+        "json_sha256": "c55029a20f6365d7ac9da87dc6aeb0b5a2f8963e528e07a784b6635e816b34f1",
+        "long_png": "evidence/m4-cross-company-research/600900.SH/report-long.png",
+        "long_png_full_page": true,
+        "long_png_sha256": "7186b284adbe973c12492d3f513b0bb4697a6cd060dca38cbedcce8b959bdc08",
+        "mobile_png": "evidence/m4-cross-company-research/600900.SH/report-mobile.png",
+        "mobile_png_dimensions": [
+          390,
+          4094
+        ],
+        "mobile_png_full_page": true,
+        "mobile_png_sha256": "6187ad978a5de28584ccfdfdf6c830c3de7949a418a1ef58b5bad7bd1e35606b",
+        "pdf": "evidence/m4-cross-company-research/600900.SH/report.pdf",
+        "pdf_module_ids": [
+          "executive_summary",
+          "investment_thesis",
+          "business_and_industry",
+          "financial_quality",
+          "framework_assessment",
+          "valuation",
+          "catalysts_risks",
+          "evidence_ledger"
+        ],
+        "pdf_pages": 5,
+        "pdf_sha256": "bbcae12dc90c1cacb2a921efd4fc34a8b4ba952b712a5be9a986762a8affce51",
+        "png_dimensions": [
+          1440,
+          3492
+        ]
+      },
+      "industry": "水力发电",
+      "industry_key": "regulated_utility",
+      "module_ids": [
+        "executive_summary",
+        "investment_thesis",
+        "business_and_industry",
+        "financial_quality",
+        "framework_assessment",
+        "valuation",
+        "catalysts_risks",
+        "evidence_ledger"
+      ],
+      "name": "长江电力",
+      "production_input_identity": "16772c2bbd380084e067a700beff054ca42985c1cdaae143bc4fd2409d5f02fd",
+      "report_hash": "b1b5188901182114aab5cabd9307815ad3b6734fd522ad50c53112db93e1761f",
+      "ticker": "600900.SH",
+      "truth_set": {
+        "is_live_research": false,
+        "note": "Contract and format fixture only; not current data, valuation, rating, or position advice.",
+        "scope": "structure_only"
+      }
+    },
+    {
+      "artifacts": {
+        "html": "evidence/m4-cross-company-research/000333.SZ/report.html",
+        "html_sha256": "fc157afff92feec0ec68ecb23b688684ef558fea1e5063a894274e7000df180d",
+        "json": "evidence/m4-cross-company-research/000333.SZ/report.json",
+        "json_sha256": "b1e0205afe4d569bd4d7704bd82025a6a2313dc37e1cf11c3da48ed2191b5f9d",
+        "long_png": "evidence/m4-cross-company-research/000333.SZ/report-long.png",
+        "long_png_full_page": true,
+        "long_png_sha256": "2da06df344c3e54833d46da24772b56e7b1f8ec3043f194dd81eb1f1102595c3",
+        "mobile_png": "evidence/m4-cross-company-research/000333.SZ/report-mobile.png",
+        "mobile_png_dimensions": [
+          390,
+          4044
+        ],
+        "mobile_png_full_page": true,
+        "mobile_png_sha256": "b1b11fca236d637ccd03737dcf92be61ef968bda1651a48504df4714adbe7702",
+        "pdf": "evidence/m4-cross-company-research/000333.SZ/report.pdf",
+        "pdf_module_ids": [
+          "executive_summary",
+          "investment_thesis",
+          "business_and_industry",
+          "financial_quality",
+          "framework_assessment",
+          "valuation",
+          "catalysts_risks",
+          "evidence_ledger"
+        ],
+        "pdf_pages": 5,
+        "pdf_sha256": "1b2a23ebef62d1d2c51e98966b8eb310ff7c8c5db130cada1a75950de63bd0b2",
+        "png_dimensions": [
+          1440,
+          3492
+        ]
+      },
+      "industry": "家用电器",
+      "industry_key": "global_manufacturing",
+      "module_ids": [
+        "executive_summary",
+        "investment_thesis",
+        "business_and_industry",
+        "financial_quality",
+        "framework_assessment",
+        "valuation",
+        "catalysts_risks",
+        "evidence_ledger"
+      ],
+      "name": "美的集团",
+      "production_input_identity": "b4102823d785d80d9bc5c10f8e81cec2bb7efb8c9b7b186909c9c52de667ff6f",
+      "report_hash": "627eff64152e3c2c01553ea8b5d528f181b6863e8703ff118d8e790f88a2e662",
+      "ticker": "000333.SZ",
+      "truth_set": {
+        "is_live_research": false,
+        "note": "Contract and format fixture only; not current data, valuation, rating, or position advice.",
+        "scope": "structure_only"
+      }
+    },
+    {
+      "artifacts": {
+        "html": "evidence/m4-cross-company-research/300750.SZ/report.html",
+        "html_sha256": "255e243f2ecac63cb0fcfb5634923ce42a86dad9738f845a98ba4b32080c97bb",
+        "json": "evidence/m4-cross-company-research/300750.SZ/report.json",
+        "json_sha256": "7fd2ef7f34d9e13544e8294fba1c6d9c762a18c94237a8d2d74b61638c1ba2f3",
+        "long_png": "evidence/m4-cross-company-research/300750.SZ/report-long.png",
+        "long_png_full_page": true,
+        "long_png_sha256": "bcd6ef065d0d06786b2bad990e83b548ba088d9c90e7946cad5e67783de20cc3",
+        "mobile_png": "evidence/m4-cross-company-research/300750.SZ/report-mobile.png",
+        "mobile_png_dimensions": [
+          390,
+          4104
+        ],
+        "mobile_png_full_page": true,
+        "mobile_png_sha256": "5deb59d43ee05854064b8f543fda002f0a8435da8f2a8ed34bca5f99c98bfa7e",
+        "pdf": "evidence/m4-cross-company-research/300750.SZ/report.pdf",
+        "pdf_module_ids": [
+          "executive_summary",
+          "investment_thesis",
+          "business_and_industry",
+          "financial_quality",
+          "framework_assessment",
+          "valuation",
+          "catalysts_risks",
+          "evidence_ledger"
+        ],
+        "pdf_pages": 5,
+        "pdf_sha256": "5c40ac235acc563b1d22a1b2b62dc28b71bc4986037e924bc1ea59da681e6b2c",
+        "png_dimensions": [
+          1440,
+          3492
+        ]
+      },
+      "industry": "动力电池",
+      "industry_key": "new_energy_manufacturing",
+      "module_ids": [
+        "executive_summary",
+        "investment_thesis",
+        "business_and_industry",
+        "financial_quality",
+        "framework_assessment",
+        "valuation",
+        "catalysts_risks",
+        "evidence_ledger"
+      ],
+      "name": "宁德时代",
+      "production_input_identity": "eeeb7aaf7ad1e91ed5332f41064aefa28c3afda8f7d01c4cc1945c7c7ce10eda",
+      "report_hash": "41c69940456c7ea3e070f7c8865db03c12a52d804292c293375b5c60a7761a5f",
+      "ticker": "300750.SZ",
+      "truth_set": {
+        "is_live_research": false,
+        "note": "Contract and format fixture only; not current data, valuation, rating, or position advice.",
+        "scope": "structure_only"
+      }
+    }
+  ],
+  "company_count": 5,
+  "deepseek_boundary": "frozen evidence only; network forbidden during synthesis",
+  "fixture_boundary": "format and pipeline acceptance only; not live investment research",
+  "industry_count": 5,
+  "live_publication": {
+    "company_count": 5,
+    "status": "passed"
+  },
+  "same_eight_module_contract": true,
+  "schema_version": "m4-cross-company-verification-v1",
+  "status": "passed"
+}

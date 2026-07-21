@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-156%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-185%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -40,6 +40,7 @@
 - 规则引擎负责数字、分数和仓位约束；DeepSeek 只基于冻结证据撰写正文，并且必须经过独立编辑批准。
 - `preview / member / paid / owner` 四级私域权限已经实现；本地开发默认关闭身份门。
 - 可生成带身份哈希的独立 HTML、A4 PDF、长图、JSON、渲染回执和 ZIP 发布包。
+- 五个跨行业 company adapter 与统一冻结证据生产线已经通过结构验收；另有五份基于同一 REAL snapshot、实际捕获文档和独立语义审批的 live proof。fixture 与 live 产物严格分开。
 
 尚未产品化的边界：
 
@@ -157,6 +158,15 @@ python3 product/deepseek_writer.py 300750.SZ --approve --reviewer Park \
   --expected-narrative-hash <reviewed-narrative-hash> \
   --expected-evidence-manifest-hash <reviewed-evidence-manifest-hash>
 ```
+
+跨公司生产线把 snapshot、冻结 evidence manifest、company adapter、模板、模型与 prompt 版本绑定成一个输入身份。五行业结构与格式验收可离线重跑：
+
+```bash
+python3 scripts/verify_cross_company_research.py
+python3 -m unittest product.tests.test_cross_company_research_v1 -v
+```
+
+`evidence/m4-cross-company-research/` 根目录五套产物是 structure-only fixture；`live/` 中五套产物来自同一 REAL snapshot、实际捕获的公司/独立文档、DeepSeek 草稿、evidence-editor 修订与四轮独立语义审查。两类产物都遵循同一八模块合同。详见 [cross-company-research-v1](docs/architecture/cross-company-research-v1.md)。
 
 ### 生成发布包
 

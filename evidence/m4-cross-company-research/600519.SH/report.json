@@ -1,0 +1,606 @@
+{
+  "as_of": "2026-07-20T07:00:00+00:00",
+  "business_model": {
+    "description": "白酒适配器定义了公司专属研究问题，但没有改变标准报告模块。",
+    "segments": [],
+    "source_ids": [
+      "fixture_doc_1",
+      "fixture_doc_2"
+    ],
+    "value_chain": [
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "原粮与基酒",
+        "question": "量价增长如何拆分"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "生产与储存",
+        "question": "渠道库存是否健康"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "渠道与配额",
+        "question": "品牌溢价能否转化为现金"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "消费者与礼赠需求",
+        "question": "资本回报是否持续"
+      }
+    ]
+  },
+  "catalysts": [
+    {
+      "body": "量价增长如何拆分",
+      "date": "下一次正式披露",
+      "source_ids": [
+        "fixture_doc_1"
+      ],
+      "title": "证据更新窗口"
+    },
+    {
+      "body": "渠道库存是否健康",
+      "date": "下一次正式披露",
+      "source_ids": [
+        "fixture_doc_1"
+      ],
+      "title": "证据更新窗口"
+    }
+  ],
+  "data_mode": "ACCEPTANCE_FIXTURE",
+  "depth_disclosure": "公司语义、行业问题与证据需求已完成适配；每个结论只来自本次冻结证据包。",
+  "disclaimer": "验收样例，不是真实、当前或可执行的投资研究。",
+  "evidence_summary": {
+    "boundary": "只使用当前 snapshot 与冻结公司证据；缺失项保持 Missing evidence。",
+    "claim_locator_count": 4,
+    "company_release_count": 0,
+    "document_count": 4,
+    "frozen_document_count": 3,
+    "frozen_evidence_set_id": "xcr_c42a766be0380f911a34",
+    "frozen_manifest_hash": "c42a766be0380f911a34d4183f466026a75ca1b45ff2a4524781734e111a18a4",
+    "independent_document_count": 1,
+    "primary_count": 3
+  },
+  "exchange": "上海证券交易所",
+  "executive": {
+    "action": "research_only",
+    "current_price": 0,
+    "execution_range": "不提供执行区间",
+    "key_contradiction": "结构已标准化，实时证据仍须由生产数据填充。",
+    "position_plan": [
+      {
+        "condition": "必须先取得 REAL snapshot 与冻结公司证据",
+        "stage": "Research",
+        "weight": 0
+      }
+    ],
+    "score": 0,
+    "stance": "research_only",
+    "summary": "Acceptance fixture：验证跨公司生产线，不提供实时结论。"
+  },
+  "falsification": [
+    "若后续正式证据否定“量价增长如何拆分”的基准判断，则重建研究结论。",
+    "若后续正式证据否定“渠道库存是否健康”的基准判断，则重建研究结论。",
+    "若后续正式证据否定“品牌溢价能否转化为现金”的基准判断，则重建研究结论。"
+  ],
+  "financials": {
+    "annual_quality": {
+      "debt_ratio": null,
+      "gross_margin": null,
+      "net_margin": null,
+      "roe": null
+    },
+    "headline": "Missing evidence",
+    "quality_notes": [
+      "Acceptance fixture only"
+    ],
+    "series": [
+      {
+        "gross_margin": null,
+        "net_profit_yi": null,
+        "net_profit_yoy": null,
+        "report_date": "2026-06-30",
+        "report_type": "fixture",
+        "revenue_yi": null,
+        "revenue_yoy": null
+      }
+    ]
+  },
+  "generated_from": {
+    "adapter_version": "1.0.0",
+    "baseline_payload_hash": "d366f554c63017e29d936b8833b9d6ebfab6638f4335e132ac994a6498e7be4b",
+    "evidence_manifest_hash": "c42a766be0380f911a34d4183f466026a75ca1b45ff2a4524781734e111a18a4",
+    "evidence_set_id": "xcr_c42a766be0380f911a34",
+    "model_boundary_version": "frozen-evidence-only-v1",
+    "model_version": "fixture",
+    "narrative_model": "deepseek-v4-pro",
+    "production_input_identity": "c82f1c9830e437f88ee96a9bf60e0ae5ff0bf594a14915e84174bca816d5cd06",
+    "prompt_version": "cross-company-writer-v4",
+    "publication_id": "acceptance_publication",
+    "snapshot_id": "acceptance_600519_SH",
+    "snapshot_manifest_hash": "6b13e1ec841b42056cf4ad1236c7e15b95d789653dbbf4a5d2aab4034f652b87",
+    "template_version": "institutional-report-v1"
+  },
+  "industry": "白酒",
+  "industry_position": {
+    "headline": "Missing evidence：同行份额与竞争排序尚未得到完整交叉验证。",
+    "metrics": [
+      {
+        "label": "可比公司",
+        "note": "研究范围，不是排名结论",
+        "value": "五粮液 / 泸州老窖 / 山西汾酒"
+      }
+    ],
+    "source_ids": [
+      "fixture_doc_1"
+    ]
+  },
+  "known_at": "2026-07-20T07:00:00+00:00",
+  "management": {
+    "score": null,
+    "source_ids": [
+      "fixture_doc_1"
+    ],
+    "strengths": [
+      "Missing evidence：资本配置与治理优势待补充。"
+    ],
+    "watchouts": [
+      "所有治理判断须由监管披露和长期资本配置记录共同支持。"
+    ]
+  },
+  "market": {
+    "change_pct": null,
+    "composite_score": null,
+    "ma20": null,
+    "ma200": null,
+    "ma60": null,
+    "market_cap_yi": null,
+    "max_drawdown_250d": null,
+    "pb": null,
+    "pe_ttm": null,
+    "price": null,
+    "return_20d": null,
+    "return_250d": null,
+    "return_60d": null,
+    "volatility_60d": null
+  },
+  "market_known_at": "2026-07-20T07:00:00+00:00",
+  "moat": [
+    {
+      "name": "证据完整度",
+      "proof": "Missing evidence：护城河强度必须由相对同行证据与长期财务记录共同验证。",
+      "score": 0,
+      "source_ids": [
+        "fixture_doc_1"
+      ]
+    }
+  ],
+  "name": "贵州茅台",
+  "quant_signals": [
+    {
+      "name": "Evidence",
+      "proof": "Acceptance fixture",
+      "score": 0,
+      "source_ids": [
+        "market_snapshot"
+      ]
+    }
+  ],
+  "report_contract": {
+    "absence_policy": {
+      "missing_evidence": "The module applies, but current evidence is insufficient. It must remain visible with a reason.",
+      "not_applicable": "The concept does not apply to this issuer or market. It must not be used as a synonym for missing data."
+    },
+    "as_of": {
+      "market_data_at": "2026-07-20T07:00:00+00:00",
+      "research_cutoff": "2026-07-20T07:00:00+00:00"
+    },
+    "claim_policy": {
+      "allowed_types": [
+        "fact",
+        "inference",
+        "assumption",
+        "risk"
+      ],
+      "assumption_requires_method": true,
+      "fact_requires_source_ids": true,
+      "inference_requires_source_ids": true,
+      "risk_requires_trigger": true
+    },
+    "contract_version": "1.0.0",
+    "format_contract": {
+      "module_order_is_authoritative": true,
+      "same_order_desktop_mobile_print": true,
+      "unknown_modules_fail_closed": true
+    },
+    "identity": {
+      "currency": "CNY",
+      "exchange": "上海证券交易所",
+      "market": "CN",
+      "name": "贵州茅台",
+      "reporting_standard": "PRC_GAAP",
+      "ticker": "600519.SH"
+    },
+    "market_specific_disclosures": {
+      "cninfo_filings": {
+        "reason": "This disclosure regime applies to the issuer market.",
+        "status": "available"
+      },
+      "sec_filings": {
+        "reason": "Not applicable to the issuer market; do not map it to Missing evidence.",
+        "status": "not_applicable"
+      }
+    },
+    "measurement_policy": {
+      "currency": "CNY",
+      "financial_presentation_currency": "CNY",
+      "financial_statement_scale": 100000000,
+      "financial_statement_unit_label": "亿元",
+      "money_unit": "issuer_reporting_currency",
+      "percent_unit": "percent",
+      "percentage_point_unit": "percentage_point",
+      "price_currency": "CNY",
+      "price_unit": "per_share",
+      "rule": "Every monetary field must inherit this currency or declare an explicit override; percent and percentage-point changes are never interchangeable."
+    },
+    "module_manifest": [
+      {
+        "anchor": "r-overview",
+        "content_paths": [
+          "executive"
+        ],
+        "id": "executive_summary",
+        "kicker": "INVESTMENT COMMITTEE",
+        "order": 1,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "决策摘要"
+      },
+      {
+        "anchor": "r-thesis",
+        "content_paths": [
+          "thesis"
+        ],
+        "id": "investment_thesis",
+        "kicker": "THESIS",
+        "order": 2,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "核心投资逻辑"
+      },
+      {
+        "anchor": "r-business",
+        "content_paths": [
+          "business_model",
+          "industry_position",
+          "management"
+        ],
+        "id": "business_and_industry",
+        "kicker": "BUSINESS / INDUSTRY",
+        "order": 3,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "经营、行业与竞争"
+      },
+      {
+        "anchor": "r-financial",
+        "content_paths": [
+          "financials"
+        ],
+        "id": "financial_quality",
+        "kicker": "FINANCIAL QUALITY",
+        "order": 4,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "财务质量"
+      },
+      {
+        "anchor": "r-serenity",
+        "content_paths": [
+          "serenity"
+        ],
+        "id": "framework_assessment",
+        "kicker": "FRAMEWORK",
+        "order": 5,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "研究框架评分"
+      },
+      {
+        "anchor": "r-valuation",
+        "content_paths": [
+          "valuation"
+        ],
+        "id": "valuation",
+        "kicker": "VALUATION",
+        "order": 6,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "估值框架"
+      },
+      {
+        "anchor": "r-risks",
+        "content_paths": [
+          "catalysts",
+          "risks",
+          "falsification",
+          "watchlist"
+        ],
+        "id": "catalysts_risks",
+        "kicker": "CATALYSTS / RISKS",
+        "order": 7,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "催化剂、风险与反证"
+      },
+      {
+        "anchor": "r-evidence",
+        "content_paths": [
+          "sources",
+          "evidence_summary",
+          "source_contract",
+          "disclaimer"
+        ],
+        "id": "evidence_ledger",
+        "kicker": "EVIDENCE / METHOD",
+        "order": 8,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Structure truth set only; no live investment conclusion or evidence is asserted.",
+        "title": "证据台账与方法"
+      }
+    ],
+    "schema_version": "research-report-v1",
+    "truth_set": {
+      "is_live_research": false,
+      "note": "Contract and format fixture only; not current data, valuation, rating, or position advice.",
+      "scope": "structure_only"
+    }
+  },
+  "report_hash": "ce614aaabecc5316d48e74e05dd1f96130689121a3c7446b94c69cd695ae9748",
+  "report_version": "cross-company-research-v1",
+  "research_depth": "deep",
+  "research_known_at": "2026-07-20T07:00:00+00:00",
+  "research_logic_hash": "7aa40bcc7cb3950043b8e363669f49d257fa9fdda81e266e3f174b6e983883b1",
+  "research_profile_hash": "4889d14be77f1f84fa5a809f8e62bb5814e640f9bfb8cbb4a247929ba0a18a86",
+  "research_status": "verified",
+  "risks": [
+    {
+      "evidence": "若验收样例被误标为实时研究，产品结论将失真。",
+      "impact": "高",
+      "probability": "中",
+      "rank": 1,
+      "source_ids": [
+        "fixture_doc_3"
+      ],
+      "title": "Fixture mistaken for live research",
+      "trigger": "data_mode 不再显示 ACCEPTANCE_FIXTURE"
+    }
+  ],
+  "serenity": {
+    "factors": [
+      {
+        "contribution": 0,
+        "label": "Evidence",
+        "reason": "Fixture",
+        "score": 0,
+        "source_ids": [
+          "market_snapshot"
+        ]
+      }
+    ],
+    "final_score": 0,
+    "label": "fixture",
+    "meaning": "Missing evidence",
+    "method": "No live scoring in acceptance mode",
+    "penalties": [],
+    "penalty": 0,
+    "raw_score": 0
+  },
+  "source_contract": {
+    "execution": [
+      "market_snapshot",
+      "fixture_doc_1",
+      "fixture_doc_2",
+      "fixture_doc_3"
+    ],
+    "falsification": [
+      "fixture_doc_1"
+    ],
+    "financials": [
+      "market_snapshot",
+      "fixture_doc_1",
+      "fixture_doc_2",
+      "fixture_doc_3"
+    ],
+    "valuation": [
+      "market_snapshot",
+      "fixture_doc_1",
+      "fixture_doc_2",
+      "fixture_doc_3"
+    ],
+    "watchlist": [
+      "fixture_doc_1"
+    ]
+  },
+  "sources": [
+    {
+      "document_id": "fixture_acceptance_600519_SH",
+      "id": "market_snapshot",
+      "kind": "market_snapshot",
+      "known_at": "2026-07-20T07:00:00+00:00",
+      "note": "Not live market evidence",
+      "provider": "acceptance_fixture",
+      "quote_time": "2026-07-20T07:00:00+00:00",
+      "snapshot_id": "acceptance_600519_SH",
+      "strength": "中",
+      "title": "Acceptance fixture snapshot",
+      "url": null
+    },
+    {
+      "document_id": "600519.SH_1",
+      "evidence_manifest_hash": "c42a766be0380f911a34d4183f466026a75ca1b45ff2a4524781734e111a18a4",
+      "id": "fixture_doc_1",
+      "kind": "primary",
+      "known_at": "2026-07-20T07:00:00+00:00",
+      "note": "Deterministic acceptance fixture; not a captured live document.",
+      "strength": "强",
+      "title": "Acceptance fixture source 1",
+      "url": "https://www.cninfo.com.cn/acceptance/600519.SH/1"
+    },
+    {
+      "document_id": "600519.SH_2",
+      "evidence_manifest_hash": "c42a766be0380f911a34d4183f466026a75ca1b45ff2a4524781734e111a18a4",
+      "id": "fixture_doc_2",
+      "kind": "primary",
+      "known_at": "2026-07-20T07:00:00+00:00",
+      "note": "Deterministic acceptance fixture; not a captured live document.",
+      "strength": "强",
+      "title": "Acceptance fixture source 2",
+      "url": "https://www.sse.com.cn/acceptance/600519.SH/2"
+    },
+    {
+      "document_id": "600519.SH_3",
+      "evidence_manifest_hash": "c42a766be0380f911a34d4183f466026a75ca1b45ff2a4524781734e111a18a4",
+      "id": "fixture_doc_3",
+      "kind": "independent",
+      "known_at": "2026-07-20T07:00:00+00:00",
+      "note": "Deterministic acceptance fixture; not a captured live document.",
+      "strength": "中",
+      "title": "Acceptance fixture source 3",
+      "url": "https://www.csindex.com.cn/acceptance/600519.SH/3"
+    }
+  ],
+  "stress_test": {
+    "formula": "not available",
+    "method": "not available",
+    "price_basis": 0,
+    "scenarios": [
+      {
+        "assumption": "Acceptance fixture",
+        "case": "base",
+        "change_pct": 0,
+        "label": "Missing evidence",
+        "price_basis": 0,
+        "stress_multiple": 0,
+        "stress_price": 0
+      }
+    ],
+    "warning": "Not a target price"
+  },
+  "thesis": [
+    {
+      "body": "验收证据只证明五家公司可以走同一结构与证据门，不表达实时基本面判断。",
+      "claim_type": "fact",
+      "source_ids": [
+        "fixture_doc_1"
+      ],
+      "title": "Acceptance boundary"
+    }
+  ],
+  "ticker": "600519.SH",
+  "title": "贵州茅台：标准化深度研究与证据边界",
+  "valuation": {
+    "base_view": "Missing evidence",
+    "currency": "CNY",
+    "current_price": 0.0,
+    "earnings_bridge": {
+      "base_eps": 0,
+      "base_period": "Missing evidence",
+      "basis": "No frozen forecast",
+      "cases": [
+        {
+          "case": "bear",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "悲观"
+        },
+        {
+          "case": "base",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "基准"
+        },
+        {
+          "case": "bull",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "乐观"
+        }
+      ]
+    },
+    "method": "Frozen-evidence scenario framework",
+    "pb": null,
+    "pe_ttm": null,
+    "reason": "Missing evidence：未冻结盈利预测与合理倍数，因此不形成目标价。",
+    "reverse_implied": "Missing evidence",
+    "scenarios": [
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "bear",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "悲观",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      },
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "base",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "基准",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      },
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "bull",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "乐观",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      }
+    ],
+    "status": "missing_evidence",
+    "warning": "零值表示估值证据缺失，不是目标价或收益率。"
+  },
+  "watchlist": [
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "量价增长如何拆分",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "渠道库存是否健康",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "品牌溢价能否转化为现金",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "资本回报是否持续",
+      "threshold": "取得两类独立证据后更新"
+    }
+  ]
+}

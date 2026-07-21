@@ -1,0 +1,195 @@
+{
+  "artifact_version": "cross-company-narrative-v1",
+  "editorial_approval": {
+    "approval_version": "cross-company-editorial-v2",
+    "approved_at": "2026-07-21T13:11:38.423950+00:00",
+    "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+    "artifact_provenance_hash": "76893668a9bb591e2c10f3630bc6f9b69ce4edff3e625d294f877593dff0cc93",
+    "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+    "input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+    "model": "deepseek-v4-pro",
+    "narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853",
+    "prompt_hash": "f821e8cbaabcc1c325bac6b43963f5e8b07cdb03e8ef795ea9621b0595849109",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "status": "approved"
+  },
+  "editorial_revision": {
+    "base_artifact_provenance_hash": "eefc523d5b6aebc89ff0f0ee6a68d899310a6d7488b64308b77fe482a1f76db5",
+    "base_model": "deepseek-v4-pro",
+    "base_narrative_hash": "241d4b8170eaf1c7e5d67227153535c5d4c9e7bbacebd98ad5800fc2085cecba",
+    "base_provider": "DeepSeek",
+    "findings": [
+      "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+    ],
+    "revised_at": "2026-07-21T12:43:02.191587+00:00",
+    "revised_by": "Codex evidence editor",
+    "revised_narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853",
+    "revision_version": "cross-company-editorial-revision-v1",
+    "status": "revised"
+  },
+  "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+  "input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+  "model": "deepseek-v4-pro",
+  "narrative": {
+    "executive_summary": {
+      "conclusion": "年度与季度材料披露营业收入及利润变化，并披露现金分红方案；来水、电价、发电量、资本开支与估值证据不足。",
+      "paragraphs": [
+        "季度报告披露营业收入与归母净利润同比增长，并将利润变化解释为售电收入增加及所持金融资产浮盈。",
+        "年度报告披露经营活动现金流净额及现金分红方案；缺少资本开支、利息支出和日常费用对照，不能判断现金覆盖能力。"
+      ],
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ]
+    },
+    "report_title": "长江电力证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "现有材料支持描述营业收入与利润变化，但缺少来水、发电量和电价构成，不能判断业务稳定性。",
+        "paragraphs": [
+          "季度报告披露售电收入增加及金融资产浮盈对利润变化的影响。",
+          "年度与独立材料披露年度营业收入和净利润变化，但未提供本研究所需的核心运营指标。"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1",
+          "cpnn_cypc_2025_results"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "现有材料披露经营活动现金流净额和现金分红方案，但不能据此推断自由现金流或持续覆盖能力。",
+        "paragraphs": [
+          "年度报告披露经营活动现金流净额为正，并披露现金分红方案。",
+          "缺少资本开支、利息支出、授信与再融资对照，无法评价现金流对资本义务或分红的持续覆盖。"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "财务质量"
+      },
+      "industry_chain": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "产业链"
+      },
+      "risk_falsification": {
+        "conclusion": "来水、电价、资本开支、金融资产收益与分红安排需要后续正式披露验证。",
+        "paragraphs": [
+          "季度报告显示利润变化包含金融资产浮盈，相关收益的后续变化会影响期间比较。",
+          "若后续披露改变来水、电价、资本开支、现金流或分红安排判断，当前研究结论需要重估。"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1",
+          "cpnn_cypc_2025_results"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853",
+  "prompt_hash": "f821e8cbaabcc1c325bac6b43963f5e8b07cdb03e8ef795ea9621b0595849109",
+  "prompt_version": "cross-company-writer-v4",
+  "provider": "DeepSeek draft + evidence editor",
+  "receipts": [
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "draft",
+      "usage": {
+        "completion_tokens": 3386,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2135
+        },
+        "prompt_cache_hit_tokens": 12416,
+        "prompt_cache_miss_tokens": 81,
+        "prompt_tokens": 12497,
+        "prompt_tokens_details": {
+          "cached_tokens": 12416
+        },
+        "total_tokens": 15883
+      }
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "schema_and_fact_repair_1",
+      "usage": {
+        "completion_tokens": 7183,
+        "completion_tokens_details": {
+          "reasoning_tokens": 5918
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 13584,
+        "prompt_tokens": 13840,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 21023
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 7183,
+    "completion_tokens_details": {
+      "reasoning_tokens": 5918
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 13584,
+    "prompt_tokens": 13840,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "total_tokens": 21023
+  },
+  "validation": {
+    "available_source_count": 3,
+    "cited_source_count": 3,
+    "errors": [],
+    "input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+    "status": "passed"
+  }
+}

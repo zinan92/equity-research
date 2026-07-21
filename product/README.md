@@ -56,6 +56,17 @@ python3 product/batch_research.py --no-refresh
 
 历史验收 runtime 中，宁德时代达到公司级 `verified / deep`，其余 7 股为明确披露的 `baseline / quantitative_baseline`；fresh clone 必须先重建真实快照与证据门才能恢复该状态。单股失败不会阻断其余股票，但只有 8/8 成功或复用时整批才是 `success`。
 
+### 跨公司标准化研报
+
+M4 首批 adapter 覆盖贵州茅台、招商银行、长江电力、美的集团和宁德时代。adapter 只定义行业问题、价值链和可比范围；八模块格式、引用、缺失证据和发布规则仍由 `research-report-v1` 统一控制：
+
+```bash
+python3 scripts/verify_cross_company_research.py
+python3 -m unittest product.tests.test_cross_company_research_v1 -v
+```
+
+`evidence/m4-cross-company-research/` 根目录是 structure-only acceptance fixture；`live/` 是五家公司 REAL snapshot + 实际捕获文档的发布证明。live 稿件经过 DeepSeek 冻结输入、可追溯 evidence-editor 修订、四轮独立语义审查和 exact-hash 审批。详见 [`cross-company-research-v1`](../docs/architecture/cross-company-research-v1.md)。
+
 ### 单独构建真实组合草稿
 
 ```bash
@@ -152,14 +163,16 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 
 ```bash
 python3 scripts/verify_research_refresh.py
+python3 scripts/verify_cross_company_research.py
 python3 -m unittest product.tests.test_research_refresh_v1 -v
+python3 -m unittest product.tests.test_cross_company_research_v1 -v
 python3 -m unittest discover -s product/tests -q
 python3 scripts/verify_baseline.py
 python3 -m py_compile product/*.py
 node --check product/render_publication.mjs
 ```
 
-当前产品测试共 156 项，覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、按 canonical key 修复缺口、独立交易日历与缺 bar 阻断、source manifest/run 绑定、provider raw bytes/hash、fixture→REAL 防升级、cached/REAL 身份隔离、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、两日自动更新、分源 manifest、显式 cached fallback、失败来源完整质量审计、8/8 标准研报激活、错误 hash 阻断、断点恢复、子进程网络/命令逃逸阻断、旧版本回滚、研报篡改、产品 canonical 消费路径、调度失败退出码、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、危险来源链接、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
+当前产品测试共 185 项，覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、按 canonical key 修复缺口、独立交易日历与缺 bar 阻断、source manifest/run 绑定、provider raw bytes/hash、fixture→REAL 防升级、cached/REAL 身份隔离、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、两日自动更新、跨公司 adapter、冻结证据 identity、DeepSeek no-network boundary、evidence-editor provenance、五行业同八模块格式、危险 URL/未知引用阻断、分源 manifest、显式 cached fallback、失败来源完整质量审计、8/8 标准研报激活、错误 hash 阻断、断点恢复、子进程网络/命令逃逸阻断、旧版本回滚、研报篡改、产品 canonical 消费路径、调度失败退出码、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
 
 标准化报告接口遵循 [`research-report-v1`](../docs/product/research-report-v1.md)。`report_contract.module_manifest` 是 Web、移动和发布包的唯一章节顺序来源；客户端遇到未知或乱序版本必须 fail closed。
 

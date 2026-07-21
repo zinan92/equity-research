@@ -1,0 +1,1020 @@
+{
+  "ai_narrative": {
+    "executive_summary": {
+      "conclusion": "公司与独立材料支持描述动力及储能电池市场位置、财务指标变化、存货增加和海外合作备忘录；技术壁垒、客户锁定、资本安全与估值仍缺少直接证据。",
+      "paragraphs": [
+        "独立机构材料披露公司动力电池使用量与储能电池出货量的市场排名；公司材料披露营业收入、归母净利润与经营活动现金流量净额变化。",
+        "季度报告披露存货账面价值较期初增加；公司与欧洲合作方签署的是合作备忘录，不是已确认合同、订单或收入，商业化结果需要后续验证。"
+      ],
+      "source_ids": [
+        "catl_2025_annual",
+        "catl_2026_q1",
+        "sne_2026_ev_jan_apr",
+        "sne_2025_ess",
+        "catl_alfen_mou_20260716"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "catl_2025_annual",
+        "catl_2026_q1",
+        "sne_2026_ev_jan_apr",
+        "sne_2025_ess",
+        "catl_alfen_mou_20260716"
+      ]
+    },
+    "report_title": "宁德时代证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "现有材料支持描述电池销量、市场排名、新业务布局、存货与在建项目，但不支持判断新业务收入贡献、产能充足或未来交付。",
+        "paragraphs": [
+          "公司与独立材料披露动力及储能电池销量和市场位置，并披露换电、船舶、航空等项目事实。",
+          "冻结材料没有这些新场景的收入贡献，也没有需求、利用率、投产进度与订单匹配，不能评价在建产能是否充足。"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2026_q1",
+          "sne_2026_ev_jan_apr",
+          "sne_2025_ess",
+          "catl_2025_release"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "公司披露研发、专利与制造相关事实，但冻结材料没有独立技术比较、客户留存或切换成本。",
+          "市场排名能够说明市场位置，不能单独证明技术壁垒、客户锁定或护城河强度。"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2025_release",
+          "sne_2026_ev_jan_apr",
+          "sne_2025_ess"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "公司材料支持描述收入、利润、经营现金流、货币资金、借款、债券、应收账款、存货与在建工程余额，但缺少完整杠杆和到期债务分析。",
+        "paragraphs": [
+          "年报与季度报告披露营业收入、归母净利润及经营活动现金流量净额变化，并披露现金分红安排。",
+          "资产负债表项目与在建工程余额属于存量信息，不能直接写成资本开支，也不足以评价资本充足、财务健康或流动性安全。"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2026_q1",
+          "catl_2025_release"
+        ],
+        "title": "财务质量"
+      },
+      "industry_chain": {
+        "conclusion": "独立材料支持描述动力与储能电池市场排名，公司材料披露回收业务，但没有证据证明已经形成材料闭环。",
+        "paragraphs": [
+          "独立机构材料披露公司在动力电池使用量与储能电池出货量中的市场排名。",
+          "公司年报披露回收业务及相关活动变化；现有材料没有证明再生材料回用于电池制造。"
+        ],
+        "source_ids": [
+          "sne_2026_ev_jan_apr",
+          "sne_2025_ess",
+          "catl_2025_annual"
+        ],
+        "title": "产业链位置"
+      },
+      "risk_falsification": {
+        "conclusion": "存货消化、在建项目匹配、市场位置与海外合作转化需要后续正式披露验证。",
+        "paragraphs": [
+          "季度报告披露存货增加，但没有备货动机证据；相关变化需要结合后续需求和减值披露判断。",
+          "与欧洲合作方签署的文件是合作备忘录，不是已确认合同、订单或收入；是否以及如何形成后续商业安排需要以新的正式披露为准。"
+        ],
+        "source_ids": [
+          "catl_2026_q1",
+          "catl_alfen_mou_20260716",
+          "catl_2025_annual",
+          "sne_2026_ev_jan_apr"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2026_q1",
+          "catl_2025_release"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "as_of": "2026-07-21",
+  "business_model": {
+    "description": "电池业务质量应围绕动力与储能需求、份额质量、技术迭代、扩产消化、库存与现金转化逐项验证。",
+    "segments": [],
+    "source_ids": [
+      "catl_2025_annual",
+      "catl_2026_q1"
+    ],
+    "value_chain": [
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "资源与材料",
+        "question": "份额是否由盈利质量支持"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "电芯与制造",
+        "question": "扩产与库存能否被需求消化"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "系统集成",
+        "question": "技术迭代是否维持客户黏性"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "整车与储能应用",
+        "question": "海外执行是否改善现金回报"
+      }
+    ]
+  },
+  "catalysts": [
+    {
+      "body": "份额是否由盈利质量支持",
+      "date": "下一次正式披露",
+      "source_ids": [
+        "sne_2025_ess"
+      ],
+      "title": "证据更新窗口"
+    },
+    {
+      "body": "扩产与库存能否被需求消化",
+      "date": "下一次正式披露",
+      "source_ids": [
+        "sne_2025_ess"
+      ],
+      "title": "证据更新窗口"
+    }
+  ],
+  "data_mode": "REAL",
+  "data_status": "verified",
+  "depth_disclosure": "公司语义、行业问题与证据需求已完成适配；每个结论只来自本次冻结证据包。",
+  "disclaimer": "本报告用于研究框架与模型组合讨论，不构成投资建议。事实、推断和估值假设已分层；公司公告能证明公司披露了什么，但不自动证明未来一定兑现。",
+  "evidence_summary": {
+    "boundary": "只使用当前 snapshot 与冻结公司证据；缺失项保持 Missing evidence。",
+    "claim_locator_count": 8,
+    "company_release_count": 2,
+    "document_count": 8,
+    "frozen_document_count": 7,
+    "frozen_evidence_set_id": "xcr_a1a38d32f5971411b753",
+    "frozen_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+    "independent_document_count": 2,
+    "primary_count": 4
+  },
+  "exchange": "深交所",
+  "executive": {
+    "action": "research_only",
+    "current_executable_weight": null,
+    "current_price": 382.2,
+    "execution_range": "不提供执行区间；待公司级深度研究。",
+    "key_contradiction": "量化综合分 59.4/100，但公司级经营与行业证据尚未完成；该权重只能用于研究排序，不能执行。",
+    "max_target_weight": null,
+    "model_observation_weight": 9.0,
+    "position_plan": [
+      {
+        "condition": "仅作为观察权重，不是已经批准的可执行仓位。",
+        "stage": "组合模型输出",
+        "weight": 9.0
+      },
+      {
+        "condition": "补齐经营、行业、治理与正式估值证据后重新评审。",
+        "stage": "公司级深度研究",
+        "weight": 0.0
+      },
+      {
+        "condition": "只有 Park 明确批准的版本才可转成执行合同。",
+        "stage": "投委会批准",
+        "weight": 0.0
+      }
+    ],
+    "score": 5.9,
+    "stance": "模型观察 · 等待公司级深度研究",
+    "summary": "当前只形成可回放的量化观察，不形成交易动作。",
+    "target_weight": null,
+    "weight_semantics": "model_observation_only"
+  },
+  "falsification": [
+    "若后续正式证据否定“份额是否由盈利质量支持”的基准判断，则重建研究结论。",
+    "若后续正式证据否定“扩产与库存能否被需求消化”的基准判断，则重建研究结论。",
+    "若后续正式证据否定“技术迭代是否维持客户黏性”的基准判断，则重建研究结论。"
+  ],
+  "financials": {
+    "annual_quality": {
+      "debt_ratio": 61.94,
+      "gross_margin": 26.27,
+      "net_margin": 18.12,
+      "operating_cash_per_share": 29.19,
+      "roe": 24.91
+    },
+    "headline": "一季报收入同比 52.4%，归母净利润同比 48.5%，毛利率 24.8%。",
+    "latest_period": "2026-03-31",
+    "latest_type": "一季报",
+    "quality_notes": [
+      "年度 ROE 24.9%，毛利率 26.3%，净利率 18.1%；这是盈利质量基线，不等同于护城河结论。",
+      "年度资产负债率 61.9%，后续需结合行业口径、现金流量表和表外承诺判断资本结构。",
+      "最新披露营收同比 52.4%，归母净利润同比 48.5%；下一版重点核验增长是否伴随毛利率和现金转化改善。"
+    ],
+    "series": [
+      {
+        "gross_margin": 24.8,
+        "net_margin": 17.6,
+        "net_profit_yi": 207.4,
+        "net_profit_yoy": 48.5,
+        "report_date": "2026-03-31",
+        "report_type": "一季报",
+        "revenue_yi": 1291.3,
+        "revenue_yoy": 52.4,
+        "roe": 6.0
+      },
+      {
+        "gross_margin": 26.3,
+        "net_margin": 18.1,
+        "net_profit_yi": 722.0,
+        "net_profit_yoy": 42.3,
+        "report_date": "2025-12-31",
+        "report_type": "年报",
+        "revenue_yi": 4237.0,
+        "revenue_yoy": 17.0,
+        "roe": 24.9
+      },
+      {
+        "gross_margin": 25.3,
+        "net_margin": 18.5,
+        "net_profit_yi": 490.3,
+        "net_profit_yoy": 36.2,
+        "report_date": "2025-09-30",
+        "report_type": "三季报",
+        "revenue_yi": 2830.7,
+        "revenue_yoy": 9.3,
+        "roe": 17.8
+      },
+      {
+        "gross_margin": 25.0,
+        "net_margin": 18.1,
+        "net_profit_yi": 304.9,
+        "net_profit_yoy": 33.3,
+        "report_date": "2025-06-30",
+        "report_type": "中报",
+        "revenue_yi": 1788.9,
+        "revenue_yoy": 7.3,
+        "roe": 11.6
+      },
+      {
+        "gross_margin": 24.4,
+        "net_margin": 17.5,
+        "net_profit_yi": 139.6,
+        "net_profit_yoy": 32.9,
+        "report_date": "2025-03-31",
+        "report_type": "一季报",
+        "revenue_yi": 847.0,
+        "revenue_yoy": 6.2,
+        "roe": 5.5
+      },
+      {
+        "gross_margin": 24.4,
+        "net_margin": 14.9,
+        "net_profit_yi": 507.4,
+        "net_profit_yoy": 15.0,
+        "report_date": "2024-12-31",
+        "report_type": "年报",
+        "revenue_yi": 3620.1,
+        "revenue_yoy": -9.7,
+        "roe": 24.1
+      },
+      {
+        "gross_margin": 25.0,
+        "net_margin": 15.0,
+        "net_profit_yi": 360.0,
+        "net_profit_yoy": 15.6,
+        "report_date": "2024-09-30",
+        "report_type": "三季报",
+        "revenue_yi": 2590.4,
+        "revenue_yoy": -12.1,
+        "roe": 17.7
+      },
+      {
+        "gross_margin": 23.5,
+        "net_margin": 14.9,
+        "net_profit_yi": 228.6,
+        "net_profit_yoy": 10.4,
+        "report_date": "2024-06-30",
+        "report_type": "中报",
+        "revenue_yi": 1667.7,
+        "revenue_yoy": -11.9,
+        "roe": 11.4
+      }
+    ]
+  },
+  "generated_from": {
+    "adapter_version": "1.0.0",
+    "baseline_payload_hash": "5495fb1d8bab017a8b26f881a93ae46cfc83cfb9951ec0a8ba418cb0c3019fa6",
+    "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+    "evidence_set_id": "xcr_a1a38d32f5971411b753",
+    "model_boundary_version": "frozen-evidence-only-v1",
+    "model_version": "long-horizon-portfolio-v0.4",
+    "narrative_model": "deepseek-v4-pro",
+    "production_input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+    "prompt_version": "cross-company-writer-v4",
+    "publication_id": "pub_real_a89a5113ef0f",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4",
+    "template_version": "institutional-report-v1"
+  },
+  "industry": "电力设备",
+  "industry_position": {
+    "headline": "Missing evidence：同行份额与竞争排序尚未得到完整交叉验证。",
+    "metrics": [
+      {
+        "label": "可比公司",
+        "note": "研究范围，不是排名结论",
+        "value": "比亚迪 / 亿纬锂能 / 国轩高科"
+      }
+    ],
+    "source_ids": [
+      "sne_2025_ess"
+    ]
+  },
+  "known_at": "2026-07-21T12:17:32Z",
+  "management": {
+    "score": null,
+    "source_ids": [
+      "sne_2025_ess"
+    ],
+    "strengths": [
+      "Missing evidence：资本配置与治理优势待补充。"
+    ],
+    "watchouts": [
+      "所有治理判断须由监管披露和长期资本配置记录共同支持。"
+    ]
+  },
+  "market": {
+    "change_pct": 1.53,
+    "composite_score": 59.4,
+    "ma20": 376.15,
+    "ma200": 382.6,
+    "ma60": 403.95,
+    "market_cap_yi": 17683.06,
+    "max_drawdown_250d": -24.2,
+    "pb": 5.41,
+    "pe_ttm": 22.39,
+    "price": 382.2,
+    "return_20d": -2.6,
+    "return_250d": 45.4,
+    "return_60d": -12.4,
+    "volatility_60d": 40.5
+  },
+  "moat": [
+    {
+      "name": "证据完整度",
+      "proof": "Missing evidence：护城河强度必须由相对同行证据与长期财务记录共同验证。",
+      "score": 0,
+      "source_ids": [
+        "sne_2025_ess"
+      ]
+    }
+  ],
+  "name": "宁德时代",
+  "narrative_provider": {
+    "artifact_hash": "ff3477a43287bd8c21d3307953fc65dd7eb53bbfed1c4d9fdab819aa2fded1e8",
+    "artifact_version": "cross-company-narrative-v1",
+    "editorial_approval": {
+      "approval_version": "cross-company-editorial-v2",
+      "approved_at": "2026-07-21T13:11:49.231636+00:00",
+      "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+      "artifact_provenance_hash": "adaf2457abc3c7fcd0792b1d839e8fd29f808e78296862e6b659ee063d5f4938",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+      "model": "deepseek-v4-pro",
+      "narrative_hash": "b1b51c53a92e119bae80d446a4cea43b25e1c91d5ec2ffb5300ed1ef2831b5d9",
+      "prompt_hash": "8881d043b78c8b77608f021cd9c605cdf391e62f8fdf7342d8b7516f97356c99",
+      "prompt_version": "cross-company-writer-v4",
+      "provider": "DeepSeek draft + evidence editor",
+      "status": "approved"
+    },
+    "editorial_review": {
+      "applied_rules": [
+        {
+          "base_narrative_hash": "b1bad62e2d16a91bb776b1d4aaed097a1bc0fdba45746a69f6be8f70ec37b2d2",
+          "findings": [
+            "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+          ],
+          "id": "evidence_entailment_revision",
+          "revised_narrative_hash": "b1b51c53a92e119bae80d446a4cea43b25e1c91d5ec2ffb5300ed1ef2831b5d9"
+        }
+      ],
+      "reviewer": "Codex independent evidence reapproval /root/m4_reapproval_audit"
+    },
+    "generated_at": "2026-07-21T13:11:49.232283+00:00",
+    "model": "deepseek-v4-pro",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "validation": {
+      "available_source_count": 6,
+      "cited_source_count": 6,
+      "errors": [],
+      "status": "passed"
+    }
+  },
+  "portfolio_context": {
+    "cash_weight": 18.0,
+    "market_regime": "均衡",
+    "weights": {
+      "000333.SZ": 12.0,
+      "300750.SZ": 9.0,
+      "600036.SH": 10.0,
+      "600519.SH": 9.0,
+      "600900.SH": 13.0,
+      "600941.SH": 10.0,
+      "601088.SH": 11.0,
+      "688036.SH": 8.0
+    }
+  },
+  "publication_approval": {
+    "approval_hash_matches": false,
+    "current_content_hash": "9d609b19e9895d2cc521a84c550fbd77fdbe780ce494dd4a79dac2cd1440d22a",
+    "effective_status": "quality_passed",
+    "is_current": false,
+    "stored_status": "quality_passed"
+  },
+  "quant_signals": [
+    {
+      "name": "财务质量线索",
+      "proof": "由 ROE、增长和资产负债率计算；尚不能替代护城河研究。",
+      "score": 7.4,
+      "source_ids": [
+        "financial_snapshot"
+      ]
+    },
+    {
+      "name": "估值约束线索",
+      "proof": "由当前 PE 与 PB 计算；尚未做同行和历史分位校准。",
+      "score": 6.8,
+      "source_ids": [
+        "market_snapshot"
+      ]
+    },
+    {
+      "name": "趋势确认线索",
+      "proof": "由多周期收益和均线位置计算。",
+      "score": 3.9,
+      "source_ids": [
+        "market_snapshot"
+      ]
+    },
+    {
+      "name": "风险韧性线索",
+      "proof": "由波动、回撤和负债率计算。",
+      "score": 4.9,
+      "source_ids": [
+        "market_snapshot",
+        "financial_snapshot"
+      ]
+    }
+  ],
+  "report_contract": {
+    "absence_policy": {
+      "missing_evidence": "The module applies, but current evidence is insufficient. It must remain visible with a reason.",
+      "not_applicable": "The concept does not apply to this issuer or market. It must not be used as a synonym for missing data."
+    },
+    "as_of": {
+      "market_data_at": "2026-07-21T12:17:32Z",
+      "research_cutoff": "2026-07-21T12:17:32Z"
+    },
+    "claim_policy": {
+      "allowed_types": [
+        "fact",
+        "inference",
+        "assumption",
+        "risk"
+      ],
+      "assumption_requires_method": true,
+      "fact_requires_source_ids": true,
+      "inference_requires_source_ids": true,
+      "risk_requires_trigger": true
+    },
+    "contract_version": "1.0.0",
+    "format_contract": {
+      "module_order_is_authoritative": true,
+      "same_order_desktop_mobile_print": true,
+      "unknown_modules_fail_closed": true
+    },
+    "identity": {
+      "currency": "CNY",
+      "exchange": "深交所",
+      "market": "CN",
+      "name": "宁德时代",
+      "reporting_standard": "PRC_GAAP",
+      "ticker": "300750.SZ"
+    },
+    "market_specific_disclosures": {
+      "cninfo_filings": {
+        "reason": "This disclosure regime applies to the issuer market.",
+        "status": "available"
+      },
+      "sec_filings": {
+        "reason": "Not applicable to the issuer market; do not map it to Missing evidence.",
+        "status": "not_applicable"
+      }
+    },
+    "measurement_policy": {
+      "currency": "CNY",
+      "financial_presentation_currency": "CNY",
+      "financial_statement_scale": 100000000,
+      "financial_statement_unit_label": "亿元",
+      "money_unit": "issuer_reporting_currency",
+      "percent_unit": "percent",
+      "percentage_point_unit": "percentage_point",
+      "price_currency": "CNY",
+      "price_unit": "per_share",
+      "rule": "Every monetary field must inherit this currency or declare an explicit override; percent and percentage-point changes are never interchangeable."
+    },
+    "module_manifest": [
+      {
+        "anchor": "r-overview",
+        "content_paths": [
+          "executive"
+        ],
+        "id": "executive_summary",
+        "kicker": "INVESTMENT COMMITTEE",
+        "order": 1,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "决策摘要"
+      },
+      {
+        "anchor": "r-thesis",
+        "content_paths": [
+          "thesis"
+        ],
+        "id": "investment_thesis",
+        "kicker": "THESIS",
+        "order": 2,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "核心投资逻辑"
+      },
+      {
+        "anchor": "r-business",
+        "content_paths": [
+          "business_model",
+          "industry_position",
+          "management"
+        ],
+        "id": "business_and_industry",
+        "kicker": "BUSINESS / INDUSTRY",
+        "order": 3,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "经营、行业与竞争"
+      },
+      {
+        "anchor": "r-financial",
+        "content_paths": [
+          "financials"
+        ],
+        "id": "financial_quality",
+        "kicker": "FINANCIAL QUALITY",
+        "order": 4,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "财务质量"
+      },
+      {
+        "anchor": "r-serenity",
+        "content_paths": [
+          "serenity"
+        ],
+        "id": "framework_assessment",
+        "kicker": "FRAMEWORK",
+        "order": 5,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "研究框架评分"
+      },
+      {
+        "anchor": "r-valuation",
+        "content_paths": [
+          "valuation"
+        ],
+        "id": "valuation",
+        "kicker": "VALUATION",
+        "order": 6,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Missing evidence：未冻结盈利预测与合理倍数，因此不形成目标价。",
+        "title": "估值框架"
+      },
+      {
+        "anchor": "r-risks",
+        "content_paths": [
+          "catalysts",
+          "risks",
+          "falsification",
+          "watchlist"
+        ],
+        "id": "catalysts_risks",
+        "kicker": "CATALYSTS / RISKS",
+        "order": 7,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "催化剂、风险与反证"
+      },
+      {
+        "anchor": "r-evidence",
+        "content_paths": [
+          "sources",
+          "evidence_summary",
+          "source_contract",
+          "disclaimer"
+        ],
+        "id": "evidence_ledger",
+        "kicker": "EVIDENCE / METHOD",
+        "order": 8,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "证据台账与方法"
+      }
+    ],
+    "schema_version": "research-report-v1",
+    "truth_set": {
+      "is_live_research": true,
+      "note": "Runtime contract generated from the current report and its evidence gates.",
+      "scope": "runtime_report"
+    }
+  },
+  "report_hash": "d71864f9540165a1b5a95954b4f03306439d0362fb96252f6521cf6c87d1cca2",
+  "report_version": "cross-company-research-v1",
+  "research_depth": "deep",
+  "research_known_at": "2026-07-21T12:17:32Z",
+  "research_logic_hash": "7aa40bcc7cb3950043b8e363669f49d257fa9fdda81e266e3f174b6e983883b1",
+  "research_profile_hash": "50783e2180df281e71c03022c81ebc7cdb560a144a7d50d65b3e83fd497fc2fa",
+  "research_status": "verified",
+  "risks": [
+    {
+      "evidence": "若后续正式披露显示份额、产能利用、库存、现金转化或海外执行恶化，当前研究假设必须重估。",
+      "impact": "高",
+      "probability": "中",
+      "rank": 1,
+      "source_ids": [
+        "catl_2026_q1",
+        "sne_2026_ev_jan_apr"
+      ],
+      "title": "Evidence change risk",
+      "trigger": "后续正式披露改变份额、产能或现金质量判断"
+    }
+  ],
+  "serenity": {
+    "factors": [
+      {
+        "contribution": 18.55,
+        "key": "quality",
+        "label": "财务质量",
+        "reason": "财务增速、ROE 与资产负债率的量化合成，只是筛选线索。",
+        "score": 3.71,
+        "source_ids": [
+          "financial_snapshot"
+        ],
+        "weight": 25
+      },
+      {
+        "contribution": 17.0,
+        "key": "value",
+        "label": "估值约束",
+        "reason": "当前 PE/PB 的横截面量化得分，不代表公司已被低估。",
+        "score": 3.4,
+        "source_ids": [
+          "market_snapshot"
+        ],
+        "weight": 25
+      },
+      {
+        "contribution": 9.8,
+        "key": "trend",
+        "label": "趋势确认",
+        "reason": "20/60/250 日收益和均线位置的合成结果。",
+        "score": 1.96,
+        "source_ids": [
+          "market_snapshot"
+        ],
+        "weight": 25
+      },
+      {
+        "contribution": 12.3,
+        "key": "resilience",
+        "label": "风险韧性",
+        "reason": "波动、回撤和负债率共同形成的风险承受线索。",
+        "score": 2.46,
+        "source_ids": [
+          "market_snapshot",
+          "financial_snapshot"
+        ],
+        "weight": 25
+      }
+    ],
+    "final_score": 57.6,
+    "label": "量化基线，等待公司级深度验证",
+    "meaning": "四项分数用于排序和发现问题，不是护城河、预期收益或买入信号；公司、行业与治理证据将在深度稿补齐。",
+    "method": "A-share quantitative baseline v1",
+    "penalties": [],
+    "penalty": 0.0,
+    "raw_score": 57.6
+  },
+  "source_contract": {
+    "execution": [
+      "market_snapshot",
+      "financial_snapshot",
+      "sne_2025_ess",
+      "catl_2025_annual",
+      "catl_2025_release",
+      "catl_2026_q1",
+      "sne_2026_ev_jan_apr",
+      "catl_alfen_mou_20260716"
+    ],
+    "falsification": [
+      "sne_2025_ess"
+    ],
+    "financials": [
+      "market_snapshot",
+      "financial_snapshot",
+      "sne_2025_ess",
+      "catl_2025_annual",
+      "catl_2025_release",
+      "catl_2026_q1",
+      "sne_2026_ev_jan_apr",
+      "catl_alfen_mou_20260716"
+    ],
+    "valuation": [
+      "market_snapshot",
+      "financial_snapshot",
+      "sne_2025_ess",
+      "catl_2025_annual",
+      "catl_2025_release",
+      "catl_2026_q1",
+      "sne_2026_ev_jan_apr",
+      "catl_alfen_mou_20260716"
+    ],
+    "watchlist": [
+      "sne_2025_ess"
+    ]
+  },
+  "sources": [
+    {
+      "document_id": "market_snap_real_a89a5113ef0f_300750.SZ",
+      "id": "market_snapshot",
+      "kind": "market_snapshot",
+      "known_at": "2026-07-21T16:14:24+08:00",
+      "note": "tencent_quote 行情 · 250+ 前复权日线 · a-share-core-v0.3 因子",
+      "provider": "tencent_quote",
+      "quote_time": "2026-07-21T16:14:24+08:00",
+      "snapshot_id": "snap_real_a89a5113ef0f",
+      "strength": "强",
+      "title": "当前不可变行情、日线与因子快照",
+      "url": "https://qt.gtimg.cn/q=sh600519,sh600036,sh600900,sz000333,sh600941,sz300750,sh601088,sh688036"
+    },
+    {
+      "document_id": "financial_snap_real_a89a5113ef0f_300750.SZ",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "financial_snapshot",
+      "kind": "primary",
+      "known_at": "2026-04-16",
+      "note": "8 个报告期 · 原始行哈希已进入不可变快照",
+      "provider": "eastmoney_f10_main",
+      "snapshot_id": "snap_real_a89a5113ef0f",
+      "strength": "中",
+      "title": "东方财富 F10 主要财务指标快照",
+      "url": null
+    },
+    {
+      "document_id": "rdoc_d59405db5aa2419f5146",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "sne_2025_ess",
+      "kind": "independent",
+      "known_at": "2026-03-05T23:59:59+08:00",
+      "note": "Captured by evidence store; role=independent",
+      "strength": "中",
+      "title": "SNE Research · 2025 全球储能电芯出货",
+      "url": "https://www.sneresearch.com/en/insight/release_view/583/page/24?s_cat=%7C&s_keyword="
+    },
+    {
+      "document_id": "rdoc_6850b3d22ec2427ceb8c",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "catl_2025_annual",
+      "kind": "primary",
+      "known_at": "2026-03-10T23:59:59+08:00",
+      "note": "Captured by evidence store; role=primary",
+      "strength": "强",
+      "title": "2025 年年度报告 · 主要业务",
+      "url": "https://www.catl.com/uploads/1/file/public/202603/20260310105829_c5p2l3q9ll.pdf"
+    },
+    {
+      "document_id": "rdoc_ffeb7b9531b3d39ec3ad",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "catl_2025_release",
+      "kind": "company_release",
+      "known_at": "2026-03-10T23:59:59+08:00",
+      "note": "Captured by evidence store; role=primary",
+      "strength": "中",
+      "title": "2025 年度分红方案与年报发布",
+      "url": "https://www.catl.com/news/9654.html"
+    },
+    {
+      "document_id": "rdoc_32e4936e6dd68a89741a",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "catl_2026_q1",
+      "kind": "primary",
+      "known_at": "2026-04-16T23:59:59+08:00",
+      "note": "Captured by evidence store; role=primary",
+      "strength": "强",
+      "title": "2026 年第一季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+    },
+    {
+      "document_id": "rdoc_03060a87ddbcc4f7aa93",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "sne_2026_ev_jan_apr",
+      "kind": "independent",
+      "known_at": "2026-06-03T23:59:59+08:00",
+      "note": "Captured by evidence store; role=independent",
+      "strength": "中",
+      "title": "SNE Research · 2026 年 1–4 月全球动力电池装机",
+      "url": "https://www.sneresearch.com/en/insight/release_view/663/page/0?s_cat=%7C&s_keyword="
+    },
+    {
+      "document_id": "rdoc_ab0aa6e49a9dd3397a52",
+      "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+      "id": "catl_alfen_mou_20260716",
+      "kind": "company_release",
+      "known_at": "2026-07-16T23:59:59+08:00",
+      "note": "Captured by evidence store; role=primary",
+      "strength": "中",
+      "title": "宁德时代与 Alfen 签署 5GWh 钠电储能 MOU",
+      "url": "https://www.catl.com/news/10075.html"
+    }
+  ],
+  "stress_test": {
+    "formula": "stress_price = price_basis × stress_multiple",
+    "method": "当前价 × 情景倍数",
+    "price_basis": 382.2,
+    "scenarios": [
+      {
+        "assumption": "把当前价格压低 20%，用于检查回撤承受力，不是基本面目标价。",
+        "case": "bear",
+        "change_pct": -20.0,
+        "label": "悲观",
+        "price_basis": 382.2,
+        "stress_multiple": 0.8,
+        "stress_price": 305.8
+      },
+      {
+        "assumption": "以当前价格为基线，等待盈利预测和历史估值分位补齐。",
+        "case": "base",
+        "change_pct": 0.0,
+        "label": "基准",
+        "price_basis": 382.2,
+        "stress_multiple": 1.0,
+        "stress_price": 382.2
+      },
+      {
+        "assumption": "把当前价格上移 20%，用于检查赔率敏感度，不是正式上行空间。",
+        "case": "bull",
+        "change_pct": 20.0,
+        "label": "乐观",
+        "price_basis": 382.2,
+        "stress_multiple": 1.2,
+        "stress_price": 458.6
+      }
+    ],
+    "warning": "压力价不是目标价。没有公司级盈利预测与估值证据前，不得把 ±20% 情景当成预期收益。"
+  },
+  "thesis": [
+    {
+      "body": "长期研究结论必须同时由公司正式披露、最新季度更新与独立交叉核验支持。",
+      "claim_type": "inference",
+      "source_ids": [
+        "catl_2025_annual",
+        "catl_2026_q1",
+        "sne_2026_ev_jan_apr"
+      ],
+      "title": "Evidence-bounded thesis"
+    }
+  ],
+  "ticker": "300750.SZ",
+  "title": "宁德时代：标准化深度研究与证据边界",
+  "valuation": {
+    "base_view": "Missing evidence",
+    "currency": "CNY",
+    "current_price": 382.2,
+    "earnings_bridge": {
+      "base_eps": 0,
+      "base_period": "Missing evidence",
+      "basis": "No frozen forecast",
+      "cases": [
+        {
+          "case": "bear",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "悲观"
+        },
+        {
+          "case": "base",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "基准"
+        },
+        {
+          "case": "bull",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "乐观"
+        }
+      ]
+    },
+    "method": "Frozen-evidence scenario framework",
+    "pb": 5.41,
+    "pe_ttm": 22.39,
+    "reason": "Missing evidence：未冻结盈利预测与合理倍数，因此不形成目标价。",
+    "reverse_implied": "Missing evidence",
+    "scenarios": [
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "bear",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "悲观",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      },
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "base",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "基准",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      },
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "bull",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "乐观",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      }
+    ],
+    "status": "missing_evidence",
+    "warning": "零值表示估值证据缺失，不是目标价或收益率。"
+  },
+  "watchlist": [
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "份额是否由盈利质量支持",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "扩产与库存能否被需求消化",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "技术迭代是否维持客户黏性",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "海外执行是否改善现金回报",
+      "threshold": "取得两类独立证据后更新"
+    }
+  ]
+}

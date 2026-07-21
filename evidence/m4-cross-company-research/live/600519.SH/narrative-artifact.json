@@ -1,0 +1,196 @@
+{
+  "artifact_version": "cross-company-narrative-v1",
+  "editorial_approval": {
+    "approval_version": "cross-company-editorial-v2",
+    "approved_at": "2026-07-21T13:11:26.394537+00:00",
+    "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+    "artifact_provenance_hash": "e93b6cab12133099bae876364cc9fa003874c84cf5a9600b13af14c70276d620",
+    "evidence_manifest_hash": "cb7e964252fb433fe56b26c5d041ee7d5cb906cf0b3f646a4a452745b51a5da8",
+    "input_identity": "f1bc4225949b538816bcaa07a24165b656e16a4dd9806dcee65a22e32e877ae9",
+    "model": "deepseek-v4-pro",
+    "narrative_hash": "400ed7e33403412ab89c9ea9c0a2d921828eda7a6c8331a62451e8fddb42a238",
+    "prompt_hash": "a7e06d6499d66ba4dd9e7a1f4836aca1d2d67c8430eb23b471fdfec7fcebf904",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "status": "approved"
+  },
+  "editorial_revision": {
+    "base_artifact_provenance_hash": "f78518f6217a6f89d3307e05b707b8e1243494f814d39de591ee21771a2ca7f9",
+    "base_model": "deepseek-v4-pro",
+    "base_narrative_hash": "2f414daa072d568cdcce982948fc6afb79926f520cb3c1269455b38034e8b151",
+    "base_provider": "DeepSeek",
+    "findings": [
+      "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+    ],
+    "revised_at": "2026-07-21T12:43:01.690115+00:00",
+    "revised_by": "Codex evidence editor",
+    "revised_narrative_hash": "400ed7e33403412ab89c9ea9c0a2d921828eda7a6c8331a62451e8fddb42a238",
+    "revision_version": "cross-company-editorial-revision-v1",
+    "status": "revised"
+  },
+  "evidence_manifest_hash": "cb7e964252fb433fe56b26c5d041ee7d5cb906cf0b3f646a4a452745b51a5da8",
+  "input_identity": "f1bc4225949b538816bcaa07a24165b656e16a4dd9806dcee65a22e32e877ae9",
+  "model": "deepseek-v4-pro",
+  "narrative": {
+    "executive_summary": {
+      "conclusion": "年报披露营业收入与归母净利润同比下降，年度拟分红占归母净利润比例同比提高；渠道库存、相对定价、护城河强度与估值均缺少直接证据。",
+      "paragraphs": [
+        "年报披露茅台酒销量与营收同比增加；系列酒营收金额已披露，销量同比增加，但冻结材料不足以判断系列酒营收同比变化。现有冻结材料没有价格拆分，不能判断量价贡献。",
+        "年报将经营活动现金流净额下降解释为财务公司吸收存款减少及同业存款增加；该解释不能替代对主营现金转化的单独验证。半年市场工作会同时包含管理层对阶段成效的自我评价和后续安排，但缺少独立证据验证改革结果。"
+      ],
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ]
+    },
+    "report_title": "贵州茅台证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "现有证据支持描述产品销量与营收变化，但不支持判断价格稳定、渠道库存或品牌溢价。",
+        "paragraphs": [
+          "年报披露茅台酒销量与营收同比增加；系列酒营收金额已披露，销量同比增加，但冻结材料不足以判断系列酒营收同比变化。冻结材料未提供可用于拆分量价贡献的价格数据。",
+          "半年市场工作会提出按产品层级分类施策与推进市场化改革；这些表述是后续动作，不代表产品结构或渠道效率已经改善。"
+        ],
+        "source_ids": [
+          "moutai_2025_annual",
+          "moutai_2026_h1_market_meeting",
+          "xinhua_moutai_2025_results"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "冻结材料没有市场份额、相对定价、替代性或同行比较，不能判断品牌溢价或护城河强度。",
+          "公司披露的品牌资质与管理层表述可以作为后续研究线索，但不能单独证明独占性或持久竞争优势。"
+        ],
+        "source_ids": [
+          "moutai_2025_annual",
+          "moutai_2026_h1_market_meeting"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "年报支持描述收入、利润、经营现金流与拟分红占比的变化，但缺少主营现金转化的独立拆分。",
+        "paragraphs": [
+          "年报披露营业收入、利润总额与归母净利润同比下降，年度拟分红占归母净利润比例同比提高。",
+          "经营活动现金流净额同比下降，年报解释涉及财务公司吸收存款及同业存款变化；现有材料不足以据此评价主营业务现金生成能力。"
+        ],
+        "source_ids": [
+          "moutai_2025_annual",
+          "xinhua_moutai_2025_results"
+        ],
+        "title": "财务质量与股东回报"
+      },
+      "industry_chain": {
+        "conclusion": "年报描述了原料采购、生产酿造、储存勾兑、直销与批发代理等经营环节，但这些事实不能证明公司控制整个产业链。",
+        "paragraphs": [
+          "年报披露原料采购采用公司与地方政府、合作社或农户协作等模式，产品通过直销与批发代理渠道销售。",
+          "半年市场工作会提出线上与线下、自营与社会渠道协同等后续安排；这些内容属于管理层计划，其执行结果需要未来披露验证。"
+        ],
+        "source_ids": [
+          "moutai_2025_annual",
+          "moutai_2026_h1_market_meeting"
+        ],
+        "title": "业务链条与渠道"
+      },
+      "risk_falsification": {
+        "conclusion": "渠道、需求、价格与盈利质量仍需后续正式披露验证。",
+        "paragraphs": [
+          "半年市场工作会描述行业进入存量竞争与需求调整阶段，并提出继续推进市场化改革。",
+          "若后续正式披露显示渠道、需求、价格或盈利质量发生不利变化，当前基于年报的经营判断需要重新评估。"
+        ],
+        "source_ids": [
+          "moutai_2026_h1_market_meeting",
+          "moutai_2025_annual",
+          "xinhua_moutai_2025_results"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "moutai_2025_annual",
+          "xinhua_moutai_2025_results",
+          "moutai_2026_h1_market_meeting"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "narrative_hash": "400ed7e33403412ab89c9ea9c0a2d921828eda7a6c8331a62451e8fddb42a238",
+  "prompt_hash": "a7e06d6499d66ba4dd9e7a1f4836aca1d2d67c8430eb23b471fdfec7fcebf904",
+  "prompt_version": "cross-company-writer-v4",
+  "provider": "DeepSeek draft + evidence editor",
+  "receipts": [
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "draft",
+      "usage": {
+        "completion_tokens": 7523,
+        "completion_tokens_details": {
+          "reasoning_tokens": 6153
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 9951,
+        "prompt_tokens": 10207,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 17730
+      }
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "schema_and_fact_repair_1",
+      "usage": {
+        "completion_tokens": 4799,
+        "completion_tokens_details": {
+          "reasoning_tokens": 3364
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 11323,
+        "prompt_tokens": 11579,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 16378
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 4799,
+    "completion_tokens_details": {
+      "reasoning_tokens": 3364
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 11323,
+    "prompt_tokens": 11579,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "total_tokens": 16378
+  },
+  "validation": {
+    "available_source_count": 3,
+    "cited_source_count": 3,
+    "errors": [],
+    "input_identity": "f1bc4225949b538816bcaa07a24165b656e16a4dd9806dcee65a22e32e877ae9",
+    "status": "passed"
+  }
+}

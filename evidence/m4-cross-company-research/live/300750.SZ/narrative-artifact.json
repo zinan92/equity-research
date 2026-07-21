@@ -1,0 +1,207 @@
+{
+  "artifact_version": "cross-company-narrative-v1",
+  "editorial_approval": {
+    "approval_version": "cross-company-editorial-v2",
+    "approved_at": "2026-07-21T13:11:49.231636+00:00",
+    "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+    "artifact_provenance_hash": "adaf2457abc3c7fcd0792b1d839e8fd29f808e78296862e6b659ee063d5f4938",
+    "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+    "input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+    "model": "deepseek-v4-pro",
+    "narrative_hash": "b1b51c53a92e119bae80d446a4cea43b25e1c91d5ec2ffb5300ed1ef2831b5d9",
+    "prompt_hash": "8881d043b78c8b77608f021cd9c605cdf391e62f8fdf7342d8b7516f97356c99",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "status": "approved"
+  },
+  "editorial_revision": {
+    "base_artifact_provenance_hash": "29f48ef29da857ba426aaacd1554301db1d6663ac8848d9f220d2d4c6d505ff3",
+    "base_model": "deepseek-v4-pro",
+    "base_narrative_hash": "b1bad62e2d16a91bb776b1d4aaed097a1bc0fdba45746a69f6be8f70ec37b2d2",
+    "base_provider": "DeepSeek",
+    "findings": [
+      "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+    ],
+    "revised_at": "2026-07-21T12:43:02.883883+00:00",
+    "revised_by": "Codex evidence editor",
+    "revised_narrative_hash": "b1b51c53a92e119bae80d446a4cea43b25e1c91d5ec2ffb5300ed1ef2831b5d9",
+    "revision_version": "cross-company-editorial-revision-v1",
+    "status": "revised"
+  },
+  "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+  "input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+  "model": "deepseek-v4-pro",
+  "narrative": {
+    "executive_summary": {
+      "conclusion": "公司与独立材料支持描述动力及储能电池市场位置、财务指标变化、存货增加和海外合作备忘录；技术壁垒、客户锁定、资本安全与估值仍缺少直接证据。",
+      "paragraphs": [
+        "独立机构材料披露公司动力电池使用量与储能电池出货量的市场排名；公司材料披露营业收入、归母净利润与经营活动现金流量净额变化。",
+        "季度报告披露存货账面价值较期初增加；公司与欧洲合作方签署的是合作备忘录，不是已确认合同、订单或收入，商业化结果需要后续验证。"
+      ],
+      "source_ids": [
+        "catl_2025_annual",
+        "catl_2026_q1",
+        "sne_2026_ev_jan_apr",
+        "sne_2025_ess",
+        "catl_alfen_mou_20260716"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "catl_2025_annual",
+        "catl_2026_q1",
+        "sne_2026_ev_jan_apr",
+        "sne_2025_ess",
+        "catl_alfen_mou_20260716"
+      ]
+    },
+    "report_title": "宁德时代证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "现有材料支持描述电池销量、市场排名、新业务布局、存货与在建项目，但不支持判断新业务收入贡献、产能充足或未来交付。",
+        "paragraphs": [
+          "公司与独立材料披露动力及储能电池销量和市场位置，并披露换电、船舶、航空等项目事实。",
+          "冻结材料没有这些新场景的收入贡献，也没有需求、利用率、投产进度与订单匹配，不能评价在建产能是否充足。"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2026_q1",
+          "sne_2026_ev_jan_apr",
+          "sne_2025_ess",
+          "catl_2025_release"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "公司披露研发、专利与制造相关事实，但冻结材料没有独立技术比较、客户留存或切换成本。",
+          "市场排名能够说明市场位置，不能单独证明技术壁垒、客户锁定或护城河强度。"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2025_release",
+          "sne_2026_ev_jan_apr",
+          "sne_2025_ess"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "公司材料支持描述收入、利润、经营现金流、货币资金、借款、债券、应收账款、存货与在建工程余额，但缺少完整杠杆和到期债务分析。",
+        "paragraphs": [
+          "年报与季度报告披露营业收入、归母净利润及经营活动现金流量净额变化，并披露现金分红安排。",
+          "资产负债表项目与在建工程余额属于存量信息，不能直接写成资本开支，也不足以评价资本充足、财务健康或流动性安全。"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2026_q1",
+          "catl_2025_release"
+        ],
+        "title": "财务质量"
+      },
+      "industry_chain": {
+        "conclusion": "独立材料支持描述动力与储能电池市场排名，公司材料披露回收业务，但没有证据证明已经形成材料闭环。",
+        "paragraphs": [
+          "独立机构材料披露公司在动力电池使用量与储能电池出货量中的市场排名。",
+          "公司年报披露回收业务及相关活动变化；现有材料没有证明再生材料回用于电池制造。"
+        ],
+        "source_ids": [
+          "sne_2026_ev_jan_apr",
+          "sne_2025_ess",
+          "catl_2025_annual"
+        ],
+        "title": "产业链位置"
+      },
+      "risk_falsification": {
+        "conclusion": "存货消化、在建项目匹配、市场位置与海外合作转化需要后续正式披露验证。",
+        "paragraphs": [
+          "季度报告披露存货增加，但没有备货动机证据；相关变化需要结合后续需求和减值披露判断。",
+          "与欧洲合作方签署的文件是合作备忘录，不是已确认合同、订单或收入；是否以及如何形成后续商业安排需要以新的正式披露为准。"
+        ],
+        "source_ids": [
+          "catl_2026_q1",
+          "catl_alfen_mou_20260716",
+          "catl_2025_annual",
+          "sne_2026_ev_jan_apr"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "catl_2025_annual",
+          "catl_2026_q1",
+          "catl_2025_release"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "narrative_hash": "b1b51c53a92e119bae80d446a4cea43b25e1c91d5ec2ffb5300ed1ef2831b5d9",
+  "prompt_hash": "8881d043b78c8b77608f021cd9c605cdf391e62f8fdf7342d8b7516f97356c99",
+  "prompt_version": "cross-company-writer-v4",
+  "provider": "DeepSeek draft + evidence editor",
+  "receipts": [
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "draft",
+      "usage": {
+        "completion_tokens": 6130,
+        "completion_tokens_details": {
+          "reasoning_tokens": 4312
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 16634,
+        "prompt_tokens": 16890,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 23020
+      }
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "schema_and_fact_repair_1",
+      "usage": {
+        "completion_tokens": 6579,
+        "completion_tokens_details": {
+          "reasoning_tokens": 4749
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 18422,
+        "prompt_tokens": 18678,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 25257
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 6579,
+    "completion_tokens_details": {
+      "reasoning_tokens": 4749
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 18422,
+    "prompt_tokens": 18678,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "total_tokens": 25257
+  },
+  "validation": {
+    "available_source_count": 6,
+    "cited_source_count": 6,
+    "errors": [],
+    "input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+    "status": "passed"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "documents": [
+    {
+      "capture_policy_version": "validated-redirect-v1",
+      "content_matches_frozen": true,
+      "current_raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+      "document_id": "rdoc_16f95f70527db59dcf27",
+      "final_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+      "frozen_raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+      "hash_matches_frozen": true,
+      "http_status": 200,
+      "initial_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+      "mime_type": "application/pdf",
+      "redirect_chain": [
+        "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF"
+      ],
+      "semantic_overlap": 1.0,
+      "source_id": "midea_2025_annual",
+      "verified_at": "2026-07-21T12:44:13.965269+00:00"
+    },
+    {
+      "capture_policy_version": "validated-redirect-v1",
+      "content_matches_frozen": true,
+      "current_raw_sha256": "4c55f0fe48345101817e28da313ef1fdf6c48bff920d03551a9c06d7151aba72",
+      "document_id": "rdoc_79d8d045ee8009504dde",
+      "final_url": "https://www.nbd.com.cn/articles/2026-03-31/4318601.html",
+      "frozen_raw_sha256": "79d8d045ee8009504dde2125838e73e4878efdee0d795762b25900d008e56e98",
+      "hash_matches_frozen": false,
+      "http_status": 200,
+      "initial_url": "https://www.nbd.com.cn/articles/2026-03-31/4318601.html",
+      "mime_type": "text/html",
+      "redirect_chain": [
+        "https://www.nbd.com.cn/articles/2026-03-31/4318601.html"
+      ],
+      "semantic_overlap": 0.9947,
+      "source_id": "nbd_midea_2025_results",
+      "verified_at": "2026-07-21T12:44:15.335296+00:00"
+    },
+    {
+      "capture_policy_version": "validated-redirect-v1",
+      "content_matches_frozen": true,
+      "current_raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+      "document_id": "rdoc_a1a977c0ab10e36d744d",
+      "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+      "frozen_raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+      "hash_matches_frozen": true,
+      "http_status": 200,
+      "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+      "mime_type": "application/pdf",
+      "redirect_chain": [
+        "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF"
+      ],
+      "semantic_overlap": 1.0,
+      "source_id": "midea_2026_q1",
+      "verified_at": "2026-07-21T12:44:18.198048+00:00"
+    }
+  ],
+  "evidence_manifest_hash": "730197a846382d4127069fa7c024d57ab4481df18d728cbfe19dd3e92871971d",
+  "evidence_store_manifest_hash": "20bd3248c9aaccc050d3a7c321d5dff90b6f26b6b983db98df456927f55667d4",
+  "snapshot_id": "snap_real_a89a5113ef0f",
+  "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4",
+  "status": "passed",
+  "ticker": "000333.SZ"
+}

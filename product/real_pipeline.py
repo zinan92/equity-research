@@ -16,7 +16,10 @@ from typing import Any
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from data_store import DB_PATH, DEMO_POSITIONS, connect, initialize, publication_content_hash, validate_invariants
+from data_store import (
+    DB_PATH, DEMO_POSITIONS, connect, create_snapshot_content_attestation,
+    initialize, publication_content_hash, validate_invariants,
+)
 from ingest_quotes import fetch_quotes_bundle, provider_symbol
 
 
@@ -472,6 +475,7 @@ def build_real_snapshot(db_path: Path = DB_PATH, *, timeout: float = 10.0) -> di
             "INSERT INTO publication_events (publication_id, event_type, from_status, to_status, content_hash, actor, created_at) VALUES (?, 'quality_gate', 'draft', 'quality_passed', ?, 'system', ?)",
             (publication_id, content_hash, created_at),
         )
+        create_snapshot_content_attestation(conn, snapshot_id, created_at=created_at)
         conn.commit()
 
     from data_store import dashboard_payload

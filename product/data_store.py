@@ -5,7 +5,7 @@ import hashlib
 import hmac
 import os
 import sqlite3
-from contextlib import closing
+from contextlib import closing, nullcontext
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -27,6 +27,12 @@ CREATE TABLE IF NOT EXISTS dataset_snapshots (
     quality_status TEXT NOT NULL CHECK (quality_status IN ('passed', 'degraded', 'blocked')),
     source_summary TEXT NOT NULL,
     manifest_hash TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS snapshot_content_attestations (
+    snapshot_id TEXT PRIMARY KEY REFERENCES dataset_snapshots(id),
+    content_hash TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
 
@@ -312,6 +318,10 @@ CREATE TRIGGER IF NOT EXISTS research_document_identity_assertions_no_update
 BEFORE UPDATE ON research_document_identity_assertions BEGIN SELECT RAISE(ABORT, 'research_document_identity_assertions are append-only'); END;
 CREATE TRIGGER IF NOT EXISTS research_document_identity_assertions_no_delete
 BEFORE DELETE ON research_document_identity_assertions BEGIN SELECT RAISE(ABORT, 'research_document_identity_assertions are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS snapshot_content_attestations_no_update
+BEFORE UPDATE ON snapshot_content_attestations BEGIN SELECT RAISE(ABORT, 'snapshot_content_attestations are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS snapshot_content_attestations_no_delete
+BEFORE DELETE ON snapshot_content_attestations BEGIN SELECT RAISE(ABORT, 'snapshot_content_attestations are append-only'); END;
 """
 
 RESEARCH_IMMUTABILITY_TRIGGERS = (
@@ -320,7 +330,21 @@ RESEARCH_IMMUTABILITY_TRIGGERS = (
     "research_evidence_set_items_no_update", "research_evidence_set_items_no_delete",
     "research_document_identities_no_update", "research_document_identities_no_delete",
     "research_document_identity_assertions_no_update", "research_document_identity_assertions_no_delete",
+    "snapshot_content_attestations_no_update", "snapshot_content_attestations_no_delete",
 )
+
+SNAPSHOT_ATTESTATION_TRIGGER_SQL = {
+    "snapshot_content_attestations_no_update": (
+        "CREATE TRIGGER snapshot_content_attestations_no_update "
+        "BEFORE UPDATE ON snapshot_content_attestations BEGIN "
+        "SELECT RAISE(ABORT, 'snapshot_content_attestations are append-only'); END"
+    ),
+    "snapshot_content_attestations_no_delete": (
+        "CREATE TRIGGER snapshot_content_attestations_no_delete "
+        "BEFORE DELETE ON snapshot_content_attestations BEGIN "
+        "SELECT RAISE(ABORT, 'snapshot_content_attestations are append-only'); END"
+    ),
+}
 
 
 DEMO_POSITIONS = [
@@ -415,6 +439,119 @@ def connect(db_path: Path = DB_PATH) -> sqlite3.Connection:
     return connection
 
 
+def snapshot_content_hash(conn: sqlite3.Connection, snapshot_id: str) -> str:
+    """Hash every immutable input row consumed by the legacy snapshot reader.
+
+    The provider-level manifest identifies the collection run. This digest is a
+    second, independently replayable binding over the normalized SQLite rows so
+    an in-place mutation cannot continue to masquerade as that frozen run.
+    Publication lifecycle fields are intentionally excluded; approval/publish
+    status may advance without changing the underlying snapshot contents.
+    """
+
+    def rows(query: str, params: tuple[Any, ...]) -> list[dict[str, Any]]:
+        return [dict(row) for row in conn.execute(query, params).fetchall()]
+
+    snapshot = conn.execute(
+        "SELECT * FROM dataset_snapshots WHERE id=?", (snapshot_id,),
+    ).fetchone()
+    if not snapshot:
+        raise ValueError(f"snapshot does not exist: {snapshot_id}")
+    publications = rows(
+        """SELECT id, snapshot_id, title, market_regime, regime_note,
+                  equity_weight, cash_weight, model_version
+           FROM publications WHERE snapshot_id=? ORDER BY id""",
+        (snapshot_id,),
+    )
+    publication_ids = [item["id"] for item in publications]
+    payload: dict[str, Any] = {
+        "snapshot": dict(snapshot),
+        "publications": publications,
+        "market_quotes": rows(
+            "SELECT * FROM market_quotes WHERE snapshot_id=? ORDER BY ticker", (snapshot_id,),
+        ),
+        "daily_bars": rows(
+            "SELECT * FROM daily_bars WHERE snapshot_id=? ORDER BY ticker, trade_date", (snapshot_id,),
+        ),
+        "financial_metrics": rows(
+            "SELECT * FROM financial_metrics WHERE snapshot_id=? ORDER BY ticker, report_date", (snapshot_id,),
+        ),
+        "stock_features": rows(
+            "SELECT * FROM stock_features WHERE snapshot_id=? ORDER BY ticker", (snapshot_id,),
+        ),
+        "source_runs": rows(
+            "SELECT * FROM source_runs WHERE snapshot_id=? ORDER BY id", (snapshot_id,),
+        ),
+    }
+    dependent_tables = {
+        "portfolio_items": "publication_id, ticker",
+        "evidence": "publication_id, ticker, evidence_type, label",
+        "portfolio_risks": "publication_id, rank",
+        "performance_points": "publication_id, date",
+    }
+    for table, order_by in dependent_tables.items():
+        if publication_ids:
+            placeholders = ",".join("?" for _ in publication_ids)
+            payload[table] = rows(
+                f"SELECT * FROM {table} WHERE publication_id IN ({placeholders}) ORDER BY {order_by}",
+                tuple(publication_ids),
+            )
+        else:
+            payload[table] = []
+    canonical = json.dumps(
+        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str,
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def verify_snapshot_attestation_guard(conn: sqlite3.Connection) -> None:
+    """Fail closed if the append-only attestation guard was removed or replaced."""
+
+    def normalized(value: str) -> str:
+        return " ".join(value.replace("IF NOT EXISTS ", "").strip().rstrip(";").split())
+
+    rows = conn.execute(
+        "SELECT name, sql FROM sqlite_master WHERE type='trigger' AND name IN (?, ?)",
+        tuple(SNAPSHOT_ATTESTATION_TRIGGER_SQL),
+    ).fetchall()
+    actual = {row["name"]: normalized(str(row["sql"] or "")) for row in rows}
+    expected = {name: normalized(sql) for name, sql in SNAPSHOT_ATTESTATION_TRIGGER_SQL.items()}
+    if actual != expected:
+        raise RuntimeError("snapshot attestation append-only guard is missing or modified")
+
+
+def create_snapshot_content_attestation(
+    conn: sqlite3.Connection, snapshot_id: str, *, created_at: str | None = None,
+) -> str:
+    verify_snapshot_attestation_guard(conn)
+    content_hash = snapshot_content_hash(conn, snapshot_id)
+    existing = conn.execute(
+        "SELECT content_hash FROM snapshot_content_attestations WHERE snapshot_id=?", (snapshot_id,),
+    ).fetchone()
+    if existing:
+        if existing["content_hash"] != content_hash:
+            raise RuntimeError("snapshot contents changed after their immutable attestation")
+        return content_hash
+    conn.execute(
+        "INSERT INTO snapshot_content_attestations VALUES (?, ?, ?)",
+        (snapshot_id, content_hash, created_at or datetime.now(timezone.utc).isoformat()),
+    )
+    return content_hash
+
+
+def verify_snapshot_content_attestation(conn: sqlite3.Connection, snapshot_id: str) -> str:
+    verify_snapshot_attestation_guard(conn)
+    attestation = conn.execute(
+        "SELECT content_hash FROM snapshot_content_attestations WHERE snapshot_id=?", (snapshot_id,),
+    ).fetchone()
+    if not attestation:
+        raise RuntimeError("verified REAL snapshot is missing its normalized-content attestation")
+    current = snapshot_content_hash(conn, snapshot_id)
+    if current != attestation["content_hash"]:
+        raise RuntimeError("snapshot contents changed after their immutable attestation")
+    return str(attestation["content_hash"])
+
+
 def initialize(db_path: Path = DB_PATH, *, force_seed: bool = False) -> None:
     with closing(connect(db_path)) as conn:
         conn.executescript(SCHEMA)
@@ -474,7 +611,7 @@ def initialize(db_path: Path = DB_PATH, *, force_seed: bool = False) -> None:
         if force_seed:
             for trigger in RESEARCH_IMMUTABILITY_TRIGGERS:
                 conn.execute(f"DROP TRIGGER IF EXISTS {trigger}")
-        for table in ("research_evidence_set_items", "research_evidence_sets", "research_document_identity_assertions", "research_document_identities", "research_documents", "research_report_versions", "refresh_runs", "publication_events", "source_runs", "stock_features", "financial_metrics", "daily_bars", "market_quotes", "performance_points", "portfolio_risks", "evidence", "portfolio_items", "publications", "dataset_snapshots"):
+        for table in ("research_evidence_set_items", "research_evidence_sets", "research_document_identity_assertions", "research_document_identities", "research_documents", "research_report_versions", "refresh_runs", "publication_events", "snapshot_content_attestations", "source_runs", "stock_features", "financial_metrics", "daily_bars", "market_quotes", "performance_points", "portfolio_risks", "evidence", "portfolio_items", "publications", "dataset_snapshots"):
             conn.execute(f"DELETE FROM {table}")
         _seed_demo(conn)
         conn.executescript(RESEARCH_IMMUTABILITY_SQL)
@@ -630,9 +767,17 @@ def dashboard_payload(db_path: Path = DB_PATH) -> dict[str, Any]:
     }
 
 
-def stock_payload(ticker: str, db_path: Path = DB_PATH, *, snapshot_id: str | None = None) -> dict[str, Any] | None:
-    initialize(db_path)
-    with closing(connect(db_path)) as conn:
+def stock_payload(
+    ticker: str,
+    db_path: Path = DB_PATH,
+    *,
+    snapshot_id: str | None = None,
+    connection: sqlite3.Connection | None = None,
+) -> dict[str, Any] | None:
+    if connection is None:
+        initialize(db_path)
+    manager = closing(connect(db_path)) if connection is None else nullcontext(connection)
+    with manager as conn:
         row = conn.execute(
             f"""SELECT i.*, p.snapshot_id, p.model_version, p.status AS publication_status,
                       p.market_regime, p.cash_weight,

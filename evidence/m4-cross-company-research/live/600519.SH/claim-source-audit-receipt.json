@@ -1,0 +1,268 @@
+{
+  "claim_count": 30,
+  "claims": [
+    {
+      "path": "executive_summary.conclusion",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "dd4cbe0882b9c968ceb7cb5d75015f51dbc85fcc9f1580c7bb094cf0bc1f4626"
+    },
+    {
+      "path": "executive_summary.paragraphs[0]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "e50d4e36aba98920f55f734829f81641ccfadc78bbf1ee8c1dbf1df4c02cf799"
+    },
+    {
+      "path": "executive_summary.paragraphs[1]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "a5b386c3169dc6b403242e49126182c1c2325c5a6354977c594aadc15af41333"
+    },
+    {
+      "path": "sections.business_quality.title",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "e54dd06a15ee2bf88740d9600b2e33dbc84e5c72fa8c6c420e1e2ee7e5e9b121"
+    },
+    {
+      "path": "sections.business_quality.conclusion",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "5afc095622a32aa355be52aec856ec4237729a82a296c8f809f33b65b1a1d5e0"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[0]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "fa43a5f4418e14711aa95a68f973bc0458b951c238fc285c0b0f1aa11ebd6c43"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[1]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "852ff10c64744d518a3ec19afc6e7aea122a5f85f9d3f2d709fcd607bedacba4"
+    },
+    {
+      "path": "sections.competitive_moat.title",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d4fd37cffecbf5549b7caf0803df51b22049317a9d06822ded9c3fe2c3877af9"
+    },
+    {
+      "path": "sections.competitive_moat.conclusion",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[0]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "c7a9e5615572f3d17a690244c60a828e21f85949ee124cef29d57c0cf5a0b3d9"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[1]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "7e34d57c9186f226479dec5fbaddc189877fbfabb6ca1efb45e1dc9210161cf2"
+    },
+    {
+      "path": "sections.financial_quality.title",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "9bab64ec510ffdda54b41f836685d987993925e27836282a55cde56f18e1ec66"
+    },
+    {
+      "path": "sections.financial_quality.conclusion",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "54ad64cc45cf2f18bd14abb6fcb0bbe3a7393b2f48a7e51b608ef095b3d50397"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[0]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "f4164c767c1d77bb714c1519f668ebdcc6dff5e187f343046f38cae9bc91e467"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[1]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "ca639d6c0aa1beda3172ac7ce3592b5a5b3f18f508b006ee402a1a48a2f83545"
+    },
+    {
+      "path": "sections.industry_chain.title",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "df05d9ef2cb6f3d7b468cf5b7c53a862d3332ea16fb9573633956043bbfa0fb1"
+    },
+    {
+      "path": "sections.industry_chain.conclusion",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "983202daa039b6444bb9120695bb16e928c610e3e777ecfc1715488c4fe3d3c4"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[0]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "1681015c2016300333bff891ca6c3151e44399a57d4b2fcddd75b7be7928b03d"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[1]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "69c601343f437fae28bba6c365efc0a0f8c24d4c3346000c93b2d608c8d1cf36"
+    },
+    {
+      "path": "sections.risk_falsification.title",
+      "source_ids": [
+        "moutai_2026_h1_market_meeting",
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "3094168d55aaf91f290feb1d4a547532b37c59cbfe1b3bbe5a9c858dc0e448b2"
+    },
+    {
+      "path": "sections.risk_falsification.conclusion",
+      "source_ids": [
+        "moutai_2026_h1_market_meeting",
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "7ccd990ec74ff858cefc4dc6e88d72003a9ea0714a20f4cfa38ac1e7927e6949"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[0]",
+      "source_ids": [
+        "moutai_2026_h1_market_meeting",
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "c6add7141b81c0607df02c8bdd106538fecc64a1be241cd87028e4c6f554119e"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[1]",
+      "source_ids": [
+        "moutai_2026_h1_market_meeting",
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results"
+      ],
+      "text_sha256": "cbf33d2fcaa65dec165ebd05166ad52683d4473fb5195597e142ca218134c365"
+    },
+    {
+      "path": "sections.valuation_debate.title",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d29e16d3dd34dc4a5c34c11c33f8a6fe4e329e5b97b16721c1185155050e922c"
+    },
+    {
+      "path": "sections.valuation_debate.conclusion",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[0]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[1]",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bull_case",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.base_case",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bear_case",
+      "source_ids": [
+        "moutai_2025_annual",
+        "xinhua_moutai_2025_results",
+        "moutai_2026_h1_market_meeting"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    }
+  ],
+  "evidence_manifest_hash": "cb7e964252fb433fe56b26c5d041ee7d5cb906cf0b3f646a4a452745b51a5da8",
+  "narrative_hash": "400ed7e33403412ab89c9ea9c0a2d921828eda7a6c8331a62451e8fddb42a238",
+  "schema_version": "cross-company-claim-source-audit-v1",
+  "status": "passed",
+  "ticker": "600519.SH"
+}
