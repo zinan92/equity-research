@@ -1,0 +1,55 @@
+{
+  "coverage": {
+    "edge_cases": {
+      "corporate_action": 1,
+      "financial_revision": 1,
+      "suspended": 1
+    },
+    "exchanges": ["BSE", "SSE", "SZSE"],
+    "fixture_only": true,
+    "instrument_count": 12,
+    "required_boards": ["BSE", "CHINEXT", "MAIN", "STAR"]
+  },
+  "ingestion": {
+    "idempotent_second_run": true,
+    "raw_hash": "7fa125da521bbf0a2771a374b79ec64cbaf8fad622d7c925b5bc2f3418ffe9ed",
+    "run_id": "run_dc04c45798115dde",
+    "status": "success"
+  },
+  "quality_gate_negative_tests": [
+    "missing adjustment factor blocks snapshot",
+    "future-visible financial revision blocks snapshot",
+    "tampered export blocks import",
+    "snapshot update/delete is rejected",
+    "fixture run cannot be promoted to REAL",
+    "mixed-offset future fact blocks snapshot",
+    "failed retries preserve separate audit receipts",
+    "second trading day ingests incrementally",
+    "source manifest version is bound to its run",
+    "degraded row cannot enter passed snapshot",
+    "raw payload tampering blocks snapshot"
+  ],
+  "replay": {
+    "digest": "153f2f35e4455f0b04c4ae590b20c9f73da9a94af53412f32316bb56551c7514",
+    "restore_digest_matches": true
+  },
+  "schema_version": "data-foundation-v1",
+  "snapshot": {
+    "item_count": 145,
+    "kind": "fixture",
+    "manifest_hash": "cef18a6adc7437d12e9411e13b93b6a59f1482ef84aa73be3875ce810d2a6775",
+    "snapshot_id": "core_fixture_cef18a6adc7437d1"
+  },
+  "postgres_migration": {
+    "postgres_version": "16",
+    "applied_twice": true,
+    "market_and_research_table_count": 17,
+    "status": "passed"
+  },
+  "product_tests": {
+    "count": 127,
+    "status": "passed"
+  },
+  "status": "passed",
+  "truth_boundary": "This receipt validates deterministic fixtures, not live market data."
+}

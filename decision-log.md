@@ -367,3 +367,25 @@
 - schema 必须约束 renderer 真正解引用的嵌套字段，并且校验必须发生在最终返回对象上；否则“顶层八模块正确”仍可能因 `{}`、错误类型或后置 mutation 失效。
 - HK/US v1 只接受 security master 中已显式登记的发行人；未知代码必须 fail closed，不能从后缀猜测交易所和会计口径。
 - AI 正文的生成校验、人工批准、运行时激活和最终 payload 必须共享同一 public schema；遗留或异常 artifact 只能被视为 inactive，不能拖垮确定性研报。
+
+## 2026-07-21 · Milestone 2：可维护、可重放的 A 股数据基座（待评审）
+
+- Objective：所有研报和组合只读取同一个 point-in-time snapshot；采集失败不会把半套新数据混入分析。
+- User outcome：数据来自哪里、何时可见、用过哪个版本、为何通过质量门都能追溯；同一 snapshot 能离线重放并恢复到新库。
+- Reuse：采用 datafeed 的 SourceManifest、raw response、显式质量/fallback 契约；a-stock-data 只作为后续 adapter 端点，quant-data-pipeline 只复用 scheduler/backfill/gap/health 思路，Intel 只做 supplementary intelligence。
+- Decision：线上唯一权威目标仍是 PostgreSQL/Supabase；本轮提供可执行 migration，但不在缺少 project/region/credential 的情况下虚构已部署数据库。
+- Decision：SQLite core_ 是零外部依赖的 acceptance adapter，与 Postgres market / research schema 共享 data-foundation-v1 逻辑契约。
+- Decision：分析消费者只获得 SnapshotReader；该接口没有 fetch/network method，阻止分析中途刷新字段。
+- Decision：fixture、cached、real 是不可混淆的 snapshot kind；随仓库 12 股样本永久是 fixture，不构成实时数据证明。
+- Decision：质量门阻断交易日历、normal 证券 bar、复权版本、财务 PIT、source/raw/run provenance 任一缺口；阻断不覆盖上一份合格 snapshot。
+- Verification：25 项专项测试、127 项产品测试通过；12 股覆盖 SSE/SZSE/BSE、主板/创业板/科创板/北交所，包含停牌、除权和财务修订；质量门与冻结在同一 write lock 下复核 state digest；相同 snapshot replay digest 与 export/import restore digest 一致；PostgreSQL 16 migration 在一次性数据库连续执行两遍并生成 17 张 market/research 表、16 个 triggers。
+- Evidence：evidence/m2-data-foundation/verification-receipt.json；它明确标记 fixture_only=true。
+- In scope：canonical contract、SQLite adapter、Postgres migration、quality gate、fixture、replay 和恢复。Out of scope：线上 Supabase、RLS、正式实时源迁移、会员/支付/UI。
+
+### Gotchas · Milestone 2
+
+- 有 PostgreSQL DDL 不等于线上数据库已经存在；必须完成真实 migration、RLS、Storage 与 backup/restore 才能称 production authority。
+- 12 股 fixture 只验证失败行为和可重复性，不能被 README、UI 或 PR 描述成 12 股真实数据覆盖。
+- 原始 payload hash 只能证明字节身份，不能单独证明来源权威或字段正确；还必须绑定 source manifest、run 和 quality result。
+- 前复权日线必须绑定 adjustment version；只存复权后的 OHLCV 而没有公司行动/因子版本，历史重放仍会漂移。
+- intelligence 缺失可以降级为 market-only，market 核心缺失必须阻断；两类失败不能混成一个 warning。

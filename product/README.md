@@ -19,6 +19,13 @@ python3 product/server.py --host 127.0.0.1 --port 8877
 
 ## 数据与研究工作流
 
+### 验收 canonical 数据基座
+
+    python3 scripts/verify_data_foundation.py
+    python3 -m unittest product.tests.test_data_foundation -v
+
+product/data_core/ 定义 data-foundation-v1：本地 SQLite adapter 用于 fresh-clone 和故障测试，PostgreSQL/Supabase migration 用于后续线上权威库。随仓库提供的 12 股 fixture 永远标记为 fixture，只证明 schema、quality gate、replay 和 restore，不代表实时行情。
+
 ### 更新真实快照
 
 ```bash
@@ -137,10 +144,10 @@ python3 -m py_compile product/*.py
 node --check product/render_publication.mjs
 ```
 
-当前产品测试共 102 项，覆盖数据完整性、时点、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、危险来源链接、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
+当前产品测试共 127 项，覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、增量 ingestion、source manifest/run 绑定、fixture→REAL 防升级、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、危险来源链接、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
 
 标准化报告接口遵循 [`research-report-v1`](../docs/product/research-report-v1.md)。`report_contract.module_manifest` 是 Web、移动和发布包的唯一章节顺序来源；客户端遇到未知或乱序版本必须 fail closed。
 
 ## 当前限制
 
-本地 SQLite 和会员层适合自己与少数朋友私域内测。正式公网商业化仍需迁移 PostgreSQL/Supabase + RLS，补齐邮件找回/二次验证、支付订阅、全市场候选池、正式公司行动数据和长期影子回测。
+本地 SQLite 和会员层适合自己与少数朋友私域内测。PostgreSQL/Supabase schema 已定义但尚未线上部署；正式公网商业化仍需执行 migration、配置 RLS/Storage/备份，并补齐邮件找回/二次验证、支付订阅、全市场候选池、正式公司行动数据和长期影子回测。
