@@ -1,0 +1,34 @@
+{
+  "milestone": "L2-B4",
+  "issue": 36,
+  "status": "accepted",
+  "user_outcome": "Users can inspect standardized broker estimates, replay consensus snapshots, and see revisions without silent outlier contamination.",
+  "verification": {
+    "issue_specific": "8 passed",
+    "upstream_smoke": "30 passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "live_probe": {
+    "ticker": "300750.SZ",
+    "eastmoney_reports": 20,
+    "eastmoney_estimate_rows": 56,
+    "ths_records": 36,
+    "ths_provider_references": 6,
+    "report_bound_profit_matches": 3,
+    "consensus_points": 7,
+    "snapshot_replay": true,
+    "forecast_years": [2026, 2027, 2028]
+  },
+  "gates": {
+    "future_report_excluded_by_as_of": true,
+    "superseded_broker_report_quarantined": true,
+    "robust_outlier_excluded_before_mean": true,
+    "ths_detail_requires_unique_report_match": true,
+    "source_raw_hashes_preserved": true
+  },
+  "boundaries": [
+    "No Park-authored earnings forecast",
+    "No arbitrary PDF forecast-table extraction",
+    "No production full-market backfill"
+  ]
+}

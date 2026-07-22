@@ -739,3 +739,23 @@
 - document ID 和 page 命中仍不足以证明引用同一份 bytes；raw hash 必须是 citation gate 的硬字段。
 - table-like text 没有坐标时只能用于搜索，不能静默声称已精确抽取单元格。
 - 默认本地 OCR 只在页面 native text 稀疏时触发，避免对数百页可搜索 PDF 做无意义重 OCR。
+
+## 2026-07-22 · L2-B4 Broker Estimates & Consensus History
+
+- Objective：用户按预测年度看到一致的 EPS/营收/净利润/目标价、券商分歧与 consensus 修订方向。
+- Reuse：复用 B2 东财 report catalog 的 report identity 与 a-stock/Vibe 字段模式；同花顺 `worth.html` 经 A3 ingestion 抽取 broker profit 与 revenue/profit provider reference，不新建预测源框架。
+- Decision：每条 BrokerEstimate 必须绑定 ticker/broker/report ID/report date/raw hash/fiscal year；THS 只有在 broker/date/year 唯一命中东财 report 时才补净利润，不能合成不存在的 report。
+- Decision：同券商同年度只取 cutoff 前最新报告进入 consensus，旧报告保留为 superseded quarantine。
+- Decision：至少四个 contributor 时用 MAD 检测异常；异常值在均值前剔除并保留 estimate/value/metric/year/reason。
+- Decision：snapshot identity 绑定 as_of、全部输入、aggregate 与 quarantine，可离线 replay；revision 显示均值方向、绝对/百分比变化与 contributor 变化。
+- Verification：专项 8 passed；B2/A3 upstream smoke 30 passed；CATL live probe 得到东财 20 份报告/56 条年度 estimate、THS 36 条记录/6 条 provider reference、3 条 report-bound profit match、7 个 consensus point，snapshot replay 通过。
+- Boundary：不生成 Park 自研盈利预测，不解析任意 PDF 预测表，不声称全市场历史已回填。
+
+### Gotchas · L2-B4
+
+- 同一券商多份历史报告不能重复进入同一时点均值，否则高频覆盖券商会被重复加权。
+- THS broker row 没有 Eastmoney report ID；只有 broker/date/year 唯一匹配时才能补字段，unmatched row 只能作为 provider evidence。
+- 东财 `currentYear` 决定 this/next/next-two year，不能用系统当前年硬猜历史 report 的 forecast year。
+- 目标价区间取 midpoint 只是一条 report-bound metric，不应复制到后三个 fiscal year。
+- THS “亿/万亿/万”必须归一到 base units；字符串去单位但不缩放会造成 1e8 量级错误。
+- outlier 不能静默丢弃；被排除值和原因必须进入 snapshot identity，才能解释 consensus 为什么变化。
