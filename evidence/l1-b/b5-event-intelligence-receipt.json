@@ -1,0 +1,37 @@
+{
+  "milestone": "L2-B5",
+  "issue": 37,
+  "status": "accepted",
+  "user_outcome": "Material A-share events are discovered and deduplicated without letting news or model output silently become official fact.",
+  "verification": {
+    "issue_specific": "7 passed",
+    "upstream_smoke": "44 passed, 17 subtests passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "live_probe": {
+    "ticker": "300750.SZ",
+    "collector": "zinan92/intel GoogleNewsCollector",
+    "query": "宁德时代",
+    "source_key": "intel_google_news_cn_live",
+    "manifest_hash": "8ac727485a788382b790f0608ea6e8f4dce99e879d28712306e6ef6e03d4e1c9",
+    "outcome_status": "success",
+    "publishable": true,
+    "evidence_count": 10,
+    "event_count": 9,
+    "coverage_gap_count": 0
+  },
+  "gates": {
+    "a_share_entity_resolution": true,
+    "ambiguous_aliases_fail_closed": true,
+    "cross_source_event_deduplication": true,
+    "evidence_and_inference_separated": true,
+    "model_and_prompt_version_required": true,
+    "source_failure_becomes_visible_coverage_gap": true,
+    "official_monitor_cross_host_rejected": true
+  },
+  "boundaries": [
+    "Discovery feeds remain supplementary-only",
+    "No social sentiment or automated trading action",
+    "No production scheduler or full-market backfill"
+  ]
+}

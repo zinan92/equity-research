@@ -759,3 +759,25 @@
 - 目标价区间取 midpoint 只是一条 report-bound metric，不应复制到后三个 fiscal year。
 - THS “亿/万亿/万”必须归一到 base units；字符串去单位但不缩放会造成 1e8 量级错误。
 - outlier 不能静默丢弃；被排除值和原因必须进入 snapshot identity，才能解释 consensus 为什么变化。
+
+## 2026-07-22 · L2-B5 A-Share News & Event Intelligence
+
+- Objective：让重要 A 股事件被及时发现、跨源去重并显示覆盖缺口，同时保持新闻证据与模型推断的硬边界。
+- Reuse：采用 `zinan92/intel` 的 SourceRegistry/Collector、RSS/Google News/Yahoo/website monitor、source-status degradation 和 48 小时 event topology 模式；复用 A3 ingestion contract 与 A4 security master，不引入 Intel SQLite authority。
+- Decision：四类 discovery source 统一输出 EVENT `SourceManifest`，authority tier 固定为 `supplementary_only`；official monitor 只能接收配置 host 内链接，但仍不等于 B1 官方事实。
+- Decision：A 股实体只能由 security master 的 source ticker、代码、公司名或显式 alias 解析；共享 alias 记为 ambiguous 并 fail closed。
+- Decision：event topology 使用同 ticker、48 小时窗口、canonical URL 或标题 token similarity 做确定性聚类；每个 event 保留全部 evidence ID 和 source key。
+- Decision：模型产物只允许进入独立 `InferenceEnvelope`，provider/model/prompt ID/prompt version/generated_at/evidence IDs 缺一即拒绝。
+- Decision：单源失败、超时或零可发布记录不阻断健康源，但必须输出含 manifest hash 的 `CoverageGap`。
+- Verification：issue 专项 7 passed；A3/A1 upstream smoke 44 passed + 17 subtests；直接复用 Intel `GoogleNewsCollector` 对宁德时代 live probe 得到 10 条 evidence、9 个 event、零 coverage gap。
+- Boundary：未安装生产 scheduler、未回填全市场、未加入社交舆情或交易动作、未自动生成 event impact 结论。
+
+### Gotchas · L2-B5
+
+- Google News/RSS 是发现入口，不是事实 authority；标题聚类不能升级证据等级。
+- collector 返回 ticker 也必须经过 A 股 security master 校验，不能接受任意字符串成为 canonical instrument。
+- 公司简称可能对应多个证券；歧义 alias 不能用“第一个命中”静默消解。
+- URL 去 tracking 参数有利于去重，但不能跟随跳转后丢掉原始 batch raw hash。
+- 同一事件多篇报道必须保留全部 evidence ID；去重不能变成删证据。
+- source failure 与“没有相关新闻”含义不同，但两者都不能伪装成完整覆盖；当前 v1 统一进入 coverage gap，并保留具体 reason。
+- 模型生成时间、模型名和 prompt 版本必须与 output 一起冻结，否则历史 event interpretation 无法 replay。
