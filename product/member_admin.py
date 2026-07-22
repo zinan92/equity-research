@@ -23,6 +23,11 @@ def main() -> None:
     invite.add_argument("--max-uses", type=int, default=1)
     invite.add_argument("--valid-days", type=int, default=7)
 
+    access_code = commands.add_parser("create-access-code")
+    access_code.add_argument("--owner-email", required=True)
+    access_code.add_argument("--tier", choices=("preview", "member"), default="member")
+    access_code.add_argument("--valid-days", type=int, default=7)
+
     members = commands.add_parser("list-members")
     members.add_argument("--owner-email", required=True)
 
@@ -39,11 +44,14 @@ def main() -> None:
     password = getpass.getpass("Password: ")
     if args.command == "create-owner":
         result = create_owner(args.email, password, args.name, args.db)
-    elif args.command == "create-invite":
+    elif args.command in {"create-invite", "create-access-code"}:
         member = authenticate(args.owner_email, password, args.db)
         if not member or member["role"] != "owner":
             raise SystemExit("owner authentication failed")
-        result = create_invite(member["id"], args.tier, args.db, max_uses=args.max_uses, valid_days=args.valid_days)
+        max_uses = args.max_uses if args.command == "create-invite" else 1
+        result = create_invite(member["id"], args.tier, args.db, max_uses=max_uses, valid_days=args.valid_days)
+        if args.command == "create-access-code":
+            result["login_mode"] = "one_time_access_code"
     else:
         member = authenticate(args.owner_email, password, args.db)
         if not member or member["role"] != "owner":

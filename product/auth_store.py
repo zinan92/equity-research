@@ -325,6 +325,42 @@ def redeem_invite(
     return _public_member(row)
 
 
+def redeem_access_code(code: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
+    """Consume a single-use invite without collecting email, name, or password."""
+    initialize_auth(db_path)
+    if not isinstance(code, str) or not code.strip() or len(code) > 256:
+        raise ValueError("access code is invalid, expired, revoked, or already used")
+    now = _iso(_now())
+    member_id = f"member_{secrets.token_hex(10)}"
+    guest_suffix = secrets.token_hex(3).upper()
+    internal_email = f"guest-{member_id.removeprefix('member_')}@access.invalid"
+    salt = secrets.token_hex(16)
+    unavailable_password = secrets.token_urlsafe(48)
+    with closing(connect(db_path)) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        invite = conn.execute(
+            """SELECT * FROM invite_codes WHERE code_hash=? AND revoked_at IS NULL
+               AND expires_at>? AND use_count<max_uses""",
+            (_hash_token(code.strip()), now),
+        ).fetchone()
+        if not invite or invite["max_uses"] != 1:
+            raise ValueError("access code is invalid, expired, revoked, or already used")
+        conn.execute(
+            """INSERT INTO members
+               (id,email,display_name,role,tier,password_hash,password_salt,status,entitlements_json,created_at)
+               VALUES (?,?,?,?,?,?,?,?,?,?)""",
+            (
+                member_id, internal_email, f"访客 {guest_suffix}", "member", invite["tier"],
+                _password_digest(unavailable_password, salt), salt, "active", invite["entitlements_json"], now,
+            ),
+        )
+        conn.execute("UPDATE invite_codes SET use_count=use_count+1 WHERE id=?", (invite["id"],))
+        _record(conn, member_id, "access_code_redeemed", {"invite_id": invite["id"], "tier": invite["tier"]})
+        conn.commit()
+        row = conn.execute("SELECT * FROM members WHERE id=?", (member_id,)).fetchone()
+    return _public_member(row)
+
+
 def has_entitlement(member: dict[str, Any] | None, entitlement: str) -> bool:
     return bool(member) and entitlement in (member.get("entitlements") or [])
 

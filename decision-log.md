@@ -885,3 +885,21 @@
 - 不同币种 target price 不能放进同一共识；A 股跨币种报告必须先有显式换算合同。
 - tentative claim 即使有页码也不能被 summary 改写成明确结论；citation validity 与 claim strength 是两道不同的门。
 - 本仓单进程 `unittest discover` 会被旧 research-refresh 的进程隔离测试提前终止，且不会给可靠 summary；全量闸采用每个 test file 独立 pytest 进程，既覆盖 pytest function，也避免跨模块全局状态污染。
+
+## 2026-07-23 · Code-first Industry Intelligence v1
+
+- Objective：把已归档网页中的 489 份公司档案和两套来源三高坐标做成可分享、默认封闭、可复验的专业前端。
+- Decision：产品只复现 38 个产业段节点和 94 家材料公司节点的来源坐标，不重算三高分，也不把 38 个 segment 自动映射到 489 份档案。
+- Decision：489 份正文按公司代码独立加载；总览 API 只返回索引，避免首屏下载全部 Markdown。
+- Decision：新增 code-first 登录；一次性码只存 hash、事务内消费，且仅接受 `max_uses=1` 的邀请。兑换后创建内部 guest identity，不收集访客邮箱、姓名或密码；Owner/既有成员仍可用邮箱密码登录。
+- Decision：归档数据独立打包进 content-addressed private-preview release，页面固定显示来源 URL、源 SHA-256、归档日期和“不是实时行情/未过独立证据门”的边界。
+- Verification：industry/auth/private-preview 专项 104 tests passed；完整 pytest 361 passed + 34 subtests；Node syntax、Python compile、browser desktop/mobile smoke 和 gitleaks 均通过。
+- Boundary：不声称这是实时数据，不声称档案逐条事实已独立溯源，不生成 489 家公司的新三高排名，不连接券商或执行交易。
+
+### Gotchas · Industry Intelligence v1
+
+- 来源的 38 个产业段 taxonomy 与公司档案的 segment 名称没有可直接接受的精确 crosswalk；自动关联会制造虚假精度。
+- `sangao` 宽口径标签与少量详细公司 assessment 存在冲突；界面只复述来源标签，不把它升级为本产品结论。
+- 一次性访问码不是短信或邮箱 OTP：它是 Park 线下转交的单次 bearer secret；转发前必须按密码对待。
+- D3 在站内 vendored，避免第三方 CDN 泄露访问元数据或在网络受限时使图表失效。
+- 浏览器图表必须有键盘列表和来源详情；只有气泡 tooltip 会把复杂研究信息锁在鼠标交互里。

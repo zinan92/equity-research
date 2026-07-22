@@ -8,6 +8,7 @@
     "verify-report-contract-dom": "node verify_report_contract_dom.mjs"
   },
   "dependencies": {
+    "d3": "7.9.0",
     "playwright": "^1.42.0"
   }
 }

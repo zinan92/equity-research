@@ -32,7 +32,7 @@ from report_versions import archive_report, compare_reports, report_version_hist
 from portfolio_committee import committee_payload, validate_committee_payload  # noqa: E402
 from publication_pack import ARTIFACT_NAMES, validate_archive, validate_pack  # noqa: E402
 from report_contract import ReportContractError, validate_report_contract  # noqa: E402
-from auth_store import authenticate, create_invite, create_owner, create_session, has_entitlement, list_members, redeem_invite, session_member, set_member_status, verify_csrf  # noqa: E402
+from auth_store import authenticate, create_invite, create_owner, create_session, has_entitlement, list_members, redeem_access_code, redeem_invite, session_member, set_member_status, verify_csrf  # noqa: E402
 
 
 class DashboardContractTest(unittest.TestCase):
@@ -262,6 +262,21 @@ class DashboardContractTest(unittest.TestCase):
         with closing(connect(self.db_path)) as conn:
             count = conn.execute("SELECT COUNT(*) FROM members WHERE role='owner' AND status='active'").fetchone()[0]
         self.assertEqual(count, 1)
+
+    def test_single_use_access_code_creates_guest_without_collecting_identity(self) -> None:
+        owner = create_owner("park@example.com", "correct horse battery staple", "Park", self.db_path)
+        access = create_invite(owner["id"], "member", self.db_path, max_uses=1, valid_days=2)
+        guest = redeem_access_code(access["code"], self.db_path)
+        self.assertTrue(guest["email"].endswith("@access.invalid"))
+        self.assertTrue(guest["display_name"].startswith("访客 "))
+        self.assertTrue(has_entitlement(guest, "deep_reports"))
+        self.assertIsNone(authenticate(guest["email"], "not-a-real-password", self.db_path))
+        with self.assertRaisesRegex(ValueError, "access code is invalid"):
+            redeem_access_code(access["code"], self.db_path)
+
+        shared = create_invite(owner["id"], "preview", self.db_path, max_uses=2, valid_days=2)
+        with self.assertRaisesRegex(ValueError, "access code is invalid"):
+            redeem_access_code(shared["code"], self.db_path)
 
     def test_demo_mode_is_explicit(self) -> None:
         payload = dashboard_payload(self.db_path)

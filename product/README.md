@@ -156,10 +156,11 @@ python3 scripts/adversarial_verify_paid_community_pilot.py
 
 这套部署只声明 `Private Preview Ready + Manual Paid Fulfillment`：平台不在线收款、不接券商、单机 origin、没有多地域高可用，也不满足 Product OS `Paid Pilot Ready`。
 
-本地开发默认不开身份门。创建 owner 和邀请码：
+本地开发默认不开身份门。创建 owner、一次性访问码或传统邀请码：
 
 ```bash
 python3 product/member_admin.py create-owner --email <owner-email> --name Park
+python3 product/member_admin.py create-access-code --owner-email <owner-email> --tier member --valid-days 7
 python3 product/member_admin.py create-invite --owner-email <owner-email> --tier member --max-uses 1 --valid-days 7
 PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0.0.1 --port 8877
 ```
@@ -190,11 +191,14 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 - `GET /api/publication-packs/latest`
 - `GET /api/billing/me`（M7 私有人工履约）
 - `GET /api/billing` / `GET /api/billing/export`（Owner）
+- `GET /api/industry-intelligence`（受保护的归档产业图谱与档案索引）
+- `GET /api/industry-intelligence/dossiers/{code}`（按需读取一份公司档案）
 - `GET /downloads/private-preview/research-pack.zip`（派生 Paid / Owner）
 
 写入：
 
 - `POST /api/auth/login`
+- `POST /api/auth/access-code`（不收集邮箱的一次性访问码）
 - `POST /api/auth/signup`
 - `POST /api/auth/logout`
 - `POST /api/refresh`

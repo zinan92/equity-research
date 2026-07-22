@@ -130,7 +130,7 @@ def copy_product_code(source: Path, target: Path) -> None:
         raise PreviewReleaseError("product server modules are unavailable or unsafe")
     for item in root_modules:
         shutil.copy2(item, target / item.name)
-    for directory in ("static", "schemas", "data_core"):
+    for directory in ("static", "schemas", "data", "data_core"):
         source_dir = source / directory
         if not source_dir.is_dir() or source_dir.is_symlink():
             raise PreviewReleaseError(f"product code directory is unavailable or unsafe: {directory}")
