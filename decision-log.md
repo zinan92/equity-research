@@ -558,7 +558,7 @@
 - Objective：数据和原始证据拥有唯一、私有、可迁移与可备份的 production authority 位置。
 - Decision：新 Supabase project 只采用 `canonical-authority-v1` migration；旧 `data-foundation-v1` PostgreSQL 文件保留为 M2 parity baseline，不把两套 table 混成同一 authority。
 - Decision：`market` 只存 accepted market/fundamental，`research` 只存 accepted document/estimate/event，`control` 保存 source/run/raw/receipt/snapshot lineage。
-- Decision：raw Storage 固定 private `canonical-raw` bucket；路径由 domain、source、UTC known date 和 SHA-256 决定，不信任 provider filename 或 URL。
+- Decision：raw Storage 固定 private `canonical-raw` bucket；blob 路径只由 SHA-256 决定，source URL、MIME 与时点保存在 domain-neutral per-fetch capture，record domain 保存在 receipt，不信任 provider filename 或 URL。
 - Decision：raw blob 与 raw capture 分表；同一 bytes 可以在多个 ingestion run 中复用 blob，同时每个 run 保留独立 capture/known_at/manifest lineage。
 - Decision：数据库 provenance 补齐 A1 合同字段：raw capture 固定保存 source URL，record receipt 固定保存 contract version；accepted payload 缺字段或与 domain row 不一致时 fail closed。
 - Decision：产品 migration 不修改 Supabase-managed `storage.*` schema。Bucket desired state 用 JSON 锁定，部署时通过 Storage API 创建和核对。
@@ -574,4 +574,6 @@
 - service_role 能 bypass RLS；它是后台 secret，不是高级会员 token，绝不能下发到浏览器。
 - dev seed 只保存 inactive fixture manifest，不插入样本行情或研报，避免 seed 被误当成产品数据。
 - PostgreSQL 三值逻辑会让 `NOT (NULL comparison)` 仍为 NULL；payload 完整性门必须使用 `(...) IS NOT TRUE`，并用缺字段攻击测试验收。
-- 公共 `StorageObjectKey` 可能绕过 factory 直接构造；Python validator 与 SQL CHECK 必须同时校验完整 canonical path、hash prefix、basename 和 UTC date。
+- 公共 `StorageObjectKey` 可能绕过 factory 直接构造；Python validator 与 SQL CHECK 必须同时校验完整 content-addressed path、hash prefix 和 basename。
+- blob 主键若只用 raw hash，storage path 就不能再包含 source/domain/date/MIME；否则同一 bytes 的后续 capture 会指向不存在的新路径，破坏去重与 provenance 一致性。
+- RawCapture 在 A1 是 domain-independent；不能给 capture 绑单一 domain 或以 `(run_id, raw_hash)` 去重，否则一个响应无法产生 market + fundamental records，也会吞掉同 run 的独立获取证据。

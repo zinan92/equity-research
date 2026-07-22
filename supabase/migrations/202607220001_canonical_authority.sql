@@ -50,28 +50,13 @@ create table if not exists control.raw_objects (
   raw_hash text primary key check (raw_hash ~ '^[0-9a-f]{64}$'),
   storage_bucket text not null check (storage_bucket = 'canonical-raw'),
   storage_path text not null check (
-    storage_path ~ '^raw/(market|fundamental|document|estimate|event)/[A-Za-z0-9][A-Za-z0-9._-]*/[0-9]{4}/[0-9]{2}/[0-9]{2}/[0-9a-f]{2}/[0-9a-f]{64}\.(json|html|pdf)$'
+    storage_path ~ '^raw/sha256/[0-9a-f]{2}/[0-9a-f]{64}$'
   ),
-  mime_type text not null check (mime_type in ('application/json','text/html','application/pdf')),
   payload_size bigint not null check (payload_size >= 0),
   created_at timestamptz not null default now(),
   unique (storage_bucket, storage_path),
   check (
-    storage_path ~ ('/' || substring(raw_hash from 1 for 2) || '/' || raw_hash || '\.(json|html|pdf)$')
-  ),
-  check (
-    to_char(
-      to_date(
-        substring(storage_path from '^raw/(?:market|fundamental|document|estimate|event)/[A-Za-z0-9][A-Za-z0-9._-]*/([0-9]{4}/[0-9]{2}/[0-9]{2})/'),
-        'YYYY/MM/DD'
-      ),
-      'YYYY/MM/DD'
-    ) = substring(storage_path from '^raw/(?:market|fundamental|document|estimate|event)/[A-Za-z0-9][A-Za-z0-9._-]*/([0-9]{4}/[0-9]{2}/[0-9]{2})/')
-  ),
-  check (
-    (mime_type = 'application/json' and storage_path ~ '\.json$')
-    or (mime_type = 'text/html' and storage_path ~ '\.html$')
-    or (mime_type = 'application/pdf' and storage_path ~ '\.pdf$')
+    storage_path = 'raw/sha256/' || substring(raw_hash from 1 for 2) || '/' || raw_hash
   )
 );
 
@@ -81,11 +66,11 @@ create table if not exists control.raw_captures (
   run_id text not null,
   manifest_hash text not null,
   source_url text not null check (source_url ~ '^https?://[^[:space:]]+$'),
+  mime_type text not null check (mime_type in ('application/json','text/html','application/pdf')),
   fetched_at timestamptz not null,
   known_at timestamptz not null,
   http_status integer,
   created_at timestamptz not null default now(),
-  unique (run_id, raw_hash),
   unique (capture_id, raw_hash, run_id, manifest_hash, known_at),
   foreign key (run_id, manifest_hash)
     references control.ingestion_runs(run_id, manifest_hash)
