@@ -663,3 +663,27 @@
 - 新浪近期日线可用于独立 close/date cross-check，但不是官方复权因子；官方可信部分是 CNINFO action document，不能把两者合并表述成“官方价格”。
 - 巨潮全文搜索返回 HTML `<em>` 高亮；title 入 canonical event 前必须清理标签，同时保留 announcement ID 和 official PDF URL。
 - 九源同时并发在本机触发过 Eastmoney/Sina TLS timeout；顺序执行 cross-check sources 后 live probe 稳定，不能把瞬时网络失败写成数据冲突。
+
+## 2026-07-22 · L2-A5 Orchestration, Quality & Immutable Snapshot
+
+- Objective：一次数据刷新要么形成可回放、raw-bound 的完整 snapshot，要么隔离失败并继续保留上一有效版本。
+- User outcome：运维方可用同一入口完成 schedule/backfill/gap planning、canonical refresh 和审计回执；无需从多个内部 JSON 猜测刷新是否可信。
+- Reuse：复用 `CanonicalResearchRefresh` 的 adapter selection、锁、断点、质量门、snapshot、8/8 activation 与 failure isolation；A5 只增加薄 orchestration/audit 层，不建立第二套状态机。
+- Decision：交易日必须由调用方提供权威列表；planner 只负责 Asia/Shanghai 17:30 cutoff 和逐 ticker/逐日期缺口检查，不用 weekday 猜开市日。
+- Decision：snapshot manifest 显式绑定排序后的 raw hashes 与集合 digest；replay 校验 raw membership、frozen rows、quality digest 和 manifest identity。
+- Decision：pre-A5 snapshot 保持向后可回放，但 A5 refresh 不会直接复用缺少显式 raw lineage 的 active version；下一次刷新会生成新的 A5 snapshot identity。
+- Decision：fresh run receipt 直接包含 actual ingestion runs 与完整 quality evaluation；source failure receipt 包含 `active_preserved`，同输入强制重跑复用 snapshot identity。
+- Decision：无缺口的正常 schedule 返回 `skipped/network_called=false`；`force=true` 只用于人工复核或恢复演练，不改变幂等身份。
+- Decision：scheduler skip 也原子保存 immutable check receipt；canonical `partial/blocked_before_activation` 在 A5 回执中归一为 `failed`，并显式写入 preserved active、原始 status/stage 和可回放的新 snapshot。
+- Boundary：本轮是 fixture-backed deterministic acceptance，不声称 live provider SLA、官方全历史交易日历、真实 Supabase authority 或生产 scheduler 已安装。
+- Verification：issue 专项 7 passed；orchestration/upstream 61 passed；产品全量 290 tests completed successfully；compile 与 diff check 通过。
+- Adversarial review：初审发现 later-stage isolation receipt P1 与 scheduler skip persistence P2；修复后窄复审确认两项关闭，剩余 P0=0/P1=0。
+
+### Gotchas · L2-A5
+
+- 全库最大日期会掩盖单股缺 bar；backfill 必须按 `(ticker, trade_date, component)` 判断。
+- 停牌日没有 bar 是合法状态，但 calendar、status 与 adjustment factor 仍不可缺；不能补零成交 bar 冒充真实记录。
+- 已经把 raw object 冻结进 snapshot items 仍不够直观；manifest 应直接列出 raw membership，才能让回执低成本验真。
+- 旧 snapshot 没有 A5 raw-membership 字段时仍可 replay；新 snapshot 一旦声明这些字段就必须严格校验，不能默默降级。
+- orchestration 层不能再持有另一份 active pointer；唯一真相仍是 canonical refresh 的 `active.json`。
+- snapshot 已创建但下游 artifact gate 失败不等于刷新成功；对 scheduler 必须给出明确 isolated failure，而不是含糊的 partial。

@@ -697,6 +697,29 @@ class CanonicalResearchRefresh:
         _atomic_json(self._receipt_path(receipt["run_id"]), receipt)
         _atomic_json(self.state_root / "latest.json", receipt)
 
+    def _snapshot_has_explicit_raw_lineage(self, snapshot_id: str | None) -> bool:
+        """A5 must not reuse a pre-A5 snapshot with only implicit raw lineage."""
+        if not snapshot_id:
+            return False
+        with self.foundation.connect() as connection:
+            row = connection.execute(
+                "SELECT manifest_json FROM core_snapshot_manifests "
+                "WHERE snapshot_id=? AND quality_status='passed'",
+                (snapshot_id,),
+            ).fetchone()
+        if not row:
+            return False
+        try:
+            manifest = json.loads(row["manifest_json"])
+        except (TypeError, json.JSONDecodeError):
+            return False
+        raw_hashes = manifest.get("raw_hashes")
+        return bool(
+            isinstance(raw_hashes, list)
+            and raw_hashes
+            and manifest.get("raw_hash_digest") == digest(raw_hashes)
+        )
+
     def _checkpoint(self, receipt: dict[str, Any], stage: str, *, interrupt_after: str | None) -> None:
         receipt["stage"] = stage
         receipt["updated_at"] = _iso(_now())
@@ -879,6 +902,9 @@ class CanonicalResearchRefresh:
                     and current_active.get("target_trade_date") == target
                     and current_active.get("payload_hash") == digest(bundle.payload)
                     and not self._publication_integrity(current_active)
+                    and self._snapshot_has_explicit_raw_lineage(
+                        current_active.get("snapshot_id")
+                    )
                 )
                 staged_quality = (
                     {"status": "reused_active", "snapshot_id": current_active["snapshot_id"]}
@@ -1017,6 +1043,12 @@ class CanonicalResearchRefresh:
                     receipt["raw_hash"] = digest([item["raw_hash"] for item in ingestions])
                     self._checkpoint(receipt, "ingested", interrupt_after=interrupt_after)
                 if not receipt.get("snapshot_id"):
+                    quality_result = self.foundation.quality_evaluation(
+                        receipt["ingestion_run_id"], as_of=receipt["target_trade_date"],
+                        known_at=bundle.payload["known_at"],
+                    )
+                    receipt["quality_result"] = quality_result
+                    self._save_receipt(receipt)
                     snapshot = self.foundation.create_snapshot(
                         receipt["ingestion_run_id"], as_of=receipt["target_trade_date"],
                         known_at=bundle.payload["known_at"], model_version=REFRESH_SCHEMA_VERSION,
@@ -1025,6 +1057,8 @@ class CanonicalResearchRefresh:
                         "snapshot_id": snapshot["snapshot_id"],
                         "snapshot_kind": snapshot["snapshot_kind"],
                         "snapshot_manifest_hash": snapshot["manifest_hash"],
+                        "snapshot_raw_hashes": snapshot["raw_hashes"],
+                        "snapshot_raw_hash_digest": snapshot["raw_hash_digest"],
                     })
                     self._checkpoint(receipt, "snapshotted", interrupt_after=interrupt_after)
                 reader = SnapshotReader(self.foundation, receipt["snapshot_id"])
