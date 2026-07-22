@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime, time, timezone
 from enum import Enum
 from functools import lru_cache
 import hashlib
 import json
 from pathlib import Path
+from statistics import median
 from typing import Any, Mapping
 from urllib.parse import urlparse
 
@@ -949,4 +950,367 @@ def build_research_section_contract_v2(
         live_eligible=not structure_only and evidence_passed,
         sections=assessments,
         total_page_budget=(minimum_pages, maximum_pages),
+    )
+
+
+# Deterministic Financial & Valuation Engine v1. Calculations live beside the
+# report contract until C-series compiler modules are split into packages.
+VALUATION_ENGINE_VERSION = "deterministic-valuation-v1"
+
+
+@dataclass(frozen=True)
+class HistoricalFinancialPeriod:
+    period: str
+    currency: str
+    revenue: float
+    ebit: float
+    tax_rate: float
+    depreciation_amortization: float
+    capital_expenditure: float
+    change_in_nwc: float
+    operating_cash_flow: float
+    net_income: float
+    cash: float
+    debt: float
+    assets: float
+    liabilities: float
+    equity: float
+    shares_outstanding: float
+    share_event: bool = False
+
+    def validate(self) -> None:
+        if not self.period.strip() or not self.currency.strip():
+            raise ReportContractError("financial period and currency are required")
+        values = asdict(self)
+        for key, value in values.items():
+            if key in {"period", "currency", "share_event"}:
+                continue
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise ReportContractError(f"{self.period}.{key} must be numeric")
+        if not 0 <= self.tax_rate <= 1:
+            raise ReportContractError(f"{self.period}.tax_rate must be between 0 and 1")
+        if self.revenue <= 0 or self.assets <= 0 or self.shares_outstanding <= 0:
+            raise ReportContractError(f"{self.period} revenue/assets/shares must be positive")
+        imbalance = abs(self.assets - self.liabilities - self.equity)
+        if imbalance > max(0.01, abs(self.assets) * 0.005):
+            raise ReportContractError(f"{self.period} balance sheet does not balance")
+
+
+@dataclass(frozen=True)
+class FinancialBridgeRow:
+    period: str
+    revenue: float
+    nopat: float
+    unlevered_fcf: float
+    reported_fcf: float
+    cash_conversion: float | None
+    net_debt: float
+    balance_check: float
+    shares_outstanding: float
+
+
+@dataclass(frozen=True)
+class ValuationScenarioAssumptions:
+    name: str
+    probability: float
+    revenue_growth: tuple[float, ...]
+    ebit_margin: tuple[float, ...]
+    tax_rate: float
+    depreciation_pct_revenue: float
+    capex_pct_revenue: float
+    nwc_investment_pct_revenue: float
+    wacc: float
+    terminal_growth: float
+
+    def validate(self) -> None:
+        if self.name not in {"bear", "base", "bull"}:
+            raise ReportContractError("valuation scenarios must be bear/base/bull")
+        if len(self.revenue_growth) < 3 or len(self.revenue_growth) != len(self.ebit_margin):
+            raise ReportContractError(f"{self.name} forecast arrays must have the same 3+ year horizon")
+        if not 0 < self.probability < 1:
+            raise ReportContractError(f"{self.name} probability must be between 0 and 1")
+        if not all(-0.8 < value < 2 for value in self.revenue_growth):
+            raise ReportContractError(f"{self.name} revenue growth assumption is out of bounds")
+        if not all(-1 < value < 1 for value in self.ebit_margin):
+            raise ReportContractError(f"{self.name} EBIT margin assumption is out of bounds")
+        if not 0 <= self.tax_rate <= 1:
+            raise ReportContractError(f"{self.name} tax rate is invalid")
+        if not 0 < self.wacc < 0.5 or not -0.05 < self.terminal_growth < self.wacc:
+            raise ReportContractError(f"{self.name} WACC/terminal growth is invalid")
+        for field in (
+            "depreciation_pct_revenue", "capex_pct_revenue", "nwc_investment_pct_revenue"
+        ):
+            if not -0.5 < getattr(self, field) < 0.5:
+                raise ReportContractError(f"{self.name}.{field} is out of bounds")
+
+    @property
+    def assumption_hash(self) -> str:
+        self.validate()
+        return _section_digest(asdict(self))
+
+
+@dataclass(frozen=True)
+class ValuationEngineInput:
+    ticker: str
+    currency: str
+    unit_scale: int
+    current_price: float
+    market_cap: float
+    shares_outstanding: float
+    historical: tuple[HistoricalFinancialPeriod, ...]
+    scenarios: tuple[ValuationScenarioAssumptions, ...]
+    peer_ev_ebitda: tuple[float, ...]
+    historical_pe: tuple[float, ...]
+
+    def validate(self) -> None:
+        if not self.ticker.strip() or not self.currency.strip():
+            raise ReportContractError("valuation ticker and currency are required")
+        if type(self.unit_scale) is not int or self.unit_scale not in {1, 1000, 10000, 1000000, 100000000}:
+            raise ReportContractError("unsupported financial unit scale")
+        if self.current_price <= 0 or self.market_cap <= 0 or self.shares_outstanding <= 0:
+            raise ReportContractError("price, market cap and shares must be positive")
+        implied_market_cap = self.current_price * self.shares_outstanding
+        if abs(implied_market_cap - self.market_cap) / self.market_cap > 0.02:
+            raise ReportContractError("price, market cap and share count are inconsistent")
+        if len(self.historical) < 2:
+            raise ReportContractError("at least two historical financial periods are required")
+        periods = [item.period for item in self.historical]
+        if periods != sorted(periods) or len(periods) != len(set(periods)):
+            raise ReportContractError("historical periods must be unique and ascending")
+        previous_shares = None
+        for item in self.historical:
+            item.validate()
+            if item.currency != self.currency:
+                raise ReportContractError("historical currency mismatch")
+            if previous_shares is not None:
+                change = abs(item.shares_outstanding / previous_shares - 1)
+                if change > 0.5 and not item.share_event:
+                    raise ReportContractError("share-count jump requires an explicit share event")
+            previous_shares = item.shares_outstanding
+        if abs(self.historical[-1].shares_outstanding - self.shares_outstanding) / self.shares_outstanding > 0.02:
+            raise ReportContractError("latest financial share count disagrees with valuation input")
+        if {item.name for item in self.scenarios} != {"bear", "base", "bull"} or len(self.scenarios) != 3:
+            raise ReportContractError("exactly one bear/base/bull scenario is required")
+        for scenario in self.scenarios:
+            scenario.validate()
+        if abs(sum(item.probability for item in self.scenarios) - 1) > 1e-9:
+            raise ReportContractError("scenario probabilities must sum to 1")
+        if not self.peer_ev_ebitda or not self.historical_pe:
+            raise ReportContractError("peer and historical valuation anchors are required")
+        if any(value <= 0 or value > 200 for value in self.peer_ev_ebitda + self.historical_pe):
+            raise ReportContractError("valuation multiple is out of bounds")
+
+    @property
+    def input_hash(self) -> str:
+        self.validate()
+        return _section_digest(asdict(self))
+
+
+@dataclass(frozen=True)
+class DCFScenarioResult:
+    name: str
+    probability: float
+    assumption_hash: str
+    revenues: tuple[float, ...]
+    unlevered_fcf: tuple[float, ...]
+    enterprise_value: float
+    equity_value: float
+    per_share_value: float
+
+
+@dataclass(frozen=True)
+class ValuationMethodResult:
+    method: str
+    per_share_value: float
+    currency: str
+    unit: str
+    inputs_hash: str
+
+
+@dataclass(frozen=True)
+class SensitivityTable:
+    wacc_values: tuple[float, ...]
+    terminal_growth_values: tuple[float, ...]
+    per_share_values: tuple[tuple[float, ...], ...]
+
+
+@dataclass(frozen=True)
+class DeterministicValuationResult:
+    engine_version: str
+    input_hash: str
+    currency: str
+    financial_bridge: tuple[FinancialBridgeRow, ...]
+    scenario_results: tuple[DCFScenarioResult, ...]
+    methods: tuple[ValuationMethodResult, ...]
+    weighted_dcf_per_share: float
+    reverse_dcf_implied_growth: float
+    sensitivity: SensitivityTable
+    output_hash: str
+
+
+def build_financial_bridge(value: ValuationEngineInput) -> tuple[FinancialBridgeRow, ...]:
+    value.validate()
+    rows = []
+    for period in value.historical:
+        nopat = period.ebit * (1 - period.tax_rate)
+        unlevered = (
+            nopat
+            + period.depreciation_amortization
+            - period.capital_expenditure
+            - period.change_in_nwc
+        )
+        reported = period.operating_cash_flow - period.capital_expenditure
+        conversion = period.operating_cash_flow / period.net_income if period.net_income else None
+        rows.append(
+            FinancialBridgeRow(
+                period=period.period,
+                revenue=period.revenue,
+                nopat=round(nopat, 8),
+                unlevered_fcf=round(unlevered, 8),
+                reported_fcf=round(reported, 8),
+                cash_conversion=round(conversion, 8) if conversion is not None else None,
+                net_debt=round(period.debt - period.cash, 8),
+                balance_check=round(period.assets - period.liabilities - period.equity, 8),
+                shares_outstanding=period.shares_outstanding,
+            )
+        )
+    return tuple(rows)
+
+
+def _project_scenario(
+    value: ValuationEngineInput,
+    scenario: ValuationScenarioAssumptions,
+    *,
+    growth_override: float | None = None,
+    wacc_override: float | None = None,
+    terminal_growth_override: float | None = None,
+) -> DCFScenarioResult:
+    latest = value.historical[-1]
+    revenue = latest.revenue
+    revenues = []
+    cash_flows = []
+    growth_values = (
+        (growth_override,) * len(scenario.revenue_growth)
+        if growth_override is not None else scenario.revenue_growth
+    )
+    for growth, margin in zip(growth_values, scenario.ebit_margin):
+        revenue *= 1 + growth
+        nopat = revenue * margin * (1 - scenario.tax_rate)
+        fcf = revenue * (
+            margin * (1 - scenario.tax_rate)
+            + scenario.depreciation_pct_revenue
+            - scenario.capex_pct_revenue
+            - scenario.nwc_investment_pct_revenue
+        )
+        revenues.append(revenue)
+        cash_flows.append(fcf)
+    wacc = scenario.wacc if wacc_override is None else wacc_override
+    terminal_growth = (
+        scenario.terminal_growth if terminal_growth_override is None else terminal_growth_override
+    )
+    if terminal_growth >= wacc:
+        raise ReportContractError("terminal growth must stay below WACC")
+    discounted = sum(fcf / (1 + wacc) ** year for year, fcf in enumerate(cash_flows, 1))
+    terminal = cash_flows[-1] * (1 + terminal_growth) / (wacc - terminal_growth)
+    enterprise = discounted + terminal / (1 + wacc) ** len(cash_flows)
+    net_debt = latest.debt - latest.cash
+    equity = enterprise - net_debt
+    per_share = equity * value.unit_scale / value.shares_outstanding
+    return DCFScenarioResult(
+        name=scenario.name,
+        probability=scenario.probability,
+        assumption_hash=scenario.assumption_hash,
+        revenues=tuple(round(item, 8) for item in revenues),
+        unlevered_fcf=tuple(round(item, 8) for item in cash_flows),
+        enterprise_value=round(enterprise, 8),
+        equity_value=round(equity, 8),
+        per_share_value=round(per_share, 6),
+    )
+
+
+def _reverse_dcf_growth(value: ValuationEngineInput, base: ValuationScenarioAssumptions) -> float:
+    target = value.current_price
+    low, high = -0.5, 1.0
+    low_value = _project_scenario(value, base, growth_override=low).per_share_value
+    high_value = _project_scenario(value, base, growth_override=high).per_share_value
+    if not low_value <= target <= high_value:
+        raise ReportContractError("current price is outside reverse-DCF solvable bounds")
+    for _ in range(100):
+        middle = (low + high) / 2
+        result = _project_scenario(value, base, growth_override=middle).per_share_value
+        if result < target:
+            low = middle
+        else:
+            high = middle
+    return round((low + high) / 2, 8)
+
+
+def _sensitivity(value: ValuationEngineInput, base: ValuationScenarioAssumptions) -> SensitivityTable:
+    wacc_values = tuple(round(base.wacc + offset, 6) for offset in (-0.01, -0.005, 0, 0.005, 0.01))
+    growth_values = tuple(round(base.terminal_growth + offset, 6) for offset in (-0.01, -0.005, 0, 0.005, 0.01))
+    if min(wacc_values) <= max(growth_values):
+        raise ReportContractError("sensitivity grid crosses WACC/terminal-growth boundary")
+    matrix = tuple(
+        tuple(
+            _project_scenario(
+                value,
+                base,
+                wacc_override=wacc,
+                terminal_growth_override=growth,
+            ).per_share_value
+            for growth in growth_values
+        )
+        for wacc in wacc_values
+    )
+    return SensitivityTable(wacc_values, growth_values, matrix)
+
+
+def run_deterministic_valuation(value: ValuationEngineInput) -> DeterministicValuationResult:
+    value.validate()
+    bridge = build_financial_bridge(value)
+    by_name = {item.name: item for item in value.scenarios}
+    scenario_results = tuple(_project_scenario(value, by_name[name]) for name in ("bear", "base", "bull"))
+    per_share = [item.per_share_value for item in scenario_results]
+    if per_share != sorted(per_share):
+        raise ReportContractError("bear/base/bull DCF values are not ordered")
+    weighted = sum(item.per_share_value * item.probability for item in scenario_results)
+    latest = value.historical[-1]
+    ebitda = latest.ebit + latest.depreciation_amortization
+    net_debt = latest.debt - latest.cash
+    comps_equity = median(value.peer_ev_ebitda) * ebitda - net_debt
+    comps_per_share = comps_equity * value.unit_scale / value.shares_outstanding
+    eps = latest.net_income * value.unit_scale / value.shares_outstanding
+    history_per_share = median(value.historical_pe) * eps
+    input_hash = value.input_hash
+    methods = (
+        ValuationMethodResult("probability_weighted_dcf", round(weighted, 6), value.currency, f"{value.currency}/share", input_hash),
+        ValuationMethodResult("peer_ev_ebitda", round(comps_per_share, 6), value.currency, f"{value.currency}/share", input_hash),
+        ValuationMethodResult("historical_pe", round(history_per_share, 6), value.currency, f"{value.currency}/share", input_hash),
+    )
+    if any(item.per_share_value <= 0 for item in methods):
+        raise ReportContractError("valuation cross-check produced a nonpositive value")
+    reverse_growth = _reverse_dcf_growth(value, by_name["base"])
+    sensitivity = _sensitivity(value, by_name["base"])
+    output_payload = {
+        "engine_version": VALUATION_ENGINE_VERSION,
+        "input_hash": input_hash,
+        "currency": value.currency,
+        "bridge": [asdict(item) for item in bridge],
+        "scenarios": [asdict(item) for item in scenario_results],
+        "methods": [asdict(item) for item in methods],
+        "weighted_dcf_per_share": round(weighted, 6),
+        "reverse_dcf_implied_growth": reverse_growth,
+        "sensitivity": asdict(sensitivity),
+    }
+    return DeterministicValuationResult(
+        engine_version=VALUATION_ENGINE_VERSION,
+        input_hash=input_hash,
+        currency=value.currency,
+        financial_bridge=bridge,
+        scenario_results=scenario_results,
+        methods=methods,
+        weighted_dcf_per_share=round(weighted, 6),
+        reverse_dcf_implied_growth=reverse_growth,
+        sensitivity=sensitivity,
+        output_hash=_section_digest(output_payload),
     )

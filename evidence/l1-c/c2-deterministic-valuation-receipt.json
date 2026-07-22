@@ -1,0 +1,37 @@
+{
+  "milestone": "L2-C2",
+  "issue": 40,
+  "status": "accepted",
+  "user_outcome": "Financial trends, scenarios and valuation methods are reproducible from frozen typed inputs.",
+  "verification": {
+    "issue_specific": "7 passed",
+    "upstream_smoke": "42 passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "deterministic_probe": {
+    "input_hash": "045784694067c7514d658f78b359d10a59de8dba2a9b1d4ba5761ea4652039fe",
+    "output_hash": "abc16a993bfcf6e333c82578540cd8c55c760b09f13f2c29c70114658f14cc60",
+    "scenario_values_cny_per_share": {
+      "bear": 254.416667,
+      "base": 491.252228,
+      "bull": 912.944549
+    },
+    "weighted_dcf_cny_per_share": 537.466418,
+    "peer_ev_ebitda_cny_per_share": 671.25,
+    "historical_pe_cny_per_share": 600.0,
+    "reverse_dcf_implied_growth": -0.05135559,
+    "sensitivity_center_cny_per_share": 491.252228
+  },
+  "gates": {
+    "historical_statement_balance": true,
+    "scenario_assumptions_hashed": true,
+    "three_valuation_methods_same_currency_and_share_unit": true,
+    "currency_unit_share_market_cap_anomalies_blocked": true,
+    "sensitivity_stable_and_monotonic": true
+  },
+  "boundaries": [
+    "No LLM-authored numeric assumptions",
+    "No target-price or position recommendation policy",
+    "No trading execution"
+  ]
+}

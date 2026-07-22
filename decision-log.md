@@ -824,3 +824,25 @@
 - `full` 只表示输入合同齐，不表示结论正确；真实发布仍必须通过 B6、后续 section compiler 和 citation gate。
 - 页数预算是信息密度规划，不是凑页数；总上限 50，行业附录只能在 profile budget 内替换/压缩。
 - C5 尚未实现时第 16 节自然显示 missing；不能临时让模型编一个仓位来填满合同。
+
+## 2026-07-22 · L2-C2 Deterministic Financial & Valuation Engine
+
+- Objective：用户可以从同一 frozen numeric input 复算历史财务桥、Bull/Base/Bear DCF、reverse DCF、comps、历史区间和 sensitivity。
+- Reuse：采用 rollingSirius 的多方法估值纪律和 reverse DCF/sensitivity 方法；采用 UZI `fin_models.py` 的纯函数 bridge/grid 模式；拒绝其缺股本时从市值反推或默认 10 亿股的 fallback。
+- Decision：输入统一使用一个 currency、显式 unit scale、absolute diluted shares；price × shares 与 market cap 差异超过 2% 阻断。
+- Decision：每期资产负债表必须在资产 0.5% 内平衡；股本跨期变化超过 50% 必须有 explicit share event；历史期必须唯一、升序。
+- Decision：scenario 固定 Bear/Base/Bull 各一个、概率和为 1、forecast horizon 一致；每个 scenario assumption 单独 hash。
+- Decision：DCF、peer EV/EBITDA、historical P/E 全部输出同 currency/share，绑定同 input hash；Bear/Base/Bull value 非单调时 fail closed。
+- Decision：reverse DCF 用二分法求 Base margin/capital intensity 下当前价格隐含的 constant revenue growth；sensitivity 固定 5×5 WACC/g grid。
+- Verification：issue 专项 7 passed；C1/v1 contract/B6 upstream smoke 42 passed；deterministic replay input/output hash 稳定；未跑全量测试。
+- Boundary：C2 不允许 LLM 写数字、不生成 action/position policy、不做交易执行。
+
+### Gotchas · L2-C2
+
+- 财务金额按“亿元”而股本按“股”时，所有 per-share 方法必须先乘 unit scale；忘记这一步会差 1e8 倍。
+- price × shares 是比任意字段名更可靠的单位 sanity check；不能同时接受互相矛盾的市值和股本。
+- 资产负债平衡不证明财报正确，但不平衡一定不能进入估值。
+- reverse DCF 只改变增长而固定 Base margin/capital intensity，输出必须说明它回答的是“当前价隐含什么”，不是预测。
+- Bear/Base/Bull 标签本身不保证单调；计算后仍必须验证 per-share value 顺序。
+- sensitivity grid 如果 terminal growth 接近或超过最低 WACC 会数学爆炸，必须在生成 table 前阻断。
+- comps 与 historical multiple 是 cross-check，不是把三个数机械平均；C2 只并列可复算结果，最终政策留给 C5。
