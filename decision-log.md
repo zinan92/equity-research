@@ -703,3 +703,20 @@
 - index JSON 与 PDF 是两份不同 raw evidence，不能共享 content hash。
 - “半年度报告”包含“年度报告”字样，分类顺序错误会把半年报标成年报。
 - 非财报公告不应全部标成 major；常规董事会决议属于 other announcement。
+
+## 2026-07-22 · L2-B2 Sell-Side Report Catalog & PDF Archive
+
+- Objective：让用户能查到支撑结论的券商研报，并明确区分已归档原始 PDF 与只有目录元数据的报告。
+- Reuse：采用 a-stock-data 的东财目录/PDF/限速重试模式和 Vibe-Trading 的券商研报元数据字段，继续复用 A2/A3 raw storage 与 ingestion contract，不重建第二套管线。
+- Decision：catalog 与 PDF 分开采集；known report ID/canonical URL 在下载前去重，下载后再按 SHA-256 去重。
+- Decision：PDF 失败不阻断同批其他报告，保留为带 error 的 `metadata_only`；卖方证据固定为 supplementary，不能冒充官方披露。
+- Decision：目录支持 broker、analyst、date、rating、pages、archive status 查询；原始 PDF 绑定 raw hash 与 content-addressed storage URI。
+- Verification：专项 6 passed；A3/A1 upstream smoke 43 passed + 17 subtests；CATL live probe 3 条目录、3 份 PDF 均成功归档。
+- Boundary：未做 OCR、观点综合、全市场 SLA 或生产 scheduler。
+
+### Gotchas · L2-B2
+
+- 目录存在不等于 PDF 可获取；metadata-only 必须是正式状态，不能静默丢弃。
+- canonical URL 只能避免重复下载；不同 URL 仍可能返回相同 bytes，因此必须再做 SHA 去重。
+- 限速要覆盖 catalog 和 PDF 且串行记录最近调用时间；仅对 429/5xx/网络失败重试，4xx 不应反复打源站。
+- PDF host、HTTPS 和 `%PDF` magic 必须同时校验，避免把反爬 HTML 当研报归档。

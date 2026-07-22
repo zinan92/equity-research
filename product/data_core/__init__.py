@@ -109,6 +109,19 @@ from .official_filings import (
     sync_cninfo_filings_async,
     validate_official_source_role,
 )
+from .sell_side_archive import (
+    EASTMONEY_SELL_SIDE_CATALOG_SOURCE,
+    EASTMONEY_SELL_SIDE_PDF_SOURCE,
+    EastmoneySellSideCatalogAdapter,
+    EastmoneySellSidePdfAdapter,
+    RateLimitedRetryTransport,
+    RetryableHttpError,
+    SellSideArchiveBatch,
+    SellSideArchiveItem,
+    build_sell_side_runtime,
+    sync_sell_side_archive,
+    sync_sell_side_archive_async,
+)
 from .storage_layout import RAW_BUCKET, StorageObjectKey, raw_storage_key
 
 __all__ = [
@@ -147,4 +160,9 @@ __all__ = [
     "build_official_filing_registry", "build_official_filing_runtime",
     "classify_filing_title", "sync_cninfo_filings", "sync_cninfo_filings_async",
     "validate_official_source_role",
+    "EASTMONEY_SELL_SIDE_CATALOG_SOURCE", "EASTMONEY_SELL_SIDE_PDF_SOURCE",
+    "EastmoneySellSideCatalogAdapter", "EastmoneySellSidePdfAdapter",
+    "RateLimitedRetryTransport", "RetryableHttpError", "SellSideArchiveBatch",
+    "SellSideArchiveItem", "build_sell_side_runtime", "sync_sell_side_archive",
+    "sync_sell_side_archive_async",
 ]
