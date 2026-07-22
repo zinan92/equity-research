@@ -296,11 +296,11 @@ gitleaks git --redact --no-banner
 
 ## 开发规则
 
-- 一个 issue、一个 `codex/*` 分支、一个 PR；PR 必须写 What / Why / Validation 并关联 issue。
+- 一个 issue、一个 `codex/*` 分支、一个 PR；PR 必须写 What / Why / Validation 并关联 issue。机器闸通过且不触红线时按 Park OS 自动合并，不等待人工批准。
 - 不提交 `product/runtime/`、`.env`、cookie、session、浏览器状态或本机缓存。
 - 产品逻辑变化必须记录在 `decision-log.md`，并补充对应 Gotchas。
 - 数据不足要 fail closed；不能用“看起来合理”的样例数据伪装成真实研究。
-- PR 由 `park-ai-bot` 提交，等待 Park 评审；bot 不批准、不合并。
+- `main` 禁止直接提交；GitHub Pull Request 对象才是合并证据，commit message 中的 `(#N)` 不能替代 PR。
 
 ## For AI Agents
 

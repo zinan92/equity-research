@@ -1,0 +1,84 @@
+{
+  "schema_version": "audit-lineage-v1",
+  "repository": "zinan92/equity-research",
+  "reconstructed_at": "2026-07-22T11:35:00Z",
+  "entries": [
+    {
+      "missing_reference": 79,
+      "reconstructed_issue": 90,
+      "milestone": "L2-A4 market, identity and PIT fundamentals packet",
+      "reference_commit": "43a127b1c69047c846e9b091ae386da3b228d452",
+      "evidence_commits": ["023bb2a15619761c415760287d709f35f543667e", "43a127b1c69047c846e9b091ae386da3b228d452", "0c6156093ff10ca19e3a1b06bf0688b3154ff3be"]
+    },
+    {
+      "missing_reference": 80,
+      "reconstructed_issue": 91,
+      "milestone": "L2-A4 cross-source PIT validation",
+      "reference_commit": "9e43f106304f7259b05d993b0c4048b46ab59349",
+      "evidence_commits": ["dcbab108bb9b8c00e2cd0d99529e2bdd42f25fdb", "9e43f106304f7259b05d993b0c4048b46ab59349", "ea059d1df46163e6dfbf01e965576fd739ef8821"]
+    },
+    {
+      "missing_reference": 81,
+      "reconstructed_issue": 92,
+      "milestone": "L2-A5 snapshot orchestration and quality gate",
+      "reference_commit": "aa47e4ab121bf104507bdf4a9f3a70b5ecab872e",
+      "evidence_commits": ["85c76e04636c63cb5bad3543b1d4f6a16d739f67", "aa47e4ab121bf104507bdf4a9f3a70b5ecab872e", "511c16e333e3f32b32375f3b083468a5a4ddc69b"]
+    },
+    {
+      "missing_reference": 82,
+      "reconstructed_issue": 93,
+      "milestone": "L2-B1 official filings ingest",
+      "reference_commit": "06fe143a8f857aeed10964138dbfa58a26401995",
+      "evidence_commits": ["7d393512efa4d99c765790046fec77b79a330ab0", "06fe143a8f857aeed10964138dbfa58a26401995", "b17f2db3aae82c17c51791945f3df6839b8d11da"]
+    },
+    {
+      "missing_reference": 83,
+      "reconstructed_issue": 94,
+      "milestone": "L2-B2 sell-side report catalog and PDF archive",
+      "reference_commit": "2c7699510588f54fea8ab3a9b944356409540903",
+      "evidence_commits": ["c8ae1da0f183bc1a6f5b721504500536523933b0", "2c7699510588f54fea8ab3a9b944356409540903", "edabd77016a245d8817a6f7769a51f8ed56e73c8"]
+    },
+    {
+      "missing_reference": 84,
+      "reconstructed_issue": 95,
+      "milestone": "L2-B3 page-level document intelligence",
+      "reference_commit": "3f529c42798d332a603c8f349d40612b2547b720",
+      "evidence_commits": ["f19ae59db9b2abbca43d17c9e45a761a36a07b59", "3f529c42798d332a603c8f349d40612b2547b720", "c0d499cf73b75386f8d77ac030523cf17d047849"]
+    },
+    {
+      "missing_reference": 85,
+      "reconstructed_issue": 96,
+      "milestone": "L2-B4 broker consensus and revision history",
+      "reference_commit": "68c66fa9085ec2524acce547c91605e74b2d72ee",
+      "evidence_commits": ["b99fc655dbb369665058fc67700dac83c7910a89", "68c66fa9085ec2524acce547c91605e74b2d72ee", "b4783767fbf2e9351b21788eb8f4ec6b8d1e3496"]
+    },
+    {
+      "missing_reference": 86,
+      "reconstructed_issue": 97,
+      "milestone": "L2-B5 A-share news and event intelligence",
+      "reference_commit": "e3e4580cd01c8d6d9c7283bcde73cb9099fa70ff",
+      "evidence_commits": ["e3e4580cd01c8d6d9c7283bcde73cb9099fa70ff", "b72dd19ecf18be49438f0dada278dae39bf2a5db"]
+    },
+    {
+      "missing_reference": 87,
+      "reconstructed_issue": 98,
+      "milestone": "L2-B6 immutable evidence set and coverage gate",
+      "reference_commit": "b9c58c6edbc4d526a16d8e3b5476a552abd77eb6",
+      "evidence_commits": ["b9c58c6edbc4d526a16d8e3b5476a552abd77eb6", "8d42a86f0bc384ec72e8d636b65396ad72bc0bc7"]
+    },
+    {
+      "missing_reference": 88,
+      "reconstructed_issue": 99,
+      "milestone": "L2-C1 research section contract v2",
+      "reference_commit": "6b7e3a4a0ecea3d18654342fa0e69b3bae4694bf",
+      "evidence_commits": ["6b7e3a4a0ecea3d18654342fa0e69b3bae4694bf", "b1d1d7a5f503f2bc36d9aa06982826d4dee00d8f"]
+    },
+    {
+      "missing_reference": 89,
+      "reconstructed_issue": 100,
+      "milestone": "L2-C2 deterministic financial and valuation engine",
+      "reference_commit": "48a744b4819876714ae6c87f1ac943b4068399c0",
+      "evidence_commits": ["48a744b4819876714ae6c87f1ac943b4068399c0", "25e6640afe91721fc4a775e58c12826ea226dee1"]
+    }
+  ]
+}

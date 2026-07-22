@@ -846,3 +846,20 @@
 - Bear/Base/Bull 标签本身不保证单调；计算后仍必须验证 per-share value 顺序。
 - sensitivity grid 如果 terminal growth 接近或超过最低 WACC 会数学爆炸，必须在生成 table 前阻断。
 - comps 与 historical multiple 是 cross-check，不是把三个数机械平均；C2 只并列可复算结果，最终政策留给 C5。
+
+## 2026-07-22 · GitHub audit-lineage repair
+
+- Objective：恢复 #79–#89 缺失的里程碑合同映射，并阻止以后用 PR 风格 commit message 代替真实 GitHub PR。
+- Fact：相关实现 commit 均在 `main`，但 GitHub Issue/PR API 对 #79–#89 返回不存在，commit-to-pull-request API 也没有关联对象；保留事件不足以证明具体低层写入路径。
+- Decision：不改写 Git 历史、不伪造旧 PR；使用明确标记为 reconstructed 的 #90–#100 绑定原缺失编号与 immutable commits，并提交机器可验的 ledger。
+- Decision：`main` branch protection 要求真实 PR 且对 admin 生效，approving review count 保持 0，以符合 Park OS 自动挡。
+- Verification：专项 verifier + 3 个单元测试；PR 合并前执行本仓默认测试与 gitleaks。
+- Secrets gate：gitleaks 的两条旧历史命中经只读、值遮蔽检查确认均为 UZI fetcher schema 字符串而非 credential，按 commit/file/rule/line 精确 fingerprint 豁免；未输出或读取密钥值。
+- Boundary：不改变任何投研、数据、估值或产品运行逻辑；C3 仍是下一产品里程碑。
+
+### Gotchas · GitHub audit lineage
+
+- `Merge pull request #N` 或 `feat: ... (#N)` 只是文本，不能证明 GitHub 存在 PR；必须查询 PR object/commit association。
+- 已被占用或缺失的 GitHub 编号不能由客户端指定复用；重建记录必须保留 original → reconstructed 映射。
+- 追求“看起来连续”的历史会诱发伪造；不可恢复的历史必须显式标为 reconstructed。
+- 自动合并与强制 PR 不冲突：required approvals 可为 0，同时对 admin 禁止 direct push。
