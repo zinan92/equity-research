@@ -1,0 +1,64 @@
+{
+  "milestone": "L2-A3",
+  "title": "Generalized datafeed Ingestion Core",
+  "issue": 30,
+  "verified_at": "2026-07-22T08:40:00Z",
+  "status": "focused_passed",
+  "scope": {
+    "included": [
+      "five-domain adapter contract harness",
+      "primary/fallback ingestion runtime",
+      "quality gate",
+      "raw capture before parse",
+      "SQLite local degraded cache",
+      "Supabase authority sink adapter"
+    ],
+    "excluded": [
+      "full provider coverage",
+      "live Supabase project deployment",
+      "production backup/restore",
+      "all-market ticker coverage"
+    ]
+  },
+  "verification": [
+    {
+      "command": "python3 -m py_compile product/data_core/ingestion.py product/data_core/local_cache.py product/data_core/authority_sink.py product/tests/test_ingestion_core.py",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m py_compile product/data_core/contracts.py product/data_core/ingestion.py product/data_core/local_cache.py product/data_core/authority_sink.py product/tests/test_ingestion_core.py product/tests/test_data_contract.py",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m pytest product/tests/test_ingestion_core.py product/tests/test_data_contract.py -q",
+      "result": "37 passed, 17 subtests passed in 0.05s"
+    },
+    {
+      "command": "python3 -m unittest discover -s product/tests -q",
+      "result": "267 tests passed in 55.720s"
+    },
+    {
+      "command": "adversarial review",
+      "result": "P0=0, P1=0"
+    }
+  ],
+  "artifact_hashes": {
+    "product/data_core/contracts.py": "1107aa46229751cac498cce4084f69f99a4e4e5b9513ed9b669add0e3917b3d3",
+    "product/data_core/ingestion.py": "043221e569f08a11d63f2eb43a6055d29e1194a54107b4364878d1f7e0c3c16d",
+    "product/data_core/local_cache.py": "38f44d2c60795a146688d45b1422d158d3a506d7ffa85b8c53cb176656873b3c",
+    "product/data_core/authority_sink.py": "81ae59d48b8a899854c0aea45015540a21d946df8b3e9f51b0ee7b3b97711b23",
+    "product/tests/test_ingestion_core.py": "f5b49187b156eb7099632b7c24d0a9a6f98f2c6afe6a7687d4013fe1ea6d04b7",
+    "product/tests/test_data_contract.py": "7426c71c8586660f8bacee442f9ef83f76db134860075bcd6518305caed1781f",
+    "docs/architecture/generalized-ingestion-core-v1.md": "788b1bfdb1ae5760d2e2ada7223ac47f9d5683aaf8fb4bf021c363f03bfd4578"
+  },
+  "gotchas": [
+    "raw capture is built before parse so parser failures retain auditable bytes",
+    "live adapter cached labels fail closed while retaining raw audit",
+    "local cache is degraded-only and never authority",
+    "non-publishable accepted records do not enter record receipts",
+    "fixture primary can fall through to a real fallback",
+    "document records must point at the same raw capture they are proven by",
+    "object storage upload before DB transaction can leave deterministic orphan blobs, which are retryable",
+    "fixture and cached data never promote to publishable records"
+  ]
+}

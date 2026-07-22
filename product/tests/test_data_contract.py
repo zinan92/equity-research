@@ -67,8 +67,8 @@ VALID_PAYLOADS = {
         "instrument_id": "CN:300750.SZ",
         "document_type": "quarterly_report",
         "published_at": "2026-07-21T18:00:00+08:00",
-        "content_hash": "b" * 64,
-        "storage_uri": "raw/documents/doc-1.pdf",
+        "content_hash": RAW.raw_hash,
+        "storage_uri": RAW.storage_uri,
     },
     RecordDomain.ESTIMATE: {
         "estimate_id": "estimate-1",

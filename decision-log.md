@@ -592,3 +592,27 @@
 - 只修 Codex 的 `AGENTS.md` 不够；根 `CLAUDE.md` 也会影响后续 Claude/Fable 复审，两个入口必须一致。
 - 不能把 UZI 删除成“不可用”；它仍是可参考的 collector/report 资产，但必须标注 mock、fixture、cached 或 live 边界。
 - 治理变更不应混入 A3 ingestion runtime，否则后续 review 会把流程清理和数据层行为混在一起。
+
+## 2026-07-22 · L2-A3 Generalized Ingestion Core
+
+- Objective：把 A1/A2 的 contract + schema 变成可运行的五域 ingestion runtime，让后续 provider 只需要写 adapter/glue code，而不是各自直连数据库。
+- User outcome：未来用户输入 A 股 ticker 时，market、fundamental、document、estimate、event 都能走同一套 provenance、quality、fallback、authority 写入路径；数据不足时降级但不冒充正式研报证据。
+- Decision：runtime 固定 one primary + explicit fallbacks。source plan 必须无重复、首个为 primary、其余为 fallback；provider adapter 不允许自己声明 cached。
+- Decision：raw capture 在 parse 前生成。fetch 成功但 parse/contract 失败时，authority 仍保存 run/raw/capture，保证 parser failure 可审计。
+- Decision：SQLiteFetchCache 是 mutable local replay cache，`authority=False`；它只在 live sources 全部失败后提供 degraded、non-publishable view。
+- Decision：SupabaseAuthoritySink 采用 DB-API connection factory + object store protocol，不为 A3 增加 Supabase SDK/psycopg runtime dependency；真实 Supabase wiring 留给部署 milestone。
+- Decision：cached 与 fixture attempt 不进入 Supabase authority sink。fixture primary 不阻断 real fallback；sink 仍拒绝 fixture 作为直接调用防线。degraded live attempt 可保留 run/raw/capture；未 promotion 的 accepted records 不写 receipts，避免 stale/fixture-like accepted receipt 污染后续 snapshot membership。
+- Decision：accepted document record 必须绑定同一 raw capture：`content_hash == raw.raw_hash` 且 `storage_uri == raw.storage_uri`。索引页引用独立 PDF 的情况后续必须建模成独立 capture。
+- Verification：`python3 -m py_compile product/data_core/contracts.py product/data_core/ingestion.py product/data_core/local_cache.py product/data_core/authority_sink.py product/tests/test_ingestion_core.py product/tests/test_data_contract.py` 通过；`python3 -m pytest product/tests/test_ingestion_core.py product/tests/test_data_contract.py -q` 37 项 + 17 subtests 通过。
+
+### Gotchas · L2-A3
+
+- 若先 parse 再建 raw capture，parse exception 会吞掉 provider bytes，后续无法复核失败原因。
+- live adapter 若把响应标成 cached，也必须作为 contract failure 留 raw audit；不能因为标签异常就让获取证据消失。
+- 本地 cache 解析成功也不能写入 authority；否则 stale/cached 数据会污染 production truth。
+- fixture primary 不能因为 sink 拒绝 fixture 而提前 abort；runtime 必须跳过 fixture 持久化并继续 fallback。
+- non-publishable accepted receipt 比“不写 receipt”更危险，因为未来 snapshot builder 可能只看 `status='accepted'` 而忘记 join run quality。
+- document payload 不能指向另一份 raw object；否则 receipt 证明的是索引页，domain row 却引用 PDF，provenance 会错位。
+- object storage 上传发生在 DB transaction 前，DB 失败可能留下 content-addressed orphan blob；该 orphan 可重试、可去重，风险低于 DB 先写后找不到 raw bytes。
+- 同一 raw bytes 可能产生多个 domain records；capture 不能被强行绑定单域，也不能用 `(run_id, raw_hash)` 吞掉独立 fetch 证据。
+- A3 只交付 runtime 和 sink，不声称已有真实 provider coverage、Supabase project、backup/restore 或全市场 ticker 覆盖。
