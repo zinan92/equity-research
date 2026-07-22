@@ -15,6 +15,7 @@
 - C1 now defines one typed 18-section report contract with fixed full/partial/missing semantics, a 32–50 page budget, section/profile/version/input hashes, and a hard B6 boundary for live acceptance.
 - C2 now reconciles historical statements and produces hashed Bear/Base/Bull DCF, reverse DCF, peer/history cross-checks and stable sensitivities while blocking currency, unit, balance and share-count anomalies.
 - C3 now compiles page-cited broker viewpoints into per-report rows, robust consensus/outlier separation, immutable rating/target/forecast revisions, visible bull/bear topic evidence and evidence-strength-bounded summary language.
+- The private research site now includes a code-first Industry Intelligence library: 38 archived segment three-high nodes, 94 materials-company nodes and 489 on-demand company dossiers. Single-use access codes collect no visitor identity; the source snapshot is explicitly separated from live/canonical research.
 - GitHub audit lineage for missing references #79–#89 is truthfully reconstructed as Issues #90–#100 and bound to immutable main commits by `docs/governance/audit-lineage-v1.json`; future main changes require real Pull Request objects.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
@@ -23,3 +24,4 @@
 
 - Start L2-C4 from latest `main`: add battery, consumer and bank industry profiles without forking the 18-section report structure.
 - Define profile-selected KPI fields and candidate truth fixtures while keeping missing industry fields isolated from universal sections.
+- Before promoting archived three-high labels into canonical research, build and manually review a segment-taxonomy crosswalk and pass the normal evidence gate; do not auto-map the 38 source segments to 489 dossiers.

@@ -45,8 +45,9 @@ from portfolio_ledger import (
 from publication_pack import latest_pack
 from auth_store import (
     AUTH_DB_PATH, authenticate, create_invite, create_session, has_entitlement, initialize_auth, list_members,
-    redeem_invite, revoke_session, rotate_csrf, session_member, set_member_status, verify_csrf,
+    redeem_access_code, redeem_invite, revoke_session, rotate_csrf, session_member, set_member_status, verify_csrf,
 )
+from industry_intelligence import IndustryIntelligenceError, dossier_payload, overview_payload
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
@@ -221,6 +222,8 @@ def route_entitlement(route: str) -> str:
 
 def private_preview_get_entitlement(route: str) -> str | None:
     if route == "/api/private-preview":
+        return "dashboard"
+    if route == "/api/industry-intelligence" or route.startswith("/api/industry-intelligence/dossiers/"):
         return "dashboard"
     if route.startswith("/api/reports/"):
         return "deep_reports"
@@ -464,6 +467,24 @@ class DashboardHandler(BaseHTTPRequestHandler):
             except (BillingError, CanonicalPortfolioError, CanonicalPublicationError, PortfolioLedgerError) as exc:
                 self._json({"error": "private_preview_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
             return
+        if route == "/api/industry-intelligence":
+            try:
+                self._json(overview_payload())
+            except IndustryIntelligenceError as exc:
+                self._json({"error": "industry_intelligence_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route.startswith("/api/industry-intelligence/dossiers/"):
+            code = unquote(route.removeprefix("/api/industry-intelligence/dossiers/"))
+            try:
+                payload = dossier_payload(code)
+            except IndustryIntelligenceError as exc:
+                self._json({"error": "industry_intelligence_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+                return
+            if payload is None:
+                self._json({"error": "dossier_not_found", "code": code}, HTTPStatus.NOT_FOUND)
+            else:
+                self._json(payload)
+            return
         if route == "/api/billing/me":
             try:
                 member = self._member()
@@ -637,7 +658,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         route = urlparse(self.path).path
-        if route in {"/api/auth/login", "/api/auth/signup"}:
+        if route in {"/api/auth/access-code", "/api/auth/login", "/api/auth/signup"}:
             self._auth_entry(route)
             return
         member = self._authorize("dashboard")
@@ -787,7 +808,11 @@ class DashboardHandler(BaseHTTPRequestHandler):
         try:
             body = self._read_json()
             now = time.monotonic()
-            identity = str(body.get("email", "")).strip().lower()[:254]
+            if route.endswith("/access-code"):
+                code = str(body.get("code", "")).strip()
+                identity = f"code:{hashlib.sha256(code.encode()).hexdigest()[:24]}"
+            else:
+                identity = str(body.get("email", "")).strip().lower()[:254]
             forwarded = self.headers.get("CF-Connecting-IP", "") if self.client_address[0] in {"127.0.0.1", "::1"} else ""
             try:
                 client_ip = str(ipaddress.ip_address(forwarded or self.client_address[0]))
@@ -807,7 +832,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 ip_attempts.append(now)
                 LOGIN_ATTEMPTS[key] = attempts
                 LOGIN_IP_ATTEMPTS[client_ip] = ip_attempts
-            if route.endswith("/signup"):
+            if route.endswith("/access-code"):
+                member = redeem_access_code(body.get("code", ""))
+            elif route.endswith("/signup"):
                 member = redeem_invite(body.get("invite_code", ""), body.get("email", ""), body.get("password", ""), body.get("display_name", ""))
             else:
                 member = authenticate(body.get("email", ""), body.get("password", ""))

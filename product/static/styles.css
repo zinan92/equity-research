@@ -1644,3 +1644,203 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
   #feedback-form .feedback-message, #feedback-status { grid-column: 1; }
   .canonical-receipt-panel dl { grid-template-columns: 1fr; }
 }
+
+/* Archived industry intelligence */
+.auth-helper { margin: -4px 0 0; color: #718096; font-size: 10px; line-height: 1.6; }
+.industry-view { --industry-blue: #184d6b; --industry-blue-soft: #e8f0f4; }
+.industry-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); gap: 54px; align-items: end; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.industry-hero h1 { margin: 7px 0 13px; color: var(--ink); font-family: var(--display); font-size: clamp(44px, 5vw, 68px); font-weight: 600; letter-spacing: -.045em; }
+.industry-hero > div > p:last-child { max-width: 760px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.75; }
+.archive-receipt { display: grid; gap: 7px; padding: 18px 0 4px 20px; border-left: 4px solid var(--vermilion); }
+.archive-receipt span, .archive-receipt strong, .archive-receipt small { display: block; }
+.archive-receipt span { color: var(--vermilion); font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: .09em; }
+.archive-receipt strong { color: var(--ink); font-size: 18px; }
+.archive-receipt small { color: var(--muted); font-size: 10px; line-height: 1.55; }
+.industry-tabs { display: flex; align-items: stretch; margin-bottom: 1px; overflow-x: auto; background: var(--ink); scrollbar-width: thin; }
+.industry-tabs button { min-height: 52px; flex: 1 0 auto; padding: 0 28px; color: #aebdca; background: transparent; border: 0; border-right: 1px solid rgba(255,255,255,.12); cursor: pointer; font-size: 12px; white-space: nowrap; }
+.industry-tabs button:hover, .industry-tabs button.is-active { color: #fff; background: #184d6b; }
+.industry-tabs button:active, .open-dossier:active, .dossier-reader-nav button:active { transform: translateY(1px); }
+.industry-state { min-height: 300px; display: grid; place-content: center; justify-items: center; gap: 8px; padding: 30px; color: var(--muted); background: var(--surface); border: 1px solid var(--line); text-align: center; }
+.industry-state strong { color: var(--ink); font-size: 18px; }
+.industry-state span { max-width: 540px; font-size: 11px; line-height: 1.7; }
+.industry-state.error { border-top: 4px solid var(--vermilion); }
+.industry-state button, .dossier-reader-state button { min-height: 40px; margin-top: 8px; padding: 0 18px; color: #fff; background: var(--ink); border: 0; cursor: pointer; }
+.industry-panel { padding: 30px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.industry-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.industry-panel-head h2, .dossier-toolbar h2 { margin: 0 0 8px; color: var(--ink); font-family: var(--display); font-size: 25px; font-weight: 600; }
+.industry-panel-head p, .dossier-toolbar > div > p { max-width: 680px; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+.bubble-legend { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 13px; max-width: 400px; }
+.bubble-legend span { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 9px; white-space: nowrap; }
+.bubble-legend i { width: 9px; height: 9px; border: 1px solid rgba(11,31,51,.12); }
+.industry-method { margin: 18px 0 0; padding: 12px 14px; color: #53677b; background: #edf2f5; border-left: 3px solid var(--industry-blue); font-size: 10px; line-height: 1.65; }
+.industry-viz-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(320px, .7fr); gap: 24px; align-items: start; margin-top: 24px; }
+.bubble-chart { position: relative; min-height: 390px; overflow: hidden; background: #f8fafb; border: 1px solid var(--line); }
+.bubble-chart svg { display: block; width: 100%; height: auto; min-height: 390px; }
+.bubble-grid line { stroke: #dde5eb; stroke-width: 1; stroke-dasharray: 3 5; }
+.bubble-axis path, .bubble-axis line { stroke: #8da0b2; }
+.bubble-axis text, .bubble-axis-title, .bubble-labels text { fill: #607286; font-family: var(--mono); font-size: 9px; }
+.bubble-labels text { font-size: 8px; pointer-events: none; }
+.bubble-nodes circle { cursor: pointer; fill-opacity: .78; stroke: rgba(255,255,255,.94); stroke-width: 1.5; transition: fill-opacity .16s ease, stroke-width .16s ease; }
+.bubble-nodes circle.is-three-high { stroke: #0b1f33; stroke-width: 2; }
+.bubble-nodes circle:hover, .bubble-nodes circle:focus, .bubble-nodes circle.is-selected { fill-opacity: 1; stroke: var(--vermilion); stroke-width: 3; outline: none; }
+.bubble-tooltip { position: absolute; z-index: 2; width: min(210px, calc(100% - 16px)); padding: 9px 11px; color: #fff; background: rgba(11,31,51,.96); box-shadow: 0 8px 28px rgba(11,31,51,.18); pointer-events: none; }
+.bubble-tooltip strong, .bubble-tooltip span { display: block; }
+.bubble-tooltip strong { margin-bottom: 4px; font-size: 11px; }
+.bubble-tooltip span { color: #c7d3dd; font-family: var(--mono); font-size: 8px; line-height: 1.5; }
+.chart-companion { margin-top: 12px; border: 1px solid var(--line); }
+.companion-head { display: flex; justify-content: space-between; padding: 10px 12px; color: var(--muted); background: #edf2f5; font-size: 9px; }
+.chart-companion ul { max-height: 250px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 0; padding: 1px; overflow-y: auto; background: var(--line); list-style: none; }
+.chart-companion li { min-width: 0; background: #fff; }
+.chart-companion button { width: 100%; min-height: 58px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 12px; color: inherit; background: transparent; border: 0; cursor: pointer; text-align: left; }
+.chart-companion button:hover, .chart-companion button.is-selected { background: var(--industry-blue-soft); box-shadow: inset 3px 0 var(--industry-blue); }
+.chart-companion button strong, .chart-companion button small { display: block; }
+.chart-companion button strong { overflow: hidden; color: var(--ink); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.chart-companion button small { margin-top: 3px; color: var(--muted); font-size: 8px; }
+.chart-companion button b { color: var(--muted); font-family: var(--mono); font-size: 8px; font-weight: 500; line-height: 1.5; text-align: right; }
+.industry-detail { position: sticky; top: 98px; max-height: calc(100dvh - 122px); overflow-y: auto; padding: 24px; background: #f4f7f9; border-top: 4px solid var(--industry-blue); }
+.industry-detail-empty { min-height: 190px; display: grid; place-items: center; padding: 24px; color: var(--muted); font-size: 11px; line-height: 1.7; text-align: center; }
+.industry-detail > header { position: relative; padding-right: 80px; }
+.industry-detail > header span { color: var(--muted); font-family: var(--mono); font-size: 8px; }
+.industry-detail > header h3 { margin: 7px 0 0; color: var(--ink); font-size: 22px; line-height: 1.35; }
+.industry-detail > header h3 small { color: var(--muted); font-family: var(--mono); font-size: 10px; font-weight: 400; }
+.source-only-badge { position: absolute; top: 0; right: 0; padding: 5px 7px; color: var(--vermilion); background: var(--vermilion-soft); font-size: 8px; font-weight: 700; }
+.industry-detail-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 20px 0; background: var(--line); border: 1px solid var(--line); }
+.industry-detail-metrics article, .archived-judgment article { min-width: 0; padding: 12px; background: #fff; }
+.industry-detail-metrics span, .industry-detail-metrics strong, .industry-detail-metrics small, .archived-judgment span, .archived-judgment strong, .archived-judgment small { display: block; }
+.industry-detail-metrics span, .archived-judgment span { color: var(--muted); font-size: 8px; }
+.industry-detail-metrics strong, .archived-judgment strong { margin-top: 6px; color: var(--ink); font-family: var(--mono); font-size: 12px; }
+.industry-detail-metrics small { margin-top: 3px; color: var(--muted); font-size: 8px; }
+.industry-detail section { padding: 18px 0; border-top: 1px solid var(--line); }
+.industry-detail h4, .leader-block h4 { margin: 0 0 10px; color: var(--ink); font-size: 11px; }
+.industry-detail p { margin: 9px 0 0; color: #53677b; font-size: 10px; line-height: 1.75; }
+.assessment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0; }
+.assessment-grid dt { color: var(--muted); font-size: 8px; }
+.assessment-grid dd { margin: 4px 0 0; color: var(--ink); font-size: 9px; line-height: 1.6; }
+.leader-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.leader-block { min-width: 0; padding-top: 16px; border-top: 1px solid var(--line); }
+.leader-block ul, .source-logic, .business-chips { margin: 0; padding: 0; list-style: none; }
+.leader-block li { padding: 9px 0; border-top: 1px solid #dfe6eb; }
+.leader-block li:first-child { border-top: 0; }
+.leader-block li strong { display: flex; justify-content: space-between; gap: 8px; color: var(--ink); font-size: 9px; }
+.leader-block li small { color: var(--muted); font-family: var(--mono); font-size: 7px; }
+.leader-block li p { margin-top: 4px; font-size: 8px; line-height: 1.55; }
+.source-logic li { position: relative; padding: 7px 0 7px 14px; color: #53677b; font-size: 9px; line-height: 1.65; }
+.source-logic li::before { content: ""; position: absolute; top: 13px; left: 0; width: 5px; height: 5px; background: var(--industry-blue); }
+.business-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.business-chips li { padding: 6px 8px; color: #40566a; background: #e5edf2; font-size: 8px; }
+.mapping-boundary { margin-top: 18px !important; padding: 12px; color: #6c4f1c !important; background: #f8f0df; border-left: 3px solid #b67a22; }
+.open-dossier { width: 100%; min-height: 44px; margin-top: 16px; color: #fff; background: var(--ink); border: 0; cursor: pointer; }
+.dossier-unavailable { padding: 11px; background: #e9eef2; text-align: center; }
+.dossier-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 360px); gap: 32px; align-items: end; }
+.dossier-toolbar label { display: grid; gap: 7px; color: var(--muted); font-size: 9px; font-weight: 700; }
+.dossier-toolbar input { width: 100%; min-height: 44px; padding: 0 13px; color: var(--ink); background: #f8fafb; border: 1px solid #aebdca; border-radius: 0; }
+.dossier-toolbar input:focus { outline: 3px solid rgba(24,77,107,.2); border-color: var(--industry-blue); }
+.dossier-layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 24px; align-items: start; margin-top: 24px; }
+.dossier-index { border: 1px solid var(--line); background: #eef2f5; }
+#dossier-count { margin: 0; padding: 12px 14px; color: var(--muted); font-size: 9px; }
+.dossier-list { max-height: 72dvh; overflow-y: auto; border-top: 1px solid var(--line); }
+.dossier-list > button { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; padding: 14px; color: inherit; background: #fff; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; text-align: left; }
+.dossier-list > button:hover, .dossier-list > button.is-active { background: var(--industry-blue-soft); box-shadow: inset 4px 0 var(--industry-blue); }
+.dossier-list > button span { min-width: 0; }
+.dossier-list > button strong, .dossier-list > button small { display: block; }
+.dossier-list > button strong { color: var(--ink); font-size: 12px; }
+.dossier-list > button small { margin-top: 3px; color: var(--muted); font-family: var(--mono); font-size: 8px; }
+.dossier-list > button b { color: var(--vermilion); font-family: var(--mono); font-size: 12px; }
+.dossier-list > button p { grid-column: 1 / -1; display: -webkit-box; overflow: hidden; margin: 0; color: var(--muted); font-size: 9px; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.dossier-empty { padding: 28px 20px; color: var(--muted); text-align: center; }
+.dossier-empty strong { color: var(--ink); font-size: 13px; }
+.dossier-empty p { margin: 8px 0 0; font-size: 10px; line-height: 1.6; }
+.dossier-reader { min-height: 500px; padding: 34px 40px; background: #fff; border: 1px solid var(--line); }
+.dossier-reader-state { min-height: 380px; display: grid; place-content: center; justify-items: center; gap: 8px; color: var(--muted); text-align: center; }
+.dossier-reader-state strong { color: var(--ink); font-size: 18px; }
+.dossier-reader-state span { font-size: 10px; }
+.dossier-reader-state.error { color: var(--vermilion); }
+.dossier-reader-nav { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; margin: -10px 0 28px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.dossier-reader-nav button { min-width: 0; padding: 7px 0; overflow: hidden; color: var(--industry-blue); background: transparent; border: 0; cursor: pointer; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.dossier-reader-nav button:last-child { text-align: right; }
+.dossier-reader-nav button:disabled { color: #a9b4bd; cursor: default; }
+.dossier-reader-nav span { color: var(--muted); font-family: var(--mono); font-size: 8px; }
+.dossier-reader-head { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+.dossier-reader-head span { color: var(--muted); font-size: 9px; }
+.dossier-reader-head h2 { margin: 7px 0; color: var(--ink); font-size: 36px; letter-spacing: -.035em; }
+.dossier-reader-head p { margin: 0; color: var(--muted); font-family: var(--mono); font-size: 9px; }
+.dossier-reader-head > b { flex: none; padding: 6px 8px; color: var(--vermilion); background: var(--vermilion-soft); font-size: 8px; }
+.archived-judgment { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 24px 0; background: var(--line); border: 1px solid var(--line); }
+.archived-judgment strong { font-size: 14px; overflow-wrap: anywhere; }
+.dossier-summary { padding: 18px 20px; color: #344d62; background: var(--industry-blue-soft); border-left: 4px solid var(--industry-blue); font-size: 12px; line-height: 1.8; }
+.dossier-markdown { max-width: 86ch; color: #344658; }
+.dossier-markdown h3, .dossier-markdown h4 { margin: 32px 0 12px; color: var(--ink); line-height: 1.35; }
+.dossier-markdown h3 { padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: 20px; }
+.dossier-markdown h4 { font-size: 16px; }
+.dossier-markdown p, .dossier-markdown li, .dossier-markdown blockquote { font-size: 12px; line-height: 1.9; }
+.dossier-markdown ul, .dossier-markdown ol { padding-left: 22px; }
+.dossier-markdown blockquote { margin-left: 0; padding: 10px 16px; color: var(--muted); background: #f2f5f7; border-left: 3px solid #8da0b2; }
+.dossier-markdown code { padding: 2px 4px; color: #29485f; background: #e8eef2; font-family: var(--mono); font-size: .9em; }
+.industry-boundary { margin-top: 24px; padding: 22px 26px; color: #d5e0e8; background: var(--ink); }
+.industry-boundary strong { color: #fff; font-size: 13px; }
+.industry-boundary > p { max-width: 900px; margin: 8px 0 0; font-size: 10px; line-height: 1.7; }
+.industry-boundary details { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.15); }
+.industry-boundary summary { color: #aebdca; cursor: pointer; font-size: 9px; }
+.industry-boundary dl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 14px 0 0; }
+.industry-boundary dt { color: #8ca0b1; font-size: 8px; }
+.industry-boundary dd { margin: 4px 0 0; overflow-wrap: anywhere; font-family: var(--mono); font-size: 8px; }
+
+@media (max-width: 1050px) {
+  .industry-viz-layout { grid-template-columns: 1fr; }
+  .industry-detail { position: static; max-height: none; }
+  .dossier-layout { grid-template-columns: 300px minmax(0, 1fr); }
+  .primary-nav .nav-item { font-size: 12px; }
+}
+
+@media (max-width: 720px) {
+  .industry-hero { grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px; padding-bottom: 20px; }
+  .industry-hero h1 { font-size: 40px; }
+  .industry-hero > div > p:last-child { font-size: 13px; line-height: 1.65; }
+  .archive-receipt { padding: 12px 0 0 14px; }
+  .archive-receipt span, .archive-receipt small { font-size: 11px; }
+  .archive-receipt strong { font-size: 16px; }
+  .industry-tabs { margin-right: -12px; margin-left: -12px; }
+  .industry-tabs button { min-height: 56px; flex: 0 0 auto; padding: 0 20px; font-size: 12px; }
+  .industry-panel { margin-right: -12px; margin-left: -12px; padding: 20px 12px; border-right: 0; border-left: 0; }
+  .industry-panel-head, .dossier-reader-head { display: block; }
+  .industry-panel-head h2, .dossier-toolbar h2 { font-size: 21px; }
+  .industry-panel-head p, .dossier-toolbar > div > p { font-size: 12px; }
+  .bubble-legend { justify-content: flex-start; max-width: none; margin-top: 14px; }
+  .bubble-legend span, .industry-method { font-size: 10px; }
+  .industry-method { margin-top: 14px; }
+  .industry-viz-layout { margin-top: 14px; }
+  .bubble-chart, .bubble-chart svg { min-height: 390px; }
+  .chart-companion ul { grid-template-columns: 1fr; max-height: 280px; }
+  .chart-companion button { min-height: 62px; }
+  .chart-companion button strong { font-size: 12px; }
+  .chart-companion button small, .chart-companion button b { font-size: 10px; }
+  .industry-detail { padding: 19px 15px; }
+  .industry-detail > header h3 { font-size: 21px; }
+  .industry-detail-metrics { grid-template-columns: 1fr 1fr 1fr; }
+  .industry-detail-metrics article { padding: 10px 8px; }
+  .industry-detail-metrics strong { font-size: 11px; }
+  .industry-detail p, .assessment-grid dd, .leader-block li p, .source-logic li { font-size: 11px; }
+  .assessment-grid, .leader-grid { grid-template-columns: 1fr; }
+  .dossier-toolbar { grid-template-columns: 1fr; gap: 18px; }
+  .dossier-toolbar label { font-size: 11px; }
+  .dossier-toolbar input { min-height: 48px; font-size: 16px; }
+  .dossier-layout { grid-template-columns: 1fr; gap: 14px; }
+  .dossier-list { max-height: 330px; }
+  .dossier-list > button { min-height: 74px; }
+  .dossier-list > button strong { font-size: 14px; }
+  .dossier-list > button small, .dossier-list > button p, #dossier-count { font-size: 11px; }
+  .dossier-reader { min-height: 420px; padding: 24px 16px; }
+  .dossier-reader-nav { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .dossier-reader-nav button { min-height: 44px; font-size: 10px; }
+  .dossier-reader-head h2 { font-size: 30px; }
+  .dossier-reader-head > b { display: inline-block; margin-top: 14px; }
+  .archived-judgment { grid-template-columns: 1fr 1fr; }
+  .archived-judgment article { min-height: 74px; }
+  .dossier-summary, .dossier-markdown p, .dossier-markdown li, .dossier-markdown blockquote { font-size: 14px; line-height: 1.8; }
+  .industry-boundary { margin-right: -12px; margin-left: -12px; padding: 20px 16px; }
+  .industry-boundary > p { font-size: 12px; }
+  .industry-boundary dl { grid-template-columns: 1fr; }
+  .industry-boundary dt, .industry-boundary dd { font-size: 10px; }
+  .primary-nav { padding-right: 4px; padding-left: 4px; }
+  .primary-nav .nav-item { min-width: 0; padding: 0 3px; font-size: 11px; }
+}

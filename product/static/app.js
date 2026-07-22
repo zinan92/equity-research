@@ -1,4 +1,9 @@
-const state = { data: null, committee: null, history: [], refreshRuns: [], filter: "全部", activeView: "decision", reportOpener: null, reportPushed: false, auth: null, privatePreview: null };
+const state = {
+  data: null, committee: null, history: [], refreshRuns: [], filter: "全部", activeView: "decision",
+  reportOpener: null, reportPushed: false, auth: null, privatePreview: null,
+  industry: null, industryLoading: false, industryTab: "segments", industrySelections: {},
+  industryPromise: null, dossierQuery: "", dossierResults: [], dossierCode: null, industryResizeObserver: null,
+};
 const colors = ["#17332d", "#245346", "#35685a", "#497a6b", "#5d8c7d", "#739c90", "#8caaa0", "#a7bcb4"];
 
 const $ = (selector) => document.querySelector(selector);
@@ -33,13 +38,19 @@ async function fetchJson(url, options = {}) {
   return payload;
 }
 
-function showAuth(mode = "login") {
-  const login = mode === "login";
+function showAuth(mode = "code") {
+  const code = mode === "code";
   $("#auth-gate").hidden = false;
-  $("#login-form").hidden = !login;
-  $("#signup-form").hidden = login;
-  $("#auth-login-tab").classList.toggle("is-active", login);
-  $("#auth-signup-tab").classList.toggle("is-active", !login);
+  $("#access-code-form").hidden = !code;
+  $("#login-form").hidden = code;
+  $("#auth-code-tab").classList.toggle("is-active", code);
+  $("#auth-login-tab").classList.toggle("is-active", !code);
+  $("#auth-code-tab").setAttribute("aria-selected", String(code));
+  $("#auth-login-tab").setAttribute("aria-selected", String(!code));
+  $("#auth-title").textContent = code ? "输入一次性访问码" : "成员登录";
+  $(".auth-intro").textContent = code
+    ? "访问码仅可使用一次。进入后可查看归档产业图谱与研究面板；内容不是实时行情，也不构成投资建议。"
+    : "Owner 与已有研究成员使用邮箱和密码登录。新访客请使用 Park 提供的一次性访问码。";
   $("#auth-error").textContent = "";
   document.body.style.overflow = "hidden";
 }
@@ -74,9 +85,19 @@ async function submitAuth(form, route) {
     form.reset();
     await loadDashboard();
     const reportTicker = new URLSearchParams(location.search).get("report");
+    const dossierCode = safeDossierCode(new URLSearchParams(location.search).get("dossier"));
     if (reportTicker) await openResearchReport(reportTicker, { syncHistory: false });
+    else if (dossierCode) {
+      setView("industry");
+      const industry = await loadIndustry();
+      if (industry) await openIndustryDossier(dossierCode, { syncHistory: false });
+    }
   } catch (error) {
-    $("#auth-error").textContent = error.code === "invalid_credentials" ? "邮箱或密码不正确。" : `无法进入：${error.message}`;
+    if (route.endsWith("access-code") && ["auth_rejected", "invalid_credentials"].includes(error.code)) {
+      $("#auth-error").textContent = "访问码无效、已使用或已过期。请向 Park 获取新的验证码。";
+    } else {
+      $("#auth-error").textContent = error.code === "invalid_credentials" ? "邮箱或密码不正确。" : `无法进入：${error.message}`;
+    }
   } finally {
     button.disabled = false;
   }
@@ -842,11 +863,319 @@ function closeDrawer() {
   if ($("#research-report").hidden) document.body.style.overflow = "";
 }
 
+const industryLayerLabels = { up: "上游", mid: "中游", dn: "下游" };
+const industryLayerColors = { up: "#184d6b", mid: "#b36b2c", dn: "#477565" };
+const materialClusterLabels = { cmp: "CMP", gas: "电子特气", litho: "光刻材料", parts: "设备零部件", target: "靶材", wafer: "晶圆材料" };
+const materialClusterColors = { cmp: "#184d6b", gas: "#8a5d22", litho: "#8b4d55", parts: "#477565", target: "#655c8a", wafer: "#6e7780" };
+
+function displayValue(value, fallback = "暂无") {
+  return value === null || value === undefined || value === "" ? fallback : String(value);
+}
+
+function safeInlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+}
+
+function renderSafeMarkdown(markdown) {
+  const lines = String(markdown || "").replace(/\r/g, "").split("\n");
+  const output = [];
+  let list = null;
+  const closeList = () => {
+    if (list) output.push(`</${list}>`);
+    list = null;
+  };
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+    if (!line) { closeList(); return; }
+    const heading = line.match(/^(#{1,4})\s+(.+)$/);
+    if (heading) {
+      closeList();
+      const level = Math.min(4, heading[1].length + 2);
+      output.push(`<h${level}>${safeInlineMarkdown(heading[2])}</h${level}>`);
+      return;
+    }
+    const bullet = line.match(/^[-*]\s+(.+)$/);
+    const ordered = line.match(/^\d+[.)]\s+(.+)$/);
+    if (bullet || ordered) {
+      const nextList = bullet ? "ul" : "ol";
+      if (list !== nextList) { closeList(); list = nextList; output.push(`<${list}>`); }
+      output.push(`<li>${safeInlineMarkdown((bullet || ordered)[1])}</li>`);
+      return;
+    }
+    closeList();
+    if (line.startsWith("> ")) output.push(`<blockquote>${safeInlineMarkdown(line.slice(2))}</blockquote>`);
+    else output.push(`<p>${safeInlineMarkdown(line)}</p>`);
+  });
+  closeList();
+  return output.join("");
+}
+
+function safeDossierCode(value) {
+  const code = String(value || "").trim().toUpperCase();
+  return /^[A-Z0-9._-]{1,24}$/.test(code) ? code : null;
+}
+
+function industryMetric(label, value, note = "") {
+  return `<article><span>${escapeHtml(label)}</span><strong>${escapeHtml(displayValue(value))}</strong>${note ? `<small>${escapeHtml(note)}</small>` : ""}</article>`;
+}
+
+function renderLeaderList(title, leaders) {
+  const items = Array.isArray(leaders) ? leaders : [];
+  return `<section class="leader-block"><h4>${escapeHtml(title)}</h4>${items.length ? `<ul>${items.map((leader) => `<li><strong>${escapeHtml(leader.name)}${leader.code || leader.ticker ? `<small>${escapeHtml(leader.code || leader.ticker)}</small>` : ""}</strong><p>${escapeHtml(leader.why)}</p></li>`).join("")}</ul>` : `<p class="quiet-empty">归档快照未列出。</p>`}</section>`;
+}
+
+function renderSegmentDetail(node) {
+  const assessment = node.assessment || {};
+  const size = assessment.size || {};
+  $("#segment-detail").innerHTML = `<header><span>${escapeHtml(node.chain)} / ${escapeHtml(industryLayerLabels[node.layer] || node.layer)}</span><h3>${escapeHtml(node.name)}</h3><b class="source-only-badge">来源评估</b></header>
+    <div class="industry-detail-metrics">${industryMetric("壁垒", `${Number(node.barrier).toFixed(1)} / 10`, assessment.barrier)}${industryMetric("利润", `${Number(node.profit).toFixed(1)} / 10`, assessment.margin)}${industryMetric("增长强度", Number(node.growth_radius).toFixed(1), assessment.growth)}</div>
+    <section><h4>规模、增速与替代窗口</h4><dl class="assessment-grid"><div><dt>来源细分</dt><dd>${escapeHtml(displayValue(size.source_segment))}</dd></div><div><dt>规模层级</dt><dd>${escapeHtml(displayValue(size.tier))}${Number.isFinite(Number(size.value_yi)) ? ` / ${Number(size.value_yi).toLocaleString("zh-CN")} 亿元` : ""}</dd></div><div><dt>CAGR</dt><dd>${escapeHtml(displayValue(size.cagr))}</dd></div><div><dt>国产替代</dt><dd>${escapeHtml(displayValue(size.substitution))}</dd></div></dl><p>${escapeHtml(displayValue(size.substitution_timing))}</p></section>
+    <section><h4>归档研究判断</h4><p>${escapeHtml(displayValue(assessment.research))}</p><p><strong>三高理由：</strong>${escapeHtml(displayValue(assessment.why))}</p></section>
+    <div class="leader-grid">${renderLeaderList("来源列出的 A 股龙头", assessment.a_leaders)}${renderLeaderList("来源列出的全球龙头", assessment.global_leaders)}</div>
+    <p class="mapping-boundary"><strong>边界：</strong>上述名单只复述该产业段的来源评估，不推断它与 649 家公司清单或 489 份档案之间的映射。</p>`;
+}
+
+function renderMaterialDetail(node) {
+  const finance = node.finance || {};
+  const logic = Array.isArray(node.logic) ? node.logic : [];
+  const business = Array.isArray(node.business) ? node.business : [];
+  $("#material-detail").innerHTML = `<header><span>${escapeHtml(materialClusterLabels[node.cluster] || node.cluster)} / ${escapeHtml(node.segment)}</span><h3>${escapeHtml(node.name)} <small>${escapeHtml(node.code)}</small></h3><b class="source-only-badge">${escapeHtml(node.tier || "归档判断")}</b></header>
+    <div class="industry-detail-metrics">${industryMetric("壁垒", `${Number(node.barrier).toFixed(1)} / 10`)}${industryMetric("利润", `${Number(node.profit).toFixed(1)} / 10`)}${industryMetric("增长强度", Number(node.growth_radius).toFixed(1))}</div>
+    <section><h4>归档财务口径</h4><dl class="assessment-grid"><div><dt>报告期</dt><dd>${escapeHtml(displayValue(finance.period))}</dd></div><div><dt>毛利率</dt><dd>${Number.isFinite(Number(finance.gm)) ? `${Number(finance.gm).toFixed(1)}%` : "暂无"}</dd></div><div><dt>营收同比</dt><dd>${Number.isFinite(Number(finance.rev_yoy)) ? `${Number(finance.rev_yoy).toFixed(1)}%` : "暂无"}</dd></div><div><dt>净利同比</dt><dd>${Number.isFinite(Number(finance.ni_yoy)) ? `${Number(finance.ni_yoy).toFixed(1)}%` : "暂无"}</dd></div></dl></section>
+    <section><h4>来源逻辑</h4>${logic.length ? `<ul class="source-logic">${logic.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : `<p class="quiet-empty">归档快照未提供结构化逻辑。</p>`}<p>${escapeHtml(displayValue(node.summary))}</p></section>
+    ${business.length ? `<section><h4>主营构成</h4><ul class="business-chips">${business.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></section>` : ""}
+    <p class="mapping-boundary"><strong>主要风险：</strong>${escapeHtml(displayValue(node.risk))}</p>
+    ${node.has_dossier ? `<button class="open-dossier" type="button" data-dossier-code="${escapeHtml(node.code)}">打开 ${escapeHtml(node.name)} 档案</button>` : `<p class="dossier-unavailable">该材料节点没有关联档案。</p>`}`;
+  const dossierButton = $("#material-detail [data-dossier-code]");
+  if (dossierButton) dossierButton.addEventListener("click", () => openIndustryDossier(dossierButton.dataset.dossierCode));
+}
+
+function selectIndustryItem(kind, item) {
+  state.industrySelections[kind] = item.id;
+  const prefix = kind === "segments" ? "segment" : "material";
+  $$(`#${prefix}-chart [data-node-id]`).forEach((node) => node.classList.toggle("is-selected", node.dataset.nodeId === item.id));
+  $$(`#${prefix}-list [data-node-id]`).forEach((node) => {
+    node.classList.toggle("is-selected", node.dataset.nodeId === item.id);
+    node.setAttribute("aria-pressed", String(node.dataset.nodeId === item.id));
+  });
+  if (kind === "segments") renderSegmentDetail(item);
+  else renderMaterialDetail(item);
+}
+
+function renderBubbleCompanion(kind, nodes) {
+  const prefix = kind === "segments" ? "segment" : "material";
+  const label = kind === "segments" ? "产业段" : "材料公司";
+  const sorted = [...nodes].sort((a, b) => b.barrier - a.barrier || b.profit - a.profit);
+  $("#" + prefix + "-list").innerHTML = `<div class="companion-head"><strong>${label}键盘列表</strong><span>${nodes.length} 项</span></div><ul>${sorted.map((item) => `<li><button type="button" data-node-id="${escapeHtml(item.id)}" aria-pressed="false"><span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(kind === "segments" ? `${item.chain} / ${industryLayerLabels[item.layer] || item.layer}` : `${item.code} / ${materialClusterLabels[item.cluster] || item.cluster}`)}</small></span><b>壁垒 ${Number(item.barrier).toFixed(1)}<br>利润 ${Number(item.profit).toFixed(1)}</b></button></li>`).join("")}</ul>`;
+  $$("#" + prefix + "-list button").forEach((button) => button.addEventListener("click", () => {
+    const item = nodes.find((node) => node.id === button.dataset.nodeId);
+    if (item) selectIndustryItem(kind, item);
+  }));
+}
+
+function renderBubbleLegend(kind, nodes) {
+  const keyFor = kind === "segments" ? (node) => node.layer : (node) => node.cluster;
+  const labels = kind === "segments" ? industryLayerLabels : materialClusterLabels;
+  const palette = kind === "segments" ? industryLayerColors : materialClusterColors;
+  const keys = [...new Set(nodes.map(keyFor))];
+  const target = kind === "segments" ? $("#segment-legend") : $("#material-legend");
+  target.innerHTML = keys.map((key) => `<span><i style="background:${palette[key] || "#607286"}"></i>${escapeHtml(labels[key] || key)}</span>`).join("");
+}
+
+function renderBubbleChart(kind) {
+  if (!state.industry) return;
+  const isSegment = kind === "segments";
+  const nodes = isSegment ? state.industry.three_high_map.nodes : state.industry.materials_map.nodes;
+  const container = $(isSegment ? "#segment-chart" : "#material-chart");
+  if (!container || container.closest("[hidden]")) return;
+  if (!window.d3) {
+    container.innerHTML = `<div class="industry-state error"><strong>图表组件未加载</strong><span>仍可使用下方键盘列表查看全部节点。</span></div>`;
+    return;
+  }
+  container.innerHTML = "";
+  const width = Math.max(320, container.clientWidth || 760);
+  const height = width < 520 ? 390 : 460;
+  const margin = { top: 24, right: 20, bottom: 54, left: width < 520 ? 44 : 58 };
+  const d3 = window.d3;
+  const x = d3.scaleLinear().domain([0, 10]).range([margin.left, width - margin.right]);
+  const y = d3.scaleLinear().domain([0, 10]).range([height - margin.bottom, margin.top]);
+  const radiusExtent = d3.extent(nodes, (item) => Number(item.growth_radius));
+  const radius = d3.scaleSqrt().domain(radiusExtent[0] === radiusExtent[1] ? [0, radiusExtent[1] || 1] : radiusExtent).range(width < 520 ? [6, 15] : [7, 22]);
+  const colorKey = isSegment ? (item) => item.layer : (item) => item.cluster;
+  const palette = isSegment ? industryLayerColors : materialClusterColors;
+  const svg = d3.select(container).append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("role", "img").attr("aria-label", isSegment ? "产业段壁垒利润增长气泡图" : "材料公司壁垒利润增长气泡图");
+  svg.append("g").attr("class", "bubble-grid").selectAll("line.horizontal").data([2, 4, 6, 8]).join("line").attr("x1", margin.left).attr("x2", width - margin.right).attr("y1", y).attr("y2", y);
+  svg.append("g").attr("class", "bubble-grid").selectAll("line.vertical").data([2, 4, 6, 8]).join("line").attr("x1", x).attr("x2", x).attr("y1", margin.top).attr("y2", height - margin.bottom);
+  svg.append("g").attr("class", "bubble-axis").attr("transform", `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x).ticks(5));
+  svg.append("g").attr("class", "bubble-axis").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(5));
+  svg.append("text").attr("class", "bubble-axis-title").attr("x", (margin.left + width - margin.right) / 2).attr("y", height - 10).attr("text-anchor", "middle").text("壁垒评分");
+  svg.append("text").attr("class", "bubble-axis-title").attr("transform", "rotate(-90)").attr("x", -(margin.top + height - margin.bottom) / 2).attr("y", 13).attr("text-anchor", "middle").text("利润厚度");
+  const tooltip = document.createElement("div");
+  tooltip.className = "bubble-tooltip";
+  tooltip.hidden = true;
+  container.append(tooltip);
+  const showTooltip = (event, item) => {
+    const pointer = event.type === "focus"
+      ? [Number(event.currentTarget.getAttribute("cx")), Number(event.currentTarget.getAttribute("cy"))]
+      : d3.pointer(event, container);
+    const [px, py] = pointer;
+    tooltip.innerHTML = `<strong>${escapeHtml(item.name)}</strong><span>壁垒 ${Number(item.barrier).toFixed(1)} / 利润 ${Number(item.profit).toFixed(1)} / 增长 ${Number(item.growth_radius).toFixed(1)}</span>`;
+    tooltip.style.left = `${Math.min(width - 210, Math.max(8, px + 12))}px`;
+    tooltip.style.top = `${Math.max(8, py - 60)}px`;
+    tooltip.hidden = false;
+  };
+  const hideTooltip = () => { tooltip.hidden = true; };
+  svg.append("g").attr("class", "bubble-nodes").selectAll("circle").data(nodes, (item) => item.id).join("circle")
+    .attr("cx", (item) => x(item.barrier)).attr("cy", (item) => y(item.profit)).attr("r", (item) => radius(item.growth_radius))
+    .attr("fill", (item) => palette[colorKey(item)] || "#607286").attr("data-node-id", (item) => item.id)
+    .attr("tabindex", 0).attr("role", "button").attr("aria-label", (item) => `${item.name}，壁垒 ${Number(item.barrier).toFixed(1)}，利润 ${Number(item.profit).toFixed(1)}，增长强度 ${Number(item.growth_radius).toFixed(1)}`)
+    .classed("is-three-high", (item) => Boolean(item.sangao)).classed("is-selected", (item) => state.industrySelections[kind] === item.id)
+    .on("mouseenter focus", showTooltip).on("mousemove", showTooltip).on("mouseleave blur", hideTooltip)
+    .on("click", (_, item) => selectIndustryItem(kind, item)).on("keydown", (event, item) => { if (["Enter", " "].includes(event.key)) { event.preventDefault(); selectIndustryItem(kind, item); } });
+  if (width >= 640) {
+    const labels = [...nodes].sort((a, b) => b.growth_radius - a.growth_radius).slice(0, isSegment ? 12 : 10);
+    svg.append("g").attr("class", "bubble-labels").selectAll("text").data(labels).join("text").attr("x", (item) => x(item.barrier)).attr("y", (item) => y(item.profit) - radius(item.growth_radius) - 4).attr("text-anchor", "middle").text((item) => item.name.length > 13 ? `${item.name.slice(0, 12)}…` : item.name);
+  }
+}
+
+function renderDossierIndex() {
+  if (!state.industry) return;
+  const query = state.dossierQuery.trim().toLocaleLowerCase("zh-CN");
+  const records = state.industry.dossiers.filter((item) => {
+    if (!query) return true;
+    const haystack = [item.name, item.code, item.layer, item.segment, item.summary, ...(item.chains || [])].join(" ").toLocaleLowerCase("zh-CN");
+    return haystack.includes(query);
+  }).sort((a, b) => Number(b.score || 0) - Number(a.score || 0) || String(a.code).localeCompare(String(b.code)));
+  state.dossierResults = records;
+  $("#dossier-count").textContent = query ? `找到 ${records.length} / ${state.industry.dossiers.length} 家公司` : `全部 ${records.length} 家公司`;
+  $("#dossier-list").innerHTML = records.length ? records.map((item) => `<button type="button" data-dossier-code="${escapeHtml(item.code)}" class="${item.code === state.dossierCode ? "is-active" : ""}"><span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.code)}${item.layer ? ` / ${escapeHtml(item.layer)}` : ""}</small></span><b>${Number.isFinite(Number(item.score)) ? Number(item.score).toFixed(0) : "暂无"}</b><p>${escapeHtml(displayValue(item.summary, "暂无摘要"))}</p></button>`).join("") : `<div class="dossier-empty"><strong>没有匹配的公司</strong><p>尝试缩短关键词，或改用公司代码、产业链和层级搜索。</p></div>`;
+  $$("#dossier-list [data-dossier-code]").forEach((button) => button.addEventListener("click", () => openIndustryDossier(button.dataset.dossierCode)));
+}
+
+async function openIndustryDossier(rawCode, { syncHistory = true } = {}) {
+  const code = safeDossierCode(rawCode);
+  if (!code) return;
+  setIndustryTab("dossiers");
+  state.dossierCode = code;
+  renderDossierIndex();
+  $("#dossier-reader").innerHTML = `<div class="dossier-reader-state"><strong>正在读取 ${escapeHtml(code)} 档案</strong><span>正文按需从独立接口加载。</span></div>`;
+  try {
+    const payload = await fetchJson(`/api/industry-intelligence/dossiers/${encodeURIComponent(code)}`);
+    const dossier = payload.dossier;
+    const records = state.dossierResults.length ? state.dossierResults : state.industry.dossiers;
+    const position = records.findIndex((item) => item.code === code);
+    const previous = position > 0 ? records[position - 1] : null;
+    const next = position >= 0 && position < records.length - 1 ? records[position + 1] : null;
+    const flags = Array.isArray(dossier.flags) ? dossier.flags : [];
+    $("#dossier-reader").innerHTML = `<nav class="dossier-reader-nav" aria-label="档案翻页"><button type="button" data-dossier-prev ${previous ? "" : "disabled"}>上一家${previous ? `：${escapeHtml(previous.name)}` : ""}</button><span>${position >= 0 ? `${position + 1} / ${records.length}` : escapeHtml(code)}</span><button type="button" data-dossier-next ${next ? "" : "disabled"}>下一家${next ? `：${escapeHtml(next.name)}` : ""}</button></nav>
+      <header class="dossier-reader-head"><div><span>${escapeHtml((dossier.chains || []).join(" / ") || dossier.segment || "未标注产业链")}</span><h2>${escapeHtml(dossier.name)}</h2><p>${escapeHtml(dossier.code)}${dossier.layer ? ` / ${escapeHtml(dossier.layer)}` : ""}${dossier.segment ? ` / ${escapeHtml(dossier.segment)}` : ""}</p></div><b>归档判断</b></header>
+      <section class="archived-judgment" aria-label="归档判断摘要">${industryMetric("综合分", Number.isFinite(Number(dossier.score)) ? Number(dossier.score).toFixed(0) : "暂无")}${industryMetric("机会分", Number.isFinite(Number(dossier.opportunity)) ? Number(dossier.opportunity).toFixed(0) : "暂无")}${industryMetric("更新日期", dossier.updated)}${industryMetric("风险旗", flags.length ? flags.join("、") : "未标注")}</section>
+      <p class="dossier-summary">${escapeHtml(displayValue(dossier.summary))}</p>
+      <div class="dossier-markdown">${renderSafeMarkdown(dossier.md)}</div>
+      <p class="mapping-boundary"><strong>归档边界：</strong>${escapeHtml(payload.source.truth_boundary)} 更新时间与评分来自来源快照，不代表本产品完成了独立证据复核。</p>`;
+    const previousButton = $("#dossier-reader [data-dossier-prev]");
+    const nextButton = $("#dossier-reader [data-dossier-next]");
+    if (previous) previousButton.addEventListener("click", () => openIndustryDossier(previous.code));
+    if (next) nextButton.addEventListener("click", () => openIndustryDossier(next.code));
+    if (syncHistory) {
+      const url = new URL(location.href);
+      url.searchParams.delete("report");
+      url.searchParams.set("dossier", code);
+      history.replaceState({ dossier: code }, "", url);
+    }
+  } catch (error) {
+    $("#dossier-reader").innerHTML = `<div class="dossier-reader-state error"><strong>${escapeHtml(code)} 档案无法读取</strong><span>${escapeHtml(error.message)}</span><button type="button" data-dossier-retry>重试</button></div>`;
+    $("#dossier-reader [data-dossier-retry]").addEventListener("click", () => openIndustryDossier(code, { syncHistory: false }));
+  }
+}
+
+function setIndustryTab(tab) {
+  if (!(["segments", "materials", "dossiers"].includes(tab))) return;
+  state.industryTab = tab;
+  $$('[data-industry-tab]').forEach((button) => {
+    const active = button.dataset.industryTab === tab;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+  $$(".industry-panel").forEach((panel) => {
+    const active = panel.id === `industry-panel-${tab}`;
+    panel.hidden = !active;
+    panel.classList.toggle("is-active", active);
+  });
+  if (state.industry && tab !== "dossiers") requestAnimationFrame(() => renderBubbleChart(tab));
+}
+
+function renderIndustry(payload) {
+  state.industry = payload;
+  const source = payload.source || {};
+  const summary = payload.summary || {};
+  $("#industry-receipt").innerHTML = `<span>归档快照，不是实时数据</span><strong>资料截至 ${escapeHtml(displayValue(source.archive_as_of))}</strong><small>页面收录 ${summary.map_node_count} 个产业段、94 家材料公司、${summary.dossier_count} 份档案</small>`;
+  $("#segment-methodology").textContent = payload.three_high_map.methodology;
+  $("#material-methodology").textContent = `${payload.materials_map.methodology} 归档更新：${payload.materials_map.updated}。`;
+  $("#industry-truth-boundary").textContent = source.truth_boundary;
+  $("#industry-source-meta").innerHTML = `<div><dt>来源标题</dt><dd>${escapeHtml(displayValue(source.title))}</dd></div><div><dt>归档资料截止</dt><dd>${escapeHtml(displayValue(source.archive_as_of))}</dd></div><div><dt>产品收录日期</dt><dd>${escapeHtml(displayValue(source.captured_at))}</dd></div><div><dt>来源哈希</dt><dd>${escapeHtml(displayValue(source.source_sha256))}</dd></div>`;
+  renderBubbleLegend("segments", payload.three_high_map.nodes);
+  renderBubbleLegend("materials", payload.materials_map.nodes);
+  renderBubbleCompanion("segments", payload.three_high_map.nodes);
+  renderBubbleCompanion("materials", payload.materials_map.nodes);
+  const strongest = (nodes) => [...nodes].sort((a, b) =>
+    (Number(b.barrier) + Number(b.profit) + Number(b.growth_radius) / 10)
+    - (Number(a.barrier) + Number(a.profit) + Number(a.growth_radius) / 10))[0];
+  const defaultSegment = payload.three_high_map.nodes.find((item) => item.id === state.industrySelections.segments) || strongest(payload.three_high_map.nodes);
+  const defaultMaterial = payload.materials_map.nodes.find((item) => item.id === state.industrySelections.materials) || strongest(payload.materials_map.nodes);
+  if (defaultSegment) selectIndustryItem("segments", defaultSegment);
+  if (defaultMaterial) selectIndustryItem("materials", defaultMaterial);
+  renderDossierIndex();
+  setIndustryTab(state.industryTab);
+  if (!state.industryResizeObserver && window.ResizeObserver) {
+    state.industryResizeObserver = new ResizeObserver(() => {
+      if (state.activeView === "industry" && state.industryTab !== "dossiers") renderBubbleChart(state.industryTab);
+    });
+    state.industryResizeObserver.observe($("#view-industry"));
+  }
+}
+
+async function loadIndustry({ force = false } = {}) {
+  if (state.industry && !force) return state.industry;
+  if (state.industryLoading && state.industryPromise) return state.industryPromise;
+  state.industryLoading = true;
+  state.industryPromise = (async () => {
+    $("#industry-loading").hidden = false;
+    $("#industry-error").hidden = true;
+    $("#industry-content").hidden = true;
+    try {
+      const payload = await fetchJson("/api/industry-intelligence");
+      if (payload.schema_version !== "industry-intelligence-snapshot-v1") throw new Error("未知产业快照合同");
+      renderIndustry(payload);
+      $("#industry-loading").hidden = true;
+      $("#industry-content").hidden = false;
+      requestAnimationFrame(() => { if (state.industryTab !== "dossiers") renderBubbleChart(state.industryTab); });
+      return payload;
+    } catch (error) {
+      $("#industry-loading").hidden = true;
+      $("#industry-error").hidden = false;
+      $("#industry-error-copy").textContent = `已保留其他研究页面。错误：${error.message}`;
+      return null;
+    } finally {
+      state.industryLoading = false;
+      state.industryPromise = null;
+    }
+  })();
+  return state.industryPromise;
+}
+
 function setView(view) {
   state.activeView = view;
   $$(".view").forEach((section) => section.classList.toggle("is-active", section.id === `view-${view}`));
   $$(".nav-item").forEach((button) => button.classList.toggle("is-active", button.dataset.view === view));
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (view === "industry") loadIndustry().then((payload) => {
+    const dossier = safeDossierCode(new URLSearchParams(location.search).get("dossier"));
+    if (payload && dossier && dossier !== state.dossierCode) openIndustryDossier(dossier, { syncHistory: false });
+  });
+  window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
 }
 
 async function triggerRefresh() {
@@ -897,10 +1226,16 @@ $("#drawer-backdrop").addEventListener("click", closeDrawer);
 $("#report-close").addEventListener("click", closeResearchReport);
 $("#refresh-button").addEventListener("click", triggerRefresh);
 $("#retry-button").addEventListener("click", () => { $("#error-state").hidden = true; $("#loading").hidden = false; loadDashboard(); });
+$("#auth-code-tab").addEventListener("click", () => showAuth("code"));
 $("#auth-login-tab").addEventListener("click", () => showAuth("login"));
-$("#auth-signup-tab").addEventListener("click", () => showAuth("signup"));
+$("#access-code-form").addEventListener("submit", (event) => { event.preventDefault(); submitAuth(event.currentTarget, "/api/auth/access-code"); });
 $("#login-form").addEventListener("submit", (event) => { event.preventDefault(); submitAuth(event.currentTarget, "/api/auth/login"); });
-$("#signup-form").addEventListener("submit", (event) => { event.preventDefault(); submitAuth(event.currentTarget, "/api/auth/signup"); });
+$$('[data-industry-tab]').forEach((button) => button.addEventListener("click", () => setIndustryTab(button.dataset.industryTab)));
+$("#industry-retry").addEventListener("click", () => loadIndustry({ force: true }));
+$("#dossier-search").addEventListener("input", (event) => {
+  state.dossierQuery = event.currentTarget.value;
+  renderDossierIndex();
+});
 $("#feedback-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.currentTarget;
@@ -931,7 +1266,7 @@ $("#invite-form").addEventListener("submit", async (event) => {
     data.max_uses = 1;
     data.valid_days = Number(data.valid_days);
     const invite = await fetchJson("/api/invites", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-    $("#invite-output").textContent = `仅显示一次：${invite.code}`;
+    $("#invite-output").textContent = `一次性验证码（仅显示一次）：${invite.code}`;
   } catch (error) {
     $("#invite-output").textContent = `生成失败：${error.message}`;
   } finally {
@@ -999,7 +1334,7 @@ $("#logout-button").addEventListener("click", async () => {
   state.auth = { auth_required: true, member: null, csrf_token: null };
   state.data = null;
   $("#app").hidden = true;
-  showAuth("login");
+  showAuth("code");
 });
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
@@ -1008,9 +1343,16 @@ document.addEventListener("keydown", (event) => {
 });
 window.addEventListener("popstate", () => {
   const reportTicker = new URLSearchParams(location.search).get("report");
+  const dossierCode = safeDossierCode(new URLSearchParams(location.search).get("dossier"));
   state.reportPushed = false;
   if (reportTicker) openResearchReport(reportTicker, { syncHistory: false });
-  else setReportVisibility(false);
+  else {
+    setReportVisibility(false);
+    if (dossierCode) {
+      setView("industry");
+      loadIndustry().then((payload) => { if (payload) openIndustryDossier(dossierCode, { syncHistory: false }); });
+    }
+  }
 });
 (async function bootstrap() {
   try {
@@ -1021,7 +1363,13 @@ window.addEventListener("popstate", () => {
     }
     await loadDashboard();
     const reportTicker = new URLSearchParams(location.search).get("report");
+    const dossierCode = safeDossierCode(new URLSearchParams(location.search).get("dossier"));
     if (reportTicker) await openResearchReport(reportTicker, { syncHistory: false });
+    else if (dossierCode) {
+      setView("industry");
+      const industry = await loadIndustry();
+      if (industry) await openIndustryDossier(dossierCode, { syncHistory: false });
+    }
   } catch (error) {
     $("#loading").hidden = true;
     $("#error-state").hidden = false;

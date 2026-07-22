@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0b1f33">
   <title>Park Equity Research · Private Preview</title>
   <link rel="stylesheet" href="/styles.css">
@@ -11,21 +12,19 @@
   <section id="auth-gate" class="auth-gate" hidden aria-labelledby="auth-title">
     <div class="auth-panel">
       <div class="auth-brand"><span class="brand-mark">P</span><div><strong>Park 投委会</strong><small>PRIVATE RESEARCH ACCESS</small></div></div>
-      <p class="eyebrow">PRIVATE PREVIEW / INVITE ONLY</p>
-      <h1 id="auth-title">登录你的研究席位</h1>
-      <p class="auth-intro">受邀成员可以查看本周模型组合；研究会员可继续阅读公司深研。预览版不收款、不连接券商，也不代表你的真实持仓。</p>
-      <div class="auth-tabs" role="tablist"><button id="auth-login-tab" class="is-active" type="button">登录</button><button id="auth-signup-tab" type="button">邀请码注册</button></div>
-      <form id="login-form" class="auth-form">
+      <p class="eyebrow">PRIVATE RESEARCH ACCESS</p>
+      <h1 id="auth-title">输入一次性访问码</h1>
+      <p class="auth-intro">访问码仅可使用一次。进入后可查看归档产业图谱与研究面板；内容不是实时行情，也不构成投资建议。</p>
+      <div class="auth-tabs" role="tablist" aria-label="登录方式"><button id="auth-code-tab" class="is-active" type="button" role="tab" aria-selected="true" aria-controls="access-code-form">一次性访问码</button><button id="auth-login-tab" type="button" role="tab" aria-selected="false" aria-controls="login-form">成员登录</button></div>
+      <form id="access-code-form" class="auth-form">
+        <label>一次性访问码<input name="code" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" required></label>
+        <p class="auth-helper">访问码兑换成功后立即失效，无需提供邮箱或姓名。</p>
+        <button class="primary-button" type="submit">进入研究面板</button>
+      </form>
+      <form id="login-form" class="auth-form" hidden>
         <label>邮箱<input name="email" type="email" autocomplete="email" required></label>
         <label>密码<input name="password" type="password" autocomplete="current-password" minlength="12" required></label>
         <button class="primary-button" type="submit">进入投委会</button>
-      </form>
-      <form id="signup-form" class="auth-form" hidden>
-        <label>邀请码<input name="invite_code" autocomplete="one-time-code" required></label>
-        <label>你的名字<input name="display_name" autocomplete="name" required></label>
-        <label>邮箱<input name="email" type="email" autocomplete="email" required></label>
-        <label>设置密码<input name="password" type="password" autocomplete="new-password" minlength="12" required></label>
-        <button class="primary-button" type="submit">领取研究席位</button>
       </form>
       <p id="auth-error" class="auth-error" role="alert"></p>
     </div>
@@ -39,6 +38,7 @@
       </a>
       <nav class="primary-nav" aria-label="产品导航">
         <button class="nav-item is-active" data-view="decision">本周决策</button>
+        <button class="nav-item" data-view="industry">产业图谱</button>
         <button class="nav-item" data-view="performance">组合与业绩</button>
         <button class="nav-item" data-view="history">调整记录</button>
       </nav>
@@ -150,10 +150,10 @@
               <div class="section-heading"><div><p class="eyebrow">OWNER CONTROL</p><h2>成员、账单与反馈</h2></div><div class="owner-export-links"><a href="/api/billing/export" class="owner-export">导出账单</a><a href="/api/feedback/export" class="owner-export">导出反馈</a></div></div>
               <div class="owner-grid">
                 <form id="invite-form" class="owner-form">
-                  <h3>创建一次性邀请</h3>
+                  <h3>创建一次性验证码</h3>
                   <label>席位<select name="tier"><option value="preview">Preview</option><option value="member">Member</option></select></label>
                   <label>有效天数<input type="number" name="valid_days" min="1" max="90" value="7"></label>
-                  <button type="submit">生成邀请码</button>
+                  <button type="submit">生成一次性验证码</button>
                   <output id="invite-output"></output>
                 </form>
                 <div><h3>成员</h3><div id="owner-members" class="owner-list"></div></div>
@@ -311,6 +311,55 @@
           <div class="page-heading"><p class="eyebrow">DECISION TRAIL</p><h1 id="history-title">调整记录</h1><p>每次变化都保留当时的快照、动作和理由，不回写历史。</p></div>
           <section class="timeline-card" id="timeline-list"></section>
         </section>
+
+        <section id="view-industry" class="view industry-view" aria-labelledby="industry-title">
+          <header class="industry-hero">
+            <div>
+              <p class="eyebrow">INDUSTRY INTELLIGENCE</p>
+              <h1 id="industry-title">产业图谱</h1>
+              <p>从归档研究快照比较产业壁垒、利润厚度与增长强度，再进入公司档案核对原始判断。</p>
+            </div>
+            <aside class="archive-receipt" id="industry-receipt" aria-live="polite">
+              <span>归档快照</span><strong>等待读取</strong><small>仅在打开本页时加载</small>
+            </aside>
+          </header>
+          <div class="industry-tabs" role="tablist" aria-label="产业图谱视图">
+            <button class="is-active" type="button" role="tab" aria-selected="true" aria-controls="industry-panel-segments" data-industry-tab="segments">产业段三高图</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="industry-panel-materials" data-industry-tab="materials">材料公司三高图</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="industry-panel-dossiers" data-industry-tab="dossiers">公司档案库</button>
+          </div>
+          <div id="industry-loading" class="industry-state" role="status"><strong>正在读取归档产业快照</strong><span>数据不会在其他主导航页面预加载。</span></div>
+          <div id="industry-error" class="industry-state error" role="alert" hidden><strong>产业快照暂不可用</strong><span id="industry-error-copy"></span><button id="industry-retry" type="button">重新读取</button></div>
+          <div id="industry-content" hidden>
+            <section id="industry-panel-segments" class="industry-panel is-active" role="tabpanel">
+              <div class="industry-panel-head"><div><h2>38 个产业段三高气泡图</h2><p>坐标和气泡只复述归档评分。选择节点后核对来源判断与其列出的龙头。</p></div><div id="segment-legend" class="bubble-legend" aria-label="产业层级图例"></div></div>
+              <p id="segment-methodology" class="industry-method"></p>
+              <div class="industry-viz-layout">
+                <div><div id="segment-chart" class="bubble-chart" aria-label="产业段三高气泡图"></div><div id="segment-list" class="chart-companion" aria-label="产业段气泡图键盘列表"></div></div>
+                <aside id="segment-detail" class="industry-detail"><div class="industry-detail-empty">选择气泡或列表项，查看该产业段的归档来源判断。</div></aside>
+              </div>
+            </section>
+            <section id="industry-panel-materials" class="industry-panel" role="tabpanel" hidden>
+              <div class="industry-panel-head"><div><h2>94 家材料公司三高气泡图</h2><p>按归档产业集群着色。坐标不使用市值或 PE，档案链接仅在快照明确标注时出现。</p></div><div id="material-legend" class="bubble-legend" aria-label="材料集群图例"></div></div>
+              <p id="material-methodology" class="industry-method"></p>
+              <div class="industry-viz-layout">
+                <div><div id="material-chart" class="bubble-chart" aria-label="材料公司三高气泡图"></div><div id="material-list" class="chart-companion" aria-label="材料公司气泡图键盘列表"></div></div>
+                <aside id="material-detail" class="industry-detail"><div class="industry-detail-empty">选择气泡或列表项，查看公司的归档材料判断。</div></aside>
+              </div>
+            </section>
+            <section id="industry-panel-dossiers" class="industry-panel" role="tabpanel" hidden>
+              <div class="dossier-toolbar">
+                <div><h2>489 家公司档案库</h2><p>搜索产业链、层级、公司名、代码或摘要。档案正文按需读取。</p></div>
+                <label for="dossier-search">搜索档案<input id="dossier-search" type="search" autocomplete="off" placeholder="例如：存储、上游、300223"></label>
+              </div>
+              <div class="dossier-layout">
+                <aside class="dossier-index"><p id="dossier-count" role="status">等待索引</p><div id="dossier-list" class="dossier-list"></div></aside>
+                <article id="dossier-reader" class="dossier-reader"><div class="industry-detail-empty">从左侧选择一家公司，正文会从独立档案接口读取。</div></article>
+              </div>
+            </section>
+            <footer class="industry-boundary"><strong>研究边界</strong><p id="industry-truth-boundary"></p><details><summary>来源与快照身份</summary><dl id="industry-source-meta"></dl></details></footer>
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -329,6 +378,7 @@
     <div id="report-content" class="report-content"></div>
   </section>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/vendor/d3.v7.min.js" defer></script>
   <script src="/app.js" defer></script>
 </body>
 </html>
