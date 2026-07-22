@@ -1,0 +1,82 @@
+{
+  "contract": "L2-A4 A-Share Market, Identity & PIT Fundamentals",
+  "generated_at": "2026-07-22T09:03:08Z",
+  "issue": "https://github.com/zinan92/equity-research/issues/78",
+  "mode": "live_provider_probe_plus_fixture_tests",
+  "samples": [
+    {
+      "ticker": "600519.SH",
+      "normalized_ticker": "600519.SH",
+      "name": "贵州茅台",
+      "last_price": 1305.0,
+      "daily_bar_rows": 6,
+      "fundamental_periods": 2,
+      "latest_report_period": "2026-03-31",
+      "latest_period_field_count": 29,
+      "publishable": true,
+      "accepted_records": {
+        "quote": 9,
+        "daily_bars": 30,
+        "fundamentals": 18,
+        "balance_sheet": 14,
+        "income_statement": 12,
+        "cash_flow": 8
+      },
+      "raw_hashes": {
+        "quote": "6c4dd67ebf515bb1c648af33e26e1dc562000d13b39f5d0e1c1ff681837fd144",
+        "daily_bars": "46556343db6184d27c662492c8d908fda4e5a74213850454c9a8c922257d5eca",
+        "fundamentals": "235f88b960821cbe2b6518a25984b3809952bbaa89b696f3e58d57d4930b88fe",
+        "balance_sheet": "96d69bb8a63d12201ba934ec7bf0856a12b51b7e02dbd6b012efa22e4d81cc4c",
+        "income_statement": "50a561baa7236a87f93d11fe2cff0c22420e9f7944ad53fc65bf0e5842130a50",
+        "cash_flow": "b2d1b375429227e26aaa36275f768d13cb5c1ba8890f9973804480fda8fc293e"
+      }
+    },
+    {
+      "ticker": "300750.SZ",
+      "normalized_ticker": "300750.SZ",
+      "name": "宁德时代",
+      "last_price": 372.26,
+      "daily_bar_rows": 6,
+      "fundamental_periods": 2,
+      "latest_report_period": "2026-03-31",
+      "latest_period_field_count": 29,
+      "publishable": true,
+      "accepted_records": {
+        "quote": 9,
+        "daily_bars": 30,
+        "fundamentals": 18,
+        "balance_sheet": 14,
+        "income_statement": 12,
+        "cash_flow": 8
+      },
+      "raw_hashes": {
+        "quote": "e5b95bc1147e69a2784bbc0b1456deb5c097c792fba88201ace7aa4d05b6e58c",
+        "daily_bars": "2028dca79392c10881a9905acba887c51d58d93d4ed284f63d42d68eb32653fa",
+        "fundamentals": "1dfdab44c3a215b91a1445442b8d994bd03a0506034702cb24bd205061f0cc89",
+        "balance_sheet": "a79d278a6fc2dd0225398dbba1b1a8f1ef842a1a26551f79e7c10b6ba6d7a83a",
+        "income_statement": "c7869ba1d8652562213b5a9dff3e1e31113b35fffb28187e6bfa7d516ad9d387",
+        "cash_flow": "f7c6002848df4fa866938a850e48d120e8f5e399e42ed45d2ec18ded25923c46"
+      }
+    }
+  ],
+  "verification": [
+    {
+      "command": "python3 -m pytest product/tests/test_ashare_data_packet.py product/tests/test_ingestion_core.py product/tests/test_data_contract.py -q",
+      "result": "47 passed, 17 subtests passed"
+    },
+    {
+      "command": "python3 -m py_compile product/data_core/ashare.py product/data_core/__init__.py product/tests/test_ashare_data_packet.py",
+      "result": "passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s product/tests -q",
+      "result": "277 tests completed successfully; existing sqlite ResourceWarning messages were non-fatal"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "adversarial_review": "P0=0, P1=0 after provider-row identity and packet completeness attack cases",
+  "truth_boundary": "Prices and provider payloads are a current point-in-time live probe, not historical intraday PIT replay or a frozen production snapshot. Full-market backfill and production Supabase deployment remain out of scope."
+}

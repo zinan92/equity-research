@@ -616,3 +616,29 @@
 - object storage 上传发生在 DB transaction 前，DB 失败可能留下 content-addressed orphan blob；该 orphan 可重试、可去重，风险低于 DB 先写后找不到 raw bytes。
 - 同一 raw bytes 可能产生多个 domain records；capture 不能被强行绑定单域，也不能用 `(run_id, raw_hash)` 吞掉独立 fetch 证据。
 - A3 只交付 runtime 和 sink，不声称已有真实 provider coverage、Supabase project、backup/restore 或全市场 ticker 覆盖。
+
+## 2026-07-22 · L2-A4 A-Share Market, Identity & PIT Fundamentals
+
+- Objective：用户输入受支持 A 股 ticker 后，摘要和研报管线获得真实、标准化、可追溯的身份、行情、日线和时点财务数据包，不再依赖 demo placeholder。
+- User outcome：`600519.SH` 与 `300750.SZ` 的真实探测均能返回公司身份、现价、前复权日线、财务摘要、资产负债表、利润表和现金流量表；任何必需源缺失都会明确降级且不可发布。
+- Reuse：复用 A3 `IngestionRuntime`、A1 canonical record contract、A2 authority sink 边界，以及既有 `real_pipeline.py` 已验证的腾讯/东财数据源；只新增 provider adapter 与 typed packet glue code。
+- Decision：ticker 先规范化为 `CN:{code}.{exchange}`；无后缀但能按板块唯一推断时接受，冲突或歧义输入抛出 typed error。
+- Decision：腾讯 quote 与 qfq daily bars 分别独立采集；东财财务摘要、资产负债表、利润表和现金流量表各自独立 raw capture，保留 source URL、raw hash、known_at 与 provider notice date。
+- Decision：一次 packet refresh 的六个 provider fetch 并发执行，并使用唯一 request ID；重复刷新不会因为固定 idempotency key 覆盖上一轮 ingestion run。
+- Decision：只有六类 live outcome 全部通过质量门才允许 `packet.publishable=true`。fixture、cache fallback 或任何 statement 缺失都只返回 degraded/gap，不补 sample value。
+- Verification：专项与上下游测试 47 passed + 17 subtests；277 项产品全量测试通过；真实 SH/SZ 探测均六源 success、无 gap、latest report period 为 2026-03-31；Python compile 与 diff check 通过；对抗终审 P0=0/P1=0。
+- Boundary：A4 未进行全市场历史回填，未创建真实 Supabase project，也未把 packet 接入最终 30–50 页 report compiler。
+
+### Gotchas · L2-A4
+
+- 东财 main finance highlights 不能替代三张财务报表；验收必须单独采集 balance/income/cash-flow，而不是把 ROE、利润和经营现金流/股拼成“完整财务”。
+- provider `NOTICE_DATE` 是 point-in-time 边界；只按 `REPORT_DATE` 排序会把尚未披露的财务放进历史回放。
+- packet API 若复用固定 request ID，Supabase sink 的 idempotent run ID 会吞掉后续刷新；每次逻辑刷新必须产生新 request identity，cache key 仍只由 source/entity/parameters 决定。
+- 腾讯 K 线 `limit=5` 的实测响应可能包含 6 个交易日；下游应按返回日期排序和自身窗口裁剪，不能假设 provider 返回行数严格等于请求值。
+- 交易日当天收盘前返回的是未收盘 bar；`observed_at` 必须取 provider close time 与 fetch known_at 的较早值，不能写一个未来的 15:00。
+- 股票代码与交易所后缀必须交叉验证；`300750.SH`、沪市 B 股 `900xxx` 等不能因为格式像 ticker 就进入 A 股 canonical identity。
+- 身份源没有行业字段时必须保留 `null`；不能用 ticker 前缀猜行业或把旧 demo 分类冒充 source-backed identity。
+- provider filter 不是身份保证；每一条东财财务 row 都必须用 `SECUCODE/SECURITY_CODE` 与请求 ticker 交叉验证，错配时整批 fail closed。
+- 六个 adapter outcome success 仍不是 packet 可发布证明；必须再检查 typed identity、quote、完整 OHLCV 与同一最新报告期的最小三表字段集。
+- 本轮真实探测证明当前网络与两个样本可用，不等于全市场 SLA；批量覆盖率、重试预算与 provider 备源属于后续 milestone。
+- `NOTICE_DATE` date-only 足以表达当前 capture 的披露先后，但不支持历史 intraday cutoff replay；该能力与真实 A2 Supabase 落库 replay 留给后续 milestone。

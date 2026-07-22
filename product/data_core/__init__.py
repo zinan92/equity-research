@@ -14,6 +14,28 @@ from .contracts import (
     validate_adapter_output,
 )
 from .authority_sink import AuthoritySinkError, ObjectStore, SupabaseAuthoritySink
+from .ashare import (
+    AShareDataGap,
+    AShareDataPacket,
+    AShareInstrument,
+    AShareTickerError,
+    EASTMONEY_BALANCE_SOURCE,
+    EASTMONEY_CASHFLOW_SOURCE,
+    EASTMONEY_FUNDAMENTAL_SOURCE,
+    EASTMONEY_INCOME_SOURCE,
+    EastmoneyFundamentalAdapter,
+    EastmoneyStatementAdapter,
+    MemoryAuthoritySink,
+    TENCENT_KLINE_SOURCE,
+    TENCENT_QUOTE_SOURCE,
+    TencentDailyBarAdapter,
+    TencentQuoteAdapter,
+    build_ashare_registry,
+    build_ashare_runtime,
+    collect_ashare_packet,
+    collect_ashare_packet_async,
+    normalize_ashare_ticker,
+)
 from .ingestion import (
     AdapterContractError,
     AdapterRegistry,
@@ -63,4 +85,11 @@ __all__ = [
     "IngestionOutcome", "IngestionRuntime", "ObjectStore", "QualityPolicy", "SourceAdapter",
     "SourceChoice", "SQLiteFetchCache", "SupabaseAuthoritySink", "ValidatedFetch",
     "build_raw_capture", "evaluate_records", "validate_fetched_payload",
+    "AShareDataGap", "AShareDataPacket", "AShareInstrument", "AShareTickerError",
+    "EASTMONEY_BALANCE_SOURCE", "EASTMONEY_CASHFLOW_SOURCE",
+    "EASTMONEY_FUNDAMENTAL_SOURCE", "EASTMONEY_INCOME_SOURCE",
+    "EastmoneyFundamentalAdapter", "EastmoneyStatementAdapter", "MemoryAuthoritySink",
+    "TENCENT_KLINE_SOURCE", "TENCENT_QUOTE_SOURCE", "TencentDailyBarAdapter",
+    "TencentQuoteAdapter", "build_ashare_registry", "build_ashare_runtime",
+    "collect_ashare_packet", "collect_ashare_packet_async", "normalize_ashare_ticker",
 ]
