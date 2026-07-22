@@ -92,6 +92,23 @@ from .snapshot_orchestration import (
     detect_canonical_gaps,
     snapshot_audit,
 )
+from .official_filings import (
+    BSE_FILING_DOCUMENT_SOURCE,
+    CNINFO_FILING_DOCUMENT_SOURCE,
+    CNINFO_FILING_INDEX_SOURCE,
+    SSE_FILING_DOCUMENT_SOURCE,
+    SZSE_FILING_DOCUMENT_SOURCE,
+    CninfoFilingIndexAdapter,
+    HttpResponse,
+    OfficialFilingBatch,
+    OfficialFilingDocumentAdapter,
+    build_official_filing_registry,
+    build_official_filing_runtime,
+    classify_filing_title,
+    sync_cninfo_filings,
+    sync_cninfo_filings_async,
+    validate_official_source_role,
+)
 from .storage_layout import RAW_BUCKET, StorageObjectKey, raw_storage_key
 
 __all__ = [
@@ -123,4 +140,11 @@ __all__ = [
     "CanonicalGap", "ORCHESTRATION_SCHEMA_VERSION", "RefreshPlan",
     "SnapshotOrchestrator", "build_refresh_plan", "detect_canonical_gaps",
     "snapshot_audit",
+    "BSE_FILING_DOCUMENT_SOURCE", "CNINFO_FILING_DOCUMENT_SOURCE",
+    "CNINFO_FILING_INDEX_SOURCE", "SSE_FILING_DOCUMENT_SOURCE",
+    "SZSE_FILING_DOCUMENT_SOURCE", "CninfoFilingIndexAdapter", "HttpResponse",
+    "OfficialFilingBatch", "OfficialFilingDocumentAdapter",
+    "build_official_filing_registry", "build_official_filing_runtime",
+    "classify_filing_title", "sync_cninfo_filings", "sync_cninfo_filings_async",
+    "validate_official_source_role",
 ]

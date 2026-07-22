@@ -1,0 +1,37 @@
+{
+  "contract": "Issue #33 L2-B1 Official Filing & Announcement Ingest",
+  "generated_at": "2026-07-22T09:47:03Z",
+  "verification": [
+    {
+      "command": "python3 -m pytest product/tests/test_official_filing_ingest.py -q",
+      "result": "6 passed"
+    },
+    {
+      "command": "python3 -m pytest product/tests/test_official_filing_ingest.py product/tests/test_ingestion_core.py product/tests/test_data_contract.py -q",
+      "result": "43 passed, 17 subtests passed"
+    }
+  ],
+  "live_cninfo_probe": {
+    "ticker": "300750.SZ",
+    "index_status": "success",
+    "discovered": 5,
+    "captured_pdf": 5,
+    "all_publishable": true,
+    "q1_document_id": "1225107946",
+    "q1_document_type": "quarterly_report",
+    "q1_raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+    "q1_mime_type": "application/pdf",
+    "q1_http_status": 200,
+    "q1_payload_size": 537170
+  },
+  "live_exchange_probe": {
+    "source": "szse_official_filing_document_v1",
+    "ticker": "002332.SZ",
+    "status": "success",
+    "publishable": true,
+    "raw_hash": "2380fe92eb6750304ba75459c257d41bd17c661dcd835e4df5b52518c533222a",
+    "mime_type": "application/pdf",
+    "http_status": 200
+  },
+  "truth_boundary": "Current sample connectivity and deterministic contract evidence only; not provider SLA, all-market coverage, OCR extraction, seller research ingestion, or real Supabase deployment."
+}

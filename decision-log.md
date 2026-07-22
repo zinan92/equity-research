@@ -687,3 +687,19 @@
 - 旧 snapshot 没有 A5 raw-membership 字段时仍可 replay；新 snapshot 一旦声明这些字段就必须严格校验，不能默默降级。
 - orchestration 层不能再持有另一份 active pointer；唯一真相仍是 canonical refresh 的 `active.json`。
 - snapshot 已创建但下游 artifact gate 失败不等于刷新成功；对 scheduler 必须给出明确 isolated failure，而不是含糊的 partial。
+
+## 2026-07-22 · L2-B1 Official Filing & Announcement Ingest
+
+- Objective：把公司官方披露稳定转成可引用、可追溯的 immutable document evidence。
+- Reuse：复用 A3 ingestion、A2 raw storage identity、A4 ticker normalization；不新建 document database。
+- Decision：CNINFO index 只负责发现，PDF 必须作为独立 raw capture 下载；document content hash 只能绑定 PDF bytes。
+- Decision：official primary 由固定 source key、official manifest 和 HTTPS host allowlist 联合校验；aggregator 不能自报角色。
+- Decision：增量以 known document IDs 跳过旧 PDF；分类明确区分完整年报、摘要、季报、半年报、重大与普通公告。
+- Verification：专项 6 passed；A3/A1 upstream smoke 43 passed + 17 subtests；CATL CNINFO 五份 PDF、CATL 2026 Q1 报告和 SZSE 官方 PDF live probe 通过。
+- Boundary：未做 OCR、卖方研报、全市场 SLA 或真实 Supabase 部署。
+
+### Gotchas · L2-B1
+
+- index JSON 与 PDF 是两份不同 raw evidence，不能共享 content hash。
+- “半年度报告”包含“年度报告”字样，分类顺序错误会把半年报标成年报。
+- 非财报公告不应全部标成 major；常规董事会决议属于 other announcement。
