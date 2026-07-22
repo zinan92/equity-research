@@ -18,6 +18,8 @@ async function loginAndVerify(browser, baseUrl, credentials, viewport, output) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
   const page = await context.newPage();
   await page.goto(baseUrl, { waitUntil: "networkidle", timeout: 30_000 });
+  await page.locator("#auth-login-tab").click();
+  await page.locator("#login-form:not([hidden])").waitFor({ timeout: 10_000 });
   await page.locator("#login-form input[name=email]").fill(credentials.acceptance_email);
   await page.locator("#login-form input[name=password]").fill(credentials.acceptance_password);
   await page.locator("#login-form button[type=submit]").click();
@@ -41,7 +43,7 @@ async function loginAndVerify(browser, baseUrl, credentials, viewport, output) {
       feedbackButtonHeight: document.querySelector("#feedback-form button").getBoundingClientRect().height,
     },
   }));
-  if (result.banner !== "PRIVATE PREVIEW") throw new Error("private preview banner is missing");
+  if (!result.banner?.startsWith("PRIVATE PREVIEW")) throw new Error("private preview banner is missing");
   if (result.positionCount !== 8) throw new Error("canonical position count differs from eight");
   if (!result.portfolioId?.startsWith("canonical_portfolio_")) throw new Error("canonical portfolio identity is missing");
   if (!result.truthText?.includes("付款") || !result.truthText?.includes("券商")) throw new Error("preview truth boundary is missing");

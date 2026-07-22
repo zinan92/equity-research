@@ -428,12 +428,16 @@ class PrivatePreviewV1Test(unittest.TestCase):
         html = (PRODUCT / "static" / "index.html").read_text(encoding="utf-8")
         css = (PRODUCT / "static" / "styles.css").read_text(encoding="utf-8")
         js = (PRODUCT / "static" / "app.js").read_text(encoding="utf-8")
+        capture = (PRODUCT / "deployment" / "capture_private_preview.mjs").read_text(encoding="utf-8")
         for marker in ("PRIVATE PREVIEW", "不收款", "不连接券商", "canonical-positions", "feedback-form"):
             self.assertIn(marker, html)
         self.assertIn("@media (max-width: 720px)", css)
         self.assertIn('/api/private-preview', js)
         self.assertIn('/api/feedback', js)
         self.assertIn('payload.schema_version !== "private-preview-v1"', js)
+        self.assertIn('page.locator("#auth-login-tab").click()', capture)
+        self.assertIn('page.locator("#login-form:not([hidden])").waitFor', capture)
+        self.assertIn('result.banner?.startsWith("PRIVATE PREVIEW")', capture)
 
 
 if __name__ == "__main__":
