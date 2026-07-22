@@ -449,6 +449,9 @@ class RecordEnvelope:
             if self.rejection_reason is not None or self.violations:
                 raise ValueError("accepted record cannot include rejection metadata")
             schema.validate_payload(payload, known_at=self.provenance.known_at)
+            if self.domain is RecordDomain.DOCUMENT:
+                if payload["content_hash"] != raw.raw_hash or payload["storage_uri"] != raw.storage_uri:
+                    raise ValueError("document payload must be bound to the supplied raw capture")
         else:
             if not isinstance(self.rejection_reason, str) or not self.rejection_reason.strip():
                 raise ValueError("rejected record requires rejection_reason")

@@ -13,6 +13,27 @@ from .contracts import (
     contract_descriptor,
     validate_adapter_output,
 )
+from .authority_sink import AuthoritySinkError, ObjectStore, SupabaseAuthoritySink
+from .ingestion import (
+    AdapterContractError,
+    AdapterRegistry,
+    AuthoritySink,
+    BatchQuality,
+    FetchedPayload,
+    FetchCache,
+    FetchRequest,
+    IngestionAttempt,
+    IngestionOutcome,
+    IngestionRuntime,
+    QualityPolicy,
+    SourceAdapter,
+    SourceChoice,
+    ValidatedFetch,
+    build_raw_capture,
+    evaluate_records,
+    validate_fetched_payload,
+)
+from .local_cache import SQLiteFetchCache
 from .research_refresh import (
     CanonicalComponent,
     CanonicalResearchRefresh,
@@ -37,4 +58,9 @@ __all__ = [
     "RecordDomain", "RecordEnvelope", "RecordSchema", "RecordStatus",
     "SourceManifest", "contract_descriptor", "validate_adapter_output",
     "RAW_BUCKET", "StorageObjectKey", "raw_storage_key",
+    "AdapterContractError", "AdapterRegistry", "AuthoritySink", "AuthoritySinkError",
+    "BatchQuality", "FetchedPayload", "FetchCache", "FetchRequest", "IngestionAttempt",
+    "IngestionOutcome", "IngestionRuntime", "ObjectStore", "QualityPolicy", "SourceAdapter",
+    "SourceChoice", "SQLiteFetchCache", "SupabaseAuthoritySink", "ValidatedFetch",
+    "build_raw_capture", "evaluate_records", "validate_fetched_payload",
 ]
