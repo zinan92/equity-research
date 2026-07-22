@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-213%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-226%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -39,13 +39,14 @@
 - 研究数据保存为不可回写快照；刷新失败不会覆盖上一份通过质量门的数据。
 - 规则引擎负责数字、分数和仓位约束；DeepSeek 只基于冻结证据撰写正文，并且必须经过独立编辑批准。
 - `preview / member / paid / owner` 四级私域权限已经实现；本地开发默认关闭身份门。
+- M7 增加人工外部付款的 append-only 账单、退款撤权、停止新付款和内容寻址 8 股研究包；Paid 权益只从账单事件派生。
 - 可生成带身份哈希的独立 HTML、A4 PDF、长图、JSON、渲染回执和 ZIP 发布包。
 - 五个跨行业 company adapter 与统一冻结证据生产线已经通过结构验收；另有五份基于同一 REAL snapshot、实际捕获文档和独立语义审批的 live proof。fixture 与 live 产物严格分开。
 - 两个连续 REAL snapshot 已生成内容寻址的统一组合版本；当前直接展示 8 只股票、82% 股票仓位、18% 现金、本期动作、版本差异和独立模拟调仓账本。
 
 尚未产品化的边界：
 
-- 还没有公网生产部署、正式 PostgreSQL/Supabase、邮件找回、支付订阅或长期影子回测。
+- 还没有多实例公网生产、正式 PostgreSQL/Supabase、邮件找回、在线支付/自动续费或长期影子回测。
 - 还没有全市场选股池；当前研究范围是固定的 8 股观察组合。
 - 当前组合仍有中国移动、中国神华和传音控股 3 只只达到量化基线，不能把 8 股组合称作 8 份完整深研。
 - 当前建议仓位是研究合同，不是交易指令，也不会自动执行。
@@ -186,7 +187,7 @@ python3 product/publication_pack.py 300750.SZ
 
 ## 私域会员内测
 
-当前 M6 私有预览使用独立、稳定的 HTTPS 地址和仓库外运行目录。受邀用户登录后直接看到 M5 canonical 组合；`preview` 只能看组合首页，`member` 可看深研，`owner` 可管理成员和反馈。页面明确标记不收款、不接券商、不代表真实持仓。部署、回滚与权限合同见 [Private Preview v1](docs/product/private-preview-v1.md)。
+M6 私有预览使用独立、稳定的 HTTPS 地址和仓库外运行目录。M7 在其上增加人工履约：平台外付款由 Owner 核验，append-only 账单事件派生 Paid 权益；退款立即撤回研究包权限并注销旧会话。平台自身不提供 checkout、自动续费或支付商 webhook。部署与权限合同见 [Private Preview v1](docs/product/private-preview-v1.md)，人工履约合同见 [Paid Community Pilot v1](docs/product/paid-community-pilot-v1.md)。
 
 可重复验收：
 
@@ -195,9 +196,12 @@ python3 scripts/prepare_private_preview.py prepare
 python3 scripts/verify_private_preview.py --rehearse-ops --rollback-release <verified-prior-release-id>
 python3 scripts/verify_private_preview.py
 python3 scripts/adversarial_verify_private_preview.py
+python3 -m unittest product.tests.test_paid_community_pilot_v1 -q
+python3 scripts/verify_paid_community_pilot.py
+python3 scripts/adversarial_verify_paid_community_pilot.py
 ```
 
-当前是单机、邀请制 `Private Preview Ready`；不是多实例生产服务，也不是已接支付的 `Paid Pilot Ready`。
+当前是单机、邀请制 `Private Preview Ready + Manual Paid Fulfillment`；不是多实例生产服务，也没有达到 Product OS `Paid Pilot Ready`。Gate B 所需的正式支付账户、沙箱/真实小额支付退款、验签 webhook、归因与完整运营门仍未完成。
 
 本地默认不开身份门。准备给少数朋友使用时：
 
@@ -207,7 +211,7 @@ python3 product/member_admin.py create-invite --owner-email <owner-email> --tier
 PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0.0.1 --port 8877
 ```
 
-上述命令只用于本机 HTTP 内测。公网必须由 HTTPS 反向代理承接，并改为 `PARK_COOKIE_SECURE=1`。M6 的 `paid` 仅是保留 tier，不开放付款或下载；M7 才定义付费权益。密码、邀请码、session 和用户数据库都属于本地运行态，不进入 Git。
+上述命令只用于本机 HTTP 内测。公网必须由 HTTPS 反向代理承接，并改为 `PARK_COOKIE_SECURE=1`。M7 的 `paid` 由账单事件派生，不能通过 paid 邀请或直接修改 member tier 开通。密码、付款 reference、邀请码、session 和用户数据库都属于仓库外运行态，不进入 Git。
 
 ## API
 
@@ -248,6 +252,8 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 | `PARK_AUTH_REQUIRED` | `0` | 是否开启身份门 |
 | `PARK_COOKIE_SECURE` | `0` | HTTPS 环境使用安全 Cookie |
 | `PARK_PRIVATE_PREVIEW` | `0` | 开启严格私有预览模式；同时要求安全 Cookie 和 loopback origin |
+| `PARK_MANUAL_PAID_PILOT` | `0` | 在私有预览中开启人工账单、派生 Paid 权益和研究包下载 |
+| `PARK_PRIVATE_RESEARCH_PACK` | `product/runtime/private-preview-research-pack` | M7 内容寻址研究包目录；部署时必须指向 verified release |
 | `DEEPSEEK_API_KEY_FILE` | `~/.park-secrets/deepseek/api-key` | 仓库外 DeepSeek key 文件 |
 | `DEEPSEEK_MODEL` | `deepseek-v4-pro` | 写作模型 |
 | `NODE_BINARY` | PATH 中的 `node` | 发布渲染 Node.js 18+ |

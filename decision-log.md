@@ -495,3 +495,29 @@
 - 旧的 broad route dispatcher 会让 preview 或 owner 读到/调用私有产品不需要的 legacy API；外部预览采用 allowlist，新增路由必须先明确 entitlement 和 truth boundary。
 - 手工写“已回滚/已重启”JSON 不是运维证据；receipt 必须由实际切换 release、重启 tunnel、逐阶段外网探针的同一命令生成。
 - stable named tunnel 仍不是高可用：本机睡眠、断网或两个 LaunchAgent 同时失效都会让预览离线。
+
+## 2026-07-22 · Milestone 7：付费社群人工履约闭环（Ready for review）
+
+- Objective：Park 能在不虚构在线支付能力的前提下，为少量社群成员记录已核验的外部付款、开通内容权益，并在退款时立即撤权。
+- User outcome：Owner 人工确认外部付款后，成员现有 session 立即获得与当前 canonical portfolio 精确绑定的 8 股研究包；退款注销旧 session，重登后不再有下载权。
+- Reuse：复用 M6 invite/session/CSRF/独立 auth DB、M5 content-addressed portfolio 和既有安全 release/Cloudflare rollback；不新建支付 SDK、第二套会员系统或第二套研究包。
+- Decision：Paid entitlement 只从 append-only `billing_events` 中未退款的付款事件派生。M7 API 禁止 paid 邀请；为保持 M6 兼容，底层仍可读取旧 paid invite，但 M7 `effective_member` 会把无账单的 stored paid 降回 member，前端状态也不能获得下载权。
+- Decision：`manual_external` 是 Owner 自己核验的外部凭据记录，不是支付商 webhook；`acceptance_test` 永久标记 test mode 并排除于真实收入。provider event 与外部付款/退款 reference 分别唯一，金额严格为整数分，退款不得早于付款。
+- Decision：完全相同的 provider event 重放返回原事件及原 release identity，即使当前 release、停止开关或 366 日新事件窗口已变化；内容变化拒绝。
+- Decision：退款继承原付款的 portfolio/research-pack identity，不会因产品已切到新版本而丢失可追溯性；退款不依赖当前 research pack，不受 stop-new-payments 影响，并撤销该成员全部旧 session。
+- Decision：每个 release 生成 deterministic `canonical-research-pack-v1`，绑定 portfolio/diff/ledger/ledger history、8 份 exact report、逐文件 hash 和 ZIP membership；runner 启动与下载时不仅验证包内自洽性，还逐项比较 canonical release 原件。
+- Decision：`PARK_MANUAL_PAID_PILOT` 是显式兼容开关。未启用时 M6 billing/pack 路由继续 404、原有权限不受影响；部署 release 必须显式启用并提供已验证 pack path。
+- Truth boundary：产品显示 `paid_pilot_ready=false`、`online_checkout=false`、`payment_provider_connected=false`。当前是 `Private Preview Ready + Manual Paid Fulfillment`，不是 Product OS Gate B。
+- Verification：13 项 M7 专项、15 项 M6 兼容测试及 226 项 fresh-clone 全量测试/server smoke 通过。外部 HTTPS 验收在最终 release `preview_76e74a7aa8a14266` 完成 test payment → 现有 session 获权 → exact 13-member/8-report ZIP 全成员 hash → 幂等/冲突重放 → stop-new-payments → refund → session revoked → 重登无权，且真实收入前后不变。安全回滚到 M7 release `preview_048f73373ce6e692`、roll-forward 和 dedicated tunnel restart 均为 200，其他 tunnel 保持 active。24 项账单/权限/pack/trigger/视觉攻击全部拒绝或检测，两路独立终审 P0/P1/P2=0。1440×2625 desktop 与 390×6874 mobile full-page 视觉证据无横向溢出，移动文字和下载触控目标通过。
+- Evidence：`evidence/m7-paid-community-pilot/verification-receipt.json`、`restart-rollback-receipt.json`、`baseline-receipt.json`、`adversarial-review.json`、`final-review.json` 与 desktop/mobile PNG；event reference、密码、cookie、session 与付款凭据不进入 Git。
+- In scope：manual_external/acceptance_test 账单、派生 Paid、退款撤权、停止新付款、对账导出、exact 8 股研究包、外部部署/验收。Out of scope：online checkout、provider SDK/webhook、自动续费、价格/税务/优惠券、佣金归因、真实生产小额支付和 Gate B 声明。
+
+### Gotchas · Milestone 7
+
+- `verify_baseline.py` 已经包含全量 product tests；Ready 前不能再额外跑一次 `unittest discover`，否则只是重复测试。
+- M6 旧 release 没有 research pack 或人工账单开关，不能作为 M7 的安全 rollback。必须先保存一份完整 M7 release，再切最终 M7 release。
+- 退款发生时 current portfolio 可能已经变化；退款事件必须绑定原付款 identity，而不是退款当天 current identity。
+- 内容包损坏不能阻断退款；refund API 必须只依赖原付款账本，并用稳定 reference 在响应丢失后对账清理。
+- 幂等不能绑定当前 release 或新事件时间窗；否则同一外部事件在换版或一年后重放会被错误当成冲突。
+- acceptance test 看起来与真实 Paid 完全相同，UI、export 和 receipt 必须同时明确“不计收入”，不能只靠后台字段区分。
+- content-addressed 内部 pack 不能代替 canonical 原件或 release manifest。只有逐项原件比较、内外两层 hash、启动前重验和固定下载路径同时成立，才能阻断自洽伪包与路径逃逸。

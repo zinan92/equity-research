@@ -1,0 +1,51 @@
+{
+  "schema_version": "paid-community-pilot-final-review-v1",
+  "status": "approved",
+  "reviewed_at": "2026-07-22T02:53:14Z",
+  "release_id": "preview_76e74a7aa8a14266",
+  "safe_rollback_release_id": "preview_048f73373ce6e692",
+  "reviews": [
+    {
+      "reviewer": "m7_product_contract_audit",
+      "scope": "Issue #24 user outcome, truth boundary, M6 compatibility, lifecycle and evidence",
+      "decision": "APPROVE",
+      "completion_percent": 100,
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+    },
+    {
+      "reviewer": "m7_security_release_audit",
+      "scope": "billing integrity, entitlement derivation, research-pack binding, rollback and cleanup",
+      "decision": "APPROVE",
+      "completion_percent": 100,
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+    }
+  ],
+  "verification": {
+    "m7_focused_tests": 13,
+    "m6_compatibility_tests": 15,
+    "fresh_clone_product_tests": 226,
+    "server_smoke": "passed",
+    "external_lifecycle": "passed",
+    "rollback_roll_forward_and_tunnel_restart": "passed",
+    "adversarial_checks": 24,
+    "desktop_full_page": "1440x2625",
+    "mobile_full_page": "390x6874"
+  },
+  "truth_boundary": {
+    "manual_external_fulfillment": true,
+    "online_checkout": false,
+    "payment_provider_connected": false,
+    "paid_pilot_ready": false
+  },
+  "aggregate": {
+    "decision": "APPROVE",
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "ready_for_review": true
+  }
+}

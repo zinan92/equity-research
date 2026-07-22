@@ -11,6 +11,7 @@ from pathlib import Path
 import shutil
 import sqlite3
 import sys
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,7 @@ if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
 from auth_store import initialize_auth  # noqa: E402
+from billing_store import initialize_billing  # noqa: E402
 from data_store import connect, stock_payload, verify_snapshot_content_attestation  # noqa: E402
 from feedback_store import initialize_feedback  # noqa: E402
 from portfolio_allocation import (  # noqa: E402
@@ -40,7 +42,10 @@ DEFAULT_SOURCE_DB = PRODUCT / "runtime" / "m4-live.db"
 DEFAULT_SOURCE_STATE = PRODUCT / "runtime" / "canonical_portfolio"
 DEFAULT_DEEP_REPORTS = ROOT / "evidence" / "m4-cross-company-research" / "live"
 STATE_FILES = {"current.json", "latest-diff.json", "latest-ledger.json", "ledger-history.json"}
-AUTH_TABLES = ("members", "invite_codes", "member_sessions", "member_events", "member_feedback")
+AUTH_TABLES = (
+    "members", "invite_codes", "member_sessions", "member_events", "member_feedback",
+    "billing_events", "billing_settings", "billing_control_events",
+)
 TRANSIENT_CODE_PARTS = {"__pycache__"}
 TRANSIENT_CODE_SUFFIXES = {".pyc", ".pyo"}
 
@@ -68,6 +73,19 @@ def is_release_payload_file(path: Path) -> bool:
 
 def canonical_json(value: object) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def research_pack_path(root: Path, name: str) -> Path:
+    if not isinstance(name, str):
+        raise PreviewReleaseError("research-pack path is invalid")
+    relative = Path(name)
+    if relative.is_absolute() or relative.as_posix() != name or any(part in {"", ".", ".."} for part in relative.parts):
+        raise PreviewReleaseError("research-pack path is unsafe")
+    resolved_root = root.resolve()
+    resolved = (resolved_root / relative).resolve()
+    if resolved_root not in resolved.parents:
+        raise PreviewReleaseError("research-pack path escapes its root")
+    return resolved
 
 
 def ensure_external_runtime(runtime: Path) -> Path:
@@ -156,6 +174,111 @@ def copy_report_bundle(source_db: Path, current: dict, deep_root: Path, target: 
         )
 
 
+def _write_deterministic_zip(path: Path, root: Path, members: list[str]) -> None:
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for name in sorted(members):
+            info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o100644 << 16
+            archive.writestr(info, (root / name).read_bytes())
+
+
+def build_research_pack(state: Path, reports: Path, current: dict, target: Path) -> dict:
+    target.mkdir(parents=True, exist_ok=True)
+    (target / "reports").mkdir()
+    sources = {
+        "portfolio.json": state / "versions" / f"{current['portfolio_id']}.json",
+        "diff.json": state / "latest-diff.json",
+        "ledger.json": state / "latest-ledger.json",
+        "ledger-history.json": state / "ledger-history.json",
+    }
+    for position in current["positions"]:
+        ticker = position["ticker"]
+        sources[f"reports/{ticker}.json"] = reports / f"{ticker}.json"
+    for name, source in sources.items():
+        if not source.is_file() or source.is_symlink():
+            raise PreviewReleaseError(f"research-pack source is unavailable: {name}")
+        destination = target / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+    report_hashes = {
+        position["ticker"]: load_json(reports / f"{position['ticker']}.json")["report_hash"]
+        for position in current["positions"]
+    }
+    core = {
+        "schema_version": "canonical-research-pack-v1",
+        "portfolio_id": current["portfolio_id"],
+        "portfolio_payload_hash": current["payload_hash"],
+        "snapshot_id": current["snapshot"]["snapshot_id"],
+        "report_bundle_hash": hashlib.sha256(canonical_json(report_hashes).encode()).hexdigest(),
+        "files": {name: sha256_file(target / name) for name in sorted(sources)},
+        "truth_boundary": {
+            "model_portfolio_not_user_holdings": True,
+            "broker_execution": False,
+            "manual_paid_pilot": True,
+        },
+    }
+    manifest = {**core, "pack_hash": hashlib.sha256(canonical_json(core).encode()).hexdigest()}
+    manifest_path = target / "pack-manifest.json"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    members = [*sources, "pack-manifest.json"]
+    _write_deterministic_zip(target / "research-pack.zip", target, members)
+    return manifest
+
+
+def verify_research_pack(target: Path, state: Path, current: dict, reports: Path) -> dict:
+    manifest = load_json(target / "pack-manifest.json")
+    pack_hash = manifest.pop("pack_hash", None)
+    if not isinstance(pack_hash, str) or pack_hash != hashlib.sha256(canonical_json(manifest).encode()).hexdigest():
+        raise PreviewReleaseError("research-pack identity is invalid")
+    if (
+        manifest.get("schema_version") != "canonical-research-pack-v1"
+        or manifest.get("portfolio_id") != current["portfolio_id"]
+        or manifest.get("portfolio_payload_hash") != current["payload_hash"]
+        or manifest.get("snapshot_id") != current["snapshot"]["snapshot_id"]
+    ):
+        raise PreviewReleaseError("research-pack portfolio identity mismatch")
+    files = manifest.get("files")
+    if not isinstance(files, dict) or len(files) != 4 + len(current["positions"]):
+        raise PreviewReleaseError("research-pack file manifest is incomplete")
+    canonical_sources = {
+        "portfolio.json": state / "versions" / f"{current['portfolio_id']}.json",
+        "diff.json": state / "latest-diff.json",
+        "ledger.json": state / "latest-ledger.json",
+        "ledger-history.json": state / "ledger-history.json",
+        **{
+            f"reports/{position['ticker']}.json": reports / f"{position['ticker']}.json"
+            for position in current["positions"]
+        },
+    }
+    if set(files) != set(canonical_sources):
+        raise PreviewReleaseError("research-pack file set differs from canonical release inputs")
+    actual: dict[str, str] = {}
+    for name in sorted(files):
+        path = research_pack_path(target, name)
+        if path.is_file() and not path.is_symlink():
+            actual[name] = sha256_file(path)
+    if actual != files:
+        raise PreviewReleaseError("research-pack files differ from the manifest")
+    for name, source in canonical_sources.items():
+        if not source.is_file() or source.is_symlink() or actual[name] != sha256_file(source):
+            raise PreviewReleaseError(f"research-pack member differs from canonical release input: {name}")
+    archive_path = target / "research-pack.zip"
+    if not archive_path.is_file() or archive_path.is_symlink():
+        raise PreviewReleaseError("research-pack archive is unavailable")
+    expected_members = sorted([*files, "pack-manifest.json"])
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            if sorted(archive.namelist()) != expected_members or archive.testzip() is not None:
+                raise PreviewReleaseError("research-pack archive membership is invalid")
+            for name in expected_members:
+                if archive.read(name) != research_pack_path(target, name).read_bytes():
+                    raise PreviewReleaseError(f"research-pack archive member differs: {name}")
+    except zipfile.BadZipFile as exc:
+        raise PreviewReleaseError("research-pack archive is invalid") from exc
+    return {**manifest, "pack_hash": pack_hash, "archive_sha256": sha256_file(archive_path)}
+
+
 def verify_release(
     release: Path, *, expected_release_id: str | None = None, require_manifest: bool = False,
 ) -> dict:
@@ -163,6 +286,7 @@ def verify_release(
     state = release / "canonical"
     product = release / "product"
     reports = release / "canonical-reports"
+    research_pack = release / "research-pack"
     if not (product / "server.py").is_file() or not (product / "static" / "index.html").is_file():
         raise PreviewReleaseError("private preview product code is incomplete")
     manifest_path = release / "manifest.json"
@@ -206,6 +330,7 @@ def verify_release(
             raise PreviewReleaseError(f"private report binding mismatch: {ticker}")
         report_hashes[ticker] = binding["report_hash"]
     report_bundle_hash = hashlib.sha256(canonical_json(report_hashes).encode()).hexdigest()
+    verified_pack = verify_research_pack(research_pack, state, current, reports)
     code_files = {
         str(path.relative_to(product)): sha256_file(path)
         for path in sorted(product.rglob("*"))
@@ -223,6 +348,7 @@ def verify_release(
         "ledger_history_hash": ledger_history["ledger_history_hash"],
         "product_code_hash": code_hash,
         "report_bundle_hash": report_bundle_hash,
+        "research_pack_hash": verified_pack["pack_hash"],
     }
     release_id = f"preview_{hashlib.sha256(canonical_json(identity_payload).encode()).hexdigest()[:16]}"
     if expected_release_id and release_id != expected_release_id:
@@ -262,9 +388,11 @@ def write_runtime_env(runtime: Path) -> None:
         f"PARK_CANONICAL_PORTFOLIO_ROOT={runtime / 'current' / 'canonical'}",
         f"PARK_CANONICAL_PORTFOLIO_SOURCE_DB={runtime / 'current' / 'research.db'}",
         f"PARK_PRIVATE_REPORT_ROOT={runtime / 'current' / 'canonical-reports'}",
+        f"PARK_PRIVATE_RESEARCH_PACK={runtime / 'current' / 'research-pack'}",
         "PARK_AUTH_REQUIRED=1",
         "PARK_COOKIE_SECURE=1",
         "PARK_PRIVATE_PREVIEW=1",
+        "PARK_MANUAL_PAID_PILOT=1",
     ]) + "\n"
     temporary = runtime / f".preview-env-{os.getpid()}"
     temporary.write_text(content, encoding="utf-8")
@@ -286,6 +414,7 @@ def sanitize_auth_store(runtime: Path) -> dict:
     try:
         copy_sqlite(source, snapshot)
         initialize_feedback(sanitized)
+        initialize_billing(sanitized)
         counts: dict[str, int] = {}
         with closing(connect(sanitized)) as connection:
             connection.execute("ATTACH DATABASE ? AS legacy", (str(snapshot),))
@@ -333,6 +462,9 @@ def prepare(source_db: Path, source_state: Path, deep_reports: Path, runtime: Pa
         copy_product_code(PRODUCT, staging / "product")
         current = load_portfolio_state(staging / "canonical")
         copy_report_bundle(staging / "research.db", current, deep_reports.resolve(), staging / "canonical-reports")
+        build_research_pack(
+            staging / "canonical", staging / "canonical-reports", current, staging / "research-pack",
+        )
         verified = verify_release(staging)
         release_id = verified["release_id"]
         manifest = {
@@ -344,6 +476,9 @@ def prepare(source_db: Path, source_state: Path, deep_reports: Path, runtime: Pa
             "truth_boundary": {
                 "private_preview": True,
                 "accepts_payment": False,
+                "manual_external_fulfillment": True,
+                "online_checkout": False,
+                "paid_pilot_ready": False,
                 "broker_connected": False,
                 "auth_database_separate": True,
             },

@@ -1,0 +1,133 @@
+{
+  "schema_version": "paid-community-pilot-adversarial-v1",
+  "status": "passed",
+  "verified_at": "2026-07-22T02:49:19.523245+00:00",
+  "public_url": "https://research.park-ai-intel.com",
+  "release_id": "preview_76e74a7aa8a14266",
+  "attacks": [
+    {
+      "attack": "anonymous:/api/billing/me",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "anonymous:/api/billing",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "anonymous:/api/billing/export",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "anonymous:/downloads/private-preview/research-pack.zip",
+      "status": "rejected",
+      "http": 401
+    },
+    {
+      "attack": "member_admin:/api/billing",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "member_admin:/api/billing/export",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "member_admin:/api/billing/settings",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "refunded_member_pack_access",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "owner_billing_without_csrf",
+      "status": "rejected",
+      "http": 403
+    },
+    {
+      "attack": "research_pack_file_tamper",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "research_pack_zip_tamper",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "research_pack_manifest_tamper",
+      "status": "rejected",
+      "failure_class": "PreviewReleaseError"
+    },
+    {
+      "attack": "stored_tier_paid_without_ledger",
+      "status": "rejected"
+    },
+    {
+      "attack": "release_change_breaks_payment_idempotency",
+      "status": "rejected"
+    },
+    {
+      "attack": "conflicting_provider_replay",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "duplicate_external_payment_reference",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "fractional_minor_amount",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "refund_provider_mismatch",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "refund_predates_payment",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "second_refund_with_new_event",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "acceptance_event_as_real_revenue",
+      "status": "rejected"
+    },
+    {
+      "attack": "billing_append_only_guard_replaced",
+      "status": "rejected",
+      "failure_class": "BillingError"
+    },
+    {
+      "attack": "modified_desktop_screenshot",
+      "status": "detected",
+      "original_sha256_matches": true
+    },
+    {
+      "attack": "modified_mobile_screenshot",
+      "status": "detected",
+      "original_sha256_matches": true
+    }
+  ],
+  "summary": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "attacks_rejected_or_detected": 24
+  },
+  "credential_values_recorded": false
+}
