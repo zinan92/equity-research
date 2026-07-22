@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-07-22",
+  "purpose": "Architecture-level upstream component lock; not an install manifest",
+  "components": [
+    {
+      "repo": "https://github.com/zinan92/datafeed",
+      "commit": "4dce9bbbd74e1875bee340f36411f898d81692cd",
+      "license": "NOASSERTION",
+      "adoption": "adopt-primitives-adapt-runtime-storage",
+      "selected": [
+        "src/kline/ports.py",
+        "src/kline/provenance.py",
+        "src/kline/quality.py",
+        "src/kline/registry.py",
+        "src/kline/store.py",
+        "tests/test_ports.py",
+        "tests/test_provenance.py",
+        "tests/test_quality.py"
+      ],
+      "target": "ingestion-core",
+      "upgrade_gate": "port, provenance, quality and fallback contract tests",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "port, provenance, quality and fallback contract tests"
+      ]
+    },
+    {
+      "repo": "https://github.com/simonlin1212/a-stock-data",
+      "commit": "9ed665cc9773457bc23fed6b770b2b5a8cede40f",
+      "license": "Apache-2.0",
+      "adoption": "reference-extract",
+      "selected": [
+        "SKILL.md: provider endpoints and parsers",
+        "SKILL.md: eastmoney_reports",
+        "SKILL.md: download_pdf"
+      ],
+      "target": "provider-bridges/ashare and document-ingest",
+      "upgrade_gate": "fixture plus live contract tests per endpoint",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "fixture plus live contract tests per endpoint"
+      ]
+    },
+    {
+      "repo": "https://github.com/HKUDS/Vibe-Trading",
+      "commit": "a5eb30fd00d6ee71cd5099d15f57de5ae47010ff",
+      "license": "MIT",
+      "adoption": "adapt",
+      "selected": [
+        "agent/backtest/loaders/tushare.py",
+        "agent/backtest/loaders/tushare_fundamentals.py",
+        "agent/src/tools/tushare_fallbacks.py",
+        "agent/src/tools/research_reports_tool.py"
+      ],
+      "target": "provider-bridges/vibe",
+      "upgrade_gate": "PIT, fallback ordering, symbol and error-envelope tests",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "PIT, fallback ordering, symbol and error-envelope tests"
+      ]
+    },
+    {
+      "repo": "https://github.com/simonlin1212/global-stock-data",
+      "commit": "d52a8a0013363577bceb28ca876c88fe6c1a5aeb",
+      "license": "Apache-2.0",
+      "adoption": "reference-later",
+      "selected": [
+        "SKILL.md: SEC EDGAR, Yahoo and HK/US endpoint catalog"
+      ],
+      "target": "future provider-bridges/global",
+      "upgrade_gate": "not active in A-share MVP",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "not active in A-share MVP"
+      ]
+    },
+    {
+      "repo": "https://github.com/zinan92/quant-data-pipeline",
+      "commit": "d306095de3c253535e4b47d08b23e9d0f07c01b4",
+      "license": "NOASSERTION",
+      "adoption": "extract",
+      "selected": [
+        "src/tasks/scheduler.py",
+        "src/services/calendar_updater.py",
+        "scripts/backfill_stock_daily.py",
+        "src/models/trade_calendar.py",
+        "src/models/symbol.py"
+      ],
+      "target": "ingestion-orchestrator",
+      "upgrade_gate": "scheduler, gap, backfill and calendar replay tests",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "scheduler, gap, backfill and calendar replay tests"
+      ]
+    },
+    {
+      "repo": "https://github.com/zinan92/intel",
+      "commit": "0e296000096042337a77464a7f5015204cbc000b",
+      "license": "NOASSERTION",
+      "adoption": "adapt",
+      "selected": [
+        "collectors/base.py",
+        "sources/registry.py",
+        "sources/adapters.py",
+        "events/aggregator.py",
+        "db/models.py: migration reference only"
+      ],
+      "target": "provider-bridges/intelligence",
+      "upgrade_gate": "entity resolution, provenance, dedupe, inference separation and replay tests",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "entity resolution, provenance, dedupe, inference separation and replay tests"
+      ]
+    },
+    {
+      "repo": "https://github.com/rollingSirius/equity-research-skill",
+      "commit": "43965c972371e1945a1a1ed899eebe75db8d818c",
+      "license": "MIT",
+      "adoption": "adopt-taxonomy-adapt-scripts-contracts",
+      "selected": [
+        "SKILL.md",
+        "references/report-template.md",
+        "references/valuation-methods.md",
+        "references/markets-cn-hk.md",
+        "industries/*.md",
+        "scripts/dcf.py",
+        "scripts/check_research_output.py"
+      ],
+      "target": "research-compiler",
+      "upgrade_gate": "section, valuation, evidence-binding and report-consistency tests",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "section, valuation, evidence-binding and report-consistency tests"
+      ]
+    },
+    {
+      "repo": "https://github.com/star23/Day1Global-Skills",
+      "commit": "562c14b0c0bc84abff755181ead30ebea613d063",
+      "license": "MIT",
+      "adoption": "reference-rewrite",
+      "selected": [
+        "tech-earnings-deepdive/SKILL.md"
+      ],
+      "rejected": [
+        "missing reference files",
+        "US-tech-only assumptions"
+      ],
+      "target": "research-compiler/optional-modules",
+      "upgrade_gate": "rewritten local references and per-module evidence contracts",
+      "audited_at": "2026-07-22",
+      "update_policy": "manual review; no automatic upstream pull",
+      "contract_tests": [
+        "rewritten local references and per-module evidence contracts"
+      ]
+    }
+  ],
+  "format": "json-compatible-yaml"
+}
