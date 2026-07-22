@@ -948,6 +948,8 @@ class DataFoundation:
                 "quality_digest": evaluation["quality_digest"],
                 "quality_state_digest": evaluation["state_digest"],
                 "frozen_state_digest": frozen_state_digest,
+                "raw_hashes": sorted(selected_raw_hashes),
+                "raw_hash_digest": digest(sorted(selected_raw_hashes)),
                 "items": items,
             }
             manifest_hash = digest(manifest)
@@ -969,7 +971,14 @@ class DataFoundation:
                 [(snapshot_id, table, row_key, row_hash, row_json) for table, row_key, row_hash, row_json in frozen_rows],
             )
             connection.commit()
-        return {"snapshot_id": snapshot_id, "manifest_hash": manifest_hash, "item_count": len(items), "snapshot_kind": snapshot_kind}
+        return {
+            "snapshot_id": snapshot_id,
+            "manifest_hash": manifest_hash,
+            "item_count": len(items),
+            "snapshot_kind": snapshot_kind,
+            "raw_hashes": sorted(selected_raw_hashes),
+            "raw_hash_digest": digest(sorted(selected_raw_hashes)),
+        }
 
     def replay_digest(self, snapshot_id: str) -> str:
         with closing(self.connect()) as connection:
@@ -995,6 +1004,18 @@ class DataFoundation:
             expected = sorted(parsed["items"], key=lambda row: (row["table"], row["key"]))
             if stored_items != expected:
                 raise RuntimeError("snapshot item manifest mismatch")
+            frozen_raw_hashes = sorted(
+                json.loads(row["row_json"])["raw_hash"]
+                for row in stored_rows
+                if row["table"] == "core_raw_objects"
+            )
+            # Pre-A5 snapshots remain replayable; A5+ manifests make the raw
+            # lineage explicit and verify both membership and its digest.
+            if "raw_hashes" in parsed:
+                if parsed["raw_hashes"] != frozen_raw_hashes:
+                    raise RuntimeError("snapshot raw hash membership mismatch")
+                if parsed.get("raw_hash_digest") != digest(frozen_raw_hashes):
+                    raise RuntimeError("snapshot raw hash digest mismatch")
             frozen_state_digest = digest([
                 item for item in stored_items if item["table"] != "core_quality_results"
             ])

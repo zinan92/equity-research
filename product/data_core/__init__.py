@@ -83,6 +83,15 @@ from .research_refresh import (
     RefreshInProgressError,
 )
 from .store import DataFoundation, QualityGateError, SnapshotReader
+from .snapshot_orchestration import (
+    CanonicalGap,
+    ORCHESTRATION_SCHEMA_VERSION,
+    RefreshPlan,
+    SnapshotOrchestrator,
+    build_refresh_plan,
+    detect_canonical_gaps,
+    snapshot_audit,
+)
 from .storage_layout import RAW_BUCKET, StorageObjectKey, raw_storage_key
 
 __all__ = [
@@ -111,4 +120,7 @@ __all__ = [
     "CninfoCorporateActionAdapter", "EastmoneyQuoteCrosscheckAdapter",
     "SinaDailyBarCrosscheckAdapter", "build_validation_runtime",
     "collect_validated_ashare_packet", "collect_validated_ashare_packet_async",
+    "CanonicalGap", "ORCHESTRATION_SCHEMA_VERSION", "RefreshPlan",
+    "SnapshotOrchestrator", "build_refresh_plan", "detect_canonical_gaps",
+    "snapshot_audit",
 ]

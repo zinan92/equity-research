@@ -1,0 +1,40 @@
+{
+  "contract": "Issue #32 L2-A5 Orchestration, Quality & Immutable Snapshot",
+  "generated_at": "2026-07-22T09:36:06Z",
+  "mode": "fixture_deterministic_acceptance",
+  "success_criteria": {
+    "scheduler_backfill_gap_detection": "passed",
+    "complete_ingestion_and_quality_receipt": "passed",
+    "snapshot_manifest_binds_raw_hashes": "passed",
+    "concurrent_lock_and_idempotency": "passed",
+    "failure_preserves_previous_active": "passed"
+  },
+  "failure_injection": {
+    "source_failure": "orchestration failed; previous active snapshot preserved",
+    "later_stage_failure": "canonical partial normalized to orchestration failed; canonical status/stage retained; previous active preserved; candidate snapshot replay passed",
+    "raw_membership_tamper": "replay rejected"
+  },
+  "verification": [
+    {
+      "command": "python3 -m pytest product/tests/test_snapshot_orchestration.py -q",
+      "result": "7 passed"
+    },
+    {
+      "command": "python3 -m pytest product/tests/test_snapshot_orchestration.py product/tests/test_research_refresh_v1.py product/tests/test_data_foundation.py -q",
+      "result": "61 passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s product/tests -q",
+      "result": "290 tests completed successfully; existing sqlite ResourceWarning messages were non-fatal"
+    },
+    {
+      "command": "python3 -m py_compile product/data_core/store.py product/data_core/research_refresh.py product/data_core/snapshot_orchestration.py product/tests/test_snapshot_orchestration.py",
+      "result": "passed"
+    }
+  ],
+  "adversarial_review": {
+    "initial": "one P1 later-stage isolation receipt gap and one P2 scheduler skip persistence gap found",
+    "final": "both closed; remaining P0=0, P1=0"
+  },
+  "truth_boundary": "Fixture-backed deterministic orchestration evidence only; not live-provider SLA, official full-history exchange calendar, real Supabase authority wiring, backup/restore, or proof that a production scheduler is installed."
+}
