@@ -1,0 +1,30 @@
+{
+  "milestone": "L2-C1",
+  "issue": 39,
+  "status": "accepted",
+  "user_outcome": "Every company uses the same typed 18-section report skeleton and completion standard.",
+  "verification": {
+    "issue_specific": "7 passed",
+    "upstream_smoke": "35 passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "contract": {
+    "schema_version": "research-section-contract-v2",
+    "contract_version": "2.0.0",
+    "section_count": 18,
+    "page_budget_min": 32,
+    "page_budget_max": 50,
+    "completion_states": ["full", "partial", "missing"],
+    "structure_only_requires_b6": false,
+    "live_acceptance_requires_b6": true
+  },
+  "upstream_audit": {
+    "rollingSirius/equity-research-skill": "43965c972371e1945a1a1ed899eebe75db8d818c",
+    "star23/Day1Global-Skills": "562c14b0c0bc84abff755181ead30ebea613d063"
+  },
+  "boundaries": [
+    "No company-specific prose",
+    "No real ticker evidence acceptance",
+    "No recommendation, target-price or position policy implementation"
+  ]
+}

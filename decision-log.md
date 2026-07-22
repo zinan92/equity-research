@@ -803,3 +803,24 @@
 - 冲突不应修改或删除原证据；它是独立 receipt，blocking 时只阻止发布。
 - 只 hash accepted evidence 会漏掉 gate 判断变化；因此 gate hash 必须同时冻结 rejection、conflict 和 coverage。
 - Context Pack 即使 dataclass frozen，内部普通 dict 仍可变；索引必须使用 read-only mapping，证据列表必须使用 tuple。
+
+## 2026-07-22 · L2-C1 Research Section Contract v2
+
+- Objective：所有公司使用同一套可机器验收的深度研报骨架、完成语义和页数预算，行业差异不再复制整份模板。
+- Reuse：采用 rollingSirius 九章的逻辑顺序和估值/来源纪律；把 Day1 A–P 的收入质量、利润率、现金流、指引、KPI、管理层、宏观、筹码、研发、会计、反偏见和行动触发重写成 typed inputs；UZI 只贡献定性模块线索。
+- Decision：主合同固定 18 节、32–50 页；行业 appendix、earnings bridge、A/H comparison 作为 profile optional modules，不改变主 section order。
+- Decision：每节显式声明 required/optional input key、value type、purpose、page budget 和 taxonomy origin；unknown section/input/type fail closed。
+- Decision：`full`=全部 required input 齐全；`partial`=有 recognized input 但 required 未齐；`missing`=无 recognized input。optional 缺失不把 full 降为 partial。
+- Decision：section schema、profile、contract version 分别 hash；input content 另有 input hash，事实变化不应伪装成 schema 变更。
+- Decision：structure-only 合同不要求 B6，且不能声称 live；live acceptance 必须绑定 publishable B6 evidence set ID/manifest hash。
+- Verification：issue 专项 7 passed；v1 report contract + B6 upstream smoke 共 35 passed；未跑全量测试。
+- Boundary：C1 不写具体公司正文、不验收真实 evidence、不实现 recommendation/target-price/position policy（留给 C5）。
+
+### Gotchas · L2-C1
+
+- 九章原始模板适合人读，但粒度不足以给每节独立 completion；必须拆开收入、利润、现金流、会计、预测和宏观，才能诚实显示缺口。
+- Day1 16 模块不能原样搬入 A 股通用报告；US-tech-only 与不存在 reference 的部分只能抽 taxonomy，不能成为 runtime dependency。
+- optional input 缺失不等于 partial，否则几乎所有公司都会永远不 full；completion 只由 required input 决定。
+- `full` 只表示输入合同齐，不表示结论正确；真实发布仍必须通过 B6、后续 section compiler 和 citation gate。
+- 页数预算是信息密度规划，不是凑页数；总上限 50，行业附录只能在 profile budget 内替换/压缩。
+- C5 尚未实现时第 16 节自然显示 missing；不能临时让模型编一个仓位来填满合同。
