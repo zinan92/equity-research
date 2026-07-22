@@ -1,0 +1,14 @@
+{
+  "id": "canonical-raw",
+  "name": "canonical-raw",
+  "public": false,
+  "file_size_limit": 52428800,
+  "allowed_mime_types": [
+    "application/json",
+    "text/html",
+    "application/pdf"
+  ],
+  "client_policies": [],
+  "provision_via": "Supabase Storage API using backend service_role",
+  "managed_storage_schema_mutation": false
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "l2-acceptance-receipt-v1",
+  "issue": 29,
+  "milestone": "A2",
+  "contract_version": "canonical-authority-v1",
+  "status": "passed",
+  "verified_at": "2026-07-22T06:54:50Z",
+  "acceptance": {
+    "schemas": [
+      "market",
+      "research",
+      "control"
+    ],
+    "raw_bucket": "canonical-raw",
+    "raw_mime_types": [
+      "application/json",
+      "text/html",
+      "application/pdf"
+    ],
+    "empty_database_replays": 2,
+    "schema_signatures_match": true,
+    "browser_roles_default_denied": true,
+    "backend_service_role_only": true,
+    "canonical_rows_require_accepted_receipts": true,
+    "raw_blob_identity": "sha256-content-addressed",
+    "storage_api_boundary_preserved": true
+  },
+  "verification": [
+    {
+      "command": "python3 -m pytest product/tests/test_supabase_schema.py -q",
+      "result": "4 passed; PostgreSQL 16 Docker replay executed"
+    },
+    {
+      "command": "python3 -m unittest discover -s product/tests -p 'test_*.py' -q",
+      "result": "251 tests passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "artifact_hashes": {
+    "supabase/migrations/202607220001_canonical_authority.sql": "d0d930e8103e043ab19ace4bb9c82d733cc70e7b61d41a0e2f64f31667c9643a",
+    "product/data_core/storage_layout.py": "6b6eae4fe7bc62fa8394c929ee34fc01123992e0487a85dc1446f1f2fca9dc47",
+    "supabase/storage/canonical-raw.bucket.json": "792cf29032fa342b12215171e5c60086f1bb229e36a29466c277a9940f19c876",
+    "supabase/seed.sql": "20c41fe5620ddfc72305f160d5ccd42d13c1b5ebdbfd8884b6b681f8d020805a",
+    "docs/architecture/supabase-canonical-authority-v1.md": "391585df86d26bf51af6552818e48b6595b5e2af64bc982619c6f0a89f68ae76"
+  },
+  "adversarial_review": {
+    "intent_fit_percent": 99,
+    "plan_alignment_percent": 100,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0
+  },
+  "truth_boundary": "A2 defines and locally replays the production authority schema and private raw-storage desired state. It does not create a live Supabase project, upload provider bytes, configure member policies, or prove production backup and restore."
+}
