@@ -521,3 +521,34 @@
 - 幂等不能绑定当前 release 或新事件时间窗；否则同一外部事件在换版或一年后重放会被错误当成冲突。
 - acceptance test 看起来与真实 Paid 完全相同，UI、export 和 receipt 必须同时明确“不计收入”，不能只靠后台字段区分。
 - content-addressed 内部 pack 不能代替 canonical 原件或 release manifest。只有逐项原件比较、内外两层 hash、启动前重验和固定下载路径同时成立，才能阻断自洽伪包与路径逃逸。
+
+## 2026-07-22 · 两层产品 Roadmap 与 Repo 拼装架构获批
+
+- Objective：把现有投研 skeleton 升级为数据可追溯、研究结构标准化、任意受支持 A 股都能诚实输出 Summary 与长报告的产品。
+- User outcome：Park 可以从 7 个 Level 1 方向审核产品价值，并以 37 个独立 Level 2 user story 跟踪每一次可验收交付。
+- Decision：Supabase PostgreSQL + Storage 是唯一 production authority；本地 SQLite、外部 repo 自带数据库与缓存都不是线上 truth。
+- Decision：datafeed 提供唯一 Port/Adapter/SourceManifest/provenance 入口；a-stock-data、Vibe、quant pipeline、Intel、rollingSirius 和 Day1Global 都按组件粒度 Adapt/Extract/Reference，不合并为第二套平台。
+- Decision：研究生成只消费 immutable Research Context Pack；确定性分析和可选 UZI synthesis 均不能直接改写原始 evidence。
+- Decision：Roadmap 已创建 7 个 GitHub Milestones、tracking issues #65–#71 和 37 张 Level 2 issues #28–#64。Level 3 只在需要独立 owner/验收时即时创建。
+- Verification：所有 Level 2 issues 均包含 User outcome、3–7 项 Success Criteria、In/Out scope、Dependencies、Risk、Allowed Files 和 Verification Commands。
+
+### Gotchas · Roadmap execution
+
+- 当前默认工作区包含未提交的架构文档，不能切分支或清理；所有实现从 `origin/main` 的隔离 worktree 开始。
+- GitHub REST issues endpoint 带 60 秒缓存，批量创建后用 `gh issue list` 或单 issue readback 验收，不能把陈旧列表误报为创建失败。
+- `roadmap-approved` 表示产品规划已批准，不等于 Dev Queue 的 `park-approved` 风险门标签；没有通过该身份校验前不把 medium/high issues 投入自动队列。
+- 每个 Level 2 保持一张 issue、一条 branch、一张 PR。跨 milestone 使用链式 base，但不为文件级小任务制造无价值子票。
+
+## 2026-07-22 · L2-A1 Canonical Data Contract v1
+
+- Objective：任何外部数据源在进入 canonical pipeline 前，都必须用同一套可执行、可拒绝、可追溯的 record contract 表达。
+- Decision：合同固定 `market / fundamental / document / estimate / event` 五个 versioned record schema；adapter 状态只允许 `accepted / rejected`。
+- Decision：每个有效 `RecordEnvelope` 必须同时绑定 `SourceManifest` 与不可变 `RawCapture`，并携带 source manifest hash、provider/schema version、raw hash 和 UTC known_at。
+- Decision：`SourceManifest.domain_scope` 是 capability allowlist，阻止一个 source 越权输出未声明的数据域。
+- Boundary：A1 只定义逻辑合同、ADR、组件锁和 contract tests；Supabase DDL/Storage 属于 A2，通用 ingestion runtime 属于 A3。
+
+### Gotchas · L2-A1
+
+- 不能把已有 `data-foundation-v1` 改名冒充新合同；它仍是本地 acceptance baseline，新的 `canonical-data-contract-v1` 是上游 adapter 的稳定逻辑边界。
+- `degraded` 不作为 adapter 接受状态；它属于后续 quality gate 的判断，避免不可信记录静默进入 authority。
+- 只保存 normalized payload 不足以证明 provenance；没有 raw hash、manifest hash 和 known_at 的 record 必须 fail closed。

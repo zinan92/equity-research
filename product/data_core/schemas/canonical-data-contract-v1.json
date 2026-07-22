@@ -1,0 +1,88 @@
+{
+  "contract_version": "canonical-data-contract-v1",
+  "record_statuses": [
+    "accepted",
+    "rejected"
+  ],
+  "record_schemas": {
+    "market": {
+      "name": "market-record",
+      "version": "market-record-v1",
+      "required_fields": [
+        "instrument_id",
+        "observed_at",
+        "metric",
+        "value",
+        "unit"
+      ]
+    },
+    "fundamental": {
+      "name": "fundamental-record",
+      "version": "fundamental-record-v1",
+      "required_fields": [
+        "instrument_id",
+        "report_period",
+        "announced_at",
+        "metric",
+        "value",
+        "unit"
+      ]
+    },
+    "document": {
+      "name": "document-record",
+      "version": "document-record-v1",
+      "required_fields": [
+        "document_id",
+        "instrument_id",
+        "document_type",
+        "published_at",
+        "content_hash",
+        "storage_uri"
+      ]
+    },
+    "estimate": {
+      "name": "estimate-record",
+      "version": "estimate-record-v1",
+      "required_fields": [
+        "estimate_id",
+        "instrument_id",
+        "broker",
+        "published_at",
+        "fiscal_period",
+        "metric",
+        "value",
+        "unit"
+      ]
+    },
+    "event": {
+      "name": "event-record",
+      "version": "event-record-v1",
+      "required_fields": [
+        "event_id",
+        "instrument_id",
+        "event_type",
+        "occurred_at",
+        "title",
+        "evidence_ids"
+      ]
+    }
+  },
+  "required_provenance": [
+    "source_key",
+    "source_manifest_hash",
+    "provider_version",
+    "provider_schema_version",
+    "raw_hash",
+    "known_at"
+  ],
+  "required_envelope_fields": [
+    "contract_version",
+    "domain",
+    "record_schema_version",
+    "entity_key",
+    "payload",
+    "payload_hash",
+    "status",
+    "provenance"
+  ]
+}

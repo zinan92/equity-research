@@ -1,6 +1,18 @@
 """Canonical, point-in-time data foundation for the research product."""
 
-from .contracts import SourceManifest
+from .contracts import (
+    CONTRACT_VERSION,
+    RECORD_SCHEMAS,
+    Provenance,
+    RawCapture,
+    RecordDomain,
+    RecordEnvelope,
+    RecordSchema,
+    RecordStatus,
+    SourceManifest,
+    contract_descriptor,
+    validate_adapter_output,
+)
 from .research_refresh import (
     CanonicalComponent,
     CanonicalResearchRefresh,
@@ -20,5 +32,7 @@ __all__ = [
     "canonical_active_report", "canonical_active_summary",
     "CollectedBundle", "DataFoundation", "InjectedInterruption",
     "FileBundleFallbackAdapter", "LegacyCollectorAdapter", "QualityGateError", "RefreshInProgressError", "SnapshotReader",
-    "SourceManifest",
+    "CONTRACT_VERSION", "RECORD_SCHEMAS", "Provenance", "RawCapture",
+    "RecordDomain", "RecordEnvelope", "RecordSchema", "RecordStatus",
+    "SourceManifest", "contract_descriptor", "validate_adapter_output",
 ]

@@ -1,0 +1,57 @@
+{
+  "schema_version": "l2-acceptance-receipt-v1",
+  "issue": 28,
+  "milestone": "A1",
+  "contract_version": "canonical-data-contract-v1",
+  "status": "passed",
+  "verified_at": "2026-07-22T14:15:55+08:00",
+  "acceptance": {
+    "record_domains": [
+      "market",
+      "fundamental",
+      "document",
+      "estimate",
+      "event"
+    ],
+    "record_statuses": [
+      "accepted",
+      "rejected"
+    ],
+    "provenance_fail_closed": true,
+    "component_lock_checked": true,
+    "single_production_authority_documented": "Supabase PostgreSQL + Storage"
+  },
+  "verification": [
+    {
+      "command": "python3 -m pytest product/tests/test_data_contract.py -q",
+      "result": "21 passed, 17 subtests passed"
+    },
+    {
+      "command": "python3 -m unittest product.tests.test_data_foundation product.tests.test_research_refresh_v1 -q",
+      "result": "54 tests passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s product/tests -p 'test_*.py' -q",
+      "result": "247 tests passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "artifact_hashes": {
+    "product/data_core/contracts.py": "3b03e64f49999db4c852cbe2500dcc91fd1ba6dbdaa4bd9ead8a82053c1bc763",
+    "product/data_core/schemas/canonical-data-contract-v1.json": "55fd07302a924a8b913d6c5c5da6466b51d7dfa2ed7dfbf901a4caa4b595a60a",
+    "docs/architecture/adr/0001-canonical-data-contract-v1.md": "cc5e2e7396db205ccbbebbb9b63da211df62fe6b7663fd5bfd25695f5753c229",
+    "docs/architecture/repo-components.lock.yaml": "696f9d269cf2ab8bb3c8649a48e53654c72f339f79df23f9e77d4463114c822f",
+    "docs/architecture/repo-composition-architecture.md": "454105fd719697d13bb54b694d71c0baa85c8e66fbec358b263b1935f3d17824",
+    "docs/plans/2026-07-22-two-level-product-roadmap.md": "1241a47ed6bfb46240b66b44e259abf1a735eda620b1b6e3701e306475bef37e"
+  },
+  "adversarial_review": {
+    "intent_fit_percent": 100,
+    "p0": 0,
+    "p1": 0,
+    "p2": 0
+  },
+  "truth_boundary": "A1 defines executable logical contracts only. Supabase schema/storage is A2; generalized ingestion runtime is A3; no provider is connected by this change."
+}
