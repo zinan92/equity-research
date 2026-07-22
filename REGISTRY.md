@@ -10,11 +10,12 @@
 - B2 now incrementally syncs the Eastmoney sell-side catalog, archives validated PDFs behind controlled rate limits/retries, deduplicates by canonical URL and SHA-256, and keeps unavailable PDFs visible as queryable metadata-only evidence.
 - B3 now extracts native PDF text with page-scoped OCR fallback, emits parser-versioned page/chunk identities, measures page-map/OCR coverage, and blocks claims whose citations do not match document ID, one-based page, and raw hash.
 - B4 now normalizes Eastmoney/THS broker estimates by forecast year, binds enriched fields to report/date/raw provenance, builds replayable point-in-time consensus snapshots, and quarantines superseded or robust-outlier values before aggregation.
+- B5 now adapts Intel RSS/Google News/Yahoo/official-monitor collectors behind canonical SourceManifest ingestion, resolves A-share entities against the security master, groups cross-source duplicate events, separates evidence from versioned model inference, and exposes per-source coverage gaps.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
 
 ## 下一步
 
-- Start L2-B5 issue #37 from latest `main`: normalize Intel/news/official-monitor events behind SourceManifest and measurable A-share entity resolution.
-- Deduplicate the same event across sources, version any inference, and expose source coverage gaps without promoting news to official fact.
-- Keep social-sentiment trading and Reddit/HN out of the default evidence pack.
+- Start L2-B6 issue #38 from latest `main`: build one immutable evidence set from B1–B5 and A5 outputs.
+- Machine-check primary/independent/lead roles plus freshness, known-at and conflict policies before a Context Pack is publishable.
+- Keep rejected evidence out and make every missing coverage requirement explicit; report writing and UI remain out of scope.
