@@ -1,0 +1,34 @@
+{
+  "milestone": "L2-B3",
+  "issue": 35,
+  "status": "accepted",
+  "user_outcome": "Every publishable report citation resolves to the exact PDF document, page, and raw hash.",
+  "verification": {
+    "issue_specific": "6 passed",
+    "upstream_smoke": "34 passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "quality_probe": {
+    "document": "two-page native-plus-scanned PDF",
+    "native_pages": 1,
+    "ocr_pages": 1,
+    "page_mapping_accuracy": 1.0,
+    "scanned_text_coverage": 1.0,
+    "page_mapping_threshold": 0.95,
+    "scanned_text_coverage_threshold": 0.9,
+    "actual_local_backend": "pdftoppm plus Tesseract",
+    "result": "passed"
+  },
+  "publication_gate_probe": {
+    "valid_claims_published": 1,
+    "invalid_or_uncited_claims_blocked": 3,
+    "wrong_raw_hash_blocked": true,
+    "wrong_page_blocked": true,
+    "uncited_claim_blocked": true
+  },
+  "boundaries": [
+    "No automatic conclusion generation",
+    "No table-cell coordinate reconstruction",
+    "Managed OCR language-pack deployment remains separate"
+  ]
+}
