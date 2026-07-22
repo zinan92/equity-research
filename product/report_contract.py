@@ -113,6 +113,13 @@ def _module_status(report: dict[str, Any], spec: ModuleSpec, *, structure_only: 
     depth = report.get("research_depth")
     if depth == "quantitative_baseline" and spec.id in {"business_and_industry", "valuation"}:
         return "missing_evidence", "Company-level evidence is not complete; the section renders its research boundary only."
+    if spec.id == "valuation" and (report.get("valuation") or {}).get("status") in {
+        "missing_evidence", "pending_company_research", "not_available",
+    }:
+        return "missing_evidence", str(
+            (report.get("valuation") or {}).get("reason")
+            or "Valuation evidence is incomplete; no target price is publishable."
+        )
     return "available", None
 
 
@@ -490,6 +497,15 @@ def validate_report_contract(contract: dict[str, Any], report: dict[str, Any] | 
             missing = [path for path in spec.content_paths if _path_value(report, path) in (None, "", [], {})]
             if missing:
                 errors.append(f"{spec.id} is available but content is missing: {', '.join(missing)}")
+        if report is not None:
+            structure_only = (contract.get("truth_set") or {}).get("scope") == "structure_only"
+            expected_status, expected_reason = _module_status(report, spec, structure_only=structure_only)
+            if status != expected_status:
+                errors.append(
+                    f"{spec.id} status disagrees with report evidence state: expected {expected_status}"
+                )
+            if expected_status != "available" and module.get("status_reason") != expected_reason:
+                errors.append(f"{spec.id} absence reason disagrees with report evidence state")
     if report is not None:
         errors.extend(_schema_errors("research-report-payload-v1.schema.json", report))
         if (
@@ -536,13 +552,13 @@ def validate_report_contract(contract: dict[str, Any], report: dict[str, Any] | 
     return sorted(set(errors))
 
 
-def attach_report_contract(report: dict[str, Any]) -> dict[str, Any]:
+def attach_report_contract(report: dict[str, Any], *, structure_only: bool = False) -> dict[str, Any]:
     payload = deepcopy(report)
     payload.setdefault(
         "disclaimer",
         "本报告用于研究框架与模型组合讨论，不构成投资建议。事实、推断和估值假设已分层；公司公告能证明公司披露了什么，但不自动证明未来一定兑现。",
     )
-    contract = build_report_contract(payload)
+    contract = build_report_contract(payload, structure_only=structure_only)
     payload.setdefault("valuation", {})["currency"] = contract["identity"]["currency"]
     payload["report_contract"] = contract
     errors = validate_report_contract(contract, payload)

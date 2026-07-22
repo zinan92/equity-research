@@ -2,18 +2,21 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import ipaddress
 import io
 import json
 import os
 import re
+import socket
 import tempfile
+import urllib.error
 import urllib.request
 from collections import defaultdict
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 from data_store import DB_PATH, connect, initialize
 
@@ -24,18 +27,86 @@ MAX_INDEPENDENT_AGE_DAYS = 365
 COMPANY_DOMAINS = {
     "300750.SZ": {"catl.com"},
     "600519.SH": {"moutaichina.com", "moutai.com.cn"},
+    "600036.SH": {"cmbchina.com"},
+    "600900.SH": {"cypc.com.cn"},
+    "000333.SZ": {"midea.com", "midea.com.cn"},
 }
 COMPANY_IDENTITIES = {
     "300750.SZ": ("宁德时代", "Contemporary Amperex Technology"),
     "600519.SH": ("贵州茅台", "Kweichow Moutai"),
+    "600036.SH": ("招商银行", "China Merchants Bank"),
+    "600900.SH": ("长江电力", "China Yangtze Power"),
+    "000333.SZ": ("美的集团", "Midea Group"),
 }
 COMPANY_LEGAL_NAMES = {
     "300750.SZ": "宁德时代新能源科技股份有限公司",
     "600519.SH": "贵州茅台酒股份有限公司",
+    "600036.SH": "招商银行股份有限公司",
+    "600900.SH": "中国长江电力股份有限公司",
+    "000333.SZ": "美的集团股份有限公司",
 }
 REGULATORY_DOMAINS = {"cninfo.com.cn", "sse.com.cn", "szse.cn"}
-INDEPENDENT_DOMAINS = {"iea.org", "sneresearch.com", "xinhuanet.com", "news.cn", "people.com.cn"}
+INDEPENDENT_DOMAINS = {
+    "iea.org", "sneresearch.com", "xinhuanet.com", "news.cn", "people.com.cn",
+    "nbd.com.cn", "cpnn.com.cn", "eeo.com.cn",
+}
 CURATED_SOURCE_PROFILES: dict[str, list[dict[str, Any]]] = {
+    "600036.SH": [
+        {
+            "id": "cmb_2025_preliminary", "document_id": "cmb_2025_preliminary",
+            "title": "招商银行 2025 年度业绩快报", "kind": "company_release", "strength": "中",
+            "known_at": "2026-01-23", "url": "https://s3gw.cmbchina.com/lb5001-cmbweb-prd-1255000097/cmbir/20260123/721c99c0-1b86-47f7-ab46-e4b6aa68da0e.pdf",
+        },
+        {
+            "id": "cmb_2025_annual", "document_id": "cmb_2025_annual",
+            "title": "招商银行 2025 年年度报告", "kind": "primary", "strength": "强",
+            "known_at": "2026-03-28", "url": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225047590.PDF",
+        },
+        {
+            "id": "cmb_2026_q1", "document_id": "cmb_2026_q1",
+            "title": "招商银行 2026 年第一季度报告", "kind": "primary", "strength": "强",
+            "known_at": "2026-04-29", "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF",
+        },
+        {
+            "id": "nbd_cmb_2025_results", "document_id": "nbd_cmb_2025_results",
+            "title": "每日经济新闻 · 招商银行 2025 年经营结果交叉核验", "kind": "independent", "strength": "中",
+            "known_at": "2026-03-30", "url": "https://www.nbd.com.cn/articles/2026-03-28/4313709.html",
+        },
+    ],
+    "600900.SH": [
+        {
+            "id": "cypc_2025_annual", "document_id": "cypc_2025_annual",
+            "title": "长江电力 2025 年年度报告", "kind": "primary", "strength": "强",
+            "known_at": "2026-04-30", "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        },
+        {
+            "id": "cypc_2026_q1", "document_id": "cypc_2026_q1",
+            "title": "长江电力 2026 年第一季度报告", "kind": "primary", "strength": "强",
+            "known_at": "2026-04-30", "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        },
+        {
+            "id": "cpnn_cypc_2025_results", "document_id": "cpnn_cypc_2025_results",
+            "title": "中国能源新闻网 · 长江电力 2025 年经营结果交叉核验", "kind": "independent", "strength": "中",
+            "known_at": "2026-04-30", "url": "https://www.cpnn.com.cn/news/nyqy/202604/t20260430_1884834.html",
+        },
+    ],
+    "000333.SZ": [
+        {
+            "id": "midea_2025_annual", "document_id": "midea_2025_annual",
+            "title": "美的集团 2025 年年度报告", "kind": "primary", "strength": "强",
+            "known_at": "2026-03-31", "url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        },
+        {
+            "id": "midea_2026_q1", "document_id": "midea_2026_q1",
+            "title": "美的集团 2026 年第一季度报告", "kind": "primary", "strength": "强",
+            "known_at": "2026-04-30", "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        },
+        {
+            "id": "nbd_midea_2025_results", "document_id": "nbd_midea_2025_results",
+            "title": "每日经济新闻 · 美的集团 2025 年经营结果交叉核验", "kind": "independent", "strength": "中",
+            "known_at": "2026-03-31", "url": "https://www.nbd.com.cn/articles/2026-03-31/4318601.html",
+        },
+    ],
     "600519.SH": [
         {
             "id": "moutai_2025_annual", "document_id": "moutai_2025_annual",
@@ -73,10 +144,53 @@ def _canonical_url(url: str | None) -> str | None:
         return None
     parts = urlsplit(url)
     host = (parts.hostname or "").lower()
-    if not host:
+    if not host or parts.username or parts.password or (parts.port and parts.port != 443):
         return None
     port = f":{parts.port}" if parts.port and parts.port != 443 else ""
     return urlunsplit(("https", host + port, parts.path or "/", parts.query, ""))
+
+
+def _require_public_https_url(url: str, allowed_domains: set[str]) -> str:
+    canonical = _canonical_url(url)
+    if not canonical:
+        raise RuntimeError("research capture URL must be canonical public HTTPS")
+    host = (urlsplit(canonical).hostname or "").lower()
+    if not _host_matches(host, allowed_domains):
+        raise RuntimeError("research capture redirect left the approved domain allowlist")
+    try:
+        literal = ipaddress.ip_address(host)
+    except ValueError:
+        literal = None
+    if literal is not None and not literal.is_global:
+        raise RuntimeError("research capture URL contains a non-public address")
+    try:
+        addresses = {
+            item[4][0] for item in socket.getaddrinfo(host, 443, type=socket.SOCK_STREAM)
+        }
+    except OSError as exc:
+        raise RuntimeError("research capture host could not be resolved") from exc
+    transport_proxy = ipaddress.ip_network("198.18.0.0/15")
+    if not addresses or any(
+        not ipaddress.ip_address(address).is_global
+        and not (literal is None and ipaddress.ip_address(address) in transport_proxy)
+        for address in addresses
+    ):
+        raise RuntimeError("research capture host resolved to a non-public address")
+    return canonical
+
+
+class _ValidatedRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def __init__(self, allowed_domains: set[str], chain: list[str]) -> None:
+        super().__init__()
+        self.allowed_domains = allowed_domains
+        self.chain = chain
+
+    def redirect_request(self, request, fp, code, msg, headers, newurl):  # type: ignore[override]
+        target = _require_public_https_url(urljoin(request.full_url, newurl), self.allowed_domains)
+        if len(self.chain) >= 6:
+            raise RuntimeError("research capture exceeded five redirects")
+        self.chain.append(target)
+        return super().redirect_request(request, fp, code, msg, headers, target)
 
 
 def _host_matches(host: str, domains: set[str]) -> bool:
@@ -101,13 +215,33 @@ def _trusted_document_kind(ticker: str, url: str | None, requested: str) -> str 
     return None
 
 
-def _capture_remote(url: str, timeout: float = 30.0) -> tuple[bytes, str, int]:
-    request = urllib.request.Request(url, headers={"User-Agent": "ParkResearchEvidenceBot/1.0"})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
+def _capture_domains(ticker: str, requested: str, canonical: str) -> set[str]:
+    if requested in {"primary", "company_release"}:
+        return set(REGULATORY_DOMAINS) | set(COMPANY_DOMAINS.get(ticker.upper(), set()))
+    if requested == "independent":
+        return set(INDEPENDENT_DOMAINS)
+    host = (urlsplit(canonical).hostname or "").lower()
+    return {host} if host else set()
+
+
+def _capture_remote(
+    url: str, allowed_domains: set[str], timeout: float = 30.0,
+) -> tuple[bytes, str, int, str, list[str]]:
+    initial = _require_public_https_url(url, allowed_domains)
+    chain = [initial]
+    opener = urllib.request.build_opener(_ValidatedRedirectHandler(allowed_domains, chain))
+    request = urllib.request.Request(initial, headers={"User-Agent": "ParkResearchEvidenceBot/1.0"})
+    with opener.open(request, timeout=timeout) as response:
+        final_url = _require_public_https_url(response.geturl(), allowed_domains)
+        if chain[-1] != final_url:
+            chain.append(final_url)
         data = response.read(30 * 1024 * 1024 + 1)
         if len(data) > 30 * 1024 * 1024:
             raise RuntimeError("research source exceeds 30 MiB capture limit")
-        return data, response.headers.get_content_type() or "application/octet-stream", int(response.status)
+        return (
+            data, response.headers.get_content_type() or "application/octet-stream",
+            int(response.status), final_url, chain,
+        )
 
 
 def _extract_capture_text(raw_bytes: bytes, mime_type: str | None) -> str:
@@ -139,23 +273,27 @@ def _extract_regulatory_header_text(raw_bytes: bytes, mime_type: str | None) -> 
 
 
 def _verify_regulatory_identity(raw_bytes: bytes, mime_type: str | None, ticker: str) -> dict[str, str] | None:
-    text = re.sub(r"\s+", " ", _extract_regulatory_header_text(raw_bytes, mime_type)).strip()
+    header = _extract_regulatory_header_text(raw_bytes, mime_type)
+    text = re.sub(r"\s+", " ", header).strip()
+    compact = re.sub(r"\s+", "", header)
     code = ticker.split(".", 1)[0]
     names = COMPANY_IDENTITIES.get(ticker.upper(), ())
     short_name = names[0] if names else ""
     legal_name = COMPANY_LEGAL_NAMES.get(ticker.upper(), "")
     first_code = re.search(r"(?:证券代码|公司代码)\s*[:：]?\s*(\d{6})(?:\D|$)", text)
     first_short_name = re.search(r"(?:证券简称|公司简称)\s*[:：]?\s*([^\s，。；:：]+)", text)
-    legal_name_position = text.find(legal_name) if legal_name else -1
-    if not (
-        first_code and first_code.group(1) == code
-        and first_short_name and first_short_name.group(1).startswith(short_name)
-        and legal_name_position >= 0 and legal_name_position < first_code.start()
-    ):
+    legal_name_matches = bool(legal_name and re.sub(r"\s+", "", legal_name) in compact)
+    code_matches = first_code is None or first_code.group(1) == code
+    short_name_matches = first_short_name is None or first_short_name.group(1).startswith(short_name)
+    if not (legal_name_matches and code_matches and short_name_matches):
         return None
     return {
         "ticker": ticker.upper(), "company_name": legal_name,
-        "matched_by": "cover_code_short_name_legal_name",
+        "matched_by": (
+            "cover_code_short_name_legal_name"
+            if first_code and first_short_name
+            else "regulatory_cover_legal_name"
+        ),
         "excerpt_hash": hashlib.sha256(text.encode("utf-8")).hexdigest(),
         "extractor_version": "regulatory-identity-v2",
     }
@@ -262,6 +400,29 @@ def _capture_is_valid(row: dict[str, Any]) -> bool:
         return False
 
 
+def _capture_provenance(row: dict[str, Any]) -> dict[str, Any]:
+    try:
+        payload = json.loads(row.get("payload_json") or "{}")
+    except (TypeError, json.JSONDecodeError):
+        payload = {}
+    final_url = payload.get("final_url") or row.get("canonical_url")
+    redirect_chain = payload.get("redirect_chain")
+    validated_redirect = bool(payload.get("final_url") and isinstance(redirect_chain, list) and redirect_chain)
+    if not isinstance(redirect_chain, list) or not redirect_chain:
+        redirect_chain = [final_url] if final_url else []
+    receipt = {
+        "capture_policy_version": (
+            "validated-redirect-v1" if validated_redirect else "legacy-capture-current-url-only"
+        ),
+        "initial_url": payload.get("initial_url") or row.get("source_url"),
+        "final_url": final_url,
+        "redirect_chain": redirect_chain,
+        "observed_at": row.get("observed_at"), "fetched_at": row.get("fetched_at"),
+        "raw_sha256": row.get("raw_sha256"),
+    }
+    return {**receipt, "capture_receipt_hash": _hash(receipt)}
+
+
 def _insert_document(db_path: Path, document: dict[str, Any]) -> dict[str, Any]:
     payload_json = _canonical_json(document["payload"])
     raw_bytes = document.get("raw_bytes")
@@ -330,10 +491,20 @@ def sync_profile_sources(
         raw_bytes: bytes | None = None
         mime_type: str | None = None
         http_status: int | None = None
+        final_url: str | None = None
+        redirect_chain: list[str] = []
         capture_error: str | None = None
         if capture_remote and canonical:
             try:
-                raw_bytes, mime_type, http_status = _capture_remote(canonical)
+                captured_result = _capture_remote(
+                    canonical, _capture_domains(ticker, requested_kind, canonical),
+                )
+                if len(captured_result) == 3:  # backwards-compatible deterministic transports
+                    raw_bytes, mime_type, http_status = captured_result
+                    final_url, redirect_chain = canonical, [canonical]
+                else:
+                    raw_bytes, mime_type, http_status, final_url, redirect_chain = captured_result
+                trusted_kind = _trusted_document_kind(ticker, final_url, requested_kind)
             except Exception as exc:
                 capture_error = f"{type(exc).__name__}: {exc}"
         identity = _verify_regulatory_identity(raw_bytes, mime_type, ticker) if raw_bytes is not None and trusted_kind == "primary" else None
@@ -350,12 +521,13 @@ def sync_profile_sources(
             "source_url": primary.get("url"), "title": primary.get("title") or external_id,
             "document_kind": kind, "evidence_strength": strength,
             "published_at": primary.get("known_at"), "observed_at": captured_at, "quality_status": quality_status,
-            "canonical_url": canonical, "raw_bytes": raw_bytes, "raw_mime_type": mime_type,
+            "canonical_url": final_url or canonical, "raw_bytes": raw_bytes, "raw_mime_type": mime_type,
             "http_status": http_status, "fetched_at": captured_at if raw_bytes is not None else None,
             "payload": {
                 "external_document_id": external_id, "locators": locators,
                 "requested_kind": requested_kind, "trusted_kind": trusted_kind,
                 "capture_error": capture_error, "capture_method": "remote_http" if raw_bytes is not None else None,
+                "initial_url": canonical, "final_url": final_url, "redirect_chain": redirect_chain,
                 "regulatory_identity": identity,
             }, "raw_path": None,
         })
@@ -514,6 +686,7 @@ def build_evidence_set(
                     "identity_matched_by": row.get("identity_matched_by"),
                     "identity_excerpt_hash": row.get("identity_excerpt_hash"),
                     "identity_extractor_version": row.get("identity_extractor_version"),
+                    "capture_provenance": _capture_provenance(row),
                 }
                 for row in documents
             ],
@@ -557,6 +730,8 @@ def build_evidence_set(
                 "published_at": row["published_at"], "content_hash": row["content_hash"],
                 "canonical_url": row["canonical_url"], "raw_sha256": row["raw_sha256"],
                 "source_key": row["source_key"], "identity_matched_by": row.get("identity_matched_by"),
+                "observed_at": row.get("observed_at"), "fetched_at": row.get("fetched_at"),
+                "capture_provenance": _capture_provenance(row),
             }
             for row in documents
         ],
@@ -605,7 +780,7 @@ def load_evidence_set(
         for raw_row in rows:
             row = dict(raw_row)
             documents_list = [dict(item) for item in conn.execute(
-                """SELECT d.id, d.title, d.source_key, d.source_url, d.canonical_url,
+                """SELECT d.id, d.title, d.source_key, d.source_url, d.canonical_url, d.payload_json,
                           d.document_kind, d.evidence_strength, d.published_at, d.observed_at,
                           d.fetched_at, d.content_hash, d.raw_sha256, d.raw_path, i.role,
                           x.matched_by AS identity_matched_by,
@@ -618,6 +793,9 @@ def load_evidence_set(
                    WHERE i.evidence_set_id=? ORDER BY d.published_at, d.id""",
                 (row["id"],),
             ).fetchall()]
+            for item in documents_list:
+                item["capture_provenance"] = _capture_provenance(item)
+                item.pop("payload_json", None)
             try:
                 gate = json.loads(row["gate_json"])
                 cutoff = _instant(row["knowledge_cutoff"])
@@ -634,6 +812,7 @@ def load_evidence_set(
                             "identity_matched_by": item.get("identity_matched_by"),
                             "identity_excerpt_hash": item.get("identity_excerpt_hash"),
                             "identity_extractor_version": item.get("identity_extractor_version"),
+                            "capture_provenance": item["capture_provenance"],
                         }
                         for item in documents_list
                     ],

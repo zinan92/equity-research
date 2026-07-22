@@ -1,0 +1,176 @@
+{
+  "current_transport_verification_hash": "53e6723a7fd5c493b39a6ca80a04beefacfeadb8b2316a25eaa5b4314d99722b",
+  "document_count": 6,
+  "documents": [
+    {
+      "capture_provenance": {
+        "capture_policy_version": "validated-redirect-v1",
+        "capture_receipt_hash": "a374fd345883d552353e99478616d3ec86d13d77548655a61d23e8e817ae4308",
+        "fetched_at": "2026-07-21T12:16:11.478494+00:00",
+        "final_url": "https://www.sneresearch.com/en/insight/release_view/583/page/24?s_cat=%7C&s_keyword=",
+        "initial_url": "https://www.sneresearch.com/en/insight/release_view/583/page/24?s_cat=%7C&s_keyword=",
+        "observed_at": "2026-07-21T12:16:11.478494+00:00",
+        "raw_sha256": "d59405db5aa2419f5146c273e1982bd3032a7e94faa4f27663970e0b27e7d7af",
+        "redirect_chain": [
+          "https://www.sneresearch.com/en/insight/release_view/583/page/24?s_cat=%7C&s_keyword="
+        ]
+      },
+      "capture_receipt_hash": "7f70c2318d797cc134a436d12b968e38531cddb143af4b8ecd52acd5949ef5a8",
+      "content_hash": "d59405db5aa2419f5146c273e1982bd3032a7e94faa4f27663970e0b27e7d7af",
+      "document_id": "rdoc_d59405db5aa2419f5146",
+      "id": "sne_2025_ess",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "independent",
+      "known_at": "2026-03-05T23:59:59+08:00",
+      "raw_sha256": "d59405db5aa2419f5146c273e1982bd3032a7e94faa4f27663970e0b27e7d7af",
+      "title": "SNE Research · 2025 全球储能电芯出货",
+      "url": "https://www.sneresearch.com/en/insight/release_view/583/page/24?s_cat=%7C&s_keyword="
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "8ec4b61d513ef6f3abd6d61fda7eb43021dd72646027ee0e15f9f3e45ed60f58",
+        "fetched_at": "2026-07-17T17:36:24.988593+00:00",
+        "final_url": "https://www.catl.com/uploads/1/file/public/202603/20260310105829_c5p2l3q9ll.pdf",
+        "initial_url": "https://www.catl.com/uploads/1/file/public/202603/20260310105829_c5p2l3q9ll.pdf",
+        "observed_at": "2026-07-17T17:36:24.988593+00:00",
+        "raw_sha256": "6850b3d22ec2427ceb8cccd8321ecf59658db21746dd99d330fcbe324efddd3f",
+        "redirect_chain": [
+          "https://www.catl.com/uploads/1/file/public/202603/20260310105829_c5p2l3q9ll.pdf"
+        ]
+      },
+      "capture_receipt_hash": "3fc37d0d20383720a60284ac6ea79e6a4d355ca333f5e7c9e86b8979817105b4",
+      "content_hash": "6850b3d22ec2427ceb8cccd8321ecf59658db21746dd99d330fcbe324efddd3f",
+      "document_id": "rdoc_6850b3d22ec2427ceb8c",
+      "id": "catl_2025_annual",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "primary",
+      "known_at": "2026-03-10T23:59:59+08:00",
+      "raw_sha256": "6850b3d22ec2427ceb8cccd8321ecf59658db21746dd99d330fcbe324efddd3f",
+      "title": "2025 年年度报告 · 主要业务",
+      "url": "https://www.catl.com/uploads/1/file/public/202603/20260310105829_c5p2l3q9ll.pdf"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "35f0504170a1dbe0a6537189c08add454ac68dfc970cc9ad31c31fd914282eac",
+        "fetched_at": "2026-07-17T17:36:27.220062+00:00",
+        "final_url": "https://www.catl.com/news/9654.html",
+        "initial_url": "https://www.catl.com/news/9654.html",
+        "observed_at": "2026-07-17T17:36:27.220062+00:00",
+        "raw_sha256": "ffeb7b9531b3d39ec3adec2f47291e0bbe7204cadb79e276a6298b94439d3edb",
+        "redirect_chain": [
+          "https://www.catl.com/news/9654.html"
+        ]
+      },
+      "capture_receipt_hash": "d110b36718250d13812ef207d3703c54e4f3a88b270039ed6442f831208172e0",
+      "content_hash": "ffeb7b9531b3d39ec3adec2f47291e0bbe7204cadb79e276a6298b94439d3edb",
+      "document_id": "rdoc_ffeb7b9531b3d39ec3ad",
+      "id": "catl_2025_release",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "company_release",
+      "known_at": "2026-03-10T23:59:59+08:00",
+      "raw_sha256": "ffeb7b9531b3d39ec3adec2f47291e0bbe7204cadb79e276a6298b94439d3edb",
+      "title": "2025 年度分红方案与年报发布",
+      "url": "https://www.catl.com/news/9654.html"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "bd405b922a65aed5196d225ee637feff8669998455f97870d8e5ae081d455c36",
+        "fetched_at": "2026-07-17T17:36:35.082428+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+        "observed_at": "2026-07-17T17:36:35.082428+00:00",
+        "raw_sha256": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+        ]
+      },
+      "capture_receipt_hash": "d7040becfbeb3715b23355e59fa5cfb23ff358d3a25e524113671d074206e783",
+      "content_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+      "document_id": "rdoc_32e4936e6dd68a89741a",
+      "id": "catl_2026_q1",
+      "identity_excerpt_hash": "1964843d56e845c73581e4936ea07419020be7914c57fce215d0d7df9bc9aab3",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "cover_code_short_name_legal_name",
+      "kind": "primary",
+      "known_at": "2026-04-16T23:59:59+08:00",
+      "raw_sha256": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+      "title": "2026 年第一季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "validated-redirect-v1",
+        "capture_receipt_hash": "17f70d6c1c95017b4cbc932d7f0409238b24d0787dd2b17a6a5ce1528a19d877",
+        "fetched_at": "2026-07-21T12:16:09.337379+00:00",
+        "final_url": "https://www.sneresearch.com/en/insight/release_view/663/page/0?s_cat=%7C&s_keyword=",
+        "initial_url": "https://www.sneresearch.com/en/insight/release_view/663/page/0?s_cat=%7C&s_keyword=",
+        "observed_at": "2026-07-21T12:16:09.337379+00:00",
+        "raw_sha256": "03060a87ddbcc4f7aa9375a27d7f7f2dd2fb32c4f498babf132d8095ea30da09",
+        "redirect_chain": [
+          "https://www.sneresearch.com/en/insight/release_view/663/page/0?s_cat=%7C&s_keyword="
+        ]
+      },
+      "capture_receipt_hash": "e8fb6369127425f46b28aadcfcdb9247f8e8a7e1c8a35dacc86462f3c95300f6",
+      "content_hash": "03060a87ddbcc4f7aa9375a27d7f7f2dd2fb32c4f498babf132d8095ea30da09",
+      "document_id": "rdoc_03060a87ddbcc4f7aa93",
+      "id": "sne_2026_ev_jan_apr",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "independent",
+      "known_at": "2026-06-03T23:59:59+08:00",
+      "raw_sha256": "03060a87ddbcc4f7aa9375a27d7f7f2dd2fb32c4f498babf132d8095ea30da09",
+      "title": "SNE Research · 2026 年 1–4 月全球动力电池装机",
+      "url": "https://www.sneresearch.com/en/insight/release_view/663/page/0?s_cat=%7C&s_keyword="
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "075e4ed6a8ef499ab9cbd1113fdf483b77c9047953ab53074b45c13e3ee05501",
+        "fetched_at": "2026-07-17T17:36:36.067816+00:00",
+        "final_url": "https://www.catl.com/news/10075.html",
+        "initial_url": "https://www.catl.com/news/10075.html",
+        "observed_at": "2026-07-17T17:36:36.067816+00:00",
+        "raw_sha256": "ab0aa6e49a9dd3397a523f1b7e3d43df4623e56cc85e7ee4778c02820c32a3c7",
+        "redirect_chain": [
+          "https://www.catl.com/news/10075.html"
+        ]
+      },
+      "capture_receipt_hash": "a2d3dd52548f1dcce88481a3c0038521dc458273a0a6e36e19245cd1019c983b",
+      "content_hash": "ab0aa6e49a9dd3397a523f1b7e3d43df4623e56cc85e7ee4778c02820c32a3c7",
+      "document_id": "rdoc_ab0aa6e49a9dd3397a52",
+      "id": "catl_alfen_mou_20260716",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "company_release",
+      "known_at": "2026-07-16T23:59:59+08:00",
+      "raw_sha256": "ab0aa6e49a9dd3397a523f1b7e3d43df4623e56cc85e7ee4778c02820c32a3c7",
+      "title": "宁德时代与 Alfen 签署 5GWh 钠电储能 MOU",
+      "url": "https://www.catl.com/news/10075.html"
+    }
+  ],
+  "evidence_gate_hash": "8812cd43dafb238fb84407eaa8d56113e25ba9952cc33a855c507843eee8c706",
+  "evidence_manifest_hash": "a1a38d32f5971411b753e508ac88f9d17a168155621cdcf1354bac8d5d22bbcd",
+  "evidence_set_id": "xcr_a1a38d32f5971411b753",
+  "knowledge_cutoff": "2026-07-21T12:17:32Z",
+  "production_input_identity": "8c5cdaa0df4e0a4f2048dae571ede2a6bf37b8a59abfa7da5a6177f94bd7dbf7",
+  "raw_bytes_committed": false,
+  "schema_version": "cross-company-redacted-evidence-receipt-v1",
+  "snapshot_binding": {
+    "baseline_payload_hash": "5495fb1d8bab017a8b26f881a93ae46cfc83cfb9951ec0a8ba418cb0c3019fa6",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4"
+  },
+  "status": "passed",
+  "ticker": "300750.SZ"
+}

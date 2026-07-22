@@ -1,0 +1,64 @@
+{
+  "documents": [
+    {
+      "capture_policy_version": "validated-redirect-v1",
+      "content_matches_frozen": true,
+      "current_raw_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+      "document_id": "rdoc_474905deeaf0f875fc0a",
+      "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+      "frozen_raw_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+      "hash_matches_frozen": true,
+      "http_status": 200,
+      "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+      "mime_type": "application/pdf",
+      "redirect_chain": [
+        "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+      ],
+      "semantic_overlap": 1.0,
+      "source_id": "moutai_2025_annual",
+      "verified_at": "2026-07-21T12:43:23.001031+00:00"
+    },
+    {
+      "capture_policy_version": "validated-redirect-v1",
+      "content_matches_frozen": true,
+      "current_raw_sha256": "ef87df7e173226889c221a496228a88630a92f84fc27034e0af7d9736a49dcf4",
+      "document_id": "rdoc_ef87df7e173226889c22",
+      "final_url": "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html",
+      "frozen_raw_sha256": "ef87df7e173226889c221a496228a88630a92f84fc27034e0af7d9736a49dcf4",
+      "hash_matches_frozen": true,
+      "http_status": 200,
+      "initial_url": "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html",
+      "mime_type": "text/html",
+      "redirect_chain": [
+        "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html"
+      ],
+      "semantic_overlap": 1.0,
+      "source_id": "xinhua_moutai_2025_results",
+      "verified_at": "2026-07-21T12:43:25.082649+00:00"
+    },
+    {
+      "capture_policy_version": "validated-redirect-v1",
+      "content_matches_frozen": true,
+      "current_raw_sha256": "6f810c79cf3b4a0d6b2f184f303624e2cdc693e60e10521ea0396940a9096437",
+      "document_id": "rdoc_6f810c79cf3b4a0d6b2f",
+      "final_url": "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html",
+      "frozen_raw_sha256": "6f810c79cf3b4a0d6b2f184f303624e2cdc693e60e10521ea0396940a9096437",
+      "hash_matches_frozen": true,
+      "http_status": 200,
+      "initial_url": "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html",
+      "mime_type": "text/html",
+      "redirect_chain": [
+        "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html"
+      ],
+      "semantic_overlap": 1.0,
+      "source_id": "moutai_2026_h1_market_meeting",
+      "verified_at": "2026-07-21T12:43:27.609498+00:00"
+    }
+  ],
+  "evidence_manifest_hash": "cb7e964252fb433fe56b26c5d041ee7d5cb906cf0b3f646a4a452745b51a5da8",
+  "evidence_store_manifest_hash": "969156ab9b854cc034b38862cc0bcf24a59d10a6cd7136004cf4d545b558887a",
+  "snapshot_id": "snap_real_a89a5113ef0f",
+  "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4",
+  "status": "passed",
+  "ticker": "600519.SH"
+}

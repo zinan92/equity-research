@@ -1,0 +1,194 @@
+{
+  "artifact_version": "cross-company-narrative-v1",
+  "editorial_approval": {
+    "approval_version": "cross-company-editorial-v2",
+    "approved_at": "2026-07-21T13:11:43.607312+00:00",
+    "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+    "artifact_provenance_hash": "e5c5b9f25fb0165708a87b1af329ffa324a0ddfe845ba0dae1333000ba6b9024",
+    "evidence_manifest_hash": "730197a846382d4127069fa7c024d57ab4481df18d728cbfe19dd3e92871971d",
+    "input_identity": "15f05bce2ffa6c607493aa875c9d33c7e7ddc445306b282019eac2c00f029a96",
+    "model": "deepseek-v4-pro",
+    "narrative_hash": "295d54086008445378c64e16e425d14d4b1bcc0f925825550d0e7a0ad92cd81f",
+    "prompt_hash": "5ef32ea051451f3c066fd6c39aab3bbda2062a7d2ea0cb04441c16b2b6db1b9f",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "status": "approved"
+  },
+  "editorial_revision": {
+    "base_artifact_provenance_hash": "fd68f3d2775d0a8f0b7f23f56d1218425608b88b080dd7774717bc6084c11285",
+    "base_model": "deepseek-v4-pro",
+    "base_narrative_hash": "fbf069e4050b6e770eba155b91549bcd49c462f224c273d0769d541b78bcc700",
+    "base_provider": "DeepSeek",
+    "findings": [
+      "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+    ],
+    "revised_at": "2026-07-21T12:43:02.620473+00:00",
+    "revised_by": "Codex evidence editor",
+    "revised_narrative_hash": "295d54086008445378c64e16e425d14d4b1bcc0f925825550d0e7a0ad92cd81f",
+    "revision_version": "cross-company-editorial-revision-v1",
+    "status": "revised"
+  },
+  "evidence_manifest_hash": "730197a846382d4127069fa7c024d57ab4481df18d728cbfe19dd3e92871971d",
+  "input_identity": "15f05bce2ffa6c607493aa875c9d33c7e7ddc445306b282019eac2c00f029a96",
+  "model": "deepseek-v4-pro",
+  "narrative": {
+    "executive_summary": {
+      "conclusion": "年度材料披露营收与归母净利润增长、海外收入增速高于国内以及商业及工业解决方案收入增长；年度经营现金流下降，季度扣非净利润下降。",
+      "paragraphs": [
+        "年度报告与独立材料披露海外收入与国内收入增长呈现分化，商业及工业解决方案收入增加；这些事实不能证明产品结构或海外回报已经改善。",
+        "年度经营活动现金流净额同比下降；季度归母净利润同比增加而扣非净利润同比下降。两个期间必须分开观察。"
+      ],
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ]
+    },
+    "report_title": "美的集团证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "海外与国内收入增速不同，商业及工业解决方案收入增加，综合毛利率及原材料成本亦发生变化；材料未给出这些变化之间的因果桥接。",
+        "paragraphs": [
+          "年度材料分别披露海外收入、国内收入以及两类业务收入的变化。",
+          "独立材料同时披露综合毛利率波动与原材料成本变化，但没有证明原材料成本是毛利率变化的主要原因。"
+        ],
+        "source_ids": [
+          "midea_2025_annual",
+          "nbd_midea_2025_results"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "管理层提出成本领先战略，但冻结材料没有同业成本或效率比较。",
+          "海外研发与制造布局不能单独证明护城河或客户黏性。"
+        ],
+        "source_ids": [
+          "midea_2025_annual"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "年度现金流变化与季度利润变化属于不同期间，现有材料不支持把其他综合收益变化写成当期利润变化。",
+        "paragraphs": [
+          "独立媒体材料披露年度经营现金流下降，并将其与购买商品及接受劳务支付现金增加联系起来。",
+          "季度归母净利润同比增加而扣非净利润同比下降；外币报表折算计入其他综合收益，不能据此评价当期净利润稳定性。"
+        ],
+        "source_ids": [
+          "midea_2025_annual",
+          "midea_2026_q1",
+          "nbd_midea_2025_results"
+        ],
+        "title": "财务质量"
+      },
+      "industry_chain": {
+        "conclusion": "年报披露海外研发与制造布局，但没有上下游控制力、售后黏性或同行效率比较。",
+        "paragraphs": [
+          "年报描述公司在海外设置研发中心与制造基地并开展本地化经营。",
+          "现有冻结材料不足以评价各环节效率、渠道控制力或客户黏性。"
+        ],
+        "source_ids": [
+          "midea_2025_annual"
+        ],
+        "title": "产业链与海外布局"
+      },
+      "risk_falsification": {
+        "conclusion": "海外执行、原材料、汇率、年度现金流与资本配置结果需要后续正式披露验证。",
+        "paragraphs": [
+          "独立媒体材料披露原材料成本变化，季度报告披露汇兑损益变化；两者属于不同来源及期间。年报披露海外与并购布局。",
+          "若后续正式披露显示海外经营、成本、年度现金流或并购结果发生不利变化，当前研究判断需要重新评估；冻结材料不足以量化估值影响。"
+        ],
+        "source_ids": [
+          "midea_2025_annual",
+          "midea_2026_q1",
+          "nbd_midea_2025_results"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "midea_2025_annual",
+          "midea_2026_q1",
+          "nbd_midea_2025_results"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "narrative_hash": "295d54086008445378c64e16e425d14d4b1bcc0f925825550d0e7a0ad92cd81f",
+  "prompt_hash": "5ef32ea051451f3c066fd6c39aab3bbda2062a7d2ea0cb04441c16b2b6db1b9f",
+  "prompt_version": "cross-company-writer-v4",
+  "provider": "DeepSeek draft + evidence editor",
+  "receipts": [
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "draft",
+      "usage": {
+        "completion_tokens": 3175,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2206
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 11551,
+        "prompt_tokens": 11807,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 14982
+      }
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "schema_and_fact_repair_1",
+      "usage": {
+        "completion_tokens": 4873,
+        "completion_tokens_details": {
+          "reasoning_tokens": 3876
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 12534,
+        "prompt_tokens": 12790,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 17663
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 4873,
+    "completion_tokens_details": {
+      "reasoning_tokens": 3876
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 12534,
+    "prompt_tokens": 12790,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "total_tokens": 17663
+  },
+  "validation": {
+    "available_source_count": 3,
+    "cited_source_count": 3,
+    "errors": [],
+    "input_identity": "15f05bce2ffa6c607493aa875c9d33c7e7ddc445306b282019eac2c00f029a96",
+    "status": "passed"
+  }
+}

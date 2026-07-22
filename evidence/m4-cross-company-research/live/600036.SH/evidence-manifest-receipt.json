@@ -1,0 +1,98 @@
+{
+  "current_transport_verification_hash": "c6bfb79740c6dc4845aab4515a60e46b599954ab70e4fad3185397cbf1563c30",
+  "document_count": 3,
+  "documents": [
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "1ac115584a61f7028a7b878c3788792f51ae76d5440c197ce437275a718ca247",
+        "fetched_at": "2026-07-21T11:04:36.178386+00:00",
+        "final_url": "https://s3gw.cmbchina.com/lb5001-cmbweb-prd-1255000097/cmbir/20260123/721c99c0-1b86-47f7-ab46-e4b6aa68da0e.pdf",
+        "initial_url": "https://s3gw.cmbchina.com/lb5001-cmbweb-prd-1255000097/cmbir/20260123/721c99c0-1b86-47f7-ab46-e4b6aa68da0e.pdf",
+        "observed_at": "2026-07-21T11:04:36.178386+00:00",
+        "raw_sha256": "c6a1ff5cf5d861f4fd93ff509df359a6952463cb49f78a5f5143b8ed72b354fe",
+        "redirect_chain": [
+          "https://s3gw.cmbchina.com/lb5001-cmbweb-prd-1255000097/cmbir/20260123/721c99c0-1b86-47f7-ab46-e4b6aa68da0e.pdf"
+        ]
+      },
+      "capture_receipt_hash": "757286bf39dd7f53e8e25324c3964dced83011c606683250541d277be0d421e7",
+      "content_hash": "c6a1ff5cf5d861f4fd93ff509df359a6952463cb49f78a5f5143b8ed72b354fe",
+      "document_id": "rdoc_c6a1ff5cf5d861f4fd93",
+      "id": "cmb_2025_preliminary",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "company_release",
+      "known_at": "2026-01-23T23:59:59+08:00",
+      "raw_sha256": "c6a1ff5cf5d861f4fd93ff509df359a6952463cb49f78a5f5143b8ed72b354fe",
+      "title": "招商银行 2025 年度业绩快报",
+      "url": "https://s3gw.cmbchina.com/lb5001-cmbweb-prd-1255000097/cmbir/20260123/721c99c0-1b86-47f7-ab46-e4b6aa68da0e.pdf"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "validated-redirect-v1",
+        "capture_receipt_hash": "ef55397d316364193309c4dd39daca74913a63982c935bd4943ed645b4f53106",
+        "fetched_at": "2026-07-21T12:15:37.561812+00:00",
+        "final_url": "https://www.nbd.com.cn/articles/2026-03-28/4313709.html",
+        "initial_url": "https://www.nbd.com.cn/articles/2026-03-28/4313709.html",
+        "observed_at": "2026-07-21T12:15:37.561812+00:00",
+        "raw_sha256": "22414dadd4a832d7246d027d0c1675b5faec17f71efe86dbedd2abc1cfd2eb5a",
+        "redirect_chain": [
+          "https://www.nbd.com.cn/articles/2026-03-28/4313709.html"
+        ]
+      },
+      "capture_receipt_hash": "ae3fc53b8fe983ce53d15d425ea9bd8e98242263964a85519f986b98b3c3e572",
+      "content_hash": "22414dadd4a832d7246d027d0c1675b5faec17f71efe86dbedd2abc1cfd2eb5a",
+      "document_id": "rdoc_22414dadd4a832d7246d",
+      "id": "nbd_cmb_2025_results",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "independent",
+      "known_at": "2026-03-30T23:59:59+08:00",
+      "raw_sha256": "22414dadd4a832d7246d027d0c1675b5faec17f71efe86dbedd2abc1cfd2eb5a",
+      "title": "每日经济新闻 · 招商银行 2025 年经营结果交叉核验",
+      "url": "https://www.nbd.com.cn/articles/2026-03-28/4313709.html"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "d78067bac600aa350114cd8fce0c4d3b103e0fcc0f4bb7595f2f411ab73b58b4",
+        "fetched_at": "2026-07-21T11:05:01.694183+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF",
+        "observed_at": "2026-07-21T11:05:01.694183+00:00",
+        "raw_sha256": "2802004753a3bf4899ebebd55a8bd80d0704390cb791775d528565009d99802d",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF"
+        ]
+      },
+      "capture_receipt_hash": "632fe274d9c52fbe7c70fb478b3ed1934a07e355cb19e739cac879521e4c5750",
+      "content_hash": "2802004753a3bf4899ebebd55a8bd80d0704390cb791775d528565009d99802d",
+      "document_id": "rdoc_2802004753a3bf4899eb",
+      "id": "cmb_2026_q1",
+      "identity_excerpt_hash": "64c84289cd9d0032ffcf28d7adbb1c35d17f534bce8cdb2ad788a7e543f7b839",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "regulatory_cover_legal_name",
+      "kind": "primary",
+      "known_at": "2026-04-29T23:59:59+08:00",
+      "raw_sha256": "2802004753a3bf4899ebebd55a8bd80d0704390cb791775d528565009d99802d",
+      "title": "招商银行 2026 年第一季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF"
+    }
+  ],
+  "evidence_gate_hash": "004d7a7206a7b101d3d3c351a13ffe0fc13ad6e7a6ee54e9ed0bd6458eeb604a",
+  "evidence_manifest_hash": "182fcd16d7c5a337220b96bba2a8ac1888b219f1825fb1db879a168fb1488b6f",
+  "evidence_set_id": "xcr_182fcd16d7c5a337220b",
+  "knowledge_cutoff": "2026-07-21T12:17:32Z",
+  "production_input_identity": "3fc0abaa04e1ff898df60b83b90009fff19a5a62a7fa5b62dc16f8b08bd05ddc",
+  "raw_bytes_committed": false,
+  "schema_version": "cross-company-redacted-evidence-receipt-v1",
+  "snapshot_binding": {
+    "baseline_payload_hash": "42add935de9d7475a06537e76318394211584d752223786b124ff04053a5a6d6",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4"
+  },
+  "status": "passed",
+  "ticker": "600036.SH"
+}

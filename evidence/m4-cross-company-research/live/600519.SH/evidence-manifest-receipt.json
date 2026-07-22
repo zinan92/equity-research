@@ -1,0 +1,98 @@
+{
+  "current_transport_verification_hash": "f6be1cc641fbecf6aeaacb1c2acbd35449b16522193f3d782c3b8fdaf795fda0",
+  "document_count": 3,
+  "documents": [
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "76cb66b5d7143febfaac7d097f6ced211b05a6bb49c8b1ad6c7b51f0514edbe8",
+        "fetched_at": "2026-07-17T17:39:30.188377+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "observed_at": "2026-07-17T17:39:30.188377+00:00",
+        "raw_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+        ]
+      },
+      "capture_receipt_hash": "75a465423c387a1ff42b208ea03c9c41b41b215e1f368b036c3e81cf13992d1c",
+      "content_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+      "document_id": "rdoc_474905deeaf0f875fc0a",
+      "id": "moutai_2025_annual",
+      "identity_excerpt_hash": "55965bdf617d194cb956eb3ab2dd996adaef3642d809983a330568a4f6a13105",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "cover_code_short_name_legal_name",
+      "kind": "primary",
+      "known_at": "2026-04-17T23:59:59+08:00",
+      "raw_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+      "title": "贵州茅台 2025 年年度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "92d50dbae919c60fc0a895caeb17e112b1024cb457c6f46d3a6bd1bdc4a84220",
+        "fetched_at": "2026-07-17T17:39:56.839103+00:00",
+        "final_url": "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html",
+        "initial_url": "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html",
+        "observed_at": "2026-07-17T17:39:56.839103+00:00",
+        "raw_sha256": "ef87df7e173226889c221a496228a88630a92f84fc27034e0af7d9736a49dcf4",
+        "redirect_chain": [
+          "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html"
+        ]
+      },
+      "capture_receipt_hash": "c70c5f346db405de138259323a216efb3d0e5a09f8e4261d63abfbb63545d6ef",
+      "content_hash": "ef87df7e173226889c221a496228a88630a92f84fc27034e0af7d9736a49dcf4",
+      "document_id": "rdoc_ef87df7e173226889c22",
+      "id": "xinhua_moutai_2025_results",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "independent",
+      "known_at": "2026-04-17T23:59:59+08:00",
+      "raw_sha256": "ef87df7e173226889c221a496228a88630a92f84fc27034e0af7d9736a49dcf4",
+      "title": "新华网 · 贵州茅台 2025 年经营结果交叉核验",
+      "url": "https://www.news.cn/enterprise/20260417/98403a5a2cb443d3af21723d0a800b28/c.html"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "7b445cf7b7b9f45138493fea25b7b41bc369200de6d7a4a7bec47f667f06e867",
+        "fetched_at": "2026-07-17T17:39:32.138494+00:00",
+        "final_url": "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html",
+        "initial_url": "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html",
+        "observed_at": "2026-07-17T17:39:32.138494+00:00",
+        "raw_sha256": "6f810c79cf3b4a0d6b2f184f303624e2cdc693e60e10521ea0396940a9096437",
+        "redirect_chain": [
+          "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html"
+        ]
+      },
+      "capture_receipt_hash": "2be17ab89f64343c1f72cb42f94687374fe37c87643ac38765cd1a0aff0eaa15",
+      "content_hash": "6f810c79cf3b4a0d6b2f184f303624e2cdc693e60e10521ea0396940a9096437",
+      "document_id": "rdoc_6f810c79cf3b4a0d6b2f",
+      "id": "moutai_2026_h1_market_meeting",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "company_release",
+      "known_at": "2026-07-14T23:59:59+08:00",
+      "raw_sha256": "6f810c79cf3b4a0d6b2f184f303624e2cdc693e60e10521ea0396940a9096437",
+      "title": "贵州茅台酒销售有限公司 2026 年半年市场工作会",
+      "url": "https://www.moutaichina.com/mtgf/2026-07/14/article_2026071416305384715.html"
+    }
+  ],
+  "evidence_gate_hash": "408e249c913030d3b2834ca6cf6127ad7fdc002bbe1cf9aa4352603e7ee68308",
+  "evidence_manifest_hash": "cb7e964252fb433fe56b26c5d041ee7d5cb906cf0b3f646a4a452745b51a5da8",
+  "evidence_set_id": "xcr_cb7e964252fb433fe56b",
+  "knowledge_cutoff": "2026-07-21T12:17:32Z",
+  "production_input_identity": "f1bc4225949b538816bcaa07a24165b656e16a4dd9806dcee65a22e32e877ae9",
+  "raw_bytes_committed": false,
+  "schema_version": "cross-company-redacted-evidence-receipt-v1",
+  "snapshot_binding": {
+    "baseline_payload_hash": "7fe787d0118f2a0d3015f6c3d4e9f6bae5533260e1c9439933d3af98fb0af1d4",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4"
+  },
+  "status": "passed",
+  "ticker": "600519.SH"
+}

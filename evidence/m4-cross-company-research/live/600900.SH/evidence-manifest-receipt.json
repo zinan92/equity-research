@@ -1,0 +1,98 @@
+{
+  "current_transport_verification_hash": "9a54de9b5ed91ebf213a682e38d34d3de6ee795aaa08add625d69cff2ab28674",
+  "document_count": 3,
+  "documents": [
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "22947f3ebcf37bdc449dd9fd1591d7177ce28a1b5aaee5e93932770c7f50cfa8",
+        "fetched_at": "2026-07-21T11:05:37.452749+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "observed_at": "2026-07-21T11:05:37.452749+00:00",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF"
+        ]
+      },
+      "capture_receipt_hash": "c7e4d0ec2b4228e131620dad09f791dd4c1a5daa5156927f69c87ab1358f0697",
+      "content_hash": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+      "document_id": "rdoc_3536efda5117d4ef0717",
+      "id": "cypc_2026_q1",
+      "identity_excerpt_hash": "43d9cc16ad5fceee1bb86e3632e1ade26865e6aa05697c17087c5c45b3a09879",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "cover_code_short_name_legal_name",
+      "kind": "primary",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+      "title": "长江电力 2026 年第一季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "b4f14394dbdfde5ed91910677a5bca4e16cb875c3b4b608921ed445512657b11",
+        "fetched_at": "2026-07-21T11:05:34.302772+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "observed_at": "2026-07-21T11:05:34.302772+00:00",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF"
+        ]
+      },
+      "capture_receipt_hash": "67948a6d8195195eca099bebf79c6aaa60f8778911e22c21a753d34ece8fd6a7",
+      "content_hash": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+      "document_id": "rdoc_aa0cdb92e3aad81b1e64",
+      "id": "cypc_2025_annual",
+      "identity_excerpt_hash": "d485f129aa0601cd58e1c2de338c2934c4c28b92b690df0312fc4ca7b87ebeb6",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "cover_code_short_name_legal_name",
+      "kind": "primary",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+      "title": "长江电力 2025 年年度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "c87faff1270ba221a5d1ee065c5361a1065b29c47de588b4b4d12164b913f668",
+        "fetched_at": "2026-07-21T11:05:39.219949+00:00",
+        "final_url": "https://www.cpnn.com.cn/news/nyqy/202604/t20260430_1884834.html",
+        "initial_url": "https://www.cpnn.com.cn/news/nyqy/202604/t20260430_1884834.html",
+        "observed_at": "2026-07-21T11:05:39.219949+00:00",
+        "raw_sha256": "b8f687da718b39756a25464b4558563e8a1d48240ea0ae50cdefb782f1306600",
+        "redirect_chain": [
+          "https://www.cpnn.com.cn/news/nyqy/202604/t20260430_1884834.html"
+        ]
+      },
+      "capture_receipt_hash": "6d8b1675cfa206af90a6f29c6698d6e085af0b518a4e670260ccb0682f618ffd",
+      "content_hash": "b8f687da718b39756a25464b4558563e8a1d48240ea0ae50cdefb782f1306600",
+      "document_id": "rdoc_b8f687da718b39756a25",
+      "id": "cpnn_cypc_2025_results",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "independent",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "raw_sha256": "b8f687da718b39756a25464b4558563e8a1d48240ea0ae50cdefb782f1306600",
+      "title": "中国能源新闻网 · 长江电力 2025 年经营结果交叉核验",
+      "url": "https://www.cpnn.com.cn/news/nyqy/202604/t20260430_1884834.html"
+    }
+  ],
+  "evidence_gate_hash": "ceed2be72130b8d8f7054ed434b54f3899a669c979c64f8e5368ef480b49087d",
+  "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+  "evidence_set_id": "xcr_ea7af1a0773505577cf1",
+  "knowledge_cutoff": "2026-07-21T12:17:32Z",
+  "production_input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+  "raw_bytes_committed": false,
+  "schema_version": "cross-company-redacted-evidence-receipt-v1",
+  "snapshot_binding": {
+    "baseline_payload_hash": "61c298732244a713d3cb26497383b63b05b300d01d8a8636df7b12989afa21a4",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4"
+  },
+  "status": "passed",
+  "ticker": "600900.SH"
+}

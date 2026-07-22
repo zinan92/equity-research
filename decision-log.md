@@ -416,3 +416,33 @@
 - `plist` 有计划时间只证明模板可审计；未在目标机器实际触发并拿到退出回执前，不能声称自动任务已经运行。
 - gitleaks 的 generic-key 规则把 M2 的公开 fixture source key 误报为密钥；本轮只按原提交与 GitHub merge commit 的四条历史 fingerprint 精确忽略，不放宽任何规则或路径。
 - canonical 标准研报已经进入实际 `/api/reports`，但组合首页仍来自旧 publication DB；两者的统一 portfolio publication identity 属于后续 milestone，当前不得声称整套组合已切到 canonical。
+
+## 2026-07-21 · Milestone 4：跨公司标准化深度研报生产线（待评审）
+
+- Objective：输入首批覆盖公司的任一 ticker，都走同一份证据门、同一生成身份和同一八模块专业格式；公司差异只改变研究问题，不改变事实标准。
+- User outcome：贵州茅台、招商银行、长江电力、美的集团与宁德时代跨五个行业复用一条生产线，不再为每家公司复制模板。
+- Reuse：继续使用 M1 `research-report-v1` semantic/schema validator、现有 DeepSeek writer 边界和浏览器 PDF 能力；不建立第二套报告合同或第二套 AI 客户端。
+- Decision：`CompanyAdapter` 只保存上市身份、行业语义、价值链、可比公司和证据问题；章节、顺序、币种、引用和 absence policy 仍由统一合同控制。
+- Decision：DeepSeek 请求只允许包含 frozen evidence、adapter、模块清单和 prompt/model 版本；不含数据库连接、文件系统 locator、API key 或可供运行时抓取的入口，并写入 `production_input_identity`。
+- Decision：冻结门至少要求两个 primary/company document 和一个 independent cross-check；每个文档绑定 allowlisted HTTPS URL、时点、raw/content SHA-256，每个 claim 只能引用当前 manifest source ID。
+- Decision：生成 identity 同时绑定 snapshot、evidence manifest、adapter、模板、模型和 prompt；冻结后任何 mutation 均阻断复用。
+- Decision：缺少公司、行业、治理或估值证据时必须保留 `Missing evidence`。估值空状态使用零值只为兼容既有 deep schema，正文明确说明它不是目标价或收益率。
+- Acceptance truth：根目录五家公司样例为 `ACCEPTANCE_FIXTURE / structure_only / is_live_research=false`；`live/` 另有同一 REAL snapshot 与实际捕获证据生成的五份发布证明。两类 truth set 不混用。
+- Decision：schema/source ID 通过不能证明引用蕴含句子。新增 provenance-preserving evidence-editor：保留 DeepSeek 原稿 hash、修订 hash、修订人和原因；任何修订都使旧审批失效。
+- Verification：29 项 M4 专项、185 项产品测试通过；覆盖五行业同合同、REAL/fixture truth 分离、REAL 禁用 fixture evidence、snapshot normalized-row attestation 与原地篡改阻断、attestation append-only guard 防改写/替换、同一 SQLite read transaction 防 TOCTOU、真实 `_inputs()` 无锁集成路径、baseline identity mismatch、重定向到未批准/私网目标、危险 URL、未知引用、证据数量门、post-freeze mutation、确定性输入身份、DeepSeek no-network boundary、base artifact 永久留档、审批前后 editor/model/prompt provenance 防篡改、可见 evidence ID/URL、Missing evidence 与 exact DOM order。
+- Editorial gate：初始四轮逐句证据审查从 `P1=25/P2=7` 收敛到五家公司内容问题清零；新证据重绑后的独立复审为五家公司 `P0=0/P1=0` 并批准发布，同时诚实保留一项全局 P2（本批原始 base artifact 留档不完整）。审批清单绑定 exact input/narrative/evidence/provenance hash。
+- Evidence：`evidence/m4-cross-company-research/verification-receipt.json`、`live/publication-receipt.json`、`live/editorial-audit-receipt.json` 及十套 fixture/live 渲染产物。live 桌面长图均为真实 full-page（1440×4763–5241），移动长图均为真实 full-page（390×6160–7372），PDF 为 7–9 页。
+- In scope：五公司 adapter、真实冻结证据/DeepSeek/evidence-editor 边界、统一 report builder、HTML/mobile/print proof。Out of scope：全 A 股覆盖、组合仓位、会员/收费和公网部署。
+
+### Gotchas · Milestone 4
+
+- “五份看起来完整的报告”不等于五份实时深研；acceptance fixture 必须永久显示非实时边界，直到 REAL snapshot 和实际捕获文档都通过门。
+- Adapter 不能携带未冻结的公司结论，否则只是把硬编码模板换了一个文件位置。
+- 允许模型看到公开 URL 不等于允许模型访问网络；生产输入只把它当引用 locator，生成子进程仍须 no-network。
+- HTML、PNG、PDF 同版式不等于同 truth set；每种产物必须保留相同 report identity 和八模块顺序。
+- macOS Chrome 有时写完截图后不退出；验收器只在文件大小稳定且 PNG/PDF 头、尺寸、页数通过后终止该独立进程，不能把 timeout 当成功。
+- source ID 合法仍可能不蕴含句子；必须逐句核对期间、因果、比较基准和会计口径，不能把 schema passed 当语义 passed。
+- 模型容易在投委会情景中偷渡宏观、估值、价格或现金覆盖结论；limitations 对全文生效，情景不是绕过证据门的出口。
+- 固定 3600px viewport 不是“长图”；页面内容超过视口时会无声截断。视觉证据必须记录 DOM scrollHeight，并要求 PNG 像素高度与之完全一致。
+- 本批修订链能通过内置 validator，但早期重试覆盖了原始 base artifact，留下一个不阻断发布的审计 P2。后续生成必须按公司永久保存 `base-narrative-draft.json`、draft receipt 与 revision receipt，禁止覆盖后才补 provenance。
+- provider manifest 只能证明采集输入身份，不能证明 SQLite normalized rows 没有被原地改写；REAL legacy snapshot 还必须在同一 SQLite read transaction 内通过 `snapshot_content_attestations` 重算。attestation 自身由 exact-SQL append-only trigger 保护，guard 缺失或被同名 no-op 替换也必须 fail closed。

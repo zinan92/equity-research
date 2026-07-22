@@ -1,0 +1,966 @@
+{
+  "ai_narrative": {
+    "executive_summary": {
+      "conclusion": "年度与季度材料披露营业收入及利润变化，并披露现金分红方案；来水、电价、发电量、资本开支与估值证据不足。",
+      "paragraphs": [
+        "季度报告披露营业收入与归母净利润同比增长，并将利润变化解释为售电收入增加及所持金融资产浮盈。",
+        "年度报告披露经营活动现金流净额及现金分红方案；缺少资本开支、利息支出和日常费用对照，不能判断现金覆盖能力。"
+      ],
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ]
+    },
+    "report_title": "长江电力证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "现有材料支持描述营业收入与利润变化，但缺少来水、发电量和电价构成，不能判断业务稳定性。",
+        "paragraphs": [
+          "季度报告披露售电收入增加及金融资产浮盈对利润变化的影响。",
+          "年度与独立材料披露年度营业收入和净利润变化，但未提供本研究所需的核心运营指标。"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1",
+          "cpnn_cypc_2025_results"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "现有材料披露经营活动现金流净额和现金分红方案，但不能据此推断自由现金流或持续覆盖能力。",
+        "paragraphs": [
+          "年度报告披露经营活动现金流净额为正，并披露现金分红方案。",
+          "缺少资本开支、利息支出、授信与再融资对照，无法评价现金流对资本义务或分红的持续覆盖。"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "财务质量"
+      },
+      "industry_chain": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "产业链"
+      },
+      "risk_falsification": {
+        "conclusion": "来水、电价、资本开支、金融资产收益与分红安排需要后续正式披露验证。",
+        "paragraphs": [
+          "季度报告显示利润变化包含金融资产浮盈，相关收益的后续变化会影响期间比较。",
+          "若后续披露改变来水、电价、资本开支、现金流或分红安排判断，当前研究结论需要重估。"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1",
+          "cpnn_cypc_2025_results"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cypc_2025_annual",
+          "cypc_2026_q1"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "as_of": "2026-07-21",
+  "business_model": {
+    "description": "水电业务质量应围绕来水、发电量、电价机制、资本开支、自由现金流与分红持续性逐项验证。",
+    "segments": [],
+    "source_ids": [
+      "cypc_2025_annual",
+      "cypc_2026_q1"
+    ],
+    "value_chain": [
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "来水与库容",
+        "question": "来水波动如何影响发电量"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "发电与调度",
+        "question": "电价机制是否稳定"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "电价与结算",
+        "question": "资本开支与自由现金流如何匹配"
+      },
+      {
+        "items": "待冻结证据逐层验证",
+        "layer": "现金流与分红",
+        "question": "分红可持续性如何验证"
+      }
+    ]
+  },
+  "catalysts": [
+    {
+      "body": "来水波动如何影响发电量",
+      "date": "下一次正式披露",
+      "source_ids": [
+        "cypc_2026_q1"
+      ],
+      "title": "证据更新窗口"
+    },
+    {
+      "body": "电价机制是否稳定",
+      "date": "下一次正式披露",
+      "source_ids": [
+        "cypc_2026_q1"
+      ],
+      "title": "证据更新窗口"
+    }
+  ],
+  "data_mode": "REAL",
+  "data_status": "verified",
+  "depth_disclosure": "公司语义、行业问题与证据需求已完成适配；每个结论只来自本次冻结证据包。",
+  "disclaimer": "本报告用于研究框架与模型组合讨论，不构成投资建议。事实、推断和估值假设已分层；公司公告能证明公司披露了什么，但不自动证明未来一定兑现。",
+  "evidence_summary": {
+    "boundary": "只使用当前 snapshot 与冻结公司证据；缺失项保持 Missing evidence。",
+    "claim_locator_count": 5,
+    "company_release_count": 0,
+    "document_count": 5,
+    "frozen_document_count": 4,
+    "frozen_evidence_set_id": "xcr_ea7af1a0773505577cf1",
+    "frozen_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+    "independent_document_count": 1,
+    "primary_count": 4
+  },
+  "exchange": "上交所",
+  "executive": {
+    "action": "research_only",
+    "current_executable_weight": null,
+    "current_price": 28.73,
+    "execution_range": "不提供执行区间；待公司级深度研究。",
+    "key_contradiction": "量化综合分 72.5/100，但公司级经营与行业证据尚未完成；该权重只能用于研究排序，不能执行。",
+    "max_target_weight": null,
+    "model_observation_weight": 13.0,
+    "position_plan": [
+      {
+        "condition": "仅作为观察权重，不是已经批准的可执行仓位。",
+        "stage": "组合模型输出",
+        "weight": 13.0
+      },
+      {
+        "condition": "补齐经营、行业、治理与正式估值证据后重新评审。",
+        "stage": "公司级深度研究",
+        "weight": 0.0
+      },
+      {
+        "condition": "只有 Park 明确批准的版本才可转成执行合同。",
+        "stage": "投委会批准",
+        "weight": 0.0
+      }
+    ],
+    "score": 7.2,
+    "stance": "模型观察 · 等待公司级深度研究",
+    "summary": "当前只形成可回放的量化观察，不形成交易动作。",
+    "target_weight": null,
+    "weight_semantics": "model_observation_only"
+  },
+  "falsification": [
+    "若后续正式证据否定“来水波动如何影响发电量”的基准判断，则重建研究结论。",
+    "若后续正式证据否定“电价机制是否稳定”的基准判断，则重建研究结论。",
+    "若后续正式证据否定“资本开支与自由现金流如何匹配”的基准判断，则重建研究结论。"
+  ],
+  "financials": {
+    "annual_quality": {
+      "debt_ratio": 58.27,
+      "gross_margin": 61.67,
+      "net_margin": 40.52,
+      "operating_cash_per_share": 2.48,
+      "roe": 15.9
+    },
+    "headline": "一季报收入同比 6.4%，归母净利润同比 30.5%，毛利率 55.6%。",
+    "latest_period": "2026-03-31",
+    "latest_type": "一季报",
+    "quality_notes": [
+      "年度 ROE 15.9%，毛利率 61.7%，净利率 40.5%；这是盈利质量基线，不等同于护城河结论。",
+      "年度资产负债率 58.3%，后续需结合行业口径、现金流量表和表外承诺判断资本结构。",
+      "最新披露营收同比 6.4%，归母净利润同比 30.5%；下一版重点核验增长是否伴随毛利率和现金转化改善。"
+    ],
+    "series": [
+      {
+        "gross_margin": 55.6,
+        "net_margin": 38.0,
+        "net_profit_yi": 67.6,
+        "net_profit_yoy": 30.5,
+        "report_date": "2026-03-31",
+        "report_type": "一季报",
+        "revenue_yi": 181.1,
+        "revenue_yoy": 6.4,
+        "roe": 3.0
+      },
+      {
+        "gross_margin": 61.7,
+        "net_margin": 40.5,
+        "net_profit_yi": 345.0,
+        "net_profit_yoy": 6.2,
+        "report_date": "2025-12-31",
+        "report_type": "年报",
+        "revenue_yi": 862.4,
+        "revenue_yoy": 2.1,
+        "roe": 15.9
+      },
+      {
+        "gross_margin": 62.5,
+        "net_margin": 43.4,
+        "net_profit_yi": 281.9,
+        "net_profit_yoy": 0.6,
+        "report_date": "2025-09-30",
+        "report_type": "三季报",
+        "revenue_yi": 657.4,
+        "revenue_yoy": -0.9,
+        "roe": 13.0
+      },
+      {
+        "gross_margin": 56.1,
+        "net_margin": 36.2,
+        "net_profit_yi": 130.6,
+        "net_profit_yoy": 14.9,
+        "report_date": "2025-06-30",
+        "report_type": "中报",
+        "revenue_yi": 367.0,
+        "revenue_yoy": 5.3,
+        "roe": 6.1
+      },
+      {
+        "gross_margin": 53.0,
+        "net_margin": 31.1,
+        "net_profit_yi": 51.8,
+        "net_profit_yoy": 30.6,
+        "report_date": "2025-03-31",
+        "report_type": "一季报",
+        "revenue_yi": 170.2,
+        "revenue_yoy": 8.7,
+        "roe": 2.4
+      },
+      {
+        "gross_margin": 59.1,
+        "net_margin": 39.0,
+        "net_profit_yi": 325.0,
+        "net_profit_yoy": 19.3,
+        "report_date": "2024-12-31",
+        "report_type": "年报",
+        "revenue_yi": 844.9,
+        "revenue_yoy": 8.1,
+        "roe": 15.7
+      },
+      {
+        "gross_margin": 61.2,
+        "net_margin": 42.8,
+        "net_profit_yi": 280.2,
+        "net_profit_yoy": 30.2,
+        "report_date": "2024-09-30",
+        "report_type": "三季报",
+        "revenue_yi": 663.3,
+        "revenue_yoy": 14.6,
+        "roe": 13.5
+      },
+      {
+        "gross_margin": 52.4,
+        "net_margin": 33.3,
+        "net_profit_yi": 113.7,
+        "net_profit_yoy": 28.0,
+        "report_date": "2024-06-30",
+        "report_type": "中报",
+        "revenue_yi": 348.4,
+        "revenue_yoy": 12.5,
+        "roe": 5.6
+      }
+    ]
+  },
+  "generated_from": {
+    "adapter_version": "1.0.0",
+    "baseline_payload_hash": "61c298732244a713d3cb26497383b63b05b300d01d8a8636df7b12989afa21a4",
+    "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+    "evidence_set_id": "xcr_ea7af1a0773505577cf1",
+    "model_boundary_version": "frozen-evidence-only-v1",
+    "model_version": "long-horizon-portfolio-v0.4",
+    "narrative_model": "deepseek-v4-pro",
+    "production_input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+    "prompt_version": "cross-company-writer-v4",
+    "publication_id": "pub_real_a89a5113ef0f",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4",
+    "template_version": "institutional-report-v1"
+  },
+  "industry": "公用事业",
+  "industry_position": {
+    "headline": "Missing evidence：同行份额与竞争排序尚未得到完整交叉验证。",
+    "metrics": [
+      {
+        "label": "可比公司",
+        "note": "研究范围，不是排名结论",
+        "value": "国投电力 / 华能水电 / 川投能源"
+      }
+    ],
+    "source_ids": [
+      "cypc_2026_q1"
+    ]
+  },
+  "known_at": "2026-07-21T12:17:32Z",
+  "management": {
+    "score": null,
+    "source_ids": [
+      "cypc_2026_q1"
+    ],
+    "strengths": [
+      "Missing evidence：资本配置与治理优势待补充。"
+    ],
+    "watchouts": [
+      "所有治理判断须由监管披露和长期资本配置记录共同支持。"
+    ]
+  },
+  "market": {
+    "change_pct": -0.86,
+    "composite_score": 72.5,
+    "ma20": 26.89,
+    "ma200": 26.46,
+    "ma60": 26.57,
+    "market_cap_yi": 7029.72,
+    "max_drawdown_250d": -14.6,
+    "pb": 3.37,
+    "pe_ttm": 19.48,
+    "price": 28.73,
+    "return_20d": 10.2,
+    "return_250d": 1.7,
+    "return_60d": 10.2,
+    "volatility_60d": 17.2
+  },
+  "moat": [
+    {
+      "name": "证据完整度",
+      "proof": "Missing evidence：护城河强度必须由相对同行证据与长期财务记录共同验证。",
+      "score": 0,
+      "source_ids": [
+        "cypc_2026_q1"
+      ]
+    }
+  ],
+  "name": "长江电力",
+  "narrative_provider": {
+    "artifact_hash": "791220b26f4575d6308c25463c422d2cfd934fb3858bb40271815c8276b5a625",
+    "artifact_version": "cross-company-narrative-v1",
+    "editorial_approval": {
+      "approval_version": "cross-company-editorial-v2",
+      "approved_at": "2026-07-21T13:11:38.423950+00:00",
+      "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+      "artifact_provenance_hash": "76893668a9bb591e2c10f3630bc6f9b69ce4edff3e625d294f877593dff0cc93",
+      "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+      "input_identity": "9d60ade60e4048f952b29c617cb47672d50edd7b0f1e3e605c1d12c975497e78",
+      "model": "deepseek-v4-pro",
+      "narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853",
+      "prompt_hash": "f821e8cbaabcc1c325bac6b43963f5e8b07cdb03e8ef795ea9621b0595849109",
+      "prompt_version": "cross-company-writer-v4",
+      "provider": "DeepSeek draft + evidence editor",
+      "status": "approved"
+    },
+    "editorial_review": {
+      "applied_rules": [
+        {
+          "base_narrative_hash": "241d4b8170eaf1c7e5d67227153535c5d4c9e7bbacebd98ad5800fc2085cecba",
+          "findings": [
+            "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+          ],
+          "id": "evidence_entailment_revision",
+          "revised_narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853"
+        }
+      ],
+      "reviewer": "Codex independent evidence reapproval /root/m4_reapproval_audit"
+    },
+    "generated_at": "2026-07-21T13:11:38.424559+00:00",
+    "model": "deepseek-v4-pro",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "validation": {
+      "available_source_count": 3,
+      "cited_source_count": 3,
+      "errors": [],
+      "status": "passed"
+    }
+  },
+  "portfolio_context": {
+    "cash_weight": 18.0,
+    "market_regime": "均衡",
+    "weights": {
+      "000333.SZ": 12.0,
+      "300750.SZ": 9.0,
+      "600036.SH": 10.0,
+      "600519.SH": 9.0,
+      "600900.SH": 13.0,
+      "600941.SH": 10.0,
+      "601088.SH": 11.0,
+      "688036.SH": 8.0
+    }
+  },
+  "publication_approval": {
+    "approval_hash_matches": false,
+    "current_content_hash": "9d609b19e9895d2cc521a84c550fbd77fdbe780ce494dd4a79dac2cd1440d22a",
+    "effective_status": "quality_passed",
+    "is_current": false,
+    "stored_status": "quality_passed"
+  },
+  "quant_signals": [
+    {
+      "name": "财务质量线索",
+      "proof": "由 ROE、增长和资产负债率计算；尚不能替代护城河研究。",
+      "score": 6.4,
+      "source_ids": [
+        "financial_snapshot"
+      ]
+    },
+    {
+      "name": "估值约束线索",
+      "proof": "由当前 PE 与 PB 计算；尚未做同行和历史分位校准。",
+      "score": 7.8,
+      "source_ids": [
+        "market_snapshot"
+      ]
+    },
+    {
+      "name": "趋势确认线索",
+      "proof": "由多周期收益和均线位置计算。",
+      "score": 8.0,
+      "source_ids": [
+        "market_snapshot"
+      ]
+    },
+    {
+      "name": "风险韧性线索",
+      "proof": "由波动、回撤和负债率计算。",
+      "score": 7.0,
+      "source_ids": [
+        "market_snapshot",
+        "financial_snapshot"
+      ]
+    }
+  ],
+  "report_contract": {
+    "absence_policy": {
+      "missing_evidence": "The module applies, but current evidence is insufficient. It must remain visible with a reason.",
+      "not_applicable": "The concept does not apply to this issuer or market. It must not be used as a synonym for missing data."
+    },
+    "as_of": {
+      "market_data_at": "2026-07-21T12:17:32Z",
+      "research_cutoff": "2026-07-21T12:17:32Z"
+    },
+    "claim_policy": {
+      "allowed_types": [
+        "fact",
+        "inference",
+        "assumption",
+        "risk"
+      ],
+      "assumption_requires_method": true,
+      "fact_requires_source_ids": true,
+      "inference_requires_source_ids": true,
+      "risk_requires_trigger": true
+    },
+    "contract_version": "1.0.0",
+    "format_contract": {
+      "module_order_is_authoritative": true,
+      "same_order_desktop_mobile_print": true,
+      "unknown_modules_fail_closed": true
+    },
+    "identity": {
+      "currency": "CNY",
+      "exchange": "上交所",
+      "market": "CN",
+      "name": "长江电力",
+      "reporting_standard": "PRC_GAAP",
+      "ticker": "600900.SH"
+    },
+    "market_specific_disclosures": {
+      "cninfo_filings": {
+        "reason": "This disclosure regime applies to the issuer market.",
+        "status": "available"
+      },
+      "sec_filings": {
+        "reason": "Not applicable to the issuer market; do not map it to Missing evidence.",
+        "status": "not_applicable"
+      }
+    },
+    "measurement_policy": {
+      "currency": "CNY",
+      "financial_presentation_currency": "CNY",
+      "financial_statement_scale": 100000000,
+      "financial_statement_unit_label": "亿元",
+      "money_unit": "issuer_reporting_currency",
+      "percent_unit": "percent",
+      "percentage_point_unit": "percentage_point",
+      "price_currency": "CNY",
+      "price_unit": "per_share",
+      "rule": "Every monetary field must inherit this currency or declare an explicit override; percent and percentage-point changes are never interchangeable."
+    },
+    "module_manifest": [
+      {
+        "anchor": "r-overview",
+        "content_paths": [
+          "executive"
+        ],
+        "id": "executive_summary",
+        "kicker": "INVESTMENT COMMITTEE",
+        "order": 1,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "决策摘要"
+      },
+      {
+        "anchor": "r-thesis",
+        "content_paths": [
+          "thesis"
+        ],
+        "id": "investment_thesis",
+        "kicker": "THESIS",
+        "order": 2,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "核心投资逻辑"
+      },
+      {
+        "anchor": "r-business",
+        "content_paths": [
+          "business_model",
+          "industry_position",
+          "management"
+        ],
+        "id": "business_and_industry",
+        "kicker": "BUSINESS / INDUSTRY",
+        "order": 3,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "经营、行业与竞争"
+      },
+      {
+        "anchor": "r-financial",
+        "content_paths": [
+          "financials"
+        ],
+        "id": "financial_quality",
+        "kicker": "FINANCIAL QUALITY",
+        "order": 4,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "财务质量"
+      },
+      {
+        "anchor": "r-serenity",
+        "content_paths": [
+          "serenity"
+        ],
+        "id": "framework_assessment",
+        "kicker": "FRAMEWORK",
+        "order": 5,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "研究框架评分"
+      },
+      {
+        "anchor": "r-valuation",
+        "content_paths": [
+          "valuation"
+        ],
+        "id": "valuation",
+        "kicker": "VALUATION",
+        "order": 6,
+        "required": true,
+        "status": "missing_evidence",
+        "status_reason": "Missing evidence：未冻结盈利预测与合理倍数，因此不形成目标价。",
+        "title": "估值框架"
+      },
+      {
+        "anchor": "r-risks",
+        "content_paths": [
+          "catalysts",
+          "risks",
+          "falsification",
+          "watchlist"
+        ],
+        "id": "catalysts_risks",
+        "kicker": "CATALYSTS / RISKS",
+        "order": 7,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "催化剂、风险与反证"
+      },
+      {
+        "anchor": "r-evidence",
+        "content_paths": [
+          "sources",
+          "evidence_summary",
+          "source_contract",
+          "disclaimer"
+        ],
+        "id": "evidence_ledger",
+        "kicker": "EVIDENCE / METHOD",
+        "order": 8,
+        "required": true,
+        "status": "available",
+        "status_reason": null,
+        "title": "证据台账与方法"
+      }
+    ],
+    "schema_version": "research-report-v1",
+    "truth_set": {
+      "is_live_research": true,
+      "note": "Runtime contract generated from the current report and its evidence gates.",
+      "scope": "runtime_report"
+    }
+  },
+  "report_hash": "228b65d8b374b9654c4345c96a3b34916a7b466f058f8d1448f3ca9390cc87b7",
+  "report_version": "cross-company-research-v1",
+  "research_depth": "deep",
+  "research_known_at": "2026-07-21T12:17:32Z",
+  "research_logic_hash": "7aa40bcc7cb3950043b8e363669f49d257fa9fdda81e266e3f174b6e983883b1",
+  "research_profile_hash": "e7173ef89351f1edd1314215edf20bfa7afe249ded8108871c43e3e87bf6940d",
+  "research_status": "verified",
+  "risks": [
+    {
+      "evidence": "若后续正式披露显示来水、电价、资本开支或分红能力恶化，当前研究假设必须重估。",
+      "impact": "高",
+      "probability": "中",
+      "rank": 1,
+      "source_ids": [
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "title": "Evidence change risk",
+      "trigger": "后续正式披露改变发电、现金流或分红能力判断"
+    }
+  ],
+  "serenity": {
+    "factors": [
+      {
+        "contribution": 15.9,
+        "key": "quality",
+        "label": "财务质量",
+        "reason": "财务增速、ROE 与资产负债率的量化合成，只是筛选线索。",
+        "score": 3.18,
+        "source_ids": [
+          "financial_snapshot"
+        ],
+        "weight": 25
+      },
+      {
+        "contribution": 19.45,
+        "key": "value",
+        "label": "估值约束",
+        "reason": "当前 PE/PB 的横截面量化得分，不代表公司已被低估。",
+        "score": 3.89,
+        "source_ids": [
+          "market_snapshot"
+        ],
+        "weight": 25
+      },
+      {
+        "contribution": 20.1,
+        "key": "trend",
+        "label": "趋势确认",
+        "reason": "20/60/250 日收益和均线位置的合成结果。",
+        "score": 4.02,
+        "source_ids": [
+          "market_snapshot"
+        ],
+        "weight": 25
+      },
+      {
+        "contribution": 17.5,
+        "key": "resilience",
+        "label": "风险韧性",
+        "reason": "波动、回撤和负债率共同形成的风险承受线索。",
+        "score": 3.5,
+        "source_ids": [
+          "market_snapshot",
+          "financial_snapshot"
+        ],
+        "weight": 25
+      }
+    ],
+    "final_score": 73.0,
+    "label": "量化基线，等待公司级深度验证",
+    "meaning": "四项分数用于排序和发现问题，不是护城河、预期收益或买入信号；公司、行业与治理证据将在深度稿补齐。",
+    "method": "A-share quantitative baseline v1",
+    "penalties": [],
+    "penalty": 0.0,
+    "raw_score": 73.0
+  },
+  "source_contract": {
+    "execution": [
+      "market_snapshot",
+      "financial_snapshot",
+      "cypc_2026_q1",
+      "cypc_2025_annual",
+      "cpnn_cypc_2025_results"
+    ],
+    "falsification": [
+      "cypc_2026_q1"
+    ],
+    "financials": [
+      "market_snapshot",
+      "financial_snapshot",
+      "cypc_2026_q1",
+      "cypc_2025_annual",
+      "cpnn_cypc_2025_results"
+    ],
+    "valuation": [
+      "market_snapshot",
+      "financial_snapshot",
+      "cypc_2026_q1",
+      "cypc_2025_annual",
+      "cpnn_cypc_2025_results"
+    ],
+    "watchlist": [
+      "cypc_2026_q1"
+    ]
+  },
+  "sources": [
+    {
+      "document_id": "market_snap_real_a89a5113ef0f_600900.SH",
+      "id": "market_snapshot",
+      "kind": "market_snapshot",
+      "known_at": "2026-07-21T16:14:49+08:00",
+      "note": "tencent_quote 行情 · 250+ 前复权日线 · a-share-core-v0.3 因子",
+      "provider": "tencent_quote",
+      "quote_time": "2026-07-21T16:14:49+08:00",
+      "snapshot_id": "snap_real_a89a5113ef0f",
+      "strength": "强",
+      "title": "当前不可变行情、日线与因子快照",
+      "url": "https://qt.gtimg.cn/q=sh600519,sh600036,sh600900,sz000333,sh600941,sz300750,sh601088,sh688036"
+    },
+    {
+      "document_id": "financial_snap_real_a89a5113ef0f_600900.SH",
+      "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+      "id": "financial_snapshot",
+      "kind": "primary",
+      "known_at": "2026-04-30",
+      "note": "8 个报告期 · 原始行哈希已进入不可变快照",
+      "provider": "eastmoney_f10_main",
+      "snapshot_id": "snap_real_a89a5113ef0f",
+      "strength": "中",
+      "title": "东方财富 F10 主要财务指标快照",
+      "url": null
+    },
+    {
+      "document_id": "rdoc_3536efda5117d4ef0717",
+      "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+      "id": "cypc_2026_q1",
+      "kind": "primary",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "note": "Captured by evidence store; role=primary",
+      "strength": "强",
+      "title": "长江电力 2026 年第一季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF"
+    },
+    {
+      "document_id": "rdoc_aa0cdb92e3aad81b1e64",
+      "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+      "id": "cypc_2025_annual",
+      "kind": "primary",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "note": "Captured by evidence store; role=primary",
+      "strength": "强",
+      "title": "长江电力 2025 年年度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF"
+    },
+    {
+      "document_id": "rdoc_b8f687da718b39756a25",
+      "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+      "id": "cpnn_cypc_2025_results",
+      "kind": "independent",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "note": "Captured by evidence store; role=independent",
+      "strength": "中",
+      "title": "中国能源新闻网 · 长江电力 2025 年经营结果交叉核验",
+      "url": "https://www.cpnn.com.cn/news/nyqy/202604/t20260430_1884834.html"
+    }
+  ],
+  "stress_test": {
+    "formula": "stress_price = price_basis × stress_multiple",
+    "method": "当前价 × 情景倍数",
+    "price_basis": 28.73,
+    "scenarios": [
+      {
+        "assumption": "把当前价格压低 20%，用于检查回撤承受力，不是基本面目标价。",
+        "case": "bear",
+        "change_pct": -20.0,
+        "label": "悲观",
+        "price_basis": 28.73,
+        "stress_multiple": 0.8,
+        "stress_price": 23.0
+      },
+      {
+        "assumption": "以当前价格为基线，等待盈利预测和历史估值分位补齐。",
+        "case": "base",
+        "change_pct": 0.0,
+        "label": "基准",
+        "price_basis": 28.73,
+        "stress_multiple": 1.0,
+        "stress_price": 28.7
+      },
+      {
+        "assumption": "把当前价格上移 20%，用于检查赔率敏感度，不是正式上行空间。",
+        "case": "bull",
+        "change_pct": 20.0,
+        "label": "乐观",
+        "price_basis": 28.73,
+        "stress_multiple": 1.2,
+        "stress_price": 34.5
+      }
+    ],
+    "warning": "压力价不是目标价。没有公司级盈利预测与估值证据前，不得把 ±20% 情景当成预期收益。"
+  },
+  "thesis": [
+    {
+      "body": "长期研究结论必须同时由公司正式披露、最新季度更新与独立交叉核验支持。",
+      "claim_type": "inference",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "title": "Evidence-bounded thesis"
+    }
+  ],
+  "ticker": "600900.SH",
+  "title": "长江电力：标准化深度研究与证据边界",
+  "valuation": {
+    "base_view": "Missing evidence",
+    "currency": "CNY",
+    "current_price": 28.73,
+    "earnings_bridge": {
+      "base_eps": 0,
+      "base_period": "Missing evidence",
+      "basis": "No frozen forecast",
+      "cases": [
+        {
+          "case": "bear",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "悲观"
+        },
+        {
+          "case": "base",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "基准"
+        },
+        {
+          "case": "bull",
+          "eps": 0,
+          "growth_pct": 0,
+          "label": "乐观"
+        }
+      ]
+    },
+    "method": "Frozen-evidence scenario framework",
+    "pb": 3.37,
+    "pe_ttm": 19.48,
+    "reason": "Missing evidence：未冻结盈利预测与合理倍数，因此不形成目标价。",
+    "reverse_implied": "Missing evidence",
+    "scenarios": [
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "bear",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "悲观",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      },
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "base",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "基准",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      },
+      {
+        "assumption": "Missing evidence；零值是空状态，不是估值结论。",
+        "case": "bull",
+        "currency": "CNY",
+        "eps": 0,
+        "label": "乐观",
+        "pe": 0,
+        "target_price": 0,
+        "upside_pct": 0
+      }
+    ],
+    "status": "missing_evidence",
+    "warning": "零值表示估值证据缺失，不是目标价或收益率。"
+  },
+  "watchlist": [
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "来水波动如何影响发电量",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "电价机制是否稳定",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "资本开支与自由现金流如何匹配",
+      "threshold": "取得两类独立证据后更新"
+    },
+    {
+      "current": "Missing evidence",
+      "frequency": "每次正式披露",
+      "metric": "分红可持续性如何验证",
+      "threshold": "取得两类独立证据后更新"
+    }
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "claim_count": 30,
+  "claims": [
+    {
+      "path": "executive_summary.conclusion",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "fd508fa59ef8dcf8c179c20cfedf0b0fc747af2d9fbeec1fa01af908b27832c0"
+    },
+    {
+      "path": "executive_summary.paragraphs[0]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "3412227dd00c71ce71b2f6d9cfb8bd4817bde996afa4a59006ce85d633f96168"
+    },
+    {
+      "path": "executive_summary.paragraphs[1]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "c465de4d8d979dbec46eaafc2a033be0e8d54f0604e1ec852a4346a10873c92d"
+    },
+    {
+      "path": "sections.business_quality.title",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "e54dd06a15ee2bf88740d9600b2e33dbc84e5c72fa8c6c420e1e2ee7e5e9b121"
+    },
+    {
+      "path": "sections.business_quality.conclusion",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d5d2b24d5158f19b1113097816118844791bdeac17d14f097d5b5fd96d7efdef"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[0]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "48555f1b12c6bab4c54c2f33b3e9424da63461250fc1d5e0d558274c4a97c6b2"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[1]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "43c3795885d800be0a6704acf1d5074a1cf82b154cb8eee4fa1cafcf01c8ae0c"
+    },
+    {
+      "path": "sections.competitive_moat.title",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d4fd37cffecbf5549b7caf0803df51b22049317a9d06822ded9c3fe2c3877af9"
+    },
+    {
+      "path": "sections.competitive_moat.conclusion",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[0]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "18bc2e1bd2c4b2503992e5a68102874d68910ea3cbb2845b70355f78cf8c8d4f"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[1]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "f432580ba9e7ec37a881cbae00c6868eb947f429d9c91351bb2c22588791e6d6"
+    },
+    {
+      "path": "sections.financial_quality.title",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "5c7f137a4156cb6f959548d69dc0ff0ae4c2f2ed83463a3aa3965473c7cb333a"
+    },
+    {
+      "path": "sections.financial_quality.conclusion",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "53ad344edc61782cfe0e94e12e8085e317f82ea60b0ebeb539fa43bc3bc59b1f"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[0]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "f9784918dc2319c61d8fae18d6e1cf911cdb7491708466e0171e31665b8b892e"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[1]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "9b48aeb210bf93f3e926420b0a8fbd383af38f71047c38affe8a9a94c58dc691"
+    },
+    {
+      "path": "sections.industry_chain.title",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "b2e066eb0ab97cd709beb52a03f645ec389198c15639478ad94f8801a373e973"
+    },
+    {
+      "path": "sections.industry_chain.conclusion",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "6393dd93575a00020c7eab620449f65bdc28d8e0f95f19da026a058ff5955602"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[0]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "52b09a87e302137c9ec07b0c511e4b76b809c686071ace7e55f2d7a10b8e25fe"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[1]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "988eb48f7f5cd26c28d189a5f25a28511e994a2ee76da2c68ea31ca27ea1fe12"
+    },
+    {
+      "path": "sections.risk_falsification.title",
+      "source_ids": [
+        "cmb_2026_q1",
+        "cmb_2025_preliminary",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "3094168d55aaf91f290feb1d4a547532b37c59cbfe1b3bbe5a9c858dc0e448b2"
+    },
+    {
+      "path": "sections.risk_falsification.conclusion",
+      "source_ids": [
+        "cmb_2026_q1",
+        "cmb_2025_preliminary",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "deadf01be8cdc1db5d31a2e0696f595096c1e46bc03e9a22908402d2ec3154a3"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[0]",
+      "source_ids": [
+        "cmb_2026_q1",
+        "cmb_2025_preliminary",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "c1b04b7f59b83512b595f1f70e1733f562a138e206583462c29a400259c924bd"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[1]",
+      "source_ids": [
+        "cmb_2026_q1",
+        "cmb_2025_preliminary",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "1fcac11f4ea12c0dbe1ecfcb7778a792654d8cc12a2dc37919571d2eae7cd9ef"
+    },
+    {
+      "path": "sections.valuation_debate.title",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d29e16d3dd34dc4a5c34c11c33f8a6fe4e329e5b97b16721c1185155050e922c"
+    },
+    {
+      "path": "sections.valuation_debate.conclusion",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[0]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[1]",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bull_case",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.base_case",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bear_case",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    }
+  ],
+  "evidence_manifest_hash": "182fcd16d7c5a337220b96bba2a8ac1888b219f1825fb1db879a168fb1488b6f",
+  "narrative_hash": "72cb160d631ed38afa51563146693c34683750cbe62aff71641ea35fa57caf20",
+  "schema_version": "cross-company-claim-source-audit-v1",
+  "status": "passed",
+  "ticker": "600036.SH"
+}

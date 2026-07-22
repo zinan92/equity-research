@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import json
 import os
 import re
+import ssl
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -11,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from data_store import DB_PATH
+from company_research import CROSS_COMPANY_PROMPT_VERSION
 from research_artifact_store import PROMPT_VERSION, artifact_path, load_artifact, write_artifact
 from research_evidence import load_evidence_set
 from research_reports import build_evidence_pack, report_payload, research_logic_hash, research_profile_hash, writer_logic_hash
@@ -246,6 +250,410 @@ EDITORIAL_RULES = (
         "reason": "修正语病。",
     },
 )
+
+
+def build_cross_company_frozen_request(
+    packet: dict[str, Any], *, model: str = DEFAULT_MODEL,
+    prompt_version: str = CROSS_COMPANY_PROMPT_VERSION,
+    snapshot_binding: dict[str, str],
+) -> dict[str, Any]:
+    """Build the only permitted M4 model input: an integrity-checked frozen pack.
+
+    This function performs no network call.  The caller may send the returned
+    object to DeepSeek only after preserving its input_identity in the receipt.
+    """
+    from company_research import frozen_model_input
+
+    return frozen_model_input(
+        packet, model=model, prompt_version=prompt_version, snapshot_binding=snapshot_binding,
+    )
+
+
+def validate_cross_company_narrative(
+    narrative: dict[str, Any], frozen_request: dict[str, Any],
+) -> dict[str, Any]:
+    """Validate M4 prose against exactly the frozen request sent to the model."""
+    from report_contract import validate_public_ai_narrative
+
+    errors = validate_public_ai_narrative(narrative)
+    source_ids = {
+        item["id"] for item in frozen_request["frozen_evidence"].get("documents") or []
+    }
+    cited: set[str] = set()
+    blocks = [narrative.get("executive_summary"), *((narrative.get("sections") or {}).values()), narrative.get("investment_committee")]
+    for index, block in enumerate(blocks):
+        if not isinstance(block, dict):
+            errors.append(f"narrative block {index} must be an object")
+            continue
+        refs = block.get("source_ids")
+        if not isinstance(refs, list) or not refs:
+            errors.append(f"narrative block {index} requires source_ids")
+            continue
+        unknown = set(refs) - source_ids
+        if unknown:
+            errors.append(f"narrative block {index} cites unknown source IDs: {sorted(unknown)}")
+        cited.update(set(refs) & source_ids)
+    narrative_text = " ".join(_visible_texts(narrative))
+    if len(re.findall(r"[\u4e00-\u9fff]", narrative_text)) < 80:
+        errors.append("model narrative must be substantive Simplified Chinese")
+    for term in ("买入", "卖出", "加仓", "减仓", "清仓", "满仓", "重仓", "止损", "仓位", "持仓"):
+        if term in narrative_text:
+            errors.append(f"model narrative contains forbidden execution language: {term}")
+    if re.search(r"https?://|www\.", narrative_text, re.IGNORECASE):
+        errors.append("model narrative may not introduce URLs")
+    numeric_tokens = sorted(set(re.findall(r"(?<![A-Za-z])\d+(?:\.\d+)?\s*%?", narrative_text)))
+    if numeric_tokens:
+        errors.append(
+            "model narrative must not contain numeric literals; deterministic report components own metrics: "
+            + ", ".join(token.strip() for token in numeric_tokens)
+        )
+    chinese_quantity = re.findall(
+        r"(?:百分之[零〇一二两三四五六七八九十百千万亿点]+|"
+        r"[零〇一二两三四五六七八九十百千万亿点]+(?:个百分点|倍|元|亿元|年|日|期|季|月|周|成))",
+        narrative_text,
+    )
+    if chinese_quantity:
+        errors.append(
+            "model narrative must not contain Chinese-number quantities: "
+            + ", ".join(sorted(set(chinese_quantity)))
+        )
+    return {
+        "status": "passed" if not errors else "needs_review",
+        "errors": sorted(set(errors)),
+        "cited_source_count": len(cited),
+        "available_source_count": len(source_ids),
+        "input_identity": frozen_request["input_identity"],
+    }
+
+
+def generate_cross_company_narrative(
+    packet: Any,
+    key_file: Path,
+    *,
+    model: str = DEFAULT_MODEL,
+    prompt_version: str = CROSS_COMPANY_PROMPT_VERSION,
+    snapshot_binding: dict[str, str],
+    transport: Any = None,
+) -> dict[str, Any]:
+    """Run the M4 DeepSeek path with no input beyond the frozen request.
+
+    ``transport`` exists for deterministic contract tests.  Production leaves it
+    unset and uses the same DeepSeek endpoint as the existing writer.
+    """
+    frozen_request = build_cross_company_frozen_request(
+        packet, model=model, prompt_version=prompt_version, snapshot_binding=snapshot_binding,
+    )
+    shape = {
+        "report_title": "string without numeric literals",
+        "executive_summary": {
+            "conclusion": "string", "paragraphs": ["substantive string", "substantive string"],
+            "source_ids": ["document id from frozen_evidence"],
+        },
+        "sections": {
+            key: {
+                "title": "string", "conclusion": "string",
+                "paragraphs": ["substantive string", "substantive string"],
+                "source_ids": ["document id from frozen_evidence"],
+            }
+            for key in (
+                "industry_chain", "business_quality", "competitive_moat",
+                "financial_quality", "valuation_debate", "risk_falsification",
+            )
+        },
+        "investment_committee": {
+            "bull_case": "string", "base_case": "string", "bear_case": "string",
+            "source_ids": ["document id from frozen_evidence"],
+        },
+    }
+    system = (
+        "You are an institutional equity-research editor. Return only one JSON object with exactly "
+        "the supplied output_shape keys. Use only frozen_evidence and cite its document ids on every "
+        "block. Do not introduce URLs. Do not write any Arabic digits, percentages, years, quantities, "
+        "or Chinese-number quantities in any human-readable narrative field; deterministic report components "
+        "own all metrics. Source_ids are the sole exception: preserve those machine identifiers exactly. "
+        "Write the entire narrative in professional Simplified Chinese. "
+        "Treat frozen_evidence.limitations as hard prohibitions. A legal source id is not proof that the "
+        "source entails a sentence: every factual assertion must be directly supported by the cited excerpt. "
+        "Every sentence must be either a direct paraphrase of an excerpt, an explicitly conditional scenario "
+        "using only source-supported variables, or exactly Missing evidence. Do not infer causality from a "
+        "change, and do not infer quality from scale. Words such as stable, strong, leading, ample, advantage, "
+        "moat, control, safe, reasonable valuation, or their Chinese equivalents require direct comparative "
+        "evidence. Investment-committee cases are hypotheses, not permission to fill evidence gaps. "
+        "If a limitation prohibits a concept anywhere in the report, omit it or write Missing evidence. "
+        "Do not turn management targets into achieved advantages, operating cash flow into free cash flow, "
+        "a memorandum into a contract, or market share into customer lock-in. Do not claim peer superiority, "
+        "moat strength, current valuation, safety margin, or liquidity coverage without direct comparative, "
+        "valuation, or financing evidence. Unsupported sections must explicitly say Missing evidence. "
+        "Write Missing evidence when support is absent. Do not add markdown or extra keys."
+    )
+    frozen_request_with_shape = {**frozen_request, "output_shape": shape}
+    user = json.dumps(frozen_request_with_shape, ensure_ascii=False, sort_keys=True)
+    api_payload = {
+        "model": model,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.1,
+    }
+    key = _read_secret(key_file)
+    def send(payload: dict[str, Any]) -> dict[str, Any]:
+        if transport is not None:
+            return transport(deepcopy(payload), key)
+        for attempt in range(3):
+            request = urllib.request.Request(
+                API_URL,
+                data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+                method="POST",
+            )
+            try:
+                with urllib.request.urlopen(request, timeout=180) as response:
+                    return json.loads(response.read().decode("utf-8"))
+            except urllib.error.HTTPError as exc:
+                if exc.code not in {429, 500, 502, 503, 504}:
+                    detail = exc.read().decode(errors="replace")[:500]
+                    raise RuntimeError(f"cross-company DeepSeek HTTP {exc.code}: {detail}") from exc
+                failure: Exception = exc
+            except (urllib.error.URLError, TimeoutError, ssl.SSLError) as exc:
+                failure = exc
+            if attempt < 2:
+                time.sleep(1.5 * (attempt + 1))
+        raise RuntimeError(
+            f"cross-company DeepSeek unavailable after retries: {type(failure).__name__}"
+        ) from failure
+
+    def unpack(response_payload: dict[str, Any]) -> tuple[Any, str, dict[str, Any]]:
+        if isinstance(response_payload, dict) and "choices" in response_payload:
+            raw_content = response_payload["choices"][0]["message"]["content"]
+            return (
+                json.loads(raw_content) if isinstance(raw_content, str) else raw_content,
+                response_payload.get("model") or model,
+                response_payload.get("usage") or {},
+            )
+        return response_payload, model, {}
+
+    response_payload = send(api_payload)
+    narrative, response_model, usage = unpack(response_payload)
+    if not isinstance(narrative, dict):
+        raise RuntimeError("cross-company DeepSeek response is not a JSON object")
+    validation = validate_cross_company_narrative(narrative, frozen_request)
+    receipts = [{"purpose": "draft", "model": response_model, "usage": usage}]
+    for repair_index in range(2):
+        if validation["status"] == "passed":
+            break
+        repair_payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": json.dumps({
+                    "task": (
+                        "Repair the rejected draft. Return the exact output_shape only. "
+                        "Remove every numeric literal from every human-readable prose field, including dates. "
+                        "Before returning, verify that no prose string contains an Arabic digit. Preserve every "
+                        "source_ids value exactly because those are machine identifiers, not prose."
+                    ),
+                    "validation_errors": validation["errors"],
+                    "rejected_draft": narrative,
+                    "request": frozen_request_with_shape,
+                }, ensure_ascii=False, sort_keys=True)},
+            ],
+            "response_format": {"type": "json_object"},
+            "temperature": 0,
+        }
+        repaired_payload = send(repair_payload)
+        narrative, response_model, usage = unpack(repaired_payload)
+        if not isinstance(narrative, dict):
+            raise RuntimeError("cross-company DeepSeek repair is not a JSON object")
+        validation = validate_cross_company_narrative(narrative, frozen_request)
+        receipts.append({
+            "purpose": f"schema_and_fact_repair_{repair_index + 1}",
+            "model": response_model, "usage": usage,
+        })
+    artifact = {
+        "artifact_version": "cross-company-narrative-v1",
+        "provider": "DeepSeek", "model": response_model, "prompt_version": prompt_version,
+        "input_identity": frozen_request["input_identity"],
+        "evidence_manifest_hash": frozen_request["frozen_evidence"]["manifest_hash"],
+        "prompt_hash": _canonical_hash({"system": system, "user": user}),
+        "narrative_hash": _canonical_hash(narrative), "validation": validation,
+        "usage": usage, "receipts": receipts, "narrative": narrative,
+        "editorial_approval": {"status": "pending", "reason": "independent editorial approval required"},
+    }
+    if validation["status"] != "passed":
+        raise RuntimeError(f"cross-company DeepSeek output rejected: {validation}")
+    return artifact
+
+
+def _cross_company_artifact_provenance_payload(artifact: dict[str, Any]) -> dict[str, Any]:
+    payload = deepcopy(artifact)
+    payload.pop("editorial_approval", None)
+    return payload
+
+
+def _cross_company_artifact_provenance_hash(artifact: dict[str, Any]) -> str:
+    return _canonical_hash(_cross_company_artifact_provenance_payload(artifact))
+
+
+def _validate_cross_company_revision_chain(artifact: dict[str, Any]) -> bool:
+    revision = artifact.get("editorial_revision")
+    provider = artifact.get("provider")
+    if provider == "DeepSeek":
+        return revision is None
+    if provider != "DeepSeek draft + evidence editor" or not isinstance(revision, dict):
+        return False
+    base_hash = revision.get("base_narrative_hash")
+    return bool(
+        revision.get("status") == "revised"
+        and revision.get("revision_version") == "cross-company-editorial-revision-v1"
+        and revision.get("base_provider") == "DeepSeek"
+        and revision.get("base_model") == artifact.get("model")
+        and isinstance(base_hash, str) and re.fullmatch(r"[0-9a-f]{64}", base_hash)
+        and base_hash != artifact.get("narrative_hash")
+        and revision.get("revised_narrative_hash") == artifact.get("narrative_hash")
+        and isinstance(revision.get("base_artifact_provenance_hash"), str)
+        and re.fullmatch(r"[0-9a-f]{64}", revision["base_artifact_provenance_hash"])
+        and isinstance(revision.get("revised_by"), str) and revision["revised_by"].strip()
+        and isinstance(revision.get("findings"), list) and revision["findings"]
+    )
+
+
+def approve_cross_company_narrative(
+    artifact: dict[str, Any], *, reviewer: str, expected_narrative_hash: str,
+    expected_evidence_manifest_hash: str, expected_artifact_provenance_hash: str,
+) -> dict[str, Any]:
+    if not reviewer.strip():
+        raise ValueError("reviewer is required")
+    if artifact.get("narrative_hash") != expected_narrative_hash:
+        raise RuntimeError("reviewed narrative hash changed")
+    if artifact.get("evidence_manifest_hash") != expected_evidence_manifest_hash:
+        raise RuntimeError("reviewed evidence manifest changed")
+    provenance_hash = _cross_company_artifact_provenance_hash(artifact)
+    if provenance_hash != expected_artifact_provenance_hash:
+        raise RuntimeError("reviewed artifact provenance changed")
+    if (artifact.get("validation") or {}).get("status") != "passed":
+        raise RuntimeError("cannot approve an invalid cross-company narrative")
+    if artifact.get("narrative_hash") != _canonical_hash(artifact.get("narrative")):
+        raise RuntimeError("cannot approve a narrative with stale content hash")
+    if not _validate_cross_company_revision_chain(artifact):
+        raise RuntimeError("cannot approve an invalid narrative provenance chain")
+    approved = deepcopy(artifact)
+    approved["editorial_approval"] = {
+        "status": "approved", "approval_version": "cross-company-editorial-v2",
+        "narrative_hash": expected_narrative_hash,
+        "evidence_manifest_hash": expected_evidence_manifest_hash,
+        "artifact_provenance_hash": provenance_hash,
+        "input_identity": artifact.get("input_identity"),
+        "provider": artifact.get("provider"), "model": artifact.get("model"),
+        "prompt_version": artifact.get("prompt_version"),
+        "prompt_hash": artifact.get("prompt_hash"),
+        "approved_by": reviewer.strip(), "approved_at": datetime.now(timezone.utc).isoformat(),
+    }
+    return approved
+
+
+def revise_cross_company_narrative(
+    artifact: dict[str, Any], revised_narrative: dict[str, Any], frozen_request: dict[str, Any],
+    *, editor: str, findings: list[str],
+) -> dict[str, Any]:
+    """Apply a provenance-preserving evidence edit before independent approval."""
+
+    if artifact.get("artifact_version") != "cross-company-narrative-v1":
+        raise RuntimeError("unsupported cross-company narrative artifact")
+    if artifact.get("input_identity") != frozen_request.get("input_identity"):
+        raise RuntimeError("editorial revision input identity mismatch")
+    evidence_manifest_hash = (frozen_request.get("frozen_evidence") or {}).get("manifest_hash")
+    if artifact.get("evidence_manifest_hash") != evidence_manifest_hash:
+        raise RuntimeError("editorial revision evidence manifest mismatch")
+    if not editor.strip() or not findings or any(not str(item).strip() for item in findings):
+        raise ValueError("editor and non-empty findings are required")
+    validation = validate_cross_company_narrative(revised_narrative, frozen_request)
+    if validation["status"] != "passed":
+        raise RuntimeError(f"editorial revision rejected: {validation}")
+    revised = deepcopy(artifact)
+    base_artifact_provenance_hash = _cross_company_artifact_provenance_hash(artifact)
+    base_narrative_hash = str(artifact.get("narrative_hash") or "")
+    revised["narrative"] = deepcopy(revised_narrative)
+    revised["narrative_hash"] = _canonical_hash(revised_narrative)
+    revised["validation"] = validation
+    revised["provider"] = "DeepSeek draft + evidence editor"
+    revised["editorial_revision"] = {
+        "status": "revised",
+        "revision_version": "cross-company-editorial-revision-v1",
+        "base_provider": artifact.get("provider"),
+        "base_model": artifact.get("model"),
+        "base_narrative_hash": base_narrative_hash,
+        "base_artifact_provenance_hash": base_artifact_provenance_hash,
+        "revised_narrative_hash": revised["narrative_hash"],
+        "revised_by": editor.strip(),
+        "findings": [str(item).strip() for item in findings],
+        "revised_at": datetime.now(timezone.utc).isoformat(),
+    }
+    revised["editorial_approval"] = {
+        "status": "pending", "reason": "independent editorial approval required after revision",
+    }
+    return revised
+
+
+def apply_cross_company_narrative(report: dict[str, Any], artifact: dict[str, Any]) -> dict[str, Any]:
+    """Attach only the narrative generated for this exact production identity."""
+    from company_research import report_payload_hash, verify_report_integrity
+    from report_contract import public_ai_narrative, validate_report_contract
+
+    verify_report_integrity(report)
+    expected_identity = (report.get("generated_from") or {}).get("production_input_identity")
+    expected_manifest = (report.get("generated_from") or {}).get("evidence_manifest_hash")
+    generated = report.get("generated_from") or {}
+    narrative = artifact.get("narrative")
+    approval = artifact.get("editorial_approval") or {}
+    if (
+        artifact.get("artifact_version") != "cross-company-narrative-v1"
+        or artifact.get("input_identity") != expected_identity
+        or artifact.get("evidence_manifest_hash") != expected_manifest
+        or (artifact.get("validation") or {}).get("status") != "passed"
+        or artifact.get("narrative_hash") != _canonical_hash(narrative)
+        or artifact.get("model") != generated.get("narrative_model")
+        or artifact.get("prompt_version") != generated.get("prompt_version")
+        or not _validate_cross_company_revision_chain(artifact)
+        or approval.get("status") != "approved"
+        or approval.get("approval_version") != "cross-company-editorial-v2"
+        or approval.get("narrative_hash") != artifact.get("narrative_hash")
+        or approval.get("evidence_manifest_hash") != expected_manifest
+        or approval.get("input_identity") != expected_identity
+        or approval.get("provider") != artifact.get("provider")
+        or approval.get("model") != artifact.get("model")
+        or approval.get("prompt_version") != artifact.get("prompt_version")
+        or approval.get("prompt_hash") != artifact.get("prompt_hash")
+        or approval.get("artifact_provenance_hash") != _cross_company_artifact_provenance_hash(artifact)
+    ):
+        raise RuntimeError("cross-company narrative identity or validation is stale")
+    output = deepcopy(report)
+    output.pop("report_hash", None)
+    output["ai_narrative"] = public_ai_narrative(narrative)
+    provider_validation = deepcopy(artifact["validation"])
+    provider_validation.pop("input_identity", None)
+    revision = artifact.get("editorial_revision") or {}
+    applied_rules = []
+    if revision.get("status") == "revised":
+        applied_rules.append({
+            "id": "evidence_entailment_revision",
+            "base_narrative_hash": revision.get("base_narrative_hash"),
+            "revised_narrative_hash": revision.get("revised_narrative_hash"),
+            "findings": revision.get("findings") or [],
+        })
+    output["narrative_provider"] = {
+        "provider": artifact["provider"], "model": artifact["model"],
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "prompt_version": artifact["prompt_version"], "artifact_version": artifact["artifact_version"],
+        "validation": provider_validation,
+        "editorial_review": {"reviewer": approval["approved_by"], "applied_rules": applied_rules},
+        "editorial_approval": approval,
+        "artifact_hash": _canonical_hash(artifact),
+    }
+    errors = validate_report_contract(output["report_contract"], output)
+    if errors:
+        raise RuntimeError("cross-company narrative broke report contract: " + "; ".join(errors))
+    output["report_hash"] = report_payload_hash(output)
+    return output
+
 UNSUPPORTED_ASSERTION_FRAGMENTS = tuple(rule["before"] for rule in EDITORIAL_RULES if rule["id"] not in {"no_automatic_stop_loss"})
 CATL_SOURCE_AUGMENTATIONS = {
     "executive_summary": ("annual_segments", "annual_risks", "annual_capacity"),

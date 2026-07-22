@@ -1,0 +1,199 @@
+{
+  "artifact_version": "cross-company-narrative-v1",
+  "editorial_approval": {
+    "approval_version": "cross-company-editorial-v2",
+    "approved_at": "2026-07-21T13:11:32.891287+00:00",
+    "approved_by": "Codex independent evidence reapproval /root/m4_reapproval_audit",
+    "artifact_provenance_hash": "fd4e570c5f57262d9570cf10cc17b7e2f39de2b35153550a5a86942c0eb9532e",
+    "evidence_manifest_hash": "182fcd16d7c5a337220b96bba2a8ac1888b219f1825fb1db879a168fb1488b6f",
+    "input_identity": "3fc0abaa04e1ff898df60b83b90009fff19a5a62a7fa5b62dc16f8b08bd05ddc",
+    "model": "deepseek-v4-pro",
+    "narrative_hash": "72cb160d631ed38afa51563146693c34683750cbe62aff71641ea35fa57caf20",
+    "prompt_hash": "2b9c1185d50a1d747238d2217803d2b9ef9ae5135c3df8d3afad42a51ee6f9a6",
+    "prompt_version": "cross-company-writer-v4",
+    "provider": "DeepSeek draft + evidence editor",
+    "status": "approved"
+  },
+  "editorial_revision": {
+    "base_artifact_provenance_hash": "bd70db9d93d6bd81dbb469a16004ba301c92ce64f84b1b0c9f777ba2c67bcef5",
+    "base_model": "deepseek-v4-pro",
+    "base_narrative_hash": "7061a36fa16ef18ffe8a735ca96f11102f623272496bde1804f6329a33992b53",
+    "base_provider": "DeepSeek",
+    "findings": [
+      "Reapplied the previously approved evidence-entailment edits only after the new frozen request, source IDs and narrative schema were revalidated."
+    ],
+    "revised_at": "2026-07-21T12:43:01.939278+00:00",
+    "revised_by": "Codex evidence editor",
+    "revised_narrative_hash": "72cb160d631ed38afa51563146693c34683750cbe62aff71641ea35fa57caf20",
+    "revision_version": "cross-company-editorial-revision-v1",
+    "status": "revised"
+  },
+  "evidence_manifest_hash": "182fcd16d7c5a337220b96bba2a8ac1888b219f1825fb1db879a168fb1488b6f",
+  "input_identity": "3fc0abaa04e1ff898df60b83b90009fff19a5a62a7fa5b62dc16f8b08bd05ddc",
+  "model": "deepseek-v4-pro",
+  "narrative": {
+    "executive_summary": {
+      "conclusion": "冻结材料支持描述盈利、净息差、财富管理与资产质量变化，但资本充足性、同业优势、分红与估值证据缺失。",
+      "paragraphs": [
+        "年度业绩快报与季度报告披露营业收入和归母净利润变化、净息差收窄以及客户存款增长。",
+        "季度报告披露整体不良贷款率与拨备指标；独立媒体对上年度报告的交叉核验披露个人住房、小微贷款及信用卡业务的部分风险指标变化。没有不良生成、迁徙、核销或监管阈值，不能评价风险阈值或资本缓冲。"
+      ],
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ]
+    },
+    "investment_committee": {
+      "base_case": "Missing evidence",
+      "bear_case": "Missing evidence",
+      "bull_case": "Missing evidence",
+      "source_ids": [
+        "cmb_2025_preliminary",
+        "cmb_2026_q1",
+        "nbd_cmb_2025_results"
+      ]
+    },
+    "report_title": "招商银行证据边界研究报告",
+    "sections": {
+      "business_quality": {
+        "conclusion": "客户存款规模增加，净息差收窄，财富管理相关收入出现变化；这些事实不能单独证明低成本负债优势。",
+        "paragraphs": [
+          "年度与季度材料披露客户存款增加以及净息差收窄，季度报告同时披露净利息收入变化。",
+          "公司与媒体材料披露财富管理、代理基金及信用卡业务的部分变化；这些信息不能外推整体客户黏性。"
+        ],
+        "source_ids": [
+          "cmb_2025_preliminary",
+          "cmb_2026_q1",
+          "nbd_cmb_2025_results"
+        ],
+        "title": "业务质量"
+      },
+      "competitive_moat": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "冻结材料缺少同业存款成本、零售资产管理规模、市场份额和客户切换成本。",
+          "存款增长与财富管理收入变化不能单独证明相对优势或客户锁定。"
+        ],
+        "source_ids": [
+          "cmb_2025_preliminary",
+          "cmb_2026_q1",
+          "nbd_cmb_2025_results"
+        ],
+        "title": "竞争壁垒"
+      },
+      "financial_quality": {
+        "conclusion": "现有证据支持描述盈利、息差、拨备与不良率变化，但不支持信用成本归因或资本安全评价。",
+        "paragraphs": [
+          "年度及季度材料披露营业收入、归母净利润、净息差、整体不良贷款率与拨备覆盖率的变化。",
+          "零售贷款分类指标出现分化；因缺少信用成本、减值计提和利润桥，不能判断拨备是否影响利润，也不能仅凭不良率评价风控成效。"
+        ],
+        "source_ids": [
+          "cmb_2025_preliminary",
+          "cmb_2026_q1",
+          "nbd_cmb_2025_results"
+        ],
+        "title": "财务质量"
+      },
+      "industry_chain": {
+        "conclusion": "现有材料覆盖存款、贷款、财富管理与资产质量，但不支持判断招商银行在同业中的相对位置。",
+        "paragraphs": [
+          "公司披露客户存款、贷款与垫款、净利息收入以及财富管理手续费等业务数据。",
+          "冻结材料没有可比银行的同口径存款成本、零售资产管理规模或市场份额，无法进行同业位置比较。"
+        ],
+        "source_ids": [
+          "cmb_2025_preliminary",
+          "cmb_2026_q1",
+          "nbd_cmb_2025_results"
+        ],
+        "title": "银行业务链条"
+      },
+      "risk_falsification": {
+        "conclusion": "零售贷款分类指标与净息差是后续需要继续核验的变量。",
+        "paragraphs": [
+          "季度报告披露整体不良贷款率与拨备指标；独立媒体对上年度报告的交叉核验披露个人住房、小微贷款及信用卡业务的部分风险指标变化。",
+          "若后续正式披露显示净息差、资产质量或资本约束发生不利变化，当前基于冻结材料的判断需要重新评估。"
+        ],
+        "source_ids": [
+          "cmb_2026_q1",
+          "cmb_2025_preliminary",
+          "nbd_cmb_2025_results"
+        ],
+        "title": "风险与证伪"
+      },
+      "valuation_debate": {
+        "conclusion": "Missing evidence",
+        "paragraphs": [
+          "Missing evidence",
+          "Missing evidence"
+        ],
+        "source_ids": [
+          "cmb_2025_preliminary",
+          "cmb_2026_q1",
+          "nbd_cmb_2025_results"
+        ],
+        "title": "估值讨论"
+      }
+    }
+  },
+  "narrative_hash": "72cb160d631ed38afa51563146693c34683750cbe62aff71641ea35fa57caf20",
+  "prompt_hash": "2b9c1185d50a1d747238d2217803d2b9ef9ae5135c3df8d3afad42a51ee6f9a6",
+  "prompt_version": "cross-company-writer-v4",
+  "provider": "DeepSeek draft + evidence editor",
+  "receipts": [
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "draft",
+      "usage": {
+        "completion_tokens": 6014,
+        "completion_tokens_details": {
+          "reasoning_tokens": 4464
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 10857,
+        "prompt_tokens": 11113,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 17127
+      }
+    },
+    {
+      "model": "deepseek-v4-pro",
+      "purpose": "schema_and_fact_repair_1",
+      "usage": {
+        "completion_tokens": 4916,
+        "completion_tokens_details": {
+          "reasoning_tokens": 3292
+        },
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 12409,
+        "prompt_tokens": 12665,
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        },
+        "total_tokens": 17581
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 4916,
+    "completion_tokens_details": {
+      "reasoning_tokens": 3292
+    },
+    "prompt_cache_hit_tokens": 256,
+    "prompt_cache_miss_tokens": 12409,
+    "prompt_tokens": 12665,
+    "prompt_tokens_details": {
+      "cached_tokens": 256
+    },
+    "total_tokens": 17581
+  },
+  "validation": {
+    "available_source_count": 3,
+    "cited_source_count": 3,
+    "errors": [],
+    "input_identity": "3fc0abaa04e1ff898df60b83b90009fff19a5a62a7fa5b62dc16f8b08bd05ddc",
+    "status": "passed"
+  }
+}

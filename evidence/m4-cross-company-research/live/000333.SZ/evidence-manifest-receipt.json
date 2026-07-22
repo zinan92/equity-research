@@ -1,0 +1,98 @@
+{
+  "current_transport_verification_hash": "adffdb4c23a17f30f1f922801048bac1d187c05c69c5f1c7638e60087b4a8759",
+  "document_count": 3,
+  "documents": [
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "123653bfe9f17c6b244e2399eaaacffc3cac942193a8d7b9c1945b77bb91367b",
+        "fetched_at": "2026-07-21T11:05:52.610683+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "observed_at": "2026-07-21T11:05:52.610683+00:00",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF"
+        ]
+      },
+      "capture_receipt_hash": "229bc50224319425b5119e2fc29447fd61d4799b67cb74a621e1257fb0a027e6",
+      "content_hash": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+      "document_id": "rdoc_16f95f70527db59dcf27",
+      "id": "midea_2025_annual",
+      "identity_excerpt_hash": "c8b754106c9017ca1b6b27dddbf5d48504afb4e3fe63ebdd3e995f8a80d198a0",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "regulatory_cover_legal_name",
+      "kind": "primary",
+      "known_at": "2026-03-31T23:59:59+08:00",
+      "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+      "title": "美的集团 2025 年年度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "validated-redirect-v1",
+        "capture_receipt_hash": "bee18891e18ef79fcf553647bbc334edc013149b958a08c96cbbc671e00631c4",
+        "fetched_at": "2026-07-21T12:15:55.089730+00:00",
+        "final_url": "https://www.nbd.com.cn/articles/2026-03-31/4318601.html",
+        "initial_url": "https://www.nbd.com.cn/articles/2026-03-31/4318601.html",
+        "observed_at": "2026-07-21T12:15:55.089730+00:00",
+        "raw_sha256": "79d8d045ee8009504dde2125838e73e4878efdee0d795762b25900d008e56e98",
+        "redirect_chain": [
+          "https://www.nbd.com.cn/articles/2026-03-31/4318601.html"
+        ]
+      },
+      "capture_receipt_hash": "313f77b6615eaec64ac6bf932d1dd59a73edfb75f7dc461b54784a91cd319e3e",
+      "content_hash": "79d8d045ee8009504dde2125838e73e4878efdee0d795762b25900d008e56e98",
+      "document_id": "rdoc_79d8d045ee8009504dde",
+      "id": "nbd_midea_2025_results",
+      "identity_excerpt_hash": null,
+      "identity_extractor_version": null,
+      "identity_matched_by": null,
+      "kind": "independent",
+      "known_at": "2026-03-31T23:59:59+08:00",
+      "raw_sha256": "79d8d045ee8009504dde2125838e73e4878efdee0d795762b25900d008e56e98",
+      "title": "每日经济新闻 · 美的集团 2025 年经营结果交叉核验",
+      "url": "https://www.nbd.com.cn/articles/2026-03-31/4318601.html"
+    },
+    {
+      "capture_provenance": {
+        "capture_policy_version": "legacy-capture-current-url-only",
+        "capture_receipt_hash": "44d3d062e69b77b213cfbb6ab424c30520772710de7e2f3df4b18a9201db24c2",
+        "fetched_at": "2026-07-21T11:05:54.703227+00:00",
+        "final_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "initial_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "observed_at": "2026-07-21T11:05:54.703227+00:00",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "redirect_chain": [
+          "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF"
+        ]
+      },
+      "capture_receipt_hash": "135ba35874e1d1debda653bc7d231b4e98e977188a58519dd1b7506bdca44008",
+      "content_hash": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+      "document_id": "rdoc_a1a977c0ab10e36d744d",
+      "id": "midea_2026_q1",
+      "identity_excerpt_hash": "7c2904f77e1be1f4485dc086454b67889f624e01774a662d3a401e758a5158d6",
+      "identity_extractor_version": "regulatory-identity-v2",
+      "identity_matched_by": "cover_code_short_name_legal_name",
+      "kind": "primary",
+      "known_at": "2026-04-30T23:59:59+08:00",
+      "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+      "title": "美的集团 2026 年第一季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF"
+    }
+  ],
+  "evidence_gate_hash": "d26f37ff0a0608aa1793e229f7469c4722e249a788801b5675c73ff490d8a000",
+  "evidence_manifest_hash": "730197a846382d4127069fa7c024d57ab4481df18d728cbfe19dd3e92871971d",
+  "evidence_set_id": "xcr_730197a846382d412706",
+  "knowledge_cutoff": "2026-07-21T12:17:32Z",
+  "production_input_identity": "15f05bce2ffa6c607493aa875c9d33c7e7ddc445306b282019eac2c00f029a96",
+  "raw_bytes_committed": false,
+  "schema_version": "cross-company-redacted-evidence-receipt-v1",
+  "snapshot_binding": {
+    "baseline_payload_hash": "97b1af8cf31b734b474df3da4bdc97686f379cebbd9d85e3d15f7fe45766e4e2",
+    "snapshot_id": "snap_real_a89a5113ef0f",
+    "snapshot_manifest_hash": "a89a5113ef0f636b5c75009140f5e5e67741d880ea6b3e48f841436cda57aac4"
+  },
+  "status": "passed",
+  "ticker": "000333.SZ"
+}

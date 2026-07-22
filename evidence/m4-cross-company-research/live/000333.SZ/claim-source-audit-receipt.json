@@ -1,0 +1,260 @@
+{
+  "claim_count": 30,
+  "claims": [
+    {
+      "path": "executive_summary.conclusion",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "f0cf47d76ee2c26397fa5667897bc38e2a90da64ad625b040f81a8bcc49e57cf"
+    },
+    {
+      "path": "executive_summary.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "c2f0bbce2b4785644c922237666393cb2b05d8c7da55e2402ae0670e3664cf9c"
+    },
+    {
+      "path": "executive_summary.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "c7159250828ce7099d0a123a63bf4c57b3ffbe672d552a5008b2e61a92571b4f"
+    },
+    {
+      "path": "sections.business_quality.title",
+      "source_ids": [
+        "midea_2025_annual",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "e54dd06a15ee2bf88740d9600b2e33dbc84e5c72fa8c6c420e1e2ee7e5e9b121"
+    },
+    {
+      "path": "sections.business_quality.conclusion",
+      "source_ids": [
+        "midea_2025_annual",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "a2ad3cad12babb949d1439ea36d133611f0367ba237f13ee3a69ed557c180b04"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "9ab8aeb8a78b57683f2a0521a6f52398dfc7bec1b906277176ceeb99c3251aeb"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "6caa653077db14ed8d81eba0a97d0bc6969cf9f7a82d60894c7030e8437bb46e"
+    },
+    {
+      "path": "sections.competitive_moat.title",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "d4fd37cffecbf5549b7caf0803df51b22049317a9d06822ded9c3fe2c3877af9"
+    },
+    {
+      "path": "sections.competitive_moat.conclusion",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "da7475b92f8ef07b390b25b5d7e818d19fc5137d97d282c3f6ef80280dd56722"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "a1b819590897cc3359b4992fdcdb6756c9cc364e1cd83fa15926fd62a61a9c41"
+    },
+    {
+      "path": "sections.financial_quality.title",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "5c7f137a4156cb6f959548d69dc0ff0ae4c2f2ed83463a3aa3965473c7cb333a"
+    },
+    {
+      "path": "sections.financial_quality.conclusion",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "043bd08f2c56ae6150ca498baa133ab9aa4f0c984ad90b1e36e90a1cccff9a99"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "4a79c6da0edb9d2486e8cfdfae729dbed3f2c4ddfeb2fd3e5e1e7ba805bb87d1"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "a3218bc4054b3261146f3c729127fb963c12d037e41279459a00a72fad8c0632"
+    },
+    {
+      "path": "sections.industry_chain.title",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "70a33c8c3b3739e5d40f0f70242573452897dece6a8920d4a15eafd0811a1a1a"
+    },
+    {
+      "path": "sections.industry_chain.conclusion",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "b640c2cfa8206eec7fb81dab8982e83290a83e9a876f5e9a89d48c4b785ea730"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "c9c78f9acf695fff7f3868028c6f7ffdcfc5fea38d8713197a45044cac76c5ae"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual"
+      ],
+      "text_sha256": "ef83f329364a2e1d07d93c0ebf59a4e3484f1a9cda7816a7d480ba7887a64748"
+    },
+    {
+      "path": "sections.risk_falsification.title",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "3094168d55aaf91f290feb1d4a547532b37c59cbfe1b3bbe5a9c858dc0e448b2"
+    },
+    {
+      "path": "sections.risk_falsification.conclusion",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "cf4c6dd0f302f338d12a5a61ad8a84fc986e9e5cd6cc0208857c02aee3a461f4"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "42f78f2d03eff35fe172abe3135de0b8731718fcb09dcca2aef303d47ecac359"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "a566badb75d907deeb4c30176756c49e2612699358e80097b1066de62d8ade5c"
+    },
+    {
+      "path": "sections.valuation_debate.title",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d29e16d3dd34dc4a5c34c11c33f8a6fe4e329e5b97b16721c1185155050e922c"
+    },
+    {
+      "path": "sections.valuation_debate.conclusion",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[0]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[1]",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bull_case",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.base_case",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bear_case",
+      "source_ids": [
+        "midea_2025_annual",
+        "midea_2026_q1",
+        "nbd_midea_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    }
+  ],
+  "evidence_manifest_hash": "730197a846382d4127069fa7c024d57ab4481df18d728cbfe19dd3e92871971d",
+  "narrative_hash": "295d54086008445378c64e16e425d14d4b1bcc0f925825550d0e7a0ad92cd81f",
+  "schema_version": "cross-company-claim-source-audit-v1",
+  "status": "passed",
+  "ticker": "000333.SZ"
+}

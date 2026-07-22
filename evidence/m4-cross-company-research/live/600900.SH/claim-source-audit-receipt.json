@@ -1,0 +1,264 @@
+{
+  "claim_count": 30,
+  "claims": [
+    {
+      "path": "executive_summary.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "5c737a566337ed6b09e8a4b57a2fce5c2a081f2ede4459bd918fa9555b46a9f3"
+    },
+    {
+      "path": "executive_summary.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "1131a58093d007a8ca636db046da7c54c43cee76cfca320c21e8215660196df4"
+    },
+    {
+      "path": "executive_summary.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "59d51c0459528d8637fd827ca6ac1f0a47640e26a7f4759ef14035459848dc80"
+    },
+    {
+      "path": "sections.business_quality.title",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "e54dd06a15ee2bf88740d9600b2e33dbc84e5c72fa8c6c420e1e2ee7e5e9b121"
+    },
+    {
+      "path": "sections.business_quality.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "99a6c47dc069655e71973f59e5e257381dece19d3141a290011be7cffb471cb7"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "141e69da6bb971486c0385777699ba5bc3c3da4ace7d9baebe33385b3df9f67f"
+    },
+    {
+      "path": "sections.business_quality.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "152121d137c26f711b9bc2a3b07eb34c19e16f924ed60bff4da0dcfb6fbf45ae"
+    },
+    {
+      "path": "sections.competitive_moat.title",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d4fd37cffecbf5549b7caf0803df51b22049317a9d06822ded9c3fe2c3877af9"
+    },
+    {
+      "path": "sections.competitive_moat.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.competitive_moat.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.financial_quality.title",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "5c7f137a4156cb6f959548d69dc0ff0ae4c2f2ed83463a3aa3965473c7cb333a"
+    },
+    {
+      "path": "sections.financial_quality.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "f470ef3609a074eafc03b3df739cf4bdff535fb9dfd6837572ab442d5191125a"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "5c74a5cc22a5b71cf52bac9670552410e4475e607d3a5fbcc586e2381fe7e83b"
+    },
+    {
+      "path": "sections.financial_quality.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "bb0414dc4e56bc6eca187159f066ddf9326fd03e4be17ed7b8cfa54430816e9f"
+    },
+    {
+      "path": "sections.industry_chain.title",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "4055f04e2334286d632892725a137b3f2915ddb6d331d02fa35be9793ee7c35a"
+    },
+    {
+      "path": "sections.industry_chain.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.industry_chain.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.risk_falsification.title",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "3094168d55aaf91f290feb1d4a547532b37c59cbfe1b3bbe5a9c858dc0e448b2"
+    },
+    {
+      "path": "sections.risk_falsification.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "1a9ac741f5b58b622f1be608975d920269fc8bbfd7ae5c354137d6d57a2535c4"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "ff80bf0abd93ae3b60f1d888a96114027a2c1d2d1c638e7c8715906490b3d7ec"
+    },
+    {
+      "path": "sections.risk_falsification.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "158ad1f7b445660e8f93d10cb0aa4241d8a8deb1ad0ce0608f6ac3ed84c55ecd"
+    },
+    {
+      "path": "sections.valuation_debate.title",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d29e16d3dd34dc4a5c34c11c33f8a6fe4e329e5b97b16721c1185155050e922c"
+    },
+    {
+      "path": "sections.valuation_debate.conclusion",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[0]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "sections.valuation_debate.paragraphs[1]",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bull_case",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.base_case",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    },
+    {
+      "path": "investment_committee.bear_case",
+      "source_ids": [
+        "cypc_2025_annual",
+        "cypc_2026_q1",
+        "cpnn_cypc_2025_results"
+      ],
+      "text_sha256": "d54d5be772b99ab648911c42e1ab02e512c8a2c9cd8e9a95bd52d13950f0cdb3"
+    }
+  ],
+  "evidence_manifest_hash": "ea7af1a0773505577cf1cd101985ca403b2f0af5b03c907d51cbaaea03db000d",
+  "narrative_hash": "cf296b54a16e0bf85ed98ad07d409c4fd54beef0e5b431a6ef6e9eb46656c853",
+  "schema_version": "cross-company-claim-source-audit-v1",
+  "status": "passed",
+  "ticker": "600900.SH"
+}
