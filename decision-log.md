@@ -720,3 +720,22 @@
 - canonical URL 只能避免重复下载；不同 URL 仍可能返回相同 bytes，因此必须再做 SHA 去重。
 - 限速要覆盖 catalog 和 PDF 且串行记录最近调用时间；仅对 429/5xx/网络失败重试，4xx 不应反复打源站。
 - PDF host、HTTPS 和 `%PDF` magic 必须同时校验，避免把反爬 HTML 当研报归档。
+
+## 2026-07-22 · L2-B3 Page-Level Document Intelligence
+
+- Objective：进入正式报告的每条引用都能回到准确 PDF document/page/raw hash，错引用连同 claim 一起阻断。
+- Reuse：native text 用 pypdf；稀疏页用 Poppler `pdftoppm` + Tesseract OCR；继续以 B1/B2 document ID 与 PDF raw hash 为 authority，不新建文档框架。
+- Decision：page 和 chunk 都绑定 one-based page、raw hash、parser version 与 extraction method；chunk 永不跨页。
+- Decision：同 raw + 同 parser version 可确定性重跑；升级 parser version 生成不同 parse identity，不覆盖旧结果。
+- Decision：默认抽检 page mapping ≥95%、scanned searchable coverage ≥90%；OCR 失败标 `unreadable`，疑似表格无可靠坐标标 `possible_unlocated`。
+- Decision：citation gate 按 claim fail closed；document ID/page/raw hash 必须 100% 命中，提供 quote/chunk 时一并核验。
+- Verification：专项 6 passed；B1/B2/A3 upstream smoke 34 passed；真实本地 pdftoppm + Tesseract 双页探测得到 native 1 页、OCR 1 页、页码准确率 100%、扫描页覆盖率 100%。
+- Boundary：未生成投资结论、未做表格 cell 坐标重建、未部署 managed OCR workers。
+
+### Gotchas · L2-B3
+
+- PDF page index 对用户必须统一 one-based；内部 zero-based index 若外泄会造成整份报告错页。
+- OCR 文本存在空格/断行差异；质量抽检应验证页面 marker 与可检索覆盖，不应要求全文逐字符相等。
+- document ID 和 page 命中仍不足以证明引用同一份 bytes；raw hash 必须是 citation gate 的硬字段。
+- table-like text 没有坐标时只能用于搜索，不能静默声称已精确抽取单元格。
+- 默认本地 OCR 只在页面 native text 稀疏时触发，避免对数百页可搜索 PDF 做无意义重 OCR。

@@ -109,6 +109,22 @@ from .official_filings import (
     sync_cninfo_filings_async,
     validate_official_source_role,
 )
+from .document_intelligence import (
+    DEFAULT_PARSER_VERSION,
+    CitationCheck,
+    CorpusQuality,
+    DocumentChunk,
+    DocumentPage,
+    DocumentParseResult,
+    PageCitation,
+    ParserConfig,
+    PublicationGateResult,
+    ReportClaim,
+    TesseractCliOCR,
+    assess_corpus_quality,
+    parse_pdf_document,
+    validate_publication_citations,
+)
 from .sell_side_archive import (
     EASTMONEY_SELL_SIDE_CATALOG_SOURCE,
     EASTMONEY_SELL_SIDE_PDF_SOURCE,
@@ -160,6 +176,10 @@ __all__ = [
     "build_official_filing_registry", "build_official_filing_runtime",
     "classify_filing_title", "sync_cninfo_filings", "sync_cninfo_filings_async",
     "validate_official_source_role",
+    "DEFAULT_PARSER_VERSION", "CitationCheck", "CorpusQuality", "DocumentChunk",
+    "DocumentPage", "DocumentParseResult", "PageCitation", "ParserConfig",
+    "PublicationGateResult", "ReportClaim", "TesseractCliOCR",
+    "assess_corpus_quality", "parse_pdf_document", "validate_publication_citations",
     "EASTMONEY_SELL_SIDE_CATALOG_SOURCE", "EASTMONEY_SELL_SIDE_PDF_SOURCE",
     "EastmoneySellSideCatalogAdapter", "EastmoneySellSidePdfAdapter",
     "RateLimitedRetryTransport", "RetryableHttpError", "SellSideArchiveBatch",
