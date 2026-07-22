@@ -642,3 +642,24 @@
 - 六个 adapter outcome success 仍不是 packet 可发布证明；必须再检查 typed identity、quote、完整 OHLCV 与同一最新报告期的最小三表字段集。
 - 本轮真实探测证明当前网络与两个样本可用，不等于全市场 SLA；批量覆盖率、重试预算与 provider 备源属于后续 milestone。
 - `NOTICE_DATE` date-only 足以表达当前 capture 的披露先后，但不支持历史 intraday cutoff replay；该能力与真实 A2 Supabase 落库 replay 留给后续 milestone。
+
+## 2026-07-22 · L2-A4 Roadmap Contract Completion
+
+- Objective：补齐 approved issue #31 中 PR #79 尚未覆盖的 security aliases、日线/估值/交易日双源校验、财务修订身份、官方公司行动证据和 source conflict 留痕。
+- User outcome：宁德时代 `300750.SZ` 的 live validated packet 同时给出 canonical identity/aliases、腾讯与东财估值对照、腾讯与新浪最近日线/交易日对照、东财四类财务 component revision identities、巨潮官方权益分派实施公告；任一身份错配或阈值冲突都会 fail closed。
+- Reuse：继续使用 A1/A3/A4 packet 与 runtime，只新增 Eastmoney quote、Sina daily、CNINFO corporate-action 三个 adapter 和 cross-source validation glue；不新建数据库或第二套 ingestion framework。
+- Decision：估值 PE(TTM)/PB 任一缺失或相对差异超过 10% 阻断；最近两日 provider 日期必须完全一致，复权/近期 close 差异超过 0.5% 阻断。
+- Decision：财务 revision identity 由完整 provider row content hash 生成，并保存 provider update time；修订后的 row 形成新 canonical receipt，不覆盖先前证据。
+- Decision：CNINFO `权益分派实施公告` 元数据和官方 PDF 是公司行动 evidence anchor；adjusted history 没有任何官方 action document 时 validated packet 不发布。
+- Decision：网络稳定性优先于并发速度。A4 base 六源完成后，三个 cross-check source 顺序采集，避免同机同时建立九条境内 TLS 连接造成假冲突。
+- Verification：issue 指定专项 6 passed；上下游 53 passed + 17 subtests；283 项产品全量测试通过；live CATL 三个 secondary source success，估值与最近两日一致，8 条官方 action announcement，blocking conflicts=0，validated packet publishable=true；对抗终审 P0=0/P1=0。
+- Boundary：当前不声称 full-market alias coverage、historical intraday PIT replay、官方交易所 adjustment-factor series 或真实 A2 Supabase replay。
+
+### Gotchas · L2-A4 Roadmap Completion
+
+- provider 返回 filter success 不代表证券身份正确；Eastmoney 与 CNINFO adapter 都必须逐 payload 校验 code，再写请求 instrument ID。
+- 腾讯 PE(TTM) 与东财 PE(TTM) 会因刷新时点/口径产生小差异；必须用明确 tolerance 留痕，不能要求浮点完全相等，也不能无限放宽。
+- “最近两个交易日一致”是当前 calendar conflict gate，不是完整交易所日历 authority；全历史 calendar replay 仍需官方 calendar snapshot。
+- 新浪近期日线可用于独立 close/date cross-check，但不是官方复权因子；官方可信部分是 CNINFO action document，不能把两者合并表述成“官方价格”。
+- 巨潮全文搜索返回 HTML `<em>` 高亮；title 入 canonical event 前必须清理标签，同时保留 announcement ID 和 official PDF URL。
+- 九源同时并发在本机触发过 Eastmoney/Sina TLS timeout；顺序执行 cross-check sources 后 live probe 稳定，不能把瞬时网络失败写成数据冲突。

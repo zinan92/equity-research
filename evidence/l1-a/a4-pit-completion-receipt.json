@@ -1,0 +1,54 @@
+{
+  "contract": "Issue #31 L2-A4 A-Share Market, Identity & PIT Fundamentals",
+  "generated_at": "2026-07-22T09:20:33Z",
+  "ticker": "300750.SZ",
+  "instrument_id": "CN:300750.SZ",
+  "name": "宁德时代",
+  "mode": "live_cross_source_probe",
+  "publishable": true,
+  "aliases": ["300750", "300750.SZ", "CN:300750.SZ", "sz300750", "宁德时代"],
+  "cross_checks": {
+    "primary_price": 372.26,
+    "secondary_price": 372.26,
+    "primary_pe_ttm": 21.81,
+    "secondary_pe_ttm": 20.76,
+    "primary_pb": 5.27,
+    "secondary_pb": 5.27,
+    "primary_latest_dates": ["2026-07-21", "2026-07-22"],
+    "secondary_latest_dates": ["2026-07-21", "2026-07-22"],
+    "blocking_conflicts": 0
+  },
+  "financial_component_revision_ids_in_latest_period": 4,
+  "official_corporate_action_announcements": 8,
+  "secondary_sources": {
+    "eastmoney_quote": {
+      "status": "success",
+      "raw_hash": "1372393a587f918666b0a0806065a51d142abedec9621e82708820471c83beb0"
+    },
+    "sina_daily_bars": {
+      "status": "success",
+      "raw_hash": "ec081c13868a64f5a7ece55f07cd2d5716dd5f464d2a6a0723bb57f76433efb6"
+    },
+    "cninfo_corporate_actions": {
+      "status": "success",
+      "raw_hash": "1b65dfeb6233b9ef9974b10ce1d084aabde296a60ff16187a4faf5073b1f7ff8",
+      "latest_document": "https://static.cninfo.com.cn/finalpage/2026-04-15/1225107879.PDF"
+    }
+  },
+  "verification": [
+    {
+      "command": "python3 -m pytest product/tests/test_a_share_pit_fundamentals.py -q",
+      "result": "6 passed"
+    },
+    {
+      "command": "python3 -m pytest product/tests/test_a_share_pit_fundamentals.py product/tests/test_ashare_data_packet.py product/tests/test_ingestion_core.py product/tests/test_data_contract.py -q",
+      "result": "53 passed, 17 subtests passed"
+    },
+    {
+      "command": "python3 -m unittest discover -s product/tests -q",
+      "result": "283 tests completed successfully; existing sqlite ResourceWarning messages were non-fatal"
+    }
+  ],
+  "adversarial_review": "P0=0, P1=0; remaining P2 boundaries are recorded in the architecture document",
+  "truth_boundary": "Current live CATL capture and provider agreement only; not full-market coverage, historical intraday PIT replay, or an official exchange adjustment-factor series."
+}
