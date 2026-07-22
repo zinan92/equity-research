@@ -1,0 +1,38 @@
+{
+  "milestone": "L2-C3",
+  "issue": 103,
+  "status": "accepted",
+  "user_outcome": "Broker reports are visible as evidence-bound viewpoints, consensus, outliers, revisions, and bull/bear disagreements instead of an unattributed institutional summary.",
+  "verification": {
+    "issue_specific": "6 passed",
+    "targeted_upstream_and_issue": "34 passed",
+    "full_product_suite": "25 test files; 353 passed and 34 subtests passed in isolated pytest processes",
+    "secrets": "gitleaks git --redact --no-banner: no leaks found"
+  },
+  "deterministic_probe": {
+    "matrix_id": "viewpoint_matrix_83215cf205c7a3e673e1d7f1e80ba8f763d1b7ac",
+    "input_hash": "ba48de139caf430e6d015b7a42f642c0e7f6aae611eaf62b7705415bff56f655",
+    "consensus_snapshot_id": "consensus_9c94a2c17387428970526f547521bf08b379f378",
+    "reports": 2,
+    "brokers": 2,
+    "published_claims": 2,
+    "blocked_claims": 0,
+    "topic": "demand",
+    "allowed_summary_language": "documented_disagreement"
+  },
+  "gates": {
+    "report_and_estimate_identity_bound": true,
+    "document_page_raw_hash_quote_bound": true,
+    "consensus_and_outliers_separate": true,
+    "historical_revisions_immutable": true,
+    "bull_and_bear_evidence_visible": true,
+    "summary_strength_cannot_exceed_evidence": true,
+    "compiler_network_and_model_free": true
+  },
+  "boundaries": [
+    "No judgment of which broker is correct",
+    "No LLM-authored estimates or facts",
+    "No C5 recommendation, target-price, or position policy",
+    "No live trading or execution"
+  ]
+}

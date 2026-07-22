@@ -863,3 +863,25 @@
 - 已被占用或缺失的 GitHub 编号不能由客户端指定复用；重建记录必须保留 original → reconstructed 映射。
 - 追求“看起来连续”的历史会诱发伪造；不可恢复的历史必须显式标为 reconstructed。
 - 自动合并与强制 PR 不冲突：required approvals 可为 0，同时对 admin 禁止 direct push。
+
+## 2026-07-22 · L2-C3 Sell-Side Viewpoint Matrix
+
+- Objective：用户可以逐篇验证券商观点、共识、分歧和修订，而不是看到没有出处的“机构综合认为”。
+- Reuse：直接复用 B2 report/PDF identity、B3 document/page/raw-hash citation gate、B4 normalized `BrokerEstimate` 与 robust consensus quarantine、C1 section 11 typed inputs。
+- Decision：一份 `SellSideViewpoint` 必须绑定 report/document/raw hash；estimate 的 ticker/broker/analyst/date/target/raw identity 任一不一致即阻断。
+- Decision：compiler 纯确定性且不联网；历史报告全部保留，latest 只影响当前 broker row 和 B4 consensus，不覆盖旧观点。
+- Decision：rating、target、EPS/revenue/net profit 按同券商相邻报告产生 immutable revision；unknown rating label 只标 `changed_unclassified`，不猜升级或降级。
+- Decision：citation 失败的 claim 保留在 blocked ledger，但不能进入 topic 或 summary；bull/bear claim IDs 分开展示，不自动裁决谁正确。
+- Decision：summary language 是 evidence ceiling：tentative、single-report、multi-broker、documented disagreement、≥4 broker 且 ≥80% alignment 五档，不能被叙事层升级。
+- Verification：6 个 issue 专项测试；B3/B4/C1/C2/C3 targeted 34 passed；全量按文件隔离执行 25 个 pytest 模块，353 passed + 34 subtests passed；gitleaks 无泄漏。
+- Boundary：不生成 LLM 数字、不做 C5 recommendation/target/position policy、不做 UI 重构或交易执行。
+
+### Gotchas · L2-C3
+
+- “有 PDF”不等于观点可引用；document/page/raw hash/quote 任一不匹配都必须阻断该 claim。
+- 同一券商多份报告不能同时进入当前共识，否则会把一个机构重复计票；旧值进入 superseded quarantine 和 revision timeline。
+- 数值 outlier 不能删除整份报告；它只退出对应 metric aggregate，报告和定性观点仍可审计。
+- 多篇报告都看多也不等于事实正确；matrix 只描述 sell-side distribution，不提升来源 authority。
+- 不同币种 target price 不能放进同一共识；A 股跨币种报告必须先有显式换算合同。
+- tentative claim 即使有页码也不能被 summary 改写成明确结论；citation validity 与 claim strength 是两道不同的门。
+- 本仓单进程 `unittest discover` 会被旧 research-refresh 的进程隔离测试提前终止，且不会给可靠 summary；全量闸采用每个 test file 独立 pytest 进程，既覆盖 pytest function，也避免跨模块全局状态污染。

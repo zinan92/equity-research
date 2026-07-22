@@ -67,6 +67,16 @@ python3 -m unittest product.tests.test_cross_company_research_v1 -v
 
 `evidence/m4-cross-company-research/` 根目录是 structure-only acceptance fixture；`live/` 是五家公司 REAL snapshot + 实际捕获文档的发布证明。live 稿件经过 DeepSeek 冻结输入、可追溯 evidence-editor 修订、四轮独立语义审查和 exact-hash 审批。详见 [`cross-company-research-v1`](../docs/architecture/cross-company-research-v1.md)。
 
+### 券商观点、共识与修订矩阵
+
+C3 在 B2–B4 冻结证据之上生成逐报告观点、稳健共识、异常值隔离、评级/目标价/预测修订和多空证据矩阵。每条可进入摘要的观点必须通过 document/page/raw-hash/quote gate；编译器不联网、不调用模型，也不判断哪家券商正确：
+
+```bash
+python3 -m unittest product.tests.test_viewpoint_matrix -v
+```
+
+合同见 [`sell-side-viewpoint-matrix-v1`](../docs/architecture/sell-side-viewpoint-matrix-v1.md)。
+
 ### 统一组合配置与调仓账本
 
 M5 把同一时点的 snapshot、标准研报和确定性仓位约束收敛成唯一 canonical portfolio identity。当前验收覆盖 `2026-07-17` 与 `2026-07-21` 两个 REAL snapshot；输出 8 只股票、现金、动作、期间差异和独立 append-only 模型账本：

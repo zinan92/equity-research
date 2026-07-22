@@ -14,12 +14,12 @@
 - B6 now freezes canonical records into deterministic evidence-set/gate identities, machine-checks primary/independent/lead roles, recomputes PIT/freshness/conflict/coverage, and exposes only accepted evidence through a read-only Research Context Pack.
 - C1 now defines one typed 18-section report contract with fixed full/partial/missing semantics, a 32–50 page budget, section/profile/version/input hashes, and a hard B6 boundary for live acceptance.
 - C2 now reconciles historical statements and produces hashed Bear/Base/Bull DCF, reverse DCF, peer/history cross-checks and stable sensitivities while blocking currency, unit, balance and share-count anomalies.
+- C3 now compiles page-cited broker viewpoints into per-report rows, robust consensus/outlier separation, immutable rating/target/forecast revisions, visible bull/bear topic evidence and evidence-strength-bounded summary language.
 - GitHub audit lineage for missing references #79–#89 is truthfully reconstructed as Issues #90–#100 and bound to immutable main commits by `docs/governance/audit-lineage-v1.json`; future main changes require real Pull Request objects.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
 
 ## 下一步
 
-- Start L2-C3 from latest `main` with a new contract Issue: turn individual sell-side reports into an evidence-bound viewpoint matrix.
-- Separate consensus from outliers, preserve revision timelines and keep both bull and bear evidence visible.
-- Prevent summaries from claiming more certainty than the source reports; do not auto-judge which broker is correct.
+- Start L2-C4 from latest `main`: add battery, consumer and bank industry profiles without forking the 18-section report structure.
+- Define profile-selected KPI fields and candidate truth fixtures while keeping missing industry fields isolated from universal sections.
