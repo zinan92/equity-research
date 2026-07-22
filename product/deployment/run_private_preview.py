@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import stat
 import sys
+import zipfile
 
 
 ALLOWED_ENV = {
@@ -16,9 +17,11 @@ ALLOWED_ENV = {
     "PARK_CANONICAL_PORTFOLIO_ROOT",
     "PARK_CANONICAL_PORTFOLIO_SOURCE_DB",
     "PARK_PRIVATE_REPORT_ROOT",
+    "PARK_PRIVATE_RESEARCH_PACK",
     "PARK_AUTH_REQUIRED",
     "PARK_COOKIE_SECURE",
     "PARK_PRIVATE_PREVIEW",
+    "PARK_MANUAL_PAID_PILOT",
 }
 
 
@@ -32,6 +35,19 @@ def sha256_file(path: Path) -> str:
 
 def canonical_json(value: object) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def research_pack_path(root: Path, name: str) -> Path:
+    if not isinstance(name, str):
+        raise RuntimeError("private preview research-pack path is invalid")
+    relative = Path(name)
+    if relative.is_absolute() or relative.as_posix() != name or any(part in {"", ".", ".."} for part in relative.parts):
+        raise RuntimeError("private preview research-pack path is unsafe")
+    resolved_root = root.resolve()
+    resolved = (resolved_root / relative).resolve()
+    if resolved_root not in resolved.parents:
+        raise RuntimeError("private preview research-pack path escapes its root")
+    return resolved
 
 
 def payload_file(path: Path) -> bool:
@@ -57,7 +73,9 @@ def load_env(path: Path) -> dict[str, str]:
     missing = ALLOWED_ENV - values.keys()
     if missing:
         raise RuntimeError("private preview environment is incomplete")
-    if any(values[key] != "1" for key in ("PARK_AUTH_REQUIRED", "PARK_COOKIE_SECURE", "PARK_PRIVATE_PREVIEW")):
+    if any(values[key] != "1" for key in (
+        "PARK_AUTH_REQUIRED", "PARK_COOKIE_SECURE", "PARK_PRIVATE_PREVIEW", "PARK_MANUAL_PAID_PILOT",
+    )):
         raise RuntimeError("private preview safety flags must all equal 1")
     return values
 
@@ -110,12 +128,58 @@ def verify_packaged_release(runtime: Path, values: dict[str, str]) -> dict:
     report_bundle_hash = hashlib.sha256(canonical_json(report_hashes).encode()).hexdigest()
     if identity.get("report_bundle_hash") != report_bundle_hash or len(report_hashes) != 8:
         raise RuntimeError("private preview report bundle identity mismatch")
+    pack_root = release / "research-pack"
+    pack_manifest_path = pack_root / "pack-manifest.json"
+    if not pack_manifest_path.is_file() or pack_manifest_path.is_symlink():
+        raise RuntimeError("private preview research-pack manifest is required")
+    try:
+        pack_manifest = json.loads(pack_manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("private preview research-pack manifest is invalid") from exc
+    pack_hash = pack_manifest.pop("pack_hash", None) if isinstance(pack_manifest, dict) else None
+    expected_pack_hash = hashlib.sha256(canonical_json(pack_manifest).encode()).hexdigest()
+    if pack_hash != expected_pack_hash or identity.get("research_pack_hash") != pack_hash:
+        raise RuntimeError("private preview research-pack identity mismatch")
+    pack_files = pack_manifest.get("files")
+    if not isinstance(pack_files, dict):
+        raise RuntimeError("private preview research-pack files are invalid")
+    canonical_root = release / "canonical"
+    canonical_pack_sources = {
+        "portfolio.json": canonical_root / "versions" / f"{identity['portfolio_id']}.json",
+        "diff.json": canonical_root / "latest-diff.json",
+        "ledger.json": canonical_root / "latest-ledger.json",
+        "ledger-history.json": canonical_root / "ledger-history.json",
+        **{f"reports/{ticker}.json": reports / f"{ticker}.json" for ticker in report_hashes},
+    }
+    if set(pack_files) != set(canonical_pack_sources):
+        raise RuntimeError("private preview research-pack file set differs from the release")
+    actual_pack_files: dict[str, str] = {}
+    for name in sorted(pack_files):
+        path = research_pack_path(pack_root, name)
+        if path.is_file() and not path.is_symlink():
+            actual_pack_files[name] = sha256_file(path)
+    if actual_pack_files != pack_files:
+        raise RuntimeError("private preview research-pack files differ from the pack manifest")
+    for name, source in canonical_pack_sources.items():
+        if not source.is_file() or source.is_symlink() or actual_pack_files[name] != sha256_file(source):
+            raise RuntimeError(f"private preview research-pack member differs from the release: {name}")
+    archive_path = pack_root / "research-pack.zip"
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            expected_members = sorted([*pack_files, "pack-manifest.json"])
+            if sorted(archive.namelist()) != expected_members or archive.testzip() is not None:
+                raise RuntimeError("private preview research-pack archive is invalid")
+            if any(archive.read(name) != research_pack_path(pack_root, name).read_bytes() for name in expected_members):
+                raise RuntimeError("private preview research-pack archive member mismatch")
+    except (OSError, zipfile.BadZipFile) as exc:
+        raise RuntimeError("private preview research-pack archive is unavailable") from exc
     expected_paths = {
         "PARK_DASHBOARD_DB": release / "research.db",
         "PARK_AUTH_DB": runtime / "auth.db",
         "PARK_CANONICAL_PORTFOLIO_ROOT": release / "canonical",
         "PARK_CANONICAL_PORTFOLIO_SOURCE_DB": release / "research.db",
         "PARK_PRIVATE_REPORT_ROOT": release / "canonical-reports",
+        "PARK_PRIVATE_RESEARCH_PACK": release / "research-pack",
     }
     for key, expected in expected_paths.items():
         if Path(values[key]).expanduser().resolve() != expected.resolve():

@@ -130,6 +130,8 @@ python3 product/publication_pack.py --validate product/runtime/publication_packs
 
 M6 私有预览把 canonical 组合、会员权限与结构化反馈放进一个外网可打开但默认封闭的产品壳。运行时复制到仓库外的 content-addressed release；研究库只读，会员/会话/反馈使用独立 `PARK_AUTH_DB`。完整合同和部署/回滚命令见 [`private-preview-v1`](../docs/product/private-preview-v1.md)。
 
+M7 在同一壳上增加人工外部付款履约。`billing_events` append-only；Paid 权益只从未退款的付款事件派生；退款撤权并注销旧 session；每个 release 带精确绑定当前组合和 8 份报告的 research pack。合同与 Owner runbook 见 [`paid-community-pilot-v1`](../docs/product/paid-community-pilot-v1.md)。
+
 机器验收：
 
 ```bash
@@ -137,9 +139,12 @@ python3 -m unittest product.tests.test_private_preview_v1 -v
 python3 scripts/verify_private_preview.py --rehearse-ops --rollback-release <verified-prior-release-id>
 python3 scripts/verify_private_preview.py
 python3 scripts/adversarial_verify_private_preview.py
+python3 -m unittest product.tests.test_paid_community_pilot_v1 -q
+python3 scripts/verify_paid_community_pilot.py
+python3 scripts/adversarial_verify_paid_community_pilot.py
 ```
 
-这套部署只声明 `Private Preview Ready`：不收款、不接券商、单机 origin、没有多地域高可用。
+这套部署只声明 `Private Preview Ready + Manual Paid Fulfillment`：平台不在线收款、不接券商、单机 origin、没有多地域高可用，也不满足 Product OS `Paid Pilot Ready`。
 
 本地开发默认不开身份门。创建 owner 和邀请码：
 
@@ -149,7 +154,7 @@ python3 product/member_admin.py create-invite --owner-email <owner-email> --tier
 PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0.0.1 --port 8877
 ```
 
-`preview` 只看首页，`member` 可看公司级研报，`paid` 在 M6 仍是保留 tier，`owner` 可管理成员和反馈。私有预览不开放刷新、批准、发布或下载路由，即使 owner 也不能修改封装后的研究 release。上述命令只用于本机 HTTP；公网必须使用 HTTPS，并改为 `PARK_COOKIE_SECURE=1`。
+`preview` 只看首页，`member` 可看公司级研报，派生 `paid` 增加当前 8 股研究包下载，`owner` 可管理成员、账单和反馈。私有预览不开放刷新、批准或发布路由，即使 owner 也不能修改封装后的研究 release。上述命令只用于本机 HTTP；公网必须使用 HTTPS，并改为 `PARK_COOKIE_SECURE=1`。
 
 ## API
 
@@ -173,6 +178,9 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 - `GET /api/research/editorial-queue`
 - `GET /api/research/editorial-status/{ticker}`
 - `GET /api/publication-packs/latest`
+- `GET /api/billing/me`（M7 私有人工履约）
+- `GET /api/billing` / `GET /api/billing/export`（Owner）
+- `GET /downloads/private-preview/research-pack.zip`（派生 Paid / Owner）
 
 写入：
 
@@ -182,6 +190,8 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 - `POST /api/refresh`
 - `POST /api/publications/{id}/approve`
 - `POST /api/publications/{id}/publish`
+- `POST /api/billing/payment` / `POST /api/billing/refund`（Owner + CSRF）
+- `POST /api/billing/settings`（Owner + CSRF）
 
 批准会锁定组合内容哈希；内容变化后原批准自动失效，发布请求会被拒绝。
 

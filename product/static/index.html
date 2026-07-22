@@ -68,8 +68,8 @@
         <section id="view-decision" class="view is-active" aria-labelledby="decision-title">
           <section id="private-preview-dashboard" class="private-preview-dashboard" hidden>
             <div class="preview-banner">
-              <span>PRIVATE PREVIEW</span>
-              <p>仅供受邀成员验证产品。模型仓位不是账户持仓，不接受真实付款，不连接券商。</p>
+              <span id="preview-mode-label">PRIVATE PREVIEW · MANUAL PAID PILOT</span>
+              <p id="preview-mode-copy">仅供受邀成员验证产品。平台自身不收款、不提供在线 checkout；外部付款由 Park 人工核验。模型仓位不是账户持仓，不连接券商。</p>
             </div>
             <header class="canonical-hero">
               <div>
@@ -102,6 +102,25 @@
                 <dl id="canonical-receipt"></dl>
               </section>
             </div>
+            <section id="billing-pilot-panel" class="billing-pilot-panel" aria-labelledby="billing-title">
+              <div class="billing-pilot-copy">
+                <p class="eyebrow">PAID COMMUNITY / MANUAL FULFILLMENT</p>
+                <h2 id="billing-title">付费权益有凭据，也有撤回路径</h2>
+                <p>平台不提供在线 checkout 或自动续费。Park 仅在外部款项核验后记录付款；退款会立即撤回下载权益并使旧会话失效。</p>
+              </div>
+              <div class="billing-status-card" id="billing-status-card" data-loaded="false">
+                <span>当前账单状态</span>
+                <strong id="billing-status">读取中</strong>
+                <small id="billing-truth">不是支付商 webhook 或真实收入证明</small>
+                <a id="research-pack-download" href="/downloads/private-preview/research-pack.zip" hidden>下载 8 股研究包</a>
+              </div>
+              <dl class="billing-pack-receipt">
+                <div><dt>研究包身份</dt><dd id="billing-pack-hash">—</dd></div>
+                <div><dt>绑定组合</dt><dd id="billing-portfolio-id">—</dd></div>
+                <div><dt>报告数量</dt><dd id="billing-report-count">—</dd></div>
+                <div><dt>履约模式</dt><dd>manual_external</dd></div>
+              </dl>
+            </section>
             <section class="feedback-panel" aria-labelledby="feedback-title">
               <div>
                 <p class="eyebrow">MEMBER FEEDBACK</p>
@@ -128,7 +147,7 @@
               </form>
             </section>
             <section id="owner-preview-panel" class="owner-preview-panel" hidden>
-              <div class="section-heading"><div><p class="eyebrow">OWNER CONTROL</p><h2>成员与反馈</h2></div><a href="/api/feedback/export" class="owner-export">导出反馈 JSON</a></div>
+              <div class="section-heading"><div><p class="eyebrow">OWNER CONTROL</p><h2>成员、账单与反馈</h2></div><div class="owner-export-links"><a href="/api/billing/export" class="owner-export">导出账单</a><a href="/api/feedback/export" class="owner-export">导出反馈</a></div></div>
               <div class="owner-grid">
                 <form id="invite-form" class="owner-form">
                   <h3>创建一次性邀请</h3>
@@ -139,6 +158,36 @@
                 </form>
                 <div><h3>成员</h3><div id="owner-members" class="owner-list"></div></div>
                 <div><h3>最新反馈</h3><div id="owner-feedback" class="owner-list"></div></div>
+              </div>
+              <div class="owner-billing-grid">
+                <form id="billing-payment-form" class="owner-form">
+                  <h3>确认外部付款</h3>
+                  <label>成员邮箱<input type="email" name="member_email" required></label>
+                  <label>金额（分）<input type="number" name="amount_minor" min="100" max="100000000" value="29900" required></label>
+                  <label>付款 reference<input name="payment_reference" minlength="6" maxlength="128" required></label>
+                  <label>事件 reference<input name="provider_event_id" minlength="6" maxlength="128" required></label>
+                  <input type="hidden" name="currency" value="CNY">
+                  <input type="hidden" name="provider" value="manual_external">
+                  <button type="submit">核验并开通 Paid</button>
+                  <output id="billing-payment-output"></output>
+                </form>
+                <form id="billing-refund-form" class="owner-form">
+                  <h3>确认退款并撤权</h3>
+                  <label>原付款事件 ID<input name="payment_event_id" minlength="6" maxlength="128" required></label>
+                  <label>退款 reference<input name="refund_reference" minlength="6" maxlength="128" required></label>
+                  <label>事件 reference<input name="provider_event_id" minlength="6" maxlength="128" required></label>
+                  <input type="hidden" name="provider" value="manual_external">
+                  <button type="submit">记录退款并撤回权限</button>
+                  <output id="billing-refund-output"></output>
+                </form>
+                <form id="billing-control-form" class="owner-form">
+                  <h3>新开通总开关</h3>
+                  <p id="billing-control-status">读取中</p>
+                  <label class="billing-control-toggle"><input type="checkbox" name="accept_new_payments" checked> 允许新的人工付款确认</label>
+                  <button type="submit">保存开关</button>
+                  <output id="billing-control-output"></output>
+                </form>
+                <div><h3>账单事件</h3><div id="owner-billing-events" class="owner-list"></div></div>
               </div>
             </section>
           </section>

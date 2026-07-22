@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import ipaddress
 import json
 import mimetypes
 import os
 import sqlite3
 import time
+import zipfile
 from http.cookies import SimpleCookie
 from threading import Lock
 from http import HTTPStatus
@@ -46,6 +48,10 @@ from auth_store import (
     redeem_invite, revoke_session, rotate_csrf, session_member, set_member_status, verify_csrf,
 )
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
+from billing_store import (
+    BillingError, billing_export, billing_status, effective_member, initialize_billing,
+    payment_controls, record_payment, record_refund, set_payment_controls,
+)
 
 
 ROOT = Path(__file__).resolve().parent
@@ -57,6 +63,7 @@ LOGIN_IP_ATTEMPTS: dict[str, list[float]] = {}
 AUTH_REQUIRED = os.getenv("PARK_AUTH_REQUIRED", "0") == "1"
 COOKIE_SECURE = os.getenv("PARK_COOKIE_SECURE", "0") == "1"
 PRIVATE_PREVIEW = os.getenv("PARK_PRIVATE_PREVIEW", "0") == "1"
+MANUAL_PAID_PILOT = PRIVATE_PREVIEW and os.getenv("PARK_MANUAL_PAID_PILOT", "0") == "1"
 PRIVATE_PREVIEW_SCHEMA_VERSION = "private-preview-v1"
 SESSION_COOKIE = "__Host-park_session" if COOKIE_SECURE else "park_session"
 
@@ -65,8 +72,108 @@ def canonical_portfolio_source_db() -> Path:
     return Path(os.environ.get("PARK_CANONICAL_PORTFOLIO_SOURCE_DB", ROOT / "runtime" / "m4-live.db"))
 
 
+def canonical_portfolio_root() -> Path:
+    return Path(os.environ.get("PARK_CANONICAL_PORTFOLIO_ROOT", ROOT / "runtime" / "canonical_portfolio"))
+
+
 def private_report_root() -> Path:
     return Path(os.environ.get("PARK_PRIVATE_REPORT_ROOT", ROOT / "runtime" / "private-preview-reports"))
+
+
+def private_research_pack_root() -> Path:
+    return Path(os.environ.get("PARK_PRIVATE_RESEARCH_PACK", ROOT / "runtime" / "private-preview-research-pack"))
+
+
+def _sha256_file(path: Path) -> str:
+    value = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            value.update(chunk)
+    return value.hexdigest()
+
+
+def _canonical_json(value: object) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def private_research_pack_info(portfolio: dict | None = None) -> dict:
+    current = portfolio or load_portfolio_state()
+    root = private_research_pack_root().resolve()
+    manifest_path = root / "pack-manifest.json"
+    archive_path = root / "research-pack.zip"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CanonicalPortfolioError("private research pack manifest is unavailable") from exc
+    if not isinstance(manifest, dict):
+        raise CanonicalPortfolioError("private research pack manifest is invalid")
+    pack_hash = manifest.pop("pack_hash", None)
+    expected_hash = hashlib.sha256(_canonical_json(manifest).encode()).hexdigest()
+    if (
+        pack_hash != expected_hash
+        or manifest.get("schema_version") != "canonical-research-pack-v1"
+        or manifest.get("portfolio_id") != current["portfolio_id"]
+        or manifest.get("portfolio_payload_hash") != current["payload_hash"]
+        or manifest.get("snapshot_id") != current["snapshot"]["snapshot_id"]
+    ):
+        raise CanonicalPortfolioError("private research pack identity mismatch")
+    files = manifest.get("files")
+    if not isinstance(files, dict):
+        raise CanonicalPortfolioError("private research pack files are invalid")
+    canonical_root = canonical_portfolio_root().resolve()
+    reports = private_report_root().resolve()
+    canonical_sources = {
+        "portfolio.json": canonical_root / "versions" / f"{current['portfolio_id']}.json",
+        "diff.json": canonical_root / "latest-diff.json",
+        "ledger.json": canonical_root / "latest-ledger.json",
+        "ledger-history.json": canonical_root / "ledger-history.json",
+        **{
+            f"reports/{position['ticker']}.json": reports / f"{position['ticker']}.json"
+            for position in current["positions"]
+        },
+    }
+    if set(files) != set(canonical_sources):
+        raise CanonicalPortfolioError("private research pack file set differs from canonical release inputs")
+    actual: dict[str, str] = {}
+    pack_paths: dict[str, Path] = {}
+    for name in sorted(files):
+        target = (root / name).resolve()
+        try:
+            target.relative_to(root)
+        except ValueError as exc:
+            raise CanonicalPortfolioError("private research pack path escapes its root") from exc
+        if not target.is_file() or target.is_symlink():
+            raise CanonicalPortfolioError("private research pack file is unavailable")
+        pack_paths[name] = target
+        actual[name] = _sha256_file(target)
+    if actual != files or not archive_path.is_file() or archive_path.is_symlink():
+        raise CanonicalPortfolioError("private research pack differs from its manifest")
+    for name, source in canonical_sources.items():
+        if not source.is_file() or source.is_symlink() or actual[name] != _sha256_file(source):
+            raise CanonicalPortfolioError(f"private research pack member differs from canonical release input: {name}")
+    try:
+        with zipfile.ZipFile(archive_path) as archive:
+            expected_members = sorted([*files, "pack-manifest.json"])
+            if sorted(archive.namelist()) != expected_members or archive.testzip() is not None:
+                raise CanonicalPortfolioError("private research pack archive membership is invalid")
+            if any(
+                archive.read(name) != (manifest_path if name == "pack-manifest.json" else pack_paths[name]).read_bytes()
+                for name in expected_members
+            ):
+                raise CanonicalPortfolioError("private research pack archive member mismatch")
+    except (OSError, zipfile.BadZipFile) as exc:
+        raise CanonicalPortfolioError("private research pack archive is invalid") from exc
+    return {
+        "schema_version": manifest["schema_version"],
+        "portfolio_id": manifest["portfolio_id"],
+        "snapshot_id": manifest["snapshot_id"],
+        "report_bundle_hash": manifest["report_bundle_hash"],
+        "pack_hash": pack_hash,
+        "archive_sha256": _sha256_file(archive_path),
+        "report_count": sum(1 for name in files if name.startswith("reports/")),
+        "download": "/downloads/private-preview/research-pack.zip",
+        "truth_boundary": manifest["truth_boundary"],
+    }
 
 
 def private_report_payload(ticker: str, portfolio: dict | None = None) -> dict:
@@ -119,6 +226,10 @@ def private_preview_get_entitlement(route: str) -> str | None:
         return "deep_reports"
     if route in {"/api/members", "/api/feedback", "/api/feedback/export"}:
         return "manage_members"
+    if MANUAL_PAID_PILOT and route == "/api/billing/me":
+        return "dashboard"
+    if MANUAL_PAID_PILOT and route in {"/api/billing", "/api/billing/export", "/api/billing/settings"}:
+        return "manage_members"
     return None
 
 
@@ -144,10 +255,10 @@ def canonical_private_preview_payload() -> dict:
         raise CanonicalPortfolioError("canonical preview diff is invalid or stale")
     for position in current["positions"]:
         private_report_payload(position["ticker"], current)
-    return {
+    payload = {
         "schema_version": PRIVATE_PREVIEW_SCHEMA_VERSION,
         "preview": {
-            "label": "PRIVATE PREVIEW",
+            "label": "MANUAL PAID PILOT" if MANUAL_PAID_PILOT else "PRIVATE PREVIEW",
             "accepts_payment": False,
             "broker_connected": False,
             "personalized_portfolio": False,
@@ -155,12 +266,24 @@ def canonical_private_preview_payload() -> dict:
             "exact_report_bindings_verified": True,
             "route_surface": "explicit_allowlist",
         },
+        "paid_pilot": {
+            "enabled": MANUAL_PAID_PILOT,
+            "contract_version": "manual-paid-community-v1" if MANUAL_PAID_PILOT else None,
+            "fulfillment_mode": "manual_external" if MANUAL_PAID_PILOT else None,
+            "online_checkout": False,
+            "payment_provider_connected": False,
+            "paid_pilot_ready": False,
+            "entitlements_derived_from_billing": MANUAL_PAID_PILOT,
+        },
         "portfolio": current,
         "history": history,
         "diff": diff,
         "ledger": ledger,
         "ledger_history": ledger_history,
     }
+    if MANUAL_PAID_PILOT:
+        payload["research_pack"] = private_research_pack_info(current)
+    return payload
 
 
 def feedback_page_context(payload: dict) -> dict:
@@ -216,11 +339,12 @@ class DashboardHandler(BaseHTTPRequestHandler):
         return morsel.value if morsel else None
 
     def _member(self) -> dict | None:
-        return session_member(self._session_token()) if AUTH_REQUIRED else {
+        member = session_member(self._session_token()) if AUTH_REQUIRED else {
             "id": "local-owner", "email": "local@park.invalid", "display_name": "Park",
             "role": "owner", "tier": "owner",
             "entitlements": ["dashboard", "deep_reports", "publication_downloads", "approve_publication", "manage_members"],
         }
+        return effective_member(member) if AUTH_REQUIRED and MANUAL_PAID_PILOT else member
 
     def _authorize(self, entitlement: str) -> dict | None:
         member = self._member()
@@ -258,10 +382,15 @@ class DashboardHandler(BaseHTTPRequestHandler):
         return "; ".join(parts)
 
     def _auth_payload(self, member: dict | None, csrf_token: str | None = None) -> dict:
-        public = None if member is None else {key: member[key] for key in ("id", "email", "display_name", "role", "tier", "entitlements")}
+        member = effective_member(member) if AUTH_REQUIRED and MANUAL_PAID_PILOT and member else member
+        public = None if member is None else {
+            key: member[key] for key in ("id", "email", "display_name", "role", "tier", "entitlements", "billing")
+            if key in member
+        }
         return {
             "auth_required": AUTH_REQUIRED,
             "private_preview": PRIVATE_PREVIEW,
+            "manual_paid_pilot": MANUAL_PAID_PILOT,
             "member": public,
             "csrf_token": csrf_token,
         }
@@ -293,6 +422,16 @@ class DashboardHandler(BaseHTTPRequestHandler):
             csrf = rotate_csrf(self._session_token()) if AUTH_REQUIRED and member else None
             self._json(self._auth_payload(member, csrf))
             return
+        if route == "/downloads/private-preview/research-pack.zip":
+            if not MANUAL_PAID_PILOT:
+                if self._authorize("dashboard") is None:
+                    return
+                self._json({"error": "private_preview_route_unavailable"}, HTTPStatus.NOT_FOUND)
+                return
+            if self._authorize("publication_downloads") is None:
+                return
+            self._private_research_pack_download()
+            return
         if route.startswith("/downloads/publication-packs/"):
             if PRIVATE_PREVIEW:
                 if self._authorize("dashboard") is None:
@@ -317,14 +456,45 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 return
         if route == "/api/private-preview":
             try:
-                self._json(canonical_private_preview_payload())
-            except (CanonicalPortfolioError, CanonicalPublicationError, PortfolioLedgerError) as exc:
+                payload = canonical_private_preview_payload()
+                if MANUAL_PAID_PILOT:
+                    member = self._member()
+                    payload["billing"] = member.get("billing") or billing_status(member["id"])
+                self._json(payload)
+            except (BillingError, CanonicalPortfolioError, CanonicalPublicationError, PortfolioLedgerError) as exc:
                 self._json({"error": "private_preview_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route == "/api/billing/me":
+            try:
+                member = self._member()
+                self._json({
+                    "billing": member.get("billing") or billing_status(member["id"]),
+                    "research_pack": private_research_pack_info(),
+                })
+            except (BillingError, CanonicalPortfolioError) as exc:
+                self._json({"error": "billing_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route == "/api/billing/settings":
+            try:
+                member = self._member()
+                self._json(payment_controls(member["id"]))
+            except (BillingError, PermissionError) as exc:
+                self._json({"error": "billing_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route in {"/api/billing", "/api/billing/export"}:
+            try:
+                member = self._member()
+                payload = billing_export(member["id"])
+                headers = {"Content-Disposition": "attachment; filename=paid-community-billing.json"} if route.endswith("/export") else None
+                self._json(payload, headers=headers)
+            except (BillingError, PermissionError) as exc:
+                self._json({"error": "billing_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
             return
         if route == "/api/members":
             member = self._member()
             try:
-                self._json({"members": list_members(member["id"])})
+                members = list_members(member["id"])
+                self._json({"members": [effective_member(item) for item in members] if MANUAL_PAID_PILOT else members})
             except PermissionError:
                 self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN)
             return
@@ -476,9 +646,10 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if AUTH_REQUIRED and not verify_csrf(member, self.headers.get("X-CSRF-Token")):
             self._json({"error": "csrf_rejected"}, HTTPStatus.FORBIDDEN)
             return
-        if PRIVATE_PREVIEW and route not in {
-            "/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status",
-        }:
+        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status"}
+        if MANUAL_PAID_PILOT:
+            private_post_routes.update({"/api/billing/payment", "/api/billing/refund", "/api/billing/settings"})
+        if PRIVATE_PREVIEW and route not in private_post_routes:
             self._json({"error": "private_preview_route_unavailable"}, HTTPStatus.NOT_FOUND)
             return
         if route == "/api/auth/logout":
@@ -506,6 +677,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 return
             try:
                 body = self._read_json()
+                if MANUAL_PAID_PILOT and body.get("tier") == "paid":
+                    raise ValueError("paid entitlement is derived from the billing ledger")
                 result = create_invite(
                     member["id"], str(body.get("tier", "")),
                     max_uses=int(body.get("max_uses", 1)), valid_days=int(body.get("valid_days", 7)),
@@ -526,6 +699,30 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 self._json({"error": "member_update_rejected", "detail": str(exc)}, HTTPStatus.BAD_REQUEST)
             else:
                 self._json(result)
+            return
+        if MANUAL_PAID_PILOT and route in {"/api/billing/payment", "/api/billing/refund", "/api/billing/settings"}:
+            if not has_entitlement(member, "manage_members"):
+                self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN)
+                return
+            try:
+                body = self._read_json()
+                if route == "/api/billing/settings":
+                    result = set_payment_controls(member["id"], body.get("accept_new_payments"))
+                elif route == "/api/billing/refund":
+                    # Refunds inherit immutable release context from the original payment and
+                    # must remain available during a portfolio or research-pack outage.
+                    result = record_refund(member["id"], body)
+                else:
+                    portfolio = load_portfolio_state()
+                    pack = private_research_pack_info(portfolio)
+                    result = record_payment(
+                        member["id"], body, portfolio["portfolio_id"], pack["pack_hash"],
+                    )
+            except (BillingError, CanonicalPortfolioError, PermissionError, sqlite3.IntegrityError) as exc:
+                status = HTTPStatus.CONFLICT if isinstance(exc, BillingError) else HTTPStatus.BAD_REQUEST
+                self._json({"error": "billing_rejected", "detail": str(exc)}, status)
+            else:
+                self._json(result, HTTPStatus.CREATED if route.endswith("/payment") or route.endswith("/refund") else HTTPStatus.OK)
             return
         if route == "/api/refresh":
             if not has_entitlement(member, "manage_members"):
@@ -659,6 +856,20 @@ class DashboardHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _private_research_pack_download(self) -> None:
+        info = private_research_pack_info()
+        target = private_research_pack_root().resolve() / "research-pack.zip"
+        body = target.read_bytes()
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "application/zip")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Content-Disposition", 'attachment; filename="park-equity-research-pack.zip"')
+        self.send_header("X-Research-Pack-Hash", info["pack_hash"])
+        self.send_header("Cache-Control", "private, no-store")
+        self._security_headers()
+        self.end_headers()
+        self.wfile.write(body)
+
     def _json(self, payload: dict, status: HTTPStatus = HTTPStatus.OK, *, headers: dict[str, str] | None = None) -> None:
         body = dump_json(payload)
         self.send_response(status)
@@ -728,7 +939,10 @@ def main() -> None:
     initialize(DB_PATH, force_seed=args.reset_demo)
     if AUTH_REQUIRED:
         initialize_auth()
-    if PRIVATE_PREVIEW:
+    if MANUAL_PAID_PILOT:
+        initialize_feedback()
+        initialize_billing()
+    elif PRIVATE_PREVIEW:
         initialize_feedback()
     server = ThreadingHTTPServer((args.host, args.port), DashboardHandler)
     print(f"A股长期投委会面板: http://{args.host}:{args.port}")
