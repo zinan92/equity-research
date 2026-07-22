@@ -1,0 +1,91 @@
+{
+  "schema_version": "paid-community-pilot-verification-v1",
+  "status": "passed",
+  "verified_at": "2026-07-22T02:48:58.963097+00:00",
+  "public_url": "https://research.park-ai-intel.com",
+  "release_id": "preview_76e74a7aa8a14266",
+  "truth_boundary": {
+    "manual_external_fulfillment": true,
+    "online_checkout": false,
+    "payment_provider_connected": false,
+    "paid_pilot_ready": false,
+    "acceptance_events_are_revenue": false
+  },
+  "lifecycle": {
+    "payment_test_event_recorded": true,
+    "idempotent_replay": true,
+    "conflicting_replay_http": 409,
+    "existing_session_gained_entitlement": true,
+    "research_pack": {
+      "archive_sha256": "92658335e4b86d95bdfc9778ad18369970728fedda7db516c231fb7444ec0fb4",
+      "pack_hash": "001ad69ab2a711c97273429716b420cb9d22f81328c8c063d468512dc6cdc6e4",
+      "report_bundle_hash": "7f041f7b43c15ffe87f410a53b6a7a0b08be4e0a2ec4d23947ed6af44f7cc5f0",
+      "members": 13,
+      "reports": 8,
+      "all_member_hashes_verified": true
+    },
+    "stop_new_payments_blocked_confirmation": true,
+    "refund_revoked_entitlement_and_session": true,
+    "realized_revenue_unchanged": true,
+    "event_ids_recorded": false
+  },
+  "operations": {
+    "status": "passed",
+    "rollback_release_id": "preview_048f73373ce6e692",
+    "roll_forward_release_id": "preview_76e74a7aa8a14266",
+    "rollback_external_health_http": 200,
+    "roll_forward_external_health_http": 200,
+    "tunnel_restart_external_health_http": 200,
+    "other_tunnels_unchanged_and_active": true,
+    "rollback_research_pack_hash": "001ad69ab2a711c97273429716b420cb9d22f81328c8c063d468512dc6cdc6e4",
+    "roll_forward_research_pack_hash": "001ad69ab2a711c97273429716b420cb9d22f81328c8c063d468512dc6cdc6e4"
+  },
+  "visual": {
+    "status": "passed",
+    "base_url": "https://research.park-ai-intel.com",
+    "desktop": {
+      "banner": "PRIVATE PREVIEW · MANUAL PAID PILOT",
+      "truth": "仅供受邀成员验证产品。平台自身不收款、不提供在线 checkout；外部付款由 Park 人工核验。模型仓位不是账户持仓，不连接券商。",
+      "billingStatus": "验收测试权益 · 不计收入",
+      "billingTruth": "acceptance_test 事件永久排除在真实收入之外",
+      "packHash": "001ad69ab2a7…",
+      "reportCount": "8 份",
+      "downloadVisible": true,
+      "positionCount": 8,
+      "horizontalOverflow": false,
+      "scrollHeight": 2625,
+      "mobileReadability": null,
+      "screenshot": {
+        "path": "/Users/wendy/Documents/equity-research-codex/evidence/m7-paid-community-pilot/paid-community-desktop.png",
+        "sha256": "90083e514e98194783d4c2c4d7f7ec9ec12717bc0c76b9c54f9078ab95172cb4",
+        "width": 1440,
+        "height": 2625
+      }
+    },
+    "mobile": {
+      "banner": "PRIVATE PREVIEW · MANUAL PAID PILOT",
+      "truth": "仅供受邀成员验证产品。平台自身不收款、不提供在线 checkout；外部付款由 Park 人工核验。模型仓位不是账户持仓，不连接券商。",
+      "billingStatus": "验收测试权益 · 不计收入",
+      "billingTruth": "acceptance_test 事件永久排除在真实收入之外",
+      "packHash": "001ad69ab2a7…",
+      "reportCount": "8 份",
+      "downloadVisible": true,
+      "positionCount": 8,
+      "horizontalOverflow": false,
+      "scrollHeight": 6874,
+      "mobileReadability": {
+        "statusFont": 14,
+        "truthFont": 12,
+        "receiptFont": 12,
+        "downloadHeight": 48
+      },
+      "screenshot": {
+        "path": "/Users/wendy/Documents/equity-research-codex/evidence/m7-paid-community-pilot/paid-community-mobile.png",
+        "sha256": "6e7a920332456f47e3022916ee1b9a4404b62e7d18e0e9e4141590fe4701370a",
+        "width": 390,
+        "height": 6874
+      }
+    }
+  },
+  "credentials_recorded": false
+}

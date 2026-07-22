@@ -157,8 +157,10 @@ function renderPrivatePreview(payload) {
   const positions = portfolio.positions;
   const deepCount = positions.filter((item) => item.report_binding?.research_depth === "deep").length;
   const pendingCount = payload.ledger.orders.filter((item) => item.status === "pending").length;
+  const billing = payload.billing || state.auth?.member?.billing || { status: "unpaid", paid: false, test_mode: false };
   const entitlements = state.auth?.member?.entitlements || [];
-  const canReadReports = entitlements.includes("deep_reports");
+  const paidByLedger = Boolean(billing.paid);
+  const canReadReports = entitlements.includes("deep_reports") || paidByLedger;
   $("#legacy-decision-dashboard").hidden = true;
   $("#private-preview-dashboard").hidden = false;
   $("#canonical-title").textContent = `${portfolio.market_regime}配置：${portfolio.allocation.equity_weight.toFixed(0)}% 股票，${portfolio.allocation.cash_weight.toFixed(0)}% 现金`;
@@ -201,11 +203,40 @@ function renderPrivatePreview(payload) {
     ["执行边界", "模型建议 · 非真实持仓"],
   ];
   $("#canonical-receipt").innerHTML = receiptRows.map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
+  renderBillingPilot(payload, billing);
   renderPrivateLedger(payload);
   renderPrivateHistory(payload);
   const isOwner = state.auth?.member?.role === "owner";
   $("#owner-preview-panel").hidden = !isOwner;
   if (isOwner) loadOwnerPreview();
+}
+
+function renderBillingPilot(payload, billing) {
+  const enabled = Boolean(payload.paid_pilot?.enabled);
+  $("#billing-pilot-panel").hidden = !enabled;
+  $("#preview-mode-label").textContent = enabled ? "PRIVATE PREVIEW · MANUAL PAID PILOT" : "PRIVATE PREVIEW";
+  $("#preview-mode-copy").textContent = enabled
+    ? "仅供受邀成员验证产品。平台自身不收款、不提供在线 checkout；外部付款由 Park 人工核验。模型仓位不是账户持仓，不连接券商。"
+    : "仅供受邀成员验证产品。模型仓位不是账户持仓，不收款，不连接券商。";
+  if (!enabled) return;
+  const labels = {
+    owner: ["Owner 可履约", "Owner 权限不是付费收入"],
+    active_paid: ["人工核验付款 · Paid 已开通", "外部付款记录；不是支付商 webhook"],
+    active_paid_test: ["验收测试权益 · 不计收入", "acceptance_test 事件永久排除在真实收入之外"],
+    refunded: ["已退款 · 权益已撤回", "旧会话已失效，研究包不可下载"],
+    suspended: ["成员已停用", "全部会话与付费权益均不可使用"],
+    unpaid: ["未开通 Paid", "平台没有在线 checkout；请由 Park 核验外部付款"],
+  };
+  const [status, truth] = labels[billing.status] || [String(billing.status || "未知"), "账单状态未识别"];
+  const pack = payload.research_pack || {};
+  const canDownload = state.auth?.member?.role === "owner" || Boolean(billing.paid);
+  $("#billing-status").textContent = status;
+  $("#billing-truth").textContent = truth;
+  $("#billing-pack-hash").textContent = pack.pack_hash || "—";
+  $("#billing-portfolio-id").textContent = pack.portfolio_id || "—";
+  $("#billing-report-count").textContent = Number.isInteger(pack.report_count) ? `${pack.report_count} 份` : "—";
+  $("#research-pack-download").hidden = !canDownload;
+  $("#billing-status-card").dataset.loaded = "true";
 }
 
 function renderPrivateLedger(payload) {
@@ -233,9 +264,15 @@ function renderPrivateHistory(payload) {
 
 async function loadOwnerPreview() {
   try {
-    const [membersPayload, feedbackPayload] = await Promise.all([fetchJson("/api/members"), fetchJson("/api/feedback")]);
+    const [membersPayload, feedbackPayload, billingPayload, controls] = await Promise.all([
+      fetchJson("/api/members"), fetchJson("/api/feedback"), fetchJson("/api/billing"), fetchJson("/api/billing/settings"),
+    ]);
     $("#owner-members").innerHTML = membersPayload.members.map((member) => `<article><strong>${escapeHtml(member.display_name)} · ${escapeHtml(member.tier)}</strong><small>${escapeHtml(member.email)} · ${escapeHtml(member.status)}</small>${member.role === "owner" ? "" : `<button data-email="${escapeHtml(member.email)}" data-status="${member.status === "active" ? "suspended" : "active"}">${member.status === "active" ? "停用并撤销会话" : "恢复席位"}</button>`}</article>`).join("") || "<p>暂无成员</p>";
     $("#owner-feedback").innerHTML = feedbackPayload.feedback.slice(0, 12).map((item) => `<article><strong>${escapeHtml(item.member_name)} · ${item.rating}/5 · ${escapeHtml(item.category)}</strong><small>${escapeHtml(item.message)}<br>${escapeHtml(formatBeijingTime(item.created_at))}</small></article>`).join("") || "<p>暂无反馈</p>";
+    $("#owner-billing-events").innerHTML = [...billingPayload.events].reverse().slice(0, 16).map((item) => `<article><strong>${item.event_type === "payment_confirmed" ? "付款开通" : "退款撤权"} · ${escapeHtml(item.member_email)}</strong><small>${escapeHtml(item.provider)}${item.test_mode ? " · 验收测试/不计收入" : " · 人工外部记录"}<br>¥${(Number(item.amount_minor) / 100).toFixed(2)} · ${escapeHtml(formatBeijingTime(item.occurred_at))}<br>${escapeHtml(item.id)}</small></article>`).join("") || "<p>暂无账单事件</p>";
+    const toggle = $("#billing-control-form input[name=accept_new_payments]");
+    toggle.checked = Boolean(controls.accept_new_payments);
+    $("#billing-control-status").textContent = controls.accept_new_payments ? "当前允许新的人工付款确认" : "当前已停止新的付款确认；退款仍可执行";
     $$("#owner-members button").forEach((button) => button.addEventListener("click", async () => {
       button.disabled = true;
       try {
@@ -245,6 +282,7 @@ async function loadOwnerPreview() {
     }));
   } catch (error) {
     $("#owner-members").innerHTML = `<p>Owner 数据读取失败：${escapeHtml(error.message)}</p>`;
+    $("#owner-billing-events").innerHTML = `<p>账单数据读取失败：${escapeHtml(error.message)}</p>`;
   }
 }
 
@@ -896,6 +934,61 @@ $("#invite-form").addEventListener("submit", async (event) => {
     $("#invite-output").textContent = `仅显示一次：${invite.code}`;
   } catch (error) {
     $("#invite-output").textContent = `生成失败：${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
+$("#billing-payment-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  $("#billing-payment-output").textContent = "";
+  try {
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.amount_minor = Number(data.amount_minor);
+    data.occurred_at = new Date().toISOString();
+    const result = await fetchJson("/api/billing/payment", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    $("#billing-payment-output").textContent = result.idempotent ? `已存在同一事件：${result.id}` : `已开通：${result.id}`;
+    $("#billing-refund-form input[name=payment_event_id]").value = result.id;
+    await loadOwnerPreview();
+  } catch (error) {
+    $("#billing-payment-output").textContent = `开通失败：${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
+$("#billing-refund-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  $("#billing-refund-output").textContent = "";
+  try {
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.occurred_at = new Date().toISOString();
+    const result = await fetchJson("/api/billing/refund", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+    $("#billing-refund-output").textContent = result.idempotent ? `已存在同一退款：${result.id}` : `已退款并撤权：${result.id}`;
+    await loadOwnerPreview();
+  } catch (error) {
+    $("#billing-refund-output").textContent = `退款失败：${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
+$("#billing-control-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  $("#billing-control-output").textContent = "";
+  try {
+    const enabled = form.elements.accept_new_payments.checked;
+    const result = await fetchJson("/api/billing/settings", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accept_new_payments: enabled }) });
+    $("#billing-control-output").textContent = result.idempotent ? "开关状态未变化" : "开关已保存";
+    await loadOwnerPreview();
+  } catch (error) {
+    $("#billing-control-output").textContent = `保存失败：${error.message}`;
   } finally {
     button.disabled = false;
   }

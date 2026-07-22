@@ -1544,6 +1544,18 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
 .canonical-receipt-panel dl { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; margin: 0; }
 .canonical-receipt-panel dt { color: var(--muted); font-size: 9px; }
 .canonical-receipt-panel dd { margin: 5px 0 0; color: var(--ink); font-family: var(--mono); font-size: 9px; overflow-wrap: anywhere; }
+.billing-pilot-panel { display: grid; grid-template-columns: minmax(260px,.85fr) minmax(240px,.65fr) minmax(300px,1fr); gap: 32px; align-items: start; padding: 28px 30px; background: #f4f7fa; border-top: 4px solid #005eb8; }
+.billing-pilot-panel[hidden] { display: none; }
+.billing-pilot-copy h2 { margin: 6px 0 10px; color: var(--ink); font-size: 24px; line-height: 1.2; }
+.billing-pilot-copy > p:last-child { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+.billing-status-card { display: grid; gap: 8px; padding: 18px; background: #fff; border-left: 3px solid #005eb8; box-shadow: 0 6px 22px rgba(11,31,51,.06); }
+.billing-status-card span, .billing-pack-receipt dt { color: var(--muted); font-size: 9px; letter-spacing: .04em; }
+.billing-status-card strong { color: var(--ink); font-size: 16px; line-height: 1.4; }
+.billing-status-card small { color: var(--muted); font-size: 9px; line-height: 1.5; }
+.billing-status-card a { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; margin-top: 4px; color: #fff; background: #005eb8; font-size: 10px; text-decoration: none; }
+.billing-pack-receipt { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0; }
+.billing-pack-receipt div { min-width: 0; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.billing-pack-receipt dd { margin: 5px 0 0; color: var(--ink); font-family: var(--mono); font-size: 9px; overflow-wrap: anywhere; }
 .feedback-panel { display: grid; grid-template-columns: minmax(240px,.7fr) minmax(0,1.3fr); gap: 44px; align-items: start; border-top: 4px solid #005eb8; }
 .feedback-panel h2 { margin-bottom: 12px; color: var(--ink); font-size: 25px; }
 .feedback-panel > div > p:last-child { color: var(--muted); font-size: 11px; line-height: 1.7; }
@@ -1556,8 +1568,14 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
 #feedback-status { grid-column: 1 / -1; min-height: 18px; margin: 0; color: var(--positive); font-size: 10px; }
 .owner-preview-panel { border-top: 4px solid #8a6a38; }
 .owner-export { color: #005eb8; font-size: 10px; }
+.owner-export-links { display: flex; flex-wrap: wrap; gap: 14px; }
 .owner-grid { display: grid; grid-template-columns: .65fr 1fr 1fr; gap: 24px; }
 .owner-grid h3 { margin: 0 0 12px; color: var(--ink); font-size: 13px; }
+.owner-billing-grid { display: grid; grid-template-columns: repeat(3,minmax(180px,.8fr)) minmax(240px,1.2fr); gap: 18px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+.owner-billing-grid h3 { margin: 0 0 12px; color: var(--ink); font-size: 13px; }
+.billing-control-toggle { grid-template-columns: auto 1fr !important; align-items: center; }
+.billing-control-toggle input { width: auto; }
+#billing-control-status { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
 .owner-form { display: grid; gap: 11px; padding: 16px; background: #f4f6f8; }
 .owner-form label { display: grid; gap: 5px; color: var(--muted); font-size: 9px; }
 .owner-form input, .owner-form select { width: 100%; padding: 9px; border: 1px solid var(--line); }
@@ -1574,6 +1592,7 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
   .canonical-position { grid-template-columns: minmax(160px,1fr) repeat(3,85px) minmax(180px,1.2fr); }
   .canonical-position .research-link { grid-column: 1 / -1; justify-self: end; width: 140px; }
   .owner-grid { grid-template-columns: 1fr 1fr; }
+  .owner-billing-grid { grid-template-columns: 1fr 1fr; }
   .owner-form { grid-row: span 2; }
 }
 
@@ -1585,7 +1604,7 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
   .canonical-status { padding: 12px 0 0 14px; }
   .canonical-metrics { grid-template-columns: 1fr 1fr; }
   .canonical-metrics article { padding: 16px; }
-  .canonical-allocation, .canonical-risk-panel, .canonical-receipt-panel, .feedback-panel, .owner-preview-panel { padding: 20px 16px; }
+  .canonical-allocation, .canonical-risk-panel, .canonical-receipt-panel, .billing-pilot-panel, .feedback-panel, .owner-preview-panel { padding: 20px 16px; }
   .canonical-strip > span { font-size: 0; }
   .canonical-position { grid-template-columns: 1fr 1fr; gap: 14px 18px; padding: 18px 0; }
   .canonical-position h3, .canonical-position .position-thesis, .canonical-position .research-link { grid-column: 1 / -1; }
@@ -1607,6 +1626,10 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
   .canonical-risk-panel p { font-size: 14px; line-height: 1.7; }
   .canonical-receipt-panel dt, .canonical-receipt-panel dd { font-size: 12px; line-height: 1.55; }
   .feedback-panel > div > p:last-child { font-size: 14px; }
+  .billing-pilot-panel { grid-template-columns: 1fr; }
+  .billing-pilot-copy > p:last-child, .billing-status-card strong { font-size: 14px; }
+  .billing-status-card span, .billing-status-card small, .billing-pack-receipt dt, .billing-pack-receipt dd { font-size: 12px; line-height: 1.55; }
+  .billing-status-card a { min-height: 48px; font-size: 14px; }
   #feedback-form label { font-size: 13px; }
   #feedback-form select, #feedback-form textarea { min-height: 48px; font-size: 16px; }
   #feedback-form .primary-button { min-height: 48px; font-size: 14px; }
@@ -1616,7 +1639,7 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
   .owner-form button, .owner-list button { min-height: 44px; font-size: 13px; }
   .owner-list strong { font-size: 14px; }
   .owner-list small { font-size: 12px; }
-  .canonical-lower-grid, .feedback-panel, .owner-grid { grid-template-columns: 1fr; }
+  .canonical-lower-grid, .feedback-panel, .owner-grid, .owner-billing-grid { grid-template-columns: 1fr; }
   #feedback-form { grid-template-columns: 1fr; }
   #feedback-form .feedback-message, #feedback-status { grid-column: 1; }
   .canonical-receipt-panel dl { grid-template-columns: 1fr; }
