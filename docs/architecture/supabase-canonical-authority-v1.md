@@ -23,10 +23,10 @@
 Bucket：`canonical-raw`，`public=false`，单对象上限 50 MB，只允许 JSON、HTML、PDF。
 
 ```text
-raw/{domain}/{source_key}/{UTC-YYYY}/{MM}/{DD}/{sha256-prefix}/{sha256}.{json|html|pdf}
+raw/sha256/{sha256-prefix}/{sha256}
 ```
 
-路径由 `raw_storage_key()` 生成，同一输入恒定得到同一 key。URL、原始文件名和 ticker 均不能改变 authority identity；`..`、绝对路径、未知 MIME 与非 SHA-256 hash fail closed。
+路径由 `raw_storage_key()` 生成，只由 bytes 的 SHA-256 决定，因此相同内容跨 source、domain、日期和 MIME 声明都只对应一个 object。source URL、MIME、fetched_at 与 known_at 保存在每次独立的 domain-neutral raw capture；record domain 保存在 receipt，同一 capture 可以产生多域 records。URL、原始文件名和 ticker 均不能改变 blob identity。`..`、绝对路径、未知 MIME 与非 SHA-256 hash fail closed。
 
 产品 migration 不直接改 Supabase-managed `storage.*` schema、trigger、grant 或 policy。`supabase/storage/canonical-raw.bucket.json` 是 desired-state contract；F5 部署用 backend service role 通过 Storage API 创建/核对 bucket。A2 不创建任何 client storage policy。
 

@@ -15,7 +15,7 @@ PRODUCT = ROOT / "product"
 if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
-from data_core import RAW_BUCKET, RecordDomain, StorageObjectKey, raw_storage_key  # noqa: E402
+from data_core import RAW_BUCKET, StorageObjectKey, raw_storage_key  # noqa: E402
 
 
 MIGRATION = ROOT / "supabase/migrations/202607220001_canonical_authority.sql"
@@ -25,55 +25,22 @@ BUCKET = ROOT / "supabase/storage/canonical-raw.bucket.json"
 
 class SupabaseSchemaTests(unittest.TestCase):
     def test_storage_paths_are_deterministic_typed_and_safe(self) -> None:
-        expected = {
-            "application/json": "json",
-            "text/html": "html",
-            "application/pdf": "pdf",
-        }
-        for mime_type, extension in expected.items():
-            with self.subTest(mime_type=mime_type):
-                key = raw_storage_key(
-                    domain=RecordDomain.DOCUMENT,
-                    source_key="cninfo_v1",
-                    known_at="2026-07-22T09:00:00+08:00",
-                    raw_hash="a" * 64,
-                    mime_type=mime_type,
-                )
-                self.assertEqual(key.bucket, RAW_BUCKET)
-                self.assertEqual(
-                    key.path,
-                    f"raw/document/cninfo_v1/2026/07/22/aa/{'a' * 64}.{extension}",
-                )
-                self.assertEqual(
-                    key,
-                    raw_storage_key(
-                        domain=RecordDomain.DOCUMENT,
-                        source_key="cninfo_v1",
-                        known_at="2026-07-22T01:00:00Z",
-                        raw_hash="a" * 64,
-                        mime_type=mime_type,
-                    ),
-                )
-        with self.assertRaisesRegex(ValueError, "safe storage segment"):
-            raw_storage_key(
-                domain=RecordDomain.DOCUMENT,
-                source_key="../escape",
-                known_at="2026-07-22T01:00:00Z",
-                raw_hash="a" * 64,
-                mime_type="application/pdf",
-            )
-        with self.assertRaisesRegex(ValueError, "canonical raw layout"):
+        key = raw_storage_key(raw_hash="a" * 64)
+        self.assertEqual(key.bucket, RAW_BUCKET)
+        self.assertEqual(key.path, f"raw/sha256/aa/{'a' * 64}")
+        self.assertEqual(key, raw_storage_key(raw_hash="a" * 64))
+        with self.assertRaisesRegex(ValueError, "lowercase SHA-256"):
+            raw_storage_key(raw_hash="not-a-hash")
+        with self.assertRaisesRegex(ValueError, "content-addressed raw layout"):
             StorageObjectKey(
                 bucket=RAW_BUCKET,
-                path=f"wrong/market/cninfo_v1/2026/07/22/99/{'a' * 64}.json",
-                mime_type="application/json",
+                path=f"wrong/sha256/aa/{'a' * 64}",
                 raw_hash="a" * 64,
             ).validate()
-        with self.assertRaisesRegex(ValueError, "canonical raw layout"):
+        with self.assertRaisesRegex(ValueError, "content-addressed raw layout"):
             StorageObjectKey(
                 bucket=RAW_BUCKET,
-                path=f"raw/market/cninfo_v1/2026/07/22/99/{'a' * 64}.json",
-                mime_type="application/json",
+                path=f"raw/sha256/99/{'a' * 64}",
                 raw_hash="a" * 64,
             ).validate()
 
@@ -194,24 +161,23 @@ insert into control.source_manifests(
   manifest_hash, source_key, domain_scope, authority_tier, provider_version,
   provider_schema_version, license_status, source_url, active
 ) values (
-  repeat('a',64), 'authority_test_v1', array['market'], 'canonical', 'test-v1',
+  repeat('a',64), 'authority_test_v1', array['market','fundamental'], 'canonical', 'test-v1',
   'test-schema-v1', 'test_fixture', 'https://example.test/', true
 );
 insert into control.ingestion_runs(
   run_id, manifest_hash, idempotency_key, attempt, data_kind, status, started_at, finished_at
 ) values ('run-1', repeat('a',64), 'seed-run', 1, 'fixture', 'success', now(), now());
 insert into control.raw_objects(
-  raw_hash, storage_bucket, storage_path, mime_type, payload_size
+  raw_hash, storage_bucket, storage_path, payload_size
 ) values (
   repeat('1',64), 'canonical-raw',
-  'raw/market/authority_test_v1/2026/07/22/11/{'1' * 64}.json',
-  'application/json', 2
+  'raw/sha256/11/{'1' * 64}', 2
 );
 insert into control.raw_captures(
-  capture_id, raw_hash, run_id, manifest_hash, source_url, fetched_at, known_at
+  capture_id, raw_hash, run_id, manifest_hash, source_url, mime_type, fetched_at, known_at
 ) values (
   'capture-1', repeat('1',64), 'run-1', repeat('a',64),
-  'https://example.test/market.json', now(), now()
+  'https://example.test/market.json', 'application/json', now(), now()
 );
 insert into control.record_receipts(
   record_hash, contract_version, capture_id, run_id, raw_hash, manifest_hash, domain, record_schema_version,
@@ -222,8 +188,29 @@ insert into control.record_receipts(
   (select known_at from control.raw_captures where capture_id='capture-1'),
   'rejected', 'invalid row', array['value.missing']
 );
+insert into control.raw_captures(
+  capture_id, raw_hash, run_id, manifest_hash, source_url, mime_type, fetched_at, known_at
+) values (
+  'capture-1b', repeat('1',64), 'run-1', repeat('a',64),
+  'https://mirror.example.test/market.json', 'application/json', now(), now() + interval '1 second'
+);
+insert into control.record_receipts(
+  record_hash, contract_version, capture_id, run_id, raw_hash, manifest_hash, domain, record_schema_version,
+  entity_key, payload_json, payload_hash, known_at, status, rejection_reason, violations
+) values (
+  repeat('3',64), 'canonical-data-contract-v1', 'capture-1', 'run-1', repeat('1',64), repeat('a',64),
+  'fundamental', 'fundamental-record-v1', 'provider-fundamental-row-1', '{{}}'::jsonb, repeat('3',64),
+  (select known_at from control.raw_captures where capture_id='capture-1'),
+  'rejected', 'invalid row', array['value.missing']
+);
 """,
                 )
+                capture_receipt_counts = self._psql(
+                    docker, name, database,
+                    "select (select count(*) from control.raw_captures) || ':' || (select count(distinct domain) from control.record_receipts where capture_id='capture-1');",
+                    tuples=True,
+                )
+                self.assertEqual(capture_receipt_counts.strip(), "2:2")
                 rejected_canonical = self._psql_result(
                     docker, name, database,
                     """
@@ -319,50 +306,31 @@ insert into control.record_receipts(
                 self.assertNotEqual(future_receipt.returncode, 0)
                 self.assertIn("foreign key constraint", future_receipt.stderr)
 
-                mime_mismatch = self._psql_result(
+                invalid_mime = self._psql_result(
                     docker, name, database,
-                    f"""
-insert into control.raw_objects(
-  raw_hash, storage_bucket, storage_path, mime_type, payload_size
+                    """
+insert into control.raw_captures(
+  capture_id, raw_hash, run_id, manifest_hash, source_url, mime_type, fetched_at, known_at
 ) values (
-  repeat('5',64), 'canonical-raw',
-  'raw/market/development_seed_v1/2026/07/22/55/{'5' * 64}.pdf',
-  'application/json', 2
+  'capture-invalid-mime', repeat('1',64), 'run-1', repeat('a',64),
+  'https://example.test/market.json', 'text/plain', now(), now()
 );
 """,
                 )
-                self.assertNotEqual(mime_mismatch.returncode, 0)
-                self.assertIn("check constraint", mime_mismatch.stderr)
+                self.assertNotEqual(invalid_mime.returncode, 0)
+                self.assertIn("check constraint", invalid_mime.stderr)
                 hash_path_mismatch = self._psql_result(
                     docker, name, database,
                     f"""
-insert into control.raw_objects(raw_hash,storage_bucket,storage_path,mime_type,payload_size)
+insert into control.raw_objects(raw_hash,storage_bucket,storage_path,payload_size)
 values (
   repeat('8',64), 'canonical-raw',
-  'raw/market/development_seed_v1/2026/07/22/99/{'9' * 64}.json',
-  'application/json', 2
+  'raw/sha256/99/{'9' * 64}', 2
 );
 """,
                 )
                 self.assertNotEqual(hash_path_mismatch.returncode, 0)
                 self.assertIn("check constraint", hash_path_mismatch.stderr)
-                invalid_calendar_date = self._psql_result(
-                    docker, name, database,
-                    f"""
-insert into control.raw_objects(raw_hash,storage_bucket,storage_path,mime_type,payload_size)
-values (
-  repeat('c',64), 'canonical-raw',
-  'raw/market/authority_test_v1/2026/02/30/cc/{'c' * 64}.json',
-  'application/json', 2
-);
-""",
-                )
-                self.assertNotEqual(invalid_calendar_date.returncode, 0)
-                self.assertTrue(
-                    "check constraint" in invalid_calendar_date.stderr
-                    or "date/time field value out of range" in invalid_calendar_date.stderr,
-                    invalid_calendar_date.stderr,
-                )
                 self._psql(
                     docker, name, database,
                     """
@@ -370,10 +338,10 @@ insert into control.ingestion_runs(
   run_id, manifest_hash, idempotency_key, attempt, data_kind, status, started_at, finished_at
 ) values ('run-2', repeat('a',64), 'seed-run-2', 1, 'fixture', 'success', now(), now());
 insert into control.raw_captures(
-  capture_id, raw_hash, run_id, manifest_hash, source_url, fetched_at, known_at
+  capture_id, raw_hash, run_id, manifest_hash, source_url, mime_type, fetched_at, known_at
 ) values (
   'capture-2', repeat('1',64), 'run-2', repeat('a',64),
-  'https://example.test/market.json', now(), now()
+  'https://mirror.example.test/market.json', 'application/json', now(), now() + interval '1 day'
 );
 """,
                 )
@@ -382,7 +350,7 @@ insert into control.raw_captures(
                     "select (select count(*) from control.raw_objects) || ':' || (select count(*) from control.raw_captures);",
                     tuples=True,
                 )
-                self.assertEqual(reuse_counts.strip(), "1:2")
+                self.assertEqual(reuse_counts.strip(), "1:3")
 
                 denied = self._psql_result(
                     docker, name, database,
