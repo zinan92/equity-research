@@ -1,40 +1,54 @@
-# UZI-Skill · Claude Code Context
+# Park Equity Research · Claude Context
 
-> 本文件供 Claude Code 自动读取，提供项目上下文。
+This repository is the Park Equity Research product repo, not the UZI-Skill
+plugin repo. Read `AGENTS.md` first and treat it as the canonical project
+contract.
 
-## 这是什么
+## Product Goal
 
-一个股票深度分析 plugin。用户说"分析 XXX"时，你应该自动触发 `deep-analysis` skill。
+Build a private-beta A-share research product where a user can enter any
+supported ticker and receive:
 
-## 核心技能
+1. a concise decision summary
+2. a standardized, evidence-backed deep equity research report
 
-| Skill | 触发条件 | 说明 |
-|---|---|---|
-| `deep-analysis` | 用户提到"分析/研究/估值/DCF/值不值得买"等 | 22维数据 + 66评委 + Bloomberg报告 |
-| `investor-panel` | 用户要求"只看评委/大佬怎么看" | 单独跑投资者面板 |
-| `lhb-analyzer` | 用户提到"龙虎榜/游资/营业部" | 龙虎榜专项分析 |
-| `trap-detector` | 用户提到"杀猪盘/有没有问题/安全吗" | 杀猪盘检测 |
+The product must distinguish live evidence, frozen snapshots, fixtures, cached
+outputs, and mock UI previews.
 
-## 工作流 · 深浅两档（v2.10.6）
+## Correct Product Entry Points
 
-**快速路径（默认）**：用户说"分析/看看"时，优先走 CLI 直跑。
+```bash
+python3 product/server.py --host 127.0.0.1 --port 8877
+python3 scripts/verify_baseline.py
+python3 -m unittest discover -s product/tests -q
 ```
-python3 run.py <ticker> --depth lite --no-browser   # 30-60s
-# 或
-python3 run.py <ticker> --depth medium --no-browser # 2-4min，默认完整度
+
+Canonical research and publication commands:
+
+```bash
+python3 product/refresh_engine.py --canonical --status
+python3 scripts/verify_cross_company_research.py
+python3 product/publication_pack.py 300750.SZ
 ```
-v2.10.4 起 CLI 直跑 `agent_analysis.json` 缺失自动降级 warning，照样出 HTML 报告。**不需要 role-play 66 评委**。
 
-**深度路径**：仅当用户明确要 DCF / IC memo / 首次覆盖 / 投委会备忘录等深度产物时走两段式：
-1. `stage1()` — 脚本采集数据 + 规则引擎骨架分
-2. **你介入** — 读 `panel.json`，role-play 66 评委，写 `agent_analysis.json`
-3. `stage2()` — 自动合并你的分析，生成报告
+## Review Expectations
 
-详细流程见 `AGENTS.md` / `skills/deep-analysis/SKILL.md`。
+For product, architecture, or research-quality review, judge the work against
+the user outcome:
 
-## 重要文件
+- Can a user understand the decision?
+- Is the report structure standardized?
+- Is every claim grounded in frozen evidence?
+- Does the product fail honestly when data is missing?
+- Are private-beta access, exports, and runtime data boundaries respected?
 
-- `AGENTS.md` — 完整 agent 指令
-- `skills/deep-analysis/SKILL.md` — 深度分析工作流
-- `skills/deep-analysis/scripts/run_real_test.py` — 主引擎
-- `commands/analyze-stock.md` — `/analyze-stock` 命令
+Use adversarial review only for high-risk changes such as schema, provenance,
+auth, billing, publication gates, or recommendation logic. Small docs/copy/UI
+changes do not need a heavy review loop unless Park asks.
+
+## UZI Boundary
+
+UZI-Skill remains useful reference material for historical report generation and
+collector ideas, but it is not the root project identity. Do not default to
+`run.py <ticker>` or the UZI deep-analysis workflow unless the task explicitly
+asks to inspect or reuse UZI.

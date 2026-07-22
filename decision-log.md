@@ -577,3 +577,18 @@
 - 公共 `StorageObjectKey` 可能绕过 factory 直接构造；Python validator 与 SQL CHECK 必须同时校验完整 content-addressed path、hash prefix 和 basename。
 - blob 主键若只用 raw hash，storage path 就不能再包含 source/domain/date/MIME；否则同一 bytes 的后续 capture 会指向不存在的新路径，破坏去重与 provenance 一致性。
 - RawCapture 在 A1 是 domain-independent；不能给 capture 绑单一 domain 或以 `(run_id, raw_hash)` 去重，否则一个响应无法产生 market + fundamental records，也会吞掉同 run 的独立获取证据。
+
+## 2026-07-22 · Root Agent Instructions Re-scoped to Equity Research
+
+- Objective：后续 agent 进入本仓库时，默认理解为 Park Equity Research 产品开发，而不是 UZI-Skill 插件维护。
+- User outcome：Park 不再需要每次纠正“当前 repo 不是 UZI-Skill”；agent 能直接围绕 ticker summary、标准化深度研报、数据基座、证据层和私域产品继续施工。
+- Decision：根 `AGENTS.md` 替换为 equity-research 专用规则，明确产品目标、入口命令、架构分层、repo 拼装策略、issue/branch/PR 工作流、decision-log、测试强度、review 风险分级和 secret 边界。
+- Decision：根 `CLAUDE.md` 同步替换，避免 Claude/Fable 风格 review 仍把本仓库当成 UZI-Skill plugin。
+- Decision：UZI-Skill 降级为历史/reference component，只在明确需要复用 report/rendering、collector behavior 或 research framework 时读取，不再作为 root project contract。
+- Verification：手工 readback `AGENTS.md` 与 `CLAUDE.md`，并用 diff scope 确认本轮只改 agent 指令和 decision log；无 product runtime、schema、report engine 或 UI 行为变更。
+
+### Gotchas · Agent instruction cleanup
+
+- 只修 Codex 的 `AGENTS.md` 不够；根 `CLAUDE.md` 也会影响后续 Claude/Fable 复审，两个入口必须一致。
+- 不能把 UZI 删除成“不可用”；它仍是可参考的 collector/report 资产，但必须标注 mock、fixture、cached 或 live 边界。
+- 治理变更不应混入 A3 ingestion runtime，否则后续 review 会把流程清理和数据层行为混在一起。
