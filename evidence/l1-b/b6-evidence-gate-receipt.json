@@ -1,0 +1,33 @@
+{
+  "milestone": "L2-B6",
+  "issue": 38,
+  "status": "accepted",
+  "user_outcome": "Only complete, point-in-time-valid, fresh and conflict-cleared evidence can enter a Research Context Pack.",
+  "verification": {
+    "issue_specific": "7 passed",
+    "upstream_smoke": "47 passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "gates": {
+    "immutable_evidence_set_identity": true,
+    "primary_independent_lead_roles_machine_checked": true,
+    "known_at_and_freshness_recomputed": true,
+    "blocking_conflicts_stop_publication": true,
+    "rejected_and_lead_only_inputs_excluded": true,
+    "required_and_optional_source_gaps_visible": true,
+    "context_pack_index_read_only": true
+  },
+  "integration_smoke": [
+    "A5 snapshot orchestration",
+    "B1 official filing ingest",
+    "B2 sell-side archive",
+    "B3 document intelligence",
+    "B4 consensus history",
+    "B5 event intelligence"
+  ],
+  "boundaries": [
+    "No report writing or UI",
+    "No production Supabase persistence for B6 receipts",
+    "No industry-specific coverage tier policy"
+  ]
+}

@@ -781,3 +781,25 @@
 - 同一事件多篇报道必须保留全部 evidence ID；去重不能变成删证据。
 - source failure 与“没有相关新闻”含义不同，但两者都不能伪装成完整覆盖；当前 v1 统一进入 coverage gap，并保留具体 reason。
 - 模型生成时间、模型名和 prompt 版本必须与 output 一起冻结，否则历史 event interpretation 无法 replay。
+
+## 2026-07-22 · L2-B6 Evidence Set, Conflict & Coverage Gate
+
+- Objective：报告生成器只能看到完整度、时点、新鲜度和冲突政策全部通过的 immutable Context Pack。
+- Reuse：复用 A3 `RecordEnvelope`/`SourceManifest` provenance、A5 cutoff/snapshot identity、B1–B5 的 document/estimate/event records；不再扩展 legacy SQLite evidence authority。
+- Decision：`EvidenceCandidate.from_record` 必须验证 record 与 manifest hash 绑定；primary 只允许 canonical/official，independent 必须 subject-independent，lead 固定 supplementary-only 且永不进入 Context Pack。
+- Decision：policy 显式冻结 as-of、每 component 的 primary/independent/total 下限、角色 freshness、blocking quality flags/conflict severities 和 subject-controlled source family。
+- Decision：known_at 晚于 as-of、effective_at 晚于 known-at、stale、rejected、fixture/mock/sample、角色伪装和 lead-only 均逐条进入 rejection receipt，不静默删除。
+- Decision：blocking conflict 阻止 Context Pack；non-blocking conflict 仍进入 gate hash。required source gap 阻断，optional gap 只保持可见，不因为额外源偶发失败让已满足的 policy 无条件失效。
+- Decision：evidence manifest hash 只绑定 accepted evidence + policy；gate hash 另绑定全部 rejection/conflict/coverage，二者分开回答“用了什么证据”和“为什么可发布/不可发布”。
+- Verification：issue 专项 7 passed；A5 与 B1–B5 upstream smoke 47 passed；未跑全量测试，符合当前 milestone test policy。
+- Boundary：本轮不设计报告 section、不生成文本、不做 UI、不部署新 receipt 到生产 Supabase。
+
+### Gotchas · L2-B6
+
+- role label 不是 authority；supplementary feed 改名成 primary 必须被机器拒绝。
+- `known_at <= as_of` 只证明当时已知，不证明内容新鲜；freshness 应看 `effective_at`，两道 gate 不能合并。
+- lead 是找证据的线索，不是弱一点的 evidence；把 UZI/LLM lead 放进 Context Pack 会让推断循环引用自身。
+- optional source gap 必须显示，但不能自动等同 required coverage failure；是否阻断由 policy 决定。
+- 冲突不应修改或删除原证据；它是独立 receipt，blocking 时只阻止发布。
+- 只 hash accepted evidence 会漏掉 gate 判断变化；因此 gate hash 必须同时冻结 rejection、conflict 和 coverage。
+- Context Pack 即使 dataclass frozen，内部普通 dict 仍可变；索引必须使用 read-only mapping，证据列表必须使用 tuple。
