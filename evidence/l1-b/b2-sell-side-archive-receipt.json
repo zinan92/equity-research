@@ -1,0 +1,31 @@
+{
+  "milestone": "L2-B2",
+  "issue": 34,
+  "status": "accepted",
+  "user_outcome": "A-share sell-side reports are cataloged with queryable metadata and explicit PDF archive status.",
+  "verification": {
+    "issue_specific": "6 passed",
+    "upstream_smoke": "43 passed, 17 subtests passed",
+    "full_suite": "not run; intentionally omitted under the milestone test policy"
+  },
+  "live_probe": {
+    "ticker": "300750.SZ",
+    "catalog_count": 3,
+    "archived_pdf_count": 3,
+    "report_ids": [
+      "AP202604231821483907",
+      "AP202604221821434869",
+      "AP202604171821298291"
+    ],
+    "raw_hashes": [
+      "9144f53fb83ad632aa3737ef75041c9baf77a0d2c47efae7fec075cf4df19bd9",
+      "68e5caec13dfbbbf07abd6fd059aa4e4bba26071113bbe34953a141c07244bb0",
+      "35759d3d98bf7266f607169c63be726be8639a0ab73d93f35cbbc5188a053e48"
+    ]
+  },
+  "boundaries": [
+    "No OCR or report synthesis",
+    "No full-market production SLA",
+    "Sell-side evidence remains supplementary"
+  ]
+}
