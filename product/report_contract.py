@@ -5,10 +5,12 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, time, timezone
+from enum import Enum
 from functools import lru_cache
+import hashlib
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 from urllib.parse import urlparse
 
 from jsonschema import Draft202012Validator
@@ -572,4 +574,379 @@ def build_structure_truth_set(*, ticker: str, name: str, exchange: str, market: 
         {"ticker": ticker, "name": name, "exchange": exchange},
         market=market,
         structure_only=True,
+    )
+
+
+# Research Section Contract v2 is additive while the v1 renderer migrates.
+SECTION_CONTRACT_SCHEMA_VERSION = "research-section-contract-v2"
+SECTION_CONTRACT_VERSION = "2.0.0"
+
+
+class SectionCompletion(str, Enum):
+    FULL = "full"
+    PARTIAL = "partial"
+    MISSING = "missing"
+
+
+@dataclass(frozen=True)
+class SectionInputSpec:
+    key: str
+    value_type: str
+    description: str
+
+    def validate(self) -> None:
+        if not all((self.key.strip(), self.value_type.strip(), self.description.strip())):
+            raise ValueError("section input identity fields are required")
+        if self.value_type not in {"object", "array", "string", "number", "boolean"}:
+            raise ValueError(f"unsupported section input type: {self.value_type}")
+
+
+@dataclass(frozen=True)
+class ResearchSectionSpec:
+    section_id: str
+    order: int
+    title: str
+    purpose: str
+    required_inputs: tuple[SectionInputSpec, ...]
+    optional_inputs: tuple[SectionInputSpec, ...]
+    page_budget: tuple[int, int]
+    origins: tuple[str, ...]
+
+    def validate(self) -> None:
+        if not all((self.section_id.strip(), self.title.strip(), self.purpose.strip())):
+            raise ValueError("section identity fields are required")
+        if type(self.order) is not int or self.order < 1:
+            raise ValueError("section order must be a positive int")
+        if not self.required_inputs:
+            raise ValueError(f"{self.section_id} must declare required inputs")
+        inputs = self.required_inputs + self.optional_inputs
+        for item in inputs:
+            item.validate()
+        keys = [item.key for item in inputs]
+        if len(keys) != len(set(keys)):
+            raise ValueError(f"{self.section_id} repeats an input key")
+        minimum, maximum = self.page_budget
+        if type(minimum) is not int or type(maximum) is not int or minimum < 1 or maximum < minimum:
+            raise ValueError(f"{self.section_id} page budget is invalid")
+        if not self.origins or not all(value.strip() for value in self.origins):
+            raise ValueError(f"{self.section_id} must identify its taxonomy origin")
+
+    @property
+    def section_hash(self) -> str:
+        self.validate()
+        return _section_digest(self.identity_payload())
+
+    def identity_payload(self) -> dict[str, Any]:
+        return {
+            "section_id": self.section_id,
+            "order": self.order,
+            "title": self.title,
+            "purpose": self.purpose,
+            "required_inputs": [item.__dict__ for item in self.required_inputs],
+            "optional_inputs": [item.__dict__ for item in self.optional_inputs],
+            "page_budget": list(self.page_budget),
+            "origins": list(self.origins),
+        }
+
+
+@dataclass(frozen=True)
+class ResearchReportProfile:
+    profile_id: str
+    profile_version: str
+    market: str
+    section_ids: tuple[str, ...]
+    optional_modules: tuple[str, ...] = ()
+
+    def validate(self, specs: tuple[ResearchSectionSpec, ...]) -> None:
+        if not all((self.profile_id.strip(), self.profile_version.strip(), self.market.strip())):
+            raise ValueError("profile identity fields are required")
+        known = {item.section_id for item in specs}
+        if set(self.section_ids) != known or len(self.section_ids) != len(known):
+            raise ValueError("profile must contain every canonical section exactly once")
+        if self.section_ids != tuple(item.section_id for item in specs):
+            raise ValueError("profile section order must match the canonical contract")
+
+    def profile_hash(self, specs: tuple[ResearchSectionSpec, ...]) -> str:
+        self.validate(specs)
+        return _section_digest(
+            {
+                "profile_id": self.profile_id,
+                "profile_version": self.profile_version,
+                "market": self.market,
+                "section_ids": list(self.section_ids),
+                "optional_modules": list(self.optional_modules),
+                "section_hashes": [item.section_hash for item in specs],
+            }
+        )
+
+
+@dataclass(frozen=True)
+class SectionAssessment:
+    section_id: str
+    order: int
+    title: str
+    status: SectionCompletion
+    present_required: tuple[str, ...]
+    missing_required: tuple[str, ...]
+    present_optional: tuple[str, ...]
+    missing_optional: tuple[str, ...]
+    page_budget: tuple[int, int]
+    section_hash: str
+    profile_hash: str
+    version_hash: str
+    input_hash: str
+
+
+@dataclass(frozen=True)
+class ResearchSectionContract:
+    schema_version: str
+    contract_version: str
+    contract_hash: str
+    version_hash: str
+    profile_id: str
+    profile_version: str
+    profile_hash: str
+    evidence_set_id: str | None
+    evidence_manifest_hash: str | None
+    live_eligible: bool
+    sections: tuple[SectionAssessment, ...]
+    total_page_budget: tuple[int, int]
+
+
+def _section_digest(value: Any) -> str:
+    payload = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _input(key: str, value_type: str, description: str) -> SectionInputSpec:
+    return SectionInputSpec(key, value_type, description)
+
+
+RESEARCH_SECTION_SPECS_V2: tuple[ResearchSectionSpec, ...] = (
+    ResearchSectionSpec(
+        "executive_summary", 1, "一页决策摘要", "用可复算的事实、估值与风险边界给出结论先行的阅读入口。",
+        (_input("market_snapshot", "object", "带时点的价格、市值与估值快照"), _input("decision_summary", "object", "政策引擎生成的结论摘要")),
+        (_input("key_chart", "object", "最能解释当前判断的一张核心图"),), (2, 3), ("rolling:chapter-1",),
+    ),
+    ResearchSectionSpec(
+        "investment_thesis", 2, "投资逻辑与预期差", "明确多空逻辑、市场隐含假设、独立判断与可证伪差异。",
+        (_input("investment_thesis", "object", "主论点与证据链"), _input("variant_view", "object", "相对市场共识的差异")),
+        (_input("bear_case", "object", "最强反方论点"),), (2, 3), ("rolling:chapters-1-9", "day1:variant-view"),
+    ),
+    ResearchSectionSpec(
+        "business_model", 3, "业务模式与收入结构", "解释公司靠什么赚钱、收入确认、分部结构、客户和价值链位置。",
+        (_input("company_profile", "object", "公司与业务边界"), _input("segment_financials", "array", "分部收入和利润序列")),
+        (_input("customer_concentration", "object", "客户集中度"), _input("partner_ecosystem", "object", "合作伙伴生态")), (2, 3), ("rolling:chapter-2", "day1:partner-ecosystem"),
+    ),
+    ResearchSectionSpec(
+        "industry_structure", 4, "行业空间与价值链", "界定 TAM、周期位置、供需结构、产业链利润池与行业分类口径。",
+        (_input("industry_profile", "object", "行业分类与生命周期"), _input("market_size", "object", "TAM、增速和口径")),
+        (_input("value_chain", "array", "产业链分层和利润池"),), (2, 3), ("rolling:chapter-3",),
+    ),
+    ResearchSectionSpec(
+        "competition_and_moat", 5, "竞争格局与护城河", "用份额、同业差异和长期资本回报验证竞争优势。",
+        (_input("peer_comparison", "array", "口径可比的同行矩阵"), _input("moat_assessment", "object", "护城河来源、强度和证据")),
+        (_input("competitive_events", "array", "近期竞争或并购变化"),), (2, 3), ("rolling:chapter-3", "day1:competition"),
+    ),
+    ResearchSectionSpec(
+        "management_and_governance", 6, "管理层、治理与资本配置", "评估管理层记录、激励、股东结构、分红回购、并购和治理红旗。",
+        (_input("management_record", "object", "核心管理层履历与经营记录"), _input("governance_events", "array", "治理、关联交易和信披事件")),
+        (_input("ownership_structure", "object", "股东与内部人持股"), _input("capital_allocation", "object", "历史资本配置回报")), (2, 3), ("rolling:chapter-4", "day1:executives-ownership"),
+    ),
+    ResearchSectionSpec(
+        "revenue_quality_and_kpis", 7, "收入质量与经营 KPI", "拆解量价组合、内生增长、客户/地区质量和行业核心 KPI。",
+        (_input("revenue_history", "array", "多期收入与增长桥"), _input("operating_kpis", "array", "行业核心 KPI 与定义")),
+        (_input("guidance_history", "array", "管理层指引与兑现记录"), _input("rd_efficiency", "object", "研发投入与转化效率")), (2, 3), ("rolling:chapters-2-5", "day1:modules-A-D-F-N"),
+    ),
+    ResearchSectionSpec(
+        "profitability_and_earnings_quality", 8, "盈利能力与利润质量", "解释毛利、费用、利润率、GAAP/Non-GAAP 和利润驱动是否可持续。",
+        (_input("income_history", "array", "多期利润表和利润率"), _input("margin_bridge", "object", "利润率变化桥")),
+        (_input("adjusted_earnings_bridge", "object", "调整项和股权激励"),), (2, 3), ("rolling:chapter-5", "day1:modules-B"),
+    ),
+    ResearchSectionSpec(
+        "cash_flow_and_balance_sheet", 9, "现金流与资产负债表", "验证利润含金量、营运资本、资本开支、负债和流动性韧性。",
+        (_input("cash_flow_history", "array", "经营现金流、资本开支与自由现金流"), _input("balance_sheet_history", "array", "现金、负债和营运资本")),
+        (_input("liquidity_stress", "object", "压力情景与融资需求"),), (2, 3), ("rolling:chapter-5", "day1:module-C"),
+    ),
+    ResearchSectionSpec(
+        "accounting_quality", 10, "会计质量与审计检查", "检查应计、收入确认、减值、表外项目、重述和审计意见。",
+        (_input("accounting_checks", "array", "会计质量检查结果"), _input("audit_opinions", "array", "审计意见与重大事项")),
+        (_input("restatement_history", "array", "重述和口径变更"),), (1, 2), ("day1:module-O",),
+    ),
+    ResearchSectionSpec(
+        "forecasts_and_consensus", 11, "盈利预测、共识与修订", "展示券商逐篇预测、共识区间、离散度、修订方向和 Park 模型桥。",
+        (_input("broker_estimates", "array", "逐券商逐年度预测"), _input("consensus_history", "array", "可回放共识和修订")),
+        (_input("forecast_model", "object", "Park 确定性预测模型"), _input("guidance_vs_consensus", "object", "指引相对共识")), (2, 3), ("rolling:chapter-7", "day1:modules-D"),
+    ),
+    ResearchSectionSpec(
+        "valuation", 12, "估值与市场隐含预期", "用至少三类可执行方法交叉验证价值区间、敏感性和安全边际。",
+        (_input("valuation_scenarios", "array", "bear/base/bull 估值情景"), _input("valuation_assumptions", "object", "模型假设和版本"), _input("current_market", "object", "现价和估值基准")),
+        (_input("reverse_dcf", "object", "现价隐含假设"), _input("sotp", "object", "分部估值"), _input("epv", "object", "盈利能力价值")), (3, 4), ("rolling:chapter-6", "day1:module-K"),
+    ),
+    ResearchSectionSpec(
+        "macro_policy_and_costs", 13, "宏观、政策与成本传导", "把利率、汇率、政策和原材料变化连接到收入、利润率与估值。",
+        (_input("macro_exposures", "object", "宏观敏感性和传导链"), _input("policy_events", "array", "政策原文与公司影响")),
+        (_input("commodity_sensitivity", "object", "原材料和套保敏感性"),), (1, 2), ("day1:module-J", "uzi:qualitative-3-8-9-13"),
+    ),
+    ResearchSectionSpec(
+        "catalysts_and_events", 14, "事件、催化剂与时间表", "区分已发生证据与未来催化，量化可能影响和兑现窗口。",
+        (_input("event_timeline", "array", "已去重且有原文证据的事件"), _input("catalyst_calendar", "array", "未来催化日期与机制")),
+        (_input("event_impact_inference", "array", "版本化事件影响推断"),), (1, 2), ("rolling:chapter-8", "day1:catalyst"),
+    ),
+    ResearchSectionSpec(
+        "risks_and_falsification", 15, "风险、反证与 Kill Conditions", "给出最强反方证据、具体触发阈值和论点失效条件。",
+        (_input("risk_register", "array", "带概率、影响和证据的风险"), _input("falsification_tests", "array", "可观察反证和 kill conditions")),
+        (_input("bias_check", "object", "反偏见检查"), _input("esg_screen", "object", "重大 ESG 风险筛查")), (2, 3), ("rolling:chapters-3-9", "day1:modules-M-P"),
+    ),
+    ResearchSectionSpec(
+        "decision_framework", 16, "结论、目标价与仓位框架", "消费可审计政策输出，固定动作、目标价窗口、仓位边界和否决项。",
+        (_input("recommendation_policy_output", "object", "C5 策略引擎的结论、目标价和仓位输出"),),
+        (_input("committee_synthesis", "object", "不覆盖政策输出的投委会解释"),), (1, 2), ("rolling:chapters-1-9", "day1:action-system"),
+    ),
+    ResearchSectionSpec(
+        "monitoring_and_action_triggers", 17, "跟踪指标与行动触发器", "把论点转成持续覆盖所需的 KPI、阈值、频率和下一步动作。",
+        (_input("monitoring_kpis", "array", "3–8 个关键跟踪指标"), _input("action_triggers", "array", "加仓、减仓、退出和复核条件")),
+        (_input("next_update_calendar", "array", "下次财报和数据刷新计划"),), (1, 2), ("rolling:chapter-9", "day1:modules-M"),
+    ),
+    ResearchSectionSpec(
+        "evidence_and_methodology", 18, "证据台账、方法与附录", "列出 evidence set、页级引用、覆盖缺口、模型版本和方法限制。",
+        (_input("evidence_set_receipt", "object", "B6 evidence/gate identity"), _input("citation_index", "array", "document/page/raw hash 引用索引"), _input("methodology", "object", "计算方法和版本")),
+        (_input("coverage_gaps", "array", "required/optional 缺口"), _input("industry_appendix", "object", "profile 选择的行业 KPI 附录")), (2, 3), ("rolling:source-appendix", "park:B3-B6"),
+    ),
+)
+
+
+A_SHARE_GENERAL_PROFILE_V1 = ResearchReportProfile(
+    profile_id="a-share-general",
+    profile_version="1.0.0",
+    market="CN",
+    section_ids=tuple(item.section_id for item in RESEARCH_SECTION_SPECS_V2),
+    optional_modules=("industry_kpi_appendix", "earnings_update_bridge", "ah_listing_comparison"),
+)
+
+
+def _input_present(value: Any) -> bool:
+    return value not in (None, "", (), [], {})
+
+
+def _input_type_matches(value: Any, value_type: str) -> bool:
+    if value_type == "object":
+        return isinstance(value, dict)
+    if value_type == "array":
+        return isinstance(value, (list, tuple))
+    if value_type == "string":
+        return isinstance(value, str)
+    if value_type == "number":
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if value_type == "boolean":
+        return isinstance(value, bool)
+    return False
+
+
+def assess_research_section(
+    spec: ResearchSectionSpec,
+    values: Mapping[str, Any],
+    *,
+    profile_hash: str,
+    version_hash: str,
+) -> SectionAssessment:
+    spec.validate()
+    known = {item.key: item for item in spec.required_inputs + spec.optional_inputs}
+    unknown = sorted(set(values).difference(known))
+    if unknown:
+        raise ReportContractError(f"{spec.section_id} received unknown inputs: {', '.join(unknown)}")
+    for key, value in values.items():
+        if _input_present(value) and not _input_type_matches(value, known[key].value_type):
+            raise ReportContractError(
+                f"{spec.section_id}.{key} must be {known[key].value_type}"
+            )
+    present_required = tuple(item.key for item in spec.required_inputs if _input_present(values.get(item.key)))
+    missing_required = tuple(item.key for item in spec.required_inputs if item.key not in present_required)
+    present_optional = tuple(item.key for item in spec.optional_inputs if _input_present(values.get(item.key)))
+    missing_optional = tuple(item.key for item in spec.optional_inputs if item.key not in present_optional)
+    if not missing_required:
+        status = SectionCompletion.FULL
+    elif present_required or present_optional:
+        status = SectionCompletion.PARTIAL
+    else:
+        status = SectionCompletion.MISSING
+    supplied = {key: values[key] for key in sorted(values) if _input_present(values[key])}
+    return SectionAssessment(
+        section_id=spec.section_id,
+        order=spec.order,
+        title=spec.title,
+        status=status,
+        present_required=present_required,
+        missing_required=missing_required,
+        present_optional=present_optional,
+        missing_optional=missing_optional,
+        page_budget=spec.page_budget,
+        section_hash=spec.section_hash,
+        profile_hash=profile_hash,
+        version_hash=version_hash,
+        input_hash=_section_digest(supplied),
+    )
+
+
+def build_research_section_contract_v2(
+    section_inputs: Mapping[str, Mapping[str, Any]],
+    *,
+    profile: ResearchReportProfile = A_SHARE_GENERAL_PROFILE_V1,
+    structure_only: bool = True,
+    evidence_set: Any | None = None,
+) -> ResearchSectionContract:
+    for spec in RESEARCH_SECTION_SPECS_V2:
+        spec.validate()
+    orders = [item.order for item in RESEARCH_SECTION_SPECS_V2]
+    if orders != list(range(1, len(RESEARCH_SECTION_SPECS_V2) + 1)):
+        raise ReportContractError("research section orders must be contiguous")
+    profile.validate(RESEARCH_SECTION_SPECS_V2)
+    unknown_sections = sorted(set(section_inputs).difference(profile.section_ids))
+    if unknown_sections:
+        raise ReportContractError("unknown research sections: " + ", ".join(unknown_sections))
+    profile_hash = profile.profile_hash(RESEARCH_SECTION_SPECS_V2)
+    version_hash = _section_digest(
+        {
+            "schema_version": SECTION_CONTRACT_SCHEMA_VERSION,
+            "contract_version": SECTION_CONTRACT_VERSION,
+        }
+    )
+    contract_hash = _section_digest(
+        {
+            "version_hash": version_hash,
+            "profile_hash": profile_hash,
+            "section_hashes": [item.section_hash for item in RESEARCH_SECTION_SPECS_V2],
+        }
+    )
+    assessments = tuple(
+        assess_research_section(
+            spec,
+            section_inputs.get(spec.section_id, {}),
+            profile_hash=profile_hash,
+            version_hash=version_hash,
+        )
+        for spec in RESEARCH_SECTION_SPECS_V2
+    )
+    evidence_set_id = getattr(evidence_set, "evidence_set_id", None)
+    evidence_manifest_hash = getattr(evidence_set, "manifest_hash", None)
+    evidence_passed = bool(evidence_set is not None and getattr(evidence_set, "publishable", False))
+    if not structure_only and not evidence_passed:
+        raise ReportContractError("live section contract requires a B6-passed evidence set")
+    minimum_pages = sum(item.page_budget[0] for item in RESEARCH_SECTION_SPECS_V2)
+    maximum_pages = sum(item.page_budget[1] for item in RESEARCH_SECTION_SPECS_V2)
+    if not 30 <= minimum_pages <= maximum_pages <= 50:
+        raise ReportContractError("canonical report page budget must stay within 30–50 pages")
+    return ResearchSectionContract(
+        schema_version=SECTION_CONTRACT_SCHEMA_VERSION,
+        contract_version=SECTION_CONTRACT_VERSION,
+        contract_hash=contract_hash,
+        version_hash=version_hash,
+        profile_id=profile.profile_id,
+        profile_version=profile.profile_version,
+        profile_hash=profile_hash,
+        evidence_set_id=evidence_set_id,
+        evidence_manifest_hash=evidence_manifest_hash,
+        live_eligible=not structure_only and evidence_passed,
+        sections=assessments,
+        total_page_budget=(minimum_pages, maximum_pages),
     )
