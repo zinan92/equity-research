@@ -193,6 +193,18 @@ from .sell_side_archive import (
     sync_sell_side_archive_async,
 )
 from .storage_layout import RAW_BUCKET, StorageObjectKey, raw_storage_key
+from .viewpoint_matrix import (
+    VIEWPOINT_MATRIX_SCHEMA_VERSION,
+    BlockedViewpointClaim,
+    SellSideViewpoint,
+    SellSideViewpointMatrix,
+    TopicEvidence,
+    ViewpointClaim,
+    ViewpointCoverage,
+    ViewpointRevision,
+    ViewpointRow,
+    build_sell_side_viewpoint_matrix,
+)
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -258,4 +270,8 @@ __all__ = [
     "RateLimitedRetryTransport", "RetryableHttpError", "SellSideArchiveBatch",
     "SellSideArchiveItem", "build_sell_side_runtime", "sync_sell_side_archive",
     "sync_sell_side_archive_async",
+    "VIEWPOINT_MATRIX_SCHEMA_VERSION", "BlockedViewpointClaim",
+    "SellSideViewpoint", "SellSideViewpointMatrix", "TopicEvidence",
+    "ViewpointClaim", "ViewpointCoverage", "ViewpointRevision", "ViewpointRow",
+    "build_sell_side_viewpoint_matrix",
 ]
