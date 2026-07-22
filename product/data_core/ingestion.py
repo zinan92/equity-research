@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from typing import Any, Callable, Iterable, Mapping, Protocol
+from urllib.parse import urlsplit
 
 from .contracts import (
     RawCapture,
@@ -86,6 +87,8 @@ class FetchedPayload:
     mime_type: str
     status_code: int = 200
     data_kind: str = "real"
+    response_headers: tuple[tuple[str, str], ...] = ()
+    redirect_chain: tuple[str, ...] = ()
 
     def validate(self) -> None:
         if not isinstance(self.body, bytes):
@@ -98,6 +101,30 @@ class FetchedPayload:
             raise ValueError(f"unsupported data_kind: {self.data_kind}")
         if not isinstance(self.status_code, int) or not 200 <= self.status_code < 300:
             raise ValueError(f"upstream status is not successful: {self.status_code}")
+        if not isinstance(self.response_headers, tuple):
+            raise ValueError("response_headers must be an immutable tuple")
+        normalized_headers = []
+        for item in self.response_headers:
+            if (
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or not all(isinstance(value, str) and value.strip() for value in item)
+            ):
+                raise ValueError("response_headers must contain non-empty string pairs")
+            key, value = item
+            if key != key.lower() or any(character in key + value for character in "\r\n"):
+                raise ValueError("response_headers must be lowercase and single-line")
+            normalized_headers.append((key, value))
+        if tuple(sorted(set(normalized_headers))) != self.response_headers:
+            raise ValueError("response_headers must be sorted and unique")
+        if not isinstance(self.redirect_chain, tuple):
+            raise ValueError("redirect_chain must be an immutable tuple")
+        for url in self.redirect_chain:
+            parsed = urlsplit(url)
+            if parsed.scheme != "https" or not parsed.netloc:
+                raise ValueError("redirect_chain must contain absolute HTTPS URLs")
+        if self.redirect_chain and self.redirect_chain[-1] != self.source_url:
+            raise ValueError("redirect_chain must end at source_url")
         RawCapture(
             raw_hash=hashlib.sha256(self.body).hexdigest(),
             storage_uri="pending/storage-key",
