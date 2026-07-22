@@ -552,3 +552,26 @@
 - 不能把已有 `data-foundation-v1` 改名冒充新合同；它仍是本地 acceptance baseline，新的 `canonical-data-contract-v1` 是上游 adapter 的稳定逻辑边界。
 - `degraded` 不作为 adapter 接受状态；它属于后续 quality gate 的判断，避免不可信记录静默进入 authority。
 - 只保存 normalized payload 不足以证明 provenance；没有 raw hash、manifest hash 和 known_at 的 record 必须 fail closed。
+
+## 2026-07-22 · L2-A2 Supabase Canonical Schema & Raw Storage
+
+- Objective：数据和原始证据拥有唯一、私有、可迁移与可备份的 production authority 位置。
+- Decision：新 Supabase project 只采用 `canonical-authority-v1` migration；旧 `data-foundation-v1` PostgreSQL 文件保留为 M2 parity baseline，不把两套 table 混成同一 authority。
+- Decision：`market` 只存 accepted market/fundamental，`research` 只存 accepted document/estimate/event，`control` 保存 source/run/raw/receipt/snapshot lineage。
+- Decision：raw Storage 固定 private `canonical-raw` bucket；路径由 domain、source、UTC known date 和 SHA-256 决定，不信任 provider filename 或 URL。
+- Decision：raw blob 与 raw capture 分表；同一 bytes 可以在多个 ingestion run 中复用 blob，同时每个 run 保留独立 capture/known_at/manifest lineage。
+- Decision：数据库 provenance 补齐 A1 合同字段：raw capture 固定保存 source URL，record receipt 固定保存 contract version；accepted payload 缺字段或与 domain row 不一致时 fail closed。
+- Decision：产品 migration 不修改 Supabase-managed `storage.*` schema。Bucket desired state 用 JSON 锁定，部署时通过 Storage API 创建和核对。
+- Decision：A2 的浏览器边界是默认全拒绝。anon/authenticated 没有 schema/table privilege，只有 backend service_role 可读写；产品用户 RLS 留给 F1。
+- Verification：同一 migration 在两个独立 PostgreSQL 16 空 application DB 重放，schema/RLS signature 一致；bucket desired-state JSON 独立验证；anon 被拒、service_role 可读、append-only trigger 生效。
+- Boundary：本轮没有创建真实 Supabase project、没有保存 live provider bytes、没有 member policy，也没有宣称完成 production backup/restore。
+
+### Gotchas · L2-A2
+
+- Supabase “空项目”仍由平台预置 storage/auth schema 和 roles；bare PostgreSQL 验收必须先建立最小 platform stubs，不能误把这些平台表写进产品 migration。
+- 不要在产品 SQL 上给 `storage.objects` 加全局 trigger/revoke；它会破坏同一 project 的其他 bucket，且绕过 Supabase Storage API 的平台边界。
+- 没有 RLS policy 时是 default deny，但 table grants 仍要显式撤销，避免未来迁移误授 browser role。
+- service_role 能 bypass RLS；它是后台 secret，不是高级会员 token，绝不能下发到浏览器。
+- dev seed 只保存 inactive fixture manifest，不插入样本行情或研报，避免 seed 被误当成产品数据。
+- PostgreSQL 三值逻辑会让 `NOT (NULL comparison)` 仍为 NULL；payload 完整性门必须使用 `(...) IS NOT TRUE`，并用缺字段攻击测试验收。
+- 公共 `StorageObjectKey` 可能绕过 factory 直接构造；Python validator 与 SQL CHECK 必须同时校验完整 canonical path、hash prefix、basename 和 UTC date。

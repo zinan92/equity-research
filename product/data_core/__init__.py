@@ -26,6 +26,7 @@ from .research_refresh import (
     RefreshInProgressError,
 )
 from .store import DataFoundation, QualityGateError, SnapshotReader
+from .storage_layout import RAW_BUCKET, StorageObjectKey, raw_storage_key
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -35,4 +36,5 @@ __all__ = [
     "CONTRACT_VERSION", "RECORD_SCHEMAS", "Provenance", "RawCapture",
     "RecordDomain", "RecordEnvelope", "RecordSchema", "RecordStatus",
     "SourceManifest", "contract_descriptor", "validate_adapter_output",
+    "RAW_BUCKET", "StorageObjectKey", "raw_storage_key",
 ]
