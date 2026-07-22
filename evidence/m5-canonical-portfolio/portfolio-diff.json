@@ -1,0 +1,38 @@
+{
+  "cash_change": 0.0,
+  "changes": [
+    {
+      "action": "加仓",
+      "after_weight": 9.0,
+      "before_weight": 8.0,
+      "change": 1.0,
+      "name": "宁德时代",
+      "reason": "确定性评分与约束引擎在新快照上重新计算；详细依据见绑定研报与风险字段。",
+      "ticker": "300750.SZ"
+    },
+    {
+      "action": "加仓",
+      "after_weight": 9.0,
+      "before_weight": 8.0,
+      "change": 1.0,
+      "name": "贵州茅台",
+      "reason": "确定性评分与约束引擎在新快照上重新计算；详细依据见绑定研报与风险字段。",
+      "ticker": "600519.SH"
+    },
+    {
+      "action": "减仓",
+      "after_weight": 8.0,
+      "before_weight": 10.0,
+      "change": -2.0,
+      "name": "传音控股",
+      "reason": "确定性评分与约束引擎在新快照上重新计算；详细依据见绑定研报与风险字段。",
+      "ticker": "688036.SH"
+    }
+  ],
+  "diff_hash": "22d36c526012e22a37e76e3a4637083bb4aca7da031f172f10e32f892f9698a7",
+  "from_portfolio_id": "canonical_portfolio_eb69f44f8222493a",
+  "from_snapshot_id": "snap_real_b0bac1135776",
+  "schema_version": "canonical-portfolio-diff-v1",
+  "to_portfolio_id": "canonical_portfolio_ada3711195caaf90",
+  "to_snapshot_id": "snap_real_a89a5113ef0f"
+}

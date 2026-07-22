@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-185%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-198%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -28,25 +28,26 @@
 
 | 投委会首页 | 公司深度研报 | 私域登录 |
 |---|---|---|
-| ![投委会首页](evidence/m3-committee-home-desktop-2026-07-18.jpg) | ![宁德时代深度研报](evidence/m4-publication-pdf-final-page1.png) | ![私域登录](evidence/m5-private-beta-login-2026-07-18.png) |
+| ![统一模型组合](evidence/m5-canonical-portfolio/portfolio-desktop.png) | ![宁德时代深度研报](evidence/m4-publication-pdf-final-page1.png) | ![私域登录](evidence/m5-private-beta-login-2026-07-18.png) |
 
 ## 当前状态
 
 代码与历史验收已经覆盖一套本地私域内测闭环；Git 仓库只分发源码、测试和精选证据，不分发任何真实 runtime：
 
 - 首批 8 只 A 股的同一时点组合面板：贵州茅台、招商银行、长江电力、美的集团、中国移动、宁德时代、中国神华、传音控股。
-- 历史验收 runtime 中，宁德时代 `300750.SZ` 达到公司级 `verified / deep`，其余 7 只为 `baseline / quantitative_baseline`；这些数据库、正文批准和发布包不进入 Git。
+- 早期 legacy 私域验收 runtime 是宁德时代 1 只 `deep` + 7 只 baseline；当前 M5 组合证据已绑定 M4 的五行业 live proof，因此是 5 只 `deep` + 3 只 `quantitative_baseline`。数据库与正文批准仍不进入 Git。
 - 研究数据保存为不可回写快照；刷新失败不会覆盖上一份通过质量门的数据。
 - 规则引擎负责数字、分数和仓位约束；DeepSeek 只基于冻结证据撰写正文，并且必须经过独立编辑批准。
 - `preview / member / paid / owner` 四级私域权限已经实现；本地开发默认关闭身份门。
 - 可生成带身份哈希的独立 HTML、A4 PDF、长图、JSON、渲染回执和 ZIP 发布包。
 - 五个跨行业 company adapter 与统一冻结证据生产线已经通过结构验收；另有五份基于同一 REAL snapshot、实际捕获文档和独立语义审批的 live proof。fixture 与 live 产物严格分开。
+- 两个连续 REAL snapshot 已生成内容寻址的统一组合版本；当前直接展示 8 只股票、82% 股票仓位、18% 现金、本期动作、版本差异和独立模拟调仓账本。
 
 尚未产品化的边界：
 
 - 还没有公网生产部署、正式 PostgreSQL/Supabase、邮件找回、支付订阅或长期影子回测。
 - 还没有全市场选股池；当前研究范围是固定的 8 股观察组合。
-- 只有宁德时代达到公司级深度研究标准，不能把其余 7 股的量化基线称作完整研报。
+- 当前组合仍有中国移动、中国神华和传音控股 3 只只达到量化基线，不能把 8 股组合称作 8 份完整深研。
 - 当前建议仓位是研究合同，不是交易指令，也不会自动执行。
 
 ## 架构

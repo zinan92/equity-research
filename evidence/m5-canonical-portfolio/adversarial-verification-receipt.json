@@ -1,0 +1,52 @@
+{
+  "schema_version": "canonical-portfolio-adversarial-verification-v1",
+  "status": "passed",
+  "baseline_status": "passed",
+  "attacks": [
+    {
+      "attack": "self_hashed_fake_diff",
+      "status": "rejected",
+      "error": "portfolio diff does not match the two exact versions"
+    },
+    {
+      "attack": "self_hashed_empty_ledger",
+      "status": "rejected",
+      "error": "current ledger differs from the final ledger history version"
+    },
+    {
+      "attack": "truncated_png_with_forged_generation_receipt",
+      "status": "rejected",
+      "error": "portfolio screenshots do not match the independent HTML re-render"
+    },
+    {
+      "attack": "rehashed_report_semantic_forgery",
+      "status": "rejected",
+      "errors": [
+        "report research depth/status is invalid: 600900.SH",
+        "report is not live research: 600900.SH",
+        "report contract version mismatch: 600900.SH"
+      ]
+    },
+    {
+      "attack": "non_finite_weight",
+      "status": "rejected",
+      "errors": [
+        "target weight 600900.SH must be finite",
+        "stock and cash weights must total 100",
+        "declared equity weight does not reconcile",
+        "target weight 600900.SH must be finite",
+        "single-stock weight out of range: 600900.SH",
+        "industry exposure does not reconcile",
+        "portfolio payload hash mismatch",
+        "portfolio identity mismatch"
+      ]
+    }
+  ],
+  "required_truth_checks": {
+    "diff_recomputed": true,
+    "ledger_source_bars_verified": true,
+    "retrospective_truth_marker_visible": true,
+    "full_page_dom_height_verified": true,
+    "independent_visual_rerender_match": true
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "allocation": {
+    "cash_weight": 18.0,
+    "equity_weight": 82.0,
+    "total": 100.0
+  },
+  "artifacts": {
+    "desktop_dimensions": [
+      1440,
+      2949
+    ],
+    "desktop_full_page": true,
+    "desktop_png": "portfolio-desktop.png",
+    "desktop_scroll_height": 2949,
+    "html": "index.html",
+    "mobile_dimensions": [
+      390,
+      7046
+    ],
+    "mobile_full_page": true,
+    "mobile_png": "portfolio-mobile.png",
+    "mobile_scroll_height": 7046,
+    "pdf": "portfolio.pdf"
+  },
+  "current_payload_hash": "ada3711195caaf900b5a52cdcd5553f100c2b67910f15808a11ca2de192a85db",
+  "current_portfolio_id": "canonical_portfolio_ada3711195caaf90",
+  "current_positions": [
+    {
+      "action": "减仓",
+      "name": "长江电力",
+      "ticker": "600900.SH",
+      "weight": 13.0
+    },
+    {
+      "action": "减仓",
+      "name": "美的集团",
+      "ticker": "000333.SZ",
+      "weight": 12.0
+    },
+    {
+      "action": "减仓",
+      "name": "中国神华",
+      "ticker": "601088.SH",
+      "weight": 11.0
+    },
+    {
+      "action": "加仓",
+      "name": "招商银行",
+      "ticker": "600036.SH",
+      "weight": 10.0
+    },
+    {
+      "action": "减仓",
+      "name": "中国移动",
+      "ticker": "600941.SH",
+      "weight": 10.0
+    },
+    {
+      "action": "加仓",
+      "name": "宁德时代",
+      "ticker": "300750.SZ",
+      "weight": 9.0
+    },
+    {
+      "action": "加仓",
+      "name": "贵州茅台",
+      "ticker": "600519.SH",
+      "weight": 9.0
+    },
+    {
+      "action": "减仓",
+      "name": "传音控股",
+      "ticker": "688036.SH",
+      "weight": 8.0
+    }
+  ],
+  "diff_hash": "22d36c526012e22a37e76e3a4637083bb4aca7da031f172f10e32f892f9698a7",
+  "ledger_hash": "f2ee6aea89019927ad278b193ad9bad617c95e39c4dd94160b16b1d9b517058f",
+  "ledger_history_hash": "4fcd1416014fa98e696338690bf69cda553913bfc560df55ab90da8b28ca7c53",
+  "ledger_status_counts": {
+    "filled": 8,
+    "pending": 8,
+    "planned": 0,
+    "unfilled": 0
+  },
+  "portfolio_ids": [
+    "canonical_portfolio_eb69f44f8222493a",
+    "canonical_portfolio_ada3711195caaf90"
+  ],
+  "replay": [
+    {
+      "replayed_tickers": 8,
+      "snapshot_id": "snap_real_b0bac1135776",
+      "status": "passed"
+    },
+    {
+      "replayed_tickers": 8,
+      "snapshot_id": "snap_real_a89a5113ef0f",
+      "status": "passed"
+    }
+  ],
+  "report_depth_counts": {
+    "deep": 5,
+    "quantitative_baseline": 3
+  },
+  "schema_version": "canonical-portfolio-verification-v1",
+  "snapshots": [
+    "snap_real_b0bac1135776",
+    "snap_real_a89a5113ef0f"
+  ],
+  "status": "passed",
+  "truth_boundary": "two stored REAL snapshots; 2026-07-17 is retrospective replay, 2026-07-21 is the current model suggestion; neither is a broker holding"
+}
