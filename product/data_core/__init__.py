@@ -55,6 +55,20 @@ from .ingestion import (
     evaluate_records,
     validate_fetched_payload,
 )
+from .ashare_validation import (
+    AShareSecurityMasterEntry,
+    AShareSourceConflict,
+    AShareValidatedPacket,
+    CNINFO_CORPORATE_ACTION_SOURCE,
+    EASTMONEY_QUOTE_SOURCE,
+    SINA_KLINE_SOURCE,
+    CninfoCorporateActionAdapter,
+    EastmoneyQuoteCrosscheckAdapter,
+    SinaDailyBarCrosscheckAdapter,
+    build_validation_runtime,
+    collect_validated_ashare_packet,
+    collect_validated_ashare_packet_async,
+)
 from .local_cache import SQLiteFetchCache
 from .research_refresh import (
     CanonicalComponent,
@@ -92,4 +106,9 @@ __all__ = [
     "TENCENT_KLINE_SOURCE", "TENCENT_QUOTE_SOURCE", "TencentDailyBarAdapter",
     "TencentQuoteAdapter", "build_ashare_registry", "build_ashare_runtime",
     "collect_ashare_packet", "collect_ashare_packet_async", "normalize_ashare_ticker",
+    "AShareSecurityMasterEntry", "AShareSourceConflict", "AShareValidatedPacket",
+    "CNINFO_CORPORATE_ACTION_SOURCE", "EASTMONEY_QUOTE_SOURCE", "SINA_KLINE_SOURCE",
+    "CninfoCorporateActionAdapter", "EastmoneyQuoteCrosscheckAdapter",
+    "SinaDailyBarCrosscheckAdapter", "build_validation_runtime",
+    "collect_validated_ashare_packet", "collect_validated_ashare_packet_async",
 ]

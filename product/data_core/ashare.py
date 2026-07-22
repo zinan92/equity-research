@@ -10,7 +10,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from uuid import uuid4
 
-from .contracts import RawCapture, RecordDomain, RecordEnvelope, SourceManifest
+from .contracts import RawCapture, RecordDomain, RecordEnvelope, SourceManifest, digest
 from .ingestion import (
     AdapterRegistry,
     AuthoritySink,
@@ -251,6 +251,18 @@ def _validate_eastmoney_row_identity(
             )
         return
     raise ValueError("Eastmoney row is missing security identity")
+
+
+def _eastmoney_revision_fields(row: Mapping[str, Any]) -> dict[str, str]:
+    row_hash = digest(dict(row))
+    provider_updated_at = str(
+        row.get("UPDATE_DATE") or row.get("NOTICE_DATE") or row.get("REPORT_DATE") or ""
+    )[:19]
+    return {
+        "provider_row_hash": row_hash,
+        "revision_id": "eastmoney:" + row_hash[:24],
+        "provider_updated_at": provider_updated_at,
+    }
 
 
 class TencentQuoteAdapter:
@@ -517,6 +529,7 @@ class EastmoneyFundamentalAdapter:
                             "unit": unit,
                             "ticker": instrument.ticker,
                             "report_type": str(report_type),
+                            **_eastmoney_revision_fields(row),
                         },
                         manifest=self.manifest,
                         raw=raw,
@@ -649,6 +662,7 @@ class EastmoneyStatementAdapter:
                             "ticker": instrument.ticker,
                             "report_type": str(report_type),
                             "statement_kind": self.statement_kind,
+                            **_eastmoney_revision_fields(row),
                         },
                         manifest=self.manifest,
                         raw=raw,
@@ -872,8 +886,12 @@ def _fundamentals_from_records(records: Iterable[RecordEnvelope]) -> tuple[dict[
                 "report_period": str(period),
                 "announced_at": payload.get("announced_at"),
                 "report_type": payload.get("report_type"),
+                "component_revision_ids": [],
             },
         )
+        revision_id = payload.get("revision_id")
+        if revision_id and revision_id not in row["component_revision_ids"]:
+            row["component_revision_ids"].append(revision_id)
         row[str(payload.get("metric"))] = payload.get("value")
     return tuple(grouped[key] for key in sorted(grouped, reverse=True))
 
