@@ -21,6 +21,7 @@ from batch_research import latest_batch, run_batch
 from research_reports import report_payload
 from research_evidence import evidence_coverage
 from deepseek_writer import editorial_queue, editorial_status
+from data_core import CanonicalPublicationError, canonical_active_report, canonical_active_summary
 from refresh_engine import RefreshInProgressError, refresh_status, run_refresh
 from report_versions import report_version_history
 from portfolio_committee import committee_payload
@@ -39,6 +40,11 @@ LOGIN_ATTEMPTS: dict[str, list[float]] = {}
 AUTH_REQUIRED = os.getenv("PARK_AUTH_REQUIRED", "0") == "1"
 COOKIE_SECURE = os.getenv("PARK_COOKIE_SECURE", "0") == "1"
 SESSION_COOKIE = "__Host-park_session" if COOKIE_SECURE else "park_session"
+
+
+def product_report_payload(ticker: str) -> dict | None:
+    """Resolve the product report without hiding a corrupt canonical active version."""
+    return canonical_active_report(ticker) or report_payload(ticker)
 
 
 def route_entitlement(route: str) -> str:
@@ -124,7 +130,11 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if route == "/api/health":
             payload = dashboard_payload()
             errors = validate_invariants(payload)
-            self._json({"status": "ok" if not errors else "blocked", "errors": errors, "data_mode": payload["snapshot"]["data_mode"]})
+            self._json({
+                "status": "ok" if not errors else "blocked", "errors": errors,
+                "data_mode": payload["snapshot"]["data_mode"],
+                "canonical_research": canonical_active_summary(),
+            })
             return
         if route == "/api/auth/me":
             member = self._member()
@@ -151,6 +161,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
             return
         if route == "/api/refresh/status":
             self._json(refresh_status())
+            return
+        if route == "/api/canonical/active":
+            self._json(canonical_active_summary())
             return
         if route == "/api/research/batches/latest":
             payload = latest_batch()
@@ -196,7 +209,14 @@ class DashboardHandler(BaseHTTPRequestHandler):
             return
         if route.startswith("/api/reports/"):
             ticker = unquote(route.removeprefix("/api/reports/"))
-            payload = report_payload(ticker)
+            try:
+                payload = product_report_payload(ticker)
+            except CanonicalPublicationError as exc:
+                self._json(
+                    {"error": "canonical_publication_invalid", "ticker": ticker.upper(), "detail": str(exc)},
+                    HTTPStatus.CONFLICT,
+                )
+                return
             if payload is None:
                 self._json({"error": "stock_not_found", "ticker": ticker}, HTTPStatus.NOT_FOUND)
             else:

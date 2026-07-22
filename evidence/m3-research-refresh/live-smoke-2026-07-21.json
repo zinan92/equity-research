@@ -1,0 +1,17 @@
+{
+  "schema_version": "m3-live-provider-smoke-v1",
+  "executed_at": "2026-07-21T17:15:00+08:00",
+  "command_scope": "canonical primary adapter with an isolated temporary database/state root",
+  "status": "failed_closed",
+  "active_created": false,
+  "selected_adapter": null,
+  "provider_coverage": {
+    "quotes": 8,
+    "klines": 2,
+    "financials": 3,
+    "required_each": 8
+  },
+  "failure_summary": "Tencent/Eastmoney requests returned SSL EOF and connection reset errors for multiple tickers; the 8/8 input gate rejected the run.",
+  "truth_boundary": "This is live provider availability evidence for one run, not a successful current-market publication. The previous active version would be preserved when present.",
+  "credentials_used": false
+}

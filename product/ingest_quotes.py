@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import hashlib
 import re
 from datetime import datetime, timedelta, timezone
@@ -67,7 +68,7 @@ def parse_response(raw: bytes, source_url: str) -> list[dict]:
     return quotes
 
 
-def fetch_quotes(timeout: float = 8.0) -> list[dict]:
+def fetch_quotes_bundle(timeout: float = 8.0) -> dict:
     symbols = [provider_symbol(item["ticker"]) for item in DEMO_POSITIONS]
     source_url = BASE_URL + ",".join(symbols)
     request = Request(source_url, headers={"User-Agent": "ParkResearchDashboard/0.1"})
@@ -76,7 +77,15 @@ def fetch_quotes(timeout: float = 8.0) -> list[dict]:
     quotes = parse_response(raw, source_url)
     if len(quotes) != len(symbols):
         raise RuntimeError(f"quote coverage incomplete: {len(quotes)}/{len(symbols)}")
-    return quotes
+    return {
+        "quotes": quotes, "source_url": source_url,
+        "raw_hash": hashlib.sha256(raw).hexdigest(),
+        "raw_payload_b64": base64.b64encode(raw).decode("ascii"),
+    }
+
+
+def fetch_quotes(timeout: float = 8.0) -> list[dict]:
+    return fetch_quotes_bundle(timeout)["quotes"]
 
 
 def main() -> None:

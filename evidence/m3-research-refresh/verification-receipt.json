@@ -1,0 +1,68 @@
+{
+  "all_sources_failed": {
+    "preserved_snapshot": "core_fixture_51440667220b00a6",
+    "previous_active_snapshot": "core_fixture_51440667220b00a6",
+    "status": "failed"
+  },
+  "fallback": {
+    "attempts": [
+      {
+        "adapter": "primary",
+        "role": "primary",
+        "status": "failed"
+      },
+      {
+        "adapter": "fallback",
+        "role": "fallback",
+        "status": "success"
+      }
+    ],
+    "selected_adapter": "fallback",
+    "status": "success"
+  },
+  "fixture_boundary": "deterministic acceptance data; not live market evidence",
+  "health": "healthy",
+  "incremental": {
+    "catl_trade_dates": [
+      "2026-07-16",
+      "2026-07-17",
+      "2026-07-20"
+    ],
+    "day_one": "2026-07-17",
+    "day_one_snapshot": "core_fixture_6d202f1b198d05a2",
+    "day_two": "2026-07-20",
+    "day_two_snapshot": "core_fixture_e20f441a4d250109",
+    "publication_id": "canonical_pub_670a762fa2f76c0c",
+    "report_gate": {
+      "passed": 8,
+      "required": 8,
+      "status": "passed"
+    },
+    "report_schema_version": "research-report-v1",
+    "same_input_ingestion_reused": true,
+    "same_input_snapshot": "core_fixture_6d202f1b198d05a2",
+    "snapshot_changed": true,
+    "standard_report_count": 8
+  },
+  "no_network_replay": {
+    "canonical": true,
+    "replay_digest": "7e0056ec264196b2aa5f2f442ce93a85210b957e9d82d8262766946ece8ccbde",
+    "status": "passed"
+  },
+  "product_consumer": {
+    "api_path": "/api/reports/300750.SZ",
+    "data_status": "verified",
+    "snapshot_id": "core_fixture_e20f441a4d250109",
+    "status": "passed",
+    "ticker": "300750.SZ"
+  },
+  "research_isolation": "forked child blocks socket connect/connect_ex/send and subprocess escape",
+  "resume": {
+    "collector_calls": 1,
+    "interruption_observed": true,
+    "resumed": true,
+    "status": "success"
+  },
+  "schedule_template": "product/automation/com.park.a-share-research-refresh.plist",
+  "schema_version": "m3-research-refresh-verification-v1"
+}

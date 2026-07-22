@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from data_store import DB_PATH, connect, dashboard_payload, initialize
+from data_store import DB_PATH, DEMO_POSITIONS, connect, dashboard_payload, initialize
 from real_pipeline import build_real_snapshot
 from report_versions import archive_report, compare_reports
 from research_reports import report_payload
@@ -213,6 +213,39 @@ def refresh_status(db_path: Path = DB_PATH, limit: int = 10) -> dict[str, Any]:
     return {"runs": [dict(row) for row in rows]}
 
 
+def canonical_refresh(
+    *,
+    db_path: Path,
+    state_root: Path,
+    timeout: float = 12.0,
+    dry_run: bool = False,
+    fallback_bundle: Path | None = None,
+) -> dict[str, Any]:
+    """Run the M3 canonical state machine through the shipped collector adapter."""
+    from data_core import (
+        CanonicalResearchRefresh, DataFoundation, FileBundleFallbackAdapter, LegacyCollectorAdapter,
+    )
+
+    adapters = [LegacyCollectorAdapter(timeout=timeout)]
+    if fallback_bundle is not None:
+        adapters.append(FileBundleFallbackAdapter(fallback_bundle))
+    engine = CanonicalResearchRefresh(
+        DataFoundation(db_path), state_root, adapters,
+        universe=[item["ticker"] for item in DEMO_POSITIONS],
+    )
+    return engine.run(dry_run=dry_run)
+
+
+def canonical_status(*, db_path: Path, state_root: Path, timeout: float = 12.0) -> dict[str, Any]:
+    from data_core import CanonicalResearchRefresh, DataFoundation, LegacyCollectorAdapter
+
+    engine = CanonicalResearchRefresh(
+        DataFoundation(db_path), state_root, [LegacyCollectorAdapter(timeout=timeout)],
+        universe=[item["ticker"] for item in DEMO_POSITIONS],
+    )
+    return engine.status()
+
+
 def main() -> None:
     import argparse
 
@@ -220,13 +253,34 @@ def main() -> None:
     parser.add_argument("--db", type=Path, default=DB_PATH)
     parser.add_argument("--ticker", default="300750.SZ")
     parser.add_argument("--timeout", type=float, default=10.0)
+    parser.add_argument("--canonical", action="store_true", help="run the canonical M3 collector/snapshot/research state machine")
+    parser.add_argument("--canonical-db", type=Path, default=DB_PATH.parent / "canonical_data.db")
+    parser.add_argument("--state-root", type=Path, default=DB_PATH.parent / "canonical_refresh")
+    parser.add_argument("--fallback-bundle", type=Path, help="explicit previously frozen canonical bundle used only after primary failure")
+    parser.add_argument("--dry-run", action="store_true", help="show the canonical plan without calling any source")
+    parser.add_argument("--status", action="store_true", help="show canonical refresh health without running it")
     args = parser.parse_args()
     try:
-        result = run_refresh(args.db, ticker=args.ticker, timeout=args.timeout)
+        if args.canonical:
+            result = (
+                canonical_status(db_path=args.canonical_db, state_root=args.state_root, timeout=args.timeout)
+                if args.status
+                else canonical_refresh(
+                    db_path=args.canonical_db, state_root=args.state_root,
+                    timeout=args.timeout, dry_run=args.dry_run,
+                    fallback_bundle=args.fallback_bundle,
+                )
+            )
+        elif args.status or args.dry_run:
+            raise ValueError("--status and --dry-run require --canonical")
+        else:
+            result = run_refresh(args.db, ticker=args.ticker, timeout=args.timeout)
     except Exception as exc:
         print(json.dumps({"status": "failed", "error": str(exc)}, ensure_ascii=False, indent=2))
         raise SystemExit(1) from exc
     print(json.dumps(result, ensure_ascii=False, indent=2, default=str))
+    if args.canonical and result.get("status") not in {"success", "healthy", "dry_run"}:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

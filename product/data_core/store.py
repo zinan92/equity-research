@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import hashlib
 import json
 import sqlite3
 from copy import deepcopy
@@ -7,6 +9,7 @@ from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
+from urllib.parse import urlsplit
 
 from .contracts import SCHEMA_VERSION, SourceManifest, canonical_json, digest
 from .schema import CORE_TABLES, SQLITE_DDL, schema_version_row
@@ -42,6 +45,69 @@ _CANONICAL_CONTRACTS = {
         ("fact_id", "instrument_id", "report_date", "announced_at", "revision", "metric_key", "metric_value", "unit", "quality_status"),
     ),
 }
+
+REAL_SOURCE_ALLOWLIST = {
+    "tencent_qfq_daily_v1",
+    "tencent_quote_v1",
+    "eastmoney_f10_main_v1",
+    "sina_exchange_calendar_v1",
+}
+REAL_SOURCE_HOSTS = {
+    "tencent_qfq_daily_v1": {"web.ifzq.gtimg.cn"},
+    "tencent_quote_v1": {"qt.gtimg.cn"},
+    "eastmoney_f10_main_v1": {"datacenter.eastmoney.com"},
+    "sina_exchange_calendar_v1": {"finance.sina.com.cn"},
+}
+
+_NORMALIZED_COLLECTIONS = (
+    "instruments", "calendar", "statuses", "actions", "factors",
+    "bars", "financials", "intelligence",
+)
+
+
+def build_normalization_receipt(payload: dict[str, Any]) -> dict[str, Any]:
+    objects = payload.get("provider_raw_objects") or []
+    if isinstance(objects, dict):
+        objects = [item for group in objects.values() for item in (group or [])]
+    return {
+        "schema_version": "canonical-normalization-receipt-v1",
+        "normalized_rows_hash": digest({key: payload.get(key) or [] for key in _NORMALIZED_COLLECTIONS}),
+        "provider_raw_hashes": sorted(str(item.get("raw_hash")) for item in objects),
+        "provider_source_urls": sorted(str(item.get("source_url")) for item in objects),
+    }
+
+
+def validate_provider_raw_objects(
+    payload: dict[str, Any], *, required: bool, source_key: str | None = None
+) -> None:
+    """Validate provider bytes before a bundle can enter trusted lineage."""
+    objects = payload.get("provider_raw_objects") or []
+    if isinstance(objects, dict):
+        objects = [item for group in objects.values() for item in (group or [])]
+    if required and not objects:
+        raise ValueError("REAL ingestion requires provider raw objects")
+    for index, item in enumerate(objects):
+        if not isinstance(item, dict):
+            raise ValueError(f"provider raw object {index} is not an object")
+        encoded = item.get("raw_payload_b64")
+        declared = item.get("raw_hash")
+        if not encoded or not declared:
+            raise ValueError(f"provider raw object {index} lacks bytes or hash")
+        try:
+            raw = base64.b64decode(encoded, validate=True)
+        except Exception as exc:
+            raise ValueError(f"provider raw object {index} has invalid base64") from exc
+        if hashlib.sha256(raw).hexdigest() != declared:
+            raise ValueError(f"provider raw object {index} hash mismatch")
+        if source_key:
+            host = (urlsplit(str(item.get("source_url") or "")).hostname or "").lower()
+            if host not in REAL_SOURCE_HOSTS.get(source_key, set()):
+                raise ValueError(f"provider raw object {index} URL is not allowed for {source_key}")
+    if required:
+        receipt = payload.get("normalization_receipt")
+        expected = build_normalization_receipt(payload)
+        if receipt != expected:
+            raise ValueError("REAL normalized rows are not bound to provider raw objects and URLs")
 
 
 class QualityGateError(RuntimeError):
@@ -136,8 +202,48 @@ class DataFoundation:
             connection.commit()
 
     def ingest_fixture(self, payload: dict[str, Any], manifest: SourceManifest) -> dict[str, Any]:
+        """Load deterministic acceptance data without allowing REAL promotion."""
         if not payload.get("fixture"):
             raise ValueError("acceptance loader only accepts payloads explicitly labelled fixture=true")
+        return self.ingest_payload(payload, manifest, data_kind="fixture")
+
+    def ingest_payload(
+        self,
+        payload: dict[str, Any],
+        manifest: SourceManifest,
+        *,
+        data_kind: str,
+    ) -> dict[str, Any]:
+        """Ingest one normalized collector bundle into the canonical contract.
+
+        The caller must state the trust kind.  A fixture marker and a non-fixture
+        trust kind can never be combined, which prevents acceptance data from
+        becoming a production snapshot through orchestration mistakes.
+        """
+        if data_kind not in {"fixture", "cached", "real"}:
+            raise ValueError(f"unsupported data_kind: {data_kind}")
+        is_fixture = bool(payload.get("fixture"))
+        if is_fixture != (data_kind == "fixture"):
+            raise ValueError("fixture marker and data_kind disagree")
+        fixture_signals = {
+            str(flag).lower() for flag in manifest.quality_flags
+        } | {
+            manifest.source_key.lower(), manifest.source_url.lower(), manifest.license_status.lower()
+        }
+        looks_fixture = any("fixture" in value or value == "not_real_time" for value in fixture_signals)
+        if data_kind == "real" and looks_fixture:
+            raise ValueError("fixture/test source manifest cannot enter REAL lineage")
+        if data_kind == "fixture" and not looks_fixture:
+            raise ValueError("fixture ingestion requires an explicit fixture source manifest")
+        if data_kind == "real":
+            if manifest.source_key not in REAL_SOURCE_ALLOWLIST:
+                raise ValueError(f"REAL source is not allowlisted: {manifest.source_key}")
+            if manifest.authority_tier != "canonical" or not manifest.source_url.startswith("https://"):
+                raise ValueError("REAL source requires canonical authority and an HTTPS provider URL")
+        validate_provider_raw_objects(
+            payload, required=data_kind == "real",
+            source_key=manifest.source_key if data_kind == "real" else None,
+        )
         self.register_source(manifest)
         payload = deepcopy(payload)
         payload["known_at"] = _canonical_instant(payload["known_at"])
@@ -151,6 +257,7 @@ class DataFoundation:
             "source": manifest.source_key,
             "source_manifest_hash": manifest.manifest_hash,
             "raw_hash": raw_hash,
+            "data_kind": data_kind,
         })
         with closing(self.connect()) as connection:
             existing = connection.execute(
@@ -159,29 +266,43 @@ class DataFoundation:
                 (idempotency_key,),
             ).fetchone()
             if existing:
-                return {"run_id": existing["run_id"], "status": existing["status"], "reused": True, "raw_hash": raw_hash}
+                return {
+                    "run_id": existing["run_id"], "status": existing["status"], "reused": True,
+                    "raw_hash": raw_hash, "data_kind": data_kind,
+                }
             attempt = connection.execute(
                 "SELECT COALESCE(MAX(attempt), 0) + 1 FROM core_ingestion_runs WHERE idempotency_key=?",
                 (idempotency_key,),
             ).fetchone()[0]
             run_id = f"run_{idempotency_key[:16]}" + (f"_{attempt:02d}" if attempt > 1 else "")
             now = _now()
-            fetched = sum(len(payload[key]) for key in ("instruments", "calendar", "statuses", "factors", "actions", "bars", "financials"))
+            fetched = sum(
+                len(payload.get(key) or [])
+                for key in (
+                    "instruments", "calendar", "statuses", "factors", "actions",
+                    "bars", "financials", "intelligence",
+                )
+            )
             try:
                 connection.execute(
                     """INSERT INTO core_ingestion_runs (
                        run_id, source_key, source_manifest_hash, data_kind, idempotency_key,
                        attempt, started_at, status
-                       ) VALUES (?, ?, ?, 'fixture', ?, ?, ?, 'running')""",
-                    (run_id, manifest.source_key, manifest.manifest_hash, idempotency_key, attempt, now),
+                       ) VALUES (?, ?, ?, ?, ?, ?, ?, 'running')""",
+                    (
+                        run_id, manifest.source_key, manifest.manifest_hash, data_kind,
+                        idempotency_key, attempt, now,
+                    ),
                 )
                 connection.execute(
                     """INSERT INTO core_raw_objects (
                        raw_hash, run_id, source_key, source_manifest_hash, object_kind, storage_uri, fetched_at, known_at,
                        http_status, payload_size, payload_json, provider_version, schema_version, license_status
-                       ) VALUES (?, ?, ?, ?, 'acceptance_fixture', ?, ?, ?, 200, ?, ?, ?, ?, ?)""",
+                       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 200, ?, ?, ?, ?, ?)""",
                     (
-                        raw_hash, run_id, manifest.source_key, manifest.manifest_hash, f"fixture://{raw_hash}", now,
+                        raw_hash, run_id, manifest.source_key, manifest.manifest_hash,
+                        "acceptance_fixture" if data_kind == "fixture" else "normalized_collector_bundle",
+                        f"{data_kind}://{raw_hash}", now,
                         payload["known_at"], len(raw_json.encode("utf-8")), raw_json, manifest.provider_version,
                         manifest.schema_version, manifest.license_status,
                     ),
@@ -204,15 +325,18 @@ class DataFoundation:
                        run_id, source_key, source_manifest_hash, data_kind, idempotency_key, attempt,
                        started_at, finished_at, status,
                        fetched_count, accepted_count, error_summary
-                       ) VALUES (?, ?, ?, 'fixture', ?, ?, ?, ?, 'failed', ?, 0, ?)""",
+                       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'failed', ?, 0, ?)""",
                     (
-                        run_id, manifest.source_key, manifest.manifest_hash, idempotency_key,
+                        run_id, manifest.source_key, manifest.manifest_hash, data_kind, idempotency_key,
                         attempt, now, _now(), fetched, f"{type(exc).__name__}: {exc}",
                     ),
                 )
                 connection.commit()
-                raise RuntimeError(f"fixture ingestion failed closed: {exc}") from exc
-        return {"run_id": run_id, "status": "success", "reused": False, "raw_hash": raw_hash}
+                raise RuntimeError(f"{data_kind} ingestion failed closed: {exc}") from exc
+        return {
+            "run_id": run_id, "status": "success", "reused": False,
+            "raw_hash": raw_hash, "data_kind": data_kind,
+        }
 
     @staticmethod
     def _accept_canonical(
@@ -329,6 +453,26 @@ class DataFoundation:
                 business_columns=("fact_id", "instrument_id", "report_date", "announced_at", "revision", "metric_key", "metric_value", "unit", "quality_status"),
                 source_key=source_key, source_manifest_hash=source_manifest_hash, run_id=run_id, raw_hash=raw_hash,
             )
+        for row in payload.get("intelligence") or []:
+            values = {
+                "item_id": row["item_id"], "instrument_id": row.get("instrument_id"),
+                "title": row["title"], "published_at": row.get("published_at"),
+                "known_at": known_at, "evidence_json": canonical_json(row["evidence"]),
+                "inference_json": canonical_json(row["inference"]) if row.get("inference") is not None else None,
+                "is_llm_inferred": int(bool(row.get("is_llm_inferred", False))),
+                "source_key": source_key, "run_id": run_id, "raw_hash": raw_hash,
+                "quality_status": "accepted",
+            }
+            accepted += cls._accept_canonical(
+                connection, table="core_intelligence_items", values=values,
+                key_columns=("item_id",),
+                business_columns=(
+                    "item_id", "instrument_id", "title", "published_at", "evidence_json",
+                    "inference_json", "is_llm_inferred", "quality_status",
+                ),
+                source_key=source_key, source_manifest_hash=source_manifest_hash,
+                run_id=run_id, raw_hash=raw_hash,
+            )
         return accepted
 
     @staticmethod
@@ -336,7 +480,40 @@ class DataFoundation:
         connection: sqlite3.Connection, *, as_of: str, known_at: str
     ) -> list[str]:
         gaps: list[str] = []
+        raw_validity: dict[str, bool] = {}
         for table, (key_columns, business_columns) in _CANONICAL_CONTRACTS.items():
+            valid_observations: set[tuple[str, str]] = set()
+            observation_rows = _rows(
+                connection,
+                """SELECT o.entity_key, o.canonical_hash, raw.raw_hash, raw.payload_json,
+                          raw.provider_version, raw.schema_version, raw.license_status,
+                          v.provider_version AS manifest_provider_version,
+                          v.schema_version AS manifest_schema_version,
+                          v.license_status AS manifest_license_status
+                   FROM core_source_observations o
+                   JOIN core_ingestion_runs r ON r.run_id=o.run_id AND r.status='success'
+                   JOIN core_raw_objects raw ON raw.raw_hash=o.raw_hash
+                       AND raw.run_id=o.run_id AND raw.source_key=o.source_key
+                       AND raw.source_manifest_hash=o.source_manifest_hash
+                   JOIN core_source_manifest_versions v ON v.manifest_hash=o.source_manifest_hash
+                       AND v.source_key=o.source_key
+                   WHERE o.entity_type=? AND o.status='accepted' AND raw.known_at<=?""",
+                (table, known_at),
+            )
+            for observation in observation_rows:
+                raw_hash = observation["raw_hash"]
+                if raw_hash not in raw_validity:
+                    try:
+                        raw_validity[raw_hash] = (
+                            digest(json.loads(observation["payload_json"])) == raw_hash
+                            and observation["provider_version"] == observation["manifest_provider_version"]
+                            and observation["schema_version"] == observation["manifest_schema_version"]
+                            and observation["license_status"] == observation["manifest_license_status"]
+                        )
+                    except (TypeError, ValueError, json.JSONDecodeError):
+                        raw_validity[raw_hash] = False
+                if raw_validity[raw_hash]:
+                    valid_observations.add((observation["entity_key"], observation["canonical_hash"]))
             columns = {row["name"] for row in connection.execute(f"PRAGMA table_info({table})")}
             predicates = ["known_at<=?"] if "known_at" in columns else []
             params: list[Any] = [known_at] if predicates else []
@@ -355,35 +532,7 @@ class DataFoundation:
             for row in _rows(connection, f"SELECT * FROM {table}{where}", tuple(params)):
                 entity_key = canonical_json({column: row[column] for column in key_columns})
                 canonical_hash = digest({column: row[column] for column in business_columns})
-                observation = connection.execute(
-                    """SELECT raw.raw_hash, raw.payload_json, raw.provider_version, raw.schema_version,
-                              raw.license_status, v.provider_version AS manifest_provider_version,
-                              v.schema_version AS manifest_schema_version,
-                              v.license_status AS manifest_license_status
-                       FROM core_source_observations o
-                       JOIN core_ingestion_runs r ON r.run_id=o.run_id AND r.status='success'
-                       JOIN core_raw_objects raw ON raw.raw_hash=o.raw_hash
-                           AND raw.run_id=o.run_id AND raw.source_key=o.source_key
-                           AND raw.source_manifest_hash=o.source_manifest_hash
-                       JOIN core_source_manifest_versions v ON v.manifest_hash=o.source_manifest_hash
-                           AND v.source_key=o.source_key
-                       WHERE o.entity_type=? AND o.entity_key=? AND o.canonical_hash=?
-                           AND o.status='accepted' AND raw.known_at<=?
-                       LIMIT 1""",
-                    (table, entity_key, canonical_hash, known_at),
-                ).fetchone()
-                observation_valid = False
-                if observation:
-                    try:
-                        observation_valid = (
-                            digest(json.loads(observation["payload_json"])) == observation["raw_hash"]
-                            and observation["provider_version"] == observation["manifest_provider_version"]
-                            and observation["schema_version"] == observation["manifest_schema_version"]
-                            and observation["license_status"] == observation["manifest_license_status"]
-                        )
-                    except (TypeError, ValueError, json.JSONDecodeError):
-                        observation_valid = False
-                if not observation_valid:
+                if (entity_key, canonical_hash) not in valid_observations:
                     gaps.append(f"{table}:{entity_key}")
         return gaps
 
