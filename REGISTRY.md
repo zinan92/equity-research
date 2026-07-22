@@ -13,11 +13,12 @@
 - B5 now adapts Intel RSS/Google News/Yahoo/official-monitor collectors behind canonical SourceManifest ingestion, resolves A-share entities against the security master, groups cross-source duplicate events, separates evidence from versioned model inference, and exposes per-source coverage gaps.
 - B6 now freezes canonical records into deterministic evidence-set/gate identities, machine-checks primary/independent/lead roles, recomputes PIT/freshness/conflict/coverage, and exposes only accepted evidence through a read-only Research Context Pack.
 - C1 now defines one typed 18-section report contract with fixed full/partial/missing semantics, a 32–50 page budget, section/profile/version/input hashes, and a hard B6 boundary for live acceptance.
+- C2 now reconciles historical statements and produces hashed Bear/Base/Bull DCF, reverse DCF, peer/history cross-checks and stable sensitivities while blocking currency, unit, balance and share-count anomalies.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
 
 ## 下一步
 
-- Start L2-C2 issue #40 from latest `main`: make financial bridges and valuation outputs deterministic and auditable.
-- Reconcile historical statements, freeze Bull/Base/Bear assumptions, and cross-check DCF/reverse DCF/comps/history with stable sensitivities.
-- Block currency, unit, share-count and statement-balance anomalies; LLM-authored numbers and trading execution remain out of scope.
+- Start L2-C3 issue #41 from latest `main`: turn individual sell-side reports into an evidence-bound viewpoint matrix.
+- Separate consensus from outliers, preserve revision timelines and keep both bull and bear evidence visible.
+- Prevent summaries from claiming more certainty than the source reports; do not auto-judge which broker is correct.
