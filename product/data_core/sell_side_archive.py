@@ -61,6 +61,14 @@ def _integer(value: Any) -> int | None:
         return None
 
 
+def _number(value: Any) -> float | None:
+    try:
+        result = float(value)
+        return result if result == result and result not in {float("inf"), float("-inf")} else None
+    except (TypeError, ValueError):
+        return None
+
+
 class RetryableHttpError(RuntimeError):
     def __init__(self, status_code: int) -> None:
         self.status_code = status_code
@@ -166,7 +174,9 @@ class EastmoneySellSideCatalogAdapter:
         self, request: FetchRequest, fetched: FetchedPayload, raw: RawCapture
     ) -> Iterable[RecordEnvelope]:
         instrument = normalize_ashare_ticker(request.entity_key)
-        rows = json.loads(fetched.body.decode("utf-8")).get("data") or []
+        response = json.loads(fetched.body.decode("utf-8"))
+        rows = response.get("data") or []
+        response_year = _integer(response.get("currentYear"))
         records = []
         for row in rows:
             report_id = _text(row.get("infoCode"))
@@ -175,7 +185,20 @@ class EastmoneySellSideCatalogAdapter:
             if not report_id or not title or not publish_date:
                 continue
             published_at = _published_at(publish_date)
+            base_year = response_year or int(published_at[:4])
             pdf_url = PDF_TEMPLATE.format(info_code=report_id)
+            forecast_years = []
+            for offset, eps_key, pe_key in (
+                (0, "predictThisYearEps", "predictThisYearPe"),
+                (1, "predictNextYearEps", "predictNextYearPe"),
+                (2, "predictNextTwoYearEps", "predictNextTwoYearPe"),
+            ):
+                eps = _number(row.get(eps_key))
+                pe = _number(row.get(pe_key))
+                if eps is not None or pe is not None:
+                    forecast_years.append(
+                        {"fiscal_year": base_year + offset, "eps": eps, "pe": pe}
+                    )
             payload = {
                 "event_id": f"sell-side-catalog:{report_id}",
                 "instrument_id": instrument.instrument_id,
@@ -190,6 +213,9 @@ class EastmoneySellSideCatalogAdapter:
                 "published_at": published_at,
                 "rating": _text(row.get("emRatingName")) or _text(row.get("sRatingName")),
                 "pages": _integer(row.get("attachPages")),
+                "forecast_years": forecast_years,
+                "target_price_low": _number(row.get("indvAimPriceL")),
+                "target_price_high": _number(row.get("indvAimPriceT")),
                 "pdf_url": pdf_url,
                 "canonical_url": pdf_url,
                 "pdf_available": bool(report_id),
