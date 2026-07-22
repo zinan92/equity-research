@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.park.equity-research-preview</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/ABSOLUTE/PATH/TO/python3</string>
+    <string>/ABSOLUTE/PATH/TO/runtime/bin/run_private_preview.py</string>
+    <string>--env-file</string>
+    <string>/ABSOLUTE/PATH/TO/runtime/preview.env</string>
+    <string>--port</string>
+    <string>8878</string>
+  </array>
+  <key>WorkingDirectory</key><string>/ABSOLUTE/PATH/TO/runtime</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PYTHONUNBUFFERED</key><string>1</string>
+    <key>PYTHONDONTWRITEBYTECODE</key><string>1</string>
+  </dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+  <key>StandardOutPath</key><string>/ABSOLUTE/PATH/TO/runtime/logs/server.out.log</string>
+  <key>StandardErrorPath</key><string>/ABSOLUTE/PATH/TO/runtime/logs/server.err.log</string>
+</dict>
+</plist>

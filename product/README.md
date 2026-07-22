@@ -128,15 +128,28 @@ python3 product/publication_pack.py --validate product/runtime/publication_packs
 
 ## 私域会员
 
+M6 私有预览把 canonical 组合、会员权限与结构化反馈放进一个外网可打开但默认封闭的产品壳。运行时复制到仓库外的 content-addressed release；研究库只读，会员/会话/反馈使用独立 `PARK_AUTH_DB`。完整合同和部署/回滚命令见 [`private-preview-v1`](../docs/product/private-preview-v1.md)。
+
+机器验收：
+
+```bash
+python3 -m unittest product.tests.test_private_preview_v1 -v
+python3 scripts/verify_private_preview.py --rehearse-ops --rollback-release <verified-prior-release-id>
+python3 scripts/verify_private_preview.py
+python3 scripts/adversarial_verify_private_preview.py
+```
+
+这套部署只声明 `Private Preview Ready`：不收款、不接券商、单机 origin、没有多地域高可用。
+
 本地开发默认不开身份门。创建 owner 和邀请码：
 
 ```bash
 python3 product/member_admin.py create-owner --email <owner-email> --name Park
-python3 product/member_admin.py create-invite --owner-email <owner-email> --tier paid --max-uses 1 --valid-days 7
+python3 product/member_admin.py create-invite --owner-email <owner-email> --tier member --max-uses 1 --valid-days 7
 PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0.0.1 --port 8877
 ```
 
-`preview` 只看首页，`member` 可看公司级研报，`paid` 可下载发布包，`owner` 才能刷新、批准、发布和管理会员。上述命令只用于本机 HTTP；公网必须使用 HTTPS，并改为 `PARK_COOKIE_SECURE=1`。
+`preview` 只看首页，`member` 可看公司级研报，`paid` 在 M6 仍是保留 tier，`owner` 可管理成员和反馈。私有预览不开放刷新、批准、发布或下载路由，即使 owner 也不能修改封装后的研究 release。上述命令只用于本机 HTTP；公网必须使用 HTTPS，并改为 `PARK_COOKIE_SECURE=1`。
 
 ## API
 
@@ -189,7 +202,7 @@ python3 -m py_compile product/*.py
 node --check product/render_publication.mjs
 ```
 
-当前产品测试共 198 项，覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、按 canonical key 修复缺口、独立交易日历与缺 bar 阻断、source manifest/run 绑定、provider raw bytes/hash、fixture→REAL 防升级、cached/REAL 身份隔离、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、两日自动更新、跨公司 adapter、冻结证据 identity、DeepSeek no-network boundary、evidence-editor provenance、五行业同八模块格式、统一组合硬约束、组合/研报 identity、价格漂移、期间差异重算、append-only 模拟账本、成交源 bar 复核、组合 API 及空账本/损坏历史失败路径、危险 URL/未知引用阻断、分源 manifest、显式 cached fallback、失败来源完整质量审计、8/8 标准研报激活、错误 hash 阻断、断点恢复、子进程网络/命令逃逸阻断、旧版本回滚、研报篡改、产品 canonical 消费路径、调度失败退出码、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销和 HTTP 安全头。
+当前产品测试覆盖数据完整性、canonical schema、PIT 财务修订/公司行动、混合时区、复权/公司行动版本、按 canonical key 修复缺口、独立交易日历与缺 bar 阻断、source manifest/run 绑定、provider raw bytes/hash、fixture→REAL 防升级、cached/REAL 身份隔离、质量门到冻结的 TOCTOU、全 lineage provenance、可重放/恢复、两日自动更新、跨公司 adapter、冻结证据 identity、DeepSeek no-network boundary、evidence-editor provenance、五行业同八模块格式、统一组合硬约束、组合/研报 identity、价格漂移、期间差异重算、append-only 模拟账本、成交源 bar 复核、组合 API 及空账本/损坏历史失败路径、危险 URL/未知引用阻断、分源 manifest、显式 cached fallback、失败来源完整质量审计、8/8 标准研报激活、错误 hash 阻断、断点恢复、子进程网络/命令逃逸阻断、旧版本回滚、研报篡改、产品 canonical 消费路径、调度失败退出码、版本身份、标准研报结构、跨市场币种与披露语义、缺失/不适用边界、前端消费字段类型、最终 API 再校验、无效 AI 降级、伪造引用、故障隔离、研究质量门、审批失效、发布包篡改、权限提升、CSRF、session 撤销、私有预览 entitlement、反馈审计、发布身份和外部 HTTPS 安全头。测试数量以实际验收输出为准，不在文档硬编码。
 
 标准化报告接口遵循 [`research-report-v1`](../docs/product/research-report-v1.md)。`report_contract.module_manifest` 是 Web、移动和发布包的唯一章节顺序来源；客户端遇到未知或乱序版本必须 fail closed。
 

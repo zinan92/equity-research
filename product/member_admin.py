@@ -5,13 +5,12 @@ import getpass
 import json
 from pathlib import Path
 
-from auth_store import authenticate, create_invite, create_owner, list_members, revoke_invite, set_member_status
-from data_store import DB_PATH
+from auth_store import AUTH_DB_PATH, authenticate, create_invite, create_owner, list_members, revoke_invite, set_member_status
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Manage Park Research private-beta members")
-    parser.add_argument("--db", type=Path, default=DB_PATH)
+    parser.add_argument("--db", type=Path, default=AUTH_DB_PATH)
     commands = parser.add_subparsers(dest="command", required=True)
 
     owner = commands.add_parser("create-owner")

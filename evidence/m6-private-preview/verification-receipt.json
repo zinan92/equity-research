@@ -1,0 +1,161 @@
+{
+  "schema_version": "private-preview-verification-v1",
+  "status": "passed",
+  "verified_at": "2026-07-21T16:09:39.852811+00:00",
+  "public_url": "https://research.park-ai-intel.com",
+  "health": {
+    "status": "ok",
+    "product": "park-equity-research-preview",
+    "auth_required": true
+  },
+  "security_headers": {
+    "cache-control": "no-store",
+    "x-frame-options": "DENY",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "x-content-type-options": "nosniff",
+    "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+  },
+  "anonymous_matrix": {
+    "/api/private-preview": 401,
+    "/api/canonical/portfolio": 401,
+    "/api/canonical/portfolio/ledger": 401,
+    "/api/reports/300750.SZ": 401,
+    "/api/feedback": 401,
+    "/api/feedback/export": 401,
+    "/api/dashboard": 401,
+    "/api/committee": 401,
+    "/api/publications": 401,
+    "/api/refresh/status": 401,
+    "/api/canonical/active": 401,
+    "/api/canonical/portfolio/history": 401,
+    "/api/canonical/portfolio/ledger/history": 401,
+    "/api/stocks/300750.SZ": 401,
+    "/api/research/batches/latest": 401,
+    "/api/publication-packs/latest": 401,
+    "/downloads/publication-packs/fake/fake.zip": 401
+  },
+  "entitlement_matrix": {
+    "preview": {
+      "canonical_portfolio": 200,
+      "deep_report": 403
+    },
+    "member": {
+      "canonical_portfolio": 200,
+      "deep_report": 200,
+      "feedback": "accepted_or_idempotently_reused"
+    },
+    "owner": {
+      "members": 200,
+      "feedback_audit": 200
+    }
+  },
+  "preview_legacy_route_matrix": {
+    "/api/dashboard": 404,
+    "/api/committee": 404,
+    "/api/publications": 404,
+    "/api/refresh/status": 404,
+    "/api/canonical/active": 404,
+    "/api/canonical/portfolio": 404,
+    "/api/canonical/portfolio/history": 404,
+    "/api/canonical/portfolio/ledger": 404,
+    "/api/canonical/portfolio/ledger/history": 404,
+    "/api/stocks/300750.SZ": 404,
+    "/api/research/batches/latest": 404,
+    "/api/publication-packs/latest": 404,
+    "/downloads/publication-packs/fake/fake.zip": 404
+  },
+  "cookie_contract": "__Host + Secure + HttpOnly + SameSite=Strict",
+  "csrf_negative_path": "rejected_403",
+  "portfolio_id": "canonical_portfolio_ada3711195caaf90",
+  "snapshot_id": "snap_real_a89a5113ef0f",
+  "release_id": "preview_581a1d3ffab5dd25",
+  "product_code_hash": "a6eed88d171c839f21f530cd8092ba8cb8e13fe8e1d148fd9ea42caba93a23f5",
+  "report_bundle_hash": "7f041f7b43c15ffe87f410a53b6a7a0b08be4e0a2ec4d23947ed6af44f7cc5f0",
+  "exact_report_hashes": {
+    "600900.SH": "228b65d8b374b9654c4345c96a3b34916a7b466f058f8d1448f3ca9390cc87b7",
+    "000333.SZ": "bdef0d66b358e94051a2e15a77f619dc47813160fd7639365c6e1a61f0cc94c5",
+    "601088.SH": "543b1e746b6d06c85e181b9b8f245e13fdeaa5f7ad0d71bb1a129dd1fad82623",
+    "600036.SH": "22e027209b9aebf4aec72abfaf0e79a88f5c14012e7158aa5540b2dca322bd70",
+    "600941.SH": "209b9ae08780aba630a49173d552f111776a7b903216fc13d567c5c4a6050346",
+    "300750.SZ": "d71864f9540165a1b5a95954b4f03306439d0362fb96252f6521cf6c87d1cca2",
+    "600519.SH": "4c80a87caf608113071f908ec070be0825faac5a695888fbdcf8bc4609f545dc",
+    "688036.SH": "af0f82067c03541b382e86b4ed9adcf308fd088b56b517faef5184db3f1852d4"
+  },
+  "signup_logout_flow": "passed_and_session_revoked",
+  "restart_rollback_receipt": {
+    "status": "verified",
+    "rollback_release_id": "preview_355f39a78d2c1eb1"
+  },
+  "feedback_page_identity_verified": true,
+  "services": [
+    {
+      "label": "com.park.equity-research-preview",
+      "state": "running",
+      "pid": 45113
+    },
+    {
+      "label": "com.park.equity-research-tunnel",
+      "state": "running",
+      "pid": 45120
+    }
+  ],
+  "tunnel": {
+    "id": "edb2db0b-b5c7-4870-825b-bd9203e37ea5",
+    "active_connector": true,
+    "config_sha256": "36c24b742131ace5846bb7d59c527f0f07fda88f48f6d8e09b8ca4ffdd0bd104",
+    "launchd_config_binding_verified": true,
+    "isolation": {
+      "dedicated_tunnel_id": "edb2db0b-b5c7-4870-825b-bd9203e37ea5",
+      "dedicated_connector_count": 1,
+      "other_tunnel_count": 1,
+      "other_tunnel_ids_sha256": "4d62ebeddd6e9e34bac924912784349acae41265dc6e79b88c4346c6fa033672",
+      "all_other_tunnels_active": true
+    }
+  },
+  "visual": {
+    "status": "passed",
+    "base_url": "https://research.park-ai-intel.com",
+    "desktop": {
+      "title": "Park Equity Research · Private Preview",
+      "banner": "PRIVATE PREVIEW",
+      "positionCount": 8,
+      "portfolioId": "canonical_portfolio_ada3711195caaf90",
+      "truthText": "仅供受邀成员验证产品。模型仓位不是账户持仓，不接受真实付款，不连接券商。",
+      "reportButtonsLocked": true,
+      "horizontalOverflow": false,
+      "scrollHeight": 2388,
+      "mobileReadability": null,
+      "screenshot": {
+        "path": "/Users/wendy/Documents/equity-research-codex/evidence/m6-private-preview/private-preview-desktop.png",
+        "sha256": "968d0e5807779d9e45105724e4f1ebbcd15e352fc8f8037faa1253302274e9c1",
+        "width": 1440,
+        "height": 2388
+      }
+    },
+    "mobile": {
+      "title": "Park Equity Research · Private Preview",
+      "banner": "PRIVATE PREVIEW",
+      "positionCount": 8,
+      "portfolioId": "canonical_portfolio_ada3711195caaf90",
+      "truthText": "仅供受邀成员验证产品。模型仓位不是账户持仓，不接受真实付款，不连接券商。",
+      "reportButtonsLocked": true,
+      "horizontalOverflow": false,
+      "scrollHeight": 6199,
+      "mobileReadability": {
+        "thesisFont": 14,
+        "riskFont": 14,
+        "receiptFont": 12,
+        "formLabelFont": 13,
+        "reportButtonHeight": 55,
+        "feedbackButtonHeight": 48
+      },
+      "screenshot": {
+        "path": "/Users/wendy/Documents/equity-research-codex/evidence/m6-private-preview/private-preview-mobile.png",
+        "sha256": "cb8ee1fdfe7f98efc9c1310effcad9b066b3fa538cfbf36dc4de9c9e72401264",
+        "width": 390,
+        "height": 6199
+      }
+    }
+  },
+  "credential_values_recorded": false
+}

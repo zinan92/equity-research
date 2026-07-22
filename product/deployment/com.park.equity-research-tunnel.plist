@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.park.equity-research-tunnel</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/cloudflared</string>
+    <string>tunnel</string>
+    <string>--config</string>
+    <string>/ABSOLUTE/PATH/TO/equity-research-preview.yml</string>
+    <string>run</string>
+    <string>EQUITY_RESEARCH_TUNNEL_UUID</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>10</integer>
+  <key>StandardOutPath</key><string>/ABSOLUTE/PATH/TO/runtime/logs/cloudflared.out.log</string>
+  <key>StandardErrorPath</key><string>/ABSOLUTE/PATH/TO/runtime/logs/cloudflared.err.log</string>
+</dict>
+</plist>

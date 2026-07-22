@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/status-private%20beta-0B1F3A)](#当前状态)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-005EB8)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/product%20tests-198%20passing-16794A)](#验收)
+[![Tests](https://img.shields.io/badge/product%20tests-213%20passing-16794A)](#验收)
 [![Data](https://img.shields.io/badge/data-point--in--time%20snapshots-6B7280)](#数据与证据边界)
 
 输入经过验证的市场与公司证据，输出可审计的投委会结论、建议观察仓位和可发布的深度研报。
@@ -186,15 +186,28 @@ python3 product/publication_pack.py 300750.SZ
 
 ## 私域会员内测
 
+当前 M6 私有预览使用独立、稳定的 HTTPS 地址和仓库外运行目录。受邀用户登录后直接看到 M5 canonical 组合；`preview` 只能看组合首页，`member` 可看深研，`owner` 可管理成员和反馈。页面明确标记不收款、不接券商、不代表真实持仓。部署、回滚与权限合同见 [Private Preview v1](docs/product/private-preview-v1.md)。
+
+可重复验收：
+
+```bash
+python3 scripts/prepare_private_preview.py prepare
+python3 scripts/verify_private_preview.py --rehearse-ops --rollback-release <verified-prior-release-id>
+python3 scripts/verify_private_preview.py
+python3 scripts/adversarial_verify_private_preview.py
+```
+
+当前是单机、邀请制 `Private Preview Ready`；不是多实例生产服务，也不是已接支付的 `Paid Pilot Ready`。
+
 本地默认不开身份门。准备给少数朋友使用时：
 
 ```bash
 python3 product/member_admin.py create-owner --email <owner-email> --name Park
-python3 product/member_admin.py create-invite --owner-email <owner-email> --tier paid --max-uses 1 --valid-days 7
+python3 product/member_admin.py create-invite --owner-email <owner-email> --tier member --max-uses 1 --valid-days 7
 PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0.0.1 --port 8877
 ```
 
-上述命令只用于本机 HTTP 内测。公网必须由 HTTPS 反向代理承接，并改为 `PARK_COOKIE_SECURE=1`。密码、邀请码、session 和用户数据库都属于本地运行态，不进入 Git。
+上述命令只用于本机 HTTP 内测。公网必须由 HTTPS 反向代理承接，并改为 `PARK_COOKIE_SECURE=1`。M6 的 `paid` 仅是保留 tier，不开放付款或下载；M7 才定义付费权益。密码、邀请码、session 和用户数据库都属于本地运行态，不进入 Git。
 
 ## API
 
@@ -231,8 +244,10 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 | 变量 | 默认 | 作用 |
 |---|---|---|
 | `PARK_DASHBOARD_DB` | `product/runtime/investment_dashboard_v2.db` | 本地 SQLite 路径 |
+| `PARK_AUTH_DB` | 与 `PARK_DASHBOARD_DB` 相同 | 私有预览必须设置为仓库外独立会员库 |
 | `PARK_AUTH_REQUIRED` | `0` | 是否开启身份门 |
 | `PARK_COOKIE_SECURE` | `0` | HTTPS 环境使用安全 Cookie |
+| `PARK_PRIVATE_PREVIEW` | `0` | 开启严格私有预览模式；同时要求安全 Cookie 和 loopback origin |
 | `DEEPSEEK_API_KEY_FILE` | `~/.park-secrets/deepseek/api-key` | 仓库外 DeepSeek key 文件 |
 | `DEEPSEEK_MODEL` | `deepseek-v4-pro` | 写作模型 |
 | `NODE_BINARY` | PATH 中的 `node` | 发布渲染 Node.js 18+ |

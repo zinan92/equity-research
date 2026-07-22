@@ -1,0 +1,36 @@
+{
+  "schema_version": "private-preview-independent-final-review-v1",
+  "status": "approved",
+  "reviewed_at": "2026-07-21T16:14:00Z",
+  "release_id": "preview_581a1d3ffab5dd25",
+  "safe_rollback_release_id": "preview_355f39a78d2c1eb1",
+  "reviews": [
+    {
+      "reviewer": "m6_product_contract_audit",
+      "scope": "Issue #22 product contract, entitlements, mobile usability and evidence",
+      "decision": "APPROVE",
+      "completion_percent": 100,
+      "P0": 0,
+      "P1": 0,
+      "P2": 0,
+      "success_criteria_passed": 7,
+      "success_criteria_total": 7
+    },
+    {
+      "reviewer": "m6_security_release_audit",
+      "scope": "authentication, route surface, release integrity, rollback and tunnel isolation",
+      "decision": "APPROVE",
+      "completion_percent": 100,
+      "P0": 0,
+      "P1": 0,
+      "P2": 0
+    }
+  ],
+  "aggregate": {
+    "decision": "APPROVE",
+    "P0": 0,
+    "P1": 0,
+    "P2": 0,
+    "ready_for_review": true
+  }
+}

@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#15352f">
-  <title>Park 投委会 · 本周决策</title>
+  <meta name="theme-color" content="#0b1f33">
+  <title>Park Equity Research · Private Preview</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <section id="auth-gate" class="auth-gate" hidden aria-labelledby="auth-title">
     <div class="auth-panel">
       <div class="auth-brand"><span class="brand-mark">P</span><div><strong>Park 投委会</strong><small>PRIVATE RESEARCH ACCESS</small></div></div>
-      <p class="eyebrow">MEMBER ACCESS / 私域内测</p>
+      <p class="eyebrow">PRIVATE PREVIEW / INVITE ONLY</p>
       <h1 id="auth-title">登录你的研究席位</h1>
-      <p class="auth-intro">面板、公司级深研和发布包按会员等级开放。所有建议仓位仍需经过 Park 的决策门。</p>
+      <p class="auth-intro">受邀成员可以查看本周模型组合；研究会员可继续阅读公司深研。预览版不收款、不连接券商，也不代表你的真实持仓。</p>
       <div class="auth-tabs" role="tablist"><button id="auth-login-tab" class="is-active" type="button">登录</button><button id="auth-signup-tab" type="button">邀请码注册</button></div>
       <form id="login-form" class="auth-form">
         <label>邮箱<input name="email" type="email" autocomplete="email" required></label>
@@ -66,6 +66,83 @@
 
       <div id="app" hidden>
         <section id="view-decision" class="view is-active" aria-labelledby="decision-title">
+          <section id="private-preview-dashboard" class="private-preview-dashboard" hidden>
+            <div class="preview-banner">
+              <span>PRIVATE PREVIEW</span>
+              <p>仅供受邀成员验证产品。模型仓位不是账户持仓，不接受真实付款，不连接券商。</p>
+            </div>
+            <header class="canonical-hero">
+              <div>
+                <p class="eyebrow">PARK EQUITY RESEARCH / A-SHARE MANDATE</p>
+                <h1 id="canonical-title">本周模型组合</h1>
+                <p id="canonical-summary"></p>
+              </div>
+              <aside class="canonical-status">
+                <span id="canonical-role">CURRENT</span>
+                <strong id="canonical-as-of">—</strong>
+                <small id="canonical-identity">—</small>
+              </aside>
+            </header>
+            <div class="canonical-metrics" id="canonical-metrics"></div>
+            <section class="canonical-allocation" aria-labelledby="canonical-allocation-title">
+              <div class="section-heading">
+                <div><p class="eyebrow">MODEL ALLOCATION</p><h2 id="canonical-allocation-title">买什么、建议多少、为什么变化</h2></div>
+                <div id="canonical-total" class="canonical-total"></div>
+              </div>
+              <div id="canonical-strip" class="canonical-strip" aria-label="模型组合权重"></div>
+              <div id="canonical-positions" class="canonical-positions"></div>
+            </section>
+            <div class="canonical-lower-grid">
+              <section class="canonical-risk-panel">
+                <div class="section-heading"><div><p class="eyebrow">RISK DESK</p><h2>先看风险，再看收益</h2></div></div>
+                <ol id="canonical-risks"></ol>
+              </section>
+              <section class="canonical-receipt-panel">
+                <div class="section-heading"><div><p class="eyebrow">VERIFIABLE RECEIPT</p><h2>这份组合来自哪里</h2></div></div>
+                <dl id="canonical-receipt"></dl>
+              </section>
+            </div>
+            <section class="feedback-panel" aria-labelledby="feedback-title">
+              <div>
+                <p class="eyebrow">MEMBER FEEDBACK</p>
+                <h2 id="feedback-title">告诉我哪一处最需要改</h2>
+                <p>反馈会绑定当前组合身份和你的会员席位，不收集资产、持仓或风险问卷。</p>
+              </div>
+              <form id="feedback-form">
+                <label>问题类型
+                  <select name="category" required>
+                    <option value="clarity">结论是否清楚</option>
+                    <option value="actionability">是否足够可执行</option>
+                    <option value="risk">风险是否完整</option>
+                    <option value="data">数据是否可信</option>
+                    <option value="bug">页面或功能问题</option>
+                    <option value="other">其他</option>
+                  </select>
+                </label>
+                <label>整体评分
+                  <select name="rating" required><option value="5">5 · 很有价值</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1 · 需要重做</option></select>
+                </label>
+                <label class="feedback-message">具体反馈<textarea name="message" minlength="10" maxlength="2000" required placeholder="至少 10 个字；请指出哪一处让你犹豫或不信任。"></textarea></label>
+                <button class="primary-button" type="submit">提交反馈</button>
+                <p id="feedback-status" role="status"></p>
+              </form>
+            </section>
+            <section id="owner-preview-panel" class="owner-preview-panel" hidden>
+              <div class="section-heading"><div><p class="eyebrow">OWNER CONTROL</p><h2>成员与反馈</h2></div><a href="/api/feedback/export" class="owner-export">导出反馈 JSON</a></div>
+              <div class="owner-grid">
+                <form id="invite-form" class="owner-form">
+                  <h3>创建一次性邀请</h3>
+                  <label>席位<select name="tier"><option value="preview">Preview</option><option value="member">Member</option></select></label>
+                  <label>有效天数<input type="number" name="valid_days" min="1" max="90" value="7"></label>
+                  <button type="submit">生成邀请码</button>
+                  <output id="invite-output"></output>
+                </form>
+                <div><h3>成员</h3><div id="owner-members" class="owner-list"></div></div>
+                <div><h3>最新反馈</h3><div id="owner-feedback" class="owner-list"></div></div>
+              </div>
+            </section>
+          </section>
+          <div id="legacy-decision-dashboard">
           <div class="decision-head">
             <div>
               <div class="status-line">
@@ -160,6 +237,7 @@
             <div><p class="eyebrow">SOURCE HEALTH</p><h2 id="source-health-title">数据源运行状态</h2></div>
             <div id="source-health-list" class="source-health-list"></div>
           </section>
+          </div>
         </section>
 
         <section id="view-performance" class="view" aria-labelledby="performance-title">
