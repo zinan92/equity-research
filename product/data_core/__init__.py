@@ -14,6 +14,14 @@ from .contracts import (
     validate_adapter_output,
 )
 from .authority_sink import AuthoritySinkError, ObjectStore, SupabaseAuthoritySink
+from .disclosed_scoring import (
+    COMPOSITE_WEIGHTS,
+    OPPORTUNITY_WEIGHTS,
+    QUANTIFIABLE_WEIGHT,
+    composite_score,
+    opportunity_score,
+    peg_grade,
+)
 from .ashare import (
     AShareDataGap,
     AShareDataPacket,
