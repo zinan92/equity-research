@@ -903,3 +903,19 @@
 - 一次性访问码不是短信或邮箱 OTP：它是 Park 线下转交的单次 bearer secret；转发前必须按密码对待。
 - D3 在站内 vendored，避免第三方 CDN 泄露访问元数据或在网络受限时使图表失效。
 - 浏览器图表必须有键盘列表和来源详情；只有气泡 tooltip 会把复杂研究信息锁在鼠标交互里。
+
+## 2026-07-23 · N1-1 爱牛字段归因总表
+
+- Objective：把归档中的 49 个主表字段与 34 个分级字段写成可机器验证、可供后续采集与公式复现使用的生产归因地图。
+- Decision：字段性质严格分为原始事实、派生、研究判断、AI 推断。候选来源只表示待复现假设；只有归档逐路径明确保存的 `src` 才能标为直接溯源。
+- Decision：产业链、角色、三高、S/A/B、上下游、layer/segment 与解释文本一律归为研究判断或 AI 推断，不进入产品事实输出，也不伪装为找到单一接口。
+- Decision：`stfin` 与 `ern` 不重新猜来源；直接引用 provenance 里的 1,161 条明确标签（东财 F10 主营构成 578、东财预约披露 583），并保留“来源标签计数不等于全部字段可用行数”的边界。
+- Verification：`build_field_attribution.py` 从只读归档生成 JSON/Markdown；`verify_field_attribution.py` 对 classification manifest 验证 83/83 覆盖及两类直接来源标签计数。
+- Boundary：不请求 ainiusq.com、不访问任何外部数据源、不写采集器、不修改 `product/static/**`，也不将爱牛档案正文或评分结果导入产品。
+
+### Gotchas · N1-1
+
+- 578/583 是 provenance 中精确来源标签的全归档计数，不是主表中 `stfin`/`ern` 字段存在行数；混用补池与主表会造成错误的来源覆盖率。
+- `classification-manifest.json` 只说明字段被归入慢知识、周期研究或快快照，不能单独证明该字段的外部来源。
+- 市场行情、财务和卖方字段当前仅是中置信度候选来源，必须由后续 issue 以原始响应、as-of 和 hash 再验证。
+- 归档是本地只读输入且不进本 PR；验证命令必须显式传入 archive root，避免产品仓在没有归档时伪造通过。
