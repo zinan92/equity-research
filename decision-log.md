@@ -933,3 +933,20 @@
 - `classification-manifest.json` 只说明字段被归入慢知识、周期研究或快快照，不能单独证明该字段的外部来源。
 - 市场行情、财务和卖方字段当前仅是中置信度候选来源，必须由后续 issue 以原始响应、as-of 和 hash 再验证。
 - 归档是本地只读输入且不进本 PR；验证命令必须显式传入 archive root，避免产品仓在没有归档时伪造通过。
+
+## 2026-07-23 · N5 产业图鉴前端第一切片（Epic #120）
+
+- Objective：用爱牛归档数据做开发 fixture，先把「先看产业、再看公司」的产品视图立起来，验证 N5 的信息架构与交互范式。
+- Decision：技术形态沿用 product/static 的无构建 vanilla ES modules；hash 路由提供六条可寻址深链接（总览/产业链/气泡/个股表/分级/公司工作台）。
+- Decision：fixture 由 `product/static/atlas/build_fixtures.py` 从 `research/ainiusq-niu/2026-07-22/data/exported/` 生成并 gitignore；按视图切小文件、公司详情按需加载（首屏 240KB），显式反对爱牛 10MB 单文件模式。`js/data.js` 是未来切换 N2 canonical API 的唯一接缝。
+- Decision：个股表与分级表使用固定行高虚拟滚动；分级表表头做成真实排序，修复爱牛「表头可点无事件」缺陷。
+- Decision：所有行情/估值区块显示 as_of 与 FIXTURE 标识；档案正文标注「爱牛归档研究正文，仅作开发样例」，产品版必须由自有管线（N1-5）替换。
+- Verification：六路由深链接可用；虚拟滚动在 scrollTop=10000 时仅渲染 26 个 DOM 节点；搜索、双向排序、气泡→催化剂联动实测通过；375px 设备指标下六路由 `scrollWidth<=innerWidth`；console 零错误。
+- Evidence：`evidence/n5-atlas-home-desktop-2026-07-23.png`、`evidence/n5-atlas-table-desktop-2026-07-23.png`、`evidence/n5-atlas-company-desktop-2026-07-23.png`、`evidence/n5-atlas-home-mobile-2026-07-23.png`。
+
+## Gotchas · N5 前端新增
+
+- 虚拟列表的可见窗口不能在挂载前计算：容器 `clientHeight` 为 0 时只会渲染 overscan 行。修复方式是路由在 `append` 之后同步调用视图挂载钩子，另挂 ResizeObserver 兜底；不要依赖 rAF——隐藏标签页里 rAF 与 ResizeObserver 回调都不会执行，headless/后台验收会得到假象。
+- 爱牛档案 Markdown 以 `##` 为主章节层级，渲染器按「# 与 ## 都归 h2」映射，否则主章节吃不到节标题样式。
+- 档案正文渲染必须先整体 HTML 转义再套白名单标签（本实现 `esc()` 先行、链接仅放行 `https?:`），杜绝归档文本注入。
+- 三高气泡图节点半径映射后要预留顶部 padding，最大气泡（r=26 → 39px）会溢出默认画布。

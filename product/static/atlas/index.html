@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>产业图鉴 · Atlas</title>
+<link rel="stylesheet" href="atlas.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>◉</text></svg>">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#/">产业<span>图鉴</span></a>
+  <nav class="nav" id="nav">
+    <a href="#/chains" data-route="chains">产业链</a>
+    <a href="#/bubble" data-route="bubble">三高气泡</a>
+    <a href="#/table" data-route="table">个股表</a>
+    <a href="#/grades" data-route="grades">S/A/B</a>
+  </nav>
+  <div class="searchbox">
+    <input id="q" type="search" placeholder="代码 / 名称 / 细分…" autocomplete="off">
+    <div id="qResults" class="q-results" hidden></div>
+  </div>
+  <div class="datachip" id="datachip" title="开发 fixture：爱牛归档快照，非实时数据">FIXTURE</div>
+</header>
+
+<main id="app" tabindex="-1"><div class="loading">载入数据…</div></main>
+
+<nav class="bottomnav" id="bottomnav">
+  <a href="#/" data-route="home">总览</a>
+  <a href="#/chains" data-route="chains">产业链</a>
+  <a href="#/bubble" data-route="bubble">气泡</a>
+  <a href="#/table" data-route="table">个股</a>
+  <a href="#/grades" data-route="grades">分级</a>
+</nav>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
