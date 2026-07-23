@@ -1,0 +1,33 @@
+{
+  "result": {
+    "pages": 1,
+    "data": [
+      {
+        "SECURITY_CODE": "300750",
+        "SECURITY_NAME_ABBR": "宁德时代",
+        "REPORT_DATE": "2026-06-30 00:00:00",
+        "FIRST_APPOINT_DATE": "2026-08-30 00:00:00",
+        "FIRST_CHANGE_DATE": null,
+        "SECOND_CHANGE_DATE": null,
+        "THIRD_CHANGE_DATE": null,
+        "ACTUAL_PUBLISH_DATE": null,
+        "APPOINT_PUBLISH_DATE": "2026-08-30 00:00:00",
+        "SECURITY_TYPE_CODE": "058001001",
+        "TRADE_MARKET_CODE": "069001002002"
+      },
+      {
+        "SECURITY_CODE": "600519",
+        "SECURITY_NAME_ABBR": "贵州茅台",
+        "REPORT_DATE": "2026-06-30 00:00:00",
+        "FIRST_APPOINT_DATE": "2026-08-20 00:00:00",
+        "FIRST_CHANGE_DATE": "2026-08-18 00:00:00",
+        "SECOND_CHANGE_DATE": null,
+        "THIRD_CHANGE_DATE": null,
+        "ACTUAL_PUBLISH_DATE": "2026-08-18 00:00:00",
+        "APPOINT_PUBLISH_DATE": "2026-08-18 00:00:00",
+        "SECURITY_TYPE_CODE": "058001008",
+        "TRADE_MARKET_CODE": "069001001001"
+      }
+    ]
+  }
+}
