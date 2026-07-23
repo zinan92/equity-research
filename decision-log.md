@@ -934,6 +934,19 @@
 - 市场行情、财务和卖方字段当前仅是中置信度候选来源，必须由后续 issue 以原始响应、as-of 和 hash 再验证。
 - 归档是本地只读输入且不进本 PR；验证命令必须显式传入 archive root，避免产品仓在没有归档时伪造通过。
 
+## 2026-07-23 · N1-5 档案生产模板与首样例
+
+- Objective：先定义一套可复跑的公司档案合同，并用一份自有、海外公司的证据样例验证它；此阶段不复制第三方档案，也不假称已完成五家盲评。
+- Decision：模板强制分开事实、研究判断、待核验问题；每个数字事实必须映射到来源 ID，且业务、财务、护城河、反题材、生产成本和复跑策略为固定章节。
+- Decision：首样例选择 NVIDIA，只使用公司 SEC 10-K、IR 业绩公告和 Newsroom Bio；把平台/护城河的结论写作可证伪的中等置信度研究判断。
+- Verification：`verify_dossier.py` 校验模板与样例的章节、schema、事实 ID、引用和来源 URL；样例记录来源数、耗时和人工介入，未获得 runner token 计数时显式留为后续自动化要求。
+- Boundary：五家公司放量与 Park+外部读者盲评属于本 issue 的下一道人工验收门，未执行前不得声称档案生产能力已验证。
+
+### Gotchas · N1-5
+
+- 固定模板能确保结构一致，不等于事实完整；缺少 proxy、10-Q 或客户/供应链证据时必须留下待补问题。
+- 生产成本不能编造 token 数。当前 runner 未给出可核验用量时，样例只能记录时间与人工介入，并把 token telemetry 作为下一步的硬缺口。
+
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 
 ## 2026-07-22 · Repo 拼装式数据与研报架构（定义完成）
