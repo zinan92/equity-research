@@ -17,12 +17,13 @@
 - C3 now compiles page-cited broker viewpoints into per-report rows, robust consensus/outlier separation, immutable rating/target/forecast revisions, visible bull/bear topic evidence and evidence-strength-bounded summary language.
 - The private research site now includes a code-first Industry Intelligence library: 38 archived segment three-high nodes, 94 materials-company nodes and 489 on-demand company dossiers. Single-use access codes collect no visitor identity; the source snapshot is explicitly separated from live/canonical research.
 - N1-1 now adds a machine-readable and human-readable 83-field attribution register for the archived benchmark. It separates direct provenance labels (Eastmoney F10 578 and earnings-calendar 583) from candidate sources and classifies industry labels, grades and narratives as research judgment/AI inference rather than product facts.
+- N1-2 now adds polite, provenance-preserving Eastmoney F10 business-composition and paginated appointment-calendar adapters. Every calendar page retains its own source URL and raw hash; a broken page yields a failed run and no partial complete-calendar result. Fixtures are isolated from optional live probes, and the 30-company runtime-only audit reached 93.46% segment-name coverage with a complete 11-page calendar and no missing validation tickers.
 - GitHub audit lineage for missing references #79–#89 is truthfully reconstructed as Issues #90–#100 and bound to immutable main commits by `docs/governance/audit-lineage-v1.json`; future main changes require real Pull Request objects.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
 
 ## 下一步
 
-- Start N1-2 / Issue #112 from latest `main`: implement polite, provenance-preserving adapters for Eastmoney F10 segment composition and earnings-calendar data using the N1-1 attribution contract.
-- Keep source evidence, fixture tests and live contract probes separate; a live-source failure must record a failed run and preserve the last accepted record.
+- Start N1-3 / Issue #113 from latest `main`: add A/HK/US/JP price and valuation snapshots with source fallback and historical 2026-06-30–07-02 reconstruction comparison.
+- Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
