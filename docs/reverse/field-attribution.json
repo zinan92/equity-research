@@ -131,7 +131,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -457,7 +457,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -484,7 +484,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -714,7 +714,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -1212,7 +1212,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -1398,7 +1398,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -1425,7 +1425,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -1542,7 +1542,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -1639,7 +1639,7 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#113 负责跨市场来源复现。",
       "source_status": "候选来源，待后续复现验证",
       "evidence": {
         "kind": "archive-classification",

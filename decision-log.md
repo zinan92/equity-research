@@ -943,6 +943,20 @@
 - 市场行情、财务和卖方字段当前仅是中置信度候选来源，必须由后续 issue 以原始响应、as-of 和 hash 再验证。
 - 归档是本地只读输入且不进本 PR；验证命令必须显式传入 archive root，避免产品仓在没有归档时伪造通过。
 
+## 2026-07-23 · N1-3 跨市场行情与估值快照
+
+- Objective：为 A/HK/US/JP 建立统一的价格、涨跌、市值、PE、PB、PEG 来源策略；把历史价格复查与当前估值快照分开，避免日 K 线被误用为历史估值。
+- Decision：Yahoo Chart 只用于 HK/US/JP 的日线价格历史；Yahoo Snapshot（经 `yfinance` 完成 provider 握手）只用于当前时点的价格、市值、PE、PB、PEG 与涨跌。后者的原始物是客户端规范化载荷，manifest 明确标成 `client_normalized_capture`，不伪装成抓到 Yahoo 原始 wire response。
+- Decision：非美元 `mcap_usd` 没有同日冻结 FX 时必须留空；所有 snapshot record 标注 `historical_reconstruction_eligible=false`。
+- Verification：30 个跨市场样本在 2026-06-30 至 2026-07-02 的价格窗口中，Yahoo 日线可取回 30/30；22/30 在 ±0.5% 内匹配，8 个 residual 原样写入运行时 diff。全部同日估值字段都因没有历史估值/FX 源而显式标记 gap，没有用 K 线倒推。
+- Boundary：验证差异报告仅生成到本地 `/tmp`，不提交爱牛记录、数值、评分或档案文字；不请求 ainiusq.com，不改 `product/static/**`。
+
+### Gotchas · N1-3
+
+- 归档的“快照”并非所有市场同一收盘时点：美股样本大量精确命中 6/30，港股样本在 6/30–7/2 窗口外更接近 6/22。不能把站点构建日期当作每个字段的 as-of。
+- Yahoo 的香港代码使用四位 display symbol（`0700.HK`），canonical identifier 保留五位证券代码（`00700.HK`）；美股类别股在 Yahoo 用连字符（`MOG-A`），不能直接复用带点 code。
+- 日本与部分港股在严格窗口仍有 1.6%–6.7% residual；在找到同口径历史来源前，这些是未解决的 source/date discrepancy，不应通过放宽默认容差消失。
+
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 
 ## 2026-07-22 · Repo 拼装式数据与研报架构（定义完成）

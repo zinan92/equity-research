@@ -52,8 +52,10 @@ from .eastmoney_periodic import (
 from .market_snapshot import (
     MARKET_FIELD_SOURCES,
     YAHOO_CHART_SOURCE,
+    YAHOO_SNAPSHOT_SOURCE,
     GlobalInstrument,
     YahooChartAdapter,
+    YahooSnapshotAdapter,
     compare_snapshot,
     normalize_global_ticker,
 )
