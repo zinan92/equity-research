@@ -16,12 +16,13 @@
 - C2 now reconciles historical statements and produces hashed Bear/Base/Bull DCF, reverse DCF, peer/history cross-checks and stable sensitivities while blocking currency, unit, balance and share-count anomalies.
 - C3 now compiles page-cited broker viewpoints into per-report rows, robust consensus/outlier separation, immutable rating/target/forecast revisions, visible bull/bear topic evidence and evidence-strength-bounded summary language.
 - The private research site now includes a code-first Industry Intelligence library: 38 archived segment three-high nodes, 94 materials-company nodes and 489 on-demand company dossiers. Single-use access codes collect no visitor identity; the source snapshot is explicitly separated from live/canonical research.
+- N1-1 now adds a machine-readable and human-readable 83-field attribution register for the archived benchmark. It separates direct provenance labels (Eastmoney F10 578 and earnings-calendar 583) from candidate sources and classifies industry labels, grades and narratives as research judgment/AI inference rather than product facts.
 - GitHub audit lineage for missing references #79–#89 is truthfully reconstructed as Issues #90–#100 and bound to immutable main commits by `docs/governance/audit-lineage-v1.json`; future main changes require real Pull Request objects.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
 
 ## 下一步
 
-- Start L2-C4 from latest `main`: add battery, consumer and bank industry profiles without forking the 18-section report structure.
-- Define profile-selected KPI fields and candidate truth fixtures while keeping missing industry fields isolated from universal sections.
-- Before promoting archived three-high labels into canonical research, build and manually review a segment-taxonomy crosswalk and pass the normal evidence gate; do not auto-map the 38 source segments to 489 dossiers.
+- Start N1-2 / Issue #112 from latest `main`: implement polite, provenance-preserving adapters for Eastmoney F10 segment composition and earnings-calendar data using the N1-1 attribution contract.
+- Keep source evidence, fixture tests and live contract probes separate; a live-source failure must record a failed run and preserve the last accepted record.
+- Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
