@@ -934,6 +934,48 @@
 - 市场行情、财务和卖方字段当前仅是中置信度候选来源，必须由后续 issue 以原始响应、as-of 和 hash 再验证。
 - 归档是本地只读输入且不进本 PR；验证命令必须显式传入 archive root，避免产品仓在没有归档时伪造通过。
 
+> 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
+
+## 2026-07-22 · Repo 拼装式数据与研报架构（定义完成）
+
+- User outcome：Park 可以明确看到每个候选 repo 在目标架构中的 branch、采用程度、排除内容和需要补写的 glue code，不再把“有数据源”“有 SQLite”或“有研报 Skill”误解为已有完整数据基座。
+- Decision：以 `datafeed` 的 Port/Adapter、SourceManifest、quality、provenance 和 fallback 为唯一采集契约内核；扩展其 record domains，但不沿用 OHLCV-only schema 或 SQLite authority。
+- Decision：`a-stock-data` 作为端点目录和解析逻辑来源，`Vibe-Trading` 作为多源 loader/fallback/PIT 工具箱；两者都必须通过 provider bridge 接入 datafeed，不得直接写 canonical 表。
+- Decision：`quant-data-pipeline` 只抽取 scheduler、backfill、gap detection、trade calendar 等运维机制；`intel` 改造为可降级 intelligence branch；两个旧 SQLite schema 都不进入生产 authority。
+- Decision：`equity-research-skill` 作为报告主骨架并扩展 typed section/evidence contract；Day1Global 只吸收深度模块 checklist，缺失 references 必须在本项目重写，不制造隐式依赖。
+- Decision：Supabase PostgreSQL + Storage 是唯一权威数据平面；研究生成只读不可变 snapshot。UZI/66 评委属于 synthesis 层，不能作为 evidence 或补写缺失事实。
+- Decision：Snapshot/Evidence Builder 产出 Research Context Pack；确定性分析与可选 UZI synthesis 均消费该 Pack，Research Compiler 再将这些 typed inputs 编译成 Report Model。UZI 不是 Compiler 后置步骤，也不是发布必经依赖。
+- Decision：新增数据域唯一归属矩阵；公司行动/复权因子是当前候选 repo 的明确空白，需新建官方来源 adapter，其余域优先复用现有模块。
+- Decision：新增 `repo-components.lock.yaml`，锁定审计 commit、license、具体采用文件、目标 wrapper 与 upgrade gate，避免“采用 repo”长期退化为不可追踪复制。
+- Artifact：`docs/architecture/repo-composition-architecture.md`、`docs/architecture/repo-components.lock.yaml`；Canvasight 新页 `Repo 拼装式投研架构`。
+- Verification：逐 repo 代码审计和宁德时代东财研报目录/PDF live probe 已完成；对抗终审 P0=0，提出的四项 P1 已修正；本轮只定义架构，未实现 adapters、Supabase schema 或运行时集成。
+
+### Gotchas · Repo 拼装架构
+
+- “Adopt framework” 不等于复制整个 repo。只有 datafeed core 值得保留核心接口；其余资产按 adapter、算法、collector、template 或 checklist 粒度吸收。
+- 外部接口暂时可访问不等于数据库。必须先保存 raw bytes、hash、known_at 和 provider version，再进入 canonical normalizer。
+- 多 source fallback 不能静默改变事实口径；source priority、降级原因和 conflict 必须进入 snapshot manifest。
+- Day1Global 缺失 reference 文件，不能让生成器在运行时假设它们存在；需要把采用的规则重写成本项目受测契约。
+
+## 2026-07-22 · 两层 Product Roadmap（待 Park 审核）
+
+- User outcome：Park 可以先在 Level 1 审核产品方向，再在 Level 2 审核可独立验收的执行结果；Level 3 issues 只在对应执行 milestone 获批后生成，避免一次创建大量无人施工的 backlog。
+- Current state：GitHub Gate 0 与 M1–M7 已关闭，证明 skeleton、报告发布、会员和人工履约路径可运行；后续不重复建设这些外壳，而是补齐 canonical data、evidence corpus、standard research、any-ticker、product experience、reliability 和 quality flywheel。
+- Plan：7 个 Level 1、37 个 Level 2；完整草案在 `docs/plans/2026-07-22-two-level-product-roadmap.md`。
+- Decision：critical path 为 `Data Authority → Evidence Corpus → Research Engine → Any-Ticker → Product/Beta`；Reliability 从数据层开始横贯，Quality Flywheel 在真实历史和反馈产生后启动。
+- Decision：审核前不创建 GitHub milestones/issues、不进入实现；批准后先创建并执行 A/B/C，D–G 保持 roadmap，避免过早堆积 backlog。
+- Correction：初稿缺少建议动作/仓位的正式生产者，且把 Optional UZI 错误放入 C6 前置依赖。现由 C5 `Decision, Target Price & Position Policy` 负责确定性动作与仓位；UZI 降为 C6 的可选 Level 3 input。
+- Correction：C1 章节合同只依赖 A1 与已批准架构，可提前设计；B6 是真实数据验收门，不再阻塞合同设计。C4 只交付 industry profiles/candidate fixtures，D2 独立审计并固化 golden truth set，避免重复施工。
+- Decision：为文档解析、100 股 acceptance、source SLO、灾备和接口性能给出第一版可审核默认阈值；这些数字属于 Park 审核项，批准前不是生产承诺。
+- Decision：B3 区分 corpus parser 质量与 publication gate。语料抽样页码映射默认 ≥95%、扫描页可检索覆盖 ≥90%；但进入正式 Report Model 的实际 citation 必须 100% 通过 document/page/raw-hash 校验，否则 claim 阻断发布。
+
+### Gotchas · 两层 Roadmap
+
+- 已关闭的 M2“数据基座”是本地可重放 baseline，不等于 Supabase production authority 或全 A 股完整数据。
+- 30–50 页是分析深度的结果，不是固定填充页数；缺证据时宁可 partial/missing，也不能凑字数。
+- “支持任意 ticker”必须经过跨行业和 100 股 acceptance，不能用三个样板直接外推到全市场。
+- Reliability 不是最后一次性补测试；source health、replay、backup、RLS 和 rollback 必须跟随对应 Level 2 同步建设。
+
 ## 2026-07-23 · N5 产业图鉴前端第一切片（Epic #120）
 
 - Objective：用爱牛归档数据做开发 fixture，先把「先看产业、再看公司」的产品视图立起来，验证 N5 的信息架构与交互范式。
