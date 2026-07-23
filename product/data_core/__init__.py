@@ -49,6 +49,14 @@ from .eastmoney_periodic import (
     collect_eastmoney_earnings_calendar,
     collect_eastmoney_earnings_calendar_async,
 )
+from .market_snapshot import (
+    MARKET_FIELD_SOURCES,
+    YAHOO_CHART_SOURCE,
+    GlobalInstrument,
+    YahooChartAdapter,
+    compare_snapshot,
+    normalize_global_ticker,
+)
 from .ingestion import (
     AdapterContractError,
     AdapterRegistry,

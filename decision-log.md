@@ -1,5 +1,14 @@
 # Decision Log
 
+## 2026-07-23 · N1-3 cross-market price history boundary
+
+- Decision: reuse the existing A-share Tencent/Eastmoney/Sina chain; add Yahoo Chart only for HK/US/JP historical close validation. The adapter preserves raw source URLs and hashes through the canonical ingestion boundary.
+- Decision: historical daily bars may validate price only. They cannot reconstruct historical market capitalization, PE, PB, or PEG, so these fields remain separate snapshot facts or explicit missing values; no implied valuation is fabricated from close prices.
+
+## Gotchas · N1-3
+
+- Yahoo's unauthenticated quote endpoint returned HTTP 401 in this environment while its Chart endpoint succeeded. Treat the two endpoints as separate contracts; do not claim valuation coverage from chart availability.
+
 ## 2026-07-23 · N1-2 Eastmoney periodic adapters
 
 - Decision: the first directly attributable recurring facts are implemented as two thin adapters on the existing `RawCapture → RecordEnvelope → IngestionRuntime` contract: F10 business composition and appointment disclosure calendar. They are `supplementary_only` vendor evidence, not a claim that Eastmoney is a statutory filing authority.
