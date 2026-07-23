@@ -1,0 +1,32 @@
+{
+  "zygcfx": [
+    {
+      "SECUCODE": "300750.SZ",
+      "SECURITY_CODE": "300750",
+      "REPORT_DATE": "2025-12-31 00:00:00",
+      "MAINOP_TYPE": "2",
+      "ITEM_NAME": "动力电池系统",
+      "MAIN_BUSINESS_INCOME": 300000000000,
+      "MBI_RATIO": 75.0,
+      "MAIN_BUSINESS_COST": 240000000000,
+      "MBC_RATIO": 74.0,
+      "MAIN_BUSINESS_RPOFIT": 60000000000,
+      "MBR_RATIO": 79.0,
+      "GROSS_RPOFIT_RATIO": 20.0
+    },
+    {
+      "SECUCODE": "300750.SZ",
+      "SECURITY_CODE": "300750",
+      "REPORT_DATE": "2025-12-31 00:00:00",
+      "MAINOP_TYPE": "3",
+      "ITEM_NAME": "境外",
+      "MAIN_BUSINESS_INCOME": 80000000000,
+      "MBI_RATIO": 20.0,
+      "MAIN_BUSINESS_COST": 64000000000,
+      "MBC_RATIO": 20.0,
+      "MAIN_BUSINESS_RPOFIT": 16000000000,
+      "MBR_RATIO": 21.0,
+      "GROSS_RPOFIT_RATIO": 20.0
+    }
+  ]
+}

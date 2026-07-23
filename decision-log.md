@@ -1,5 +1,19 @@
 # Decision Log
 
+## 2026-07-23 · N1-2 Eastmoney periodic adapters
+
+- Decision: the first directly attributable recurring facts are implemented as two thin adapters on the existing `RawCapture → RecordEnvelope → IngestionRuntime` contract: F10 business composition and appointment disclosure calendar. They are `supplementary_only` vendor evidence, not a claim that Eastmoney is a statutory filing authority.
+- Decision: F10 does not expose a filing publication timestamp in its business-composition response. The normalized `announced_at` is therefore explicitly tagged `availability_time_kind=provider_observation`; product code must not relabel it as an issuer notice date.
+- Decision: the calendar endpoint caps responses at 500 rows. The collection helper serially requests every reported page; each page has a separate URL and raw hash. It returns no partial records as a complete calendar if any page fails.
+- Decision: fixtures cover parser and failure semantics, while `scripts/probe_eastmoney_periodic.py` is an optional live contract probe outside CI. `scripts/validate_eastmoney_periodic.py` accepts a runtime-only expectation file so N1-6 can audit 30 companies without committing benchmark originals.
+- Validation: a local 30-company A-share audit against the read-only archive passed on 2026-07-23: business-segment name coverage 93.46% (threshold 90%), complete 11-page appointment calendar, and 0 missing validation tickers. Only derived pass/fail metrics and this collector's own raw hashes were retained outside the archive.
+
+## Gotchas · N1-2
+
+- Eastmoney's `pageSize=10000` parameter is silently capped at 500; treating page one as a full universe produces a plausible but incomplete calendar. Always inspect `result.pages`.
+- The calendar filter requires literal double quotes around the security-type codes. Escaped quote characters yield a successful HTTP response with no usable `result`, so contract probes must check parsed payload shape rather than HTTP status alone.
+- A changed F10 report period may legitimately alter segment structure. Validation allows report-period changes but must retain the raw page hash and report period; it must not fill missing segments from an archived benchmark.
+
 ## 2026-07-17 · 启动 60 分内测版
 
 - Objective：先交付能运行、能看懂、能追溯的 A 股长期投委会面板，不等待完整商业基础设施。

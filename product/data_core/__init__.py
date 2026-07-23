@@ -36,6 +36,19 @@ from .ashare import (
     collect_ashare_packet_async,
     normalize_ashare_ticker,
 )
+from .eastmoney_periodic import (
+    EASTMONEY_BUSINESS_COMPOSITION_SOURCE,
+    EASTMONEY_EARNINGS_CALENDAR_SOURCE,
+    EastmoneyBusinessCompositionAdapter,
+    EastmoneyEarningsCalendarAdapter,
+    EastmoneyPeriodicPayloadError,
+    EarningsCalendarCollection,
+    MemoryAttemptSink,
+    build_eastmoney_periodic_registry,
+    build_eastmoney_periodic_runtime,
+    collect_eastmoney_earnings_calendar,
+    collect_eastmoney_earnings_calendar_async,
+)
 from .ingestion import (
     AdapterContractError,
     AdapterRegistry,
