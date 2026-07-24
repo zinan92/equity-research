@@ -1417,4 +1417,16 @@
 - 市场目录是 identity directory，不是官方披露、市场行情或公司基本面；它不能填 B6、C1 或 E4-S3 的任何证据缺口。
 - Sina 的 `bj_a` node 当前返回 null；受限采集改用 symbol-sorted `hs_a`，解析器仍强制 `bj+code` 与 canonical ticker 一致，否则 fail closed。
 - 原始目录 JSON 含实时市场字段但本 Story 不读取、不写入产品事实；它只保留运行时 raw hash 与 identity fields，且整个 runtime 目录不进 Git。
+
+## 2026-07-24 · E4-S4b 严格真实覆盖验收收据
+
+- Decision：将 E4-S4 固化为不可放宽的 100 identity / 95 real Report Model / 80 Tier A/B / 20 numeric+page audit 四门收据。identity corpus 只允许 runtime-captured `real` input；fixture、cached 与 archive 都不会计入生产覆盖。
+- Why：E4 的风险不是“不知道下一步”，而是容易把格式解析、结构样本或局部报告误读为全产品覆盖。一个逐 ticker failure taxonomy 才能把缺口变成可执行队列。
+- Evidence：`product/data_core/e4_acceptance.py`、`scripts/verify_e4_s4_acceptance.py`、`product/tests/test_e4_acceptance.py`。live identity baseline receipt `b7f196bbf346cc6fafd20a6ddbcbd4067a5887f91ba44b145bcd92f213c40c2b`：identity 100，Report Model 0，Tier A/B 0，spot audits 0，100 个 ticker 均为 `missing_canonical_evidence`。
+
+### Gotchas · E4-S4b
+
+- 通过的 test fixture 只证明验收公式可重放，绝不能被写成已完成生产覆盖；真实 baseline 的 failed 状态是本 Story 的正确结果。
+- Report Model hash 没有 real data kind 不计数；Tier A/B 没有 real Report Model 也不计数，防止任一层单独刷分。
+- runner 默认 nonzero 退出以便自动化 fail closed；调用脚本时应读取 JSON receipt，而不是把非零退出误解成工具故障。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。
