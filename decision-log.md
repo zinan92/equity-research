@@ -1678,3 +1678,14 @@
 
 - retry 只会重新拉取同一个 ticker 的同一 A4 adapters；final row 仍必须拥有新抓取的 raw/manifest/known-at identity，旧 receipt 或 cache 不可作为成功结果。
 - 财务输入 20/20 不会让 R2 pass：moat、market-future、falsifier 仍为 0/20，继续禁止 Tier、target、position 或 action 输出。
+
+## 2026-07-25 · N3-S8 公司证伪条件证据
+
+- Decision：对 N3 既有 20-company selection 逐份重拉同一 CNINFO 官方年报，接受一条同时具备可观察弱化条件、官方 URL、PDF raw hash、页码和 known-at 的 issuer-disclosed risk；R2 falsifier 只读取这份 receipt。
+- Why：产业 profile 的 generic risk 不能替代公司级证伪条件；风险标题或模型总结不足以证明“什么情况会削弱判断”。
+- Evidence：`docs/evidence/2026-07-25-n3-s8-company-falsifier-evidence.md`，runtime receipt `0ef0c3c1…`，selection identity `39786334…`，20 requested / 20 accepted / 0 gaps；R2 falsifier 为 20/20。
+
+### Gotchas · N3-S8
+
+- CNINFO 大 PDF 需使用相同官方 URL 的 Range read 才能在连接中断后完成；assembled bytes 必须命中既有 citation SHA-256，不能以 partial response 或 mirror 补齐。
+- 证伪条件只解决 R2 五问之一；它不构成 moat、市场预期、估值、Tier、target、position 或 action 证据。
