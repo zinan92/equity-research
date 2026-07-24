@@ -159,6 +159,15 @@ class DataFoundation:
         installed_at = _now()
         with closing(self.connect()) as connection:
             connection.executescript(SQLITE_DDL)
+            columns = {row["name"] for row in connection.execute("PRAGMA table_info(core_research_object_revisions)")}
+            for column, definition in (
+                ("raw_hashes_json", "TEXT NOT NULL DEFAULT '[]'"),
+                ("snapshot_id", "TEXT NOT NULL DEFAULT ''"),
+            ):
+                if column not in columns:
+                    connection.execute(
+                        f"ALTER TABLE core_research_object_revisions ADD COLUMN {column} {definition}"
+                    )
             connection.execute(
                 "INSERT OR IGNORE INTO core_schema_versions(version, installed_at) VALUES (?, ?)",
                 schema_version_row(installed_at),

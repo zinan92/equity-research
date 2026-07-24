@@ -18,6 +18,15 @@ evidence identities. `judgments` are a separate payload and require a
 document page and provider metadata remain in A1/A2 evidence contracts and are
 referenced rather than copied here.
 
+## A2/A5 replay binding
+
+Every stored revision now carries one or more A2 `raw_hashes` and an A5
+accepted `snapshot_id`. The writer rejects unknown raw identities, blocked or
+unknown snapshots, and raw identities not frozen by that snapshot. The replay
+receipt recomputes every object hash, walks the immediate `revision_of` chain,
+rechecks raw/snapshot membership, and emits only identities and conflicts—never
+source prose.
+
 ## Persistence and revision rule
 
 SQLite acceptance uses `core_research_object_revisions`; Supabase/Postgres uses

@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from enum import Enum
+import json
+import re
 from typing import Any, Mapping
 
 from .contracts import canonical_json, digest
@@ -74,6 +76,8 @@ class ResearchObject:
     known_at: str
     confidence: str
     evidence_refs: tuple[str, ...]
+    raw_hashes: tuple[str, ...]
+    snapshot_id: str
     facts: Mapping[str, Any]
     judgments: Mapping[str, Any]
     model_version: str | None = None
@@ -99,6 +103,11 @@ class ResearchObject:
             isinstance(item, str) and item.strip() for item in self.evidence_refs
         ):
             raise ValueError("evidence_refs must be a non-empty tuple of evidence identities")
+        if not isinstance(self.raw_hashes, tuple) or not self.raw_hashes or not all(
+            isinstance(item, str) and re.fullmatch(r"[0-9a-f]{64}", item) for item in self.raw_hashes
+        ):
+            raise ValueError("raw_hashes must be a non-empty tuple of SHA-256 identities")
+        _non_empty(self.snapshot_id, "snapshot_id")
         if not isinstance(self.facts, Mapping) or not isinstance(self.judgments, Mapping):
             raise ValueError("facts and judgments must be mappings")
         schema = OBJECT_SCHEMAS[object_type]
@@ -132,6 +141,8 @@ class ResearchObject:
             "known_at": self.known_at,
             "confidence": self.confidence,
             "evidence_refs": list(self.evidence_refs),
+            "raw_hashes": list(self.raw_hashes),
+            "snapshot_id": self.snapshot_id,
             "facts": dict(self.facts),
             "judgments": dict(self.judgments),
             "model_version": self.model_version,
@@ -152,7 +163,7 @@ def object_contract_descriptor() -> dict[str, Any]:
             for item, schema in OBJECT_SCHEMAS.items()
         },
         "confidence": sorted(ALLOWED_CONFIDENCE),
-        "fact_judgment_boundary": "facts require evidence_refs; judgments require model_version and remain distinct",
+        "fact_judgment_boundary": "facts require evidence_refs and raw_hashes; judgments require model_version and remain distinct",
     }
 
 
@@ -167,6 +178,15 @@ class ResearchObjectStore:
         record = item.to_record()
         connection = self.connection_factory()
         try:
+            self._validate_authority_bindings(connection, item)
+            existing = connection.execute(
+                "SELECT object_hash FROM core_research_object_revisions WHERE object_id=? AND revision=?",
+                (item.object_id, item.revision),
+            ).fetchone()
+            if existing is not None:
+                if existing[0] != record["object_hash"]:
+                    raise ValueError("research object revision already exists with different inputs")
+                return {**record, "reused": True}
             prior = connection.execute(
                 "SELECT revision, object_hash FROM core_research_object_revisions WHERE object_id=? ORDER BY revision DESC LIMIT 1",
                 (item.object_id,),
@@ -181,17 +201,80 @@ class ResearchObjectStore:
             connection.execute(
                 """INSERT INTO core_research_object_revisions (
                    object_id,object_type,revision,state,schema_version,source_ref,known_at,confidence,
-                   evidence_refs_json,facts_json,judgments_json,model_version,revision_of,object_hash
-                   ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                   evidence_refs_json,raw_hashes_json,snapshot_id,facts_json,judgments_json,model_version,revision_of,object_hash
+                   ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     item.object_id, item.object_type.value, item.revision, item.state, item.schema_version,
                     item.source_ref, item.known_at, item.confidence, canonical_json(record["evidence_refs"]),
-                    canonical_json(record["facts"]), canonical_json(record["judgments"]), item.model_version,
-                    item.revision_of, record["object_hash"],
+                    canonical_json(record["raw_hashes"]), item.snapshot_id, canonical_json(record["facts"]),
+                    canonical_json(record["judgments"]), item.model_version, item.revision_of, record["object_hash"],
                 ),
             )
             connection.commit()
-            return record
+            return {**record, "reused": False}
+        finally:
+            connection.close()
+
+    @staticmethod
+    def _validate_authority_bindings(connection: Any, item: ResearchObject) -> None:
+        placeholders = ",".join("?" for _ in item.raw_hashes)
+        rows = connection.execute(
+            f"SELECT raw_hash FROM core_raw_objects WHERE raw_hash IN ({placeholders})", item.raw_hashes
+        ).fetchall()
+        if {row[0] for row in rows} != set(item.raw_hashes):
+            raise ValueError("research object references unknown raw evidence")
+        snapshot = connection.execute(
+            "SELECT manifest_json FROM core_snapshot_manifests WHERE snapshot_id=? AND quality_status='passed'",
+            (item.snapshot_id,),
+        ).fetchone()
+        if snapshot is None:
+            raise ValueError("research object references unknown or blocked snapshot")
+        manifest = json.loads(snapshot[0])
+        if not set(item.raw_hashes).issubset(set(manifest.get("raw_hashes") or ())):
+            raise ValueError("research object raw evidence is not frozen by snapshot")
+
+    def replay(self, object_id: str) -> dict[str, Any]:
+        """Return a deterministic, prose-free revision receipt or explicit conflicts."""
+        connection = self.connection_factory()
+        try:
+            rows = connection.execute(
+                "SELECT * FROM core_research_object_revisions WHERE object_id=? ORDER BY revision", (object_id,)
+            ).fetchall()
+            if not rows:
+                raise KeyError(object_id)
+            conflicts: list[str] = []
+            receipts: list[dict[str, Any]] = []
+            prior_hash: str | None = None
+            for row in rows:
+                data = dict(row)
+                try:
+                    item = ResearchObject(
+                        object_id=data["object_id"], object_type=ResearchObjectType(data["object_type"]),
+                        revision=data["revision"], state=data["state"], schema_version=data["schema_version"],
+                        source_ref=data["source_ref"], known_at=data["known_at"], confidence=data["confidence"],
+                        evidence_refs=tuple(json.loads(data["evidence_refs_json"])),
+                        raw_hashes=tuple(json.loads(data["raw_hashes_json"])), snapshot_id=data["snapshot_id"],
+                        facts=json.loads(data["facts_json"]), judgments=json.loads(data["judgments_json"]),
+                        model_version=data["model_version"], revision_of=data["revision_of"],
+                    )
+                    if item.object_hash != data["object_hash"]:
+                        conflicts.append(f"revision {item.revision}: object_hash_mismatch")
+                    if prior_hash is not None and item.revision_of != prior_hash:
+                        conflicts.append(f"revision {item.revision}: prior_revision_mismatch")
+                    self._validate_authority_bindings(connection, item)
+                    receipts.append({
+                        "revision": item.revision, "object_hash": data["object_hash"],
+                        "snapshot_id": item.snapshot_id, "raw_hashes": list(item.raw_hashes),
+                        "evidence_refs": list(item.evidence_refs), "model_version": item.model_version,
+                    })
+                    prior_hash = data["object_hash"]
+                except (ValueError, KeyError, json.JSONDecodeError) as exc:
+                    conflicts.append(f"revision {data['revision']}: {exc}")
+            return {
+                "schema_version": "research-object-replay-receipt-v1", "object_id": object_id,
+                "status": "passed" if not conflicts else "blocked", "revisions": receipts,
+                "conflicts": conflicts,
+            }
         finally:
             connection.close()
 

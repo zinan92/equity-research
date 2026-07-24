@@ -17,6 +17,8 @@ from data_core.research_objects import (  # noqa: E402
     object_contract_descriptor,
 )
 from data_core.store import DataFoundation  # noqa: E402
+from data_core.contracts import SourceManifest  # noqa: E402
+from data_core.fixtures import AS_OF, KNOWN_AT, fixture_payload  # noqa: E402
 
 
 FACTS = {
@@ -41,6 +43,8 @@ def item(kind: ResearchObjectType, *, revision: int = 1, revision_of: str | None
         known_at="2026-07-24T00:00:00Z",
         confidence="high",
         evidence_refs=("evidence:filing:1",),
+        raw_hashes=kwargs.pop("raw_hashes", ("a" * 64,)),
+        snapshot_id=kwargs.pop("snapshot_id", "core_fixture_test"),
         facts=kwargs.pop("facts", FACTS[kind]),
         judgments=kwargs.pop("judgments", {}),
         model_version=kwargs.pop("model_version", None),
@@ -50,6 +54,19 @@ def item(kind: ResearchObjectType, *, revision: int = 1, revision_of: str | None
 
 
 class ResearchObjectContractTests(unittest.TestCase):
+    def authority(self) -> tuple[DataFoundation, str, str]:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        foundation = DataFoundation(Path(directory.name) / "canonical.db")
+        manifest = SourceManifest(
+            source_key="research_object_fixture_v1", domain_scope="market", authority_tier="canonical",
+            provider_version="fixture-1", schema_version="fixture-1", license_status="internal_test_only",
+            source_url="fixture://research-object-v1", quality_flags=("fixture", "not_real_time"),
+        )
+        run = foundation.ingest_fixture(fixture_payload(), manifest)
+        snapshot = foundation.create_snapshot(run["run_id"], as_of=AS_OF, known_at=KNOWN_AT)
+        return foundation, run["raw_hash"], snapshot["snapshot_id"]
+
     def test_exactly_eight_versioned_object_contracts(self) -> None:
         self.assertEqual(set(OBJECT_SCHEMAS), set(ResearchObjectType))
         descriptor = object_contract_descriptor()
@@ -72,20 +89,23 @@ class ResearchObjectContractTests(unittest.TestCase):
             item(ResearchObjectType.COMPANY, revision_of="x" * 64).validate()
 
     def test_migration_readback_and_append_only_history(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            foundation = DataFoundation(Path(directory) / "canonical.db")
-            foundation.initialize()
-            store = ResearchObjectStore(foundation.connect)
-            first = store.append(item(ResearchObjectType.COMPANY))
-            second = item(ResearchObjectType.COMPANY, revision=2, revision_of=first["object_hash"])
-            store.append(second)
-            history = store.history(second.object_id)
-            self.assertEqual([row["revision"] for row in history], [1, 2])
-            with self.assertRaisesRegex(ValueError, "consecutive"):
-                store.append(item(ResearchObjectType.COMPANY, revision=4, revision_of=first["object_hash"]))
-            with foundation.connect() as connection:
-                with self.assertRaisesRegex(Exception, "append-only"):
-                    connection.execute("UPDATE core_research_object_revisions SET state='blocked' WHERE object_id=?", (second.object_id,))
+        foundation, raw_hash, snapshot_id = self.authority()
+        store = ResearchObjectStore(foundation.connect)
+        first = store.append(item(ResearchObjectType.COMPANY, raw_hashes=(raw_hash,), snapshot_id=snapshot_id))
+        self.assertFalse(first["reused"])
+        self.assertTrue(store.append(item(ResearchObjectType.COMPANY, raw_hashes=(raw_hash,), snapshot_id=snapshot_id))["reused"])
+        second = item(ResearchObjectType.COMPANY, revision=2, revision_of=first["object_hash"], raw_hashes=(raw_hash,), snapshot_id=snapshot_id)
+        store.append(second)
+        history = store.history(second.object_id)
+        self.assertEqual([row["revision"] for row in history], [1, 2])
+        self.assertEqual(store.replay(second.object_id)["status"], "passed")
+        with self.assertRaisesRegex(ValueError, "consecutive"):
+            store.append(item(ResearchObjectType.COMPANY, revision=4, revision_of=first["object_hash"], raw_hashes=(raw_hash,), snapshot_id=snapshot_id))
+        with self.assertRaisesRegex(ValueError, "unknown raw evidence"):
+            store.append(item(ResearchObjectType.DOSSIER, raw_hashes=("b" * 64,), snapshot_id=snapshot_id))
+        with foundation.connect() as connection:
+            with self.assertRaisesRegex(Exception, "append-only"):
+                connection.execute("UPDATE core_research_object_revisions SET state='blocked' WHERE object_id=?", (second.object_id,))
 
 
 if __name__ == "__main__":

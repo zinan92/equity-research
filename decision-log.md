@@ -1142,3 +1142,15 @@
 - Crosswalk 的 `matched` 仍只是一条 code+market 候选，Company 对象不能擅自把 A/H、ADR 或历史代码合并为 legal company。
 - `facts` 必须指向 evidence identity；研究/AI judgment 必须留在独立字段并带 model version，不能借 `source_ref` 伪装成事实。
 - 本 Story 只定义合同和 append-only revision；任何 archive prose、评分或 dossier 正文都不得用来 seed 正式对象。
+
+## 2026-07-24 · E1-S3 研究对象溯源与 Revision Replay
+
+- Decision：每个研究对象 revision 必须绑定既有 A2 `raw_hash` 与 A5 accepted `snapshot_id`；写入会验证 raw 存在且属于该 snapshot，回放会重算对象 hash、逐版检查 revision 链与 snapshot membership。
+- Why：对象级别的 source_ref 和 evidence ID 不能替代不可变原始证据与 point-in-time snapshot；否则旧对象会在数据刷新后失去可审计性。
+- Evidence：`ResearchObjectStore.replay()`、SQLite schema upgrade、Postgres migration `0003_research_object_provenance.postgres.sql` 和 clean-store replay/tamper/idempotency tests。
+
+### Gotchas · E1-S3
+
+- raw identity 格式正确不等于可接受：它必须已存在于 A2，并被所声明的 A5 snapshot 冻结。
+- 同 revision 且 object hash 相同才是幂等重试；任何字段（含 model version、evidence、raw hash）变化都必须成为下一 revision，不能 overwrite。
+- replay receipt 只输出 hash、snapshot、evidence IDs 与 conflict；不要将任何原始文本或 archive 正文带入 receipt。
