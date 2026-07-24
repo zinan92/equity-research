@@ -36,11 +36,12 @@
 - E2-S3 now production-validates existing corporate-action, adjustment-factor and historical valuation/FX contracts: broken lineage, future-visible actions, valuation conflicts and inferred valuation history all fail closed; FX remains date-frozen and unavailable inputs remain gaps.
 - E2-S4 now production-validates the existing B1/B3 official-filings corpus: incremental discovery preserves official PDF identity and raw receipt; parser page/OCR coverage is measured and unreadable pages remain gaps; document/page/hash citations can fail-closed return to the official HTTPS URL and immutable storage URI.
 - E2-S5 now production-validates the existing B2/B4 sell-side path: catalog/PDF identity and metadata-only gaps remain explicit; broker estimates have point-in-time, stale/outlier-quarantine and replay semantics; viewpoint language stays constrained by page-bound evidence and documented disagreement.
+- E2-S6 now production-validates B5/B6: event entity ambiguity, cross-source provenance and source failures are explicit; accepted-only Context Packs reject future, fixture, rejected or tampered evidence; coverage tiers remain recomputable.
 
 ## 下一步
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
-- Start E2-S6 / M2 from latest `main`: production-validate the existing B5 event intelligence and B6 evidence gate with entity resolution, multi-source dedupe, accepted-evidence-only Context Packs and recomputable coverage tiers; do not rewrite collectors or gate rules.
+- Start E3-S1 / M3.1 from latest `main`: define the self-owned AI-compute industry ontology (10–15 nodes and at least 104 segments) with stable identity, boundaries, versioning and source strategy; no archive classification prose enters product facts.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
