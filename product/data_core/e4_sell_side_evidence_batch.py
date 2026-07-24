@@ -24,6 +24,45 @@ E4_SELL_SIDE_EVIDENCE_CHECKPOINT_SCHEMA_VERSION = "e4-s4-sell-side-evidence-chec
 SyncFn = Callable[..., SellSideArchiveBatch]
 
 
+class RuntimeRawAuthoritySink:
+    """Persist only verified ingestion payloads beneath an ignored runtime root."""
+
+    def __init__(self, raw_root: Path) -> None:
+        self.raw_root = raw_root.resolve()
+        self.paths: dict[str, str] = {}
+
+    def persist_attempt(self, attempt: Any) -> None:
+        raw, fetched = getattr(attempt, "raw", None), getattr(attempt, "fetched", None)
+        if raw is None or fetched is None:
+            return
+        body = bytes(getattr(fetched, "body", b""))
+        raw_hash = str(getattr(raw, "raw_hash", ""))
+        if len(raw_hash) != 64 or hashlib.sha256(body).hexdigest() != raw_hash:
+            raise ValueError("runtime raw bytes do not match ingestion raw hash")
+        target = (self.raw_root / raw_hash[:2] / f"{raw_hash}.bin").resolve()
+        try:
+            target.relative_to(self.raw_root)
+        except ValueError as exc:
+            raise ValueError("runtime raw path escapes configured root") from exc
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if target.exists() and target.read_bytes() != body:
+            raise ValueError("runtime raw hash collision")
+        if not target.exists():
+            temporary = target.with_suffix(".tmp")
+            temporary.write_bytes(body)
+            temporary.replace(target)
+        self.paths[raw_hash] = str(target)
+
+    def path_for(self, raw_hash: str | None) -> str | None:
+        path = self.paths.get(str(raw_hash or ""))
+        if not path:
+            return None
+        candidate = Path(path)
+        if not candidate.is_file() or hashlib.sha256(candidate.read_bytes()).hexdigest() != raw_hash:
+            raise ValueError("runtime raw file is unavailable or hash-mismatched")
+        return path
+
+
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
@@ -39,7 +78,7 @@ def _config(identity_receipt_path: Path, *, max_tickers: int, inter_ticker_delay
     }
 
 
-def _attempt_identity(outcome: Any) -> dict[str, Any]:
+def _attempt_identity(outcome: Any, *, raw_sink: RuntimeRawAuthoritySink) -> dict[str, Any]:
     attempts = tuple(getattr(outcome, "attempts", ()) or ())
     attempt = attempts[-1] if attempts else None
     raw = getattr(attempt, "raw", None)
@@ -48,17 +87,19 @@ def _attempt_identity(outcome: Any) -> dict[str, Any]:
         "source_url": getattr(raw, "source_url", None),
         "raw_hash": getattr(raw, "raw_hash", None),
         "storage_uri": getattr(raw, "storage_uri", None),
+        "runtime_raw_path": raw_sink.path_for(getattr(raw, "raw_hash", None)) if raw else None,
         "error": getattr(attempt, "error", None),
     }
 
 
-def _row_for_batch(ticker: str, batch: SellSideArchiveBatch) -> dict[str, Any]:
-    catalog = [_attempt_identity(outcome) for outcome in batch.catalog_outcomes]
+def _row_for_batch(ticker: str, batch: SellSideArchiveBatch, *, raw_sink: RuntimeRawAuthoritySink) -> dict[str, Any]:
+    catalog = [_attempt_identity(outcome, raw_sink=raw_sink) for outcome in batch.catalog_outcomes]
     reports = [{
         "report_id": item.report_id, "title": item.title, "broker": item.broker,
         "published_at": item.published_at, "rating": item.rating, "pages": item.pages,
         "source_url": item.canonical_url, "archive_status": item.archive_status,
-        "pdf_raw_hash": item.raw_hash, "storage_uri": item.storage_uri, "error": item.error,
+        "pdf_raw_hash": item.raw_hash, "storage_uri": item.storage_uri,
+        "runtime_raw_path": raw_sink.path_for(item.raw_hash) if item.raw_hash else None, "error": item.error,
     } for item in batch.items]
     catalog_ok = bool(catalog) and all(item["status"] == "captured" for item in catalog)
     archived = sum(item["archive_status"] == "archived_pdf" for item in reports)
@@ -121,9 +162,10 @@ def run_sell_side_evidence_batch(
             rows.append({**previous[ticker], "status": "skipped", "resumed_from": previous[ticker].get("status")})
             continue
         try:
-            runtime = build_sell_side_runtime(transport=RateLimitedRetryTransport(default_http_transport, min_interval=inter_ticker_delay_seconds, max_attempts=2))
+            raw_sink = RuntimeRawAuthoritySink(runtime_root / "raw")
+            runtime = build_sell_side_runtime(authority_sink=raw_sink, transport=RateLimitedRetryTransport(default_http_transport, min_interval=inter_ticker_delay_seconds, max_attempts=2))
             batch = sync(ticker, runtime=runtime, max_reports=max_reports_per_ticker)
-            row = _row_for_batch(ticker, batch)
+            row = _row_for_batch(ticker, batch, raw_sink=raw_sink)
         except Exception as exc:
             row = {"ticker": ticker, "status": "failed", "data_kind": "real", "catalog": [], "reports": [], "counts": {"catalog_reports": 0, "archived_pdf": 0, "metadata_only": 0}, "blockers": ["sell_side_collector_exception"], "error": type(exc).__name__}
         rows.append(row)

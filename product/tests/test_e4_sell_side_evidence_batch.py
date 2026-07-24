@@ -11,7 +11,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
-from data_core.e4_sell_side_evidence_batch import run_sell_side_evidence_batch  # noqa: E402
+from data_core.e4_sell_side_evidence_batch import RuntimeRawAuthoritySink, run_sell_side_evidence_batch  # noqa: E402
 from data_core.sell_side_archive import SellSideArchiveBatch, SellSideArchiveItem  # noqa: E402
 
 
@@ -71,3 +71,22 @@ class SellSideEvidenceBatchTest(unittest.TestCase):
             root = Path(directory); payload = identity(); payload["data_kind"] = "fixture"
             with self.assertRaisesRegex(ValueError, "real bounded"):
                 run_sell_side_evidence_batch(self._identity(root, payload), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0)
+
+    def test_runtime_sink_persists_hash_bound_bytes_and_rejects_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); body = b"%PDF-1.7\\nproof\\n%%EOF"; raw_hash = __import__("hashlib").sha256(body).hexdigest()
+            sink = RuntimeRawAuthoritySink(root / "raw")
+            sink.persist_attempt(SimpleNamespace(raw=SimpleNamespace(raw_hash=raw_hash), fetched=SimpleNamespace(body=body)))
+            path = sink.path_for(raw_hash)
+            self.assertEqual(Path(path).read_bytes(), body)
+            with self.assertRaisesRegex(ValueError, "do not match"):
+                sink.persist_attempt(SimpleNamespace(raw=SimpleNamespace(raw_hash="0" * 64), fetched=SimpleNamespace(body=body)))
+
+    def test_metadata_only_row_never_exposes_runtime_raw_path(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            def sync(ticker: str, **_kwargs):
+                item = SellSideArchiveItem("r3", ticker, "报告", None, None, "2026-07-01T00:00:00Z", None, None, "https://pdf.dfcfw.com/pdf/H3_r3_1.pdf", "metadata_only", error="HTTPError")
+                return SellSideArchiveBatch(ticker, (item,), (SimpleNamespace(publishable=True, attempts=()),), {})
+            row = run_sell_side_evidence_batch(self._identity(root), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0, sync=sync)["receipt"]["tickers"][0]
+            self.assertIsNone(row["reports"][0]["runtime_raw_path"])
