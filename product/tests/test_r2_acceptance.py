@@ -13,6 +13,7 @@ from data_core.n3_dossier_batch import N3_DOSSIER_BATCH_SCHEMA_VERSION, selected
 from data_core.n3_financial_delivery import N3_FINANCIAL_DELIVERY_SCHEMA_VERSION  # noqa: E402
 from data_core.n3_falsifier_evidence import N3_FALSIFIER_EVIDENCE_SCHEMA_VERSION  # noqa: E402
 from data_core.n3_moat_evidence import N3_MOAT_EVIDENCE_SCHEMA_VERSION  # noqa: E402
+from data_core.n3_market_future_evidence import N3_MARKET_FUTURE_EVIDENCE_SCHEMA_VERSION  # noqa: E402
 from data_core.r2_acceptance import audit_r2  # noqa: E402
 
 
@@ -112,6 +113,26 @@ class R2AcceptanceTest(unittest.TestCase):
         }
         audit = audit_r2(self.receipt, self.captures, repository_root=self.root, moat_evidence_receipt=moat)
         self.assertEqual(audit["five_questions"]["moat"]["covered"], 20)
+        self.assertFalse(audit["gates"]["five_questions"])
+
+    def test_source_bound_market_future_receipt_raises_only_that_question(self) -> None:
+        self.receipt["selection_identity"] = "selection"
+        market_future = {
+            "schema_version": N3_MARKET_FUTURE_EVIDENCE_SCHEMA_VERSION,
+            "selection_identity": "selection",
+            "rows": [
+                {"ticker": item.ticker, "status": "accepted", "evidence": {
+                    "ticker": item.ticker, "evidence_id": "market-future:" + "a" * 40,
+                    "source_url": "https://static.cninfo.com.cn/finalpage/fixture.pdf", "raw_hash": "b" * 64,
+                    "page_number": 1, "known_at": "2026-07-25T00:00:00Z",
+                    "observed_market_driver": "Issuer disclosed a forward market-demand driver.",
+                    "observation_type": "issuer_disclosed_market_outlook",
+                }}
+                for item in selected_positions()
+            ],
+        }
+        audit = audit_r2(self.receipt, self.captures, repository_root=self.root, market_future_evidence_receipt=market_future)
+        self.assertEqual(audit["five_questions"]["market_future"]["covered"], 20)
         self.assertFalse(audit["gates"]["five_questions"])
 
 
