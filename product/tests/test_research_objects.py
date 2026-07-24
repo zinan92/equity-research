@@ -28,10 +28,10 @@ FACTS = {
     ResearchObjectType.COMPANY: {"company_id": "company-v1:catl", "display_name": "宁德时代", "ticker": "300750.SZ"},
     ResearchObjectType.SECTOR_POSITION: {"company_id": "company-v1:catl", "sector_id": "battery", "role": "manufacturer"},
     ResearchObjectType.EVIDENCE: {"evidence_id": "evidence:filing:1", "evidence_type": "filing", "citation": "document:1#p1"},
-    ResearchObjectType.CATALYST: {"company_id": "company-v1:catl", "title": "capacity ramp", "time_horizon": "12m"},
+    ResearchObjectType.CATALYST: {"company_id": "company-v1:catl", "thesis_ref": "research-v1:thesis:catl", "title": "capacity ramp", "direction": "up", "threshold": "capacity > 100GWh", "time_window": "2026H2", "trigger_status": "pending", "time_horizon": "12m"},
     ResearchObjectType.ROADMAP: {"company_id": "company-v1:catl", "milestone": "new product", "time_horizon": "24m"},
     ResearchObjectType.SCORE_SNAPSHOT: {"company_id": "company-v1:catl", "as_of": "2026-07-24", "score_name": "quality", "score_value": 80},
-    ResearchObjectType.FALSIFIER: {"company_id": "company-v1:catl", "title": "margin miss", "trigger": "gross margin < 15%"},
+    ResearchObjectType.FALSIFIER: {"company_id": "company-v1:catl", "thesis_ref": "research-v1:thesis:catl", "title": "margin miss", "trigger": "gross margin < 15%", "direction": "down", "threshold": "gross margin < 15%", "time_window": "next two results", "trigger_status": "pending"},
     ResearchObjectType.DOSSIER: {"company_id": "company-v1:catl", "dossier_version": "v1", "as_of": "2026-07-24"},
 }
 
