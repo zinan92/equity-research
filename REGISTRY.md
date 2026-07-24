@@ -48,6 +48,7 @@
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
+
 - E4-S4o is merged: valuation and sell-side coverage can now be bound only through real, hash-bound receipts matching the same ticker, cutoff and accepted Context Pack as an E4 partial model; even with both sections present it remains Tier C / no_action.
 - Next E4 step: produce source-compliant runtime valuation/sell-side receipt adapters for the canonical 100-ticker corpus, then evaluate #218 without treating partial models as Tier A/B coverage.
 - E4-S4p is merged: the canonical real 100-ticker identity corpus can now run a bounded, checkpointed B2 sell-side catalog/PDF archive batch with per-ticker raw/source identities, metadata-only states and typed failures; it is input-only and grants no Tier, target, position, action or page-audit credit.
@@ -116,3 +117,8 @@
 - E7-S3 is now merged: a read-only outcome receipt freezes publication/report identity and its `as_of`/`known_at` basis, then records separately labelled later company/benchmark/optional-industry/fundamental outcomes. Later inputs cannot rewrite the research basis and never yield an action, target, position or order. Next: E7-S4 aggregates coverage/freshness/citation/outcome quality into a controlled expansion gate.
 - E7-S4 is now merged: a deterministic quality aggregate returns `no_go` whenever coverage, cadence, citation or outcome quality is not passed, or a manual correction issue is present. It reuses receipt status only and creates no source collection, action, target, position, recommendation or order. Next: R3 remains blocked on E4-S4 100-ticker evidence coverage.
 - E4-S4n is now merged: partial Report Models expose valuation and sell-side states only as accepted/missing/blocked, retaining Tier C and `no_action` in every case. It does not collect a new source, relax #218, or create target/position/action output. Next: establish actual point-in-time valuation and sell-side availability across the 100-ticker corpus.
+
+## 2026-07-25 · E4-S4t receipt-binding update
+
+- 现在在哪里：PR #388 merged. E4 can now bind the existing B6 official-primary Context Pack identity, market/fundamentals source receipts, and C3 page-verified sell-side matrix into deterministic per-ticker Report Model inputs. Mismatched ticker, official lineage or exact cutoff is explicit blocked; all outputs remain Tier C / no_action.
+- 下一步：run a synchronized real-input trial using these receipts, record its typed coverage/blockers on #218, then close the remaining E4-S4 acceptance gaps (valuation, explicit page-cited claims and numeric/page audit) without treating rating-only matrices as research conclusions.
