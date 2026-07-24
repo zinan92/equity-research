@@ -182,13 +182,30 @@ def _raw_receipt(document_outcome: Any, raw_root: Path) -> dict[str, Any]:
     }
 
 
+def _discovery_failure_blockers(discovery: Any) -> list[str]:
+    """Classify a failed official discovery without inventing source state."""
+
+    attempts = tuple(getattr(discovery, "attempts", ()) or ())
+    attempt = attempts[-1] if attempts else None
+    error = str(getattr(attempt, "error", "") or "").lower()
+    fetched = getattr(attempt, "fetched", None)
+    status_code = getattr(fetched, "status_code", None)
+    if "handshake" in error or "ssl" in error or "tls" in error:
+        return ["official_transport_tls_handshake_timeout"]
+    if status_code in {401, 403, 429}:
+        return ["official_access_denied"]
+    if fetched is not None and status_code == 200 and not tuple(getattr(discovery, "records", ()) or ()):
+        return ["official_filing_index_empty"]
+    return ["official_filing_discovery_failed"]
+
+
 def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -> dict[str, Any]:
     summary = batch.to_summary() if hasattr(batch, "to_summary") else {}
     discovery_pages = summary.get("discovery_pages", [])
     if not batch.discovery.publishable:
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
-            "blockers": ["official_filing_discovery_failed"], "discovery_pages": discovery_pages,
+            "blockers": _discovery_failure_blockers(batch.discovery), "discovery_pages": discovery_pages,
         }
     if len(batch.documents) > 1:
         raise ValueError("official evidence batch may capture at most one document per ticker")
