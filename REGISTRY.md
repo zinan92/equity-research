@@ -38,11 +38,12 @@
 - E2-S5 now production-validates the existing B2/B4 sell-side path: catalog/PDF identity and metadata-only gaps remain explicit; broker estimates have point-in-time, stale/outlier-quarantine and replay semantics; viewpoint language stays constrained by page-bound evidence and documented disagreement.
 - E2-S6 now production-validates B5/B6: event entity ambiguity, cross-source provenance and source failures are explicit; accepted-only Context Packs reject future, fixture, rejected or tampered evidence; coverage tiers remain recomputable.
 - E3-S1 now defines the self-owned, versioned AI-compute ontology: 12 major nodes and 108 stable segments with identity, boundary and source strategy, explicitly separate from archive prose, scores and grades.
+- E3-S2 now provides an evidence-bound industry graph: 30 source-scoped, direction/strength/as-of edges bind to raw hashes captured from three first-party sources; absent or rejected evidence cannot appear in traversal.
 
 ## 下一步
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
-- Start E3-S2 / M3.1 from latest `main`: build the self-owned upstream/downstream relationship graph over ontology IDs, preserving edge type, direction, strength, as-of and evidence identity; conflict and unknown relationships remain explicit.
+- Start E3-S3 / M3.1 from latest `main`: produce 50–100 company industry positions, beginning from the M1 identity-only validation set and keeping unverified or ambiguous segment/role mappings in an explicit review queue.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
