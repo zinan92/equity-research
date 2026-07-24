@@ -107,23 +107,22 @@ def build_pack(
             }
         )
 
-    score_rows = [
-        "| Pair | Document | Detail 1–5 | Evidence density 1–5 | Anti-hype discipline 1–5 | Notes |",
-        "| --- | --- | --- | --- | --- | --- |",
+    preference_rows = [
+        "| Pair | Preferred (A/B/tie) | Notes |",
+        "| --- | --- | --- |",
     ]
     for pair in key_pairs:
-        for label in ("A", "B"):
-            score_rows.append(f"| {pair['pair_id']} | {label} |  |  |  |  |")
+        preference_rows.append(f"| {pair['pair_id']} |  |  |")
     pack = "\n".join(
         [
             "# Dossier Blind Review Pack",
             "",
-            "Read each A/B pair without trying to identify the producer. Score each document independently on detail, evidence density, and anti-hype discipline from 1 to 5.",
+            "Read each A/B pair without trying to identify the producer. Choose the stronger complete dossier on company-specific detail, traceable evidence, readable synthesis, and anti-hype discipline. Use tie only when neither is stronger.",
             "",
             *pair_sections,
-            "## Score sheet",
+            "## Preference sheet",
             "",
-            *score_rows,
+            *preference_rows,
             "",
         ]
     )
@@ -231,6 +230,105 @@ def score_pack(*, key_path: Path, scores_path: Path) -> dict[str, Any]:
     }
 
 
+def prefer_pack(*, key_path: Path, preferences_path: Path) -> dict[str, Any]:
+    """Resolve whole-document A/B preferences without inventing sub-scores."""
+    key = _read_json(key_path)
+    preferences = _read_json(preferences_path)
+    key_pairs = {
+        str(pair["pair_id"]): pair
+        for pair in key.get("pairs", [])
+        if isinstance(pair, dict)
+    }
+    reviewers = preferences.get("reviewers")
+    if not isinstance(reviewers, list) and isinstance(preferences.get("reviewer"), dict):
+        reviewers = [preferences["reviewer"]]
+    if not isinstance(reviewers, list):
+        raise ValueError("preferences must contain reviewers")
+    roles = {
+        str(reviewer.get("role"))
+        for reviewer in reviewers
+        if isinstance(reviewer, dict)
+    }
+    missing_roles = REQUIRED_ROLES - roles
+
+    observations: list[dict[str, Any]] = []
+    reviewer_results: list[dict[str, Any]] = []
+    for reviewer in reviewers:
+        if not isinstance(reviewer, dict):
+            raise ValueError("reviewer must be an object")
+        reviewer_id = str(reviewer.get("id") or "")
+        role = str(reviewer.get("role") or "")
+        if not reviewer_id or not role:
+            raise ValueError("reviewer id and role are required")
+        choices = reviewer.get("choices")
+        if not isinstance(choices, list):
+            raise ValueError(f"{reviewer_id}: choices must be a list")
+        by_pair = {
+            str(row.get("pair_id")): row
+            for row in choices
+            if isinstance(row, dict)
+        }
+        if len(choices) != len(key_pairs) or len(by_pair) != len(choices):
+            raise ValueError(
+                f"{reviewer_id}: choices must cover every pair exactly once"
+            )
+        if set(by_pair) != set(key_pairs):
+            raise ValueError(
+                f"{reviewer_id}: choices must cover every pair exactly once"
+            )
+        self_wins = 0
+        benchmark_wins = 0
+        ties = 0
+        for pair_id, pair in key_pairs.items():
+            preferred = str(by_pair[pair_id].get("preferred") or "").upper()
+            if preferred not in {"A", "B", "TIE"}:
+                raise ValueError(
+                    f"{reviewer_id}/{pair_id}: preferred must be A, B or tie"
+                )
+            if preferred == "TIE":
+                selected_origin = "tie"
+                ties += 1
+            elif preferred == str(pair["self_label"]):
+                selected_origin = "self"
+                self_wins += 1
+            else:
+                selected_origin = "benchmark"
+                benchmark_wins += 1
+            observations.append(
+                {
+                    "reviewer_id": reviewer_id,
+                    "role": role,
+                    "pair_id": pair_id,
+                    "ticker": pair["ticker"],
+                    "selected_origin": selected_origin,
+                }
+            )
+        reviewer_results.append(
+            {
+                "reviewer_id": reviewer_id,
+                "role": role,
+                "self_wins": self_wins,
+                "benchmark_wins": benchmark_wins,
+                "ties": ties,
+                "required_self_wins": 4,
+                "passed": self_wins >= 4,
+            }
+        )
+
+    return {
+        "schema_version": "dossier-blind-preference-receipt-v1",
+        "pack_sha256": key.get("pack_sha256"),
+        "reviewer_count": len(reviewers),
+        "present_roles": sorted(roles),
+        "missing_roles": sorted(missing_roles),
+        "pair_count": len(key_pairs),
+        "observations": observations,
+        "reviewer_results": reviewer_results,
+        "passed": not missing_roles
+        and all(result["passed"] for result in reviewer_results),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -243,6 +341,10 @@ def main() -> int:
     score.add_argument("--key", required=True, type=Path)
     score.add_argument("--scores", required=True, type=Path)
     score.add_argument("--out", required=True, type=Path)
+    prefer = subparsers.add_parser("prefer")
+    prefer.add_argument("--key", required=True, type=Path)
+    prefer.add_argument("--preferences", required=True, type=Path)
+    prefer.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
 
     if args.command == "build":
@@ -252,8 +354,18 @@ def main() -> int:
             output_path=args.out,
             key_path=args.key_out,
         )
-    else:
+    elif args.command == "score":
         receipt = score_pack(key_path=args.key, scores_path=args.scores)
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(
+            json.dumps(receipt, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    else:
+        receipt = prefer_pack(
+            key_path=args.key,
+            preferences_path=args.preferences,
+        )
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(
             json.dumps(receipt, ensure_ascii=False, indent=2) + "\n",

@@ -996,7 +996,11 @@
 - Decision：同公司复跑采用冻结证据与冻结正文的确定性 replay，receipt 同时记录源文件和输出的结构签名；它证明结构可复现，不冒充重新抓取了最新事实。
 - Verification：`verify_dossier.py` 校验模板、七份样例、章节、schema、数字引用、来源 URL、生产清单与统一结构签名；`replay_dossier.py` 对 NVIDIA 生成独立复跑版本并验证结构签名一致。
 - Verification：外部读者使用 runtime-only A/B 包盲评五家公司，自有档案总分 56、标杆总分 43，比例 130.2%，五组均超过 100%。评分模型实际返回 `deepseek-v4-flash`，收据保留请求 ID、token 用量与 pack hash。
-- Boundary：外部读者已完成，但 Park 角色仍缺失，故总门禁保持 `passed=false`；Park 未独立提交盲评分数前不得合并 #115 或声称档案生产能力通过最终验收。
+- Boundary：Round 1 外部读者按旧三维分数偏好自产，但 Park 明确拒绝逐维打分，改为每组选择整体更好的文档。Park 选择 `P1A/P2A/P3B/P4B/P5B`，解码后为 benchmark 5/5、自有 0/5，因此 Round 1 明确失败，不能合并 #115。
+- Decision：盲评合同改为 Park 与 external reader 各自完成五组整体 A/B 偏好，自有档案须分别胜出至少 4/5；平局不计胜出。旧分数不换算成通过证据，新一轮必须重新随机化标签。
+- Evidence：Round 1 的脱敏 Park preference receipt 记录 pack hash、五家公司 selected origin 和 0/5 结果；A/B key 与 benchmark 正文继续留在 Git 外。
+- Iteration：Round 2 在五份档案中补充公司特异的人与组织、发展路径、三年与最新季度财务、时点评估以及“市场在交易什么”，随后使用新随机标签重建盲评包。
+- Evidence：Round 2 外部读者完成五组整体 A/B 选择，自有档案胜出 5/5，超过独立角色 4/5 门槛；总门禁仍因 Park 角色尚未提交而 fail closed。
 
 ### Gotchas · N1-5
 
@@ -1005,6 +1009,7 @@
 - 外部模型可能返回与请求别名不同的实际模型名；收据必须记录服务端实际返回值，不能把 `deepseek-chat` 请求参数写成已验证模型身份。
 - 盲评包、A/B key 与第三方标杆正文必须留在 `/tmp` 等 Git 外路径；仓库只保留脱敏汇总收据。
 - 复跑结构一致只证明模板和渲染确定性，不证明事实已刷新；真正的“最新版本”仍需重新捕获来源并生成新的 evidence snapshot。
+- 结构更长、表格更多、引用更规范并不自动等于更好读。Round 1 自有档案字符数高于 benchmark 仍被 Park 5/5 拒绝，说明机械表格、稀疏团队叙事和缺少公司特异的技术/历史解释是实质缺口。
 
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 

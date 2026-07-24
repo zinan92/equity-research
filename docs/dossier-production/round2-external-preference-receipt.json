@@ -1,0 +1,44 @@
+{
+  "schema_version": "dossier-external-preference-receipt-v1",
+  "reviewed_at": "2026-07-24T05:59:30.871196+00:00",
+  "reviewer": {
+    "id": "deepseek:deepseek-v4-flash",
+    "role": "external_reader",
+    "request_id": "61bed097-090f-4c71-b3c1-a0b1171da47f",
+    "finish_reason": "stop"
+  },
+  "usage": {
+    "prompt_tokens": 23001,
+    "completion_tokens": 358,
+    "total_tokens": 23359
+  },
+  "runtime_evidence": {
+    "blind_pack_sha256": "7cae698594ad071a42ec2119ea4fca98f94b0b5a87226e64f335374b0341b867",
+    "prompt_sha256": "1b4f65fe00ffbbc72e3a2f298456cd7ba293fab7926edaf38769f2251a06b1d7",
+    "blind_set": [
+      "002371.SZ",
+      "002594.SZ",
+      "300308.SZ",
+      "300502.SZ",
+      "NVDA"
+    ]
+  },
+  "result": {
+    "self_wins": 5,
+    "benchmark_wins": 0,
+    "ties": 0,
+    "required_self_wins": 4,
+    "external_reader_passed": true
+  },
+  "gate": {
+    "present_roles": [
+      "external_reader"
+    ],
+    "missing_roles": [
+      "park"
+    ],
+    "passed": false,
+    "reason": "The external reader preferred the self-produced dossier in all five pairs, but the contract also requires Park's independent 4/5 preference gate."
+  },
+  "boundary": "The A/B key, benchmark prose, reviewer notes and credentials remain runtime-only and are not committed."
+}

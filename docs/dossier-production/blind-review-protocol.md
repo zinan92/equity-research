@@ -1,6 +1,6 @@
 # Dossier pilot blind-review protocol
 
-This protocol tests whether five independently sourced dossiers reach at least 80% of the local benchmark on detail, evidence density, and anti-hype discipline. It does not import benchmark prose or scores into product output.
+This protocol tests whether five independently sourced dossiers are preferred to the local benchmark as complete documents. It does not import benchmark prose or preferences into product output.
 
 ## Reviewers
 
@@ -8,15 +8,16 @@ This protocol tests whether five independently sourced dossiers reach at least 8
 - At least one independent reader must use role `external_reader`.
 - Reviewers receive only the runtime A/B pack. They must not receive the key file before scoring.
 
-## Scoring
+## Whole-document preference
 
-Each A/B document receives three integer scores from 1 to 5:
+For each pair, the reviewer selects `A`, `B`, or `tie`. The decision considers:
 
-1. `detail`: useful company-specific depth rather than generic coverage.
-2. `evidence_density`: important factual claims are traceable and uncertainties are visible.
-3. `anti_hype_discipline`: promotional claims are challenged with falsifiers and missing evidence.
+1. useful company-specific detail rather than generic coverage;
+2. traceable evidence and explicit uncertainty;
+3. readable synthesis rather than mechanical tables;
+4. falsifiers and issuer-claim discipline.
 
-The acceptance ratio is total self-produced score divided by total benchmark score across all pairs and required reviewers. Passing requires a ratio of at least `0.80`. Missing pairs, missing reviewer roles, or out-of-range scores fail closed.
+Park and one `external_reader` must each complete all five pairs. Self-produced dossiers must win at least four of five pairs for each reviewer. Ties do not count as self wins. Missing pairs or reviewer roles fail closed.
 
 ## Runtime-only build
 
@@ -30,7 +31,7 @@ python3 scripts/dossier_blind_review.py build \
 
 The pack and key must remain outside Git. The benchmark archive is a comparison input only; its prose is not a product source.
 
-## Score input
+## Preference input
 
 ```json
 {
@@ -38,11 +39,10 @@ The pack and key must remain outside Git. The benchmark archive is a comparison 
     {
       "id": "park",
       "role": "park",
-      "scores": [
+      "choices": [
         {
           "pair_id": "P1",
-          "A": {"detail": 1, "evidence_density": 1, "anti_hype_discipline": 1},
-          "B": {"detail": 1, "evidence_density": 1, "anti_hype_discipline": 1}
+          "preferred": "A"
         }
       ]
     }
@@ -55,10 +55,10 @@ Every reviewer must provide every pair exactly once. The real input includes `P1
 ## Scoring receipt
 
 ```bash
-python3 scripts/dossier_blind_review.py score \
+python3 scripts/dossier_blind_review.py prefer \
   --key /tmp/dossier-blind-key.json \
-  --scores /tmp/dossier-blind-scores.json \
-  --out /tmp/dossier-blind-score-receipt.json
+  --preferences /tmp/dossier-blind-preferences.json \
+  --out /tmp/dossier-blind-preference-receipt.json
 ```
 
-Only a passed receipt plus reviewer identities closes the human evaluation gate. A model-generated or fabricated `park` score is invalid.
+Only a passed receipt plus reviewer identities closes the human evaluation gate. A model-generated or fabricated `park` choice is invalid.

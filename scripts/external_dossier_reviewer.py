@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Ask an external model to score a local blind dossier pack.
+"""Ask an external model to choose the stronger dossier in each blind pair.
 
 The key is read from an external file and never printed. The response is
-validated as one external_reader score object compatible with
-``dossier_blind_review.py score``.
+validated as one external_reader preference object compatible with
+``dossier_blind_review.py prefer``.
 """
 from __future__ import annotations
 
@@ -18,7 +18,6 @@ from typing import Any
 
 
 API_URL = "https://api.deepseek.com/chat/completions"
-DIMENSIONS = ("detail", "evidence_density", "anti_hype_discipline")
 
 
 def _secret(path: Path) -> str:
@@ -28,27 +27,23 @@ def _secret(path: Path) -> str:
     return value
 
 
-def _validate_scores(value: Any) -> list[dict[str, Any]]:
+def _validate_choices(value: Any) -> list[dict[str, Any]]:
     if not isinstance(value, list):
-        raise ValueError("response scores must be a list")
+        raise ValueError("response choices must be a list")
     by_pair: dict[str, dict[str, Any]] = {}
     for row in value:
         if not isinstance(row, dict):
-            raise ValueError("score row must be an object")
+            raise ValueError("choice row must be an object")
         pair_id = str(row.get("pair_id") or "")
         if pair_id in by_pair or pair_id not in {f"P{i}" for i in range(1, 6)}:
             raise ValueError(f"invalid or duplicate pair_id: {pair_id}")
-        for label in ("A", "B"):
-            document = row.get(label)
-            if not isinstance(document, dict):
-                raise ValueError(f"{pair_id}/{label} must be an object")
-            for dimension in DIMENSIONS:
-                score = document.get(dimension)
-                if not isinstance(score, int) or isinstance(score, bool) or not 1 <= score <= 5:
-                    raise ValueError(f"{pair_id}/{label}/{dimension} must be 1..5")
+        preferred = str(row.get("preferred") or "").upper()
+        if preferred not in {"A", "B", "TIE"}:
+            raise ValueError(f"{pair_id}/preferred must be A, B or tie")
+        row["preferred"] = preferred
         by_pair[pair_id] = row
     if set(by_pair) != {f"P{i}" for i in range(1, 6)}:
-        raise ValueError("response must score P1 through P5")
+        raise ValueError("response must choose P1 through P5")
     return [by_pair[f"P{i}"] for i in range(1, 6)]
 
 
@@ -56,17 +51,15 @@ def review(pack_path: Path, key_path: Path, *, model: str) -> dict[str, Any]:
     pack = pack_path.read_text(encoding="utf-8")
     system = (
         "You are an independent institutional-equity-research editor. "
-        "Score each A/B dossier independently without guessing authorship. "
-        "Use integer 1-5 scores for detail, evidence_density, and anti_hype_discipline. "
-        "Evidence density rewards traceable sources and explicit unknowns, not merely many numbers. "
-        "Anti-hype discipline rewards falsifiers, counter-evidence and issuer-claim downgrades. "
-        "Return valid JSON only with top-level scores. Include concise notes but do not quote either dossier."
+        "Choose the stronger overall dossier in each A/B pair without guessing authorship. "
+        "Judge company-specific detail, evidence density, readability and anti-hype discipline together. "
+        "Traceable facts and explicit unknowns matter, but mechanical tables alone do not equal depth. "
+        "Return valid JSON only with top-level choices. Include concise notes but do not quote either dossier."
     )
     user = (
         "Review all five pairs in this blind pack. Output "
-        '{"scores":[{"pair_id":"P1","A":{"detail":1,"evidence_density":1,'
-        '"anti_hype_discipline":1},"B":{"detail":1,"evidence_density":1,'
-        '"anti_hype_discipline":1},"notes":"short"}]} with P1-P5 exactly once.\n\n'
+        '{"choices":[{"pair_id":"P1","preferred":"A","notes":"short"}]} '
+        'with P1-P5 exactly once. Use preferred "tie" only when neither document is stronger.\n\n'
         + pack
     )
     request_payload = {
@@ -98,14 +91,14 @@ def review(pack_path: Path, key_path: Path, *, model: str) -> dict[str, Any]:
     if choice.get("finish_reason") != "stop":
         raise RuntimeError(f"external review incomplete: {choice.get('finish_reason')}")
     parsed = json.loads(choice["message"]["content"])
-    scores = _validate_scores(parsed.get("scores"))
+    choices = _validate_choices(parsed.get("choices"))
     prompt_hash = hashlib.sha256((system + "\n" + user).encode()).hexdigest()
     return {
         "schema_version": "external-dossier-review-v1",
         "reviewer": {
             "id": f"deepseek:{payload.get('model') or model}",
             "role": "external_reader",
-            "scores": scores,
+            "choices": choices,
         },
         "receipt": {
             "request_id": payload.get("id"),

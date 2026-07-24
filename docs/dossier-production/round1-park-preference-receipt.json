@@ -1,0 +1,24 @@
+{
+  "schema_version": "dossier-blind-preference-receipt-v1",
+  "reviewed_at": "2026-07-24T13:46:00+08:00",
+  "pack_sha256": "4c274bc5ef1947e4b6574b34e49db6597cea738afb3cd553adbe128cc80c529a",
+  "reviewer": {
+    "id": "park",
+    "role": "park"
+  },
+  "pair_count": 5,
+  "results": [
+    {"ticker": "002371.SZ", "selected_origin": "benchmark"},
+    {"ticker": "002594.SZ", "selected_origin": "benchmark"},
+    {"ticker": "300308.SZ", "selected_origin": "benchmark"},
+    {"ticker": "300502.SZ", "selected_origin": "benchmark"},
+    {"ticker": "NVDA", "selected_origin": "benchmark"}
+  ],
+  "self_wins": 0,
+  "benchmark_wins": 5,
+  "ties": 0,
+  "required_self_wins": 4,
+  "passed": false,
+  "decision": "Revise the self-produced template and dossiers, rebuild a newly randomized blind pack, and rerun Park plus external-reader preferences.",
+  "boundary": "The A/B key and benchmark prose remain runtime-only."
+}

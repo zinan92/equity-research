@@ -4,15 +4,15 @@ status: "structural-replay"
 company: "NVIDIA Corporation"
 ticker: "NVDA"
 market: "NASDAQ"
-as_of: "2026-07-23"
-prepared_by: "dossier-pilot/manual-v1"
-evidence_cutoff: "2026-07-23"
-replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b987f6e268"
+as_of: "2026-07-24"
+prepared_by: "dossier-pilot/codex-v2"
+evidence_cutoff: "2026-07-24"
+replayed_from_sha256: "80b60e6732aad72db4718f4dcccaf2c3f961226f9e2e008effc44929f8972396"
 ---
 
 # NVIDIA｜公司档案（样例）
 
-> **用途**：这是对模板的首个自有证据样例，不复制任何第三方档案正文，也不是投资建议。事实编号均能追溯到末尾来源；研究判断与公司披露分开。
+> **阅读方式**：NVIDIA 的核心不是一句“GPU 龙头”，而是 GPU、互联、系统和软件形成的计算平台。下面先解释创始人连续性、平台演进和客户采购结构，再审计最新财务、集中风险与当前估值；不复制第三方档案正文。
 
 ## 1. 一句话定位
 
@@ -25,7 +25,14 @@ replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b98
 | --- | --- | --- |
 | 公司/证券身份 | NVIDIA Corporation 在美国 SEC 以 CIK 0001045810 披露，FY2026 年结为 2026-01-25。 | [S-01] |
 | 创始人/关键管理者 | Jensen Huang 于 1993 年创立 NVIDIA，并自创立起担任 President、CEO 和董事会成员。 | [S-02] |
-| 治理观察 | 本样例未对投票权、激励或继任安排作独立判断；需读取 proxy 后补充。 | 待核验 |
+| 治理观察 | 2026 proxy 披露 Jensen Huang 截至 2026-03-23 实益拥有 870,604,104 股，占 3.58%；创始人控制力主要来自职位、战略与文化连续性，不是多数投票权。[S-04] | [S-04] |
+
+### 人和组织
+
+- **Jensen Huang**于 1993 年共同创办 NVIDIA，此后持续担任 President、CEO 和董事；公司官方履历还记录其在 LSI Logic 和 AMD 的半导体工作经历。[S-02]
+- 2026 proxy 将 Huang 的直接/信托/基金会相关实益持股合计为 870,604,104 股、占 3.58%。这是一笔巨额经济敞口，但远低于绝对控股。[S-04]
+- **研究判断**：三十多年创始人连续性让架构、开发者生态和资本开支保持长期一致；反面是继任机制、关键人依赖和对单一战略判断的组织集中。
+- FY2027 第一季度三名直接客户分别贡献总收入 21%、17% 和 16%，合计 54%；公司平台很强，但收入并不分散。[S-05]
 
 ## 3. 技术来源与发展史
 
@@ -35,7 +42,17 @@ replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b98
 | 1999 | 公司称 GPU 的发明推动 PC gaming、计算机图形和现代 AI 的发展。 | GPU 架构与开发者工具的长期积累是平台叙事的事实基础；护城河强度仍需客户迁移成本证据。 | [S-02] |
 | FY2026 | 公司披露 NVLink Fusion，用于让 hyperscaler 与 custom ASIC 设计者接入其平台。 | 互联开放可能扩大平台边界，也可能降低封闭生态控制力；需持续跟踪采用。 | [S-01] |
 
+### 平台如何形成
+
+- 1993 年公司成立，1999 年推出 GeForce 256 并推广 GPU 概念；图形计算是硬件规模与开发者基础的起点。[S-02]
+- 2006 年 CUDA 把 GPU 从图形处理扩展到通用并行计算；**研究判断**：软件工具、库和开发者习惯比单颗芯片性能更难迁移。[S-02]
+- FY2026 的收入主要来自硬件与系统产品，平台同时包含 GPU、网络和软件；NVLink Fusion 允许客户把自研 CPU/ASIC 接入 NVIDIA 互联。[S-01]
+- FY2027 第一季度 Blackwell 系统、InfiniBand、Spectrum-X Ethernet 与 NVLink 共同推动 Compute & Networking 增长，说明公司卖的是计算与网络组合，而非只有一块 GPU。[S-05]
+- 下一代 Vera Rubin 已被公司发布，但未来性能、出货时间和客户采用属于前瞻，不进入已兑现事实。[S-05]
+
 ## 4. 商业模式与业务线
+
+NVIDIA 主要把芯片、板卡、网络、系统与软件授权/支持卖给云厂商、OEM/ODM、系统集成商和模型公司。直接客户可能再把算力交付给最终云客户，因此“谁开资本支出、谁下订单、谁真正使用”不是同一层。收入由新架构放量、整机柜/网络附加值和供应能力共同决定；客户自研 ASIC 或云资本开支放缓会同时影响销量与议价。
 
 | 业务线/平台 | 客户与交付物 | 收入或经营证据 | 关键依赖 | 来源 |
 | --- | --- | --- | --- | --- |
@@ -50,7 +67,14 @@ replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b98
 | FY2026 | 收入 | 2,159.38 亿美元 | +65% | GAAP | [S-03] |
 | FY2026 | 毛利率 | 71.1% | -3.9 个百分点 | GAAP | [S-03] |
 | FY2026 | 净利润 | 1,200.67 亿美元 | +65% | GAAP | [S-03] |
+| FY2025 | 收入 / 净利润 | 1,304.97 / 728.80 亿美元 | 历史可比 | GAAP | [S-01] |
+| FY2024 | 收入 / 净利润 | 609.22 / 297.60 亿美元 | 历史可比 | GAAP | [S-01] |
 | Q4 FY2026 | Data Center 收入 | 623 亿美元 | +75% | 公司新闻稿 | [S-03] |
+| Q1 FY2027 | 收入 / Data Center 收入 | 816.15 / 752.00 亿美元 | +85% / +92% | GAAP / 公司平台口径 | [S-05] |
+| Q1 FY2027 | GAAP 毛利率 / 净利润 | 74.9% / 583.21 亿美元 | +14.4 个百分点 / +211% | GAAP | [S-05] |
+| 2026-07-24 00:15 UTC | 股价 / 总市值 / PE | 208.76 美元 / 约 5.09 万亿美元 / 约 31.77 倍 | point-in-time market snapshot | 不回填历史 | [S-06] |
+
+FY2024 到 FY2026，收入从 609.22 亿美元增长到 2,159.38 亿美元，净利润从 297.60 亿美元增长到 1,200.67 亿美元；Q1 FY2027 仍同比高速增长。[S-01][S-05] 但 FY2027 第一季度 GAAP 净利润包含较大的证券投资相关收益，不能只用净利润增速推断核心经营利润；同时当前约 5.09 万亿美元市值意味着市场已预期高增长延续。[S-05][S-06]
 
 ## 6. 护城河的证据链
 
@@ -58,6 +82,7 @@ replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b98
 | --- | --- | --- | --- |
 | 加速计算平台拥有生态与系统级黏性 | 公司披露其平台涵盖 GPU、网络，并服务多类客户；FY2026 提出 NVLink Fusion。[F-01][S-01] | 若大客户将训练/推理工作负载稳定迁移到替代平台、且不再需要其软硬件栈。 | **中等置信度的研究判断**：证据支持平台范围，不足以单独量化客户转换成本。 |
 | Data Center 是增长引擎 | FY2026 Data Center 收入同比 +68%。[S-01] | 若后续报告显示 Data Center 增长显著低于总收入或出现持续客户集中度恶化。 | **事实支持强，持续性判断待更新**。 |
+| 计算、网络与软件形成系统级平台 | Q1 FY2027 Compute & Networking 增长由 Blackwell、InfiniBand、Spectrum-X 与 NVLink 共同推动。[S-05] | 客户稳定把工作负载迁移到自研 ASIC/替代网络，或系统附加值下降。 | **中等偏高置信度**：组合收入事实明确，迁移成本仍需客户侧验证。 |
 
 ## 7. 风险、反题材与观察触发器
 
@@ -66,22 +91,25 @@ replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b98
 | 中国 Data Center compute 暴露 | 公司 FY2027 Q1 outlook 未假设中国 Data Center compute 收入。 | 后续业绩披露调整中国假设或出现新的出口/许可变化。 | 下一份 10-Q / earnings release。 | [S-03] |
 | 组合复杂度与毛利率 | FY2026 GAAP 毛利率为 71.1%，公司称向 Blackwell 全规模数据中心方案转换以及 H20 相关费用影响毛利率。 | 毛利率持续低于公司指引区间，或库存/采购义务费用扩大。 | 下一份 10-Q / earnings release。 | [S-01] |
 | Gaming 供给约束 | 公司预计 FY2027 Q1 及之后 Gaming 供给约束可能构成逆风。 | 供给约束延长或 Gaming 增长显著放缓。 | 下一份 earnings release。 | [S-01] |
+| 客户集中 | FY2027 第一季度三名直接客户分别占收入 21%、17% 和 16%。[S-05] | 任一大客户削减订单、转向自研 ASIC，或直接/间接客户库存上升。 | 下一份 10-Q 的 concentration disclosure。 | [S-05] |
+| 库存与采购承诺 | Q1 FY2027 库存由年初 214.03 亿美元增至 257.97 亿美元，公司还需管理晶圆、封装、内存和系统采购承诺。[S-05] | 库存增速持续快于收入、新架构切换产生减值或供应承诺费用。 | 下一份 10-Q 的库存与 commitments。 | [S-05] |
 
 ## 8. 研究结论与待补问题
 
 - **事实结论**：FY2026 的收入、Data Center 增长和利润率显示公司规模及增长处于高位；这些都是截至各披露期的历史事实。[S-01][S-03]
-- **研究判断**：平台深度与增长持续性应视为待证假设，而不是“永久垄断”结论；最关键的反例是客户工作负载迁移和政策/供给冲击。
-- **待补问题**：客户集中度、供应商依赖、回购/股权激励、区域收入与竞争对手替代，需要从 10-K 注释、proxy 和后续 10-Q 再建证据包。[S-01]
+- **研究判断**：平台深度与增长持续性应视为待证假设，而不是“永久垄断”结论；最关键反例是大客户把训练/推理迁移到自研 ASIC、网络附加值下降，或出口/供应链冲击。
+- **市场在交易什么**：约 5.09 万亿美元市值要求 Blackwell/Vera Rubin 代际持续放量、云资本支出维持、客户集中不转化为订单断层，并保持接近当前的高利润率；这是“高质量 + 高预期”，不是低预期安全垫。[S-05][S-06]
+- **待补问题**：直接与间接客户的真实最终需求、供应商/先进封装/HBM 依赖、证券投资收益对利润的影响、回购与股权激励净稀释、Vera Rubin 量产节奏仍需继续更新。[S-01][S-04][S-05]
 
 ## 9. 生产记录
 
 | 字段 | 值 |
 | --- | --- |
-| 运行 ID | `nvda-dossier-pilot-2026-07-24-structural-replay` |
+| 运行 ID | `nvda-dossier-pilot-2026-07-24-structural-replay-v2` |
 | 采集/写作耗时 | 约 20 分钟初稿 + 约 8 分钟官方页面重开与数字回读。 |
 | 模型/人工介入 | Codex 选择 SEC、IR 与公司 Newsroom 来源；2026-07-24 重新打开三项官方来源核验；未使用第三方档案文本。 |
 | token 记录 | 见 `pilot-production-manifest.json`；历史初稿无独立计数，重验区间使用 Goal 级计数器记录并显式标注范围。 |
-| 已用来源数 | 3 |
+| 已用来源数 | 6 |
 | 复跑策略 | 固定模板 + 固定事实 ID；以新的 evidence cutoff 重跑，并对事实、判断与待补问题生成 diff。 |
 
 ## Sources
@@ -91,3 +119,6 @@ replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b98
 | S-01 | NVIDIA / SEC | FY2026 Form 10-K | 2026-02-25 | https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm | 业务、客户、平台、分部增长与风险 |
 | S-02 | NVIDIA Newsroom | Jensen Huang bio | accessed 2026-07-24 | https://nvidianews.nvidia.com/bios/jensen-huang | 创立年份、CEO 角色、GPU 历史表述 |
 | S-03 | NVIDIA Investor Relations | Q4 and FY2026 financial results | 2026-02-25 | https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/ | FY2026 GAAP 财务数字、Q4 Data Center、指引 |
+| S-04 | NVIDIA / SEC | 2026 Proxy Statement | 2026-05-12 | https://www.sec.gov/Archives/edgar/data/1045810/000104581026000036/nvda-20260512.htm | 创始人持股、治理与薪酬边界 |
+| S-05 | NVIDIA / SEC and IR | Q1 FY2027 Form 10-Q and results | 2026-05-20 | https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm | 最新季度财务、客户集中、库存与平台增长 |
+| S-06 | Nasdaq market data | NVDA real-time quote snapshot | accessed 2026-07-24 00:15 UTC | https://www.nasdaq.com/market-activity/stocks/nvda/real-time | 股价、市值与 PE point-in-time snapshot |
