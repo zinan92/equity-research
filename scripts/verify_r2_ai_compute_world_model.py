@@ -21,6 +21,7 @@ if __name__ == "__main__":
     parser.add_argument("--financial-delivery-receipt", type=Path)
     parser.add_argument("--falsifier-evidence-receipt", type=Path)
     parser.add_argument("--moat-evidence-receipt", type=Path)
+    parser.add_argument("--market-future-evidence-receipt", type=Path)
     args = parser.parse_args()
     captures = capture_official_evidence(
         (item.evidence_url for item in audited_candidates()), fetched_at="2026-07-24T00:00:00Z"
@@ -29,4 +30,5 @@ if __name__ == "__main__":
     financial = json.loads(args.financial_delivery_receipt.read_text(encoding="utf-8")) if args.financial_delivery_receipt else None
     falsifier = json.loads(args.falsifier_evidence_receipt.read_text(encoding="utf-8")) if args.falsifier_evidence_receipt else None
     moat = json.loads(args.moat_evidence_receipt.read_text(encoding="utf-8")) if args.moat_evidence_receipt else None
-    print(json.dumps(audit_r2(receipt, captures, repository_root=ROOT, financial_delivery_receipt=financial, falsifier_evidence_receipt=falsifier, moat_evidence_receipt=moat), ensure_ascii=False, sort_keys=True, indent=2))
+    market_future = json.loads(args.market_future_evidence_receipt.read_text(encoding="utf-8")) if args.market_future_evidence_receipt else None
+    print(json.dumps(audit_r2(receipt, captures, repository_root=ROOT, financial_delivery_receipt=financial, falsifier_evidence_receipt=falsifier, moat_evidence_receipt=moat, market_future_evidence_receipt=market_future), ensure_ascii=False, sort_keys=True, indent=2))
