@@ -56,6 +56,8 @@
 - Next E4 step: rerun the bounded sell-side corpus using runtime raw persistence, then parse the archived PDFs through B3/C3 into page-cited viewpoints before the #218 coverage gate.
 - E4-S4r is merged: re-hashed, runtime-local E4 sell-side PDFs can now be parsed through the existing B3 parser into document/page/chunk identities with parser version and typed blockers; this is page evidence only, not an analyst claim, matrix, Tier or decision.
 - Next E4 step: rerun the 100-ticker sell-side batch on the raw-persistent path, then compile page-cited C3 viewpoints/estimate receipts against matching Context Packs.
+- E4-S4s is merged: a catalog broker/rating can enter the existing C3 matrix only when the same report PDF has been re-hashed and page-verified; target, estimates and claims remain explicit missing fields rather than inferred prose, and output is still non-Tier/non-decision input.
+- Next E4 step: finish the raw-persistent 100-ticker run, compile its page evidence and C3 matrices, then bind only matching Context Packs into partial Report Models before re-running #218.
 
 ## 2026-07-24 · E4-S4b strict coverage baseline
 
