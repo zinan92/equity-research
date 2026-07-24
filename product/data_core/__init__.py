@@ -266,6 +266,13 @@ from .viewpoint_matrix import (
     ViewpointRow,
     build_sell_side_viewpoint_matrix,
 )
+from .valuation_context import (
+    VALUATION_CONTEXT_SCHEMA_VERSION,
+    ContextBoundValuation,
+    ViewpointContextReceipt,
+    run_context_bound_valuation,
+    validate_viewpoint_matrix_context,
+)
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -336,4 +343,6 @@ __all__ = [
     "SellSideViewpoint", "SellSideViewpointMatrix", "TopicEvidence",
     "ViewpointClaim", "ViewpointCoverage", "ViewpointRevision", "ViewpointRow",
     "build_sell_side_viewpoint_matrix",
+    "VALUATION_CONTEXT_SCHEMA_VERSION", "ContextBoundValuation", "ViewpointContextReceipt",
+    "run_context_bound_valuation", "validate_viewpoint_matrix_context",
 ]

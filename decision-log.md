@@ -1240,3 +1240,15 @@
 
 - unknown ticker 和 non-real snapshot 都返回 structured missing/gap，禁止猜测或 fallback 到 archive dossier。
 - 本 Story 不改 product/static；前端接 canonical API 必须保持 Claude-owned 的独立 ticket。
+
+## 2026-07-24 · E3-S6 Context Pack 估值与卖方矩阵绑定
+
+- Decision：复用 C2 `run_deterministic_valuation()` 与 C3 `build_sell_side_viewpoint_matrix()`；新增薄的 Context Pack binding，只允许已通过 evidence gate 的身份进入估值与卖方报告回执。
+- Why：估值数字、券商观点和页级 PDF 引用只有同时能回到同一 frozen evidence manifest 时，才可被重放和审计；不能因引擎本身可运行就把未验收数据写成研究结论。
+- Evidence：`product/data_core/valuation_context.py` 和 `product/tests/test_valuation_context.py`；focused tests 证明估值 replay、component/ticker fail-closed、报告 raw hash join，以及 fixture evidence 被 gate 拒绝。
+
+### Gotchas · E3-S6
+
+- Context Pack 证明输入证据身份，不会替估值假设背书；任何未来可见、货币/单位/股本冲突仍必须由 C2 原有校验阻断。
+- C3 已负责 report/document/page citation 正确性；本 bridge 只补 raw hash 必须进入 accepted Context Pack 的连接，缺 PDF、缺字段和 blocked claim 必须显式留在 receipt。
+- 测试中的合成候选只验证合同；带 `fixture` quality flag 的候选不能通过 production Context Pack，也不能被用于发布回执。
