@@ -8,6 +8,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.ashare_resolver import AShareResolver, SecurityAlias, SecurityStatus  # noqa: E402
+from scripts.verify_ashare_resolver import verify  # noqa: E402
 
 
 class AShareResolverTests(unittest.TestCase):
@@ -39,6 +40,11 @@ class AShareResolverTests(unittest.TestCase):
         collision = self.resolver.resolve("同名", as_of="2026-01-01")
         self.assertEqual(collision["status"], "ambiguous")
         self.assertEqual(len(collision["candidates"]), 2)
+
+    def test_100_ticker_contract_corpus_covers_all_three_exchanges(self) -> None:
+        receipt = verify()
+        self.assertEqual(receipt["count"], 100)
+        self.assertEqual(receipt["markets"], ["BSE", "SSE", "SZSE"])
 
 
 if __name__ == "__main__":
