@@ -18,9 +18,11 @@ from data_core.r2_acceptance import audit_r2  # noqa: E402
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("batch_receipt", type=Path)
+    parser.add_argument("--financial-delivery-receipt", type=Path)
     args = parser.parse_args()
     captures = capture_official_evidence(
         (item.evidence_url for item in audited_candidates()), fetched_at="2026-07-24T00:00:00Z"
     )
     receipt = json.loads(args.batch_receipt.read_text(encoding="utf-8"))
-    print(json.dumps(audit_r2(receipt, captures, repository_root=ROOT), ensure_ascii=False, sort_keys=True, indent=2))
+    financial = json.loads(args.financial_delivery_receipt.read_text(encoding="utf-8")) if args.financial_delivery_receipt else None
+    print(json.dumps(audit_r2(receipt, captures, repository_root=ROOT, financial_delivery_receipt=financial), ensure_ascii=False, sort_keys=True, indent=2))
