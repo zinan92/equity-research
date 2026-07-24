@@ -51,7 +51,7 @@
     {"ticker":"688012.SH","name":"中微公司","market":"A","sector":"半导体设备材料","reason":"单点强项与平台型设备商对照。"},
     {"ticker":"300346.SZ","name":"南大光电","market":"A","sector":"半导体设备材料","reason":"材料链条样本，区别于设备口径。"},
     {"ticker":"8035.T","name":"Tokyo Electron","market":"JP","sector":"半导体设备材料","reason":"全球设备标杆，验证日股行情路径。"},
-    {"ticker":"0981.HK","name":"中芯国际","market":"HK","sector":"半导体设备材料","reason":"港股晶圆制造公司，覆盖设备需求侧。"},
+    {"ticker":"00981.HK","name":"中芯国际","market":"HK","sector":"半导体设备材料","reason":"港股晶圆制造公司，覆盖设备需求侧。"},
 
     {"ticker":"300308.SZ","name":"中际旭创","market":"A","sector":"光模块","reason":"高速模块规模交付样本。"},
     {"ticker":"300502.SZ","name":"新易盛","market":"A","sector":"光模块","reason":"高弹性、外销集中的光模块样本。"},
@@ -67,7 +67,7 @@
     {"ticker":"300124.SZ","name":"汇川技术","market":"A","sector":"机器人","reason":"工业自动化核心部件样本。"},
     {"ticker":"002747.SZ","name":"埃斯顿","market":"A","sector":"机器人","reason":"国产机器人本体样本。"},
     {"ticker":"688165.SH","name":"埃夫特","market":"A","sector":"机器人","reason":"机器人本体与软件服务的高缺口样本。"},
-    {"ticker":"9880.HK","name":"优必选","market":"HK","sector":"机器人","reason":"港股人形机器人样本。"},
+    {"ticker":"09880.HK","name":"优必选","market":"HK","sector":"机器人","reason":"港股人形机器人样本。"},
     {"ticker":"6324.T","name":"Harmonic Drive Systems","market":"JP","sector":"机器人","reason":"日股减速器关键部件标杆。"},
     {"ticker":"6861.T","name":"Keyence","market":"JP","sector":"机器人","reason":"工业自动化全球标杆。"},
 
