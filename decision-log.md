@@ -1799,3 +1799,14 @@
 
 - B2 archive output 是卖方 input；没有通过 C3 page citation 与 Context Pack 绑定前，不能作为 matrix、Tier、target、position 或 action 的证据。
 - runtime receipt/PDF 一律不提交；collector 遇到反爬、404 或超时只能记录 metadata/typed failure，不能切换 proxy、cookie 或其他数据源。
+
+## 2026-07-25 · E4-S4q 卖方 PDF runtime raw 保存
+
+- Decision：E4-S4p 的 ingestion attempts 使用 content-addressed runtime sink 保存已成功抓取且 SHA-256 验证一致的 catalog/PDF bytes；receipt 只在本地文件存在且复验哈希后暴露 runtime path。
+- Why：B2 的 raw hash 和 storage URI 足以说明归档身份，但 B3/C3 的页级 citation 还需要可重读的 PDF bytes；不能为方便解析而将 PDF 提交进仓库。
+- Evidence：`RuntimeRawAuthoritySink` 与 `test_e4_sell_side_evidence_batch.py` 覆盖 hash-bound write、mismatch 拒绝与 metadata-only 不产生本地 path。
+
+### Gotchas · E4-S4q
+
+- runtime path 是本机临时材料，不是 canonical storage authority；正式发布仍需由已配置的 authority sink 接管同一 raw hash。
+- 每次写入都重验 payload hash；任何 collision、path escape 或文件漂移都是阻断，不可用旧 PDF 替代。
