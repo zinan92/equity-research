@@ -263,6 +263,7 @@ from .event_intelligence import (
     collect_intelligence,
     collect_intelligence_async,
 )
+from .research_outcomes import OUTCOME_SCHEMA_VERSION, build_outcome_receipt
 from .evidence_gate import (
     EVIDENCE_GATE_SCHEMA_VERSION,
     CoverageReport,
@@ -398,6 +399,7 @@ __all__ = [
     "IntelligenceBatch", "IntelligenceEvent", "IntelligenceEvidence",
     "attach_event_inference", "build_event_topology", "canonical_article_url",
     "collect_intelligence", "collect_intelligence_async",
+    "OUTCOME_SCHEMA_VERSION", "build_outcome_receipt",
     "EVIDENCE_GATE_SCHEMA_VERSION", "CoverageReport",
     "CoverageRequirementResult", "EvidenceCandidate", "EvidenceConflict",
     "EvidenceGatePolicy", "EvidenceGateReceipt", "EvidenceRequirement",

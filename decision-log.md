@@ -1766,3 +1766,14 @@
 
 - `fulfilled`、`delayed`、`broken` 是显式人/规则判断结果，不是新闻标题或模型自动结论；需要 event evidence identity 和 rule/model version。
 - proposal 不等于写入，写入仍必须通过 raw hash/snapshot authority。没有 action、target、position 或 order output。
+
+## 2026-07-25 · E7-S3 发布时点 outcome attribution
+
+- Decision：复用 canonical publication/report identity；将 report 的 `as_of`/`known_at` 与 starting market price 冻结，之后的价格、benchmark、industry 与 basic fundamental observation 只能进入独立 outcome window。
+- Why：回看研究价值必须有结果，但不能让后来可见的数据回写为当时的研究依据。
+- Evidence：`test_research_outcomes.py` 验证 component attribution、frozen basis 与 cutoff/identity fail-closed；`test_research_refresh_v1` 确认 publication/report contracts 未回归。
+
+### Gotchas · E7-S3
+
+- outcome window 不是历史投资业绩或 backtest；缺失 benchmark、industry 或 fundamental component 必须保持 missing。
+- outcome receipt 不能生成或升级 rating、target、position、recommendation 或 order。
