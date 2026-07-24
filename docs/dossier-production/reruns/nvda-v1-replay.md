@@ -7,7 +7,7 @@ market: "NASDAQ"
 as_of: "2026-07-24"
 prepared_by: "dossier-pilot/codex-v2"
 evidence_cutoff: "2026-07-24"
-replayed_from_sha256: "a1186e72451b76d70cd0dc9a44d0e3357bd9a61cbee74df4efc5829919ccfcff"
+replayed_from_sha256: "17efa31430cf00c5d27c20f03d3f00f41b9620b0f4d8e4a362a53f1535ea7626"
 ---
 
 # NVIDIA（NVDA）｜公司档案
@@ -15,6 +15,15 @@ replayed_from_sha256: "a1186e72451b76d70cd0dc9a44d0e3357bd9a61cbee74df4efc582991
 > **最新数据卡｜Q1 FY2027**　收入 **816.15 亿美元（+85%）**　Data Center **752.00 亿美元（+92%）**　GAAP 净利润 **583.21 亿美元（+211%）**　毛利率 **74.9%**。[S-05]
 >
 > **当前定价｜2026-07-24 00:15 UTC**　股价 **208.76 美元**　总市值约 **5.09 万亿美元**　PE 约 **31.77 倍**。[S-06]
+
+## 产业坐标
+
+- **产业链位置**：TSMC/Samsung 晶圆制造、SK hynix/Micron/Samsung 存储、先进封装与代工装配 → NVIDIA 的 GPU、CPU、网络、整机系统和软件平台 → 云厂商、AI 模型公司、企业和公共部门。它是 fabless 平台王者，但不是独立于上游制造的全能公司。[S-01]
+- **直接竞品坐标**：AMD、Intel、Huawei 在 GPU/加速计算侧竞争；Broadcom 与大型云厂商的自研 ASIC 在定制芯片侧竞争；Arista、Broadcom、Cisco 等又在网络侧竞争。NVIDIA 的独特性是把计算、互联、系统和软件一起卖，而不是每条产品线都没有对手。[S-01]
+- **替代路线坐标（研究判断）**：通用 GPU 赢在生态与灵活性，定制 ASIC 赢在特定负载的成本和能效。NVLink Fusion 允许客户把自研 CPU/XPU 接入 NVIDIA 互联，说明公司正在把潜在替代品变成平台参与者；如果客户最终绕开整个平台，这个策略就会失效。[S-01]
+- **议价权与约束**：CUDA、网络和整机系统提高迁移成本，公司因而拥有强平台议价权；反面是晶圆、HBM、封装集中在少数供应商，且直接客户高度集中，上下游任何一端都能卡住交付或订单。[S-01][S-05]
+
+**大白话逻辑链**：模型越大 → 要的算力和网络越多 → 开发者先在 CUDA 上写软件 → 云厂商继续买 NVIDIA 全栈 → 更多开发者再被吸进生态。断点是大客户自研 ASIC 足够好、供应链交不出货，或出口限制让客户被迫迁移。[S-01]
 
 ## 一句话定位
 
@@ -81,7 +90,7 @@ NVIDIA 把芯片、板卡、网络、整机系统和软件授权/支持卖给云
 
 | 字段 | 值 |
 | --- | --- |
-| 运行 ID | `nvda-dossier-pilot-2026-07-24-structural-replay-v5` |
+| 运行 ID | `nvda-dossier-pilot-2026-07-24-structural-replay-v6` |
 | 采集/写作耗时 | 约 20 分钟初稿 + 约 8 分钟官方页面重开与数字回读。 |
 | 模型/人工介入 | Codex 选择 SEC、IR 与公司 Newsroom 来源；2026-07-24 重新打开三项官方来源核验；未使用第三方档案文本。 |
 | token 记录 | 见 `pilot-production-manifest.json`；历史初稿无独立计数，重验区间使用 Goal 级计数器记录并显式标注范围。 |

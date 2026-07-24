@@ -15,6 +15,10 @@
     "revised_at": "2026-07-24T15:17:03+08:00",
     "reason": "Round 4 again failed Park preference 0/5. Park identified the missing product trait directly: the benchmark compresses company uniqueness into directional labels. Round 5 adds a sourced uniqueness position and a memorable asset-character conclusion to every dossier; superlatives are explicitly scoped as research judgments rather than unsupported facts."
   },
+  "round6_revision": {
+    "revised_at": "2026-07-24T15:45:14+08:00",
+    "reason": "Park judged Round 5 close but still preferred the benchmark because it pinpoints each company on a broader map. Round 6 adds a fixed industry-coordinate layer covering value-chain position, domestic peer context, global peer or substitute context, bargaining constraints, and a plain-language causal chain before the uniqueness statement."
+  },
   "token_accounting": {
     "counter": "Codex Goal tokensUsed",
     "meaning": "Inclusive interval delta covering research, reasoning, tool calls and authoring between two counter reads. It is not provider prompt/completion usage and must not be used for API billing.",
