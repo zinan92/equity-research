@@ -1513,3 +1513,14 @@
 
 - 40 个 Tier C model 是真实 evidence-bound inputs，不是 95/80/20 gate 的替代；不得因为有模型 hash 就输出 target、position 或 Tier A/B 语言。
 - runtime raw path 相对采集 worktree；编译必须从同一运行根目录执行，否则会将存在的 PDFs 错判为 `partial_model_input_invalid`。跨 worktree 的错误编译结果不进入基线证据。
+
+## 2026-07-24 · E4-S4j 市场与 PIT 财务批次 checkpoint
+
+- Decision：复用 E4-S4h 的 A4 companion collector，并为长运行的 100-ticker batch 增加逐 ticker runtime checkpoint、in-progress/completed pointer 与 exact-config/input-hash resume contract。
+- Why：市场与 PIT 财务是后续估值/质量模块的必要输入；100 ticker 外部采集不能因进程中断重复请求已完成 issuer，且任何不同 identity 或 official baseline 都不能静默混入同一 receipt。
+- Evidence：`product/data_core/e4_market_fundamentals_batch.py` 与 `product/tests/test_e4_market_fundamentals_batch.py`。interrupted-run fixture 在首 ticker checkpoint 后中断，重跑仅处理未完成 ticker；mismatch fixture fail closed。
+
+### Gotchas · E4-S4j
+
+- companion receipt 是 market/fundamentals availability 证明，不是 accepted evidence corpus；即使全部组件 real/publishable，也不会独自提升 Tier、target、position 或 audit credit。
+- checkpoint 绑定 official receipt hash，故新的官方 corpus 或配置必须创建新的 runtime root；不得为省时手改 pointer 或拼接两个 corpus。

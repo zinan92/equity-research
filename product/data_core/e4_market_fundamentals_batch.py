@@ -15,6 +15,7 @@ from .e4_official_evidence_batch import load_real_identity_tickers
 
 
 E4_MARKET_FUNDAMENTALS_BATCH_SCHEMA_VERSION = "e4-s4-market-fundamentals-batch-v1"
+E4_MARKET_FUNDAMENTALS_CHECKPOINT_SCHEMA_VERSION = "e4-s4-market-fundamentals-checkpoint-v1"
 Collector = Callable[[str], AShareDataPacket]
 
 
@@ -22,6 +23,29 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
+
+
+def _run_config(
+    identity_receipt_path: Path, official_receipt_path: Path, *, max_tickers: int,
+    inter_ticker_delay_seconds: float, collector_timeout_seconds: float,
+) -> dict[str, Any]:
+    return {
+        "identity_receipt_sha256": hashlib.sha256(identity_receipt_path.read_bytes()).hexdigest(),
+        "official_receipt_sha256": hashlib.sha256(official_receipt_path.read_bytes()).hexdigest(),
+        "max_tickers": max_tickers,
+        "inter_ticker_delay_seconds": inter_ticker_delay_seconds,
+        "collector_timeout_seconds": collector_timeout_seconds,
+    }
+
+
+def _write_checkpoint(runtime_root: Path, *, config: Mapping[str, Any], rows: list[dict[str, Any]]) -> None:
+    payload = {
+        "schema_version": E4_MARKET_FUNDAMENTALS_CHECKPOINT_SCHEMA_VERSION,
+        "state": "in_progress", "data_kind": "real", "config": dict(config), "tickers": rows,
+        "truth_boundary": {"market_fundamentals_are_inputs_not_tier": True, "counts_as_tier_a_or_b": False, "counts_as_position_or_target": False},
+    }
+    _write_json(runtime_root / "market-fundamentals-batch-checkpoint.json", payload)
+    _write_json(runtime_root / "market-fundamentals-batch-latest.json", {"state": "in_progress", "receipt": "market-fundamentals-batch-checkpoint.json"})
 
 
 def _validate_official_receipt(path: Path) -> dict[str, Any]:
@@ -100,15 +124,43 @@ def run_market_fundamentals_batch(
     _validate_official_receipt(official_receipt_path)
     tickers = load_real_identity_tickers(identity_receipt_path)[:max_tickers]
     runtime_root.mkdir(parents=True, exist_ok=True)
-    rows = []
+    config = _run_config(identity_receipt_path, official_receipt_path, max_tickers=max_tickers, inter_ticker_delay_seconds=inter_ticker_delay_seconds, collector_timeout_seconds=collector_timeout_seconds)
+    latest_path = runtime_root / "market-fundamentals-batch-latest.json"
+    previous: dict[str, Mapping[str, Any]] = {}
+    resuming_checkpoint = False
+    if latest_path.exists():
+        pointer = json.loads(latest_path.read_text(encoding="utf-8"))
+        previous_path = runtime_root / str(pointer.get("receipt") or "")
+        if previous_path.is_file():
+            payload = json.loads(previous_path.read_text(encoding="utf-8"))
+            if pointer.get("state") == "in_progress":
+                if payload.get("schema_version") != E4_MARKET_FUNDAMENTALS_CHECKPOINT_SCHEMA_VERSION or payload.get("config") != config:
+                    raise ValueError("market fundamentals checkpoint does not match this corpus configuration")
+                previous = {str(row.get("ticker") or "").upper(): row for row in payload.get("tickers") or [] if row.get("status") in {"captured", "partial", "failed"}}
+                resuming_checkpoint = True
+            elif pointer.get("state") == "completed":
+                if payload.get("config") != config:
+                    raise ValueError("market fundamentals completed receipt does not match this corpus configuration")
+                previous = {str(row.get("ticker") or "").upper(): row for row in payload.get("tickers") or []}
+            else:
+                raise ValueError("market fundamentals latest pointer has unknown state")
+    rows: list[dict[str, Any]] = []
     for index, ticker in enumerate(tickers):
+        prior = previous.get(ticker)
+        if prior and resuming_checkpoint:
+            rows.append(dict(prior))
+            continue
+        if prior:
+            rows.append({"ticker": ticker, "status": "skipped", "data_kind": "real", "market_available": bool(prior.get("market_available")), "fundamentals_available": bool(prior.get("fundamentals_available")), "blockers": ["already_completed"]})
+            continue
         rows.append(_collect_isolated(ticker, collector_timeout_seconds, worker))
+        _write_checkpoint(runtime_root, config=config, rows=rows)
         if index < len(tickers) - 1 and inter_ticker_delay_seconds:
             sleep(inter_ticker_delay_seconds)
     receipt = {
         "schema_version": E4_MARKET_FUNDAMENTALS_BATCH_SCHEMA_VERSION,
-        "data_kind": "real", "identity_receipt_sha256": hashlib.sha256(identity_receipt_path.read_bytes()).hexdigest(),
-        "official_receipt_sha256": hashlib.sha256(official_receipt_path.read_bytes()).hexdigest(),
+        "data_kind": "real", "identity_receipt_sha256": config["identity_receipt_sha256"],
+        "official_receipt_sha256": config["official_receipt_sha256"], "config": config,
         "configured_max_concurrency": 1, "inter_ticker_delay_seconds": inter_ticker_delay_seconds,
         "collector_timeout_seconds": collector_timeout_seconds, "tickers": rows,
         "counts": {"requested": len(rows), "market_available": sum(bool(row["market_available"]) for row in rows), "fundamentals_available": sum(bool(row["fundamentals_available"]) for row in rows), "failed": sum(row["status"] == "failed" for row in rows)},
@@ -117,5 +169,8 @@ def run_market_fundamentals_batch(
     receipt["receipt_hash"] = digest(receipt)
     path = runtime_root / f"market-fundamentals-batch-{receipt['receipt_hash'][:16]}.json"
     _write_json(path, receipt)
-    _write_json(runtime_root / "market-fundamentals-batch-latest.json", {"receipt": path.name, "receipt_hash": receipt["receipt_hash"]})
+    _write_json(latest_path, {"state": "completed", "receipt": path.name, "receipt_hash": receipt["receipt_hash"]})
+    checkpoint_path = runtime_root / "market-fundamentals-batch-checkpoint.json"
+    if checkpoint_path.exists():
+        checkpoint_path.unlink()
     return {"path": str(path), "receipt": receipt}

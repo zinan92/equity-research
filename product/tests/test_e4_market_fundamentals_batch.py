@@ -31,3 +31,25 @@ class MarketFundamentalsBatchTest(unittest.TestCase):
    self.assertLess(time.monotonic()-started,2.5); self.assertEqual(r['receipt']['tickers'][0]['blockers'],['collector_timeout']); self.assertTrue(r['receipt']['tickers'][1]['market_available'])
    bad=official();bad['data_kind']='fixture';o.write_text(json.dumps(bad))
    with self.assertRaisesRegex(ValueError,'real E4 official'): run_market_fundamentals_batch(i,o,root/'bad',max_tickers=1,worker=good_worker)
+
+ def test_interrupted_run_resumes_checkpoint_without_recollecting(self):
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);i,o=self.paths(root)
+   def first_sleep(_seconds): raise KeyboardInterrupt()
+   with self.assertRaises(KeyboardInterrupt):
+    run_market_fundamentals_batch(i,o,root/'runtime',max_tickers=3,inter_ticker_delay_seconds=1,worker=good_worker,sleep=first_sleep)
+   pointer=json.loads((root/'runtime'/'market-fundamentals-batch-latest.json').read_text())
+   self.assertEqual(pointer['state'],'in_progress')
+   checkpoint=json.loads((root/'runtime'/'market-fundamentals-batch-checkpoint.json').read_text())
+   self.assertEqual([row['ticker'] for row in checkpoint['tickers']],['000000.SZ'])
+   result=run_market_fundamentals_batch(i,o,root/'runtime',max_tickers=3,inter_ticker_delay_seconds=1,worker=good_worker,sleep=lambda _seconds:None)
+   self.assertEqual(result['receipt']['counts']['requested'],3)
+   self.assertEqual(json.loads((root/'runtime'/'market-fundamentals-batch-latest.json').read_text())['state'],'completed')
+
+ def test_checkpoint_config_mismatch_fails_closed(self):
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d);i,o=self.paths(root)
+   with self.assertRaises(KeyboardInterrupt):
+    run_market_fundamentals_batch(i,o,root/'runtime',max_tickers=2,inter_ticker_delay_seconds=1,worker=good_worker,sleep=lambda _seconds:(_ for _ in ()).throw(KeyboardInterrupt()))
+   with self.assertRaisesRegex(ValueError,'does not match'):
+    run_market_fundamentals_batch(i,o,root/'runtime',max_tickers=3,inter_ticker_delay_seconds=1,worker=good_worker,sleep=lambda _seconds:None)
