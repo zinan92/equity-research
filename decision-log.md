@@ -1369,4 +1369,16 @@
 - `access_role` 是产品协作角色；现有持久 `role='owner'` 仍是唯一可管理成员的 authority，避免 editor 被错误当成管理者。
 - SQLite trigger 只能保护通过该数据库连接发生的 UPDATE/DELETE；备份恢复或宿主机文件访问是 E6-S2/E6-S3 的运行与备份边界，不能声称此处解决。
 - 审计 detail 的输入必须继续走 `_record()`；它会对 password/token/code/cookie 等键做 redaction，但不应把原始请求体、邀请码或会话值交给审计层。
+
+## 2026-07-24 · E6-S2 数据源与管线可观测性
+
+- Decision：复用 A5 refresh/orchestration receipt，新增本地 identity-only source-health、run-trace 与 alert lifecycle receipt；不新建 scheduler、监控 SaaS 或外发 telemetry。source health 只保留 adapter、可用性、交易日 freshness、data kind、覆盖影响、snapshot/evidence identity 和 hash。
+- Why：故障发现应从已存在的 canonical receipt 派生，避免出现一套看似健康但与数据快照无关的监控面板。
+- Evidence：`product/data_core/source_observability.py`、refresh attempt 的 `data_kind`、orchestration receipt 绑定与 `product/tests/test_source_observability.py`。测试覆盖 fallback 恢复不误报、fixture 不可升格生产健康、告警去重与恢复闭合。
+
+### Gotchas · E6-S2
+
+- 未被选中的 primary source 失败仍应可见，但在 explicit fallback 成功时 coverage impact 必须为零；否则会制造噪声告警。
+- data kind 不是质量的替代：`real` 仍须通过原有 B6/A5 门；但 `fixture/cached` 无论结构多完整都不能出现在 production healthy receipt。
+- 本 Story 只产生本地、可重放告警记录；向 PagerDuty/Slack 等外部通知的授权、凭据和服务级策略仍是未来独立工作，不能暗示已通知人。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。

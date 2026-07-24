@@ -19,6 +19,7 @@ from zoneinfo import ZoneInfo
 
 from .contracts import digest
 from .research_refresh import CanonicalResearchRefresh
+from .source_observability import SourceObservabilityLedger
 from .store import DataFoundation
 
 
@@ -303,6 +304,9 @@ class SnapshotOrchestrator:
             expected_trade_dates=plan.eligible_trade_dates,
         )
         receipt["remaining_gaps"] = [asdict(gap) for gap in after]
+        receipt["observability"] = SourceObservabilityLedger(self.refresh.state_root).record(
+            receipt, required_tickers=self.refresh.universe, now=now,
+        )
         receipt["receipt_hash"] = digest(receipt)
         path = self.refresh.state_root / "runs" / result["run_id"] / "orchestration.json"
         _atomic_json(path, receipt)
