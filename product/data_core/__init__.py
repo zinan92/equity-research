@@ -107,7 +107,13 @@ from .ashare_validation import (
     collect_validated_ashare_packet,
     collect_validated_ashare_packet_async,
 )
-from .local_cache import SQLiteFetchCache
+from .local_cache import CachedReportTask, SQLiteFetchCache, SQLiteReportTaskCache
+from .report_task_runtime import (
+    REPORT_TASK_RUNTIME_VERSION,
+    ReportTask,
+    ReportTaskResult,
+    run_report_task_batch,
+)
 from .research_refresh import (
     CanonicalComponent,
     CanonicalResearchRefresh,
@@ -345,6 +351,8 @@ __all__ = [
     "validate_official_source_role",
     "ONTOLOGY_VERSION", "IndustryNode", "IndustrySegment", "build_ontology", "ontology_receipt", "validate_ontology",
     "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
+    "CachedReportTask", "SQLiteReportTaskCache", "REPORT_TASK_RUNTIME_VERSION", "ReportTask",
+    "ReportTaskResult", "run_report_task_batch",
     "DocumentPage", "DocumentParseResult", "PageCitation", "ParserConfig",
     "PublicationGateResult", "ReportClaim", "TesseractCliOCR",
     "OFFICIAL_EVIDENCE_ANCHORS", "VERTICAL_SLICE_AS_OF", "VerticalSliceReceipt",

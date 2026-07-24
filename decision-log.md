@@ -1334,3 +1334,15 @@
 - 招行对应的 SSE 公告 URL 在本环境返回反自动化页面，不能绕过；因此引用同一发行人公司 IR 的公开年报摘要，并保留其来源差异，而不是伪称 SSE capture 成功。
 - 纵向切片的 as-of 固定为 2025-05-01，使 2025 年披露在 evidence gate 的 freshness policy 内。它是可重放的历史验证，不是当前时点的完整投研结论。
 - blocked receipt 允许 `current_price=None`：当 coverage 已不足时，必须返回 `missing_market_price`，不能用 1.0 等占位价凑出可执行仓位。
+
+## 2026-07-24 · E4-S2 多 ticker 报告任务
+
+- Decision：复用本地 SQLite cache 的运行边界，新增 report-task cache 与可恢复队列；cache key 只由 ticker、snapshot ID 与 evidence manifest hash 构成。任务按稳定 ticker 顺序逐项落盘，完成结果可复用，partial/failed 保留原因。
+- Why：多 ticker 运行的关键风险是跨股票串写和跨快照复用，而不是再造一个 scheduler。把 immutable identity 写进 cache 与 receipt，才能在中断后安全恢复。
+- Evidence：`product/data_core/local_cache.py`、`product/data_core/report_task_runtime.py`、`product/tests/test_report_task_runtime.py`。覆盖 snapshot/evidence isolation、注入中断后的 selective resume、队列/rate-limit receipt 和 cross-ticker builder fail-closed。
+
+### Gotchas · E4-S2
+
+- `configured_max_concurrency` 目前是显式配置与 receipt 字段，effective concurrency 故意固定为 1；在没有 provider-specific parallel rate-limit contract 前，不能把配置名误解为已安全并发抓取。
+- cache 只是 mutable local replay state，`authority=False`；它不提升任何事实的 authority，也不能把 partial/failed 报告变成 completed。
+- 旧 `batch_research.py` 的固定八股 universe 仍保留，E4-S2 新 runner 是 E3/E4 immutable report-task glue，不能混淆为同一生产入口。

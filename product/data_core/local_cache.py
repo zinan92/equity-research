@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 import sqlite3
+from dataclasses import dataclass
+from datetime import datetime, timezone
+import json
+from typing import Any
 
 from .ingestion import FetchedPayload, FetchRequest
 
@@ -91,3 +95,81 @@ class SQLiteFetchCache:
     def count(self) -> int:
         with sqlite3.connect(self.path) as connection:
             return int(connection.execute("select count(*) from fetch_cache").fetchone()[0])
+
+
+@dataclass(frozen=True)
+class CachedReportTask:
+    cache_key: str
+    ticker: str
+    snapshot_id: str
+    evidence_manifest_hash: str
+    report_export_hash: str
+    artifact: dict[str, Any]
+    cached_at: str
+
+
+class SQLiteReportTaskCache:
+    """Local replay cache for report tasks, never an authority store.
+
+    A report task cache key is bound to ticker + immutable snapshot + accepted
+    evidence manifest.  It cannot return a result for a different identity.
+    """
+
+    authority = False
+
+    def __init__(self, path: str | Path) -> None:
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(self.path) as connection:
+            connection.execute(
+                """
+                create table if not exists report_task_cache (
+                  cache_key text primary key,
+                  ticker text not null,
+                  snapshot_id text not null,
+                  evidence_manifest_hash text not null,
+                  report_export_hash text not null,
+                  artifact_json text not null,
+                  cached_at text not null
+                )
+                """
+            )
+
+    def put(
+        self, *, cache_key: str, ticker: str, snapshot_id: str,
+        evidence_manifest_hash: str, report_export_hash: str, artifact: dict[str, Any],
+    ) -> CachedReportTask:
+        cached_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        payload = json.dumps(artifact, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        with sqlite3.connect(self.path) as connection:
+            connection.execute(
+                """
+                insert into report_task_cache(
+                  cache_key,ticker,snapshot_id,evidence_manifest_hash,report_export_hash,artifact_json,cached_at
+                ) values (?,?,?,?,?,?,?)
+                on conflict(cache_key) do update set
+                  report_export_hash=excluded.report_export_hash,
+                  artifact_json=excluded.artifact_json,cached_at=excluded.cached_at
+                """,
+                (cache_key, ticker.upper(), snapshot_id, evidence_manifest_hash, report_export_hash, payload, cached_at),
+            )
+        return CachedReportTask(cache_key, ticker.upper(), snapshot_id, evidence_manifest_hash, report_export_hash, dict(artifact), cached_at)
+
+    def get(
+        self, *, cache_key: str, ticker: str, snapshot_id: str, evidence_manifest_hash: str,
+    ) -> CachedReportTask | None:
+        with sqlite3.connect(self.path) as connection:
+            row = connection.execute(
+                """
+                select cache_key,ticker,snapshot_id,evidence_manifest_hash,report_export_hash,artifact_json,cached_at
+                from report_task_cache
+                where cache_key=? and ticker=? and snapshot_id=? and evidence_manifest_hash=?
+                """,
+                (cache_key, ticker.upper(), snapshot_id, evidence_manifest_hash),
+            ).fetchone()
+        if row is None:
+            return None
+        artifact = json.loads(row[5])
+        if not isinstance(artifact, dict):
+            raise ValueError("cached report task artifact must be an object")
+        return CachedReportTask(*row[:5], artifact, row[6])
