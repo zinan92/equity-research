@@ -23,6 +23,11 @@
     "revised_at": "2026-07-24T15:52:09+08:00",
     "reason": "Park corrected the reader order before accepting Round 6: the one-line positioning must be the first reader section, while the plain-language verdict must be the final reader section. Round 7 preserves all industry context but moves it after positioning and renames the closing section to an explicit plain-language verdict."
   },
+  "round7_park_approval": {
+    "approved_at": "2026-07-24T16:02:13+08:00",
+    "receipt": "docs/dossier-production/round7-park-approval-receipt.json",
+    "reason": "Park explicitly approved the complete Round 7 version and authorized moving on. No pairwise choices are inferred; the receipt records this as an owner-authorized replacement for the remaining Park A/B gate."
+  },
   "token_accounting": {
     "counter": "Codex Goal tokensUsed",
     "meaning": "Inclusive interval delta covering research, reasoning, tool calls and authoring between two counter reads. It is not provider prompt/completion usage and must not be used for API billing.",

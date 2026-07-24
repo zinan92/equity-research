@@ -1016,6 +1016,9 @@
 - Decision：Park 在接受 Round 6 前纠正阅读顺序：用户必须先看到“一句话定位”，再展开产业坐标和证据，最后由独立“大白话点评”收口。Round 7 只重排信息层级，不删除 Round 6 的 context 或引用。
 - Gotcha：五组独立二项随机可能碰巧让自产稿全部落在同一侧，形成位置偏差。Round 7 起生成器强制自产标签保持 2/3 均衡，再随机顺序；旧的全同侧 pack 不作为最终收据。
 - Evidence：均衡后的 Round 7 pack 中自产标签为 A 三份、B 两份；外部 reader 盲选自产 5/5。该结果只满足 external gate，仍等待 Park 对同一 pack 的选择。
+- Decision：Park 明确回复“我先 approve 了这个版本，你继续 move on”，批准 Round 7 整体版本并授权进入下一步；将其记录为 owner-authorized gate replacement，而不是继续要求形式化五组选择。
+- Gotcha：整体批准不等于完成五组盲选。收据不得虚构 P1–P5 或自产胜场，只能记录批准原文、适用版本、替代的合同门禁和未发生的 pairwise choices。
+- Evidence：`round7-park-approval-receipt.json` 固定 Round 7 pack hash、Park 原始指令与 gate replacement；外部 reader 的独立 5/5 收据保持不变。
 
 ### Gotchas · N1-5
 
