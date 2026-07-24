@@ -1722,3 +1722,14 @@
 
 - 分类只解释 failed source attempt，不能提供 primary evidence、Report Model、Tier、numeric/page audit、target、position 或 action credit。
 - access denial 不是授权绕过、代理或 aggregator fallback 的理由；后续 source adapter 必须仍是已登记的官方来源。
+
+## 2026-07-25 · E4-S4k SSE 同源 TLS transport fallback
+
+- Decision：仅当 Python urllib 对 `query.sse.com.cn` 的官方 SSE index 出现 TLS/SSL handshake failure 时，使用系统 curl 对**完全相同的官方 URL、headers 与 HTTPS host allowlist**进行一次有界 transport fallback；curl 失败或跳出 host 仍失败。
+- Why：同一 URL 在本运行环境中 curl 可成功返回 SSE 官方 index，而 urllib 会在 TLS handshake 超时。保持同源和 raw capture 能恢复 discovery，不需要 aggregator 或跨交易所 fallback。
+- Evidence：2026-07-25 live probe `600519.SH`：SSE index 以 `sse_official_filing_index_v1` 成功捕获 30 条官方 discovery（raw hash `f57a8b8c…`）；focused adapter tests 覆盖 final-header parsing。
+
+### Gotchas · E4-S4k SSE fallback
+
+- fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
+- curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。

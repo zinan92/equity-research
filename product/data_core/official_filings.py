@@ -6,11 +6,15 @@ import asyncio
 import hashlib
 import json
 import re
+import shutil
+import subprocess
+import tempfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from html import unescape
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlencode, urljoin, urlsplit
+from urllib.error import URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 from uuid import uuid4
 
@@ -93,6 +97,47 @@ def _host(url: str) -> str:
     return parsed.hostname.lower().rstrip(".")
 
 
+def _curl_headers(raw_headers: str) -> tuple[int, tuple[tuple[str, str], ...]]:
+    blocks = [block for block in re.split(r"\r?\n\r?\n", raw_headers) if block.strip()]
+    final = next((block for block in reversed(blocks) if block.lstrip().startswith("HTTP/")), "")
+    lines = final.splitlines()
+    match = re.match(r"HTTP/\S+\s+(\d{3})", lines[0].strip() if lines else "")
+    if not match:
+        raise ValueError("curl fallback returned invalid HTTP status")
+    headers = tuple(sorted({
+        (key.strip().lower(), value.strip())
+        for line in lines[1:] if ":" in line
+        for key, value in (line.split(":", 1),)
+        if key.strip().lower() in HTTP_HEADER_ALLOWLIST and value.strip()
+    }))
+    return int(match.group(1)), headers
+
+
+def _sse_curl_fallback(url: str, request_headers: Mapping[str, str]) -> HttpResponse:
+    """Retry exactly the official SSE index URL after a urllib TLS timeout."""
+    if _host(url) != "query.sse.com.cn":
+        raise ValueError("curl fallback is only registered for the SSE official index")
+    curl = shutil.which("curl")
+    if not curl:
+        raise URLError("curl unavailable for bounded SSE transport fallback")
+    with tempfile.TemporaryDirectory(prefix="park-sse-") as directory:
+        headers_path, body_path = f"{directory}/headers", f"{directory}/body"
+        command = [curl, "--silent", "--show-error", "--location", "--proto", "=https", "--connect-timeout", "15", "--max-time", "20", "--dump-header", headers_path, "--output", body_path, "--write-out", "%{url_effective}"]
+        for key, value in {"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)}.items():
+            command.extend(["--header", f"{key}: {value}"])
+        completed = subprocess.run(command + [url], check=False, capture_output=True, text=True, timeout=25)
+        if completed.returncode:
+            raise URLError(f"curl SSE transport fallback failed: {completed.stderr.strip()}")
+        final_url = completed.stdout.strip()
+        if _host(final_url) != "query.sse.com.cn":
+            raise ValueError("curl SSE transport fallback left the source allowlist")
+        with open(headers_path, encoding="iso-8859-1") as handle:
+            status_code, headers = _curl_headers(handle.read())
+        with open(body_path, "rb") as handle:
+            body = handle.read()
+    return HttpResponse(body, final_url, status_code, headers, (url, final_url))
+
+
 def validate_official_source_role(
     manifest: SourceManifest,
     source_url: str,
@@ -141,25 +186,22 @@ def default_http_transport(
         url,
         headers={"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)},
     )
-    with opener.open(request, timeout=timeout_seconds) as response:
-        final_url = response.geturl()
-        if _host(final_url) not in allowed_hosts:
-            raise ValueError("official filing final URL left the source allowlist")
-        headers = tuple(
-            sorted(
-                {
-                    (str(key).lower(), str(value).strip())
-                    for key, value in response.headers.items()
-                    if str(key).lower() in HTTP_HEADER_ALLOWLIST and str(value).strip()
-                }
-            )
-        )
-        chain = list(redirect_handler.redirect_chain)
-        if chain[-1] != final_url:
-            chain.append(final_url)
-        result = HttpResponse(
-            response.read(), final_url, int(response.status), headers, tuple(chain)
-        )
+    try:
+        with opener.open(request, timeout=timeout_seconds) as response:
+            final_url = response.geturl()
+            if _host(final_url) not in allowed_hosts:
+                raise ValueError("official filing final URL left the source allowlist")
+            headers = tuple(sorted({(str(key).lower(), str(value).strip()) for key, value in response.headers.items() if str(key).lower() in HTTP_HEADER_ALLOWLIST and str(value).strip()}))
+            chain = list(redirect_handler.redirect_chain)
+            if chain[-1] != final_url:
+                chain.append(final_url)
+            result = HttpResponse(response.read(), final_url, int(response.status), headers, tuple(chain))
+            result.validate()
+            return result
+    except URLError as exc:
+        if _host(url) != "query.sse.com.cn" or "handshake" not in str(exc).lower():
+            raise
+        result = _sse_curl_fallback(url, request_headers)
         result.validate()
         return result
 
