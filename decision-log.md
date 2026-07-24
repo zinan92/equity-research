@@ -1252,3 +1252,16 @@
 - Context Pack 证明输入证据身份，不会替估值假设背书；任何未来可见、货币/单位/股本冲突仍必须由 C2 原有校验阻断。
 - C3 已负责 report/document/page citation 正确性；本 bridge 只补 raw hash 必须进入 accepted Context Pack 的连接，缺 PDF、缺字段和 blocked claim 必须显式留在 receipt。
 - 测试中的合成候选只验证合同；带 `fixture` quality flag 的候选不能通过 production Context Pack，也不能被用于发布回执。
+
+## 2026-07-24 · E3-S3 公司产业位置的页级官方证据
+
+- Decision：建立 50 家 A 股优先的公司位置 review queue；只有 CNINFO 官方 2024 年报返回 URL、页码与 SHA-256 后才将一条位置设为 `accepted`。当前 30/50 已通过，20/50 保持 `needs_evidence`。
+- Why：产业链归类可以先作为研究假设，但产品中的公司位置必须可回到具体的原始披露页；不能从爱牛归档、模型语言或无页码描述提升为事实。
+- Evidence：`product/data_core/company_positions.py`、`scripts/verify_e3_s3_company_positions.py` 和 `product/tests/test_company_positions.py`。验收回执为 50 total / 30 accepted / 30 page_cited；每一条 accepted citation 指向 CNINFO static official PDF 并带原始 SHA-256。
+
+### Gotchas · E3-S3
+
+- CNINFO 按时间倒序分页。高披露频率公司会把年度报告推到第二页或后续页；只读取第一页会把“未找到”误判成数据缺口，因此审计只在有明确请求时检查限定的前四页。
+- 默认 verification 不再触发网络采集；调用者必须显式给出 `--limit` 才会重查官方 PDF，避免把日常合同验证变成无意的批量抓取。
+- 显式重查会先去除冻结的 accepted 状态；若最新官方抓取不能复现冻结的 URL/page/raw hash，会输出 `citation_mismatches` 并保持 `partial`，不能用旧 citation 静默通过。
+- 年报关键词只能证明公司披露中的业务/产品锚点；角色、上下游归属来自自有 ontology 的有界研究判断，仍不能伪装成披露原话。
