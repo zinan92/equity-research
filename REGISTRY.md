@@ -48,6 +48,12 @@
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
+
+## 2026-07-24 · E4-S4b strict coverage baseline
+
+- E4-S4b is merged: the fixed 100 identity / 95 real Report Model / 80 Tier A/B / 20 numeric+page audit contract now has a deterministic, fail-closed receipt with per-ticker failure taxonomy.
+- The live baseline is intentionally not accepted: 100 real A-share identities are present, while real Report Model, Tier A/B, and numeric/page-audit counts remain 0; all 100 tickers are classified `missing_canonical_evidence`.
+- Parent #218 remains open. Next data work is canonical-evidence acquisition and explicit Report Model construction; identity directories and fixtures do not count toward that gate.
 - E3-S4 is now merged: all 108 ontology segments have an evidence-gated six-section catalyst profile; current one-party captures anchor 24 segments and the remaining 84 remain explicit `missing_evidence`. Next: E3-S7 dossier generation from accepted evidence and E3-S3 positions.
 - E3-S7 is now merged: deterministic dossiers compile only from an accepted Context Pack, accepted company position and matching catalyst profile; facts retain evidence identity and unavailable catalyst inputs remain gaps. Next research-engine step: E3-S8 decision/target/position policy.
 - E3-S8 is now merged: decision receipts jointly bind valuation/quality/risk/liquidity/coverage and portfolio caps; insufficient evidence or breached constraints returns non-executable `no_action`. Next: E3-S9 offline research compiler.
