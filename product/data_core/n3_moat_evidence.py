@@ -65,15 +65,21 @@ def collect_position_moat(position: CompanyPosition, *, known_at: str) -> dict[s
     if position.citation is None:
         raise ValueError("selected company position requires an official citation")
     source_url, _position_page, expected_raw_hash = position.citation
-    body = fetch_cited_pdf_with_extended_timeout(position)
     from hashlib import sha256
-    if sha256(body).hexdigest() != expected_raw_hash:
-        raise ValueError("official_filing_raw_hash_mismatch")
-    parsed = parse_pdf_document("n3-s9:" + position.ticker, body, expected_raw_hash=expected_raw_hash, config=ParserConfig(parser_version="park-document-parser-v1-native-moat", native_text_min_chars=0), ocr_backend=None)
-    evidence = _from_pages(position, parsed.pages, known_at=known_at)
-    if evidence is None:
-        return {"ticker": position.ticker, "status": "gap", "reason": "official_filing_has_no_explicit_concrete_moat_capability", "raw_hash": expected_raw_hash}
-    return {"ticker": position.ticker, "status": "accepted", "evidence": asdict(evidence)}
+    last_error: Exception | None = None
+    for attempt in range(1, 4):
+        try:
+            body = fetch_cited_pdf_with_extended_timeout(position)
+            if sha256(body).hexdigest() != expected_raw_hash:
+                raise ValueError("official_filing_raw_hash_mismatch")
+            parsed = parse_pdf_document("n3-s9:" + position.ticker, body, expected_raw_hash=expected_raw_hash, config=ParserConfig(parser_version="park-document-parser-v1-native-moat", native_text_min_chars=0), ocr_backend=None)
+            evidence = _from_pages(position, parsed.pages, known_at=known_at)
+            if evidence is None:
+                return {"ticker": position.ticker, "status": "gap", "reason": "official_filing_has_no_explicit_concrete_moat_capability", "raw_hash": expected_raw_hash, "fetch_attempts": attempt}
+            return {"ticker": position.ticker, "status": "accepted", "evidence": asdict(evidence), "fetch_attempts": attempt}
+        except (OSError, TimeoutError) as exc:
+            last_error = exc
+    raise RuntimeError(f"official_filing_fetch_failed_after_3_attempts: {last_error}")
 
 
 def collect_moat_batch(runtime_root: Path, *, known_at: str | None = None, positions: Iterable[CompanyPosition] | None = None) -> dict[str, object]:
