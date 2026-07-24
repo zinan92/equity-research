@@ -28,11 +28,12 @@
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
 - E1-S1 now supplies the canonical Company / Universe Crosswalk without creating a parallel identity schema: code + market resolve to explicit `matched`, `ambiguous`, or `unmapped` outcomes; every candidate carries source reference, known-at and data-kind. The local 649/661 archive audit remains runtime-only (1,058 matched, 252 unmapped), while all 30 M1 tickers parse and nine archive absences stay explicit.
 - E1-S2 now supplies eight versioned research-object contracts on the existing A1/A2 authority path: Company, SectorPosition, Evidence, Catalyst, Roadmap, ScoreSnapshot, Falsifier and Dossier. SQLite and Postgres revisions are append-only; facts require evidence references, judgments require a model version, and each subsequent revision binds the immediately prior object hash.
+- E1-S3 now binds each research-object revision to existing A2 raw hashes and an accepted A5 snapshot, rejects un-frozen evidence, preserves same-input idempotency, and produces deterministic identity-only replay receipts that expose any broken revision/provenance chain.
 
 ## 下一步
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
-- Start E1-S3 / N2 from latest `main`: extend the eight-object contracts with immutable provenance and revision replay on top of A2 raw storage and A5 snapshots; do not create a parallel authority path or make archived benchmark output a product fact.
+- Start E1-S4 / N2 from latest `main`: reuse A3 `ingestion.py` and `authority_sink.py` for the canonical eight-object write path, preserving last-good behavior and atomic evidence/object publication; do not create a parallel authority path or make archived benchmark output a product fact.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
