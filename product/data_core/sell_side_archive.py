@@ -359,10 +359,13 @@ async def sync_sell_side_archive_async(
     ticker: str, *, runtime: IngestionRuntime,
     start_date: str = "2020-01-01", end_date: str | None = None,
     page_size: int = 50, max_pages: int = 1,
+    max_reports: int | None = None,
     known_report_ids: Iterable[str] = (), known_canonical_urls: Iterable[str] = (),
     known_raw_hashes: Iterable[str] = (),
 ) -> SellSideArchiveBatch:
     instrument = normalize_ashare_ticker(ticker)
+    if max_reports is not None and (not isinstance(max_reports, int) or max_reports < 1):
+        raise ValueError("max_reports must be a positive integer when supplied")
     token = uuid4().hex[:12]
     known_ids = {str(value) for value in known_report_ids}
     known_urls = {str(value) for value in known_canonical_urls}
@@ -389,7 +392,7 @@ async def sync_sell_side_archive_async(
 
     items = []
     pdf_outcomes: dict[str, IngestionOutcome] = {}
-    for report_id, metadata in metadata_rows.items():
+    for report_id, metadata in list(metadata_rows.items())[:max_reports]:
         base = dict(
             report_id=report_id, ticker=instrument.ticker, title=str(metadata["title"]),
             broker=metadata.get("broker"), analyst=metadata.get("analyst"),
