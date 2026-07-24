@@ -1568,3 +1568,14 @@
 
 - 20 条 needs-evidence 记录是工作队列，不是事实查询结果；只有调用者明确要求 review access 才会看见它们。
 - 该索引只投影 E3-S3，不能自行填补 role、客户、收入暴露或产业关系；这些仍需独立证据与后续 N3 票据。
+
+## 2026-07-24 · N3-S2 AI 算力产业关系基线
+
+- Decision：复用 E3-S2 的 first-party capture 与 evidence-bound graph，发布 12 nodes / 108 segments / 30 accepted edges 的真实 replay aggregate，而不新建关系推理或第二张产业图。
+- Why：N3 需要可重放的产业链结构，但结构关系与公司竞争结论不同；先固定每条 edge 的 raw evidence identity 才能在后续公司档案中安全引用。
+- Evidence：`docs/evidence/2026-07-24-n3-s2-ai-compute-relationship-baseline.md` 记录 2026-07-24T15:04:00.777739Z 的 ASML/NVIDIA 三个 first-party captures 和 sha256；`scripts/verify_e3_s2_industry_graph.py` 重放 graph receipt。
+
+### Gotchas · N3-S2
+
+- segment edge 不能推导“某公司是龙头”“某公司直接受益”或任何投资结论；company claim 必须另有 N3-S1/E3-S3 的页级公司证据。
+- raw 内容留在 runtime；以后 source capture 失败时，不得拿旧 hash 假装 fresh replay，必须显式记录 source gap。
