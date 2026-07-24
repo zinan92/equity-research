@@ -48,3 +48,4 @@
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
+- E3-S6 is now merged: C2 valuation and C3 sell-side matrix outputs are bound to B6 accepted Context Pack identity; unaccepted report raw hashes, missing components and fixture evidence fail closed. E3-S3 remains the active evidence-collection gate for page-cited company positions.
