@@ -122,3 +122,8 @@
 
 - 现在在哪里：PR #388 merged. E4 can now bind the existing B6 official-primary Context Pack identity, market/fundamentals source receipts, and C3 page-verified sell-side matrix into deterministic per-ticker Report Model inputs. Mismatched ticker, official lineage or exact cutoff is explicit blocked; all outputs remain Tier C / no_action.
 - 下一步：run a synchronized real-input trial using these receipts, record its typed coverage/blockers on #218, then close the remaining E4-S4 acceptance gaps (valuation, explicit page-cited claims and numeric/page audit) without treating rating-only matrices as research conclusions.
+
+## 2026-07-25 · E4-S4v research-cutoff update
+
+- 现在在哪里：PR #393 merged. E4 C3 matrix runtime receipts now carry a caller-supplied, timezone-qualified `research_cutoff` alongside the unchanged date-level report-filter `as_of`; no provider timestamp or report date is rewritten.
+- 下一步：make E4-S4u consume this explicit cutoff against official/market known-at evidence, then rerun the real 100-ticker Context Pack binding and retain every remaining acceptance gap on #218.
