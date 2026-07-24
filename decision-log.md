@@ -1105,6 +1105,17 @@
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
 
+## 2026-07-24 · E2-S5 卖方研报、预测与分歧生产化验收
+
+- Decision：复用 B2 `sell_side_archive.py`、B4 `consensus_history.py` 与 `viewpoint_matrix.py`；本 Story 只补可复跑的 production-acceptance receipt，不改采集器、预测算法或评分逻辑。
+- Why：卖方目录、PDF 可用性、预测口径、时间截面及页面引用必须共同保持可审计，且不能将 metadata-only 报告伪装成已读取正文。
+- Evidence：`scripts/verify_e2_s5_sell_side.py` 与 archive、consensus、viewpoint matrix focused tests。
+
+### Gotchas · E2-S5
+
+- 该回执是 fixture contract corpus；不宣称付费、实时或全券商覆盖。真实采集只能通过显式运行和独立 raw receipt 证明。
+- 缺 PDF、失败请求、过期/异常预测及无效页级引用必须维持 metadata-only、quarantine 或 explicit gap，不能借用旧报告或上一版共识。
+
 ## 2026-07-24 · E2-S4 官方披露与文档语料库生产化验收
 
 - Decision：复用 B1 `official_filings.py` 与 B3 `document_intelligence.py`，仅增加可复跑验收回执和“页码引用回官方原文”的薄 glue；不重写采集器、解析器、raw storage 或 provider。
