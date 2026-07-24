@@ -1557,3 +1557,14 @@
 
 - 27 只代表同一 partial model 上 market/PIT 两个组件均 available；它不是 27 份完整研报，也不减少 valuation、sell-side、industry position 或人工数字/页级抽检的缺口。
 - official receipt 内 raw PDF 路径相对其采集 worktree；从其他目录 replay 会把真实 PDF 错判缺失。绝不通过复制 runtime payload 到 git 来规避该路径约束。
+
+## 2026-07-24 · N3-S1 公司到产业位置索引
+
+- Decision：将 E3-S3 的 `REVIEW_TARGETS` 投影为唯一的 company↔segment 查询索引；默认查询只返回带官方页级引用的 accepted 位置，review 查询才可显式读取 `needs_evidence` 记录。
+- Why：产业世界模型需要从公司到产业环节、也从产业环节到公司的稳定查询，但不能复制一套位置数据或把待验证假设包装成产业事实。
+- Evidence：`product/data_core/industry_company_index.py` 复用 `company_positions.position_coverage` 和 E3-S1 ontology；`scripts/verify_n3_s1_industry_company_index.py` 发出 50 total / 30 accepted / 20 needs-evidence 的确定性 receipt。
+
+### Gotchas · N3-S1
+
+- 20 条 needs-evidence 记录是工作队列，不是事实查询结果；只有调用者明确要求 review access 才会看见它们。
+- 该索引只投影 E3-S3，不能自行填补 role、客户、收入暴露或产业关系；这些仍需独立证据与后续 N3 票据。
