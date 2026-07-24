@@ -13,7 +13,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
-from data_core.e4_official_evidence_batch import load_real_identity_tickers, run_official_evidence_batch  # noqa: E402
+from data_core.e4_official_evidence_batch import _result_for_batch, load_real_identity_tickers, run_official_evidence_batch  # noqa: E402
 
 
 def hung_then_failure_worker(ticker: str, _raw_root: str, _pages: int, result_queue) -> None:
@@ -87,6 +87,22 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
             self.assertEqual(result["receipt"]["counts"], {"requested": 2, "captured_official_primary": 1, "failed": 1, "resumed": 0})
             self.assertEqual(result["receipt"]["tickers"][0]["blockers"], ["collector_exception"])
             self.assertFalse(result["receipt"]["truth_boundary"]["counts_as_tier_a_or_b"])
+
+    def test_discovery_failures_preserve_transport_access_and_empty_taxonomy(self) -> None:
+        root = Path(tempfile.mkdtemp())
+        cases = (
+            (SimpleNamespace(error="URLError: _ssl handshake operation timed out", fetched=None), "official_transport_tls_handshake_timeout"),
+            (SimpleNamespace(error=None, fetched=SimpleNamespace(status_code=403)), "official_access_denied"),
+            (SimpleNamespace(error=None, fetched=SimpleNamespace(status_code=200)), "official_filing_index_empty"),
+            (SimpleNamespace(error="unexpected", fetched=None), "official_filing_discovery_failed"),
+        )
+        for attempt, expected in cases:
+            batch = SimpleNamespace(
+                discovery=SimpleNamespace(publishable=False, attempts=(attempt,), records=()),
+                documents={}, to_summary=lambda: {"discovery_pages": []},
+            )
+            row = _result_for_batch("600519.SH", batch, root)
+            self.assertEqual(row["blockers"], [expected])
 
     def test_hard_timeout_terminates_hung_child_and_continues(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

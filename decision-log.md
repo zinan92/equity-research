@@ -1711,3 +1711,14 @@
 
 - issuer-disclosed market outlook 是事实性观察，不是市场共识、预测、估值、Tier、target、position 或 action。
 - R2 `passed` 只代表本阶段 evidence gate 完成；20 份 dossier 仍是 `no_action`，下一阶段不得用它跳过 valuation、sell-side 或发布门。
+
+## 2026-07-25 · E4-S4k 官方披露失败分类
+
+- Decision：E4 official-evidence receipt 在官方 discovery 不可发布时，按现有 attempt 证据区分 TLS/SSL transport timeout、明确 access denial、官方索引空结果与无法分类的失败；只在证据足够时分类，否则保留 generic failure。
+- Why：SH 握手超时、BSE 官方页面的明确拒绝访问与 CNINFO 对 BJ 的空索引是不同的可恢复性和 source-coverage 状态。把它们都写成“无披露”会污染覆盖率判断。
+- Evidence：Issue #274 的 2026-07-25 bounded probes；`product/tests/test_e4_official_evidence_batch.py` 覆盖四种 receipt taxonomy。
+
+### Gotchas · E4-S4k
+
+- 分类只解释 failed source attempt，不能提供 primary evidence、Report Model、Tier、numeric/page audit、target、position 或 action credit。
+- access denial 不是授权绕过、代理或 aggregator fallback 的理由；后续 source adapter 必须仍是已登记的官方来源。
