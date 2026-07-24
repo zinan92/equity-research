@@ -1535,3 +1535,14 @@
 
 - 市场与财务可用性均为 component-level availability，不能推断同一 ticker 已拥有完整 valuation、sell-side、industry position 或可审计报告。
 - runtime receipt 仅在 exact official baseline / identity / config 组合下可复用；后续 source rerun 必须重建 companion input，而不是复制 aggregate count。
+
+## 2026-07-24 · E4-S4l primary 与 market/PIT 模型绑定
+
+- Decision：在既有 E4-S4d partial model contract 内可选绑定 exact official receipt lineage 的 market/PIT companion receipt，组件仅将 market/fundamentals sections 从 missing 标为 available；决策边界保持 Tier C / `no_action`。
+- Why：模型需要同时显示一手披露与真实市场/PIT 输入的可用性，但 valuation、sell-side、industry position 与 audit 仍缺失，不能把输入扩展误译为行动升级。
+- Evidence：`product/data_core/e4_partial_report_models.py`、`product/tests/test_e4_partial_report_models.py`。不同 official lineage 的 companion fixture fail closed。
+
+### Gotchas · E4-S4l
+
+- companion receipt 的 official hash 必须严格等于编译输入的 official receipt bytes hash；相同 ticker 但不同批次也不能混拼。
+- 没有 companion、或 companion 的该 ticker 不可用时，仍编译真实 primary partial model，但 market/fundamentals 保持 `missing_evidence`。

@@ -36,7 +36,17 @@ def _inside(root: Path, value: str) -> Path:
     return candidate
 
 
-def _partial_model(row: Mapping[str, Any], runtime_root: Path) -> dict[str, Any]:
+def _companion_by_ticker(path: Path, official_payload: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    boundary = payload.get("truth_boundary") or {}
+    if payload.get("schema_version") != "e4-s4-market-fundamentals-batch-v1" or payload.get("data_kind") != "real" or boundary.get("counts_as_tier_a_or_b") is not False:
+        raise ValueError("partial model compiler requires a real input-only market companion receipt")
+    if not payload.get("official_receipt_sha256"):
+        raise ValueError("market companion receipt is missing official lineage")
+    return {str(row.get("ticker") or "").upper(): row for row in payload.get("tickers") or []}
+
+
+def _partial_model(row: Mapping[str, Any], runtime_root: Path, companion: Mapping[str, Any] | None = None) -> dict[str, Any]:
     if row.get("status") != "captured" or row.get("data_kind") != "real":
         raise ValueError("partial model requires a captured real official input")
     ticker = str(row.get("ticker") or "").upper()
@@ -88,25 +98,30 @@ def _partial_model(row: Mapping[str, Any], runtime_root: Path) -> dict[str, Any]
         "schema_version": E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION, "ticker": instrument.ticker,
         "evidence_set_id": context.evidence_set_id, "evidence_manifest_hash": context.manifest_hash,
         "raw_hash": raw_hash, "document_id": row["document_id"],
-        "sections": {"filings": "available", "market": "missing_evidence", "fundamentals": "missing_evidence", "valuation": "missing_evidence", "sell_side": "missing_evidence", "industry_position": "missing_evidence"},
+        "sections": {"filings": "available", "market": "available" if companion and companion.get("market_available") else "missing_evidence", "fundamentals": "available" if companion and companion.get("fundamentals_available") else "missing_evidence", "valuation": "missing_evidence", "sell_side": "missing_evidence", "industry_position": "missing_evidence"},
         "decision_boundary": {"tier": "C", "action": "no_action", "target_price": None, "position_range": None},
     }
     model_hash = digest(material)
     return {**material, "report_model_hash": model_hash, "data_kind": "real", "numeric_spot_audit": False, "page_citation_spot_audit": False, "blockers": ["partial_model_missing_market_fundamentals_valuation_sell_side_industry_position"]}
 
 
-def compile_partial_report_models(batch_receipt_path: Path, runtime_root: Path) -> dict[str, Any]:
+def compile_partial_report_models(batch_receipt_path: Path, runtime_root: Path, companion_receipt_path: Path | None = None) -> dict[str, Any]:
     payload = json.loads(batch_receipt_path.read_text(encoding="utf-8"))
     boundary = payload.get("truth_boundary") or {}
     if payload.get("schema_version") != "e4-s4-official-evidence-batch-v1" or payload.get("data_kind") != "real" or boundary.get("counts_as_report_model_coverage") is not False:
         raise ValueError("partial model compiler requires a real E4-S4c input-only receipt")
+    companion_rows: dict[str, Mapping[str, Any]] = {}
+    if companion_receipt_path is not None:
+        companion_rows = _companion_by_ticker(companion_receipt_path, payload)
+        if json.loads(companion_receipt_path.read_text(encoding="utf-8")).get("official_receipt_sha256") != hashlib.sha256(batch_receipt_path.read_bytes()).hexdigest():
+            raise ValueError("market companion receipt does not match official receipt lineage")
     rows = []
     for input_row in payload.get("tickers") or []:
         ticker = str(input_row.get("ticker") or "").upper()
         if not ticker:
             continue
         try:
-            rows.append({"ticker": ticker, "status": "compiled", "model": _partial_model(input_row, runtime_root)})
+            rows.append({"ticker": ticker, "status": "compiled", "model": _partial_model(input_row, runtime_root, companion_rows.get(ticker))})
         except Exception as exc:
             rows.append({"ticker": ticker, "status": "blocked", "blockers": ["partial_model_input_invalid"], "error": type(exc).__name__})
     coverage = {
@@ -114,7 +129,7 @@ def compile_partial_report_models(batch_receipt_path: Path, runtime_root: Path) 
         for row in rows
     }
     receipt = {
-        "schema_version": E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION, "input_receipt_sha256": hashlib.sha256(batch_receipt_path.read_bytes()).hexdigest(),
+        "schema_version": E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION, "input_receipt_sha256": hashlib.sha256(batch_receipt_path.read_bytes()).hexdigest(), "companion_receipt_sha256": hashlib.sha256(companion_receipt_path.read_bytes()).hexdigest() if companion_receipt_path else None,
         "data_kind": "real", "models": rows, "coverage": coverage,
         "counts": {"compiled_partial_models": sum(row["status"] == "compiled" for row in rows), "blocked": sum(row["status"] == "blocked" for row in rows)},
         "truth_boundary": {"tier_is_c_only": True, "counts_as_tier_a_or_b": False, "counts_as_numeric_page_audit": False, "not_a_full_equity_research_report": True},
