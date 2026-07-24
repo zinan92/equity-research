@@ -52,6 +52,8 @@
 - Next E4 step: produce source-compliant runtime valuation/sell-side receipt adapters for the canonical 100-ticker corpus, then evaluate #218 without treating partial models as Tier A/B coverage.
 - E4-S4p is merged: the canonical real 100-ticker identity corpus can now run a bounded, checkpointed B2 sell-side catalog/PDF archive batch with per-ticker raw/source identities, metadata-only states and typed failures; it is input-only and grants no Tier, target, position, action or page-audit credit.
 - Next E4 step: run the bounded sell-side batch against the full corpus, parse archived PDFs into C3 page citations, and bind only matching Context Pack receipts before re-evaluating #218.
+- E4-S4q is merged: each successful E4 sell-side catalog/PDF ingestion attempt can now persist re-hashed, content-addressed bytes beneath ignored runtime raw storage; receipt paths appear only after local hash verification and remain non-canonical, input-only material.
+- Next E4 step: rerun the bounded sell-side corpus using runtime raw persistence, then parse the archived PDFs through B3/C3 into page-cited viewpoints before the #218 coverage gate.
 
 ## 2026-07-24 · E4-S4b strict coverage baseline
 
