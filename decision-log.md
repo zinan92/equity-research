@@ -1430,3 +1430,15 @@
 - Report Model hash 没有 real data kind 不计数；Tier A/B 没有 real Report Model 也不计数，防止任一层单独刷分。
 - runner 默认 nonzero 退出以便自动化 fail closed；调用脚本时应读取 JSON receipt，而不是把非零退出误解成工具故障。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。
+
+## 2026-07-24 · E4-S4c 官方披露证据包批处理
+
+- Decision：复用 B1 的官方交易所披露 adapter，基于 E4-S4 的 runtime-only real identity corpus 顺序抓取每 ticker 至多一份年度/半年度/季度 PDF。每份 raw body、官方 URL、发布时间、raw hash 和 canonical storage URI 只存于 gitignored runtime；批次只声明“official primary input captured”，绝不计入 Report Model、Tier 或 spot-audit 覆盖。
+- Why：E4 的 100 ticker 缺口不能用样例、归档或模型文字填充。先把可追溯的一手披露输入变成可恢复的批队列，后续才能编译 canonical evidence set / Report Model。
+- Evidence：`product/data_core/e4_official_evidence_batch.py`、`scripts/refresh_e4_s4_official_evidence.py`、`product/tests/test_e4_official_evidence_batch.py`。本地 live 3-ticker receipt `3f51db80bf20afd4…`：1 份真实 CNINFO 季报被捕获，2 个 ticker 明确 `no_qualifying_recent_financial_report`，没有 coverage inflation。
+
+### Gotchas · E4-S4c
+
+- B1 的默认增量同步会抓取多个公告；E4 batch 必须显式使用 `financial_reports_only=True, max_documents=1`，否则就会违反每 ticker 至多一份 PDF 的速率和存储预算。
+- `captured` 只表示网络、官方域名、PDF 和 raw hash 已通过 adapter；不是 accepted Report Model，也不能自动获得 Tier A/B 或 citation audit credit。
+- runtime 的 `latest` 指针只跳过已经成功抓到 raw 的 ticker；失败 ticker 可以在后续批次重试，且任何错误都必须留在 per-ticker receipt 中而不能中断整个队列。

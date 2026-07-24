@@ -1,0 +1,79 @@
+from __future__ import annotations
+
+import hashlib
+import json
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+from types import SimpleNamespace
+
+PRODUCT = Path(__file__).resolve().parents[1]
+if str(PRODUCT) not in sys.path:
+    sys.path.insert(0, str(PRODUCT))
+
+from data_core.e4_official_evidence_batch import load_real_identity_tickers, run_official_evidence_batch  # noqa: E402
+
+
+def identity_receipt() -> dict:
+    return {
+        "schema_version": "ashare-security-master-v1", "data_kind": "real",
+        "truth_boundary": {"identity_only": True},
+        "records": [{"ticker": f"{index:06d}.SZ"} for index in range(100)],
+    }
+
+
+def successful_batch(ticker: str):
+    body = b"%PDF-1.7\nreal filing\n%%EOF"
+    raw_hash = hashlib.sha256(body).hexdigest()
+    raw = SimpleNamespace(raw_hash=raw_hash, source_url="https://static.cninfo.com.cn/finalpage/real.PDF", storage_uri=f"canonical-raw/raw/sha256/{raw_hash[:2]}/{raw_hash}")
+    fetched = SimpleNamespace(body=body)
+    attempt = SimpleNamespace(raw=raw, fetched=fetched)
+    record = SimpleNamespace(payload={
+        "document_id": "official-filing:cninfo:1", "document_type": "annual_report",
+        "published_at": "2026-03-31T00:00:00Z",
+    })
+    outcome = SimpleNamespace(publishable=True, selected_source="cninfo_official_filing_document_v1", attempts=(attempt,), records=(record,))
+    return SimpleNamespace(ticker=ticker, discovery=SimpleNamespace(publishable=True), documents={"1": outcome})
+
+
+class OfficialEvidenceBatchTest(unittest.TestCase):
+    def write_identity(self, root: Path, payload: dict | None = None) -> Path:
+        path = root / "identity.json"
+        path.write_text(json.dumps(payload or identity_receipt()), encoding="utf-8")
+        return path
+
+    def test_rejects_non_real_identity_input(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = identity_receipt()
+            payload["data_kind"] = "fixture"
+            with self.assertRaisesRegex(ValueError, "real bounded"):
+                load_real_identity_tickers(self.write_identity(root, payload))
+
+    def test_captures_once_then_resumes_without_duplicate_fetch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            calls: list[str] = []
+            def sync(ticker: str, **_kwargs):
+                calls.append(ticker)
+                return successful_batch(ticker)
+            first = run_official_evidence_batch(self.write_identity(root), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0, sync=sync)
+            row = first["receipt"]["tickers"][0]
+            self.assertEqual((row["status"], row["report_model_hash"], row["tier"]), ("captured", None, None))
+            self.assertFalse(first["receipt"]["truth_boundary"]["counts_as_report_model_coverage"])
+            second = run_official_evidence_batch(self.write_identity(root), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0, sync=sync)
+            self.assertEqual(second["receipt"]["tickers"][0]["status"], "skipped")
+            self.assertEqual(calls, ["000000.SZ"])
+
+    def test_failure_isolated_and_never_becomes_coverage(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            def sync(ticker: str, **_kwargs):
+                if ticker == "000000.SZ":
+                    raise RuntimeError("network")
+                return successful_batch(ticker)
+            result = run_official_evidence_batch(self.write_identity(root), root / "runtime", max_tickers=2, inter_ticker_delay_seconds=0, sync=sync)
+            self.assertEqual(result["receipt"]["counts"], {"requested": 2, "captured_official_primary": 1, "failed": 1, "resumed": 0})
+            self.assertEqual(result["receipt"]["tickers"][0]["blockers"], ["collector_exception"])
+            self.assertFalse(result["receipt"]["truth_boundary"]["counts_as_tier_a_or_b"])

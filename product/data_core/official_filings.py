@@ -602,6 +602,8 @@ async def sync_cninfo_filings_async(
     end_date: str | None = None,
     limit: int = 30,
     known_document_ids: Iterable[str] = (),
+    financial_reports_only: bool = False,
+    max_documents: int | None = None,
 ) -> OfficialFilingBatch:
     instrument = normalize_ashare_ticker(ticker)
     active_runtime = runtime or build_official_filing_runtime(
@@ -625,8 +627,20 @@ async def sync_cninfo_filings_async(
     )
     documents: dict[str, IngestionOutcome] = {}
     skipped: list[str] = []
+    if max_documents is not None and max_documents < 1:
+        raise ValueError("max_documents must be positive when provided")
     if discovery.publishable:
-        for record in discovery.records:
+        discovered_records = tuple(discovery.records)
+        if financial_reports_only:
+            discovered_records = tuple(
+                record for record in discovered_records
+                if record.payload.get("document_type") in {
+                    "annual_report", "semiannual_report", "quarterly_report",
+                }
+            )
+        if max_documents is not None:
+            discovered_records = discovered_records[:max_documents]
+        for record in discovered_records:
             event = record.payload
             document_id = str(event["document_id"])
             if document_id in known_ids:
@@ -669,6 +683,8 @@ async def sync_sse_filings_async(
     end_date: str | None = None,
     limit: int = 30,
     known_document_ids: Iterable[str] = (),
+    financial_reports_only: bool = False,
+    max_documents: int | None = None,
 ) -> OfficialFilingBatch:
     instrument = normalize_ashare_ticker(ticker)
     if instrument.exchange != "SSE":
@@ -694,8 +710,20 @@ async def sync_sse_filings_async(
     )
     documents: dict[str, IngestionOutcome] = {}
     skipped: list[str] = []
+    if max_documents is not None and max_documents < 1:
+        raise ValueError("max_documents must be positive when provided")
     if discovery.publishable:
-        for record in discovery.records:
+        discovered_records = tuple(discovery.records)
+        if financial_reports_only:
+            discovered_records = tuple(
+                record for record in discovered_records
+                if record.payload.get("document_type") in {
+                    "annual_report", "semiannual_report", "quarterly_report",
+                }
+            )
+        if max_documents is not None:
+            discovered_records = discovered_records[:max_documents]
+        for record in discovered_records:
             event = record.payload
             document_id = str(event["document_id"])
             if document_id in known_ids:
