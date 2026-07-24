@@ -1490,3 +1490,15 @@
 - `collect_ashare_packet` 内部会并行获取六个组件，但 E4 batch 在 ticker 之间保持 spawn/join 串行；这不是跨 ticker 并发采集。
 - 原 packet 可能有部分组件成功，故 receipt 分别报告 market/fundamentals availability 与 typed gaps；任何失败都不能被另一组件的 success 掩盖。
 - 实时市场和 PIT 财务收据是估值输入，不等价于 accepted evidence corpus、Tier A/B、目标价或仓位；这些升级必须由后续 evidence gate 和 decision policy 完成。
+
+## 2026-07-24 · E4-S4i 官方证据批次逐 ticker checkpoint
+
+- Decision：官方证据批次在每个 ticker 得到 captured 或 failed 终态后，原子写入 runtime-only in-progress checkpoint；latest pointer 明确标记 `in_progress` 或 `completed`。恢复只能复用 identity receipt hash、ticker 数量、限流、分页与 timeout 完全一致的 checkpoint。
+- Why：真实 100 ticker 运行在 39 个已捕获 issuer 后中断，原先仅在全量结束时写总 receipt，已完成工作无法可靠恢复。逐 ticker checkpoint 把外部采集的长运行失败隔离为可重放的进度状态。
+- Evidence：`product/data_core/e4_official_evidence_batch.py` 与 `product/tests/test_e4_official_evidence_batch.py`。interrupted-run fixture 在第二 ticker 抛出 `KeyboardInterrupt` 后保留首个 captured row；下一次运行只从未完成 ticker 继续，并输出 completed receipt。
+
+### Gotchas · E4-S4i
+
+- checkpoint 是运行进度，不是 canonical evidence：它和最终 receipt 一样不提供 Report Model、Tier A/B 或 numeric/page audit credit，且永远位于 ignored runtime root。
+- corpus 或采集策略任一绑定字段不一致即 fail closed；不能为了“继续跑”而静默拼接不同页数、timeout 或 identity universe 的结果。
+- 成功完成后 checkpoint 文件会被删除，latest pointer 指向 completed receipt；中断期间 latest pointer 指向 checkpoint，消费者不得将它误读为完整 100-ticker baseline。

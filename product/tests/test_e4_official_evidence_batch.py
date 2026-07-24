@@ -103,3 +103,56 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
             self.assertEqual(rows[0]["blockers"], ["collector_timeout"])
             self.assertEqual(rows[1]["blockers"], ["simulated_next_ticker"])
             self.assertEqual(result["receipt"]["counts"]["captured_official_primary"], 0)
+
+    def test_interrupted_batch_resumes_from_atomic_checkpoint(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            calls: list[str] = []
+
+            def interrupted_sync(ticker: str, **_kwargs):
+                calls.append(ticker)
+                if ticker == "000001.SZ":
+                    raise KeyboardInterrupt()
+                return successful_batch(ticker)
+
+            with self.assertRaises(KeyboardInterrupt):
+                run_official_evidence_batch(
+                    self.write_identity(root), root / "runtime", max_tickers=3,
+                    inter_ticker_delay_seconds=0, sync=interrupted_sync,
+                )
+            pointer = json.loads((root / "runtime" / "official-evidence-batch-latest.json").read_text())
+            self.assertEqual(pointer["state"], "in_progress")
+
+            resumed_calls: list[str] = []
+            def resumed_sync(ticker: str, **_kwargs):
+                resumed_calls.append(ticker)
+                return successful_batch(ticker)
+
+            result = run_official_evidence_batch(
+                self.write_identity(root), root / "runtime", max_tickers=3,
+                inter_ticker_delay_seconds=0, sync=resumed_sync,
+            )
+            self.assertEqual(calls, ["000000.SZ", "000001.SZ"])
+            self.assertEqual(resumed_calls, ["000001.SZ", "000002.SZ"])
+            self.assertEqual(result["receipt"]["counts"], {"requested": 3, "captured_official_primary": 3, "failed": 0, "resumed": 0})
+            self.assertEqual(json.loads((root / "runtime" / "official-evidence-batch-latest.json").read_text())["state"], "completed")
+            self.assertFalse((root / "runtime" / "official-evidence-batch-checkpoint.json").exists())
+
+    def test_rejects_checkpoint_with_mismatched_corpus_configuration(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            def interrupted_sync(ticker: str, **_kwargs):
+                if ticker == "000001.SZ":
+                    raise KeyboardInterrupt()
+                return successful_batch(ticker)
+
+            with self.assertRaises(KeyboardInterrupt):
+                run_official_evidence_batch(
+                    self.write_identity(root), root / "runtime", max_tickers=3,
+                    inter_ticker_delay_seconds=0, sync=interrupted_sync,
+                )
+            with self.assertRaisesRegex(ValueError, "does not match"):
+                run_official_evidence_batch(
+                    self.write_identity(root), root / "runtime", max_tickers=2,
+                    inter_ticker_delay_seconds=0, sync=lambda ticker, **_kwargs: successful_batch(ticker),
+                )

@@ -21,6 +21,7 @@ from .official_filings import OfficialFilingBatch, sync_exchange_filings
 
 
 E4_OFFICIAL_EVIDENCE_BATCH_SCHEMA_VERSION = "e4-s4-official-evidence-batch-v1"
+E4_OFFICIAL_EVIDENCE_CHECKPOINT_SCHEMA_VERSION = "e4-s4-official-evidence-checkpoint-v1"
 QUALIFYING_DOCUMENT_TYPES = frozenset({"annual_report", "semiannual_report", "quarterly_report"})
 MAX_OFFICIAL_FILING_AGE_DAYS = 365
 SyncFn = Callable[..., OfficialFilingBatch]
@@ -92,6 +93,47 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
+
+
+def _checkpoint_config(
+    identity_receipt_path: Path,
+    *,
+    max_tickers: int,
+    inter_ticker_delay_seconds: float,
+    max_discovery_pages: int,
+    collector_timeout_seconds: float,
+) -> dict[str, Any]:
+    """Bind resumable work to the exact corpus and collection policy."""
+    return {
+        "identity_receipt_sha256": hashlib.sha256(identity_receipt_path.read_bytes()).hexdigest(),
+        "max_tickers": max_tickers,
+        "inter_ticker_delay_seconds": inter_ticker_delay_seconds,
+        "max_discovery_pages": max_discovery_pages,
+        "collector_timeout_seconds": collector_timeout_seconds,
+    }
+
+
+def _write_checkpoint(
+    runtime_root: Path, *, config: Mapping[str, Any], rows: list[dict[str, Any]],
+) -> None:
+    """Atomically persist resolved issuer rows while a corpus is still running."""
+    payload = {
+        "schema_version": E4_OFFICIAL_EVIDENCE_CHECKPOINT_SCHEMA_VERSION,
+        "state": "in_progress",
+        "data_kind": "real",
+        "config": dict(config),
+        "tickers": rows,
+        "truth_boundary": {
+            "official_primary_is_input_not_report_model": True,
+            "counts_as_report_model_coverage": False,
+            "counts_as_tier_a_or_b": False,
+            "counts_as_numeric_page_audit": False,
+        },
+    }
+    _write_json(runtime_root / "official-evidence-batch-checkpoint.json", payload)
+    _write_json(runtime_root / "official-evidence-batch-latest.json", {
+        "state": "in_progress", "receipt": "official-evidence-batch-checkpoint.json",
+    })
 
 
 def _raw_receipt(document_outcome: Any, raw_root: Path) -> dict[str, Any]:
@@ -196,18 +238,45 @@ def run_official_evidence_batch(
     tickers = load_real_identity_tickers(identity_receipt_path)[:max_tickers]
     runtime_root.mkdir(parents=True, exist_ok=True)
     latest_path = runtime_root / "official-evidence-batch-latest.json"
+    config = _checkpoint_config(
+        identity_receipt_path,
+        max_tickers=max_tickers,
+        inter_ticker_delay_seconds=inter_ticker_delay_seconds,
+        max_discovery_pages=max_discovery_pages,
+        collector_timeout_seconds=collector_timeout_seconds,
+    )
     previous: dict[str, Mapping[str, Any]] = {}
+    resuming_checkpoint = False
     if latest_path.exists():
         pointer = json.loads(latest_path.read_text(encoding="utf-8"))
         previous_path = runtime_root / str(pointer.get("receipt") or "")
         if previous_path.is_file():
             previous_payload = json.loads(previous_path.read_text(encoding="utf-8"))
-            previous = {str(item.get("ticker") or "").upper(): item for item in previous_payload.get("tickers") or []}
+            if pointer.get("state") == "in_progress":
+                if (
+                    previous_payload.get("schema_version") != E4_OFFICIAL_EVIDENCE_CHECKPOINT_SCHEMA_VERSION
+                    or previous_payload.get("state") != "in_progress"
+                    or previous_payload.get("config") != config
+                ):
+                    raise ValueError("official evidence checkpoint does not match this corpus configuration")
+                previous = {
+                    str(item.get("ticker") or "").upper(): item
+                    for item in previous_payload.get("tickers") or []
+                    if item.get("status") in {"captured", "failed"}
+                }
+                resuming_checkpoint = True
+            elif pointer.get("state") == "completed":
+                previous = {str(item.get("ticker") or "").upper(): item for item in previous_payload.get("tickers") or []}
+            else:
+                raise ValueError("official evidence latest pointer has unknown state")
 
     rows: list[dict[str, Any]] = []
     raw_root = runtime_root / "raw"
     for index, ticker in enumerate(tickers):
         prior = previous.get(ticker)
+        if prior and resuming_checkpoint:
+            rows.append(dict(prior))
+            continue
         if prior and prior.get("status") == "captured":
             rows.append({"ticker": ticker, "status": "skipped", "data_kind": "real", "resumed_from_raw_hash": prior.get("raw_hash"), "blockers": ["already_captured"]})
             continue
@@ -225,6 +294,7 @@ def run_official_evidence_batch(
                 rows.append(_result_for_batch(ticker, batch, raw_root))
         except Exception as exc:  # a single issuer must never abort the corpus
             rows.append({"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_exception"], "error": type(exc).__name__})
+        _write_checkpoint(runtime_root, config=config, rows=rows)
         if index < len(tickers) - 1 and inter_ticker_delay_seconds:
             sleep(inter_ticker_delay_seconds)
 
@@ -232,7 +302,7 @@ def run_official_evidence_batch(
     receipt = {
         "schema_version": E4_OFFICIAL_EVIDENCE_BATCH_SCHEMA_VERSION,
         "identity_receipt_path": str(identity_receipt_path),
-        "identity_receipt_sha256": hashlib.sha256(identity_receipt_path.read_bytes()).hexdigest(),
+        "identity_receipt_sha256": config["identity_receipt_sha256"],
         "data_kind": "real",
         "sequential": True,
         "configured_max_concurrency": 1,
@@ -251,5 +321,8 @@ def run_official_evidence_batch(
     receipt["receipt_hash"] = digest(receipt)
     receipt_path = runtime_root / f"official-evidence-batch-{receipt['receipt_hash'][:16]}.json"
     _write_json(receipt_path, receipt)
-    _write_json(latest_path, {"receipt": receipt_path.name, "receipt_hash": receipt["receipt_hash"]})
+    _write_json(latest_path, {"state": "completed", "receipt": receipt_path.name, "receipt_hash": receipt["receipt_hash"]})
+    checkpoint_path = runtime_root / "official-evidence-batch-checkpoint.json"
+    if checkpoint_path.exists():
+        checkpoint_path.unlink()
     return {"path": str(receipt_path), "receipt": receipt}
