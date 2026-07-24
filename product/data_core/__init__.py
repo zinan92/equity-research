@@ -280,6 +280,12 @@ from .industry_catalysts import (
     build_catalyst_profiles,
     catalyst_coverage,
 )
+from .dossier_generator import (
+    DOSSIER_SCHEMA_VERSION,
+    CompanyDossier,
+    DossierSection,
+    compile_dossier,
+)
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -354,4 +360,5 @@ __all__ = [
     "run_context_bound_valuation", "validate_viewpoint_matrix_context",
     "CATALYST_PROFILE_SCHEMA_VERSION", "CatalystSection", "IndustryCatalystProfile",
     "build_catalyst_profiles", "catalyst_coverage",
+    "DOSSIER_SCHEMA_VERSION", "CompanyDossier", "DossierSection", "compile_dossier",
 ]

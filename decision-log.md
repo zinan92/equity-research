@@ -1277,3 +1277,14 @@
 - `available` 仅代表该环节有一个证据锚点，绝不代表六段研究已经成熟；未覆盖段必须继续显示 `missing_evidence`。
 - first-party source 捕获是运行时行为，raw bodies 不进 Git。回执只输出 URL、raw hash 与 profile identity，供后续 Context Pack/Research Object 写入使用。
 - 研究判断如未来加入，必须有 model version 且不能同时携带 fact evidence identity，防止模型语言被伪装成披露事实。
+
+## 2026-07-24 · E3-S7 证据绑定公司档案
+
+- Decision：公司档案仅做 deterministic template 编译，不调用模型；固定输出 identity、industry position、evidence coverage、catalysts、unknowns 与 method 六段，并将零 token/模型成本显式记录。
+- Why：在数据与模型能力尚未完整时，先保证档案的每一个事实和缺口可审计，避免“有一篇研报”被误解为已有完整研究结论。
+- Evidence：`product/data_core/dossier_generator.py` 与 three-company structural fixture；输入相同时 dossier identity 恒定，未进入 Context Pack 的产业催化剂证据维持 missing。
+
+### Gotchas · E3-S7
+
+- 被 E3-S3 接受的产业位置也必须同时进入当前 Context Pack；仅有旧 URL/page/raw hash 不能跨 evidence manifest 自动复用。
+- deterministic dossier 不能声称模型版本或 token 成本；未来引入 AI judgment 时必须以独立版本化层补充，不能改写 facts 或隐去 gaps。
