@@ -1502,3 +1502,14 @@
 - checkpoint 是运行进度，不是 canonical evidence：它和最终 receipt 一样不提供 Report Model、Tier A/B 或 numeric/page audit credit，且永远位于 ignored runtime root。
 - corpus 或采集策略任一绑定字段不一致即 fail closed；不能为了“继续跑”而静默拼接不同页数、timeout 或 identity universe 的结果。
 - 成功完成后 checkpoint 文件会被删除，latest pointer 指向 completed receipt；中断期间 latest pointer 指向 checkpoint，消费者不得将它误读为完整 100-ticker baseline。
+
+## 2026-07-24 · E4-S4f 真实 100 ticker 基线结果
+
+- Decision：发布 100 identity / 40 real Report Model / 0 Tier A/B / 0 numeric+page audit 的失败基线，不修改 #218 的 100/95/80/20 阈值。
+- Why：真实运行完成后，40 个官方一手披露可编译为 Tier C partial model；其余输入与覆盖门槛仍缺失。失败收据是下一轮 source/coverage 工作的合同，而不是可以被文字解释绕过的验收。
+- Evidence：runtime-only official receipt `115bdd8d6ac1f5c5`、partial-model receipt `b27d7e8c8cc752a1`、acceptance hash `b24009621a40897fc0336b86ef0a4fa55a70967158d1f4626159666c7ab76609`，以及 `docs/evidence/2026-07-24-e4-s4f-100-ticker-baseline.md`。
+
+### Gotchas · E4-S4f
+
+- 40 个 Tier C model 是真实 evidence-bound inputs，不是 95/80/20 gate 的替代；不得因为有模型 hash 就输出 target、position 或 Tier A/B 语言。
+- runtime raw path 相对采集 worktree；编译必须从同一运行根目录执行，否则会将存在的 PDFs 错判为 `partial_model_input_invalid`。跨 worktree 的错误编译结果不进入基线证据。
