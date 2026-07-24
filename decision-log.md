@@ -1104,3 +1104,17 @@
 - 计划中的 Story 不等于全部立即建票；当前 #129–#131 已占满 WIP=3，应先清空 E0。
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
+
+## 2026-07-24 · N1-6 / M1 验收包
+
+- Decision：将 N1-1 至 N1-5 的输出收口为一个 30 公司黄金验证集，而不是再起采集器。验证集覆盖 AI 芯片、半导体设备材料、光模块、PCB、机器人、电力，以及 A/HK/US/JP 四市场。
+- Decision：M1 的 90 个字段单元只评估 `price`、`change_pct` 与 `revenue_growth` 的来源契约和可再生成性。84/90（93.33%）为高/中置信度；港股/日股 6 个 `revenue_growth` 单元明确为 gap。
+- Decision：将 N1-3 的 30 家运行时差异报告、N1-4 已披露算术复现和 N1-5 档案批准汇总为同一份 Go/No-go 报告。运行时 benchmark 输入和 residual 不进入 Git；报告只引用聚合结果与可复跑合同。
+- Why：后续 E1/N2 需要的是一组稳定的回归身份、来源口径和已知缺口，不是看似覆盖 30 家、实则把 archive 复制进产品的伪基线。
+- Evidence：`docs/reverse/m1/golden-validation-set.json`、`docs/reverse/m1-acceptance-report.md`、`scripts/verify_m1_acceptance.py`；市场/评分/档案原始合同分别仍由 N1-1 至 N1-5 的文档和测试持有。
+
+### Gotchas · N1-6
+
+- 93.33% 是字段来源契约覆盖率，不是 30 家实时财务完整率；港股/日股 PIT 财务仍未实现，必须以 gap 进入 canonical 数据模型。
+- 价格的窗口外精确值只能解释残差，不能改写成声明窗口通过；同理，PEG definition mismatch 不是可接受的“通过”。
+- Park 的 Round 7 整体批准被记录为 owner-authorized gate replacement，不得向后续模型伪造为五组 A/B 胜场或数值评分。
