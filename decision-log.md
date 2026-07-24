@@ -1634,3 +1634,14 @@
 
 - resume 只复用 receipt selection identity 完全相同的 compiled row；失败 row 始终重新请求。一次成功不能变成未来 refresh 的永久缓存结论。
 - 20/20 仅满足 R2 的 filing-backed dossier coverage 数量条件；所有决策仍为 `no_action`，并不接近 R3 的 valuation/sell-side/Tier A/B 门槛。
+
+## 2026-07-24 · N3-S6 R2 产业世界模型验收
+
+- Decision：建立 fail-closed R2 audit，将 ontology、company position/index、industry graph、20-company receipt、五问覆盖与 archive isolation 作为独立 gates；所有 gate 同时通过才允许 R2 `passed`。
+- Why：节点数、公司数和 dossier 数量不能证明产业研究闭环已可用。五问中的 moat、财务兑现、市场未来和 falsifier 必须有各自公司级 evidence，不能从产业结构或 filing existence 推断。
+- Evidence：`product/data_core/r2_acceptance.py`、`scripts/verify_r2_ai_compute_world_model.py` 与 `product/tests/test_r2_acceptance.py`。
+
+### Gotchas · N3-S6
+
+- 当前 R2 预期为 `partial`：它会如实显示仅 layer 有 20 个 accepted positions，其他四问的 coverage 不会因数量门通过而变成事实。
+- archive isolation 是生产代码与输出契约的非依赖检查；它不是读取或复用 archive 内容的授权。
