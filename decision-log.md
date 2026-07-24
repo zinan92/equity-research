@@ -1579,3 +1579,14 @@
 
 - segment edge 不能推导“某公司是龙头”“某公司直接受益”或任何投资结论；company claim 必须另有 N3-S1/E3-S3 的页级公司证据。
 - raw 内容留在 runtime；以后 source capture 失败时，不得拿旧 hash 假装 fresh replay，必须显式记录 source gap。
+
+## 2026-07-24 · N3-S3 AI 算力催化剂基线
+
+- Decision：复用 E3-S4 的 108 profile contract 发布真实 coverage：24 个 profile 有一条 first-party `current_state` fact，84 个 profile 保持全量 missing-evidence，所有其他 section 均不从关系图自动填充。
+- Why：催化剂对象必须先区分“已知当前状态”与“仍未知的驱动、触发、指标、证伪和时限”，否则看似完整的产业图会把结构关系误包装成可交易判断。
+- Evidence：`docs/evidence/2026-07-24-n3-s3-ai-compute-catalyst-baseline.md` 与 `scripts/verify_e3_s4_catalysts.py`；replay 使用 ASML/NVIDIA 的 3 个 first-party raw captures。
+
+### Gotchas · N3-S3
+
+- profile `available` 只表示至少一个 fact section，不表示有可投资 catalyst；下游报告必须逐 section 检查 evidence state。
+- 任何 source failure 或 stale/future evidence 都必须留出 missing-evidence，不能借用上次抓取或生成性文本补齐。
