@@ -45,7 +45,8 @@ from portfolio_ledger import (
 from publication_pack import latest_pack
 from auth_store import (
     AUTH_DB_PATH, authenticate, create_invite, create_session, has_entitlement, initialize_auth, list_members,
-    redeem_access_code, redeem_invite, revoke_session, rotate_csrf, session_member, set_member_status, verify_csrf,
+    list_audit_events, redeem_access_code, redeem_invite, revoke_session, rotate_csrf, session_member,
+    set_member_access_role, set_member_status, verify_csrf,
 )
 from industry_intelligence import IndustryIntelligenceError, dossier_payload, overview_payload
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
@@ -227,7 +228,7 @@ def private_preview_get_entitlement(route: str) -> str | None:
         return "dashboard"
     if route.startswith("/api/reports/"):
         return "deep_reports"
-    if route in {"/api/members", "/api/feedback", "/api/feedback/export"}:
+    if route in {"/api/members", "/api/members/audit", "/api/feedback", "/api/feedback/export"}:
         return "manage_members"
     if MANUAL_PAID_PILOT and route == "/api/billing/me":
         return "dashboard"
@@ -519,6 +520,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
             except PermissionError:
                 self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN)
             return
+        if route == "/api/members/audit":
+            member = self._member()
+            try:
+                self._json({"events": list_audit_events(member["id"])})
+            except PermissionError:
+                self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN)
+            return
         if route == "/api/feedback":
             member = self._member()
             try:
@@ -667,7 +675,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if AUTH_REQUIRED and not verify_csrf(member, self.headers.get("X-CSRF-Token")):
             self._json({"error": "csrf_rejected"}, HTTPStatus.FORBIDDEN)
             return
-        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status"}
+        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status", "/api/members/role"}
         if MANUAL_PAID_PILOT:
             private_post_routes.update({"/api/billing/payment", "/api/billing/refund", "/api/billing/settings"})
         if PRIVATE_PREVIEW and route not in private_post_routes:
@@ -718,6 +726,18 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 result = set_member_status(member["id"], body.get("email", ""), body.get("status", ""))
             except (ValueError, PermissionError) as exc:
                 self._json({"error": "member_update_rejected", "detail": str(exc)}, HTTPStatus.BAD_REQUEST)
+            else:
+                self._json(result)
+            return
+        if route == "/api/members/role":
+            if not has_entitlement(member, "manage_members"):
+                self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN)
+                return
+            try:
+                body = self._read_json()
+                result = set_member_access_role(member["id"], body.get("email", ""), body.get("role", ""))
+            except (ValueError, PermissionError) as exc:
+                self._json({"error": "member_role_rejected", "detail": str(exc)}, HTTPStatus.BAD_REQUEST)
             else:
                 self._json(result)
             return

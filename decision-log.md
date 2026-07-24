@@ -1357,4 +1357,16 @@
 
 - B6 passed 只代表 evidence coverage 达到该 gate 的合同，不自动代表 18 节研究内容已完整；section contract 仍可把输出降为 B。
 - C/Missing 不是错误吞掉：其 receipt 明确给出 allowed/blocked fields 和下一步数据动作，调用方不得另行补 action、target price 或 position range。
+
+## 2026-07-24 · E6-S1 私测身份、角色与审计边界
+
+- Decision：在既有 SQLite auth store 上增加向后兼容的 `access_role`（owner/editor/member）字段；只有 durable owner 可将非 owner 账户设为 editor/member，任何接口不能授予 owner。现有 tier/entitlement 继续决定具体 API 能力，不以 UI 或角色文案替代服务端授权。
+- Why：private beta 需要一个可审计的协作角色，但角色调整不能成为权限升级或重写既有认证系统的理由。
+- Evidence：`product/auth_store.py` 增加 schema migration、owner-only role mutation、bounded audit reader、SQLite append-only triggers 与敏感字段过滤；`product/tests/test_auth_audit.py` 和 `product/tests/test_private_beta_http.py` 覆盖 owner/editor/member、CSRF、登录限流、审计不可改写和 owner-only audit route。
+
+### Gotchas · E6-S1
+
+- `access_role` 是产品协作角色；现有持久 `role='owner'` 仍是唯一可管理成员的 authority，避免 editor 被错误当成管理者。
+- SQLite trigger 只能保护通过该数据库连接发生的 UPDATE/DELETE；备份恢复或宿主机文件访问是 E6-S2/E6-S3 的运行与备份边界，不能声称此处解决。
+- 审计 detail 的输入必须继续走 `_record()`；它会对 password/token/code/cookie 等键做 redaction，但不应把原始请求体、邀请码或会话值交给审计层。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。

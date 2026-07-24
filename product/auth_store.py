@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS members (
   email TEXT NOT NULL UNIQUE,
   display_name TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('owner','member')),
+  access_role TEXT NOT NULL DEFAULT 'member' CHECK (access_role IN ('owner','editor','member')),
   tier TEXT NOT NULL CHECK (tier IN ('preview','member','paid','owner')),
   password_hash TEXT NOT NULL,
   password_salt TEXT NOT NULL,
@@ -68,6 +69,16 @@ CREATE TABLE IF NOT EXISTS member_events (
   detail_json TEXT NOT NULL,
   created_at TEXT NOT NULL
 );
+CREATE TRIGGER IF NOT EXISTS member_events_no_update
+BEFORE UPDATE ON member_events
+BEGIN
+  SELECT RAISE(ABORT, 'member events are append-only');
+END;
+CREATE TRIGGER IF NOT EXISTS member_events_no_delete
+BEFORE DELETE ON member_events
+BEGIN
+  SELECT RAISE(ABORT, 'member events are append-only');
+END;
 CREATE INDEX IF NOT EXISTS idx_member_sessions_token ON member_sessions(token_hash);
 CREATE INDEX IF NOT EXISTS idx_member_sessions_member ON member_sessions(member_id, expires_at);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_single_active_owner ON members(role) WHERE role='owner' AND status='active';
@@ -116,6 +127,13 @@ def _hash_token(token: str) -> str:
 def initialize_auth(db_path: Path = AUTH_DB_PATH) -> None:
     with closing(connect(db_path)) as conn:
         conn.executescript(AUTH_SCHEMA)
+        columns = {row["name"] for row in conn.execute("PRAGMA table_info(members)")}
+        if "access_role" not in columns:
+            conn.execute(
+                "ALTER TABLE members ADD COLUMN access_role TEXT NOT NULL DEFAULT 'member' "
+                "CHECK (access_role IN ('owner','editor','member'))"
+            )
+        conn.execute("UPDATE members SET access_role='owner' WHERE role='owner' AND access_role='member'")
         conn.commit()
 
 
@@ -123,15 +141,38 @@ def _public_member(row: sqlite3.Row | dict[str, Any]) -> dict[str, Any]:
     value = dict(row)
     return {
         "id": value["id"], "email": value["email"], "display_name": value["display_name"],
-        "role": value["role"], "tier": value["tier"], "status": value["status"],
+        "role": value.get("access_role", value["role"]), "tier": value["tier"], "status": value["status"],
         "entitlements": json.loads(value["entitlements_json"]),
     }
+
+
+_SENSITIVE_AUDIT_KEYS = frozenset({
+    "password", "password_hash", "password_salt", "token", "csrf", "csrf_token",
+    "code", "invite_code", "secret", "credential", "authorization", "cookie",
+})
+
+
+def _safe_audit_detail(value: Any, *, depth: int = 0) -> Any:
+    """Keep audit receipts useful without providing a future secret sink."""
+    if depth > 4:
+        return "[truncated]"
+    if isinstance(value, dict):
+        return {
+            str(key): "[redacted]" if str(key).lower() in _SENSITIVE_AUDIT_KEYS
+            else _safe_audit_detail(item, depth=depth + 1)
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_safe_audit_detail(item, depth=depth + 1) for item in value[:50]]
+    if value is None or isinstance(value, (bool, int, float)):
+        return value
+    return str(value)[:512]
 
 
 def _record(conn: sqlite3.Connection, member_id: str | None, event_type: str, detail: dict[str, Any]) -> None:
     conn.execute(
         "INSERT INTO member_events (member_id,event_type,detail_json,created_at) VALUES (?,?,?,?)",
-        (member_id, event_type, json.dumps(detail, ensure_ascii=False, sort_keys=True), _iso(_now())),
+        (member_id, event_type, json.dumps(_safe_audit_detail(detail), ensure_ascii=False, sort_keys=True), _iso(_now())),
     )
 
 
@@ -147,9 +188,9 @@ def create_owner(email: str, password: str, display_name: str, db_path: Path = A
             raise ValueError("an active owner already exists")
         conn.execute(
             """INSERT INTO members
-               (id,email,display_name,role,tier,password_hash,password_salt,status,entitlements_json,created_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?)""",
-            (member_id, email, display_name.strip() if isinstance(display_name, str) and display_name.strip() else "Park", "owner", "owner", _password_digest(password, salt), salt,
+               (id,email,display_name,role,tier,access_role,password_hash,password_salt,status,entitlements_json,created_at)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+            (member_id, email, display_name.strip() if isinstance(display_name, str) and display_name.strip() else "Park", "owner", "owner", "owner", _password_digest(password, salt), salt,
              "active", json.dumps(TIER_ENTITLEMENTS["owner"]), _iso(_now())),
         )
         _record(conn, member_id, "owner_created", {"email": email})
@@ -313,10 +354,10 @@ def redeem_invite(
             raise ValueError("invite is invalid, expired, revoked, or exhausted")
         conn.execute(
             """INSERT INTO members
-               (id,email,display_name,role,tier,password_hash,password_salt,status,entitlements_json,created_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?)""",
+               (id,email,display_name,role,tier,access_role,password_hash,password_salt,status,entitlements_json,created_at)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
             (member_id, email, display_name.strip() if isinstance(display_name, str) and display_name.strip() else email.split("@", 1)[0], "member", invite["tier"],
-             _password_digest(password, salt), salt, "active", invite["entitlements_json"], now),
+             "member", _password_digest(password, salt), salt, "active", invite["entitlements_json"], now),
         )
         conn.execute("UPDATE invite_codes SET use_count=use_count+1 WHERE id=?", (invite["id"],))
         _record(conn, member_id, "invite_redeemed", {"invite_id": invite["id"], "tier": invite["tier"]})
@@ -347,11 +388,11 @@ def redeem_access_code(code: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any
             raise ValueError("access code is invalid, expired, revoked, or already used")
         conn.execute(
             """INSERT INTO members
-               (id,email,display_name,role,tier,password_hash,password_salt,status,entitlements_json,created_at)
-               VALUES (?,?,?,?,?,?,?,?,?,?)""",
+               (id,email,display_name,role,tier,access_role,password_hash,password_salt,status,entitlements_json,created_at)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
             (
                 member_id, internal_email, f"访客 {guest_suffix}", "member", invite["tier"],
-                _password_digest(unavailable_password, salt), salt, "active", invite["entitlements_json"], now,
+                "member", _password_digest(unavailable_password, salt), salt, "active", invite["entitlements_json"], now,
             ),
         )
         conn.execute("UPDATE invite_codes SET use_count=use_count+1 WHERE id=?", (invite["id"],))
@@ -397,6 +438,50 @@ def set_member_status(owner_id: str, email: str, status: str, db_path: Path = AU
         conn.commit()
         updated = conn.execute("SELECT * FROM members WHERE id=?", (target["id"],)).fetchone()
     return _public_member(updated)
+
+
+def set_member_access_role(owner_id: str, email: str, access_role: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
+    """Assign the non-escalating product role; only the durable owner may do so."""
+    initialize_auth(db_path)
+    if access_role not in {"editor", "member"}:
+        raise ValueError("invalid member access role")
+    email = _normalize_email(email)
+    with closing(connect(db_path)) as conn:
+        conn.execute("BEGIN IMMEDIATE")
+        owner = conn.execute("SELECT role,status FROM members WHERE id=?", (owner_id,)).fetchone()
+        target = conn.execute("SELECT * FROM members WHERE email=?", (email,)).fetchone()
+        if not owner or owner["role"] != "owner" or owner["status"] != "active":
+            raise PermissionError("owner access required")
+        if not target:
+            raise ValueError("member not found")
+        if target["role"] == "owner":
+            raise ValueError("owner role cannot be changed here")
+        conn.execute("UPDATE members SET access_role=? WHERE id=?", (access_role, target["id"]))
+        _record(conn, owner_id, "member_role_changed", {"member_id": target["id"], "access_role": access_role})
+        conn.commit()
+        updated = conn.execute("SELECT * FROM members WHERE id=?", (target["id"],)).fetchone()
+    return _public_member(updated)
+
+
+def list_audit_events(owner_id: str, db_path: Path = AUTH_DB_PATH, *, limit: int = 100) -> list[dict[str, Any]]:
+    """Return bounded, actor-scoped audit rows to the active owner only."""
+    initialize_auth(db_path)
+    if not isinstance(limit, int) or not 1 <= limit <= 500:
+        raise ValueError("audit limit must be 1-500")
+    with closing(connect(db_path)) as conn:
+        owner = conn.execute("SELECT role,status FROM members WHERE id=?", (owner_id,)).fetchone()
+        if not owner or owner["role"] != "owner" or owner["status"] != "active":
+            raise PermissionError("owner access required")
+        rows = conn.execute(
+            "SELECT id,member_id,event_type,detail_json,created_at FROM member_events ORDER BY id DESC LIMIT ?", (limit,)
+        ).fetchall()
+    return [
+        {
+            "id": row["id"], "actor_member_id": row["member_id"], "event_type": row["event_type"],
+            "detail": json.loads(row["detail_json"]), "created_at": row["created_at"],
+        }
+        for row in rows
+    ]
 
 
 def revoke_invite(owner_id: str, invite_id: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any]:
