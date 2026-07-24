@@ -125,7 +125,14 @@ class _AllowlistedRedirectHandler(HTTPRedirectHandler):
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
-def default_http_transport(url: str, request_headers: Mapping[str, str]) -> HttpResponse:
+def default_http_transport(
+    url: str,
+    request_headers: Mapping[str, str],
+    *,
+    timeout_seconds: float = 15.0,
+) -> HttpResponse:
+    if timeout_seconds <= 0:
+        raise ValueError("official filing timeout must be positive")
     allowed_hosts = frozenset({_host(url)})
     redirect_handler = _AllowlistedRedirectHandler(allowed_hosts)
     redirect_handler.redirect_chain.append(url)
@@ -134,7 +141,7 @@ def default_http_transport(url: str, request_headers: Mapping[str, str]) -> Http
         url,
         headers={"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)},
     )
-    with opener.open(request, timeout=15.0) as response:
+    with opener.open(request, timeout=timeout_seconds) as response:
         final_url = response.geturl()
         if _host(final_url) not in allowed_hosts:
             raise ValueError("official filing final URL left the source allowlist")
