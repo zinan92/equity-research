@@ -1667,3 +1667,14 @@
 
 - A4 的 packet validation 会将缺 latest fundamental period 的行拒绝，即使部分 raw sources 已到达；部分成功不可被改写为完整 financial delivery。
 - 11 个 PIT inputs 只解决五问的一项且仍无 valuation/recommendation credit；后续恢复应在同一 source contract 下重跑并重新审计。
+
+## 2026-07-24 · N3-S7a PIT 财务交付恢复
+
+- Decision：Eastmoney 预约披露行仅保留在 raw capture 中，不在其 `NOTICE_DATE` 晚于 capture `known_at` 时进入 PIT records；N3 financial-delivery 同时从共享 market packet 中拆出，只验证四个已声明财务来源，并对瞬时失败做至多三次相同来源的 isolated re-pull。
+- Why：未来预约披露不是当时已知事实；反之，日 K 线传输失败也不是财务来源缺失。两种情况都不能通过改写日期、复用陈旧结果或切换未声明 provider 来“修复”20-company gate。
+- Evidence：`docs/evidence/2026-07-24-n3-s7a-pit-financial-recovery.md`，runtime receipt `e3cd6e06…`，selection identity `39786334…`，真实结果 20 requested / 20 available / 0 gaps；R2 audit 将 financial delivery 提升为 20/20。
+
+### Gotchas · N3-S7a
+
+- retry 只会重新拉取同一个 ticker 的同一 A4 adapters；final row 仍必须拥有新抓取的 raw/manifest/known-at identity，旧 receipt 或 cache 不可作为成功结果。
+- 财务输入 20/20 不会让 R2 pass：moat、market-future、falsifier 仍为 0/20，继续禁止 Tier、target、position 或 action 输出。

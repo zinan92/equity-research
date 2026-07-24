@@ -23,7 +23,11 @@ from data_core import (  # noqa: E402
     collect_ashare_packet,
     normalize_ashare_ticker,
 )
-from data_core.ashare import TencentDailyBarAdapter  # noqa: E402
+from data_core.ashare import (  # noqa: E402
+    EastmoneyFundamentalAdapter,
+    EastmoneyStatementAdapter,
+    TencentDailyBarAdapter,
+)
 from data_core.ingestion import FetchedPayload, build_raw_capture  # noqa: E402
 
 
@@ -326,6 +330,69 @@ class AShareDataPacketTest(unittest.TestCase):
         ]
         self.assertTrue(current_day)
         self.assertTrue(all(item["observed_at"] == known_at for item in current_day))
+
+    def test_future_scheduled_financial_rows_are_not_accepted_as_pit_facts(self) -> None:
+        known_at = "2026-07-24T10:00:00Z"
+        request = FetchRequest.create(
+            request_id="future-financial-row",
+            domain=RecordDomain.FUNDAMENTAL,
+            entity_key="300750.SZ",
+            parameters={"periods": 4},
+        )
+
+        main = json.loads(fundamental_payload())
+        main["result"]["data"].insert(
+            0,
+            {
+                **main["result"]["data"][0],
+                "REPORT_DATE": "2026-06-30 00:00:00",
+                "NOTICE_DATE": "2026-08-30 00:00:00",
+            },
+        )
+        main_fetched = FetchedPayload(
+            body=json.dumps(main).encode(),
+            source_url="https://datacenter.eastmoney.com/fixture/main",
+            fetched_at=known_at,
+            known_at=known_at,
+            mime_type="application/json",
+            data_kind="fixture",
+        )
+        main_records = tuple(
+            EastmoneyFundamentalAdapter(http_get=FakeHttp()).parse(
+                request, main_fetched, build_raw_capture(main_fetched)
+            )
+        )
+        self.assertTrue(main_records)
+        self.assertTrue(
+            all(record.payload["report_period"] == "2026-03-31" for record in main_records)
+        )
+
+        statement = json.loads(statement_payload("RPT_DMSK_FN_INCOME"))
+        statement["result"]["data"].insert(
+            0,
+            {
+                **statement["result"]["data"][0],
+                "REPORT_DATE": "2026-06-30 00:00:00",
+                "NOTICE_DATE": "2026-08-30 00:00:00",
+            },
+        )
+        statement_fetched = FetchedPayload(
+            body=json.dumps(statement).encode(),
+            source_url="https://datacenter.eastmoney.com/fixture/income",
+            fetched_at=known_at,
+            known_at=known_at,
+            mime_type="application/json",
+            data_kind="fixture",
+        )
+        statement_records = tuple(
+            EastmoneyStatementAdapter("income_statement", http_get=FakeHttp()).parse(
+                request, statement_fetched, build_raw_capture(statement_fetched)
+            )
+        )
+        self.assertTrue(statement_records)
+        self.assertTrue(
+            all(record.payload["report_period"] == "2026-03-31" for record in statement_records)
+        )
 
 
 if __name__ == "__main__":

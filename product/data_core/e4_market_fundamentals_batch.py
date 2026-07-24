@@ -93,7 +93,13 @@ def _collector_worker(ticker: str, result_queue: Any) -> None:
         result_queue.put({"status": "error", "error": type(exc).__name__, "message": str(exc)[:240]})
 
 
-def _collect_isolated(ticker: str, timeout_seconds: float, worker: Callable[[str, Any], None]) -> dict[str, Any]:
+def _collect_isolated(
+    ticker: str,
+    timeout_seconds: float,
+    worker: Callable[[str, Any], None],
+    *,
+    summary_row: Callable[[str, Mapping[str, Any]], dict[str, Any]] = _packet_row,
+) -> dict[str, Any]:
     context = multiprocessing.get_context("spawn")
     result_queue = context.Queue(maxsize=1)
     process = context.Process(target=worker, args=(ticker, result_queue))
@@ -108,7 +114,7 @@ def _collect_isolated(ticker: str, timeout_seconds: float, worker: Callable[[str
     if result.get("status") != "ok":
         return {"ticker": ticker.upper(), "status": "failed", "data_kind": "real", "market_available": False, "fundamentals_available": False, "blockers": ["collector_exception"], "error": result.get("error"), "message": result.get("message")}
     try:
-        return _packet_row(ticker, result["summary"])
+        return summary_row(ticker, result["summary"])
     except ValueError as exc:
         return {"ticker": ticker.upper(), "status": "failed", "data_kind": "real", "market_available": False, "fundamentals_available": False, "blockers": ["packet_validation_failed"], "error": type(exc).__name__, "message": str(exc)[:240]}
 

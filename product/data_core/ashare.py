@@ -204,6 +204,16 @@ def _bar_observed_at(trade_date: str, known_at: str) -> str:
     return min(close_time, fetch_time).isoformat().replace("+00:00", "Z")
 
 
+def _announced_by_known_at(announced_at_date: str, known_at: str) -> bool:
+    """Whether an Eastmoney disclosure date was visible at this capture.
+
+    Eastmoney may return scheduled future disclosure rows alongside filed rows.
+    They remain in the immutable raw capture but cannot become point-in-time
+    facts before their stated notice date.
+    """
+    return announced_at_date <= known_at[:10]
+
+
 def _num(value: Any) -> float | None:
     if value in (None, "", "-", "--"):
         return None
@@ -510,6 +520,8 @@ class EastmoneyFundamentalAdapter:
             announced_at_date = str(row.get("NOTICE_DATE") or "")[:10]
             if not report_period or not announced_at_date:
                 continue
+            if not _announced_by_known_at(announced_at_date, fetched.known_at):
+                continue
             announced_at = announced_at_date
             report_type = row.get("REPORT_TYPE") or row.get("REPORT_DATE_NAME") or "unknown"
             for provider_key, (metric, unit) in metric_map.items():
@@ -638,6 +650,8 @@ class EastmoneyStatementAdapter:
             report_period = str(row.get("REPORT_DATE") or "")[:10]
             announced_at_date = str(row.get("NOTICE_DATE") or "")[:10]
             if not report_period or not announced_at_date:
+                continue
+            if not _announced_by_known_at(announced_at_date, fetched.known_at):
                 continue
             announced_at = announced_at_date
             report_type = row.get("REPORT_TYPE") or row.get("DATE_TYPE_CODE") or "unknown"
