@@ -1105,6 +1105,16 @@
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
 
+## 2026-07-24 · E2-S6 事件与 Evidence Gate 生产化验收
+
+- Decision：复用 B5 `event_intelligence.py` 和 B6 `evidence_gate.py`，仅增加可复跑的验收回执，不更改 collector、推理策略或 Evidence Gate 规则。
+- Why：新闻事件可以解释研究背景，但只有 accepted、PIT-valid、无未解决冲突的证据才能进入 Context Pack 与后续报告。
+- Evidence：`scripts/verify_e2_s6_events_gate.py` 和 event/evidence-gate focused tests。
+
+### Gotchas · E2-S6
+
+- inference 不是 evidence；source failure、ambiguous entity、future-known、rejected、fixture 或 tampered evidence 必须显式留在 gap/blocked 状态，不能通过聚合或上一快照绕过。
+
 ## 2026-07-24 · E2-S5 卖方研报、预测与分歧生产化验收
 
 - Decision：复用 B2 `sell_side_archive.py`、B4 `consensus_history.py` 与 `viewpoint_matrix.py`；本 Story 只补可复跑的 production-acceptance receipt，不改采集器、预测算法或评分逻辑。
