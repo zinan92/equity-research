@@ -14,11 +14,12 @@ import tempfile
 from dataclasses import asdict, dataclass
 from datetime import datetime, time
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 from zoneinfo import ZoneInfo
 
 from .contracts import digest
 from .research_refresh import CanonicalResearchRefresh
+from .research_cadence import build_cadence_plan
 from .source_observability import SourceObservabilityLedger
 from .store import DataFoundation
 
@@ -230,6 +231,15 @@ def snapshot_audit(foundation: DataFoundation, snapshot_id: str) -> dict[str, An
     }
 
 
+def cadence_receipt(active: Mapping[str, Any] | None, *, now: datetime) -> dict[str, object]:
+    """Attach cadence truthfully: A5 currently refreshes only the fast lane."""
+    activated = (active or {}).get("activated_at")
+    fast_last_good = None
+    if activated:
+        fast_last_good = datetime.fromisoformat(str(activated).replace("Z", "+00:00"))
+    return build_cadence_plan(now=now, last_good={"fast": fast_last_good})
+
+
 class SnapshotOrchestrator:
     """Schedule and audit the existing canonical refresh; never fork its state."""
 
@@ -251,12 +261,14 @@ class SnapshotOrchestrator:
             now=now,
         )
         if not force and not plan.due:
+            active = self.refresh.status().get("active")
             receipt = {
                 "schema_version": ORCHESTRATION_SCHEMA_VERSION,
                 "check_id": f"schedule_{digest(plan.as_json())[:16]}",
                 "status": "skipped",
                 "plan": plan.as_json(),
-                "active": self.refresh.status().get("active"),
+                "active": active,
+                "cadence": cadence_receipt(active, now=now),
                 "network_called": False,
             }
             receipt["receipt_hash"] = digest(receipt)
@@ -293,6 +305,7 @@ class SnapshotOrchestrator:
             "active": result.get("active"),
             "active_preserved": active_preserved,
             "error": error,
+            "cadence": cadence_receipt(result.get("active") or active_preserved, now=now),
         }
         if result.get("snapshot_id"):
             receipt["snapshot"] = snapshot_audit(
