@@ -1165,3 +1165,14 @@
 
 - blocked receipt 是返回值，不落库伪装成 accepted receipt；失败批次不得留下半个 revision 或 evidence receipt。
 - identical retry 仅在 object hash 完全相同时复用；不同输入必须先被同 revision conflict 阻断。
+
+## 2026-07-24 · E1-S5 Canonical Read 与 Fixture Isolation
+
+- Decision：canonical reader 默认只暴露 accepted、real snapshot 的对象；fixture/non-real snapshot 必须由调用方显式启用，且输出保留 data_kind，不能静默进入生产读路径。
+- Why：Atlas/industry-intelligence 的 archive fixture 是开发样本，不能因为 read API 存在而被误认为 canonical 事实。
+- Evidence：`CanonicalResearchReader` 与 fixture-off/fixture-explicit focused tests。
+
+### Gotchas · E1-S5
+
+- unknown ticker 和 non-real snapshot 都返回 structured missing/gap，禁止猜测或 fallback 到 archive dossier。
+- 本 Story 不改 product/static；前端接 canonical API 必须保持 Claude-owned 的独立 ticket。

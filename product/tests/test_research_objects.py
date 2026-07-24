@@ -18,6 +18,7 @@ from data_core.research_objects import (  # noqa: E402
 )
 from data_core.store import DataFoundation  # noqa: E402
 from data_core.research_object_publish import ResearchObjectPublisher  # noqa: E402
+from data_core.research_object_read import CanonicalResearchReader  # noqa: E402
 from data_core.contracts import SourceManifest  # noqa: E402
 from data_core.fixtures import AS_OF, KNOWN_AT, fixture_payload  # noqa: E402
 
@@ -122,6 +123,17 @@ class ResearchObjectContractTests(unittest.TestCase):
         self.assertEqual(len(store.history(good.object_id)), 1)
         self.assertEqual(store.history("research-v1:catalyst:catl"), [])
         self.assertTrue(publisher.publish((good,))["records"][0]["reused"])
+
+    def test_reader_fails_closed_when_fixture_is_disabled(self) -> None:
+        foundation, raw_hash, snapshot_id = self.authority()
+        publisher = ResearchObjectPublisher(foundation.connect)
+        company = item(ResearchObjectType.COMPANY, raw_hashes=(raw_hash,), snapshot_id=snapshot_id)
+        dossier = item(ResearchObjectType.DOSSIER, raw_hashes=(raw_hash,), snapshot_id=snapshot_id)
+        self.assertEqual(publisher.publish((company, dossier))["status"], "accepted")
+        self.assertEqual(CanonicalResearchReader(foundation.connect).by_ticker("300750.SZ")["reason"], "fixture_or_nonreal_snapshot")
+        visible = CanonicalResearchReader(foundation.connect, allow_fixture=True).by_ticker("300750.SZ")
+        self.assertEqual(visible["status"], "accepted")
+        self.assertEqual(set(visible["objects"]), {"company", "dossier"})
 
 
 if __name__ == "__main__":

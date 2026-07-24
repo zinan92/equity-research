@@ -133,6 +133,7 @@ from .research_objects import (
     object_contract_descriptor,
 )
 from .research_object_publish import ResearchObjectPublishError, ResearchObjectPublisher
+from .research_object_read import CanonicalReadError, CanonicalResearchReader
 from .snapshot_orchestration import (
     CanonicalGap,
     ORCHESTRATION_SCHEMA_VERSION,
