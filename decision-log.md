@@ -1381,4 +1381,16 @@
 - 未被选中的 primary source 失败仍应可见，但在 explicit fallback 成功时 coverage impact 必须为零；否则会制造噪声告警。
 - data kind 不是质量的替代：`real` 仍须通过原有 B6/A5 门；但 `fixture/cached` 无论结构多完整都不能出现在 production healthy receipt。
 - 本 Story 只产生本地、可重放告警记录；向 PagerDuty/Slack 等外部通知的授权、凭据和服务级策略仍是未来独立工作，不能暗示已通知人。
+
+## 2026-07-24 · E6-S3 私测备份、恢复与回滚演练
+
+- Decision：复用现有 content-addressed private-preview release、`verify_release()`、独立 auth DB 与原子 `current` pointer；新增 `scripts/recovery_drill.py`，将它们编排为外部 runtime-only 的 backup manifest、clean restore receipt 和 verified rollback receipt。
+- Why：已经能发布不等于已经能恢复。恢复必须能重新验证 release/snapshot identity 和 auth DB hash，且篡改或残缺备份不能进入 current。
+- Evidence：`scripts/recovery_drill.py` 与 `product/tests/test_private_preview_v1.py`。测试生成隔离 release，创建备份，恢复到全新 runtime，验证 current identity，并注入 auth DB 篡改确保 verify 在激活前拒绝。
+
+### Gotchas · E6-S3
+
+- 备份包含独立 auth database，故只能在仓库外 runtime 保存、权限为 owner-only，绝不能加入 Git 或截图/日志。
+- backup 是固定 release 的可恢复副本，不是持续同步或多地域灾备；RPO/RTO 需要真实生产存储和演练后才能宣称达到目标。
+- rollback 仍只接受一个已经 `verify_release()` 通过且不同于 current 的历史 release；不能用目录名、软链接或未验证 staging 冒充回退目标。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。
