@@ -1524,3 +1524,14 @@
 
 - companion receipt 是 market/fundamentals availability 证明，不是 accepted evidence corpus；即使全部组件 real/publishable，也不会独自提升 Tier、target、position 或 audit credit。
 - checkpoint 绑定 official receipt hash，故新的官方 corpus 或配置必须创建新的 runtime root；不得为省时手改 pointer 或拼接两个 corpus。
+
+## 2026-07-24 · E4-S4j 真实 100 ticker market/PIT 基线
+
+- Decision：发布 100 requested / 67 market available / 67 fundamentals available / 33 failed 的 aggregate baseline，保留其 receipt hash 和 input-only boundary。
+- Why：这将后续估值与质量模块的输入缺口量化为真实、可重放的 component coverage，不能以“已有市场数据”替代 primary evidence、Tier 或投资动作。
+- Evidence：runtime-only receipt `99177f8d263adbcd26c88594c5e575af34e20357813ce807f307938705bb7be6` 与 `docs/evidence/2026-07-24-e4-s4j-market-pit-baseline.md`。
+
+### Gotchas · E4-S4j live baseline
+
+- 市场与财务可用性均为 component-level availability，不能推断同一 ticker 已拥有完整 valuation、sell-side、industry position 或可审计报告。
+- runtime receipt 仅在 exact official baseline / identity / config 组合下可复用；后续 source rerun 必须重建 companion input，而不是复制 aggregate count。
