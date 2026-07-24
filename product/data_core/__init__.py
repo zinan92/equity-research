@@ -160,6 +160,14 @@ from .official_filings import (
     sync_cninfo_filings_async,
     validate_official_source_role,
 )
+from .industry_ontology import (
+    ONTOLOGY_VERSION,
+    IndustryNode,
+    IndustrySegment,
+    build_ontology,
+    ontology_receipt,
+    validate_ontology,
+)
 from .document_intelligence import (
     DEFAULT_PARSER_VERSION,
     CitationCheck,
@@ -295,6 +303,7 @@ __all__ = [
     "build_official_filing_registry", "build_official_filing_runtime",
     "classify_filing_title", "sync_cninfo_filings", "sync_cninfo_filings_async",
     "validate_official_source_role",
+    "ONTOLOGY_VERSION", "IndustryNode", "IndustrySegment", "build_ontology", "ontology_receipt", "validate_ontology",
     "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
     "DocumentPage", "DocumentParseResult", "PageCitation", "ParserConfig",
     "PublicationGateResult", "ReportClaim", "TesseractCliOCR",
