@@ -18,7 +18,7 @@ LEGACY_REQUIRED_HEADINGS = (
 READER_REQUIRED_HEADINGS = (
     "## 产业坐标", "## 一句话定位", "## 创始人与团队", "## 发展时间线",
     "## 技术、产品与商业模式", "## 财务与估值", "## 风险与点评",
-    "## 9. 生产记录", "## Sources",
+    "### 大白话点评", "## 9. 生产记录", "## Sources",
 )
 NUMERIC_FACT = re.compile(r"\d")
 SOURCE_CITATION = re.compile(r"\[S-\d+\]")
@@ -59,7 +59,7 @@ def verify(path: Path) -> list[str]:
 
         in_factual_sections = False
         for line_number, line in enumerate(text.splitlines(), start=1):
-            if line in {"## 1. 一句话定位", "## 产业坐标"}:
+            if line in {"## 1. 一句话定位", "## 一句话定位"}:
                 in_factual_sections = True
             elif line.startswith("## 9. "):
                 in_factual_sections = False

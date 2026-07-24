@@ -62,6 +62,12 @@ def build_pack(
     if not isinstance(tickers, list) or len(tickers) != 5:
         raise ValueError("manifest blind_evaluation_set must contain five tickers")
 
+    randomizer = secrets.SystemRandom()
+    own_labels = ["A", "A", "B", "B", "B"]
+    if randomizer.getrandbits(1):
+        own_labels = ["A", "A", "A", "B", "B"]
+    randomizer.shuffle(own_labels)
+
     pair_sections: list[str] = []
     key_pairs: list[dict[str, Any]] = []
     for index, raw_ticker in enumerate(tickers, start=1):
@@ -78,7 +84,7 @@ def build_pack(
             raise ValueError(f"self-produced dossier missing for {ticker}")
         own_text = _review_body(own_path.read_text(encoding="utf-8"))
         benchmark_text = str(benchmark["md"]).strip()
-        own_label = "A" if secrets.randbits(1) == 0 else "B"
+        own_label = own_labels[index - 1]
         benchmark_label = "B" if own_label == "A" else "A"
         documents = {own_label: own_text, benchmark_label: benchmark_text}
         pair_id = f"P{index}"

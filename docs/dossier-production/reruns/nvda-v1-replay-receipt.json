@@ -2,9 +2,9 @@
   "schema_version": "dossier-structural-replay-v1",
   "source": "docs/dossier-production/samples/nvda-v1.md",
   "output": "docs/dossier-production/reruns/nvda-v1-replay.md",
-  "source_sha256": "17efa31430cf00c5d27c20f03d3f00f41b9620b0f4d8e4a362a53f1535ea7626",
-  "output_sha256": "829b2da0c6e1b0c0b6a70f5c345d6e6aa10c3c5e8645d58c16422d563630b18f",
-  "source_structure_signature": "15388ee9e3ec90ba8c22bdae9d300fdf03bddaf48b73e8f39bceebfeb10811bc",
-  "output_structure_signature": "15388ee9e3ec90ba8c22bdae9d300fdf03bddaf48b73e8f39bceebfeb10811bc",
+  "source_sha256": "6f1b6718986332c5321b8e65f9c6a39c2d815ca101f3768953f74bb3fe49be1e",
+  "output_sha256": "af70a072afb670d78abc76b4b326a1714de43e196ae8ce0e2271d7cb40f57534",
+  "source_structure_signature": "bb6e0c1399cb75c4433eb0692168dfa90aaaff7ef1b0eb57788b1091ed7e0add",
+  "output_structure_signature": "bb6e0c1399cb75c4433eb0692168dfa90aaaff7ef1b0eb57788b1091ed7e0add",
   "structure_match": true
 }
