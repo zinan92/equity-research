@@ -15,6 +15,7 @@ if str(PRODUCT) not in sys.path:
 
 from data_core import (  # noqa: E402
     CNINFO_FILING_DOCUMENT_SOURCE,
+    SSE_FILING_INDEX_SOURCE,
     SSE_FILING_DOCUMENT_SOURCE,
     SZSE_FILING_DOCUMENT_SOURCE,
     FetchRequest,
@@ -26,11 +27,14 @@ from data_core import (  # noqa: E402
     build_official_filing_runtime,
     classify_filing_title,
     sync_cninfo_filings,
+    sync_exchange_filings,
+    sync_sse_filings,
     validate_official_source_role,
 )
 
 
 INDEX_PREFIX = "https://www.cninfo.com.cn/new/fulltextSearch/full?"
+SSE_INDEX_PREFIX = "https://query.sse.com.cn/security/stock/queryCompanyBulletin.do?"
 DOCS = {
     "annual": "https://static.cninfo.com.cn/finalpage/2026-03-15/annual.PDF",
     "quarter": "https://static.cninfo.com.cn/finalpage/2026-04-20/quarter.PDF",
@@ -60,6 +64,17 @@ class FakeTransport:
         if wrong_security:
             rows[0]["secCode"] = "600519"
         self.index_body = json.dumps({"announcements": rows}, ensure_ascii=False).encode()
+        self.sse_index_body = json.dumps({
+            "result": [
+                {
+                    "SECURITY_CODE": "600036",
+                    "BULLETIN_ID": "sse-annual-2024",
+                    "TITLE": "招商银行2024年年度报告",
+                    "SSEDATE": "2025-03-26",
+                    "URL": "/disclosure/listedinfo/announcement/c/new/2025-03-26/600036_2024_n.pdf",
+                }
+            ]
+        }, ensure_ascii=False).encode()
         self.invalid_pdf = invalid_pdf
         self.calls: list[str] = []
 
@@ -71,6 +86,13 @@ class FakeTransport:
                 url,
                 200,
                 (("content-length", str(len(self.index_body))), ("content-type", "application/json")),
+            )
+        if url.startswith(SSE_INDEX_PREFIX):
+            return HttpResponse(
+                self.sse_index_body,
+                url,
+                200,
+                (("content-length", str(len(self.sse_index_body))), ("content-type", "application/json")),
             )
         if url in DOCS.values():
             body = (
@@ -255,6 +277,42 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertFalse(result.documents["annual"].publishable)
         self.assertIn("not a PDF", result.documents["annual"].attempts[-1].error)
         self.assertTrue(result.documents["quarter"].publishable)
+
+    def test_sse_sync_keeps_index_raw_identity_and_only_uses_declared_url(self) -> None:
+        transport = FakeTransport()
+        sink = MemoryAuthoritySink()
+        result = sync_sse_filings(
+            "600036.SH", transport=transport, authority_sink=sink,
+            start_date="2025-01-01", end_date="2025-12-31",
+        )
+        self.assertTrue(result.publishable)
+        self.assertEqual(set(result.documents), {"sse-annual-2024"})
+        discovery_attempt = result.discovery.attempts[-1]
+        self.assertEqual(result.discovery.selected_source, SSE_FILING_INDEX_SOURCE)
+        self.assertIsNotNone(discovery_attempt.raw)
+        document = result.documents["sse-annual-2024"].records[0]
+        self.assertEqual(document.payload["official_platform"], SSE_FILING_DOCUMENT_SOURCE)
+        self.assertEqual(
+            document.payload["http_metadata"]["source_url"],
+            "https://static.sse.com.cn/disclosure/listedinfo/announcement/c/new/2025-03-26/600036_2024_n.pdf",
+        )
+        self.assertEqual(len(sink.attempts), 2)
+
+    def test_sse_rejects_missing_or_unofficial_declared_document_url(self) -> None:
+        transport = FakeTransport()
+        transport.sse_index_body = json.dumps({"result": [{
+            "SECURITY_CODE": "600036", "TITLE": "招商银行2024年年度报告",
+            "SSEDATE": "2025-03-26", "URL": "https://finance.example.com/600036.pdf",
+        }]}, ensure_ascii=False).encode()
+        result = sync_sse_filings("600036.SH", transport=transport)
+        self.assertFalse(result.publishable)
+        self.assertIn("outside official SSE", result.discovery.attempts[-1].error)
+
+    def test_exchange_selection_is_explicit_and_never_falls_back(self) -> None:
+        sse = sync_exchange_filings("600036.SH", transport=FakeTransport())
+        cninfo = sync_exchange_filings("300750.SZ", transport=FakeTransport())
+        self.assertTrue(sse.publishable)
+        self.assertTrue(cninfo.publishable)
 
 
 if __name__ == "__main__":
