@@ -83,6 +83,8 @@ class CrosswalkRecord:
     ticker: str | None
     company_id: str | None
     reason: str | None
+    source_ref: str
+    known_at: str
 
     def to_dict(self) -> dict[str, Any]:
         return self.__dict__.copy()
@@ -93,16 +95,20 @@ class CrosswalkResolution:
     query: str
     status: str
     candidates: tuple[CrosswalkRecord, ...]
+    data_kind: str
 
 
 class UniverseCrosswalk:
     """Read-only resolver that fails closed on alias collisions."""
 
-    def __init__(self, records: Iterable[CrosswalkRecord]) -> None:
+    def __init__(self, records: Iterable[CrosswalkRecord], *, data_kind: str = "fixture") -> None:
         materialized = tuple(records)
         if not materialized:
             raise ValueError("crosswalk records are required")
         self.records = materialized
+        if data_kind not in {"fixture", "cached", "real", "runtime_only_audit"}:
+            raise ValueError("invalid crosswalk data kind")
+        self.data_kind = data_kind
         self._by_ticker: dict[str, list[CrosswalkRecord]] = {}
         self._by_alias: dict[str, list[CrosswalkRecord]] = {}
         for record in materialized:
@@ -119,15 +125,18 @@ class UniverseCrosswalk:
         matched = tuple(item for item in candidates if item.status == "matched")
         unique_companies = {item.company_id for item in matched if item.company_id}
         if len(unique_companies) == 1:
-            return CrosswalkResolution(query=query, status="matched", candidates=matched)
+            return CrosswalkResolution(query=query, status="matched", candidates=matched, data_kind=self.data_kind)
         if candidates:
-            return CrosswalkResolution(query=query, status="ambiguous", candidates=candidates)
-        return CrosswalkResolution(query=query, status="unmapped", candidates=())
+            return CrosswalkResolution(query=query, status="ambiguous", candidates=candidates, data_kind=self.data_kind)
+        return CrosswalkResolution(query=query, status="unmapped", candidates=(), data_kind=self.data_kind)
 
 
 def build_crosswalk(
     main_records: Iterable[Mapping[str, Any]],
     levels_records: Iterable[Mapping[str, Any]],
+    *,
+    source_ref: str = "fixture",
+    known_at: str = "fixture",
 ) -> tuple[CrosswalkRecord, ...]:
     """Build rows from audit-only universe records without name-based joins."""
     grouped: dict[tuple[str, str], list[tuple[str, Mapping[str, Any]]]] = {}
@@ -157,5 +166,7 @@ def build_crosswalk(
                 ticker=ticker,
                 company_id=company,
                 reason=reason,
+                source_ref=source_ref,
+                known_at=known_at,
             ))
     return tuple(output)

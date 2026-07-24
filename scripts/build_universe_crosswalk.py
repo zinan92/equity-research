@@ -33,10 +33,16 @@ def main() -> int:
     parser.add_argument("--main", type=Path, required=True)
     parser.add_argument("--levels", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--known-at", required=True, help="snapshot known_at ISO-8601 timestamp")
     args = parser.parse_args()
     main_records = _records(args.main, main_only=True)
     level_records = _records(args.levels)
-    records = build_crosswalk(main_records, level_records)
+    records = build_crosswalk(
+        main_records,
+        level_records,
+        source_ref="runtime_only_archive_audit",
+        known_at=args.known_at,
+    )
     statuses = Counter(row.status for row in records)
     payload = {
         "schema_version": "company-universe-crosswalk-v1",

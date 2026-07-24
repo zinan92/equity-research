@@ -37,6 +37,8 @@ python3 scripts/build_universe_crosswalk.py \
 
 在 2026-07-24 的本地归档审计中，`main=649`、`levels=661`，输出 1,310 条记录：1,058 `matched`、252 `unmapped`、0 `ambiguous`。该 JSON 是 runtime-only audit output，不能提交或作为产品事实。
 
+同一审计针对 M1 的 30 家黄金集产生独立 coverage receipt：30/30 ticker 可按其显式市场规范化；其中 21 家在 archive universe 中有 `matched` 候选，9 家为 `unmapped`。后者是 archive coverage 缺口，不是名称匹配或产品身份失败。该 receipt 同样只写到 `/tmp`。
+
 ## Boundary
 
 该模块复用 A1/A2 的 canonical `instrument_id` 语义和 A4 的证券代码规则；它没有新建 authority schema，也不允许从 archive 回填证券身份。后续 E1-S2 才定义 Company、SectorPosition、Evidence 等正式对象的版本化写入。
