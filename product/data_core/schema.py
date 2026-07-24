@@ -210,6 +210,8 @@ CREATE TABLE IF NOT EXISTS core_research_object_revisions (
     known_at TEXT NOT NULL,
     confidence TEXT NOT NULL CHECK(confidence IN ('high','medium','low','unknown')),
     evidence_refs_json TEXT NOT NULL,
+    raw_hashes_json TEXT NOT NULL,
+    snapshot_id TEXT NOT NULL,
     facts_json TEXT NOT NULL,
     judgments_json TEXT NOT NULL,
     model_version TEXT,
