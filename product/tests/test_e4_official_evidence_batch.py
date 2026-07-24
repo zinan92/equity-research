@@ -4,6 +4,7 @@ import hashlib
 import json
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -13,6 +14,13 @@ if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
 from data_core.e4_official_evidence_batch import load_real_identity_tickers, run_official_evidence_batch  # noqa: E402
+
+
+def hung_then_failure_worker(ticker: str, _raw_root: str, _pages: int, result_queue) -> None:
+    if ticker == "000000.SZ":
+        time.sleep(2)
+        return
+    result_queue.put({"status": "ok", "row": {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["simulated_next_ticker"]}})
 
 
 def identity_receipt() -> dict:
@@ -79,3 +87,19 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
             self.assertEqual(result["receipt"]["counts"], {"requested": 2, "captured_official_primary": 1, "failed": 1, "resumed": 0})
             self.assertEqual(result["receipt"]["tickers"][0]["blockers"], ["collector_exception"])
             self.assertFalse(result["receipt"]["truth_boundary"]["counts_as_tier_a_or_b"])
+
+    def test_hard_timeout_terminates_hung_child_and_continues(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            started = time.monotonic()
+            result = run_official_evidence_batch(
+                self.write_identity(root), root / "runtime", max_tickers=2,
+                inter_ticker_delay_seconds=0, collector_timeout_seconds=0.5,
+                isolated_worker=hung_then_failure_worker,
+            )
+            elapsed = time.monotonic() - started
+            rows = result["receipt"]["tickers"]
+            self.assertLess(elapsed, 2.5)
+            self.assertEqual(rows[0]["blockers"], ["collector_timeout"])
+            self.assertEqual(rows[1]["blockers"], ["simulated_next_ticker"])
+            self.assertEqual(result["receipt"]["counts"]["captured_official_primary"], 0)

@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import multiprocessing
+import queue
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,6 +24,45 @@ E4_OFFICIAL_EVIDENCE_BATCH_SCHEMA_VERSION = "e4-s4-official-evidence-batch-v1"
 QUALIFYING_DOCUMENT_TYPES = frozenset({"annual_report", "semiannual_report", "quarterly_report"})
 MAX_OFFICIAL_FILING_AGE_DAYS = 365
 SyncFn = Callable[..., OfficialFilingBatch]
+
+
+def _isolated_collector_worker(
+    ticker: str, raw_root_text: str, max_discovery_pages: int, result_queue: Any,
+) -> None:
+    """Run the provider call and raw write outside the parent batch process."""
+    try:
+        sink = MemoryAuthoritySink()
+        batch = sync_exchange_filings(
+            ticker, authority_sink=sink, limit=30, financial_reports_only=True,
+            max_documents=1, max_discovery_pages=max_discovery_pages,
+        )
+        result_queue.put({"status": "ok", "row": _result_for_batch(ticker, batch, Path(raw_root_text))})
+    except Exception as exc:
+        result_queue.put({"status": "error", "error": type(exc).__name__})
+
+
+def _collect_with_hard_timeout(
+    ticker: str, raw_root: Path, max_discovery_pages: int, timeout_seconds: float,
+    *, worker: Callable[[str, str, int, Any], None] = _isolated_collector_worker,
+) -> dict[str, Any]:
+    if timeout_seconds <= 0:
+        raise ValueError("collector_timeout_seconds must be positive")
+    context = multiprocessing.get_context("spawn")
+    result_queue = context.Queue(maxsize=1)
+    process = context.Process(target=worker, args=(ticker, str(raw_root), max_discovery_pages, result_queue))
+    process.start()
+    process.join(timeout_seconds)
+    if process.is_alive():
+        process.terminate()
+        process.join(5)
+        return {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_timeout"]}
+    try:
+        result = result_queue.get_nowait()
+    except queue.Empty:
+        return {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_worker_no_receipt"]}
+    if result.get("status") != "ok":
+        return {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_exception"], "error": result.get("error")}
+    return dict(result["row"])
 
 
 def _canonical_json(value: Any) -> str:
@@ -138,7 +179,9 @@ def run_official_evidence_batch(
     max_tickers: int = 100,
     inter_ticker_delay_seconds: float = 1.0,
     max_discovery_pages: int = 3,
+    collector_timeout_seconds: float = 45.0,
     sync: SyncFn = sync_exchange_filings,
+    isolated_worker: Callable[[str, str, int, Any], None] = _isolated_collector_worker,
     sleep: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
     """Capture one qualifying official filing per ticker, sequentially and resumably."""
@@ -148,6 +191,8 @@ def run_official_evidence_batch(
         raise ValueError("inter_ticker_delay_seconds must be nonnegative")
     if not isinstance(max_discovery_pages, int) or max_discovery_pages < 1:
         raise ValueError("max_discovery_pages must be positive")
+    if collector_timeout_seconds <= 0:
+        raise ValueError("collector_timeout_seconds must be positive")
     tickers = load_real_identity_tickers(identity_receipt_path)[:max_tickers]
     runtime_root.mkdir(parents=True, exist_ok=True)
     latest_path = runtime_root / "official-evidence-batch-latest.json"
@@ -167,12 +212,17 @@ def run_official_evidence_batch(
             rows.append({"ticker": ticker, "status": "skipped", "data_kind": "real", "resumed_from_raw_hash": prior.get("raw_hash"), "blockers": ["already_captured"]})
             continue
         try:
-            sink = MemoryAuthoritySink()
-            batch = sync(
-                ticker, authority_sink=sink, limit=30, financial_reports_only=True, max_documents=1,
-                max_discovery_pages=max_discovery_pages,
-            )
-            rows.append(_result_for_batch(ticker, batch, raw_root))
+            if sync is sync_exchange_filings:
+                rows.append(_collect_with_hard_timeout(
+                    ticker, raw_root, max_discovery_pages, collector_timeout_seconds, worker=isolated_worker,
+                ))
+            else:  # test seam: custom adapters remain in-process and never represent live collection.
+                sink = MemoryAuthoritySink()
+                batch = sync(
+                    ticker, authority_sink=sink, limit=30, financial_reports_only=True, max_documents=1,
+                    max_discovery_pages=max_discovery_pages,
+                )
+                rows.append(_result_for_batch(ticker, batch, raw_root))
         except Exception as exc:  # a single issuer must never abort the corpus
             rows.append({"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_exception"], "error": type(exc).__name__})
         if index < len(tickers) - 1 and inter_ticker_delay_seconds:
@@ -188,6 +238,7 @@ def run_official_evidence_batch(
         "configured_max_concurrency": 1,
         "inter_ticker_delay_seconds": inter_ticker_delay_seconds,
         "max_discovery_pages": max_discovery_pages,
+        "collector_timeout_seconds": collector_timeout_seconds,
         "tickers": rows,
         "counts": {"requested": len(tickers), "captured_official_primary": len(captured), "failed": sum(row.get("status") == "failed" for row in rows), "resumed": sum(row.get("status") == "skipped" for row in rows)},
         "truth_boundary": {
