@@ -13,6 +13,7 @@ from .industry_ontology import build_ontology
 from .n3_dossier_batch import N3_DOSSIER_BATCH_SCHEMA_VERSION
 from .n3_financial_delivery import N3_FINANCIAL_DELIVERY_SCHEMA_VERSION
 from .n3_falsifier_evidence import N3_FALSIFIER_EVIDENCE_SCHEMA_VERSION
+from .n3_moat_evidence import N3_MOAT_EVIDENCE_SCHEMA_VERSION
 
 
 R2_ACCEPTANCE_SCHEMA_VERSION = "r2-ai-compute-world-model-acceptance-v1"
@@ -97,7 +98,31 @@ def _falsifier_rows(
     return accepted
 
 
-def _five_question_coverage(index: IndustryCompanyIndex, catalyst_profiles: Iterable[IndustryCatalystProfile], batch: Mapping[str, object], financial_delivery: set[str], falsifier_evidence: set[str]) -> dict[str, dict[str, object]]:
+def _moat_rows(
+    receipt: Mapping[str, object] | None,
+    *,
+    dossier_selection_identity: str | None,
+) -> set[str]:
+    if receipt is None:
+        return set()
+    if receipt.get("schema_version") != N3_MOAT_EVIDENCE_SCHEMA_VERSION:
+        raise ValueError("R2 audit requires N3 moat-evidence receipt")
+    if receipt.get("selection_identity") != dossier_selection_identity:
+        raise ValueError("moat-evidence receipt selection identity mismatch")
+    accepted: set[str] = set()
+    for row in receipt.get("rows", []):
+        if not isinstance(row, Mapping) or row.get("status") != "accepted":
+            continue
+        evidence = row.get("evidence")
+        required = ("ticker", "evidence_id", "source_url", "raw_hash", "page_number", "known_at", "observed_capability")
+        if not isinstance(evidence, Mapping) or any(not evidence.get(key) for key in required):
+            continue
+        if str(evidence.get("ticker")).upper() == str(row.get("ticker")).upper():
+            accepted.add(str(row["ticker"]).upper())
+    return accepted
+
+
+def _five_question_coverage(index: IndustryCompanyIndex, catalyst_profiles: Iterable[IndustryCatalystProfile], batch: Mapping[str, object], financial_delivery: set[str], falsifier_evidence: set[str], moat_evidence: set[str]) -> dict[str, dict[str, object]]:
     compiled = {str(row.get("ticker")).upper() for row in batch.get("rows", []) if isinstance(row, Mapping) and row.get("status") == "compiled"}
     accepted = [position for position in index.review_records if position.status == "accepted" and position.ticker.upper() in compiled]
     profiles = {profile.segment_id: profile for profile in catalyst_profiles}
@@ -106,7 +131,7 @@ def _five_question_coverage(index: IndustryCompanyIndex, catalyst_profiles: Iter
     # company-specific moat, financial delivery, market-future or falsifier facts.
     return {
         "layer": {"covered": len(accepted), "required": 20, "source": "accepted_company_position"},
-        "moat": {"covered": 0, "required": 20, "source": "missing_company_specific_evidence"},
+        "moat": {"covered": len(accepted_tickers.intersection(moat_evidence)), "required": 20, "source": "n3_company_moat_evidence" if moat_evidence else "missing_company_moat_evidence"},
         "financial_delivery": {"covered": len(accepted_tickers.intersection(financial_delivery)), "required": 20, "source": "n3_pit_financial_delivery" if financial_delivery else "missing_parsed_financial_evidence"},
         "market_future": {"covered": 0, "required": 20, "source": "missing_market_expectation_evidence"},
         "falsifier": {"covered": len(accepted_tickers.intersection(falsifier_evidence)), "required": 20, "source": "n3_company_falsifier_evidence" if falsifier_evidence else "missing_company_falsifier_evidence"},
@@ -120,6 +145,7 @@ def audit_r2(
     repository_root: Path,
     financial_delivery_receipt: Mapping[str, object] | None = None,
     falsifier_evidence_receipt: Mapping[str, object] | None = None,
+    moat_evidence_receipt: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
     """Evaluate the R2 contract without allowing a count-only pass."""
 
@@ -136,7 +162,11 @@ def audit_r2(
         falsifier_evidence_receipt,
         dossier_selection_identity=str(batch_receipt.get("selection_identity") or ""),
     )
-    questions = _five_question_coverage(index, profiles, batch_receipt, financial_delivery, falsifier_evidence)
+    moat_evidence = _moat_rows(
+        moat_evidence_receipt,
+        dossier_selection_identity=str(batch_receipt.get("selection_identity") or ""),
+    )
+    questions = _five_question_coverage(index, profiles, batch_receipt, financial_delivery, falsifier_evidence, moat_evidence)
     isolation = _archive_isolation(repository_root)
     gates = {
         "ontology": 10 <= len(nodes) <= 15 and len(segments) >= 104,
