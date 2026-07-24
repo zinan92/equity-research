@@ -1832,3 +1832,14 @@
 
 - rating-only matrix 不是 page-cited claim matrix，因此不产生 numeric/page audit、Tier、target、position 或 action credit。
 - `as_of` 是 caller 明示的 point-in-time cutoff；不能从当前时间或 later report 自动补全。
+
+## 2026-07-25 · E4-S4t Context Pack receipt binding
+
+- Decision：复用 B6 的 official-primary Context Pack identity、E4 partial model 与 E4-S4o coverage binder，将同一 official lineage 下的市场/财务 receipt 和 C3 page-verified matrix 编译为 per-ticker Context Pack binding；所有输入 source receipt、matrix 与 partial model 必须完全匹配同一 `as_of`。
+- Why：报告模型必须能回答每个 section 的来源、原始哈希与截至时点；相邻时点或其他 ticker 的数据看似完整，却会破坏 point-in-time research 的可审计性。
+- Evidence：`test_e4_context_pack_models.py` 覆盖同源确定性编译、official lineage 拒绝、market cutoff mismatch 显式 blocked 和缺失 sell-side matrix 不借用。
+
+### Gotchas · E4-S4t
+
+- 这里的 Context Pack 是 B6 已通过的 official-primary identity 加上 E4 component bindings；它不是放宽 B6 coverage policy 的新入口，也不代表 market/sell-side 已成为可发布 research evidence。
+- C3 rating-only matrix 不是 valuation receipt；即使 market 与 matrix 都 available，valuation 保持 missing、Tier C/no_action 不变。未能同步采集的 source receipt 必须 blocked，不能以最近交易日替代。
