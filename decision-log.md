@@ -1322,3 +1322,15 @@
 - SSE 索引在本机网络运行时曾出现 TLS/页面加载超时；此 PR 的 fixture 证明合同和 fail-closed 行为，不把它表述为 live probe 成功。后续首次真实采集必须保存该次 index response 的 raw hash 和状态。
 - 绝不依据文件名或日期拼造 SSE PDF URL；只有 index row 的 `URL` 字段可提供 document identity。没有 URL 就是 explicit gap。
 - `AShareInstrument.exchange` 使用 `SSE` / `SZSE` / `BSE` 名称，而非 ticker 的 `.SH` / `.SZ` / `.BJ` 后缀；路由代码必须使用前者。
+
+## 2026-07-24 · E4-S1 三家公司真实证据纵向切片
+
+- Decision：以宁德时代、贵州茅台、招商银行的公开一方披露 PDF 建立同一条 historic evidence-to-dossier-to-blocked-decision-to-report-model 纵向链。每条保留 HTTPS URL、页码与 SHA-256；市场价格、估值、卖方、质量/风险/流动性与催化剂内容未采集时统一为显式 gap 和 `no_action`。
+- Why：纵向验收应证明一套 schema 能跨电池、消费、银行运行，同时不能用 acceptance fixture、标杆稿或虚构市场价格把“结构能跑”伪装为完整研究。
+- Evidence：`product/data_core/vertical_slices.py`、`scripts/verify_e4_s1_vertical_slices.py`、`product/tests/test_vertical_slices.py`。三个锚点在本次运行中都下载为真实 PDF：宁德时代/贵州茅台来自 CNINFO，招商银行来自公司 IR 的 2024 年度报告摘要。
+
+### Gotchas · E4-S1
+
+- 招行对应的 SSE 公告 URL 在本环境返回反自动化页面，不能绕过；因此引用同一发行人公司 IR 的公开年报摘要，并保留其来源差异，而不是伪称 SSE capture 成功。
+- 纵向切片的 as-of 固定为 2025-05-01，使 2025 年披露在 evidence gate 的 freshness policy 内。它是可重放的历史验证，不是当前时点的完整投研结论。
+- blocked receipt 允许 `current_price=None`：当 coverage 已不足时，必须返回 `missing_market_price`，不能用 1.0 等占位价凑出可执行仓位。

@@ -192,6 +192,15 @@ from .document_intelligence import (
     resolve_citation_return_path,
     validate_publication_citations,
 )
+from .vertical_slices import (
+    OFFICIAL_EVIDENCE_ANCHORS,
+    VERTICAL_SLICE_AS_OF,
+    VerticalSliceReceipt,
+    compile_three_company_vertical_slices,
+    compile_vertical_slice,
+    official_evidence_anchors,
+    vertical_slice_audit,
+)
 from .consensus_history import (
     CONSENSUS_SCHEMA_VERSION,
     THS_FORECAST_SOURCE,
@@ -338,6 +347,9 @@ __all__ = [
     "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
     "DocumentPage", "DocumentParseResult", "PageCitation", "ParserConfig",
     "PublicationGateResult", "ReportClaim", "TesseractCliOCR",
+    "OFFICIAL_EVIDENCE_ANCHORS", "VERTICAL_SLICE_AS_OF", "VerticalSliceReceipt",
+    "compile_three_company_vertical_slices", "compile_vertical_slice", "official_evidence_anchors",
+    "vertical_slice_audit",
     "assess_corpus_quality", "parse_pdf_document", "resolve_citation_return_path", "validate_publication_citations",
     "CONSENSUS_SCHEMA_VERSION", "BrokerEstimate", "ConsensusPoint",
     "ConsensusRevision", "ConsensusSnapshot", "EstimateQuarantine",
