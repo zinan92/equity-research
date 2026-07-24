@@ -1393,4 +1393,16 @@
 - 备份包含独立 auth database，故只能在仓库外 runtime 保存、权限为 owner-only，绝不能加入 Git 或截图/日志。
 - backup 是固定 release 的可恢复副本，不是持续同步或多地域灾备；RPO/RTO 需要真实生产存储和演练后才能宣称达到目标。
 - rollback 仍只接受一个已经 `verify_release()` 通过且不同于 current 的历史 release；不能用目录名、软链接或未验证 staging 冒充回退目标。
+
+## 2026-07-24 · E6-S4 本地性能、缓存与成本预算
+
+- Decision：复用 E4-S2 task cache/runtime，新增 local-contract performance receipt 与 receipt-backed cost ledger；缓存读 p95 预算为 2 秒，离线 task builder p95 预算为 3 秒。结果固定标为 local harness，不等同公网 SLA 或 live source latency。
+- Why：第一版需要能够发现 cache identity 串写、任务吞吐退化与已知成本超支，但不能用合成 timing 或缺失的 provider bill 冒充生产事实。
+- Evidence：`product/data_core/performance_budget.py` 与 `product/tests/test_performance_budget.py`。十 ticker workload 验证稳定队列/隔离/cache hit；已知 parse 成本可触发 budget alert，未提供 receipt 的 model-token cost 保持 unknown。
+
+### Gotchas · E6-S4
+
+- `configured_max_concurrency` 仍是 E4-S2 已披露的配置，effective concurrency 仍为 1；性能 receipt 不能暗示已安全并行调用 provider。
+- cache miss、fresh report 和 source collection 不在同步 UI path 被测；fresh report 始终只是 queued async contract。
+- provider cost 没有 receipt 就必须是 unknown，不允许通过 token quantity 乘假定单价得到“成本”。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。
