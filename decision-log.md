@@ -1810,3 +1810,14 @@
 
 - runtime path 是本机临时材料，不是 canonical storage authority；正式发布仍需由已配置的 authority sink 接管同一 raw hash。
 - 每次写入都重验 payload hash；任何 collision、path escape 或文件漂移都是阻断，不可用旧 PDF 替代。
+
+## 2026-07-25 · E4-S4r 卖方页级证据
+
+- Decision：复用 B3 parser，仅对 E4-S4q receipt 中已归档、路径受 runtime root 限制且 SHA-256 一致的 PDF 输出 page/chunk identity；metadata-only、路径缺失、hash 不一致和 parser 异常一律按单文档阻断。
+- Why：C3 matrix 的页级引用需要真实 PDF 文本和 page identity，不能从 catalog title、评级或 LLM 摘要推断文本。
+- Evidence：`product/data_core/e4_sell_side_page_evidence.py` 与对应测试覆盖 native PDF、hash mismatch 和 metadata-only boundary。
+
+### Gotchas · E4-S4r
+
+- parser receipt 的 page/chunk identity 不是 analyst claim，更不是 matrix 或 recommendation；claim extraction 仍需独立、可审计的 C3 step。
+- runtime path 只能在 supplied root 下读取，并在每次 parse 前 re-hash；不能将其他临时 PDF 伪装成该 report 的 source evidence。
