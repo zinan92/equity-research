@@ -31,6 +31,7 @@ from data_core import (  # noqa: E402
     sync_sse_filings,
     validate_official_source_role,
 )
+from data_core.official_filings import _curl_headers  # noqa: E402
 
 
 INDEX_PREFIX = "https://www.cninfo.com.cn/new/fulltextSearch/full?"
@@ -140,6 +141,13 @@ class PageTwoTransport(FakeTransport):
 
 
 class OfficialFilingIngestTest(unittest.TestCase):
+    def test_curl_header_parser_uses_final_redirect_block_and_allowlist(self) -> None:
+        status, headers = _curl_headers(
+            "HTTP/1.1 302 Found\r\nLocation: https://query.sse.com.cn/next\r\n\r\n"
+            "HTTP/2 200\r\nContent-Type: application/json\r\nX-Ignore: no\r\n\r\n"
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(headers, (("content-type", "application/json"),))
     def test_incremental_cninfo_sync_captures_raw_pdf_and_http_receipt(self) -> None:
         transport = FakeTransport()
         sink = MemoryAuthoritySink()
