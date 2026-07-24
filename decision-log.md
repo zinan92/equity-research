@@ -1865,3 +1865,14 @@
 
 - `official_context_as_of` 是已有 B6 official-primary evidence 的时间，不能被 output cutoff 覆盖；所有两者都保留以便审计。
 - C3 catalog rating matrix 仍不是 valuation 或 page-cited analyst claim；available sell-side section 不增加 Tier、numeric/page audit、target、position 或 action credit。
+
+## 2026-07-25 · E4-S4w real valuation receipt adapter
+
+- Decision：复用 C2 deterministic valuation engine；E4 只负责把 canonical source receipts、显式 assumption receipt 与 partial Context Pack identity 绑定成 runtime-only valuation receipt。
+- Why：C2 可以验证计算，却不能证明数值或情景假设从哪里来。adapter 因此拒绝缺少 hash、晚于 cutoff 的 source 或未经身份绑定的公司输入。
+- Evidence：`test_e4_valuation_receipts.py` 覆盖 deterministic replay、real lineage、future-source block 和 Tier C boundary。
+
+### Gotchas · E4-S4w
+
+- assumption receipt 是可审计的研究判断输入，不是 provider fact；没有它不允许默认 bear/base/bull 参数。
+- 即便 C2 输出可复算，receipt 也只提供 valuation section input，绝不产生 Tier A/B、target、position 或 action。
