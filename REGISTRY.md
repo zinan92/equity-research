@@ -26,11 +26,12 @@
 - GitHub audit lineage for missing references #79–#89 is truthfully reconstructed as Issues #90–#100 and bound to immutable main commits by `docs/governance/audit-lineage-v1.json`; future main changes require real Pull Request objects.
 - Root `AGENTS.md` / `CLAUDE.md` are re-scoped from UZI-Skill to Park Equity Research.
 - The prior stacked PR chain has been cleared; each completed story is now merged before the next branch starts under the 2026-07-22 Park Operating System manual.
+- E1-S1 now supplies the canonical Company / Universe Crosswalk without creating a parallel identity schema: code + market resolve to explicit `matched`, `ambiguous`, or `unmapped` outcomes; every candidate carries source reference, known-at and data-kind. The local 649/661 archive audit remains runtime-only (1,058 matched, 252 unmapped), while all 30 M1 tickers parse and nine archive absences stay explicit.
 
 ## 下一步
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
-- Start E1 / N2 from latest `main`: create the missing E1-S1 child issue and implement the Company/Universe Crosswalk on top of the existing A1/A2 canonical contract; do not create a parallel identity schema.
+- Start E1-S2 / N2 from latest `main`: define the eight versioned canonical object contracts on top of the existing A1/A2 schema and E1-S1 crosswalk; do not create a parallel identity schema or make archived benchmark output a product fact.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
