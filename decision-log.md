@@ -973,6 +973,20 @@
 - `EntityCommonStockSharesOutstanding` 可能只包含一个股份类别；Mobileye 等多类别发行人的市值不能把单类股本当总股本。
 - 外国发行人的 ordinary shares 与 ADR 价格需要 ADR ratio；没有比率时必须留 gap。
 
+## 2026-07-23 · N1-4 已披露评分公式复现
+
+- Objective：只复现页面明示的综合分、机会分与 PEG 分档，并把不能被可见输入解释的等级明确隔离为人工判断。
+- Decision：综合分采用 `(0.28G + 0.12Q + 0.13V + 0.08A) / 0.61`；机会分采用 `0.45G + 0.20Q + 0.35V`；二者按多数样本可复验的最近整数序列化。PEG 使用 `<1 / <2 / ≤4 / >4` 四档。
+- Decision：缺失输入不做填充；少数公式 residual 保留在运行时审计输出，不能为匹配个别档案而修改全局权重或 rounding 规则。
+- Decision：S/A/B 等级标为 `manual_judgment_not_formulaically_reproducible`：同一可见 score 出现多个 grade，且绝大部分记录缺少 barrier、毛利/净利或三高输入。不得用 score 阈值伪造一个等级公式。
+- Verification：外部本地归档验证器按 `universe=main` 锁定 649 家主池；综合分 453/453、机会分 575/578（99.48%），分级池 PEG 276/276。验证输出同时报告缺输入覆盖率与 residual；公式单元测试覆盖 61% 归一、机会分和四个 PEG 边界。
+- Boundary：归档评分、公司代码和等级 residual 仅写到调用者指定的本地审计 JSON，不进入产品数据或本仓 Git。
+
+### Gotchas · N1-4
+
+- 实际可完整计算 composite 的记录数可能少于页面/issue 中的横截面口径；报告必须分别写出可计算分母，不能把缺输入的公司算作公式通过。
+- 0.5 tie 在少数行与多数样本的序列化行为不一致，连同非 tie residual 一起视为疑似人工覆盖；不要把它错误归因成一个“隐藏 rounding 公式”。
+
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 
 ## 2026-07-22 · Repo 拼装式数据与研报架构（定义完成）
