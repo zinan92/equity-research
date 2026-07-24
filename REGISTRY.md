@@ -48,6 +48,8 @@
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
+- E4-S4o is merged: valuation and sell-side coverage can now be bound only through real, hash-bound receipts matching the same ticker, cutoff and accepted Context Pack as an E4 partial model; even with both sections present it remains Tier C / no_action.
+- Next E4 step: produce source-compliant runtime valuation/sell-side receipt adapters for the canonical 100-ticker corpus, then evaluate #218 without treating partial models as Tier A/B coverage.
 
 ## 2026-07-24 · E4-S4b strict coverage baseline
 
