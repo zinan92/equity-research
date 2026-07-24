@@ -1105,6 +1105,17 @@
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
 
+## 2026-07-24 · E3-S1 AI 算力产业本体
+
+- Decision：定义自有 `ai-compute-ontology-v1`：12 个主要节点、108 个细分环节。每个环节有稳定 ID、定义、边界、版本和取证策略；taxonomy 本身不承载公司事实、评分或投资判断。
+- Why：产业图必须先有可版本化、可审计的坐标系，后续关系图、公司位置和催化剂才能更新而不丢失身份。
+- Evidence：`product/data_core/industry_ontology.py`、`scripts/verify_e3_s1_industry_ontology.py` 和 focused identity/boundary tests。
+
+### Gotchas · E3-S1
+
+- 108 是 ontology 覆盖数量，不代表已完成 108 段催化剂研究或 108 项实时事实；后者由 E3-S4 单独生产。
+- 稳定 ID 变更意味着新 ontology version；不得用名称相似度静默迁移，也不得从 archive 的 segment 文本、评级或分数导入产品事实。
+
 ## 2026-07-24 · E2-S6 事件与 Evidence Gate 生产化验收
 
 - Decision：复用 B5 `event_intelligence.py` 和 B6 `evidence_gate.py`，仅增加可复跑的验收回执，不更改 collector、推理策略或 Evidence Gate 规则。
