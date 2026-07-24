@@ -1478,3 +1478,15 @@
 - 这不是并行化：父进程 join 一个 child 后才启动下一个，effective concurrency 始终为 1；timeout 是隔离手段，不是提速或绕限流。
 - 子进程若在 raw write 前被 terminate，父 receipt 只记录失败；没有 raw hash 的工作绝不能 resume 为 captured 或生成 Report Model。
 - 测试 seam 的 in-process custom adapter 仅用于 fixture unit tests；真实运行永远走 default `sync_exchange_filings` 的 spawn path，避免把测试方便性误带到 production behavior。
+
+## 2026-07-24 · E4-S4h 市场与 PIT 财务 companion batch
+
+- Decision：复用 A4 `collect_ashare_packet`，以单 ticker spawn child 收集 quote、qfq daily bars、财务摘要、资产负债表、利润表和现金流量表。只输出每一组件的 real source/raw/manifest/known-at receipt 与 availability，不复制数据到新底座，也不将这些输入自动升级为 Tier 或投资动作。
+- Why：E4-S4d 的 primary filing 只能形成 Tier C partial model；市场和财务是后续估值、质量与风险模块的必要 canonical inputs，需先独立审计其真实来源和 PIT 边界。
+- Evidence：`product/data_core/e4_market_fundamentals_batch.py`、`scripts/refresh_e4_s4_market_fundamentals.py` 和 `product/tests/test_e4_market_fundamentals_batch.py`。2026-07-24 live 000001.SZ smoke receipt `1d9e58e059676f7f…` 显示 quote、qfq bars、main finance 与三张财务报表皆为 real/publishable。
+
+### Gotchas · E4-S4h
+
+- `collect_ashare_packet` 内部会并行获取六个组件，但 E4 batch 在 ticker 之间保持 spawn/join 串行；这不是跨 ticker 并发采集。
+- 原 packet 可能有部分组件成功，故 receipt 分别报告 market/fundamentals availability 与 typed gaps；任何失败都不能被另一组件的 success 掩盖。
+- 实时市场和 PIT 财务收据是估值输入，不等价于 accepted evidence corpus、Tier A/B、目标价或仓位；这些升级必须由后续 evidence gate 和 decision policy 完成。
