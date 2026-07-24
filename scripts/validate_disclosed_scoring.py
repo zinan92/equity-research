@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -32,34 +33,74 @@ def _records(path: Path) -> list[dict[str, Any]]:
 
 
 def _numeric(value: Any) -> bool:
-    return not isinstance(value, bool) and isinstance(value, (int, float))
+    return (
+        not isinstance(value, bool)
+        and isinstance(value, (int, float))
+        and math.isfinite(float(value))
+    )
+
+
+def _empty_formula_counter() -> dict[str, int]:
+    return {"rows": 0, "calculable": 0, "matched": 0, "missing_inputs": 0}
+
+
+def _finalize_formula_counter(counter: dict[str, int]) -> dict[str, Any]:
+    calculable = counter["calculable"]
+    return {
+        **counter,
+        "match_rate": counter["matched"] / calculable if calculable else 0.0,
+        "input_coverage": calculable / counter["rows"] if counter["rows"] else 0.0,
+    }
 
 
 def validate(scores_path: Path, levels_path: Path, levels_market_path: Path) -> dict[str, Any]:
     score_rows = _records(scores_path)
-    composite_checked = 0
-    composite_matches = 0
-    opportunity_checked = 0
-    opportunity_matches = 0
+    by_universe: dict[str, dict[str, dict[str, int]]] = defaultdict(
+        lambda: {"composite": _empty_formula_counter(), "opportunity": _empty_formula_counter()}
+    )
     residuals = []
     for row in score_rows:
+        universe = str(row.get("universe") or "unspecified")
+        counters = by_universe[universe]
+        counters["composite"]["rows"] += 1
+        counters["opportunity"]["rows"] += 1
         score = row.get("s") if isinstance(row.get("s"), dict) else {}
         dims = {key: score.get(key) for key in ("growth", "quality", "value", "attention")}
         if all(_numeric(value) for value in dims.values()) and _numeric(score.get("composite")):
-            composite_checked += 1
+            counters["composite"]["calculable"] += 1
             observed = composite_score(**dims)
             if observed == score["composite"]:
-                composite_matches += 1
+                counters["composite"]["matched"] += 1
             else:
-                residuals.append({"code": row.get("code"), "field": "composite", "expected": score["composite"], "observed": observed})
+                residuals.append(
+                    {
+                        "universe": universe,
+                        "code": row.get("code"),
+                        "field": "composite",
+                        "expected": score["composite"],
+                        "observed": observed,
+                    }
+                )
+        else:
+            counters["composite"]["missing_inputs"] += 1
         opportunity_dims = {key: dims[key] for key in ("growth", "quality", "value")}
         if all(_numeric(value) for value in opportunity_dims.values()) and _numeric(row.get("opp")):
-            opportunity_checked += 1
+            counters["opportunity"]["calculable"] += 1
             observed = opportunity_score(**opportunity_dims)
             if observed == row["opp"]:
-                opportunity_matches += 1
+                counters["opportunity"]["matched"] += 1
             else:
-                residuals.append({"code": row.get("code"), "field": "opportunity", "expected": row["opp"], "observed": observed})
+                residuals.append(
+                    {
+                        "universe": universe,
+                        "code": row.get("code"),
+                        "field": "opportunity",
+                        "expected": row["opp"],
+                        "observed": observed,
+                    }
+                )
+        else:
+            counters["opportunity"]["missing_inputs"] += 1
 
     levels = _records(levels_path)
     market = {str(row.get("code")): row for row in _records(levels_market_path)}
@@ -92,19 +133,37 @@ def validate(scores_path: Path, levels_path: Path, levels_market_path: Path) -> 
         "total_distinct_score_values": len(grades_by_score),
         "missing_input_counts": missing_inputs,
     }
-    composite_rate = composite_matches / composite_checked if composite_checked else 0.0
-    opportunity_rate = opportunity_matches / opportunity_checked if opportunity_checked else 0.0
+    universe_validation = {
+        universe: {
+            name: _finalize_formula_counter(counter)
+            for name, counter in counters.items()
+        }
+        for universe, counters in sorted(by_universe.items())
+    }
+    main_validation = universe_validation.get("main", {})
+    main_composite_rate = main_validation.get("composite", {}).get("match_rate", 0.0)
+    main_opportunity_rate = main_validation.get("opportunity", {}).get("match_rate", 0.0)
     peg_rate = peg_matches / peg_checked if peg_checked else 0.0
     return {
-        "schema_version": "disclosed-scoring-validation-v1",
+        "schema_version": "disclosed-scoring-validation-v2",
+        "benchmark_counts": {
+            "score_rows": len(score_rows),
+            "main_universe_rows": sum(1 for row in score_rows if row.get("universe") == "main"),
+            "levels_rows": len(levels),
+            "levels_market_rows": len(market),
+        },
         "formula_validation": {
-            "composite": {"checked": composite_checked, "matched": composite_matches, "match_rate": composite_rate},
-            "opportunity": {"checked": opportunity_checked, "matched": opportunity_matches, "match_rate": opportunity_rate},
+            "by_universe": universe_validation,
             "peg_grade": {"checked": peg_checked, "matched": peg_matches, "match_rate": peg_rate},
         },
         "residuals": residuals,
         "grade_predictability": grade_assessment,
-        "passed": composite_rate >= 0.95 and opportunity_rate >= 0.95 and peg_rate >= 0.95,
+        "passed": (
+            main_validation.get("composite", {}).get("rows") == 649
+            and main_composite_rate >= 0.95
+            and main_opportunity_rate >= 0.95
+            and peg_rate >= 0.95
+        ),
     }
 
 

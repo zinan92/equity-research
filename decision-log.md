@@ -979,7 +979,7 @@
 - Decision：综合分采用 `(0.28G + 0.12Q + 0.13V + 0.08A) / 0.61`；机会分采用 `0.45G + 0.20Q + 0.35V`；二者按多数样本可复验的最近整数序列化。PEG 使用 `<1 / <2 / ≤4 / >4` 四档。
 - Decision：缺失输入不做填充；少数公式 residual 保留在运行时审计输出，不能为匹配个别档案而修改全局权重或 rounding 规则。
 - Decision：S/A/B 等级标为 `manual_judgment_not_formulaically_reproducible`：同一可见 score 出现多个 grade，且绝大部分记录缺少 barrier、毛利/净利或三高输入。不得用 score 阈值伪造一个等级公式。
-- Verification：外部本地归档验证器输出 composite、opportunity、PEG 三类匹配率与 residual 列表；公式单元测试覆盖 61% 归一、机会分和四个 PEG 边界。
+- Verification：外部本地归档验证器按 `universe=main` 锁定 649 家主池；综合分 453/453、机会分 575/578（99.48%），分级池 PEG 276/276。验证输出同时报告缺输入覆盖率与 residual；公式单元测试覆盖 61% 归一、机会分和四个 PEG 边界。
 - Boundary：归档评分、公司代码和等级 residual 仅写到调用者指定的本地审计 JSON，不进入产品数据或本仓 Git。
 
 ### Gotchas · N1-4

@@ -5,6 +5,7 @@ archived company score nor infer the separate research-grade judgement.
 """
 from __future__ import annotations
 
+import math
 from typing import Any
 
 
@@ -16,7 +17,10 @@ QUANTIFIABLE_WEIGHT = sum(COMPOSITE_WEIGHTS.values())
 def _number(value: Any, field: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise ValueError(f"{field} must be a number")
-    return float(value)
+    number = float(value)
+    if not math.isfinite(number):
+        raise ValueError(f"{field} must be finite")
+    return number
 
 
 def _round_to_archive_integer(value: float) -> int:
