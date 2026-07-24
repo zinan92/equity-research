@@ -1004,6 +1004,9 @@
 - Boundary：Park 的 Round 2 选择解码后仍为 benchmark 5/5、自有 0/5，因此 #115 再次失败。外部读者恰好自有 5/5，说明审计严谨度与产品交付力出现系统性分歧，外部通过不得覆盖 Park 失败。
 - Decision：Round 3 不再靠增加表格和免责声明修补。保留数字、来源、口径冲突与可证伪条件，但读者层改为“最新数据卡 → 有立场的一句话 → 人与发展史 → 产品/商业模式 → 财务估值 → 风险 → 明确结论”；除财务和时间线外去表格化。
 - Evidence：Round 3 使用全新随机标签；DeepSeek 连续返回 503 后，按既有第三视角授权改用 Claude Code CLI `opus` alias 作为 external_reader。CLI 不暴露 token usage，因此收据明确写 unknown，不伪造；其盲选解码为自有 5/5，总门禁仍等待 Park。
+- Boundary：Park 的 Round 3 选择再次解码为 benchmark 5/5、自有 0/5，故 reader-first 改写仍未通过。五份自产文本实际比 benchmark 长 1.28–1.61 倍、数字数量更多；失败不能再解释为“内容不够多”。
+- Decision：Round 4 聚焦编辑选择而非扩写。读者层统一为六段式：最新数据、定位、创始人与团队、发展时间线、技术/产品/商业模式、财务估值、风险与点评；删除可见财务表和 9 个正式审计式标题，把来源与生产记录保留在文后审计层。
+- Evidence：Round 4 使用全新随机标签。DeepSeek 的旧密钥路径已不存在，未伪装为已调用；按既有第三视角授权改用 Claude Code CLI `opus`（实际模型 `claude-opus-4-8`），外部盲选解码为自有 5/5。总门禁仍等待 Park 独立盲选。
 
 ### Gotchas · N1-5
 

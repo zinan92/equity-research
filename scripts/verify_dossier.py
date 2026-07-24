@@ -9,10 +9,15 @@ import re
 from pathlib import Path
 
 
-REQUIRED_HEADINGS = (
+LEGACY_REQUIRED_HEADINGS = (
     "## 1. 一句话定位", "## 2. 身份、创始人与治理", "## 3. 技术来源与发展史",
     "## 4. 商业模式与业务线", "## 5. 财务与经营时间序列", "## 6. 护城河的证据链",
     "## 7. 风险、反题材与观察触发器", "## 8. 研究结论与待补问题",
+    "## 9. 生产记录", "## Sources",
+)
+READER_REQUIRED_HEADINGS = (
+    "## 一句话定位", "## 创始人与团队", "## 发展时间线",
+    "## 技术、产品与商业模式", "## 财务与估值", "## 风险与点评",
     "## 9. 生产记录", "## Sources",
 )
 NUMERIC_FACT = re.compile(r"\d")
@@ -23,7 +28,11 @@ TABLE_DIVIDER = re.compile(r"^\|(?:\s*:?-+:?\s*\|)+$")
 
 def verify(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
-    problems = [f"missing heading: {heading}" for heading in REQUIRED_HEADINGS if heading not in text]
+    has_legacy_contract = all(heading in text for heading in LEGACY_REQUIRED_HEADINGS)
+    has_reader_contract = all(heading in text for heading in READER_REQUIRED_HEADINGS)
+    problems = []
+    if not has_legacy_contract and not has_reader_contract:
+        problems.append("document does not match the legacy or reader-facing heading contract")
     if "schema_version: dossier-template-v1" not in text:
         problems.append("missing dossier schema version")
     source_ids = set(re.findall(r"\| (S-\d+) \|", text))
@@ -50,7 +59,7 @@ def verify(path: Path) -> list[str]:
 
         in_factual_sections = False
         for line_number, line in enumerate(text.splitlines(), start=1):
-            if line.startswith("## 1. "):
+            if line in {"## 1. 一句话定位", "## 一句话定位"}:
                 in_factual_sections = True
             elif line.startswith("## 9. "):
                 in_factual_sections = False
@@ -84,6 +93,7 @@ def verify_manifest(path: Path) -> list[str]:
         blind_set = []
     if blind_set and not any(not str(ticker).endswith((".SZ", ".SH")) for ticker in blind_set):
         problems.append("blind evaluation set must contain at least one overseas company")
+    blind_tickers = set(map(str, blind_set))
     runs = payload.get("runs")
     if not isinstance(runs, list):
         return problems + ["manifest runs must be a list"]
@@ -98,7 +108,7 @@ def verify_manifest(path: Path) -> list[str]:
         if not relative_path or not document_path.is_file():
             problems.append(f"{ticker}: dossier path is missing")
             continue
-        if ticker in set(map(str, blind_set)):
+        if ticker in blind_tickers:
             signatures.add(structure_signature(document_path))
         start = run.get("goal_token_start")
         end = run.get("goal_token_end")
