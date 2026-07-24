@@ -1105,6 +1105,17 @@
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
 
+## 2026-07-24 · E3-S2 产业上下游关系图
+
+- Decision：在 E3-S1 ontology 上增加 evidence-bound graph。首批 30 条关系边仅覆盖可稳定捕获的 ASML 与 NVIDIA 第一方公开页面所直接涉及的半导体制造、网络与 AI 数据中心关系；每次显式采集生成 raw hash，缺任一 capture 则整张已审图不生成。
+- Why：图谱边必须有方向、强度、时点和不可变证据身份，不能因产业常识或 taxonomy 相邻而自动补边。
+- Evidence：`product/data_core/industry_graph.py`、`scripts/verify_e3_s2_industry_graph.py`；验收运行捕获 3 份 source、30 条 accepted 边。
+
+### Gotchas · E3-S2
+
+- 30 条边不是全产业链的完整断言；能源、材料等未被该三份来源直接覆盖的关系仍应是 `needs_evidence`，不能用本轮通过结果推广。
+- 上游 403/TLS 拒绝会阻断发布而不是改用缓存/fixture；raw body 不入 Git，运行 receipt 只输出 URL、hash 与抓取时间。
+
 ## 2026-07-24 · E3-S1 AI 算力产业本体
 
 - Decision：定义自有 `ai-compute-ontology-v1`：12 个主要节点、108 个细分环节。每个环节有稳定 ID、定义、边界、版本和取证策略；taxonomy 本身不承载公司事实、评分或投资判断。
