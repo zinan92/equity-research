@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -22,6 +23,17 @@ def _load(path: Path, schema: str) -> tuple[bytes, dict[str, Any]]:
     return raw, value
 
 
+def _research_cutoff(value: str) -> str:
+    """Require an explicit timestamp without changing C3's report-date cutoff."""
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError) as exc:
+        raise ValueError("research_cutoff must be an ISO-8601 timestamp") from exc
+    if parsed.tzinfo is None:
+        raise ValueError("research_cutoff must include timezone")
+    return str(value)
+
+
 def _parse_report(report: Mapping[str, Any], evidence: Mapping[str, Any], runtime_root: Path) -> DocumentParseResult:
     path = _inside(runtime_root, str(report.get("runtime_raw_path") or ""))
     raw = path.read_bytes(); raw_hash = str(report.get("pdf_raw_hash") or "")
@@ -33,12 +45,15 @@ def _parse_report(report: Mapping[str, Any], evidence: Mapping[str, Any], runtim
     return result
 
 
-def compile_sell_side_matrices(batch_path: Path, page_evidence_path: Path, runtime_root: Path, *, as_of: str) -> dict[str, Any]:
+def compile_sell_side_matrices(
+    batch_path: Path, page_evidence_path: Path, runtime_root: Path, *, as_of: str, research_cutoff: str,
+) -> dict[str, Any]:
     """Build rating-only C3 matrices from reports whose exact PDFs were page parsed.
 
     No claim is inferred from report text.  Ratings stay catalog-attributed and
     the C3 matrix exposes missing target/estimate/claim fields.
     """
+    research_cutoff = _research_cutoff(research_cutoff)
     batch_bytes, batch = _load(batch_path, "e4-s4-sell-side-evidence-batch-v1")
     evidence_bytes, evidence = _load(page_evidence_path, "e4-s4-sell-side-page-evidence-v1")
     if evidence.get("sell_side_batch_receipt_sha256") != hashlib.sha256(batch_bytes).hexdigest():
@@ -65,9 +80,9 @@ def compile_sell_side_matrices(batch_path: Path, page_evidence_path: Path, runti
                 blockers.append({"report_id": report_id, "reason": "matrix_input_invalid", "error": type(exc).__name__})
         if viewpoints:
             matrix = build_sell_side_viewpoint_matrix(ticker, viewpoints, corpus, as_of=as_of)
-            output.append({"ticker": ticker, "status": "compiled", "matrix": {"matrix_id": matrix.matrix_id, "input_hash": matrix.input_hash, "as_of": matrix.as_of, "rows": [row.__dict__ for row in matrix.rows], "coverage": matrix.coverage.__dict__}, "blockers": blockers})
+            output.append({"ticker": ticker, "status": "compiled", "matrix": {"matrix_id": matrix.matrix_id, "input_hash": matrix.input_hash, "as_of": matrix.as_of, "research_cutoff": research_cutoff, "rows": [row.__dict__ for row in matrix.rows], "coverage": matrix.coverage.__dict__}, "blockers": blockers})
         else:
             output.append({"ticker": ticker, "status": "blocked", "blockers": blockers or [{"reason": "no_page_verified_sell_side_viewpoint"}]})
-    receipt = {"schema_version": E4_SELL_SIDE_MATRIX_SCHEMA_VERSION, "data_kind": "real", "as_of": as_of, "batch_receipt_sha256": hashlib.sha256(batch_bytes).hexdigest(), "page_evidence_receipt_sha256": hashlib.sha256(evidence_bytes).hexdigest(), "matrices": output, "counts": {"compiled": sum(row["status"] == "compiled" for row in output), "blocked": sum(row["status"] == "blocked" for row in output)}, "truth_boundary": {"matrix_is_not_tier": True, "counts_as_tier_a_or_b": False, "counts_as_numeric_page_audit": False, "counts_as_position_or_target": False}}
+    receipt = {"schema_version": E4_SELL_SIDE_MATRIX_SCHEMA_VERSION, "data_kind": "real", "as_of": as_of, "research_cutoff": research_cutoff, "batch_receipt_sha256": hashlib.sha256(batch_bytes).hexdigest(), "page_evidence_receipt_sha256": hashlib.sha256(evidence_bytes).hexdigest(), "matrices": output, "counts": {"compiled": sum(row["status"] == "compiled" for row in output), "blocked": sum(row["status"] == "blocked" for row in output)}, "truth_boundary": {"matrix_is_not_tier": True, "counts_as_tier_a_or_b": False, "counts_as_numeric_page_audit": False, "counts_as_position_or_target": False}}
     receipt["receipt_hash"] = digest(receipt)
     return receipt

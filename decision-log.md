@@ -1843,3 +1843,14 @@
 
 - 这里的 Context Pack 是 B6 已通过的 official-primary identity 加上 E4 component bindings；它不是放宽 B6 coverage policy 的新入口，也不代表 market/sell-side 已成为可发布 research evidence。
 - C3 rating-only matrix 不是 valuation receipt；即使 market 与 matrix 都 available，valuation 保持 missing、Tier C/no_action 不变。未能同步采集的 source receipt 必须 blocked，不能以最近交易日替代。
+
+## 2026-07-25 · E4-S4v C3 research cutoff identity
+
+- Decision：保留 C3 原有用于报告日期筛选的 date-level `as_of`，在 E4 matrix runtime receipt 额外强制记录 caller 提供的 timezone-qualified `research_cutoff`；它不改写任一报告发布日期或 C3 matrix core identity。
+- Why：研究截止时点与报告发布日期是不同概念。前者必须精确绑定到跨源 Context Pack，后者仍是 C3 正确过滤 historical report 的业务语义。
+- Evidence：`test_e4_sell_side_matrix.py` 验证 timestamp 保存、date-only cutoff 拒绝、同 inputs/cutoff replay与改变 cutoff 后 receipt identity 变化。
+
+### Gotchas · E4-S4v
+
+- `research_cutoff` 是显式 caller contract，绝不能默认取当前时间；它只标识 E4 runtime receipt 的研究边界，不将 rating-only matrix 升为 valuation、claim、Tier、target、position 或 action。
+- C3 matrix 的 `as_of` 仍为 date-level，Context Pack compiler 必须读取新的 `research_cutoff`，而不是把两者混为同一字段。
