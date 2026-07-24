@@ -266,6 +266,8 @@ def run_official_evidence_batch(
                 }
                 resuming_checkpoint = True
             elif pointer.get("state") == "completed":
+                if previous_payload.get("config") != config:
+                    raise ValueError("official evidence completed receipt does not match this corpus configuration")
                 previous = {str(item.get("ticker") or "").upper(): item for item in previous_payload.get("tickers") or []}
             else:
                 raise ValueError("official evidence latest pointer has unknown state")
@@ -303,6 +305,7 @@ def run_official_evidence_batch(
         "schema_version": E4_OFFICIAL_EVIDENCE_BATCH_SCHEMA_VERSION,
         "identity_receipt_path": str(identity_receipt_path),
         "identity_receipt_sha256": config["identity_receipt_sha256"],
+        "config": config,
         "data_kind": "real",
         "sequential": True,
         "configured_max_concurrency": 1,
