@@ -286,6 +286,7 @@ from .dossier_generator import (
     DossierSection,
     compile_dossier,
 )
+from .decision_policy import DecisionInput, DecisionReceipt, POLICY_VERSION, decide
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -361,4 +362,5 @@ __all__ = [
     "CATALYST_PROFILE_SCHEMA_VERSION", "CatalystSection", "IndustryCatalystProfile",
     "build_catalyst_profiles", "catalyst_coverage",
     "DOSSIER_SCHEMA_VERSION", "CompanyDossier", "DossierSection", "compile_dossier",
+    "POLICY_VERSION", "DecisionInput", "DecisionReceipt", "decide",
 ]

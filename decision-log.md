@@ -1288,3 +1288,14 @@
 
 - 被 E3-S3 接受的产业位置也必须同时进入当前 Context Pack；仅有旧 URL/page/raw hash 不能跨 evidence manifest 自动复用。
 - deterministic dossier 不能声称模型版本或 token 成本；未来引入 AI judgment 时必须以独立版本化层补充，不能改写 facts 或隐去 gaps。
+
+## 2026-07-24 · E3-S8 决策、目标价与仓位政策
+
+- Decision：政策层是 deterministic、non-executable receipt；同时读取 Context Pack manifest、dossier identity、估值、质量、风险、流动性、行业暴露、当前仓位和现金权重，不接行情、不发交易。
+- Why：目标价或仓位只能是完整证据集下的输入绑定结论；缺覆盖、缺关键分数或触发组合上限时，产品必须返回 `no_action`，而不是装作有投资建议。
+- Evidence：`product/data_core/decision_policy.py` 和 boundary/counterexample/replay tests。
+
+### Gotchas · E3-S8
+
+- 这不是实际投资指令：receipt 只给区间和可解释原因，未连接任何券商、订单或 live-money 操作。
+- 行业上限、单股上限与现金底线是 hard guard；即使 upside 较高也不能绕过 coverage 或组合约束。
