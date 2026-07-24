@@ -558,10 +558,11 @@ class OfficialFilingBatch:
     discovery: IngestionOutcome
     documents: Mapping[str, IngestionOutcome]
     skipped_document_ids: tuple[str, ...]
+    discovery_pages: tuple[IngestionOutcome, ...] = ()
 
     @property
     def publishable(self) -> bool:
-        return self.discovery.publishable and all(
+        return self.discovery.publishable and all(item.publishable for item in self.discovery_pages) and all(
             outcome.publishable for outcome in self.documents.values()
         )
 
@@ -585,7 +586,17 @@ class OfficialFilingBatch:
             "ticker": self.ticker,
             "status": "success" if self.publishable else "degraded",
             "publishable": self.publishable,
-            "discovered": len(self.discovery.records),
+            "discovered": sum(len(item.records) for item in self.discovery_pages or (self.discovery,)),
+            "discovery_pages": [
+                {
+                    "status": item.status,
+                    "publishable": item.publishable,
+                    "source_key": item.selected_source,
+                    "source_url": item.attempts[-1].raw.source_url if item.attempts and item.attempts[-1].raw else None,
+                    "raw_hash": item.attempts[-1].raw.raw_hash if item.attempts and item.attempts[-1].raw else None,
+                }
+                for item in (self.discovery_pages or (self.discovery,))
+            ],
             "captured": len(self.documents),
             "skipped_document_ids": list(self.skipped_document_ids),
             "captures": captures,
@@ -604,6 +615,7 @@ async def sync_cninfo_filings_async(
     known_document_ids: Iterable[str] = (),
     financial_reports_only: bool = False,
     max_documents: int | None = None,
+    max_discovery_pages: int = 1,
 ) -> OfficialFilingBatch:
     instrument = normalize_ashare_ticker(ticker)
     active_runtime = runtime or build_official_filing_runtime(
@@ -611,33 +623,33 @@ async def sync_cninfo_filings_async(
     )
     known_ids = tuple(sorted({str(value) for value in known_document_ids}))
     request_token = uuid4().hex[:12]
-    discovery_request = FetchRequest.create(
-        request_id=f"filing-{request_token}-index",
-        domain=RecordDomain.EVENT,
-        entity_key=instrument.ticker,
-        parameters={
-            "start_date": start_date,
-            "end_date": end_date or str(datetime.now().date()),
-            "limit": limit,
-            "known_document_ids": list(known_ids),
-        },
-    )
-    discovery = await active_runtime.run(
-        discovery_request, (SourceChoice(CNINFO_FILING_INDEX_SOURCE, "primary"),)
-    )
+    if not isinstance(max_discovery_pages, int) or max_discovery_pages < 1:
+        raise ValueError("max_discovery_pages must be positive")
+    discovery_pages: list[IngestionOutcome] = []
+    discovered_records: tuple[RecordEnvelope, ...] = ()
+    discovery: IngestionOutcome | None = None
+    for page in range(1, max_discovery_pages + 1):
+        discovery_request = FetchRequest.create(
+            request_id=f"filing-{request_token}-index-{page}", domain=RecordDomain.EVENT,
+            entity_key=instrument.ticker,
+            parameters={"start_date": start_date, "end_date": end_date or str(datetime.now().date()), "limit": limit, "page": page, "known_document_ids": list(known_ids)},
+        )
+        discovery = await active_runtime.run(discovery_request, (SourceChoice(CNINFO_FILING_INDEX_SOURCE, "primary"),))
+        discovery_pages.append(discovery)
+        if not discovery.publishable:
+            break
+        page_records = tuple(discovery.records)
+        if financial_reports_only:
+            page_records = tuple(record for record in page_records if record.payload.get("document_type") in {"annual_report", "semiannual_report", "quarterly_report"})
+        discovered_records = page_records
+        if page_records or not financial_reports_only:
+            break
+    assert discovery is not None
     documents: dict[str, IngestionOutcome] = {}
     skipped: list[str] = []
     if max_documents is not None and max_documents < 1:
         raise ValueError("max_documents must be positive when provided")
     if discovery.publishable:
-        discovered_records = tuple(discovery.records)
-        if financial_reports_only:
-            discovered_records = tuple(
-                record for record in discovered_records
-                if record.payload.get("document_type") in {
-                    "annual_report", "semiannual_report", "quarterly_report",
-                }
-            )
         if max_documents is not None:
             discovered_records = discovered_records[:max_documents]
         for record in discovered_records:
@@ -666,6 +678,7 @@ async def sync_cninfo_filings_async(
         discovery=discovery,
         documents=documents,
         skipped_document_ids=tuple(sorted(skipped)),
+        discovery_pages=tuple(discovery_pages),
     )
 
 
@@ -685,6 +698,7 @@ async def sync_sse_filings_async(
     known_document_ids: Iterable[str] = (),
     financial_reports_only: bool = False,
     max_documents: int | None = None,
+    max_discovery_pages: int = 1,
 ) -> OfficialFilingBatch:
     instrument = normalize_ashare_ticker(ticker)
     if instrument.exchange != "SSE":
@@ -694,33 +708,33 @@ async def sync_sse_filings_async(
     )
     known_ids = tuple(sorted({str(value) for value in known_document_ids}))
     request_token = uuid4().hex[:12]
-    discovery_request = FetchRequest.create(
-        request_id=f"filing-{request_token}-index",
-        domain=RecordDomain.EVENT,
-        entity_key=instrument.ticker,
-        parameters={
-            "start_date": start_date,
-            "end_date": end_date or str(datetime.now().date()),
-            "limit": limit,
-            "known_document_ids": list(known_ids),
-        },
-    )
-    discovery = await active_runtime.run(
-        discovery_request, (SourceChoice(SSE_FILING_INDEX_SOURCE, "primary"),)
-    )
+    if not isinstance(max_discovery_pages, int) or max_discovery_pages < 1:
+        raise ValueError("max_discovery_pages must be positive")
+    discovery_pages: list[IngestionOutcome] = []
+    discovered_records: tuple[RecordEnvelope, ...] = ()
+    discovery: IngestionOutcome | None = None
+    for page in range(1, max_discovery_pages + 1):
+        discovery_request = FetchRequest.create(
+            request_id=f"filing-{request_token}-index-{page}", domain=RecordDomain.EVENT,
+            entity_key=instrument.ticker,
+            parameters={"start_date": start_date, "end_date": end_date or str(datetime.now().date()), "limit": limit, "page": page, "known_document_ids": list(known_ids)},
+        )
+        discovery = await active_runtime.run(discovery_request, (SourceChoice(SSE_FILING_INDEX_SOURCE, "primary"),))
+        discovery_pages.append(discovery)
+        if not discovery.publishable:
+            break
+        page_records = tuple(discovery.records)
+        if financial_reports_only:
+            page_records = tuple(record for record in page_records if record.payload.get("document_type") in {"annual_report", "semiannual_report", "quarterly_report"})
+        discovered_records = page_records
+        if page_records or not financial_reports_only:
+            break
+    assert discovery is not None
     documents: dict[str, IngestionOutcome] = {}
     skipped: list[str] = []
     if max_documents is not None and max_documents < 1:
         raise ValueError("max_documents must be positive when provided")
     if discovery.publishable:
-        discovered_records = tuple(discovery.records)
-        if financial_reports_only:
-            discovered_records = tuple(
-                record for record in discovered_records
-                if record.payload.get("document_type") in {
-                    "annual_report", "semiannual_report", "quarterly_report",
-                }
-            )
         if max_documents is not None:
             discovered_records = discovered_records[:max_documents]
         for record in discovered_records:
@@ -748,6 +762,7 @@ async def sync_sse_filings_async(
         discovery=discovery,
         documents=documents,
         skipped_document_ids=tuple(sorted(skipped)),
+        discovery_pages=tuple(discovery_pages),
     )
 
 

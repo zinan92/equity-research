@@ -100,31 +100,33 @@ def _raw_receipt(document_outcome: Any, raw_root: Path) -> dict[str, Any]:
 
 
 def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -> dict[str, Any]:
+    summary = batch.to_summary() if hasattr(batch, "to_summary") else {}
+    discovery_pages = summary.get("discovery_pages", [])
     if not batch.discovery.publishable:
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
-            "blockers": ["official_filing_discovery_failed"],
+            "blockers": ["official_filing_discovery_failed"], "discovery_pages": discovery_pages,
         }
     if len(batch.documents) > 1:
         raise ValueError("official evidence batch may capture at most one document per ticker")
     if not batch.documents:
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
-            "blockers": ["no_qualifying_recent_financial_report"],
+            "blockers": ["no_qualifying_report_within_page_budget"], "discovery_pages": discovery_pages,
         }
     document_id, outcome = next(iter(batch.documents.items()))
     if not outcome.publishable:
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
-            "document_id": document_id, "blockers": ["official_filing_document_capture_failed"],
+            "document_id": document_id, "blockers": ["official_filing_document_capture_failed"], "discovery_pages": discovery_pages,
         }
     try:
-        return {"ticker": ticker, **_raw_receipt(outcome, raw_root)}
+        return {"ticker": ticker, "discovery_pages": discovery_pages, **_raw_receipt(outcome, raw_root)}
     except ValueError as exc:
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
             "document_id": document_id,
-            "blockers": ["official_filing_stale_or_unqualified"],
+            "blockers": ["official_filing_stale_or_unqualified"], "discovery_pages": discovery_pages,
             "error": type(exc).__name__,
         }
 
@@ -135,6 +137,7 @@ def run_official_evidence_batch(
     *,
     max_tickers: int = 100,
     inter_ticker_delay_seconds: float = 1.0,
+    max_discovery_pages: int = 3,
     sync: SyncFn = sync_exchange_filings,
     sleep: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
@@ -143,6 +146,8 @@ def run_official_evidence_batch(
         raise ValueError("max_tickers must be 1-100")
     if inter_ticker_delay_seconds < 0:
         raise ValueError("inter_ticker_delay_seconds must be nonnegative")
+    if not isinstance(max_discovery_pages, int) or max_discovery_pages < 1:
+        raise ValueError("max_discovery_pages must be positive")
     tickers = load_real_identity_tickers(identity_receipt_path)[:max_tickers]
     runtime_root.mkdir(parents=True, exist_ok=True)
     latest_path = runtime_root / "official-evidence-batch-latest.json"
@@ -165,6 +170,7 @@ def run_official_evidence_batch(
             sink = MemoryAuthoritySink()
             batch = sync(
                 ticker, authority_sink=sink, limit=30, financial_reports_only=True, max_documents=1,
+                max_discovery_pages=max_discovery_pages,
             )
             rows.append(_result_for_batch(ticker, batch, raw_root))
         except Exception as exc:  # a single issuer must never abort the corpus
@@ -181,6 +187,7 @@ def run_official_evidence_batch(
         "sequential": True,
         "configured_max_concurrency": 1,
         "inter_ticker_delay_seconds": inter_ticker_delay_seconds,
+        "max_discovery_pages": max_discovery_pages,
         "tickers": rows,
         "counts": {"requested": len(tickers), "captured_official_primary": len(captured), "failed": sum(row.get("status") == "failed" for row in rows), "resumed": sum(row.get("status") == "skipped" for row in rows)},
         "truth_boundary": {

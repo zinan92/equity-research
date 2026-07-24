@@ -63,6 +63,7 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
             self.assertEqual((row["status"], row["report_model_hash"], row["tier"]), ("captured", None, None))
             self.assertEqual(row["fetched_at"], "2026-07-24T00:00:00Z")
             self.assertFalse(first["receipt"]["truth_boundary"]["counts_as_report_model_coverage"])
+            self.assertEqual(first["receipt"]["max_discovery_pages"], 3)
             second = run_official_evidence_batch(self.write_identity(root), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0, sync=sync)
             self.assertEqual(second["receipt"]["tickers"][0]["status"], "skipped")
             self.assertEqual(calls, ["000000.SZ"])

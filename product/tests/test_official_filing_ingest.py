@@ -6,7 +6,7 @@ import json
 import sys
 import unittest
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 
 PRODUCT = Path(__file__).resolve().parents[1]
@@ -124,6 +124,21 @@ class FakeTransport:
         raise AssertionError(f"unexpected URL: {url}")
 
 
+class PageTwoTransport(FakeTransport):
+    def __call__(self, url: str, headers) -> HttpResponse:
+        if url.startswith(INDEX_PREFIX):
+            page = parse_qs(urlsplit(url).query).get("pageNum", ["1"])[0]
+            rows = (
+                [announcement("major", "宁德时代：关于重大合同的公告", 1777593600000)]
+                if page == "1"
+                else [announcement("annual", "宁德时代：2025年年度报告", 1773504000000)]
+            )
+            body = json.dumps({"announcements": rows}, ensure_ascii=False).encode()
+            self.calls.append(url)
+            return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
+        return super().__call__(url, headers)
+
+
 class OfficialFilingIngestTest(unittest.TestCase):
     def test_incremental_cninfo_sync_captures_raw_pdf_and_http_receipt(self) -> None:
         transport = FakeTransport()
@@ -206,6 +221,30 @@ class OfficialFilingIngestTest(unittest.TestCase):
     def test_limited_sync_rejects_zero_document_cap(self) -> None:
         with self.assertRaisesRegex(ValueError, "max_documents"):
             sync_cninfo_filings("300750.SZ", transport=FakeTransport(), max_documents=0)
+
+    def test_financial_report_searches_page_two_before_declaring_absent(self) -> None:
+        transport = PageTwoTransport()
+        result = sync_cninfo_filings(
+            "300750.SZ", transport=transport, financial_reports_only=True,
+            max_documents=1, max_discovery_pages=2,
+        )
+        self.assertEqual(set(result.documents), {"annual"})
+        self.assertEqual(len(result.discovery_pages), 2)
+        self.assertEqual(len([url for url in transport.calls if url.startswith(INDEX_PREFIX)]), 2)
+        self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
+
+    def test_financial_report_page_budget_exhaustion_preserves_all_index_receipts(self) -> None:
+        transport = FakeTransport()
+        transport.index_body = json.dumps({"announcements": [announcement("major", "宁德时代：关于重大合同的公告", 1777593600000)]}, ensure_ascii=False).encode()
+        result = sync_cninfo_filings(
+            "300750.SZ", transport=transport, financial_reports_only=True,
+            max_documents=1, max_discovery_pages=2,
+        )
+        self.assertTrue(result.discovery.publishable)
+        self.assertEqual(result.documents, {})
+        self.assertEqual(len(result.discovery_pages), 2)
+        self.assertEqual(len([url for url in transport.calls if url.startswith(INDEX_PREFIX)]), 2)
+        self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 0)
 
     def test_cninfo_identity_mismatch_fails_closed_before_document_fetch(self) -> None:
         transport = FakeTransport(wrong_security=True)
