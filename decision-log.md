@@ -1546,3 +1546,14 @@
 
 - companion receipt 的 official hash 必须严格等于编译输入的 official receipt bytes hash；相同 ticker 但不同批次也不能混拼。
 - 没有 companion、或 companion 的该 ticker 不可用时，仍编译真实 primary partial model，但 market/fundamentals 保持 `missing_evidence`。
+
+## 2026-07-24 · E4-S4m 真实双输入回放证据
+
+- Decision：发布 E4-S4l 的双输入 replay aggregate：100 requested 中 40 个 real primary partial Report Model、60 个 typed block；40 个中 27 个同时绑定 real market 与 PIT fundamentals component。保持所有输出 Tier C / `no_action`。
+- Why：单独的 primary 与 companion baseline 不能证明两者在同一 official-receipt lineage 下可组合。该回放使后续估值/质量工作可从可复验的、非夸大的 component coverage 出发。
+- Evidence：`docs/evidence/2026-07-24-e4-s4m-dual-input-replay.md`，其记录 official receipt bytes SHA-256 `60f5dc8a…` 和 companion receipt bytes SHA-256 `52f34bca…`，并给出必须从 official runtime owning worktree 执行的 replay command。
+
+### Gotchas · E4-S4m
+
+- 27 只代表同一 partial model 上 market/PIT 两个组件均 available；它不是 27 份完整研报，也不减少 valuation、sell-side、industry position 或人工数字/页级抽检的缺口。
+- official receipt 内 raw PDF 路径相对其采集 worktree；从其他目录 replay 会把真实 PDF 错判缺失。绝不通过复制 runtime payload 到 git 来规避该路径约束。
