@@ -1310,3 +1310,15 @@
 
 - C1 当前 renderer manifest 是 8 个顶级模块；18-section 内容合同在其内部承载，不能把两种层级混成“新增第九套报告格式”。
 - structure truth set 表示格式与缺失语义，不构成 live research；最终 HTML/PDF/PNG render smoke 必须由后续有真实 Context Pack 的 vertical slice 证明。
+
+## 2026-07-24 · E2-S4b 上交所公告索引
+
+- Decision：为上交所发行人新增独立的官方公告索引适配器；索引记录只接受查询结果明确声明的 PDF HTTPS URL 或根路径，随后交给既有 SSE PDF 适配器捕获。按交易所选路，SSE 不会静默回退到 CNINFO。
+- Why：SH 公司的年报发现必须拥有与 SZ/BJ 不同的官方来源、原始索引 capture 与 source manifest；通过猜测 URL 或将 fixture 当作真实发现都会破坏证据链。
+- Evidence：`product/data_core/official_filings.py`、`product/tests/test_official_filing_ingest.py`。测试覆盖 SH 索引 raw identity、官方 URL allowlist、缺失/跨站 URL fail-closed 与显式交易所路由。
+
+### Gotchas · E2-S4b
+
+- SSE 索引在本机网络运行时曾出现 TLS/页面加载超时；此 PR 的 fixture 证明合同和 fail-closed 行为，不把它表述为 live probe 成功。后续首次真实采集必须保存该次 index response 的 raw hash 和状态。
+- 绝不依据文件名或日期拼造 SSE PDF URL；只有 index row 的 `URL` 字段可提供 document identity。没有 URL 就是 explicit gap。
+- `AShareInstrument.exchange` 使用 `SSE` / `SZSE` / `BSE` 名称，而非 ticker 的 `.SH` / `.SZ` / `.BJ` 后缀；路由代码必须使用前者。

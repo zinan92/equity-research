@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import re
 from dataclasses import dataclass
@@ -28,6 +29,7 @@ from .ingestion import (
 
 
 CNINFO_FILING_INDEX_SOURCE = "cninfo_official_filing_index_v1"
+SSE_FILING_INDEX_SOURCE = "sse_official_filing_index_v1"
 CNINFO_FILING_DOCUMENT_SOURCE = "cninfo_official_filing_document_v1"
 SSE_FILING_DOCUMENT_SOURCE = "sse_official_filing_document_v1"
 SZSE_FILING_DOCUMENT_SOURCE = "szse_official_filing_document_v1"
@@ -35,6 +37,7 @@ BSE_FILING_DOCUMENT_SOURCE = "bse_official_filing_document_v1"
 
 OFFICIAL_SOURCE_HOSTS: dict[str, frozenset[str]] = {
     CNINFO_FILING_INDEX_SOURCE: frozenset({"www.cninfo.com.cn"}),
+    SSE_FILING_INDEX_SOURCE: frozenset({"query.sse.com.cn"}),
     CNINFO_FILING_DOCUMENT_SOURCE: frozenset({"static.cninfo.com.cn"}),
     SSE_FILING_DOCUMENT_SOURCE: frozenset({"static.sse.com.cn", "www.sse.com.cn"}),
     SZSE_FILING_DOCUMENT_SOURCE: frozenset({"disc.static.szse.cn", "www.szse.cn"}),
@@ -44,7 +47,7 @@ OFFICIAL_SOURCE_HOSTS: dict[str, frozenset[str]] = {
 DOCUMENT_SOURCE_BY_HOST = {
     host: source_key
     for source_key, hosts in OFFICIAL_SOURCE_HOSTS.items()
-    if source_key != CNINFO_FILING_INDEX_SOURCE
+    if source_key not in {CNINFO_FILING_INDEX_SOURCE, SSE_FILING_INDEX_SOURCE}
     for host in hosts
 }
 
@@ -301,6 +304,126 @@ class CninfoFilingIndexAdapter:
         return tuple(records)
 
 
+class SseFilingIndexAdapter:
+    """Discover SH issuer filing links from the official SSE bulletin index.
+
+    The SSE index exposes the PDF path in each result row.  We only turn that
+    declared path into a canonical static.sse.com.cn URL; missing or off-host
+    values are rejected rather than guessed.
+    """
+
+    def __init__(self, *, transport: HttpTransport = default_http_transport) -> None:
+        self.transport = transport
+        self.manifest = _manifest(
+            SSE_FILING_INDEX_SOURCE,
+            RecordDomain.EVENT,
+            "https://query.sse.com.cn/security/stock/queryCompanyBulletin.do",
+        )
+
+    async def fetch(self, request: FetchRequest) -> FetchedPayload:
+        instrument = normalize_ashare_ticker(request.entity_key)
+        if instrument.exchange != "SSE":
+            raise ValueError("SSE filing index only accepts SH tickers")
+        params = {
+            "isPagination": "true",
+            "productId": instrument.ticker[:6],
+            "securityType": "0101,120100,020100,020200,120200",
+            "reportType": "ALL",
+            "reportType2": "DQGG",
+            "beginDate": str(request.parameters.get("start_date") or "2020-01-01"),
+            "endDate": str(request.parameters.get("end_date") or datetime.now().date()),
+            "pageHelp.pageSize": str(int(request.parameters.get("limit") or 30)),
+            "pageHelp.pageNo": str(int(request.parameters.get("page") or 1)),
+            "pageHelp.beginPage": "1",
+            "pageHelp.cacheSize": "1",
+        }
+        url = self.manifest.source_url + "?" + urlencode(params)
+        response = await asyncio.to_thread(
+            self.transport,
+            url,
+            {"Accept": "application/json", "Referer": "https://www.sse.com.cn/"},
+        )
+        response.validate()
+        validate_official_source_role(self.manifest, response.final_url)
+        fetched_at = _utc_now()
+        return FetchedPayload(
+            response.body, response.final_url, fetched_at, fetched_at, "application/json",
+            status_code=response.status_code,
+            response_headers=response.headers,
+            redirect_chain=response.redirect_chain or (response.final_url,),
+        )
+
+    @staticmethod
+    def _row_value(row: Mapping[str, Any], *names: str) -> Any:
+        for name in names:
+            if name in row and row[name] not in (None, ""):
+                return row[name]
+        return None
+
+    @staticmethod
+    def _document_url(value: Any) -> str:
+        declared = str(value or "").strip()
+        if not declared:
+            raise ValueError("SSE filing index row has no declared document URL")
+        if declared.startswith("https://"):
+            url = declared
+        elif declared.startswith("/"):
+            url = "https://static.sse.com.cn" + declared
+        else:
+            raise ValueError("SSE filing index document URL must be absolute HTTPS or a root path")
+        if _host(url) not in OFFICIAL_SOURCE_HOSTS[SSE_FILING_DOCUMENT_SOURCE]:
+            raise ValueError("SSE filing index points outside official SSE document hosts")
+        return url
+
+    def parse(
+        self, request: FetchRequest, fetched: FetchedPayload, raw: RawCapture
+    ) -> Iterable[RecordEnvelope]:
+        instrument = normalize_ashare_ticker(request.entity_key)
+        payload = json.loads(fetched.body.decode("utf-8"))
+        rows = payload.get("result") or payload.get("results") or []
+        if not isinstance(rows, list):
+            raise ValueError("SSE filing index result must be a list")
+        records: list[RecordEnvelope] = []
+        for row in rows:
+            if not isinstance(row, Mapping):
+                raise ValueError("SSE filing index row must be an object")
+            row_ticker = str(self._row_value(row, "SECURITY_CODE", "securityCode", "PRODUCT_ID") or "")
+            if row_ticker and row_ticker[:6] != instrument.ticker[:6]:
+                raise ValueError("SSE filing index returned another security")
+            title = _clean_title(self._row_value(row, "TITLE", "title", "BULLETIN_TITLE"))
+            if not title:
+                continue
+            document_url = self._document_url(self._row_value(row, "URL", "url", "FILE_URL"))
+            declared_id = str(self._row_value(row, "BULLETIN_ID", "bulletinId", "ID") or "").strip()
+            document_id = declared_id or "sse-" + hashlib.sha256(
+                document_url.encode("utf-8")
+            ).hexdigest()[:24]
+            published_at = _published_at(
+                self._row_value(row, "SSEDATE", "publishDate", "PUBLISH_DATE", "date")
+            )
+            records.append(RecordEnvelope.accepted(
+                domain=RecordDomain.EVENT,
+                entity_key=f"{instrument.instrument_id}:filing-discovery:{document_id}",
+                payload={
+                    "event_id": f"sse-discovery:{document_id}",
+                    "instrument_id": instrument.instrument_id,
+                    "event_type": "official_filing_discovered",
+                    "occurred_at": published_at,
+                    "title": title,
+                    "evidence_ids": [f"official-filing:{document_id}"],
+                    "document_id": document_id,
+                    "document_url": document_url,
+                    "document_type": classify_filing_title(title),
+                    "document_source_key": SSE_FILING_DOCUMENT_SOURCE,
+                    "source_role": "official_index",
+                    "ticker": instrument.ticker,
+                },
+                manifest=self.manifest,
+                raw=raw,
+            ))
+        return tuple(records)
+
+
 class OfficialFilingDocumentAdapter:
     def __init__(
         self,
@@ -384,6 +507,7 @@ def build_official_filing_registry(
 ) -> AdapterRegistry:
     registry = AdapterRegistry()
     registry.register(CninfoFilingIndexAdapter(transport=transport))
+    registry.register(SseFilingIndexAdapter(transport=transport))
     registry.register(
         OfficialFilingDocumentAdapter(
             CNINFO_FILING_DOCUMENT_SOURCE,
@@ -533,3 +657,85 @@ async def sync_cninfo_filings_async(
 
 def sync_cninfo_filings(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
     return asyncio.run(sync_cninfo_filings_async(ticker, **kwargs))
+
+
+async def sync_sse_filings_async(
+    ticker: str,
+    *,
+    runtime: IngestionRuntime | None = None,
+    transport: HttpTransport = default_http_transport,
+    authority_sink: AuthoritySink | None = None,
+    start_date: str = "2020-01-01",
+    end_date: str | None = None,
+    limit: int = 30,
+    known_document_ids: Iterable[str] = (),
+) -> OfficialFilingBatch:
+    instrument = normalize_ashare_ticker(ticker)
+    if instrument.exchange != "SSE":
+        raise ValueError("sync_sse_filings only accepts SH tickers")
+    active_runtime = runtime or build_official_filing_runtime(
+        transport=transport, authority_sink=authority_sink
+    )
+    known_ids = tuple(sorted({str(value) for value in known_document_ids}))
+    request_token = uuid4().hex[:12]
+    discovery_request = FetchRequest.create(
+        request_id=f"filing-{request_token}-index",
+        domain=RecordDomain.EVENT,
+        entity_key=instrument.ticker,
+        parameters={
+            "start_date": start_date,
+            "end_date": end_date or str(datetime.now().date()),
+            "limit": limit,
+            "known_document_ids": list(known_ids),
+        },
+    )
+    discovery = await active_runtime.run(
+        discovery_request, (SourceChoice(SSE_FILING_INDEX_SOURCE, "primary"),)
+    )
+    documents: dict[str, IngestionOutcome] = {}
+    skipped: list[str] = []
+    if discovery.publishable:
+        for record in discovery.records:
+            event = record.payload
+            document_id = str(event["document_id"])
+            if document_id in known_ids:
+                skipped.append(document_id)
+                continue
+            documents[document_id] = await active_runtime.run(
+                FetchRequest.create(
+                    request_id=f"filing-{request_token}-document-{document_id}",
+                    domain=RecordDomain.DOCUMENT,
+                    entity_key=instrument.ticker,
+                    parameters={
+                        "document_id": document_id,
+                        "document_url": event["document_url"],
+                        "title": event["title"],
+                        "published_at": event["occurred_at"],
+                    },
+                ),
+                (SourceChoice(SSE_FILING_DOCUMENT_SOURCE, "primary"),),
+            )
+    return OfficialFilingBatch(
+        ticker=instrument.ticker,
+        discovery=discovery,
+        documents=documents,
+        skipped_document_ids=tuple(sorted(skipped)),
+    )
+
+
+def sync_sse_filings(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
+    return asyncio.run(sync_sse_filings_async(ticker, **kwargs))
+
+
+async def sync_exchange_filings_async(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
+    """Select the registered exchange index; never silently fall back."""
+    instrument = normalize_ashare_ticker(ticker)
+    if instrument.exchange == "SSE":
+        return await sync_sse_filings_async(ticker, **kwargs)
+    if instrument.exchange in {"SZSE", "BSE"}:
+        return await sync_cninfo_filings_async(ticker, **kwargs)
+    raise ValueError(f"no official filing index registered for {instrument.exchange}")
+
+
+def sync_exchange_filings(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
+    return asyncio.run(sync_exchange_filings_async(ticker, **kwargs))
