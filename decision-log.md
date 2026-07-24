@@ -1,5 +1,14 @@
 # Decision Log
 
+## 2026-07-23 · N1-3 cross-market price history boundary
+
+- Decision: reuse the existing A-share Tencent/Eastmoney/Sina chain; add Yahoo Chart only for HK/US/JP historical close validation. The adapter preserves raw source URLs and hashes through the canonical ingestion boundary.
+- Decision: historical daily bars may validate price only. They cannot reconstruct historical market capitalization, PE, PB, or PEG, so these fields remain separate snapshot facts or explicit missing values; no implied valuation is fabricated from close prices.
+
+## Gotchas · N1-3
+
+- Yahoo's unauthenticated quote endpoint returned HTTP 401 in this environment while its Chart endpoint succeeded. Treat the two endpoints as separate contracts; do not claim valuation coverage from chart availability.
+
 ## 2026-07-23 · N1-2 Eastmoney periodic adapters
 
 - Decision: the first directly attributable recurring facts are implemented as two thin adapters on the existing `RawCapture → RecordEnvelope → IngestionRuntime` contract: F10 business composition and appointment disclosure calendar. They are `supplementary_only` vendor evidence, not a claim that Eastmoney is a statutory filing authority.
@@ -934,6 +943,50 @@
 - 市场行情、财务和卖方字段当前仅是中置信度候选来源，必须由后续 issue 以原始响应、as-of 和 hash 再验证。
 - 归档是本地只读输入且不进本 PR；验证命令必须显式传入 archive root，避免产品仓在没有归档时伪造通过。
 
+## 2026-07-23 · N1-3 跨市场行情与估值快照
+
+- Objective：为 A/HK/US/JP 建立统一的价格、涨跌、市值、PE、PB、PEG 来源策略；把历史价格复查与当前估值快照分开，避免日 K 线被误用为历史估值。
+- Decision：Yahoo Chart 只用于 HK/US/JP 的日线价格历史；Yahoo Snapshot（经 `yfinance` 完成 provider 握手）只用于当前时点的价格、市值、PE、PB、PEG 与涨跌。后者的原始物是客户端规范化载荷，manifest 明确标成 `client_normalized_capture`，不伪装成抓到 Yahoo 原始 wire response。
+- Decision：非美元 `mcap_usd` 没有同日冻结 FX 时必须留空；所有 snapshot record 标注 `historical_reconstruction_eligible=false`。
+- Verification：30 个跨市场样本在 2026-06-30 至 2026-07-02 的价格窗口中，Yahoo 日线可取回 30/30；22/30 在 ±0.5% 内匹配，8 个 residual 原样写入运行时 diff。全部同日估值字段都因没有历史估值/FX 源而显式标记 gap，没有用 K 线倒推。
+- Boundary：验证差异报告仅生成到本地 `/tmp`，不提交爱牛记录、数值、评分或档案文字；不请求 ainiusq.com，不改 `product/static/**`。
+
+### Gotchas · N1-3
+
+- 归档的“快照”并非所有市场同一收盘时点：美股样本大量精确命中 6/30，港股样本在 6/30–7/2 窗口外更接近 6/22。不能把站点构建日期当作每个字段的 as-of。
+- Yahoo 的香港代码使用四位 display symbol（`0700.HK`），canonical identifier 保留五位证券代码（`00700.HK`）；美股类别股在 Yahoo 用连字符（`MOG-A`），不能直接复用带点 code。
+- 日本与部分港股在严格窗口仍有 1.6%–6.7% residual；在找到同口径历史来源前，这些是未解决的 source/date discrepancy，不应通过放宽默认容差消失。
+
+## 2026-07-24 · N1-3 历史估值与残差收口
+
+- Decision：将价格验证窗口扩展为“声明窗口 + 只用于解释残差的 45 天回看”。窗口外精确匹配只能标 `explained_residual`，不能改写为窗口内通过。
+- Decision：美国历史市值、PE、PB 使用 Yahoo 同日收盘加 SEC companyfacts 中 `filed <= as_of` 的股本、TTM 净利和净资产重建。非美元估值必须绑定同日冻结 FX。
+- Decision：PEG 的 benchmark 增长率基础未披露；SEC TTM 同比是另一种定义，统一标 `definition_mismatch`，即使数值偶然接近也不宣称复现。
+- Decision：A/HK/US/JP 七个字段的 28 个来源单元写入 `HISTORICAL_MARKET_FIELD_POLICY`；24/28 为高/中置信度候选归因，4 个 PEG 单元保持低置信度。
+- Why：满足“30 家都能解释”和“字段来源 ≥80% 归因”，同时不靠放宽容差、当前估值冒充历史值或未披露 PEG 定义制造假通过。
+- Evidence：运行时 30 家验证得到 22 家声明窗口通过、8 家在 2026-06-22 精确匹配、0 unexplained price outlier、0 missing price；涨跌幅为 28 pass / 2 previous-close reference mismatch / 0 missing；106 个估值字段为 52 pass / 3 outlier / 39 missing / 12 definition mismatch；SEC 和 Yahoo 原始响应均保留 raw hash，完整 diff 仅写 `/tmp`。
+
+### Gotchas · N1-3 历史估值
+
+- 港股/日股 8 个价格 residual 全部精确对应 2026-06-22，证明归档快照混合了至少两个市场日期；网页构建日不能当作统一 as-of。
+- SEC companyfacts 后续 proxy 可能重复 10-K 数字；按期间去重会让 DEF 14A 覆盖正式 10-K，必须把 filing form 纳入事实身份。
+- `EntityCommonStockSharesOutstanding` 可能只包含一个股份类别；Mobileye 等多类别发行人的市值不能把单类股本当总股本。
+- 外国发行人的 ordinary shares 与 ADR 价格需要 ADR ratio；没有比率时必须留 gap。
+
+## 2026-07-23 · N1-4 已披露评分公式复现
+
+- Objective：只复现页面明示的综合分、机会分与 PEG 分档，并把不能被可见输入解释的等级明确隔离为人工判断。
+- Decision：综合分采用 `(0.28G + 0.12Q + 0.13V + 0.08A) / 0.61`；机会分采用 `0.45G + 0.20Q + 0.35V`；二者按多数样本可复验的最近整数序列化。PEG 使用 `<1 / <2 / ≤4 / >4` 四档。
+- Decision：缺失输入不做填充；少数公式 residual 保留在运行时审计输出，不能为匹配个别档案而修改全局权重或 rounding 规则。
+- Decision：S/A/B 等级标为 `manual_judgment_not_formulaically_reproducible`：同一可见 score 出现多个 grade，且绝大部分记录缺少 barrier、毛利/净利或三高输入。不得用 score 阈值伪造一个等级公式。
+- Verification：外部本地归档验证器按 `universe=main` 锁定 649 家主池；综合分 453/453、机会分 575/578（99.48%），分级池 PEG 276/276。验证输出同时报告缺输入覆盖率与 residual；公式单元测试覆盖 61% 归一、机会分和四个 PEG 边界。
+- Boundary：归档评分、公司代码和等级 residual 仅写到调用者指定的本地审计 JSON，不进入产品数据或本仓 Git。
+
+### Gotchas · N1-4
+
+- 实际可完整计算 composite 的记录数可能少于页面/issue 中的横截面口径；报告必须分别写出可计算分母，不能把缺输入的公司算作公式通过。
+- 0.5 tie 在少数行与多数样本的序列化行为不一致，连同非 tie residual 一起视为疑似人工覆盖；不要把它错误归因成一个“隐藏 rounding 公式”。
+
 ## 2026-07-23 · N1-5 档案生产模板与首样例
 
 - Objective：先定义一套可复跑的公司档案合同，并用一份自有、海外公司的证据样例验证它；此阶段不复制第三方档案，也不假称已完成五家盲评。
@@ -1005,3 +1058,20 @@
 - 爱牛档案 Markdown 以 `##` 为主章节层级，渲染器按「# 与 ## 都归 h2」映射，否则主章节吃不到节标题样式。
 - 档案正文渲染必须先整体 HTML 转义再套白名单标签（本实现 `esc()` 先行、链接仅放行 `https?:`），杜绝归档文本注入。
 - 三高气泡图节点半径映射后要预留顶部 padding，最大气泡（r=26 → 39px）会溢出默认画布。
+
+## 2026-07-24 · R0 Epic Execution Plan 批准
+
+- Decision：批准 `docs/plans/2026-07-23-epic-execution-plan.md` 作为正式执行合同；范围为 8 个 Epic、23 个 Milestone、43 个 Story。
+- Decision：不创建第三套平行编号。优先复用现有 N1–N6、L1-A–G、#110/#117–#121 和 #113–#116；只为缺失 Story 建 child issue。
+- Decision：N3 产业世界模型是产品差异化主线，必须交付产业本体、上下游关系、50–100 家公司位置和至少 104 个环节的催化剂内容。
+- Decision：E5-S1～S4 与所有 `product/static/**` diff 只由 Claude Code 实施；E5-S4 只依赖 E1-S5，不被 100 ticker 验收阻塞。
+- Decision：执行沿用自动挡；本仓测试、gitleaks、diff 红线三闸通过后自行 merge，只有真钱/live 与 Park Operating System 红线需要 Park 介入。
+- Why：把“先看产业、再看公司”和“任意 ticker 可信研报”放进同一条可验收路线，同时防止执行模型重写已完成的数据、证据、研究和前端基础。
+- Evidence：Park 于 2026-07-24 在当前任务明确批准 R0；完整合同及旧 GitHub 容器处置表见上述计划文件。
+
+### Gotchas · R0 执行
+
+- `REGISTRY.md` 是累积登记册，只追加指针和当前状态；长计划必须留在 `docs/plans/`。
+- 计划中的 Story 不等于全部立即建票；当前 #129–#131 已占满 WIP=3，应先清空 E0。
+- 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
+- benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。

@@ -14,6 +14,14 @@ from .contracts import (
     validate_adapter_output,
 )
 from .authority_sink import AuthoritySinkError, ObjectStore, SupabaseAuthoritySink
+from .disclosed_scoring import (
+    COMPOSITE_WEIGHTS,
+    OPPORTUNITY_WEIGHTS,
+    QUANTIFIABLE_WEIGHT,
+    composite_score,
+    opportunity_score,
+    peg_grade,
+)
 from .ashare import (
     AShareDataGap,
     AShareDataPacket,
@@ -48,6 +56,23 @@ from .eastmoney_periodic import (
     build_eastmoney_periodic_runtime,
     collect_eastmoney_earnings_calendar,
     collect_eastmoney_earnings_calendar_async,
+)
+from .market_snapshot import (
+    HISTORICAL_MARKET_FIELD_POLICY,
+    MARKET_FIELD_SOURCES,
+    SEC_COMPANY_FACTS_SOURCE,
+    YAHOO_CHART_SOURCE,
+    YAHOO_FX_SOURCE,
+    YAHOO_SNAPSHOT_SOURCE,
+    GlobalInstrument,
+    SecCompanyFactsAdapter,
+    YahooChartAdapter,
+    YahooFxAdapter,
+    YahooSnapshotAdapter,
+    compare_snapshot,
+    derive_historical_valuation,
+    normalize_global_ticker,
+    sec_point_in_time_inputs,
 )
 from .ingestion import (
     AdapterContractError,

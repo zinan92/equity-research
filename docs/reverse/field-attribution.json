@@ -25,9 +25,10 @@
       "研究判断": 32
     },
     "confidence_counts": {
-      "中": 42,
+      "中": 36,
+      "低": 2,
       "判断类": 34,
-      "高": 7
+      "高": 11
     }
   },
   "fields": [
@@ -125,14 +126,14 @@
         "新浪财经",
         "Yahoo Finance（海外）"
       ],
-      "confidence": "中",
+      "confidence": "高",
       "auto_update": true,
       "fallback": [
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；N1-3 已验证 A/HK/US/JP 历史价格主链，但不能据此推断历史估值。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -446,10 +447,9 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "新浪财经",
-        "Yahoo Finance（海外）"
+        "同日价格",
+        "SEC companyfacts（美国）",
+        "交易所/公司披露股本"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -457,8 +457,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日价格×披露日前已知股本；多类别股份、ADR 比率或 PIT 股本不全时留 gap。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -473,10 +473,8 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "新浪财经",
-        "Yahoo Finance（海外）"
+        "同日本币市值",
+        "Yahoo 历史 FX"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -484,8 +482,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日本币市值×同日冻结 USD 换算率；没有 PIT 市值或同日 FX 时留 gap。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -625,10 +623,9 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "Yahoo Finance（海外）",
-        "公司财报"
+        "同日市值",
+        "SEC/company filing 的披露日前已知净资产",
+        "提供方同日估值快照"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -636,8 +633,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "行情源估值字段或价格/每股净资产计算；需记录口径。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日市值/净资产；必须记录股东权益口径和 filing known_at。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -652,10 +649,9 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "Yahoo Finance（海外）",
-        "公司财报"
+        "同日市值",
+        "SEC/company filing 的披露日前已知 TTM 净利",
+        "提供方同日估值快照"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -663,8 +659,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "行情源估值字段或价格/TTM EPS 计算；需记录亏损和口径。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日市值/TTM 净利；必须区分 GAAP、adjusted、亏损和 filing known_at。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -680,14 +676,14 @@
       "cadence": "上游快照或财报更新后",
       "candidate_sources": [
         "PE 快照",
-        "增长率快照"
+        "版本化增长率快照"
       ],
-      "confidence": "中",
+      "confidence": "低",
       "auto_update": true,
       "fallback": [
-        "无法稳定定义时留空"
+        "无法确认增长率定义时留空或标 definition_mismatch"
       ],
-      "production_method": "归档未逐字段给出计算输入与公式；仅作为待复现派生字段。",
+      "production_method": "归档未披露增长率基础；SEC TTM 同比只能作为另一种定义，不得冒充 benchmark PEG。",
       "source_status": "公式/输入待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -708,14 +704,14 @@
         "新浪财经",
         "Yahoo Finance（海外）"
       ],
-      "confidence": "中",
+      "confidence": "高",
       "auto_update": true,
       "fallback": [
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；N1-3 已验证 A/HK/US/JP 历史价格主链，但不能据此推断历史估值。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -1206,14 +1202,14 @@
         "新浪财经",
         "Yahoo Finance（海外）"
       ],
-      "confidence": "中",
+      "confidence": "高",
       "auto_update": true,
       "fallback": [
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；N1-3 已验证 A/HK/US/JP 历史价格主链，但不能据此推断历史估值。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -1387,10 +1383,8 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "新浪财经",
-        "Yahoo Finance（海外）"
+        "同日本币市值",
+        "Yahoo 历史 FX"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -1398,8 +1392,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日本币市值×同日冻结 USD 换算率；输入不全时留 gap。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -1414,10 +1408,9 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "新浪财经",
-        "Yahoo Finance（海外）"
+        "同日价格",
+        "PIT 股本",
+        "同日冻结 FX"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -1425,8 +1418,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日价格×PIT 股本并按同日 FX 换算；输入不全时留 gap。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -1531,10 +1524,8 @@
       "nature": "原始事实",
       "cadence": "日内或收盘后",
       "candidate_sources": [
-        "腾讯行情",
-        "东方财富行情",
-        "新浪财经",
-        "Yahoo Finance（海外）"
+        "同日市值",
+        "披露日前已知 TTM 净利"
       ],
       "confidence": "中",
       "auto_update": true,
@@ -1542,8 +1533,8 @@
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "同日市值/TTM 净利；GAAP 与 adjusted 口径不可混用。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
@@ -1582,14 +1573,14 @@
       "cadence": "上游快照或财报更新后",
       "candidate_sources": [
         "PE 快照",
-        "增长率快照"
+        "版本化增长率快照"
       ],
-      "confidence": "中",
+      "confidence": "低",
       "auto_update": true,
       "fallback": [
-        "无法稳定定义时留空"
+        "定义不明时标 definition_mismatch"
       ],
-      "production_method": "归档未逐字段给出计算输入；待#114验证。",
+      "production_method": "归档增长率基础未披露；#114 只验证分档公式，不猜输入定义。",
       "source_status": "公式/输入待后续复现验证",
       "evidence": {
         "kind": "archive-classification",
@@ -1633,14 +1624,14 @@
         "新浪财经",
         "Yahoo Finance（海外）"
       ],
-      "confidence": "中",
+      "confidence": "高",
       "auto_update": true,
       "fallback": [
         "交易所/官方行情",
         "次级行情源"
       ],
-      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；#112 负责复现。",
-      "source_status": "候选来源，待后续复现验证",
+      "production_method": "按交易日抓取并附 as_of、交易所、币种与原始响应哈希；N1-3 已验证 A/HK/US/JP 历史价格主链，但不能据此推断历史估值。",
+      "source_status": "产品重建来源已验证；归档原始提供方仍不可伪装成已确认",
       "evidence": {
         "kind": "archive-classification",
         "path": "data/exported/classification-manifest.json",
