@@ -1,0 +1,37 @@
+{
+  "schema_version": "dossier-park-approval-receipt-v1",
+  "approved_at": "2026-07-24T16:02:13+08:00",
+  "reviewer": {
+    "id": "park",
+    "role": "park"
+  },
+  "approval": {
+    "round": 7,
+    "approved": true,
+    "instruction": "我先approve了这个版本 你继续move on 吧",
+    "scope": "Round 7 dossier structure and reader-facing version"
+  },
+  "contract_override": {
+    "original_gate": "Park independently chooses A or B in five balanced pairs and self-produced dossiers win at least four.",
+    "replacement_gate": "Park explicitly approves the complete Round 7 version and authorizes moving on.",
+    "reason": "Park approved the version without submitting five A/B choices. This receipt records the explicit approval as an owner-authorized gate replacement instead of fabricating pairwise selections.",
+    "pairwise_choices_recorded": false
+  },
+  "runtime_evidence": {
+    "blind_pack_sha256": "28aab8c17464ad94368f3356550c09a6ebdf49ad98e05ba05ca626b59ad1ea04",
+    "blind_set": [
+      "002371.SZ",
+      "002594.SZ",
+      "300308.SZ",
+      "300502.SZ",
+      "NVDA"
+    ]
+  },
+  "gate": {
+    "external_reader_passed": true,
+    "park_explicit_approval": true,
+    "passed": true,
+    "reason": "The external reader preferred self-produced dossiers 5/5 and Park explicitly approved Round 7 as the accepted version."
+  },
+  "boundary": "No A/B choices are inferred. The runtime-only key and benchmark prose remain uncommitted."
+}

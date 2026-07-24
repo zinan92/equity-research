@@ -987,6 +987,48 @@
 - 实际可完整计算 composite 的记录数可能少于页面/issue 中的横截面口径；报告必须分别写出可计算分母，不能把缺输入的公司算作公式通过。
 - 0.5 tie 在少数行与多数样本的序列化行为不一致，连同非 tie residual 一起视为疑似人工覆盖；不要把它错误归因成一个“隐藏 rounding 公式”。
 
+## 2026-07-23 · N1-5 档案生产模板与五家公司试产
+
+- Objective：定义可复跑的公司档案合同，并用五份自有档案完成盲评主样本；另保留两份 A 股产品样例验证跨行业适用性。第三方档案仅在本地运行时用作盲评标杆，不进入产品输出或 Git。
+- Decision：模板强制分开事实、研究判断、待核验问题；每个数字事实必须映射到来源 ID，且业务、财务、护城河、反题材、生产成本和复跑策略为固定章节。
+- Decision：盲评主样本为北方华创、比亚迪、中际旭创、新易盛与 NVIDIA；宁德时代、贵州茅台是额外产品样例。A 股只使用巨潮资讯正式披露，NVIDIA 只使用 SEC 与发行人官方材料。
+- Decision：生产清单记录每家公司 Goal token 区间差、耗时、人工介入点、来源数量与原始捕获 SHA-256。Goal token 是包含研究、推理、工具与写作的执行区间，不冒充模型 API 计费用量。
+- Decision：同公司复跑采用冻结证据与冻结正文的确定性 replay，receipt 同时记录源文件和输出的结构签名；它证明结构可复现，不冒充重新抓取了最新事实。
+- Verification：`verify_dossier.py` 校验模板、七份样例、章节、schema、数字引用、来源 URL、生产清单与统一结构签名；`replay_dossier.py` 对 NVIDIA 生成独立复跑版本并验证结构签名一致。
+- Verification：外部读者使用 runtime-only A/B 包盲评五家公司，自有档案总分 56、标杆总分 43，比例 130.2%，五组均超过 100%。评分模型实际返回 `deepseek-v4-flash`，收据保留请求 ID、token 用量与 pack hash。
+- Boundary：Round 1 外部读者按旧三维分数偏好自产，但 Park 明确拒绝逐维打分，改为每组选择整体更好的文档。Park 选择 `P1A/P2A/P3B/P4B/P5B`，解码后为 benchmark 5/5、自有 0/5，因此 Round 1 明确失败，不能合并 #115。
+- Decision：盲评合同改为 Park 与 external reader 各自完成五组整体 A/B 偏好，自有档案须分别胜出至少 4/5；平局不计胜出。旧分数不换算成通过证据，新一轮必须重新随机化标签。
+- Evidence：Round 1 的脱敏 Park preference receipt 记录 pack hash、五家公司 selected origin 和 0/5 结果；A/B key 与 benchmark 正文继续留在 Git 外。
+- Iteration：Round 2 在五份档案中补充公司特异的人与组织、发展路径、三年与最新季度财务、时点评估以及“市场在交易什么”，随后使用新随机标签重建盲评包。
+- Evidence：Round 2 外部读者完成五组整体 A/B 选择，自有档案胜出 5/5，超过独立角色 4/5 门槛；总门禁仍因 Park 角色尚未提交而 fail closed。
+- Boundary：Park 的 Round 2 选择解码后仍为 benchmark 5/5、自有 0/5，因此 #115 再次失败。外部读者恰好自有 5/5，说明审计严谨度与产品交付力出现系统性分歧，外部通过不得覆盖 Park 失败。
+- Decision：Round 3 不再靠增加表格和免责声明修补。保留数字、来源、口径冲突与可证伪条件，但读者层改为“最新数据卡 → 有立场的一句话 → 人与发展史 → 产品/商业模式 → 财务估值 → 风险 → 明确结论”；除财务和时间线外去表格化。
+- Evidence：Round 3 使用全新随机标签；DeepSeek 连续返回 503 后，按既有第三视角授权改用 Claude Code CLI `opus` alias 作为 external_reader。CLI 不暴露 token usage，因此收据明确写 unknown，不伪造；其盲选解码为自有 5/5，总门禁仍等待 Park。
+- Boundary：Park 的 Round 3 选择再次解码为 benchmark 5/5、自有 0/5，故 reader-first 改写仍未通过。五份自产文本实际比 benchmark 长 1.28–1.61 倍、数字数量更多；失败不能再解释为“内容不够多”。
+- Decision：Round 4 聚焦编辑选择而非扩写。读者层统一为六段式：最新数据、定位、创始人与团队、发展时间线、技术/产品/商业模式、财务估值、风险与点评；删除可见财务表和 9 个正式审计式标题，把来源与生产记录保留在文后审计层。
+- Evidence：Round 4 使用全新随机标签。DeepSeek 的旧密钥路径已不存在，未伪装为已调用；按既有第三视角授权改用 Claude Code CLI `opus`（实际模型 `claude-opus-4-8`），外部盲选解码为自有 5/5。总门禁仍等待 Park 独立盲选。
+- Boundary：Park 的 Round 4 选择解码后仍为 benchmark 5/5、自有 0/5。只把自产稿改成相同六段式并删除表格没有改变产品偏好，说明缺口不是版式相似度，而是人物、产品与业务变化的公司特异信息选择。
+- Decision：Round 5 不再对五份文档做统一机械改写。逐家公司建立“人物与组织转折 / 关键技术产品节点 / 收入与利润结构变化 / 市场正在押注什么 / 最关键反证”五项内容卡，只把从各自官方披露独立核验的内容写入读者稿。
+- Evidence：Park 进一步明确标杆优势是用“第一、绝对龙头、最硬、弹性之王”等方向性词汇压缩 uniqueness。Round 5 将强定位纳入模板，但要求限定比较范围并标记研究判断；外部 reader 盲选结果为自产 5/5，总门禁仍等待 Park。
+- Decision：Park 认为 Round 5 已接近，但强定位之前仍缺一张可定位公司的 map。Round 6 在读者层新增“产业坐标”：产业链位置、国内同类、全球竞品/替代路线、上下游议价权，再用一条大白话因果链连接需求与利润。
+- Gotcha：市场简称可以帮助记忆，但不能冒充同口径 peer group。“易中天”同时包含全模块厂与偏上游器件/光引擎公司；文档必须说明比较维度，不能从简称直接推出市场份额或技术排名。
+- Evidence：Round 6 外部 reader 盲选自产 5/5，认为新增的产业链、peer/global context 与供应约束补齐了标杆缺失的定位层。外部通过仍不得替代 Park 五组选择。
+- Decision：Park 在接受 Round 6 前纠正阅读顺序：用户必须先看到“一句话定位”，再展开产业坐标和证据，最后由独立“大白话点评”收口。Round 7 只重排信息层级，不删除 Round 6 的 context 或引用。
+- Gotcha：五组独立二项随机可能碰巧让自产稿全部落在同一侧，形成位置偏差。Round 7 起生成器强制自产标签保持 2/3 均衡，再随机顺序；旧的全同侧 pack 不作为最终收据。
+- Evidence：均衡后的 Round 7 pack 中自产标签为 A 三份、B 两份；外部 reader 盲选自产 5/5。该结果只满足 external gate，仍等待 Park 对同一 pack 的选择。
+- Decision：Park 明确回复“我先 approve 了这个版本，你继续 move on”，批准 Round 7 整体版本并授权进入下一步；将其记录为 owner-authorized gate replacement，而不是继续要求形式化五组选择。
+- Gotcha：整体批准不等于完成五组盲选。收据不得虚构 P1–P5 或自产胜场，只能记录批准原文、适用版本、替代的合同门禁和未发生的 pairwise choices。
+- Evidence：`round7-park-approval-receipt.json` 固定 Round 7 pack hash、Park 原始指令与 gate replacement；外部 reader 的独立 5/5 收据保持不变。
+
+### Gotchas · N1-5
+
+- 固定模板能确保结构一致，不等于事实完整；缺少 proxy、10-Q 或客户/供应链证据时必须留下待补问题。
+- Goal token 区间是 agent 整体工作量 telemetry，不是某家 LLM 的 prompt/completion token，不能据此推算 API 成本。
+- 外部模型可能返回与请求别名不同的实际模型名；收据必须记录服务端实际返回值，不能把 `deepseek-chat` 请求参数写成已验证模型身份。
+- 盲评包、A/B key 与第三方标杆正文必须留在 `/tmp` 等 Git 外路径；仓库只保留脱敏汇总收据。
+- 复跑结构一致只证明模板和渲染确定性，不证明事实已刷新；真正的“最新版本”仍需重新捕获来源并生成新的 evidence snapshot。
+- 结构更长、表格更多、引用更规范并不自动等于更好读。Round 1 自有档案字符数高于 benchmark 仍被 Park 5/5 拒绝，说明机械表格、稀疏团队叙事和缺少公司特异的技术/历史解释是实质缺口。
+
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 
 ## 2026-07-22 · Repo 拼装式数据与研报架构（定义完成）
