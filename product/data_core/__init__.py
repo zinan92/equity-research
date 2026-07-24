@@ -288,6 +288,7 @@ from .dossier_generator import (
 )
 from .decision_policy import DecisionInput, DecisionReceipt, POLICY_VERSION, decide
 from .offline_report_model import OfflineReportModel, compile_offline_report_model
+from .sector_taxonomy import SECTOR_TAXONOMY_VERSION, SectorSegment, build_cross_sector_taxonomy, taxonomy_receipt, validate_position_segment
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -365,4 +366,5 @@ __all__ = [
     "DOSSIER_SCHEMA_VERSION", "CompanyDossier", "DossierSection", "compile_dossier",
     "POLICY_VERSION", "DecisionInput", "DecisionReceipt", "decide",
     "OfflineReportModel", "compile_offline_report_model",
+    "SECTOR_TAXONOMY_VERSION", "SectorSegment", "build_cross_sector_taxonomy", "taxonomy_receipt", "validate_position_segment",
 ]
