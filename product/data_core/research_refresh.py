@@ -916,6 +916,7 @@ class CanonicalResearchRefresh:
                     errors.append(error)
                     receipt["attempts"].append({
                         "adapter": adapter.name, "role": adapter.role, "status": "failed",
+                        "data_kind": bundle.data_kind,
                         "started_at": started_at, "finished_at": _iso(_now()),
                         "manifest_hash": bundle.manifest.manifest_hash,
                         "payload_hash": digest(bundle.payload), "target_trade_date": target,
@@ -926,6 +927,7 @@ class CanonicalResearchRefresh:
                     continue
                 receipt["attempts"].append({
                     "adapter": adapter.name, "role": adapter.role, "status": "success",
+                    "data_kind": bundle.data_kind,
                     "started_at": started_at, "finished_at": _iso(_now()),
                     "manifest_hash": bundle.manifest.manifest_hash,
                     "payload_hash": digest(bundle.payload), "target_trade_date": target,
