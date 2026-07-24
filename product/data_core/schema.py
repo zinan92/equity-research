@@ -220,6 +220,20 @@ CREATE TABLE IF NOT EXISTS core_research_object_revisions (
     PRIMARY KEY(object_id, revision)
 );
 
+CREATE TABLE IF NOT EXISTS core_research_object_receipts (
+    receipt_id TEXT PRIMARY KEY,
+    object_id TEXT NOT NULL,
+    revision INTEGER NOT NULL,
+    object_hash TEXT NOT NULL,
+    snapshot_id TEXT NOT NULL,
+    evidence_refs_json TEXT NOT NULL,
+    raw_hashes_json TEXT NOT NULL,
+    status TEXT NOT NULL CHECK(status IN ('accepted','blocked')),
+    reason TEXT,
+    created_at TEXT NOT NULL,
+    UNIQUE(object_id, revision, object_hash)
+);
+
 CREATE TABLE IF NOT EXISTS core_quality_results (
     quality_id TEXT PRIMARY KEY,
     evaluation_id TEXT NOT NULL,
@@ -290,6 +304,10 @@ CREATE TRIGGER IF NOT EXISTS core_research_object_revisions_no_update
 BEFORE UPDATE ON core_research_object_revisions BEGIN SELECT RAISE(ABORT, 'research object revisions are append-only'); END;
 CREATE TRIGGER IF NOT EXISTS core_research_object_revisions_no_delete
 BEFORE DELETE ON core_research_object_revisions BEGIN SELECT RAISE(ABORT, 'research object revisions are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS core_research_object_receipts_no_update
+BEFORE UPDATE ON core_research_object_receipts BEGIN SELECT RAISE(ABORT, 'research object receipts are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS core_research_object_receipts_no_delete
+BEFORE DELETE ON core_research_object_receipts BEGIN SELECT RAISE(ABORT, 'research object receipts are append-only'); END;
 CREATE TRIGGER IF NOT EXISTS core_ingestion_runs_no_delete
 BEFORE DELETE ON core_ingestion_runs BEGIN SELECT RAISE(ABORT, 'ingestion runs cannot be deleted'); END;
 CREATE TRIGGER IF NOT EXISTS core_ingestion_runs_terminal_no_update
@@ -311,7 +329,7 @@ CORE_TABLES = (
     "core_schema_versions", "core_source_registry", "core_source_manifest_versions",
     "core_ingestion_runs", "core_raw_objects", "core_source_observations",
     "core_instruments", "core_trading_calendar", "core_instrument_status", "core_corporate_actions",
-    "core_adjustment_factors", "core_daily_bars", "core_financial_facts", "core_intelligence_items", "core_research_object_revisions",
+    "core_adjustment_factors", "core_daily_bars", "core_financial_facts", "core_intelligence_items", "core_research_object_revisions", "core_research_object_receipts",
     "core_quality_results", "core_snapshot_manifests", "core_snapshot_items",
 )
 

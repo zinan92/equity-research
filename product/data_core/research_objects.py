@@ -174,31 +174,42 @@ class ResearchObjectStore:
         self.connection_factory = connection_factory
 
     def append(self, item: ResearchObject) -> dict[str, Any]:
-        item.validate()
-        record = item.to_record()
         connection = self.connection_factory()
         try:
-            self._validate_authority_bindings(connection, item)
-            existing = connection.execute(
+            record = self.append_in_transaction(connection, item)
+            connection.commit()
+            return record
+        except Exception:
+            connection.rollback()
+            raise
+        finally:
+            connection.close()
+
+    def append_in_transaction(self, connection: Any, item: ResearchObject) -> dict[str, Any]:
+        """Validate and stage one revision without committing the caller transaction."""
+        item.validate()
+        record = item.to_record()
+        self._validate_authority_bindings(connection, item)
+        existing = connection.execute(
                 "SELECT object_hash FROM core_research_object_revisions WHERE object_id=? AND revision=?",
                 (item.object_id, item.revision),
             ).fetchone()
-            if existing is not None:
-                if existing[0] != record["object_hash"]:
-                    raise ValueError("research object revision already exists with different inputs")
-                return {**record, "reused": True}
-            prior = connection.execute(
+        if existing is not None:
+            if existing[0] != record["object_hash"]:
+                raise ValueError("research object revision already exists with different inputs")
+            return {**record, "reused": True}
+        prior = connection.execute(
                 "SELECT revision, object_hash FROM core_research_object_revisions WHERE object_id=? ORDER BY revision DESC LIMIT 1",
                 (item.object_id,),
-            ).fetchone()
-            if prior is None and item.revision != 1:
-                raise ValueError("first stored revision must be revision 1")
-            if prior is not None:
-                if item.revision != int(prior[0]) + 1:
-                    raise ValueError("research object revisions must be consecutive")
-                if item.revision_of != prior[1]:
-                    raise ValueError("revision_of must bind the immediately prior object hash")
-            connection.execute(
+        ).fetchone()
+        if prior is None and item.revision != 1:
+            raise ValueError("first stored revision must be revision 1")
+        if prior is not None:
+            if item.revision != int(prior[0]) + 1:
+                raise ValueError("research object revisions must be consecutive")
+            if item.revision_of != prior[1]:
+                raise ValueError("revision_of must bind the immediately prior object hash")
+        connection.execute(
                 """INSERT INTO core_research_object_revisions (
                    object_id,object_type,revision,state,schema_version,source_ref,known_at,confidence,
                    evidence_refs_json,raw_hashes_json,snapshot_id,facts_json,judgments_json,model_version,revision_of,object_hash
@@ -209,11 +220,8 @@ class ResearchObjectStore:
                     canonical_json(record["raw_hashes"]), item.snapshot_id, canonical_json(record["facts"]),
                     canonical_json(record["judgments"]), item.model_version, item.revision_of, record["object_hash"],
                 ),
-            )
-            connection.commit()
-            return {**record, "reused": False}
-        finally:
-            connection.close()
+        )
+        return {**record, "reused": False}
 
     @staticmethod
     def _validate_authority_bindings(connection: Any, item: ResearchObject) -> None:
