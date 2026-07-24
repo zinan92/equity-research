@@ -1299,3 +1299,14 @@
 
 - 这不是实际投资指令：receipt 只给区间和可解释原因，未连接任何券商、订单或 live-money 操作。
 - 行业上限、单股上限与现金底线是 hard guard；即使 upside 较高也不能绕过 coverage 或组合约束。
+
+## 2026-07-24 · E3-S9 离线 Report Model
+
+- Decision：复用 C1 的 `build_structure_truth_set()`，将 dossier identity、decision receipt identity 与 C1 module manifest 编译为 offline Report Model；编译过程不联网、不调用 DeepSeek、不产生叙事文本。
+- Why：长报告的第一真实性是输入、章节顺序和导出身份能稳定回放；模型文案必须作为后续独立层，不能反过来成为事实来源。
+- Evidence：`product/data_core/offline_report_model.py` 与 replay/ticker mismatch tests。
+
+### Gotchas · E3-S9
+
+- C1 当前 renderer manifest 是 8 个顶级模块；18-section 内容合同在其内部承载，不能把两种层级混成“新增第九套报告格式”。
+- structure truth set 表示格式与缺失语义，不构成 live research；最终 HTML/PDF/PNG render smoke 必须由后续有真实 Context Pack 的 vertical slice 证明。
