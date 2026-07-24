@@ -1466,3 +1466,15 @@
 - 分页上限是礼貌访问与假阴性之间的显式取舍；页面预算耗尽只能说明本轮范围未找到，不能说明发行人没有披露。
 - 任何中途 index page 失败会保留该页失败并令 batch discovery 不可发布，不能跳过失败页后继续声称完整搜索。
 - PDF cap 与分页是独立约束：多页用于寻找首个合格财报，绝不用于一次抓多份 PDF 或提升 Tier/spot-audit 覆盖。
+
+## 2026-07-24 · E4-S4g 官方披露硬超时隔离
+
+- Decision：将 live E4 官方披露采集的每 ticker 执行放入单独 spawn 子进程。父批次在 configured wall-clock timeout 后 terminate 子进程、写 `collector_timeout`，再按原顺序继续；跨进程只传递 JSON-safe receipt，不传 raw bytes、socket 或 provider object。
+- Why：真实 100 ticker 运行证实，`asyncio.to_thread()` 的取消不能中断已卡在 SSL read 的 urllib worker，导致单一 issuer 能阻塞整个 batch。子进程是这条 public-source boundary 的可终止执行单元。
+- Evidence：`product/data_core/e4_official_evidence_batch.py` 和 `product/tests/test_e4_official_evidence_batch.py`。测试模拟 first ticker hangs，父批次在 timeout 内 kill 并继续 second ticker；live 2-ticker smoke 在 20 秒 wall-clock cap 内 2/2 capture。
+
+### Gotchas · E4-S4g
+
+- 这不是并行化：父进程 join 一个 child 后才启动下一个，effective concurrency 始终为 1；timeout 是隔离手段，不是提速或绕限流。
+- 子进程若在 raw write 前被 terminate，父 receipt 只记录失败；没有 raw hash 的工作绝不能 resume 为 captured 或生成 Report Model。
+- 测试 seam 的 in-process custom adapter 仅用于 fixture unit tests；真实运行永远走 default `sync_exchange_filings` 的 spawn path，避免把测试方便性误带到 production behavior。
