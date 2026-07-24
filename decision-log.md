@@ -1265,3 +1265,15 @@
 - 默认 verification 不再触发网络采集；调用者必须显式给出 `--limit` 才会重查官方 PDF，避免把日常合同验证变成无意的批量抓取。
 - 显式重查会先去除冻结的 accepted 状态；若最新官方抓取不能复现冻结的 URL/page/raw hash，会输出 `citation_mismatches` 并保持 `partial`，不能用旧 citation 静默通过。
 - 年报关键词只能证明公司披露中的业务/产品锚点；角色、上下游归属来自自有 ontology 的有界研究判断，仍不能伪装成披露原话。
+
+## 2026-07-24 · E3-S4 产业环节催化剂 Profile
+
+- Decision：为自有 ontology 的全部 108 个环节建立固定六段 Profile；只将已捕获的一方关系证据写入 `current_state` fact，其余 driver、catalyst、leading indicator、risk/falsifier 与 time horizon 一律明确为 `missing_evidence`，不补写合理化文案。
+- Why：产业中层需要全覆盖的稳定结构，但“看起来完整”不能替代真实研究覆盖。先让证据可到达、缺口可见，后续采集器才有明确的填充目标。
+- Evidence：`product/data_core/industry_catalysts.py`、`scripts/verify_e3_s4_catalysts.py`。显式一方来源 capture 当前覆盖 24 个环节，运行时回执为 108 total / 24 available / 84 missing_evidence，并输出三份 source raw hash。
+
+### Gotchas · E3-S4
+
+- `available` 仅代表该环节有一个证据锚点，绝不代表六段研究已经成熟；未覆盖段必须继续显示 `missing_evidence`。
+- first-party source 捕获是运行时行为，raw bodies 不进 Git。回执只输出 URL、raw hash 与 profile identity，供后续 Context Pack/Research Object 写入使用。
+- 研究判断如未来加入，必须有 model version 且不能同时携带 fact evidence identity，防止模型语言被伪装成披露事实。

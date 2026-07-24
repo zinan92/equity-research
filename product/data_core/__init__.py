@@ -273,6 +273,13 @@ from .valuation_context import (
     run_context_bound_valuation,
     validate_viewpoint_matrix_context,
 )
+from .industry_catalysts import (
+    CATALYST_PROFILE_SCHEMA_VERSION,
+    CatalystSection,
+    IndustryCatalystProfile,
+    build_catalyst_profiles,
+    catalyst_coverage,
+)
 
 __all__ = [
     "CanonicalComponent", "CanonicalPublicationError", "CanonicalResearchRefresh",
@@ -345,4 +352,6 @@ __all__ = [
     "build_sell_side_viewpoint_matrix",
     "VALUATION_CONTEXT_SCHEMA_VERSION", "ContextBoundValuation", "ViewpointContextReceipt",
     "run_context_bound_valuation", "validate_viewpoint_matrix_context",
+    "CATALYST_PROFILE_SCHEMA_VERSION", "CatalystSection", "IndustryCatalystProfile",
+    "build_catalyst_profiles", "catalyst_coverage",
 ]
