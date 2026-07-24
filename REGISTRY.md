@@ -54,6 +54,8 @@
 - Next E4 step: run the bounded sell-side batch against the full corpus, parse archived PDFs into C3 page citations, and bind only matching Context Pack receipts before re-evaluating #218.
 - E4-S4q is merged: each successful E4 sell-side catalog/PDF ingestion attempt can now persist re-hashed, content-addressed bytes beneath ignored runtime raw storage; receipt paths appear only after local hash verification and remain non-canonical, input-only material.
 - Next E4 step: rerun the bounded sell-side corpus using runtime raw persistence, then parse the archived PDFs through B3/C3 into page-cited viewpoints before the #218 coverage gate.
+- E4-S4r is merged: re-hashed, runtime-local E4 sell-side PDFs can now be parsed through the existing B3 parser into document/page/chunk identities with parser version and typed blockers; this is page evidence only, not an analyst claim, matrix, Tier or decision.
+- Next E4 step: rerun the 100-ticker sell-side batch on the raw-persistent path, then compile page-cited C3 viewpoints/estimate receipts against matching Context Packs.
 
 ## 2026-07-24 · E4-S4b strict coverage baseline
 
