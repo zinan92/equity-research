@@ -47,10 +47,10 @@ OBJECT_SCHEMAS: dict[ResearchObjectType, ResearchObjectSchema] = {
     ResearchObjectType.COMPANY: ResearchObjectSchema(ResearchObjectType.COMPANY, ("company_id", "display_name"), ("ticker", "market", "legal_name")),
     ResearchObjectType.SECTOR_POSITION: ResearchObjectSchema(ResearchObjectType.SECTOR_POSITION, ("company_id", "sector_id", "role"), ("segment_id", "products", "revenue_exposure")),
     ResearchObjectType.EVIDENCE: ResearchObjectSchema(ResearchObjectType.EVIDENCE, ("evidence_id", "evidence_type", "citation"), ("published_at", "document_id", "title")),
-    ResearchObjectType.CATALYST: ResearchObjectSchema(ResearchObjectType.CATALYST, ("company_id", "title", "time_horizon"), ("expected_at", "leading_indicator")),
+    ResearchObjectType.CATALYST: ResearchObjectSchema(ResearchObjectType.CATALYST, ("company_id", "title", "time_horizon"), ("thesis_ref", "direction", "threshold", "time_window", "trigger_status", "expected_at", "leading_indicator", "status_event_id", "status_evidence_refs")),
     ResearchObjectType.ROADMAP: ResearchObjectSchema(ResearchObjectType.ROADMAP, ("company_id", "milestone", "time_horizon"), ("expected_at", "dependency")),
     ResearchObjectType.SCORE_SNAPSHOT: ResearchObjectSchema(ResearchObjectType.SCORE_SNAPSHOT, ("company_id", "as_of", "score_name", "score_value"), ("score_scale", "calculation_version")),
-    ResearchObjectType.FALSIFIER: ResearchObjectSchema(ResearchObjectType.FALSIFIER, ("company_id", "title", "trigger"), ("threshold", "monitoring_frequency")),
+    ResearchObjectType.FALSIFIER: ResearchObjectSchema(ResearchObjectType.FALSIFIER, ("company_id", "title", "trigger"), ("thesis_ref", "direction", "threshold", "time_window", "trigger_status", "monitoring_frequency", "status_event_id", "status_evidence_refs")),
     ResearchObjectType.DOSSIER: ResearchObjectSchema(ResearchObjectType.DOSSIER, ("company_id", "dossier_version", "as_of"), ("report_model_hash", "publication_status")),
 }
 

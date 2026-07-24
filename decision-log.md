@@ -1755,3 +1755,14 @@
 
 - SQLite 不能 in-place 修改 CHECK；仅当既有表缺少 `thesis` 时显式 rebuild，逐列复制当前字段并重装 append-only triggers。
 - thesis 是研究上下文，不能据此生成 rating、target price、position 或 action。
+
+## 2026-07-25 · E7-S2 Versioned trigger history
+
+- Decision：复用 B5 `IntelligenceEvent` 与 E1 append-only object store；event match 只产出可审计 proposal，只有调用既有 store append 才会持久化下一 revision。
+- Why：event 不能静默重写 thesis/catalyst/falsifier，也不能直接产生 recommendation 或 action。每个 trigger 因此带 thesis_ref、direction、threshold、time_window、status 和 event-evidence reference。
+- Evidence：`test_research_trigger_history.py` 覆盖 fulfilled revision proposal、原 revision 不变、immediately-prior hash binding、unmatched evidence 与非法 direction fail closed。
+
+### Gotchas · E7-S2
+
+- `fulfilled`、`delayed`、`broken` 是显式人/规则判断结果，不是新闻标题或模型自动结论；需要 event evidence identity 和 rule/model version。
+- proposal 不等于写入，写入仍必须通过 raw hash/snapshot authority。没有 action、target、position 或 order output。
