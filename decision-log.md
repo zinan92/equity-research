@@ -1590,3 +1590,14 @@
 
 - profile `available` 只表示至少一个 fact section，不表示有可投资 catalyst；下游报告必须逐 section 检查 evidence state。
 - 任何 source failure 或 stale/future evidence 都必须留出 missing-evidence，不能借用上次抓取或生成性文本补齐。
+
+## 2026-07-24 · N3-S4 三家公司研究闭环基线
+
+- Decision：发布 E4-S1 的三家公司 vertical slice receipt，复用同一 Context Pack、dossier、offline report 和 decision policy 契约；三家公司全部保持 partial-evidence-bound 与 `no_action`。
+- Why：R2 需要验证“产业—公司—证据—档案—决策”能走通，但可运行闭环不能被误说成已具备估值、卖方、市场和催化剂输入的完整研报。
+- Evidence：`docs/evidence/2026-07-24-n3-s4-three-company-dossier-baseline.md` 与 `scripts/verify_e4_s1_vertical_slices.py`，记录 300750.SZ、600519.SH、600036.SH 的 filing page/raw identity、Context Pack、dossier 和 report receipt。
+
+### Gotchas · N3-S4
+
+- 三家公司使用的是 historic evidence-bound anchor；它不能替代 fresh ticker collection 或 R3 的 100 ticker acceptance。
+- `no_action` 是 evidence gate 的正确输出，不是投资观点；后续必须接入真实 market、valuation、sell-side、quality/risk/liquidity 和 catalyst 证据才能谈升级。
