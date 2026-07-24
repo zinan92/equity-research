@@ -24,6 +24,7 @@ from data_core.fixtures import AS_OF, KNOWN_AT, fixture_payload  # noqa: E402
 
 
 FACTS = {
+    ResearchObjectType.THESIS: {"company_id": "company-v1:catl", "statement": "Demand remains resilient.", "scope": "battery demand", "time_horizon": "12m"},
     ResearchObjectType.COMPANY: {"company_id": "company-v1:catl", "display_name": "宁德时代", "ticker": "300750.SZ"},
     ResearchObjectType.SECTOR_POSITION: {"company_id": "company-v1:catl", "sector_id": "battery", "role": "manufacturer"},
     ResearchObjectType.EVIDENCE: {"evidence_id": "evidence:filing:1", "evidence_type": "filing", "citation": "document:1#p1"},

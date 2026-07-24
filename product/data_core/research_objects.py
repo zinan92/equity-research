@@ -19,6 +19,7 @@ RESEARCH_OBJECT_SCHEMA_VERSION = "canonical-research-object-v1"
 
 
 class ResearchObjectType(str, Enum):
+    THESIS = "thesis"
     COMPANY = "company"
     SECTOR_POSITION = "sector_position"
     EVIDENCE = "evidence"
@@ -42,6 +43,7 @@ class ResearchObjectSchema:
 
 
 OBJECT_SCHEMAS: dict[ResearchObjectType, ResearchObjectSchema] = {
+    ResearchObjectType.THESIS: ResearchObjectSchema(ResearchObjectType.THESIS, ("company_id", "statement", "scope", "time_horizon"), ("forecast_ref", "valuation_ref")),
     ResearchObjectType.COMPANY: ResearchObjectSchema(ResearchObjectType.COMPANY, ("company_id", "display_name"), ("ticker", "market", "legal_name")),
     ResearchObjectType.SECTOR_POSITION: ResearchObjectSchema(ResearchObjectType.SECTOR_POSITION, ("company_id", "sector_id", "role"), ("segment_id", "products", "revenue_exposure")),
     ResearchObjectType.EVIDENCE: ResearchObjectSchema(ResearchObjectType.EVIDENCE, ("evidence_id", "evidence_type", "citation"), ("published_at", "document_id", "title")),
