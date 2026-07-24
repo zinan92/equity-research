@@ -1154,3 +1154,14 @@
 - raw identity 格式正确不等于可接受：它必须已存在于 A2，并被所声明的 A5 snapshot 冻结。
 - 同 revision 且 object hash 相同才是幂等重试；任何字段（含 model version、evidence、raw hash）变化都必须成为下一 revision，不能 overwrite。
 - replay receipt 只输出 hash、snapshot、evidence IDs 与 conflict；不要将任何原始文本或 archive 正文带入 receipt。
+
+## 2026-07-24 · E1-S4 Canonical Research Object Write Path
+
+- Decision：对象发布复用 A3 的 contract-first/authority transaction 模式；`ResearchObjectPublisher` 通过 E1-S3 的 connection-bound writer，在同一 SQLite authority transaction 写 object revision 与 identity-only evidence receipt。
+- Why：collector 或调用方不能绕过 provenance/snapshot 绑定直接写 canonical objects；任一对象失败时必须回滚整批并保留 last-good revision。
+- Evidence：`product/data_core/research_object_publish.py` 与 atomic success/failure/idempotency focused tests。
+
+### Gotchas · E1-S4
+
+- blocked receipt 是返回值，不落库伪装成 accepted receipt；失败批次不得留下半个 revision 或 evidence receipt。
+- identical retry 仅在 object hash 完全相同时复用；不同输入必须先被同 revision conflict 阻断。

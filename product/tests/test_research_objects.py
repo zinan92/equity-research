@@ -17,6 +17,7 @@ from data_core.research_objects import (  # noqa: E402
     object_contract_descriptor,
 )
 from data_core.store import DataFoundation  # noqa: E402
+from data_core.research_object_publish import ResearchObjectPublisher  # noqa: E402
 from data_core.contracts import SourceManifest  # noqa: E402
 from data_core.fixtures import AS_OF, KNOWN_AT, fixture_payload  # noqa: E402
 
@@ -106,6 +107,21 @@ class ResearchObjectContractTests(unittest.TestCase):
         with foundation.connect() as connection:
             with self.assertRaisesRegex(Exception, "append-only"):
                 connection.execute("UPDATE core_research_object_revisions SET state='blocked' WHERE object_id=?", (second.object_id,))
+
+    def test_atomic_publisher_preserves_last_good_on_failure(self) -> None:
+        foundation, raw_hash, snapshot_id = self.authority()
+        publisher = ResearchObjectPublisher(foundation.connect)
+        good = item(ResearchObjectType.COMPANY, raw_hashes=(raw_hash,), snapshot_id=snapshot_id)
+        accepted = publisher.publish((good,))
+        self.assertEqual(accepted["status"], "accepted")
+        self.assertFalse(accepted["records"][0]["reused"])
+        bad = item(ResearchObjectType.DOSSIER, raw_hashes=("b" * 64,), snapshot_id=snapshot_id)
+        blocked = publisher.publish((item(ResearchObjectType.CATALYST, raw_hashes=(raw_hash,), snapshot_id=snapshot_id), bad))
+        self.assertEqual(blocked["status"], "blocked")
+        store = ResearchObjectStore(foundation.connect)
+        self.assertEqual(len(store.history(good.object_id)), 1)
+        self.assertEqual(store.history("research-v1:catalyst:catl"), [])
+        self.assertTrue(publisher.publish((good,))["records"][0]["reused"])
 
 
 if __name__ == "__main__":
