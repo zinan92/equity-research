@@ -992,3 +992,20 @@
 - 爱牛档案 Markdown 以 `##` 为主章节层级，渲染器按「# 与 ## 都归 h2」映射，否则主章节吃不到节标题样式。
 - 档案正文渲染必须先整体 HTML 转义再套白名单标签（本实现 `esc()` 先行、链接仅放行 `https?:`），杜绝归档文本注入。
 - 三高气泡图节点半径映射后要预留顶部 padding，最大气泡（r=26 → 39px）会溢出默认画布。
+
+## 2026-07-24 · R0 Epic Execution Plan 批准
+
+- Decision：批准 `docs/plans/2026-07-23-epic-execution-plan.md` 作为正式执行合同；范围为 8 个 Epic、23 个 Milestone、43 个 Story。
+- Decision：不创建第三套平行编号。优先复用现有 N1–N6、L1-A–G、#110/#117–#121 和 #113–#116；只为缺失 Story 建 child issue。
+- Decision：N3 产业世界模型是产品差异化主线，必须交付产业本体、上下游关系、50–100 家公司位置和至少 104 个环节的催化剂内容。
+- Decision：E5-S1～S4 与所有 `product/static/**` diff 只由 Claude Code 实施；E5-S4 只依赖 E1-S5，不被 100 ticker 验收阻塞。
+- Decision：执行沿用自动挡；本仓测试、gitleaks、diff 红线三闸通过后自行 merge，只有真钱/live 与 Park Operating System 红线需要 Park 介入。
+- Why：把“先看产业、再看公司”和“任意 ticker 可信研报”放进同一条可验收路线，同时防止执行模型重写已完成的数据、证据、研究和前端基础。
+- Evidence：Park 于 2026-07-24 在当前任务明确批准 R0；完整合同及旧 GitHub 容器处置表见上述计划文件。
+
+### Gotchas · R0 执行
+
+- `REGISTRY.md` 是累积登记册，只追加指针和当前状态；长计划必须留在 `docs/plans/`。
+- 计划中的 Story 不等于全部立即建票；当前 #129–#131 已占满 WIP=3，应先清空 E0。
+- 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
+- benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。

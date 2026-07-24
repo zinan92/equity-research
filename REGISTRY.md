@@ -25,6 +25,7 @@
 
 ## 下一步
 
+- R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
 - Start N1-3 / Issue #113 from latest `main`: add A/HK/US/JP price and valuation snapshots with source fallback and historical 2026-06-30–07-02 reconstruction comparison.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
