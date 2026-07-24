@@ -1700,3 +1700,14 @@
 
 - issuer 的能力披露只能证明其自述的可观察能力，不能自动推出持久竞争优势、估值、Tier、target、position 或 action。
 - R2 仍因 market-future 0/20 而 partial；不得因四问通过而绕过最后一问。
+
+## 2026-07-25 · N3-S10 公司市场未来证据
+
+- Decision：对原 N3 20-company selection 逐份重拉同一 CNINFO 官方年报，仅接受同时包含前瞻标记和市场/行业/需求等市场上下文的 native-text passage，并以 source URL、full raw hash、页码、known-at、observation type 绑定；R2 market-future 只读取该 receipt。
+- Why：公司愿景、模型预测或爱牛归档不能替代可审计的公司级前瞻市场证据；同时，不应把 issuer outlook 伪装成 sell-side consensus。
+- Evidence：`docs/evidence/2026-07-25-n3-s10-company-market-future-evidence.md`，runtime receipt `1dd226f9…`（SHA-256 `235d7e2a…`），selection identity `39786334…`，20 requested / 20 accepted / 0 gaps；R2 全五问 20/20 且 `passed`。
+
+### Gotchas · N3-S10
+
+- issuer-disclosed market outlook 是事实性观察，不是市场共识、预测、估值、Tier、target、position 或 action。
+- R2 `passed` 只代表本阶段 evidence gate 完成；20 份 dossier 仍是 `no_action`，下一阶段不得用它跳过 valuation、sell-side 或发布门。
