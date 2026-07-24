@@ -1118,3 +1118,14 @@
 - 93.33% 是字段来源契约覆盖率，不是 30 家实时财务完整率；港股/日股 PIT 财务仍未实现，必须以 gap 进入 canonical 数据模型。
 - 价格的窗口外精确值只能解释残差，不能改写成声明窗口通过；同理，PEG definition mismatch 不是可接受的“通过”。
 - Park 的 Round 7 整体批准被记录为 owner-authorized gate replacement，不得向后续模型伪造为五组 A/B 胜场或数值评分。
+
+## 2026-07-24 · E1-S1 Company / Universe Crosswalk
+
+- Decision：Crosswalk 以 `code + market` 为唯一自动候选规则；名称只能作为显示与冲突检测，不能单独完成身份合并。输出固定为 `matched`、`ambiguous`、`unmapped` 三态。
+- Evidence：本地 runtime-only audit 按主池 649 与分级池 661 运行，生成 1,310 条映射：1,058 matched、252 unmapped、0 ambiguous。输出只存在 `/tmp`，不提交 archive rows。
+- Why：同名公司、A/H、ADR、历史代码及 archive 的两套 universe 不能靠字符串相似度猜测，否则未来 evidence、价格和报告会落到错误实体。
+
+### Gotchas · E1-S1
+
+- `matched` 只意味着该 archive code+market 可解析到候选 instrument，不意味着跨上市地已归并为同一 legal company。
+- 649/661 的覆盖数字来自 runtime audit；仓库提交的是 builder、状态语义和测试，不能把归档输出当成 canonical seed data。
