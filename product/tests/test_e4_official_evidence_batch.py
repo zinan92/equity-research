@@ -156,3 +156,17 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
                     self.write_identity(root), root / "runtime", max_tickers=2,
                     inter_ticker_delay_seconds=0, sync=lambda ticker, **_kwargs: successful_batch(ticker),
                 )
+
+    def test_rejects_completed_receipt_with_mismatched_configuration(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            identity = self.write_identity(root)
+            run_official_evidence_batch(
+                identity, root / "runtime", max_tickers=1,
+                inter_ticker_delay_seconds=0, sync=lambda ticker, **_kwargs: successful_batch(ticker),
+            )
+            with self.assertRaisesRegex(ValueError, "completed receipt does not match"):
+                run_official_evidence_batch(
+                    identity, root / "runtime", max_tickers=2,
+                    inter_ticker_delay_seconds=0, sync=lambda ticker, **_kwargs: successful_batch(ticker),
+                )
