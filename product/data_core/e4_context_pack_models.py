@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -39,6 +40,20 @@ def _valid_hash(value: object) -> bool:
     return len(value) == 64 and all(char in "0123456789abcdef" for char in value.lower())
 
 
+def _instant(value: object, *, field: str) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{field} must be an ISO-8601 timestamp") from exc
+    if parsed.tzinfo is None:
+        raise ValueError(f"{field} must include timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def _at_or_before(value: object, cutoff: datetime) -> bool:
+    return _instant(value, field="source known_at") <= cutoff
+
+
 def _by_ticker(rows: object, *, label: str) -> dict[str, Mapping[str, Any]]:
     if not isinstance(rows, list):
         raise ValueError(f"{label} rows must be a list")
@@ -53,7 +68,7 @@ def _by_ticker(rows: object, *, label: str) -> dict[str, Mapping[str, Any]]:
     return result
 
 
-def _market_component(row: Mapping[str, Any] | None, *, as_of: str) -> tuple[dict[str, Any], list[str]]:
+def _market_component(row: Mapping[str, Any] | None, *, cutoff: datetime) -> tuple[dict[str, Any], list[str]]:
     if row is None:
         return {"status": "missing_evidence", "source_receipts": []}, ["market_fundamentals_missing_ticker"]
     if row.get("data_kind") != "real":
@@ -73,8 +88,13 @@ def _market_component(row: Mapping[str, Any] | None, *, as_of: str) -> tuple[dic
         if not _valid_hash(raw_hash) or not _valid_hash(manifest_hash):
             blockers.append(f"market_fundamentals_invalid_{name}_identity")
             continue
-        if known_at != as_of:
-            blockers.append(f"market_fundamentals_{name}_cutoff_mismatch")
+        try:
+            known_on_time = _at_or_before(known_at, cutoff)
+        except ValueError:
+            blockers.append(f"market_fundamentals_invalid_{name}_known_at")
+            continue
+        if not known_on_time:
+            blockers.append(f"market_fundamentals_{name}_known_at_after_cutoff")
             continue
         receipts.append({"component": name, "source_key": str(source.get("source_key") or ""), "raw_hash": str(raw_hash), "manifest_hash": str(manifest_hash), "known_at": str(known_at)})
     if blockers:
@@ -89,7 +109,7 @@ def _sell_side_component(row: Mapping[str, Any] | None, *, as_of: str) -> tuple[
     if row.get("status") != "compiled" or not isinstance(row.get("matrix"), Mapping):
         return {"status": "missing_evidence", "matrix_id": None, "report_ids": []}, ["sell_side_matrix_unavailable"]
     matrix = row["matrix"]
-    if matrix.get("as_of") != as_of or not _valid_hash(matrix.get("input_hash")):
+    if matrix.get("research_cutoff") != as_of or not _valid_hash(matrix.get("input_hash")):
         return {"status": "blocked", "matrix_id": matrix.get("matrix_id"), "report_ids": []}, ["sell_side_matrix_cutoff_or_identity_mismatch"]
     report_ids = []
     for item in matrix.get("rows") or []:
@@ -104,13 +124,16 @@ def _sell_side_component(row: Mapping[str, Any] | None, *, as_of: str) -> tuple[
 def compile_context_pack_models(partial_receipt_path: Path, market_receipt_path: Path, sell_side_matrix_path: Path, *, as_of: str) -> dict[str, Any]:
     """Bind three captured input families into Tier-C models.
 
-    ``as_of`` is intentionally exact (not a date range): all source receipts
-    and the C3 matrix must carry the same cutoff. A non-synchronized collector
-    is blocked rather than allowed to borrow a nearby observation.
+    ``as_of`` is one explicit, timezone-qualified research cutoff. Source
+    observations retain their actual capture timestamps and may be earlier, but
+    never later, than that cutoff; the C3 matrix must declare the cutoff
+    exactly. This is a point-in-time rule, not a claim that providers captured
+    every source at the same instant.
     """
     partial_raw, partial = _load(partial_receipt_path, _PARTIAL_SCHEMA)
     market_raw, market = _load(market_receipt_path, _MARKET_SCHEMA)
     matrix_raw, matrices = _load(sell_side_matrix_path, _MATRIX_SCHEMA)
+    cutoff = _instant(as_of, field="as_of")
     if not partial.get("truth_boundary", {}).get("tier_is_c_only"):
         raise ValueError("partial model receipt must preserve Tier C boundary")
     if market.get("truth_boundary", {}).get("counts_as_tier_a_or_b") is not False:
@@ -123,7 +146,7 @@ def compile_context_pack_models(partial_receipt_path: Path, market_receipt_path:
     market_sha = _sha256(market_raw)
     if partial.get("companion_receipt_sha256") != market_sha:
         raise ValueError("partial model does not match market companion lineage")
-    if matrices.get("as_of") != as_of:
+    if matrices.get("research_cutoff") != as_of:
         raise ValueError("sell-side matrix receipt cutoff does not match requested cutoff")
 
     market_by_ticker = _by_ticker(market.get("tickers"), label="market receipt")
@@ -135,10 +158,14 @@ def compile_context_pack_models(partial_receipt_path: Path, market_receipt_path:
             continue
         model = dict(entry["model"])
         ticker = str(model.get("ticker") or "").upper()
-        if not ticker or model.get("as_of") != as_of:
+        try:
+            partial_on_time = _at_or_before(model.get("as_of"), cutoff)
+        except ValueError:
+            partial_on_time = False
+        if not ticker or not partial_on_time:
             output.append({"ticker": ticker or entry.get("ticker"), "status": "blocked", "blockers": ["partial_model_cutoff_mismatch"]})
             continue
-        market_component, market_blockers = _market_component(market_by_ticker.get(ticker), as_of=as_of)
+        market_component, market_blockers = _market_component(market_by_ticker.get(ticker), cutoff=cutoff)
         sell_side_component, sell_side_blockers = _sell_side_component(matrices_by_ticker.get(ticker), as_of=as_of)
         # Reuse E4's coverage binder while deliberately leaving valuation
         # unavailable: C3 catalog ratings are not valuation receipts.
@@ -150,6 +177,7 @@ def compile_context_pack_models(partial_receipt_path: Path, market_receipt_path:
         context_pack = {
             "kind": "B6_context_identity_with_E4_component_bindings", "evidence_set_id": model["evidence_set_id"],
             "manifest_hash": model["evidence_manifest_hash"], "ticker": ticker, "as_of": as_of,
+            "official_context_as_of": model["as_of"],
             "official": {"status": "available", "official_receipt_sha256": official_sha, "raw_hash": model["raw_hash"], "document_id": model["document_id"]},
             "market_fundamentals": market_component, "sell_side": sell_side_component,
         }

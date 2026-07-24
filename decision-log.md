@@ -1854,3 +1854,14 @@
 
 - `research_cutoff` 是显式 caller contract，绝不能默认取当前时间；它只标识 E4 runtime receipt 的研究边界，不将 rating-only matrix 升为 valuation、claim、Tier、target、position 或 action。
 - C3 matrix 的 `as_of` 仍为 date-level，Context Pack compiler 必须读取新的 `research_cutoff`，而不是把两者混为同一字段。
+
+## 2026-07-25 · E4-S4u canonical research cutoff
+
+- Decision：E4 Context Pack 以一个 timezone-qualified `research_cutoff` 为本次研究的 point-in-time boundary；B6 official Context 和 A4 source `known_at` 可以早于该 cutoff，但不得晚于它，C3 matrix receipt 必须显式声明完全相同的 cutoff。
+- Why：不同采集器不可能保证同一秒完成。把 source capture timestamp 强行设为同值会伪造来源历史；用 `known_at <= cutoff` 保留真实 capture identity，同时仍阻止 future leakage。
+- Evidence：`test_e4_context_pack_models.py` 覆盖 earlier-on-time 绑定、later-known source blocking、exact matrix-cutoff mismatch、ticker/official-lineage mismatch 和 deterministic rerun。实际 replay 在 `2026-07-25T23:59:59Z` cutoff 下编译 40 个 Context Pack inputs，其中 27 个 market/fundamentals 与 18 个 sell-side sections available；全部仍为 Tier C/no_action。
+
+### Gotchas · E4-S4u
+
+- `official_context_as_of` 是已有 B6 official-primary evidence 的时间，不能被 output cutoff 覆盖；所有两者都保留以便审计。
+- C3 catalog rating matrix 仍不是 valuation 或 page-cited analyst claim；available sell-side section 不增加 Tier、numeric/page audit、target、position 或 action credit。
