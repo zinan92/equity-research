@@ -98,7 +98,8 @@ def verify_manifest(path: Path) -> list[str]:
         if not relative_path or not document_path.is_file():
             problems.append(f"{ticker}: dossier path is missing")
             continue
-        signatures.add(structure_signature(document_path))
+        if ticker in set(map(str, blind_set)):
+            signatures.add(structure_signature(document_path))
         start = run.get("goal_token_start")
         end = run.get("goal_token_end")
         delta = run.get("goal_token_delta")

@@ -3,6 +3,10 @@
   "created_at": "2026-07-24T13:23:00+08:00",
   "revised_at": "2026-07-24T13:58:45+08:00",
   "revision_reason": "Round 1 blind preference failed 0/5. The five evaluation dossiers were expanded with company narrative, three-year plus latest-quarter financial context, point-in-time valuation and explicit market-expectation analysis before Round 2.",
+  "round3_revision": {
+    "revised_at": "2026-07-24T14:28:39+08:00",
+    "reason": "Round 2 also failed Park preference 0/5 despite an external-reader 5/5 pass. The reader layer was rebuilt around a latest-data card, decisive positioning, narrative people/history/business sections, a retained financial table, compact falsifiers and a clear conclusion."
+  },
   "token_accounting": {
     "counter": "Codex Goal tokensUsed",
     "meaning": "Inclusive interval delta covering research, reasoning, tool calls and authoring between two counter reads. It is not provider prompt/completion usage and must not be used for API billing.",

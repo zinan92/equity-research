@@ -1,0 +1,32 @@
+{
+  "schema_version": "dossier-park-preference-receipt-v1",
+  "reviewed_at": "2026-07-24T14:19:13+08:00",
+  "reviewer": {
+    "id": "park",
+    "role": "park"
+  },
+  "runtime_evidence": {
+    "blind_pack_sha256": "7cae698594ad071a42ec2119ea4fca98f94b0b5a87226e64f335374b0341b867",
+    "blind_set": [
+      "002371.SZ",
+      "002594.SZ",
+      "300308.SZ",
+      "300502.SZ",
+      "NVDA"
+    ]
+  },
+  "result": {
+    "self_wins": 0,
+    "benchmark_wins": 5,
+    "ties": 0,
+    "required_self_wins": 4,
+    "park_passed": false
+  },
+  "gate": {
+    "external_reader_passed": true,
+    "park_passed": false,
+    "passed": false,
+    "reason": "Park preferred the benchmark in all five Round 2 pairs. The external reader's 5/5 self preference does not override the required independent Park gate."
+  },
+  "boundary": "The A/B key and benchmark prose remain runtime-only."
+}

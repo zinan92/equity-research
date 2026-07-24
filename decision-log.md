@@ -1001,6 +1001,9 @@
 - Evidence：Round 1 的脱敏 Park preference receipt 记录 pack hash、五家公司 selected origin 和 0/5 结果；A/B key 与 benchmark 正文继续留在 Git 外。
 - Iteration：Round 2 在五份档案中补充公司特异的人与组织、发展路径、三年与最新季度财务、时点评估以及“市场在交易什么”，随后使用新随机标签重建盲评包。
 - Evidence：Round 2 外部读者完成五组整体 A/B 选择，自有档案胜出 5/5，超过独立角色 4/5 门槛；总门禁仍因 Park 角色尚未提交而 fail closed。
+- Boundary：Park 的 Round 2 选择解码后仍为 benchmark 5/5、自有 0/5，因此 #115 再次失败。外部读者恰好自有 5/5，说明审计严谨度与产品交付力出现系统性分歧，外部通过不得覆盖 Park 失败。
+- Decision：Round 3 不再靠增加表格和免责声明修补。保留数字、来源、口径冲突与可证伪条件，但读者层改为“最新数据卡 → 有立场的一句话 → 人与发展史 → 产品/商业模式 → 财务估值 → 风险 → 明确结论”；除财务和时间线外去表格化。
+- Evidence：Round 3 使用全新随机标签；DeepSeek 连续返回 503 后，按既有第三视角授权改用 Claude Code CLI `opus` alias 作为 external_reader。CLI 不暴露 token usage，因此收据明确写 unknown，不伪造；其盲选解码为自有 5/5，总门禁仍等待 Park。
 
 ### Gotchas · N1-5
 
