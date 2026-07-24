@@ -200,6 +200,24 @@ CREATE TABLE IF NOT EXISTS core_intelligence_items (
     quality_status TEXT NOT NULL CHECK(quality_status IN ('accepted','degraded','rejected'))
 );
 
+CREATE TABLE IF NOT EXISTS core_research_object_revisions (
+    object_id TEXT NOT NULL,
+    object_type TEXT NOT NULL CHECK(object_type IN ('company','sector_position','evidence','catalyst','roadmap','score_snapshot','falsifier','dossier')),
+    revision INTEGER NOT NULL CHECK(revision > 0),
+    state TEXT NOT NULL CHECK(state IN ('draft','accepted','superseded','blocked')),
+    schema_version TEXT NOT NULL,
+    source_ref TEXT NOT NULL,
+    known_at TEXT NOT NULL,
+    confidence TEXT NOT NULL CHECK(confidence IN ('high','medium','low','unknown')),
+    evidence_refs_json TEXT NOT NULL,
+    facts_json TEXT NOT NULL,
+    judgments_json TEXT NOT NULL,
+    model_version TEXT,
+    revision_of TEXT,
+    object_hash TEXT NOT NULL UNIQUE,
+    PRIMARY KEY(object_id, revision)
+);
+
 CREATE TABLE IF NOT EXISTS core_quality_results (
     quality_id TEXT PRIMARY KEY,
     evaluation_id TEXT NOT NULL,
@@ -266,6 +284,10 @@ CREATE TRIGGER IF NOT EXISTS core_source_observations_no_update
 BEFORE UPDATE ON core_source_observations BEGIN SELECT RAISE(ABORT, 'source observations are append-only'); END;
 CREATE TRIGGER IF NOT EXISTS core_source_observations_no_delete
 BEFORE DELETE ON core_source_observations BEGIN SELECT RAISE(ABORT, 'source observations are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS core_research_object_revisions_no_update
+BEFORE UPDATE ON core_research_object_revisions BEGIN SELECT RAISE(ABORT, 'research object revisions are append-only'); END;
+CREATE TRIGGER IF NOT EXISTS core_research_object_revisions_no_delete
+BEFORE DELETE ON core_research_object_revisions BEGIN SELECT RAISE(ABORT, 'research object revisions are append-only'); END;
 CREATE TRIGGER IF NOT EXISTS core_ingestion_runs_no_delete
 BEFORE DELETE ON core_ingestion_runs BEGIN SELECT RAISE(ABORT, 'ingestion runs cannot be deleted'); END;
 CREATE TRIGGER IF NOT EXISTS core_ingestion_runs_terminal_no_update
@@ -287,7 +309,7 @@ CORE_TABLES = (
     "core_schema_versions", "core_source_registry", "core_source_manifest_versions",
     "core_ingestion_runs", "core_raw_objects", "core_source_observations",
     "core_instruments", "core_trading_calendar", "core_instrument_status", "core_corporate_actions",
-    "core_adjustment_factors", "core_daily_bars", "core_financial_facts", "core_intelligence_items",
+    "core_adjustment_factors", "core_daily_bars", "core_financial_facts", "core_intelligence_items", "core_research_object_revisions",
     "core_quality_results", "core_snapshot_manifests", "core_snapshot_items",
 )
 

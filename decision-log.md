@@ -1130,3 +1130,15 @@
 - `matched` 只意味着该 archive code+market 可解析到候选 instrument，不意味着跨上市地已归并为同一 legal company。
 - 649/661 的覆盖数字来自 runtime audit；仓库提交的是 builder、状态语义和测试，不能把归档输出当成 canonical seed data。
 - Crosswalk 修正了 M1 中两只港股的零填充 ticker（`00981.HK`、`09880.HK`）；不得把 display code 当成 canonical ticker。
+
+## 2026-07-24 · E1-S2 八类 Canonical Research Object 合同
+
+- Decision：在既有 A1/A2 authority 之上增加 Company、SectorPosition、Evidence、Catalyst、Roadmap、ScoreSnapshot、Falsifier、Dossier 八类对象的 `canonical-research-object-v1` 合同；不新建平行 company master、source registry、raw storage 或 ingestion framework。
+- Why：产业位置、催化剂、证伪条件和档案需要稳定版本与 evidence 引用，才能让后续写入、读取和报告编译共享同一个事实/判断边界。
+- Evidence：`product/data_core/research_objects.py`、SQLite `core_research_object_revisions`、Postgres migration `0002_canonical_research_objects.postgres.sql` 与 focused schema/readback tests。
+
+### Gotchas · E1-S2
+
+- Crosswalk 的 `matched` 仍只是一条 code+market 候选，Company 对象不能擅自把 A/H、ADR 或历史代码合并为 legal company。
+- `facts` 必须指向 evidence identity；研究/AI judgment 必须留在独立字段并带 model version，不能借 `source_ref` 伪装成事实。
+- 本 Story 只定义合同和 append-only revision；任何 archive prose、评分或 dossier 正文都不得用来 seed 正式对象。
