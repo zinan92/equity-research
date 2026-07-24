@@ -168,6 +168,28 @@ class DataFoundation:
                     connection.execute(
                         f"ALTER TABLE core_research_object_revisions ADD COLUMN {column} {definition}"
                     )
+            table_sql = str(connection.execute(
+                "SELECT sql FROM sqlite_master WHERE type='table' AND name='core_research_object_revisions'"
+            ).fetchone()[0])
+            if "'thesis'" not in table_sql:
+                connection.executescript("""
+                    DROP TRIGGER IF EXISTS core_research_object_revisions_no_update;
+                    DROP TRIGGER IF EXISTS core_research_object_revisions_no_delete;
+                    ALTER TABLE core_research_object_revisions RENAME TO core_research_object_revisions_legacy;
+                    CREATE TABLE core_research_object_revisions (
+                        object_id TEXT NOT NULL,
+                        object_type TEXT NOT NULL CHECK(object_type IN ('thesis','company','sector_position','evidence','catalyst','roadmap','score_snapshot','falsifier','dossier')),
+                        revision INTEGER NOT NULL CHECK(revision > 0), state TEXT NOT NULL CHECK(state IN ('draft','accepted','superseded','blocked')),
+                        schema_version TEXT NOT NULL, source_ref TEXT NOT NULL, known_at TEXT NOT NULL,
+                        confidence TEXT NOT NULL CHECK(confidence IN ('high','medium','low','unknown')),
+                        evidence_refs_json TEXT NOT NULL, raw_hashes_json TEXT NOT NULL, snapshot_id TEXT NOT NULL,
+                        facts_json TEXT NOT NULL, judgments_json TEXT NOT NULL, model_version TEXT, revision_of TEXT,
+                        object_hash TEXT NOT NULL UNIQUE, PRIMARY KEY(object_id, revision)
+                    );
+                    INSERT INTO core_research_object_revisions SELECT object_id,object_type,revision,state,schema_version,source_ref,known_at,confidence,evidence_refs_json,raw_hashes_json,snapshot_id,facts_json,judgments_json,model_version,revision_of,object_hash FROM core_research_object_revisions_legacy;
+                    DROP TABLE core_research_object_revisions_legacy;
+                """)
+                connection.executescript(SQLITE_DDL)
             connection.execute(
                 "INSERT OR IGNORE INTO core_schema_versions(version, installed_at) VALUES (?, ?)",
                 schema_version_row(installed_at),

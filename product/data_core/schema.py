@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS core_intelligence_items (
 
 CREATE TABLE IF NOT EXISTS core_research_object_revisions (
     object_id TEXT NOT NULL,
-    object_type TEXT NOT NULL CHECK(object_type IN ('company','sector_position','evidence','catalyst','roadmap','score_snapshot','falsifier','dossier')),
+    object_type TEXT NOT NULL CHECK(object_type IN ('thesis','company','sector_position','evidence','catalyst','roadmap','score_snapshot','falsifier','dossier')),
     revision INTEGER NOT NULL CHECK(revision > 0),
     state TEXT NOT NULL CHECK(state IN ('draft','accepted','superseded','blocked')),
     schema_version TEXT NOT NULL,
