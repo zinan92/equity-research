@@ -89,6 +89,8 @@ def _raw_receipt(document_outcome: Any, raw_root: Path) -> dict[str, Any]:
         "raw_hash": raw_hash,
         "storage_uri": attempt.raw.storage_uri,
         "runtime_raw_path": str(raw_path),
+        "fetched_at": attempt.raw.fetched_at,
+        "known_at": attempt.raw.known_at,
         "report_model_hash": None,
         "tier": None,
         "numeric_spot_audit": False,

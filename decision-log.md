@@ -1442,3 +1442,15 @@
 - B1 的默认增量同步会抓取多个公告；E4 batch 必须显式使用 `financial_reports_only=True, max_documents=1`，否则就会违反每 ticker 至多一份 PDF 的速率和存储预算。
 - `captured` 只表示网络、官方域名、PDF 和 raw hash 已通过 adapter；不是 accepted Report Model，也不能自动获得 Tier A/B 或 citation audit credit。
 - runtime 的 `latest` 指针只跳过已经成功抓到 raw 的 ticker；失败 ticker 可以在后续批次重试，且任何错误都必须留在 per-ticker receipt 中而不能中断整个队列。
+
+## 2026-07-24 · E4-S4d 官方一手证据到 Partial Report Model
+
+- Decision：将 E4-S4c 运行时官方 PDF 重新验证为 source manifest、raw capture、accepted primary EvidenceCandidate 和单一 filings Context Pack，再编译 deterministic partial Report Model。该模型只将 filings 标为 available；market、fundamentals、valuation、sell-side 与 industry position 保持 missing_evidence，决策固定 Tier C / `no_action`。
+- Why：一份官方披露足以成为可审计的一手证据输入，但不够生成完整投研判断。把“有真实模型身份”和“有可执行结论”拆开，才可在 95 Report Model 与 80 Tier A/B 两道 E4 门之间诚实推进。
+- Evidence：`product/data_core/e4_partial_report_models.py`、`scripts/compile_e4_s4_partial_models.py`、`product/tests/test_e4_partial_report_models.py`。2026-07-24 live 3-ticker batch 编译出 1 个 real partial model，2 个无 PDF 输入 ticker 被 blocked；模型的 C/no_action、无 target/position/spot audit 均写入 receipt。
+
+### Gotchas · E4-S4d
+
+- 只有 raw path 位于指定 batch runtime root、PDF bytes 与 sha256 一致、官方 host allowlist 和 real E4-S4c receipt 全部通过时才可编译；旧 schema（没有 fetched/known timestamp）的 input 会被拒绝而不是猜测 provenance。
+- partial Report Model 可以计入“real evidence-bound model exists”，但 E4 acceptance sidecar 固定 Tier C、两个 audit 均 false；它不能为 80 Tier A/B 或 20 citation spot-audit 门槛刷分。
+- 单一 primary filing 的 Context Pack 是最小可用 B6 proof，不是完整 evidence corpus；后续 Tier upgrade 必须加入市场/财务/估值/卖方与可定位引用，不能扩写此模型的结论。
