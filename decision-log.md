@@ -1788,3 +1788,14 @@
 
 - 这是 compiler glue，不会采集数据，也不会生成估值参数、broker 观点、target、position 或 action；collector 的 runtime payload 仍必须在仓库外。
 - 现有 C2/C3 dataclass 的输出需要由后续 runtime adapter 加上 real data kind、partial receipt lineage 与 as-of；缺任一项必须显示 missing/blocked，而不是升级覆盖率。
+
+## 2026-07-25 · E4-S4p 卖方证据 batch
+
+- Decision：复用 B2 的 Eastmoney catalog/PDF archive，以每 ticker 至多一份 PDF、顺序限流、checkpoint/replay 的 runtime receipt 接入 E4；catalog 与 metadata-only 都保留，但不产生 Tier 或决策 credit。
+- Why：C3 matrix 前必须先知道真实 corpus 中每只股票的 catalog、PDF 与失败状态，不能把“未抓到”静默变成无覆盖或将目录 metadata 当作页级证据。
+- Evidence：`product/data_core/e4_sell_side_evidence_batch.py` 与 `product/tests/test_e4_sell_side_evidence_batch.py` 覆盖 PDF、metadata-only、异常隔离、配置重放与 fixture 输入拒绝。
+
+### Gotchas · E4-S4p
+
+- B2 archive output 是卖方 input；没有通过 C3 page citation 与 Context Pack 绑定前，不能作为 matrix、Tier、target、position 或 action 的证据。
+- runtime receipt/PDF 一律不提交；collector 遇到反爬、404 或超时只能记录 metadata/typed failure，不能切换 proxy、cookie 或其他数据源。
