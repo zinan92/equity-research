@@ -1105,6 +1105,16 @@
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
 
+## 2026-07-24 · E3-S5 三行业 Profile
+
+- Decision：电池、消费、银行只通过 declarative profile 改变 KPI、估值焦点、输入与缺失策略；全部复用 C1 的同一 8 节报告合同。
+- Why：行业差异必须来自可审计输入和缺失边界，不能演变成三套不可比较的报告模板。
+- Evidence：`product/data_core/industry_profiles.py`、profile contract tests 及 `scripts/verify_e3_s5_industry_profiles.py`。
+
+### Gotchas · E3-S5
+
+- Profile 的 `available` 仅代表所列 profile inputs 齐备，不代表公司研究、估值或仓位结论已可发布；B6/E3-S6 仍是证据门。
+
 ## 2026-07-24 · E3-S2 产业上下游关系图
 
 - Decision：在 E3-S1 ontology 上增加 evidence-bound graph。首批 30 条关系边仅覆盖可稳定捕获的 ASML 与 NVIDIA 第一方公开页面所直接涉及的半导体制造、网络与 AI 数据中心关系；每次显式采集生成 raw hash，缺任一 capture 则整张已审图不生成。
