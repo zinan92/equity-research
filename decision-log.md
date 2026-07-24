@@ -1405,4 +1405,16 @@
 - `configured_max_concurrency` 仍是 E4-S2 已披露的配置，effective concurrency 仍为 1；性能 receipt 不能暗示已安全并行调用 provider。
 - cache miss、fresh report 和 source collection 不在同步 UI path 被测；fresh report 始终只是 queued async contract。
 - provider cost 没有 receipt 就必须是 unknown，不允许通过 token quantity 乘假定单价得到“成本”。
+
+## 2026-07-24 · E4-S4a 真实 A 股身份语料
+
+- Decision：用受限的公开市场目录采集运行时 120 条真实 SH/SZ/BJ 代码、简称、交易所/板块、原始 URL 与 SHA-256；只提升 E4 的 identity coverage，不提升任何 evidence、Report Model 或 Tier A/B 覆盖。
+- Why：原 `verify_ashare_resolver.py` 的 100 个 prefix+序号只证明格式解析，不能证明上市公司身份。必须先把这两种能力在收据层明确拆开。
+- Evidence：`product/data_core/ashare_security_master.py`、`scripts/refresh_e4_s4_security_master.py`、`product/tests/test_ashare_security_master.py`。2026-07-24 live receipt `0e1d99c430f2b7dbc1f2bcb40fcd2ad0733107fc3dda9b7af122a796bd5beb39` 在 gitignored runtime 中记录 120 条、SSE/SZSE/BSE 三所和三份 raw hash。
+
+### Gotchas · E4-S4a
+
+- 市场目录是 identity directory，不是官方披露、市场行情或公司基本面；它不能填 B6、C1 或 E4-S3 的任何证据缺口。
+- Sina 的 `bj_a` node 当前返回 null；受限采集改用 symbol-sorted `hs_a`，解析器仍强制 `bj+code` 与 canonical ticker 一致，否则 fail closed。
+- 原始目录 JSON 含实时市场字段但本 Story 不读取、不写入产品事实；它只保留运行时 raw hash 与 identity fields，且整个 runtime 目录不进 Git。
 - `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。
