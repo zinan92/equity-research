@@ -96,6 +96,7 @@ def _partial_model(row: Mapping[str, Any], runtime_root: Path, companion: Mappin
     context = build_context_pack(evidence_set)
     material = {
         "schema_version": E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION, "ticker": instrument.ticker,
+        "as_of": known_at,
         "evidence_set_id": context.evidence_set_id, "evidence_manifest_hash": context.manifest_hash,
         "raw_hash": raw_hash, "document_id": row["document_id"],
         "sections": {"filings": "available", "market": "available" if companion and companion.get("market_available") else "missing_evidence", "fundamentals": "available" if companion and companion.get("fundamentals_available") else "missing_evidence", "valuation": "missing_evidence", "sell_side": "missing_evidence", "industry_position": "missing_evidence"},

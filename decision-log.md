@@ -1777,3 +1777,14 @@
 
 - outcome window 不是历史投资业绩或 backtest；缺失 benchmark、industry 或 fundamental component 必须保持 missing。
 - outcome receipt 不能生成或升级 rating、target、position、recommendation 或 order。
+
+## 2026-07-25 · E4-S4o 估值与卖方收据绑定
+
+- Decision：只在 valuation 与 sell-side runtime receipts 同时绑定到同一 partial-model receipt、ticker、as-of、accepted Context Pack 时，才将相应 section 标记为 available；输出永远维持 Tier C / no_action。
+- Why：E4 的目标是可追溯的 100 ticker 覆盖，不能用“有一份估值”或“有一篇研报”跨公司/跨时间地填充 partial model。
+- Evidence：`product/data_core/e4_valuation_sellside_coverage.py` 和 `product/tests/test_e4_valuation_sellside_coverage.py` 覆盖同源成功、context/as-of 不匹配、fixture/lineage 拒绝及 decision boundary。
+
+### Gotchas · E4-S4o
+
+- 这是 compiler glue，不会采集数据，也不会生成估值参数、broker 观点、target、position 或 action；collector 的 runtime payload 仍必须在仓库外。
+- 现有 C2/C3 dataclass 的输出需要由后续 runtime adapter 加上 real data kind、partial receipt lineage 与 as-of；缺任一项必须显示 missing/blocked，而不是升级覆盖率。
