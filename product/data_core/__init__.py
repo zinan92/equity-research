@@ -121,6 +121,17 @@ from .research_refresh import (
     RefreshInProgressError,
 )
 from .store import DataFoundation, QualityGateError, SnapshotReader
+from .research_objects import (
+    ALLOWED_CONFIDENCE,
+    ALLOWED_STATES,
+    OBJECT_SCHEMAS,
+    RESEARCH_OBJECT_SCHEMA_VERSION,
+    ResearchObject,
+    ResearchObjectSchema,
+    ResearchObjectStore,
+    ResearchObjectType,
+    object_contract_descriptor,
+)
 from .snapshot_orchestration import (
     CanonicalGap,
     ORCHESTRATION_SCHEMA_VERSION,
