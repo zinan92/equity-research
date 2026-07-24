@@ -34,11 +34,12 @@
 - E2-S1 now production-validates the existing A4 A-share identity contract: point-in-time alias resolution reuses A4 normalization across SH/SZ/BJ, returns explicit ambiguous/unmapped outcomes, exposes lifecycle state by as-of, and carries a deterministic 100-ticker identity-contract corpus (not a claim of live full-market coverage).
 - E2-S2 now production-validates the existing A4/A5 market and PIT-financial authority path with an explicit fixture-only acceptance receipt: identical input is idempotent, PIT quality gates have no blockers, raw-bound snapshot replay is deterministic, and this remains separate from any claim of real-time/full-market coverage.
 - E2-S3 now production-validates existing corporate-action, adjustment-factor and historical valuation/FX contracts: broken lineage, future-visible actions, valuation conflicts and inferred valuation history all fail closed; FX remains date-frozen and unavailable inputs remain gaps.
+- E2-S4 now production-validates the existing B1/B3 official-filings corpus: incremental discovery preserves official PDF identity and raw receipt; parser page/OCR coverage is measured and unreadable pages remain gaps; document/page/hash citations can fail-closed return to the official HTTPS URL and immutable storage URI.
 
 ## 下一步
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
-- Start E2-S4 / M2 from latest `main`: production-validate the existing B1 official-filings and B3 document-intelligence corpus with incremental discovery, raw document identity, parser/page/OCR coverage and citation return paths; do not rewrite collectors/parsers.
+- Start E2-S5 / M2 from latest `main`: production-validate the existing B2 sell-side archive, B4 consensus history and viewpoint matrix with catalog/PDF identity, estimate point-in-time semantics, replay and metadata-only coverage gaps; do not rewrite collectors or scoring logic.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
