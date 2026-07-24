@@ -193,6 +193,20 @@ class OfficialFilingIngestTest(unittest.TestCase):
             {title: classify_filing_title(title) for title in cases}, cases
         )
 
+    def test_financial_report_limited_sync_captures_one_qualifying_pdf(self) -> None:
+        transport = FakeTransport()
+        result = sync_cninfo_filings(
+            "300750.SZ", transport=transport, financial_reports_only=True, max_documents=1,
+        )
+        self.assertTrue(result.publishable)
+        self.assertEqual(set(result.documents), {"annual"})
+        self.assertEqual(result.documents["annual"].records[0].payload["document_type"], "annual_report")
+        self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
+
+    def test_limited_sync_rejects_zero_document_cap(self) -> None:
+        with self.assertRaisesRegex(ValueError, "max_documents"):
+            sync_cninfo_filings("300750.SZ", transport=FakeTransport(), max_documents=0)
+
     def test_cninfo_identity_mismatch_fails_closed_before_document_fetch(self) -> None:
         transport = FakeTransport(wrong_security=True)
         result = sync_cninfo_filings("300750.SZ", transport=transport)
