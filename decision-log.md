@@ -1601,3 +1601,25 @@
 
 - 三家公司使用的是 historic evidence-bound anchor；它不能替代 fresh ticker collection 或 R3 的 100 ticker acceptance。
 - `no_action` 是 evidence gate 的正确输出，不是投资观点；后续必须接入真实 market、valuation、sell-side、quality/risk/liquidity 和 catalyst 证据才能谈升级。
+
+## 2026-07-24 · N3-S5 二十家公司档案批次
+
+- Decision：将 E3-S3 的 20 个排序稳定、accepted/page-cited 公司位置逐份重新拉取其 CNINFO 官方 PDF，只有 raw SHA-256 精确匹配才进入既有 Context Pack → dossier → offline report → decision pipeline；失败留下 typed row。
+- Why：R2 的档案放量必须证明二十个公司真实输入可复验，不能从历史位置表直接“相信”引用仍有效，更不能用 fixture 或生成文本补齐失败。
+- Evidence：`product/data_core/n3_dossier_batch.py`、`scripts/refresh_n3_s5_dossiers.py` 与 `product/tests/test_n3_dossier_batch.py`。runtime receipt 记录 selection identity、每行 citation/context/dossier/report/decision 和 counts。
+
+### Gotchas · N3-S5
+
+- 默认位置选择与引用集合的 hash 是 batch input identity；更换任意 ticker、URL、page 或 raw hash 都是新批次，不能把旧 receipt 当作可续跑结果。
+- 即使二十份 dossier 都编译成功，输入仍只有 filing；固定缺口使 decision 保持 `no_action`，不产生 Tier、target 或 position credit。
+
+## 2026-07-24 · N3-S5 真实 20 家批次失败基线
+
+- Decision：发布 real batch 的 19/20 failed-acceptance receipt，不把 19 说成 20；`601138.SH` 的 CNINFO PDF 在重试后仍为 `TimeoutError`，保留 typed failure，后续单独恢复。
+- Why：N3-S5 的放量阈值本身是 R2 合同的一部分。单一来源传输失败只能缩小覆盖，不允许以旧 hash、替代源或 PR 文字解释绕过。
+- Evidence：`docs/evidence/2026-07-24-n3-s5-20-company-dossier-baseline.md`，runtime receipt sha256 `0bedbe4c…`，selection identity `39786334…`，counts 20 requested / 19 compiled / 1 failed / 19 no_action。
+
+### Gotchas · N3-S5 live baseline
+
+- checkpoint resume 只能复用 exact selection identity 下已成功且 citation raw hash 一致的 row；所有 failed row 都会重新请求，避免把短暂网络失败永久冻结为结论。
+- 19 个成功 dossier 依旧只含 filing input；统一 `no_action` 是正确边界，绝不将其描述为 full report、Tier A/B、target 或 position 进展。

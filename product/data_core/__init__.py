@@ -192,6 +192,12 @@ from .industry_company_index import (
     IndustryCompanyIndex,
     build_industry_company_index,
 )
+from .n3_dossier_batch import (
+    N3_DOSSIER_BATCH_SCHEMA_VERSION,
+    N3_DOSSIER_BATCH_SIZE,
+    compile_batch as compile_n3_dossier_batch,
+    selected_positions as n3_dossier_batch_positions,
+)
 from .document_intelligence import (
     DEFAULT_PARSER_VERSION,
     CitationCheck,
@@ -363,6 +369,7 @@ __all__ = [
     "validate_official_source_role",
     "ONTOLOGY_VERSION", "IndustryNode", "IndustrySegment", "build_ontology", "ontology_receipt", "validate_ontology",
     "INDUSTRY_COMPANY_INDEX_SCHEMA_VERSION", "IndustryCompanyIndex", "build_industry_company_index",
+    "N3_DOSSIER_BATCH_SCHEMA_VERSION", "N3_DOSSIER_BATCH_SIZE", "compile_n3_dossier_batch", "n3_dossier_batch_positions",
     "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
     "CachedReportTask", "SQLiteReportTaskCache", "REPORT_TASK_RUNTIME_VERSION", "ReportTask",
     "ReportTaskResult", "run_report_task_batch",
