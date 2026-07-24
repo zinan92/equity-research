@@ -1689,3 +1689,14 @@
 
 - CNINFO 大 PDF 需使用相同官方 URL 的 Range read 才能在连接中断后完成；assembled bytes 必须命中既有 citation SHA-256，不能以 partial response 或 mirror 补齐。
 - 证伪条件只解决 R2 五问之一；它不构成 moat、市场预期、估值、Tier、target、position 或 action 证据。
+
+## 2026-07-25 · N3-S9 公司护城河证据
+
+- Decision：对相同的 N3 20-company selection 逐份重拉同一 CNINFO 官方年报，仅接受同时具备 issuer-described advantage、具体能力锚点、官方 URL、PDF raw hash、页码及 known-at 的 capability observation；R2 moat 只读取该 receipt。
+- Why：产业层或 AI 归纳出的“护城河”不能代替公司级一手证据。泛化的领先口号不具备可审计的竞争能力含义。
+- Evidence：`docs/evidence/2026-07-25-n3-s9-company-moat-evidence.md`，runtime receipt `3e3be84f…`（SHA-256 `6eef6ee0…`），selection identity `39786334…`，20 requested / 20 accepted / 0 gaps；R2 moat 为 20/20。
+
+### Gotchas · N3-S9
+
+- issuer 的能力披露只能证明其自述的可观察能力，不能自动推出持久竞争优势、估值、Tier、target、position 或 action。
+- R2 仍因 market-future 0/20 而 partial；不得因四问通过而绕过最后一问。

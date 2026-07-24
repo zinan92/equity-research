@@ -24,6 +24,8 @@ ARCHIVE_ISOLATION_MODULES = (
     "product/data_core/industry_graph.py",
     "product/data_core/industry_catalysts.py",
     "product/data_core/n3_dossier_batch.py",
+    "product/data_core/n3_falsifier_evidence.py",
+    "product/data_core/n3_moat_evidence.py",
     "product/data_core/dossier_generator.py",
     "product/data_core/decision_policy.py",
     "product/data_core/offline_report_model.py",
