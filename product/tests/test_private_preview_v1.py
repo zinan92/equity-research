@@ -30,6 +30,7 @@ from run_private_preview import load_env, verify_packaged_release  # noqa: E402
 from portfolio_allocation import digest, portfolio_diff  # noqa: E402
 from portfolio_ledger import PortfolioLedger, build_ledger_history  # noqa: E402
 from prepare_private_preview import PreviewReleaseError, point_current, prepare, sanitize_auth_store  # noqa: E402
+from recovery_drill import RecoveryDrillError, create_backup, restore_backup, verify_backup  # noqa: E402
 from research_reports import _baseline_report  # noqa: E402
 from tests import test_canonical_portfolio_v1 as canonical_fixture  # noqa: E402
 
@@ -230,6 +231,26 @@ class PrivatePreviewV1Test(unittest.TestCase):
                 handle.write("\n# active tamper\n")
             with self.assertRaises(RuntimeError):
                 verify_packaged_release(runtime, values)
+
+    def test_external_backup_clean_restore_and_tamper_rejection(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            runtime = root / "runtime"
+            deep = root / "deep"
+            deep.mkdir()
+            prepared = prepare(self.db, self.state, deep, runtime)
+            backup = create_backup(runtime, root / "backup-store")
+            self.assertEqual(backup["status"], "created")
+            verified = verify_backup(root / "backup-store" / "backups" / backup["backup_id"])
+            self.assertEqual(verified["release_id"], prepared["release_id"])
+            restored = restore_backup(root / "backup-store" / "backups" / backup["backup_id"], root / "restored-runtime")
+            self.assertTrue(restored["current_release_verified"])
+            self.assertEqual(restored["release_id"], prepared["release_id"])
+            auth_copy = root / "backup-store" / "backups" / backup["backup_id"] / "auth.db"
+            with auth_copy.open("ab") as handle:
+                handle.write(b"tamper")
+            with self.assertRaises(RecoveryDrillError):
+                verify_backup(root / "backup-store" / "backups" / backup["backup_id"])
 
     def test_private_preview_startup_rejects_shared_auth_and_research_database(self) -> None:
         env = dict(os.environ)
