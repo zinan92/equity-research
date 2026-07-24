@@ -1733,3 +1733,14 @@
 
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
+
+## 2026-07-25 · E7-S1 三层 cadence receipt
+
+- Decision：在既有 A5 orchestration receipt 中附加 versioned slow/periodic/fast cadence plan；fast lane 的 last-good 只读取 canonical active 的 `activated_at`，slow/periodic 在没有各自独立成功 receipt 时显式为 missing。
+- Why：不能把一次 fast market refresh 错当成基本面或产业研究已经刷新。A5 继续是唯一执行器、锁、回填和 last-good 机制。
+- Evidence：`product/data_core/research_cadence.py` 与 `test_snapshot_orchestration.py` 的 deterministic receipt coverage。
+
+### Gotchas · E7-S1
+
+- cadence state 是 freshness policy，不是新增事实或 recommendation；missing/stale 不可静默升级为 fresh。
+- 此阶段只绑定 fast lane 到现有 A5 active identity；slow/periodic 的实际 runner 必须以后续 source-specific receipt 接入。

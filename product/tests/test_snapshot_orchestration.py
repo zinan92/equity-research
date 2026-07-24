@@ -101,6 +101,10 @@ class SnapshotOrchestrationTest(unittest.TestCase):
         self.assertEqual(result["status"], "success")
         self.assertEqual(result["remaining_gaps"], [])
         self.assertEqual(result["plan"]["mode"], "backfill")
+        states = {row["name"]: row["state"] for row in result["cadence"]["lanes"]}
+        self.assertEqual(states["fast"], "fresh")
+        self.assertEqual(states["slow"], "missing")
+        self.assertEqual(states["periodic"], "missing")
 
     def test_receipt_binds_ingestion_quality_raw_hashes_and_replay(self) -> None:
         result = self.orchestrator(
@@ -178,6 +182,9 @@ class SnapshotOrchestrationTest(unittest.TestCase):
         active = json.loads((self.state_root / "active.json").read_text())
         self.assertEqual(active["snapshot_id"], first["snapshot"]["snapshot_id"])
         self.assertTrue(failed["remaining_gaps"])
+        self.assertIsNotNone(
+            next(row for row in failed["cadence"]["lanes"] if row["name"] == "fast")["last_good_at"]
+        )
 
     def test_later_stage_failure_is_isolated_and_records_preserved_active(self) -> None:
         first = self.orchestrator(
