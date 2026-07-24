@@ -1454,3 +1454,15 @@
 - 只有 raw path 位于指定 batch runtime root、PDF bytes 与 sha256 一致、官方 host allowlist 和 real E4-S4c receipt 全部通过时才可编译；旧 schema（没有 fetched/known timestamp）的 input 会被拒绝而不是猜测 provenance。
 - partial Report Model 可以计入“real evidence-bound model exists”，但 E4 acceptance sidecar 固定 Tier C、两个 audit 均 false；它不能为 80 Tier A/B 或 20 citation spot-audit 门槛刷分。
 - 单一 primary filing 的 Context Pack 是最小可用 B6 proof，不是完整 evidence corpus；后续 Tier upgrade 必须加入市场/财务/估值/卖方与可定位引用，不能扩写此模型的结论。
+
+## 2026-07-24 · E4-S4e 官方披露分页发现
+
+- Decision：E4 官方披露批处理在 financial-report 模式下按交易所原生分页索引顺序检查至多三页；每一页的 source URL/raw hash/status 均进入 runtime receipt。只在页预算耗尽后才写 `no_qualifying_report_within_page_budget`，且仍保持每 ticker 至多一份 PDF。
+- Why：首页通常被最新的交易提示、会议决议等公告占满；把首页未命中当作公司没有财报会系统性压低真实 evidence 覆盖。
+- Evidence：`product/data_core/official_filings.py`、`product/data_core/e4_official_evidence_batch.py` 与 `product/tests/test_official_filing_ingest.py`。2026-07-24 live 3-ticker run receipt `b8129bd784f69ba5…` 抓到 3/3 官方财报；随后的 partial model receipt `fb84f3290738e1d0…` 编译 3/3 Tier C 模型。
+
+### Gotchas · E4-S4e
+
+- 分页上限是礼貌访问与假阴性之间的显式取舍；页面预算耗尽只能说明本轮范围未找到，不能说明发行人没有披露。
+- 任何中途 index page 失败会保留该页失败并令 batch discovery 不可发布，不能跳过失败页后继续声称完整搜索。
+- PDF cap 与分页是独立约束：多页用于寻找首个合格财报，绝不用于一次抓多份 PDF 或提升 Tier/spot-audit 覆盖。

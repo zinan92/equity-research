@@ -19,8 +19,9 @@ def main() -> None:
     parser.add_argument("--runtime-root", type=Path, default=ROOT / "product" / "runtime" / "e4-s4-official-evidence")
     parser.add_argument("--max-tickers", type=int, default=100)
     parser.add_argument("--delay", type=float, default=1.0, help="seconds between ticker requests")
+    parser.add_argument("--max-discovery-pages", type=int, default=3)
     args = parser.parse_args()
-    result = run_official_evidence_batch(args.identity_receipt, args.runtime_root, max_tickers=args.max_tickers, inter_ticker_delay_seconds=args.delay)
+    result = run_official_evidence_batch(args.identity_receipt, args.runtime_root, max_tickers=args.max_tickers, inter_ticker_delay_seconds=args.delay, max_discovery_pages=args.max_discovery_pages)
     receipt = result["receipt"]
     print(json.dumps({"status": "captured", "path": result["path"], "counts": receipt["counts"], "truth_boundary": receipt["truth_boundary"]}, ensure_ascii=False, sort_keys=True, indent=2))
 
