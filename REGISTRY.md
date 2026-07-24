@@ -32,11 +32,12 @@
 - E1-S4 now provides the single canonical write path for E1 objects: the A3-style publisher validates E1-S2/E1-S3 bindings and atomically writes revision plus identity-only evidence receipt, rolling back an invalid batch without changing last-good state.
 - E1-S5 now exposes fixture-safe canonical read contracts for Company, SectorPosition, Dossier, ScoreSnapshot and Roadmap: accepted real-snapshot data retains object/evidence/snapshot identity, while unknown or fixture/non-real requests return structured gaps unless fixture access is explicitly enabled.
 - E2-S1 now production-validates the existing A4 A-share identity contract: point-in-time alias resolution reuses A4 normalization across SH/SZ/BJ, returns explicit ambiguous/unmapped outcomes, exposes lifecycle state by as-of, and carries a deterministic 100-ticker identity-contract corpus (not a claim of live full-market coverage).
+- E2-S2 now production-validates the existing A4/A5 market and PIT-financial authority path with an explicit fixture-only acceptance receipt: identical input is idempotent, PIT quality gates have no blockers, raw-bound snapshot replay is deterministic, and this remains separate from any claim of real-time/full-market coverage.
 
 ## 下一步
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
-- Start E2-S2 / M2 from latest `main`: production-validate existing A4/A5 market and PIT-financial ingestion, snapshot, quality and last-good semantics; do not create a new data authority.
+- Start E2-S3 / M2 from latest `main`: reuse A4 CNINFO corporate-action anchors and existing adjustment/valuation contracts to production-validate corporate actions, adjustments and explicit historical valuation/FX gaps; do not replace the canonical authority.
 - Reuse N1-2's runtime-only validation-input pattern; do not commit benchmark originals, ratings, scores, or dossier text into product outputs.
 - N5 next slice: replace Atlas fixtures with the N2 canonical read API once it exists, run the three-minute five-question self-test with Park on real usage, and keep frontend ownership with Claude (Codex must not modify `product/static/**`).
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
