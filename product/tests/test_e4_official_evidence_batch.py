@@ -26,7 +26,7 @@ def identity_receipt() -> dict:
 def successful_batch(ticker: str):
     body = b"%PDF-1.7\nreal filing\n%%EOF"
     raw_hash = hashlib.sha256(body).hexdigest()
-    raw = SimpleNamespace(raw_hash=raw_hash, source_url="https://static.cninfo.com.cn/finalpage/real.PDF", storage_uri=f"canonical-raw/raw/sha256/{raw_hash[:2]}/{raw_hash}")
+    raw = SimpleNamespace(raw_hash=raw_hash, source_url="https://static.cninfo.com.cn/finalpage/real.PDF", storage_uri=f"canonical-raw/raw/sha256/{raw_hash[:2]}/{raw_hash}", fetched_at="2026-07-24T00:00:00Z", known_at="2026-07-24T00:00:00Z")
     fetched = SimpleNamespace(body=body)
     attempt = SimpleNamespace(raw=raw, fetched=fetched)
     record = SimpleNamespace(payload={
@@ -61,6 +61,7 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
             first = run_official_evidence_batch(self.write_identity(root), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0, sync=sync)
             row = first["receipt"]["tickers"][0]
             self.assertEqual((row["status"], row["report_model_hash"], row["tier"]), ("captured", None, None))
+            self.assertEqual(row["fetched_at"], "2026-07-24T00:00:00Z")
             self.assertFalse(first["receipt"]["truth_boundary"]["counts_as_report_model_coverage"])
             second = run_official_evidence_batch(self.write_identity(root), root / "runtime", max_tickers=1, inter_ticker_delay_seconds=0, sync=sync)
             self.assertEqual(second["receipt"]["tickers"][0]["status"], "skipped")
