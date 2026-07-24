@@ -1105,6 +1105,17 @@
 - 已完成 A1–A5、B1–B6、C1–C3 与 Atlas 第一切片必须复用；“生产化验收”不授权重写。
 - benchmark 只用于覆盖和质量比较，爱牛原文、评分与静态档案不能进入正式产品输出。
 
+## 2026-07-24 · E2-S4 官方披露与文档语料库生产化验收
+
+- Decision：复用 B1 `official_filings.py` 与 B3 `document_intelligence.py`，仅增加可复跑验收回执和“页码引用回官方原文”的薄 glue；不重写采集器、解析器、raw storage 或 provider。
+- Why：报告引用必须不仅能证明页码和 raw hash，还要能安全回到同一份官方 HTTPS 文档及其不可变 storage receipt。
+- Evidence：`scripts/verify_e2_s4_official_corpus.py`，以及官方披露、页级解析和 citation-return-path focused tests。
+
+### Gotchas · E2-S4
+
+- 该验收回执是 fixture contract corpus，不宣称实时或全市场文件覆盖；真实上游采集只能通过显式运行并保留独立 receipt。
+- fixture URL、缺失 storage URI、错配 raw hash、非 HTTPS URL 和 OCR 不可读页必须保持显式 gap，不能被 citation 或上一次文档静默掩盖。
+
 ## 2026-07-24 · N1-6 / M1 验收包
 
 - Decision：将 N1-1 至 N1-5 的输出收口为一个 30 公司黄金验证集，而不是再起采集器。验证集覆盖 AI 芯片、半导体设备材料、光模块、PCB、机器人、电力，以及 A/HK/US/JP 四市场。

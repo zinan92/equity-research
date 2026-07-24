@@ -20,6 +20,7 @@ from data_core import (  # noqa: E402
     ReportClaim,
     assess_corpus_quality,
     parse_pdf_document,
+    resolve_citation_return_path,
     validate_publication_citations,
 )
 
@@ -143,6 +144,28 @@ class DocumentIntelligenceTest(unittest.TestCase):
         )
         self.assertFalse(gate.publishable)
         self.assertEqual(sum(check.valid for check in gate.checks), 1)
+
+    def test_citation_return_path_requires_official_raw_bound_receipt(self) -> None:
+        result = parse_pdf_document("official-filing:cninfo:annual", mixed_pdf(), ocr_backend=fake_ocr)
+        citation = PageCitation(result.document_id, 2, result.raw_hash)
+        payload = {
+            "document_id": result.document_id,
+            "content_hash": result.raw_hash,
+            "storage_uri": f"raw/{result.raw_hash}.pdf",
+            "http_metadata": {"source_url": "https://static.cninfo.com.cn/finalpage/annual.pdf"},
+        }
+        path = resolve_citation_return_path(citation, payload)
+        self.assertEqual(path.page_number, 2)
+        self.assertEqual(path.raw_hash, result.raw_hash)
+        self.assertEqual(path.source_url, payload["http_metadata"]["source_url"])
+
+        with self.assertRaisesRegex(ValueError, "raw_hash"):
+            resolve_citation_return_path(PageCitation(result.document_id, 2, "0" * 64), payload)
+        with self.assertRaisesRegex(ValueError, "HTTPS"):
+            resolve_citation_return_path(
+                citation,
+                {**payload, "http_metadata": {"source_url": "fixture://annual.pdf"}},
+            )
 
     def test_possible_table_without_coordinates_is_never_silent(self) -> None:
         result = parse_pdf_document("catl-annual", mixed_pdf(table=True), ocr_backend=fake_ocr)
