@@ -108,6 +108,30 @@ class PrivateBetaHttpTest(unittest.TestCase):
         status, payload, _ = self.request("POST", "/api/refresh", {}, cookie=cookie)
         self.assertEqual((status, payload["error"]), (403, "csrf_rejected"))
 
+    def test_owner_only_role_and_audit_routes_reject_member_and_keep_audit_private(self) -> None:
+        owner_auth, owner_cookie, _ = self.login("park@example.com", "owner-password-2026")
+        status, editor, _ = self.request(
+            "POST", "/api/members/role", {"email": "preview@example.com", "role": "editor"},
+            cookie=owner_cookie, csrf=owner_auth["csrf_token"],
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(editor["role"], "editor")
+        status, audit, _ = self.request("GET", "/api/members/audit", cookie=owner_cookie)
+        self.assertEqual(status, 200)
+        self.assertTrue(audit["events"])
+        self.assertTrue(all("password" not in json.dumps(item["detail"]) for item in audit["events"]))
+        _, editor_cookie, _ = self.login("preview@example.com", "preview-password-2026")
+        status, payload, _ = self.request("GET", "/api/members/audit", cookie=editor_cookie)
+        self.assertEqual((status, payload["error"]), (403, "entitlement_required"))
+
+    def test_login_rate_limit_applies_before_password_verification(self) -> None:
+        email = "rate-limit@example.com"
+        for _ in range(10):
+            status, payload, _ = self.request("POST", "/api/auth/login", {"email": email, "password": "wrong-password-2026"})
+            self.assertEqual((status, payload["error"]), (401, "invalid_credentials"))
+        status, payload, _ = self.request("POST", "/api/auth/login", {"email": email, "password": "wrong-password-2026"})
+        self.assertEqual((status, payload["error"]), (429, "too_many_attempts"))
+
     def test_preview_can_open_dashboard_but_not_deep_reports(self) -> None:
         _, cookie, _ = self.login("preview@example.com", "preview-password-2026")
         self.assertEqual(self.request("GET", "/api/dashboard", cookie=cookie)[0], 200)
