@@ -987,18 +987,24 @@
 - 实际可完整计算 composite 的记录数可能少于页面/issue 中的横截面口径；报告必须分别写出可计算分母，不能把缺输入的公司算作公式通过。
 - 0.5 tie 在少数行与多数样本的序列化行为不一致，连同非 tie residual 一起视为疑似人工覆盖；不要把它错误归因成一个“隐藏 rounding 公式”。
 
-## 2026-07-23 · N1-5 档案生产模板与首样例
+## 2026-07-23 · N1-5 档案生产模板与五家公司试产
 
-- Objective：先定义一套可复跑的公司档案合同，并用一份自有、海外公司的证据样例验证它；此阶段不复制第三方档案，也不假称已完成五家盲评。
+- Objective：定义可复跑的公司档案合同，并用五份自有档案完成盲评主样本；另保留两份 A 股产品样例验证跨行业适用性。第三方档案仅在本地运行时用作盲评标杆，不进入产品输出或 Git。
 - Decision：模板强制分开事实、研究判断、待核验问题；每个数字事实必须映射到来源 ID，且业务、财务、护城河、反题材、生产成本和复跑策略为固定章节。
-- Decision：首样例选择 NVIDIA，只使用公司 SEC 10-K、IR 业绩公告和 Newsroom Bio；把平台/护城河的结论写作可证伪的中等置信度研究判断。
-- Verification：`verify_dossier.py` 校验模板与样例的章节、schema、事实 ID、引用和来源 URL；样例记录来源数、耗时和人工介入，未获得 runner token 计数时显式留为后续自动化要求。
-- Boundary：五家公司放量与 Park+外部读者盲评属于本 issue 的下一道人工验收门，未执行前不得声称档案生产能力已验证。
+- Decision：盲评主样本为北方华创、比亚迪、中际旭创、新易盛与 NVIDIA；宁德时代、贵州茅台是额外产品样例。A 股只使用巨潮资讯正式披露，NVIDIA 只使用 SEC 与发行人官方材料。
+- Decision：生产清单记录每家公司 Goal token 区间差、耗时、人工介入点、来源数量与原始捕获 SHA-256。Goal token 是包含研究、推理、工具与写作的执行区间，不冒充模型 API 计费用量。
+- Decision：同公司复跑采用冻结证据与冻结正文的确定性 replay，receipt 同时记录源文件和输出的结构签名；它证明结构可复现，不冒充重新抓取了最新事实。
+- Verification：`verify_dossier.py` 校验模板、七份样例、章节、schema、数字引用、来源 URL、生产清单与统一结构签名；`replay_dossier.py` 对 NVIDIA 生成独立复跑版本并验证结构签名一致。
+- Verification：外部读者使用 runtime-only A/B 包盲评五家公司，自有档案总分 56、标杆总分 43，比例 130.2%，五组均超过 100%。评分模型实际返回 `deepseek-v4-flash`，收据保留请求 ID、token 用量与 pack hash。
+- Boundary：外部读者已完成，但 Park 角色仍缺失，故总门禁保持 `passed=false`；Park 未独立提交盲评分数前不得合并 #115 或声称档案生产能力通过最终验收。
 
 ### Gotchas · N1-5
 
 - 固定模板能确保结构一致，不等于事实完整；缺少 proxy、10-Q 或客户/供应链证据时必须留下待补问题。
-- 生产成本不能编造 token 数。当前 runner 未给出可核验用量时，样例只能记录时间与人工介入，并把 token telemetry 作为下一步的硬缺口。
+- Goal token 区间是 agent 整体工作量 telemetry，不是某家 LLM 的 prompt/completion token，不能据此推算 API 成本。
+- 外部模型可能返回与请求别名不同的实际模型名；收据必须记录服务端实际返回值，不能把 `deepseek-chat` 请求参数写成已验证模型身份。
+- 盲评包、A/B key 与第三方标杆正文必须留在 `/tmp` 等 Git 外路径；仓库只保留脱敏汇总收据。
+- 复跑结构一致只证明模板和渲染确定性，不证明事实已刷新；真正的“最新版本”仍需重新捕获来源并生成新的 evidence snapshot。
 
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 

@@ -1,0 +1,50 @@
+{
+  "schema_version": "dossier-external-review-receipt-v1",
+  "reviewed_at": "2026-07-24T05:25:51.572798+00:00",
+  "reviewer": {
+    "id": "deepseek:deepseek-v4-flash",
+    "role": "external_reader",
+    "request_id": "bf88dfbe-7a61-4998-82ab-02fa1096d79a",
+    "finish_reason": "stop"
+  },
+  "usage": {
+    "prompt_tokens": 17829,
+    "completion_tokens": 571,
+    "total_tokens": 18400
+  },
+  "runtime_evidence": {
+    "blind_pack_sha256": "4c274bc5ef1947e4b6574b34e49db6597cea738afb3cd553adbe128cc80c529a",
+    "prompt_sha256": "6059593b8fe1e945f934c4f0ab50269492231783273be08b05c19c5e82c67f9c",
+    "blind_set": [
+      "002371.SZ",
+      "002594.SZ",
+      "300308.SZ",
+      "300502.SZ",
+      "NVDA"
+    ]
+  },
+  "result": {
+    "self_score_total": 56,
+    "benchmark_score_total": 43,
+    "aggregate_ratio": 1.302325581395349,
+    "threshold": 0.8,
+    "pair_ratios": {
+      "002371.SZ": 1.375,
+      "002594.SZ": 1.2222222222222223,
+      "300308.SZ": 1.3333333333333333,
+      "300502.SZ": 1.1,
+      "NVDA": 1.5714285714285714
+    }
+  },
+  "gate": {
+    "present_roles": [
+      "external_reader"
+    ],
+    "missing_roles": [
+      "park"
+    ],
+    "passed": false,
+    "reason": "The external-reader result exceeds the threshold, but the issue contract also requires Park's independent blind score."
+  },
+  "boundary": "The A/B key, benchmark prose, reviewer notes and credentials remain runtime-only and are not committed."
+}

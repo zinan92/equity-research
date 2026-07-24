@@ -1,12 +1,13 @@
 ---
 schema_version: dossier-template-v1
-status: pilot
+status: "structural-replay"
 company: "NVIDIA Corporation"
 ticker: "NVDA"
 market: "NASDAQ"
 as_of: "2026-07-23"
 prepared_by: "dossier-pilot/manual-v1"
 evidence_cutoff: "2026-07-23"
+replayed_from_sha256: "32338c07e78aafc4c91470a1fd899be1b16d65db9f25410cc967f8b987f6e268"
 ---
 
 # NVIDIA｜公司档案（样例）
@@ -76,7 +77,7 @@ evidence_cutoff: "2026-07-23"
 
 | 字段 | 值 |
 | --- | --- |
-| 运行 ID | `nvda-dossier-pilot-2026-07-23-v1` |
+| 运行 ID | `nvda-dossier-pilot-2026-07-24-structural-replay` |
 | 采集/写作耗时 | 约 20 分钟初稿 + 约 8 分钟官方页面重开与数字回读。 |
 | 模型/人工介入 | Codex 选择 SEC、IR 与公司 Newsroom 来源；2026-07-24 重新打开三项官方来源核验；未使用第三方档案文本。 |
 | token 记录 | 见 `pilot-production-manifest.json`；历史初稿无独立计数，重验区间使用 Goal 级计数器记录并显式标注范围。 |

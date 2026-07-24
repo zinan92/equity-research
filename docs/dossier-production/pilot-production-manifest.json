@@ -1,0 +1,156 @@
+{
+  "schema_version": "dossier-pilot-production-v1",
+  "created_at": "2026-07-24T13:23:00+08:00",
+  "token_accounting": {
+    "counter": "Codex Goal tokensUsed",
+    "meaning": "Inclusive interval delta covering research, reasoning, tool calls and authoring between two counter reads. It is not provider prompt/completion usage and must not be used for API billing.",
+    "limitation": "The NVIDIA original draft predates interval capture; only its official-source revalidation interval is measured."
+  },
+  "blind_evaluation_set": [
+    "002371.SZ",
+    "002594.SZ",
+    "300308.SZ",
+    "300502.SZ",
+    "NVDA"
+  ],
+  "additional_product_samples": [
+    "300750.SZ",
+    "600519.SH"
+  ],
+  "runs": [
+    {
+      "ticker": "300750.SZ",
+      "path": "samples/300750.SZ-v1.md",
+      "elapsed_minutes": 28,
+      "goal_token_start": 653581,
+      "goal_token_end": 659342,
+      "goal_token_delta": 5761,
+      "source_count": 2,
+      "manual_intervention_points": [
+        "official filing selection",
+        "PDF integrity and text extraction",
+        "numeric fact readback",
+        "fact versus judgment boundary"
+      ],
+      "source_capture_sha256": [
+        "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+        "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8"
+      ]
+    },
+    {
+      "ticker": "600519.SH",
+      "path": "samples/600519.SH-v1.md",
+      "elapsed_minutes": 24,
+      "goal_token_start": 659342,
+      "goal_token_end": 672372,
+      "goal_token_delta": 13030,
+      "source_count": 2,
+      "manual_intervention_points": [
+        "official filing selection",
+        "production cycle and channel readback",
+        "numeric fact readback",
+        "brand claim downgrade"
+      ],
+      "source_capture_sha256": [
+        "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "ca10d0e4fb3a1e4e9f258c04fc4c62000968f337a9b0bf6f714d4f153536d363"
+      ]
+    },
+    {
+      "ticker": "002594.SZ",
+      "path": "samples/002594.SZ-v1.md",
+      "elapsed_minutes": 27,
+      "goal_token_start": 672372,
+      "goal_token_end": 676608,
+      "goal_token_delta": 4236,
+      "source_count": 2,
+      "manual_intervention_points": [
+        "official filing selection",
+        "business mix normalization",
+        "numeric fact readback",
+        "company ranking downgrade"
+      ],
+      "source_capture_sha256": [
+        "710d8b2e08e37ba521f1c4071d2c3e2369d3cadabc21a45073215d9f72138b0b",
+        "8e07bf9481c450daa0184c8bab218eb5b29f5587fc406116a911903852c0c907"
+      ]
+    },
+    {
+      "ticker": "300308.SZ",
+      "path": "samples/300308.SZ-v1.md",
+      "elapsed_minutes": 25,
+      "goal_token_start": 676608,
+      "goal_token_end": 688828,
+      "goal_token_delta": 12220,
+      "source_count": 2,
+      "manual_intervention_points": [
+        "official filing selection",
+        "product generation timeline normalization",
+        "numeric fact readback",
+        "customer claim downgrade"
+      ],
+      "source_capture_sha256": [
+        "0290f380253dde79613d43a1c6203674ae36cb89f849f063668ccde9a8789b5e",
+        "5e37220662c1fea7c9286a9410dbcef20ce83f70329ba3b44f2bf733459aa1af"
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "path": "samples/nvda-v1.md",
+      "elapsed_minutes": 28,
+      "goal_token_start": 688828,
+      "goal_token_end": 702754,
+      "goal_token_delta": 13926,
+      "source_count": 3,
+      "manual_intervention_points": [
+        "official SEC and issuer page reopen",
+        "numeric fact readback",
+        "issuer platform claim downgrade",
+        "historical draft provenance labeling"
+      ],
+      "source_capture_sha256": [
+        "73d81f5a111abcf72426c840871e76f5f5edc9631f436d495a86b6f87306d58b",
+        "8ab3ce2e846503ee31dbccec0da8806d2f40687dab8bc9f49fb845bb4f11ed3f"
+      ],
+      "capture_gap": "The IR earnings page was reopened and verified in the web reader, but a later local curl capture failed TLS; no fabricated hash is recorded."
+    },
+    {
+      "ticker": "002371.SZ",
+      "path": "samples/002371.SZ-v1.md",
+      "elapsed_minutes": 28,
+      "goal_token_start": 702754,
+      "goal_token_end": 750024,
+      "goal_token_delta": 47270,
+      "source_count": 2,
+      "manual_intervention_points": [
+        "official filing selection",
+        "restated period normalization",
+        "equipment category readback",
+        "market-share claim downgrade"
+      ],
+      "source_capture_sha256": [
+        "af09ac4951073e650f8d4f428a7eaea6977e18a162cfb042000408a3fc49d50f",
+        "c586a006edbf5455695236dea16513c47e6f1d5b4a96caee168f6fd14637edf8"
+      ]
+    },
+    {
+      "ticker": "300502.SZ",
+      "path": "samples/300502.SZ-v1.md",
+      "elapsed_minutes": 27,
+      "goal_token_start": 750024,
+      "goal_token_end": 765054,
+      "goal_token_delta": 15030,
+      "source_count": 2,
+      "manual_intervention_points": [
+        "official filing selection",
+        "product and geography concentration readback",
+        "administrative penalty readback",
+        "technology ranking downgrade"
+      ],
+      "source_capture_sha256": [
+        "3432905a431a8254c2274c2188269e94cfc5a69e92c7d34332a5a3a7da8b15b6",
+        "816e9ca46844cf4262e34c7c2dbf02ba8ea74b5ba90203ff877cc94b9253cbb9"
+      ]
+    }
+  ]
+}
