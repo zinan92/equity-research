@@ -50,6 +50,8 @@
 - Resume L2-C4 industry profiles only after the N1 queue has established the reusable source and research-production contracts; do not auto-map archived three-high segments to dossiers.
 - E4-S4o is merged: valuation and sell-side coverage can now be bound only through real, hash-bound receipts matching the same ticker, cutoff and accepted Context Pack as an E4 partial model; even with both sections present it remains Tier C / no_action.
 - Next E4 step: produce source-compliant runtime valuation/sell-side receipt adapters for the canonical 100-ticker corpus, then evaluate #218 without treating partial models as Tier A/B coverage.
+- E4-S4p is merged: the canonical real 100-ticker identity corpus can now run a bounded, checkpointed B2 sell-side catalog/PDF archive batch with per-ticker raw/source identities, metadata-only states and typed failures; it is input-only and grants no Tier, target, position, action or page-audit credit.
+- Next E4 step: run the bounded sell-side batch against the full corpus, parse archived PDFs into C3 page citations, and bind only matching Context Pack receipts before re-evaluating #218.
 
 ## 2026-07-24 · E4-S4b strict coverage baseline
 
