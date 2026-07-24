@@ -62,3 +62,16 @@ class PartialReportModelsTest(unittest.TestCase):
             path.write_text(json.dumps(payload), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "real E4-S4c"):
                 compile_partial_report_models(path, root)
+
+    def test_rejects_companion_with_other_official_lineage(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = self.batch_receipt(root)
+            companion = root / "companion.json"
+            companion.write_text(json.dumps({
+                "schema_version": "e4-s4-market-fundamentals-batch-v1", "data_kind": "real",
+                "official_receipt_sha256": "0" * 64,
+                "truth_boundary": {"counts_as_tier_a_or_b": False}, "tickers": [],
+            }), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "does not match"):
+                compile_partial_report_models(path, root, companion)
