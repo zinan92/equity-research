@@ -11,6 +11,10 @@
     "revised_at": "2026-07-24T14:43:00+08:00",
     "reason": "Round 3 again failed Park preference 0/5. The five self-produced documents were already 1.28-1.61 times longer and numerically denser than the benchmark, so the reader layer was reduced to six editorial sections, financial tables were replaced by three interpretive bullets, and the audit layer remains after the reader conclusion."
   },
+  "round5_revision": {
+    "revised_at": "2026-07-24T15:17:03+08:00",
+    "reason": "Round 4 again failed Park preference 0/5. Park identified the missing product trait directly: the benchmark compresses company uniqueness into directional labels. Round 5 adds a sourced uniqueness position and a memorable asset-character conclusion to every dossier; superlatives are explicitly scoped as research judgments rather than unsupported facts."
+  },
   "token_accounting": {
     "counter": "Codex Goal tokensUsed",
     "meaning": "Inclusive interval delta covering research, reasoning, tool calls and authoring between two counter reads. It is not provider prompt/completion usage and must not be used for API billing.",

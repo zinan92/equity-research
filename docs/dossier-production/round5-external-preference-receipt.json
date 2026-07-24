@@ -1,0 +1,45 @@
+{
+  "schema_version": "dossier-external-preference-receipt-v1",
+  "reviewed_at": "2026-07-24T15:20:26+08:00",
+  "reviewer": {
+    "id": "claude-cli:claude-opus-4-8",
+    "role": "external_reader",
+    "client": "claude-code-cli/2.1.218",
+    "requested_model_alias": "opus"
+  },
+  "runtime_evidence": {
+    "blind_pack_sha256": "6b889fa0f9529a32dcabf409f617f6600c61c0531ecfd2438a83d05ba89f1f8b",
+    "blind_set": [
+      "002371.SZ",
+      "002594.SZ",
+      "300308.SZ",
+      "300502.SZ",
+      "NVDA"
+    ],
+    "usage": {
+      "input_tokens": 4,
+      "cache_creation_input_tokens": 35685,
+      "cache_read_input_tokens": 65549,
+      "output_tokens": 3114,
+      "cost_usd": 0.881749
+    }
+  },
+  "result": {
+    "self_wins": 5,
+    "benchmark_wins": 0,
+    "ties": 0,
+    "required_self_wins": 4,
+    "external_reader_passed": true
+  },
+  "gate": {
+    "present_roles": [
+      "external_reader"
+    ],
+    "missing_roles": [
+      "park"
+    ],
+    "passed": false,
+    "reason": "The external reader preferred the self-produced dossier in all five Round 5 pairs, but the contract also requires Park's independent 4/5 preference gate."
+  },
+  "boundary": "The A/B key, benchmark prose, model notes and credentials remain runtime-only and are not committed."
+}

@@ -2,8 +2,8 @@
   "schema_version": "dossier-structural-replay-v1",
   "source": "docs/dossier-production/samples/nvda-v1.md",
   "output": "docs/dossier-production/reruns/nvda-v1-replay.md",
-  "source_sha256": "157cbd67cf40e8ae3e4a43dac8a3ffcd9f1f0ef5b66ea2070b682a54955b1675",
-  "output_sha256": "2e911c4c9558307bec9c4ee212dbcefeb91a823db14cdbb212e9017124417c71",
+  "source_sha256": "a1186e72451b76d70cd0dc9a44d0e3357bd9a61cbee74df4efc5829919ccfcff",
+  "output_sha256": "351463d4e4434d74e9393697fcdd2ba13e3414d257ff1bdb4b08228e01166ac7",
   "source_structure_signature": "841edf980107ffbba74bda38bf13faa44e877397af8d793c9d813c7aa50d6df1",
   "output_structure_signature": "841edf980107ffbba74bda38bf13faa44e877397af8d793c9d813c7aa50d6df1",
   "structure_match": true
