@@ -1623,3 +1623,14 @@
 
 - checkpoint resume 只能复用 exact selection identity 下已成功且 citation raw hash 一致的 row；所有 failed row 都会重新请求，避免把短暂网络失败永久冻结为结论。
 - 19 个成功 dossier 依旧只含 filing input；统一 `no_action` 是正确边界，绝不将其描述为 full report、Tier A/B、target 或 position 进展。
+
+## 2026-07-24 · N3-S5a 工业富联官方输入恢复
+
+- Decision：只使用原 CNINFO URL/page/raw hash 重试 `601138.SH`，成功后以 exact selection identity 恢复原 batch；最终达到 20 requested / 20 compiled / 0 failed / 20 no-action。
+- Why：此前失败是传输超时而非证据缺失；恢复必须重新验证同一 PDF hash，不能替换来源或把旧结果直接升级为成功。
+- Evidence：`docs/evidence/2026-07-24-n3-s5a-601138-recovery.md` 与 runtime receipt `10dd875e…`；PDF hash 为 `42d4d1f5…`，与冻结 E3-S3 citation 一致。
+
+### Gotchas · N3-S5a
+
+- resume 只复用 receipt selection identity 完全相同的 compiled row；失败 row 始终重新请求。一次成功不能变成未来 refresh 的永久缓存结论。
+- 20/20 仅满足 R2 的 filing-backed dossier coverage 数量条件；所有决策仍为 `no_action`，并不接近 R3 的 valuation/sell-side/Tier A/B 门槛。
