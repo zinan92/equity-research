@@ -957,6 +957,22 @@
 - Yahoo 的香港代码使用四位 display symbol（`0700.HK`），canonical identifier 保留五位证券代码（`00700.HK`）；美股类别股在 Yahoo 用连字符（`MOG-A`），不能直接复用带点 code。
 - 日本与部分港股在严格窗口仍有 1.6%–6.7% residual；在找到同口径历史来源前，这些是未解决的 source/date discrepancy，不应通过放宽默认容差消失。
 
+## 2026-07-24 · N1-3 历史估值与残差收口
+
+- Decision：将价格验证窗口扩展为“声明窗口 + 只用于解释残差的 45 天回看”。窗口外精确匹配只能标 `explained_residual`，不能改写为窗口内通过。
+- Decision：美国历史市值、PE、PB 使用 Yahoo 同日收盘加 SEC companyfacts 中 `filed <= as_of` 的股本、TTM 净利和净资产重建。非美元估值必须绑定同日冻结 FX。
+- Decision：PEG 的 benchmark 增长率基础未披露；SEC TTM 同比是另一种定义，统一标 `definition_mismatch`，即使数值偶然接近也不宣称复现。
+- Decision：A/HK/US/JP 七个字段的 28 个来源单元写入 `HISTORICAL_MARKET_FIELD_POLICY`；24/28 为高/中置信度候选归因，4 个 PEG 单元保持低置信度。
+- Why：满足“30 家都能解释”和“字段来源 ≥80% 归因”，同时不靠放宽容差、当前估值冒充历史值或未披露 PEG 定义制造假通过。
+- Evidence：运行时 30 家验证得到 22 家声明窗口通过、8 家在 2026-06-22 精确匹配、0 unexplained price outlier、0 missing price；涨跌幅为 28 pass / 2 previous-close reference mismatch / 0 missing；106 个估值字段为 52 pass / 3 outlier / 39 missing / 12 definition mismatch；SEC 和 Yahoo 原始响应均保留 raw hash，完整 diff 仅写 `/tmp`。
+
+### Gotchas · N1-3 历史估值
+
+- 港股/日股 8 个价格 residual 全部精确对应 2026-06-22，证明归档快照混合了至少两个市场日期；网页构建日不能当作统一 as-of。
+- SEC companyfacts 后续 proxy 可能重复 10-K 数字；按期间去重会让 DEF 14A 覆盖正式 10-K，必须把 filing form 纳入事实身份。
+- `EntityCommonStockSharesOutstanding` 可能只包含一个股份类别；Mobileye 等多类别发行人的市值不能把单类股本当总股本。
+- 外国发行人的 ordinary shares 与 ADR 价格需要 ADR ratio；没有比率时必须留 gap。
+
 > 补录说明（2026-07-23）：以下两节为 2026-07-22 本地会话的决策记录，当时仅存于 agent/import-equity-research 工作树未提交；对应正式产物（docs/architecture/repo-composition-architecture.md、repo-components.lock.yaml、docs/plans/2026-07-22-two-level-product-roadmap.md）已先行入 main。原文按当日措辞补录，不作改写。
 
 ## 2026-07-22 · Repo 拼装式数据与研报架构（定义完成）
