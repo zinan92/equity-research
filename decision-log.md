@@ -1645,3 +1645,25 @@
 
 - 当前 R2 预期为 `partial`：它会如实显示仅 layer 有 20 个 accepted positions，其他四问的 coverage 不会因数量门通过而变成事实。
 - archive isolation 是生产代码与输出契约的非依赖检查；它不是读取或复用 archive 内容的授权。
+
+## 2026-07-24 · N3-S7 PIT 财务兑现输入
+
+- Decision：复用 A4 isolated market/fundamentals collector，在 N3-S5 exact 20-company selection 上生成含 report period、announced_at 和 source/raw/manifest/known-at identity 的 financial-delivery receipt，并使 R2 audit 只对这些 accepted rows 增加 coverage。
+- Why：财务兑现不能由年报存在、产业位置或估值模板推断；必须有明确 period 和 PIT source identity，且与同一公司 selection 对齐。
+- Evidence：`product/data_core/n3_financial_delivery.py`、`scripts/refresh_n3_financial_delivery.py` 和 R2 audit optional receipt bridge。
+
+### Gotchas · N3-S7
+
+- 仅 fundamental source receipts 全部 real/publishable 且有 latest report period 的 row 才计入 financial_delivery；任何一项缺失均是 gap。
+- financial delivery 是 input-only，不是 valuation、Tier、target 或 position evidence；即使 20/20 可用，R2 的其他三问仍单独受 gate 控制。
+
+## 2026-07-24 · N3-S7 真实 PIT 财务失败基线
+
+- Decision：发布 11/20 financial-delivery receipt 并保留 9 个 `packet_validation_failed` / `missing_latest_financial_period` gaps；R2 audit 仅从 0/20 提升至 11/20，不修改门槛。
+- Why：真实 provider packet 缺少 latest period 时，年报引用、旧缓存或其他字段不能替代 PIT financial-delivery evidence。
+- Evidence：`docs/evidence/2026-07-24-n3-s7-financial-delivery-baseline.md` 与 runtime receipt `4dd8be33…`；九个 ticker 的 failures 均可逐行回看。
+
+### Gotchas · N3-S7 live baseline
+
+- A4 的 packet validation 会将缺 latest fundamental period 的行拒绝，即使部分 raw sources 已到达；部分成功不可被改写为完整 financial delivery。
+- 11 个 PIT inputs 只解决五问的一项且仍无 valuation/recommendation credit；后续恢复应在同一 source contract 下重跑并重新审计。

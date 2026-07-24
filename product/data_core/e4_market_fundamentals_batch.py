@@ -69,10 +69,13 @@ def _packet_row(ticker: str, summary: Mapping[str, Any]) -> dict[str, Any]:
     blockers = [f"{gap.get('domain')}: {gap.get('reason')}" for gap in gaps]
     market_available = all((sources.get(key) or {}).get("publishable") for key in ("quote", "daily_bars"))
     fundamentals_available = all((sources.get(key) or {}).get("publishable") for key in required[2:])
+    latest_fundamental = next(iter(summary.get("fundamentals") or ()), {})
     return {
         "ticker": ticker.upper(), "status": "captured" if market_available or fundamentals_available else "partial",
         "data_kind": "real", "market_available": market_available,
         "fundamentals_available": fundamentals_available, "blockers": blockers,
+        "latest_financial_period": latest_fundamental.get("report_period") if isinstance(latest_fundamental, Mapping) else None,
+        "latest_financial_announced_at": latest_fundamental.get("announced_at") if isinstance(latest_fundamental, Mapping) else None,
         "source_receipts": {key: {
             "source_key": (sources.get(key) or {}).get("selected_source"),
             "raw_hash": (sources.get(key) or {}).get("raw_hash"),

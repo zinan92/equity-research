@@ -199,6 +199,7 @@ from .n3_dossier_batch import (
     selected_positions as n3_dossier_batch_positions,
 )
 from .r2_acceptance import R2_ACCEPTANCE_SCHEMA_VERSION, audit_r2
+from .n3_financial_delivery import N3_FINANCIAL_DELIVERY_SCHEMA_VERSION, run_financial_delivery_batch
 from .document_intelligence import (
     DEFAULT_PARSER_VERSION,
     CitationCheck,
@@ -372,6 +373,7 @@ __all__ = [
     "INDUSTRY_COMPANY_INDEX_SCHEMA_VERSION", "IndustryCompanyIndex", "build_industry_company_index",
     "N3_DOSSIER_BATCH_SCHEMA_VERSION", "N3_DOSSIER_BATCH_SIZE", "compile_n3_dossier_batch", "n3_dossier_batch_positions",
     "R2_ACCEPTANCE_SCHEMA_VERSION", "audit_r2",
+    "N3_FINANCIAL_DELIVERY_SCHEMA_VERSION", "run_financial_delivery_batch",
     "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
     "CachedReportTask", "SQLiteReportTaskCache", "REPORT_TASK_RUNTIME_VERSION", "ReportTask",
     "ReportTaskResult", "run_report_task_batch",
