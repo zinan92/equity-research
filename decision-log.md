@@ -1821,3 +1821,14 @@
 
 - parser receipt 的 page/chunk identity 不是 analyst claim，更不是 matrix 或 recommendation；claim extraction 仍需独立、可审计的 C3 step。
 - runtime path 只能在 supplied root 下读取，并在每次 parse 前 re-hash；不能将其他临时 PDF 伪装成该 report 的 source evidence。
+
+## 2026-07-25 · E4-S4s 页面验证卖方矩阵
+
+- Decision：复用 C3，仅让同时具备 catalog broker/rating 与已 page-verified PDF 的报告进入 matrix；不从 PDF 文本推断 claim、target 或 forecast。
+- Why：评级 metadata 与 PDF/page identity 可以作为有边界的 matrix 输入，但缺失字段必须保留，不能借页面文本生成未经审计的分析师观点。
+- Evidence：`test_e4_sell_side_matrix.py` 覆盖真实 page-verified report matrix、missing target/estimate fields 与 lineage mismatch。
+
+### Gotchas · E4-S4s
+
+- rating-only matrix 不是 page-cited claim matrix，因此不产生 numeric/page audit、Tier、target、position 或 action credit。
+- `as_of` 是 caller 明示的 point-in-time cutoff；不能从当前时间或 later report 自动补全。
