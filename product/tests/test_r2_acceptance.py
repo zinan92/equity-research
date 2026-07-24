@@ -12,6 +12,7 @@ from data_core.industry_graph import EvidenceCapture, audited_candidates  # noqa
 from data_core.n3_dossier_batch import N3_DOSSIER_BATCH_SCHEMA_VERSION, selected_positions  # noqa: E402
 from data_core.n3_financial_delivery import N3_FINANCIAL_DELIVERY_SCHEMA_VERSION  # noqa: E402
 from data_core.n3_falsifier_evidence import N3_FALSIFIER_EVIDENCE_SCHEMA_VERSION  # noqa: E402
+from data_core.n3_moat_evidence import N3_MOAT_EVIDENCE_SCHEMA_VERSION  # noqa: E402
 from data_core.r2_acceptance import audit_r2  # noqa: E402
 
 
@@ -85,6 +86,32 @@ class R2AcceptanceTest(unittest.TestCase):
             falsifier_evidence_receipt=falsifier,
         )
         self.assertEqual(audit["five_questions"]["falsifier"]["covered"], 20)
+        self.assertFalse(audit["gates"]["five_questions"])
+
+    def test_source_bound_moat_receipt_raises_only_that_question(self) -> None:
+        self.receipt["selection_identity"] = "selection"
+        moat = {
+            "schema_version": N3_MOAT_EVIDENCE_SCHEMA_VERSION,
+            "selection_identity": "selection",
+            "rows": [
+                {
+                    "ticker": item.ticker,
+                    "status": "accepted",
+                    "evidence": {
+                        "ticker": item.ticker,
+                        "evidence_id": "moat:" + "a" * 40,
+                        "source_url": "https://static.cninfo.com.cn/finalpage/fixture.pdf",
+                        "raw_hash": "b" * 64,
+                        "page_number": 1,
+                        "known_at": "2026-07-25T00:00:00Z",
+                        "observed_capability": "Issuer disclosed a concrete company capability.",
+                    },
+                }
+                for item in selected_positions()
+            ],
+        }
+        audit = audit_r2(self.receipt, self.captures, repository_root=self.root, moat_evidence_receipt=moat)
+        self.assertEqual(audit["five_questions"]["moat"]["covered"], 20)
         self.assertFalse(audit["gates"]["five_questions"])
 
 
