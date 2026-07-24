@@ -1346,3 +1346,15 @@
 - `configured_max_concurrency` 目前是显式配置与 receipt 字段，effective concurrency 故意固定为 1；在没有 provider-specific parallel rate-limit contract 前，不能把配置名误解为已安全并发抓取。
 - cache 只是 mutable local replay state，`authority=False`；它不提升任何事实的 authority，也不能把 partial/failed 报告变成 completed。
 - 旧 `batch_research.py` 的固定八股 universe 仍保留，E4-S2 新 runner 是 E3/E4 immutable report-task glue，不能混淆为同一生产入口。
+
+## 2026-07-24 · E4-S3 Any-Ticker 诚实降级
+
+- Decision：在 B6 evidence gate 与 C1 18-section contract 之上固定 A/B/C/Missing 四档。A 仅在 real、B6 passed、live section contract 且 18 节均 full 时可暴露 action/target/position；其余档一律屏蔽这些字段并返回 source-specific next steps。
+- Why：ticker 输入体验不能靠“看起来像报告”的文案掩盖来源缺口。降级必须稳定、机器可读，且 fixture、archive 或模型文本不能把事实 coverage 提升为研究等级。
+- Evidence：`product/data_core/research_degradation.py` 和 `product/tests/test_research_degradation.py`；覆盖 A/B/C/Missing、section partial、source-gap matrix、fixture rejection 和 identity mismatch fail-closed。
+
+### Gotchas · E4-S3
+
+- B6 passed 只代表 evidence coverage 达到该 gate 的合同，不自动代表 18 节研究内容已完整；section contract 仍可把输出降为 B。
+- C/Missing 不是错误吞掉：其 receipt 明确给出 allowed/blocked fields 和下一步数据动作，调用方不得另行补 action、target price 或 position range。
+- `data_kind != real` 直接是 Missing，即使传入的对象结构与 canonical evidence 相同也不能升级。

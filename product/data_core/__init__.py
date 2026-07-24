@@ -114,6 +114,13 @@ from .report_task_runtime import (
     ReportTaskResult,
     run_report_task_batch,
 )
+from .research_degradation import (
+    DEGRADATION_POLICY_VERSION,
+    DegradationReceipt,
+    ResearchTier,
+    SourceGapAction,
+    assess_any_ticker,
+)
 from .research_refresh import (
     CanonicalComponent,
     CanonicalResearchRefresh,
@@ -353,6 +360,8 @@ __all__ = [
     "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
     "CachedReportTask", "SQLiteReportTaskCache", "REPORT_TASK_RUNTIME_VERSION", "ReportTask",
     "ReportTaskResult", "run_report_task_batch",
+    "DEGRADATION_POLICY_VERSION", "DegradationReceipt", "ResearchTier", "SourceGapAction",
+    "assess_any_ticker",
     "DocumentPage", "DocumentParseResult", "PageCitation", "ParserConfig",
     "PublicationGateResult", "ReportClaim", "TesseractCliOCR",
     "OFFICIAL_EVIDENCE_ANCHORS", "VERTICAL_SLICE_AS_OF", "VerticalSliceReceipt",
