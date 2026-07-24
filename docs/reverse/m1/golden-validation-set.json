@@ -1,0 +1,87 @@
+{
+  "schema_version": "m1-golden-validation-set-v1",
+  "as_of": "2026-07-24",
+  "boundary": "This is a validation manifest, not product data. It contains public identifiers and source-contract references only; it contains no archived benchmark prose, score outputs, or copied facts.",
+  "field_matrix": {
+    "price": {
+      "A": {"confidence": "high", "recipe": "a_share_quote_contract"},
+      "HK": {"confidence": "high", "recipe": "global_market_contract"},
+      "US": {"confidence": "high", "recipe": "global_market_contract"},
+      "JP": {"confidence": "high", "recipe": "global_market_contract"}
+    },
+    "change_pct": {
+      "A": {"confidence": "high", "recipe": "a_share_quote_contract"},
+      "HK": {"confidence": "high", "recipe": "global_market_contract"},
+      "US": {"confidence": "high", "recipe": "global_market_contract"},
+      "JP": {"confidence": "high", "recipe": "global_market_contract"}
+    },
+    "revenue_growth": {
+      "A": {"confidence": "medium", "recipe": "a_share_fundamental_contract"},
+      "HK": {"confidence": "gap", "recipe": "not_yet_collected"},
+      "US": {"confidence": "medium", "recipe": "sec_pit_fundamental_contract"},
+      "JP": {"confidence": "gap", "recipe": "not_yet_collected"}
+    }
+  },
+  "regeneration_recipes": {
+    "a_share_quote_contract": {
+      "source": "Tencent quote/bars with Eastmoney cross-check",
+      "evidence": "product/tests/test_a_share_pit_fundamentals.py"
+    },
+    "global_market_contract": {
+      "source": "Yahoo Chart historical close with frozen FX where needed",
+      "evidence": "product/tests/test_market_snapshot.py"
+    },
+    "a_share_fundamental_contract": {
+      "source": "Eastmoney financial highlights and point-in-time statements",
+      "evidence": "product/tests/test_a_share_pit_fundamentals.py"
+    },
+    "sec_pit_fundamental_contract": {
+      "source": "SEC Company Facts filed-before-as-of inputs",
+      "evidence": "product/tests/test_market_snapshot.py"
+    }
+  },
+  "companies": [
+    {"ticker":"688041.SH","name":"海光信息","market":"A","sector":"AI芯片","reason":"国产高性能计算芯片与海外 GPU 的同层验证。"},
+    {"ticker":"688008.SH","name":"澜起科技","market":"A","sector":"AI芯片","reason":"AI 服务器内存接口环节，验证非 GPU 的芯片角色。"},
+    {"ticker":"688256.SH","name":"寒武纪","market":"A","sector":"AI芯片","reason":"国产 AI 加速器的高波动、数据缺口样本。"},
+    {"ticker":"NVDA","name":"NVIDIA","market":"US","sector":"AI芯片","reason":"全球平台型算力基准，覆盖 SEC 点时财务。"},
+    {"ticker":"AMD","name":"AMD","market":"US","sector":"AI芯片","reason":"同赛道竞争者，检验海外可比公司。"},
+
+    {"ticker":"002371.SZ","name":"北方华创","market":"A","sector":"半导体设备材料","reason":"国产多品类前道设备平台。"},
+    {"ticker":"688012.SH","name":"中微公司","market":"A","sector":"半导体设备材料","reason":"单点强项与平台型设备商对照。"},
+    {"ticker":"300346.SZ","name":"南大光电","market":"A","sector":"半导体设备材料","reason":"材料链条样本，区别于设备口径。"},
+    {"ticker":"8035.T","name":"Tokyo Electron","market":"JP","sector":"半导体设备材料","reason":"全球设备标杆，验证日股行情路径。"},
+    {"ticker":"0981.HK","name":"中芯国际","market":"HK","sector":"半导体设备材料","reason":"港股晶圆制造公司，覆盖设备需求侧。"},
+
+    {"ticker":"300308.SZ","name":"中际旭创","market":"A","sector":"光模块","reason":"高速模块规模交付样本。"},
+    {"ticker":"300502.SZ","name":"新易盛","market":"A","sector":"光模块","reason":"高弹性、外销集中的光模块样本。"},
+    {"ticker":"300394.SZ","name":"天孚通信","market":"A","sector":"光模块","reason":"上游器件与全模块厂的边界样本。"},
+    {"ticker":"002281.SZ","name":"光迅科技","market":"A","sector":"光模块","reason":"国内第二组产品与客户结构样本。"},
+    {"ticker":"COHR","name":"Coherent","market":"US","sector":"光模块","reason":"海外光通信器件与模块可比公司。"},
+
+    {"ticker":"002463.SZ","name":"沪电股份","market":"A","sector":"PCB","reason":"AI 服务器 PCB 样本。"},
+    {"ticker":"002916.SZ","name":"深南电路","market":"A","sector":"PCB","reason":"高端 PCB 与封装基板交叉样本。"},
+    {"ticker":"603228.SH","name":"景旺电子","market":"A","sector":"PCB","reason":"消费与服务器 PCB 的周期对照。"},
+    {"ticker":"300476.SZ","name":"胜宏科技","market":"A","sector":"PCB","reason":"高多层板和 AI 需求弹性样本。"},
+
+    {"ticker":"300124.SZ","name":"汇川技术","market":"A","sector":"机器人","reason":"工业自动化核心部件样本。"},
+    {"ticker":"002747.SZ","name":"埃斯顿","market":"A","sector":"机器人","reason":"国产机器人本体样本。"},
+    {"ticker":"688165.SH","name":"埃夫特","market":"A","sector":"机器人","reason":"机器人本体与软件服务的高缺口样本。"},
+    {"ticker":"9880.HK","name":"优必选","market":"HK","sector":"机器人","reason":"港股人形机器人样本。"},
+    {"ticker":"6324.T","name":"Harmonic Drive Systems","market":"JP","sector":"机器人","reason":"日股减速器关键部件标杆。"},
+    {"ticker":"6861.T","name":"Keyence","market":"JP","sector":"机器人","reason":"工业自动化全球标杆。"},
+
+    {"ticker":"300750.SZ","name":"宁德时代","market":"A","sector":"电力","reason":"电池与储能龙头，已有完整 A 股来源契约样本。"},
+    {"ticker":"600900.SH","name":"长江电力","market":"A","sector":"电力","reason":"公用事业现金流和估值口径对照。"},
+    {"ticker":"601985.SH","name":"中国核电","market":"A","sector":"电力","reason":"核电长期资产样本。"},
+    {"ticker":"601012.SH","name":"隆基绿能","market":"A","sector":"电力","reason":"新能源制造周期与价格风险样本。"},
+    {"ticker":"00836.HK","name":"华润电力","market":"HK","sector":"电力","reason":"港股电力运营商，补足跨市场公用事业口径。"}
+  ],
+  "evidence_refs": {
+    "field_attribution": "docs/reverse/field-attribution.md",
+    "market_policy": "docs/reverse/market-source-policy.md",
+    "scoring_report": "docs/reverse/scoring-formulas.md",
+    "dossier_manifest": "docs/dossier-production/pilot-production-manifest.json",
+    "park_approval": "docs/dossier-production/round7-park-approval-receipt.json"
+  }
+}
