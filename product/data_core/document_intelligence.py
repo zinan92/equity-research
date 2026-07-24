@@ -11,6 +11,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Mapping, Protocol, Sequence
+from urllib.parse import urlsplit
 
 
 DEFAULT_PARSER_VERSION = "park-document-parser-v1"
@@ -378,6 +379,41 @@ class PageCitation:
     raw_hash: str
     quote: str | None = None
     chunk_id: str | None = None
+
+
+@dataclass(frozen=True)
+class CitationReturnPath:
+    """Immutable source coordinates needed to return a reader to evidence."""
+
+    document_id: str
+    page_number: int
+    raw_hash: str
+    source_url: str
+    storage_uri: str
+
+
+def resolve_citation_return_path(
+    citation: PageCitation, document_payload: Mapping[str, object]
+) -> CitationReturnPath:
+    """Bind a page citation to its official document receipt without guessing URLs."""
+
+    document_id = str(document_payload.get("document_id") or "")
+    content_hash = str(document_payload.get("content_hash") or "")
+    storage_uri = str(document_payload.get("storage_uri") or "")
+    metadata = document_payload.get("http_metadata")
+    source_url = str(metadata.get("source_url") or "") if isinstance(metadata, Mapping) else ""
+    if document_id != citation.document_id:
+        raise ValueError("citation document_id does not match document receipt")
+    if content_hash != citation.raw_hash:
+        raise ValueError("citation raw_hash does not match document receipt")
+    parsed = urlsplit(source_url)
+    if parsed.scheme != "https" or not parsed.hostname:
+        raise ValueError("citation source URL is missing or not HTTPS")
+    if not storage_uri:
+        raise ValueError("citation storage URI is missing")
+    if citation.page_number < 1:
+        raise ValueError("citation page_number must be one-based")
+    return CitationReturnPath(document_id, citation.page_number, content_hash, source_url, storage_uri)
 
 
 @dataclass(frozen=True)

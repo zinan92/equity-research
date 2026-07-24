@@ -163,6 +163,7 @@ from .official_filings import (
 from .document_intelligence import (
     DEFAULT_PARSER_VERSION,
     CitationCheck,
+    CitationReturnPath,
     CorpusQuality,
     DocumentChunk,
     DocumentPage,
@@ -174,6 +175,7 @@ from .document_intelligence import (
     TesseractCliOCR,
     assess_corpus_quality,
     parse_pdf_document,
+    resolve_citation_return_path,
     validate_publication_citations,
 )
 from .consensus_history import (
@@ -293,10 +295,10 @@ __all__ = [
     "build_official_filing_registry", "build_official_filing_runtime",
     "classify_filing_title", "sync_cninfo_filings", "sync_cninfo_filings_async",
     "validate_official_source_role",
-    "DEFAULT_PARSER_VERSION", "CitationCheck", "CorpusQuality", "DocumentChunk",
+    "DEFAULT_PARSER_VERSION", "CitationCheck", "CitationReturnPath", "CorpusQuality", "DocumentChunk",
     "DocumentPage", "DocumentParseResult", "PageCitation", "ParserConfig",
     "PublicationGateResult", "ReportClaim", "TesseractCliOCR",
-    "assess_corpus_quality", "parse_pdf_document", "validate_publication_citations",
+    "assess_corpus_quality", "parse_pdf_document", "resolve_citation_return_path", "validate_publication_citations",
     "CONSENSUS_SCHEMA_VERSION", "BrokerEstimate", "ConsensusPoint",
     "ConsensusRevision", "ConsensusSnapshot", "EstimateQuarantine",
     "build_consensus_snapshot", "compare_consensus_snapshots",
