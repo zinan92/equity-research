@@ -110,6 +110,33 @@ class ResearchObjectContractTests(unittest.TestCase):
             with self.assertRaisesRegex(Exception, "append-only"):
                 connection.execute("UPDATE core_research_object_revisions SET state='blocked' WHERE object_id=?", (second.object_id,))
 
+    def test_initialize_rebuilds_legacy_object_check_without_losing_rows(self) -> None:
+        foundation, raw_hash, snapshot_id = self.authority()
+        store = ResearchObjectStore(foundation.connect)
+        saved = store.append(
+            item(ResearchObjectType.COMPANY, raw_hashes=(raw_hash,), snapshot_id=snapshot_id)
+        )
+        with foundation.connect() as connection:
+            connection.execute("DROP TRIGGER core_research_object_revisions_no_update")
+            connection.execute("DROP TRIGGER core_research_object_revisions_no_delete")
+            connection.execute("ALTER TABLE core_research_object_revisions RENAME TO legacy")
+            connection.execute("CREATE TABLE core_research_object_revisions AS SELECT * FROM legacy")
+            connection.execute("DROP TABLE legacy")
+            connection.commit()
+        foundation.initialize()
+        with foundation.connect() as connection:
+            sql = connection.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='core_research_object_revisions'").fetchone()[0]
+            self.assertIn("'thesis'", sql)
+            self.assertEqual(
+                connection.execute(
+                    "SELECT object_hash FROM core_research_object_revisions WHERE object_id=?",
+                    ("research-v1:company:catl",),
+                ).fetchone()[0],
+                saved["object_hash"],
+            )
+            with self.assertRaisesRegex(Exception, "append-only"):
+                connection.execute("UPDATE core_research_object_revisions SET state='blocked'")
+
     def test_atomic_publisher_preserves_last_good_on_failure(self) -> None:
         foundation, raw_hash, snapshot_id = self.authority()
         publisher = ResearchObjectPublisher(foundation.connect)

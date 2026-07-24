@@ -1744,3 +1744,14 @@
 
 - cadence state 是 freshness policy，不是新增事实或 recommendation；missing/stale 不可静默升级为 fresh。
 - 此阶段只绑定 fast lane 到现有 A5 active identity；slow/periodic 的实际 runner 必须以后续 source-specific receipt 接入。
+
+## 2026-07-25 · E7-S2a Thesis object contract and migration
+
+- Decision：新增 versioned `thesis` research object，并同时迁移 SQLite 与 PostgreSQL 的 object type contract；不把 thesis 塞进 catalyst 或 dossier prose。
+- Why：thesis 必须有独立 evidence identity 和 revision history，后续 catalyst、falsifier 与 event 才能引用它而不丢失语义。
+- Evidence：focused object-contract/schema tests 覆盖 fresh schema、PostgreSQL migration presence，以及一张有对象记录的 legacy SQLite 表重建后保留 object hash 和 append-only protection。
+
+### Gotchas · E7-S2a
+
+- SQLite 不能 in-place 修改 CHECK；仅当既有表缺少 `thesis` 时显式 rebuild，逐列复制当前字段并重装 append-only triggers。
+- thesis 是研究上下文，不能据此生成 rating、target price、position 或 action。
