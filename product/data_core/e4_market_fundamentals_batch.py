@@ -18,6 +18,17 @@ E4_MARKET_FUNDAMENTALS_BATCH_SCHEMA_VERSION = "e4-s4-market-fundamentals-batch-v
 E4_MARKET_FUNDAMENTALS_CHECKPOINT_SCHEMA_VERSION = "e4-s4-market-fundamentals-checkpoint-v1"
 Collector = Callable[[str], AShareDataPacket]
 
+_QUOTE_FACTS = (
+    "last_price", "change_pct", "high", "low", "pe_ttm",
+    "circulating_market_cap", "market_cap", "pb", "observed_at",
+)
+_BAR_FACTS = ("trade_date", "adjustment", "open", "close", "high", "low", "volume")
+_FUNDAMENTAL_FACTS = (
+    "report_period", "announced_at", "report_type", "revenue",
+    "net_profit_parent", "total_assets", "total_liabilities", "total_equity",
+    "total_operating_income", "net_profit_parent_statement", "net_cash_operating",
+)
+
 
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -58,6 +69,58 @@ def _validate_official_receipt(path: Path) -> dict[str, Any]:
     return payload
 
 
+def _selected_facts(value: object, fields: tuple[str, ...]) -> dict[str, Any]:
+    """Copy only the documented display fields from a packet component.
+
+    Values are intentionally copied from the already validated packet summary,
+    rather than recalculated here.  The row's component receipts remain the
+    identity anchor for every fact in this small runtime-only projection.
+    """
+    if not isinstance(value, Mapping):
+        return {}
+    return {field: value[field] for field in fields if value.get(field) is not None}
+
+
+def _display_facts(
+    summary: Mapping[str, Any], *, market_available: bool, fundamentals_available: bool,
+) -> tuple[dict[str, Any], list[str]]:
+    """Make a bounded, non-interpretive projection suitable for display.
+
+    A fact is emitted only when its whole source component has already passed
+    the packet's real/publishable checks.  This prevents a partial response
+    from looking complete merely because one field happened to parse.
+    """
+    facts: dict[str, Any] = {}
+    blockers: list[str] = []
+    if market_available:
+        quote = _selected_facts(summary.get("quote"), _QUOTE_FACTS)
+        bars = summary.get("daily_bars")
+        latest_bar = _selected_facts(bars[-1], _BAR_FACTS) if isinstance(bars, list) and bars else {}
+        if quote and latest_bar:
+            facts["market"] = {
+                "quote": quote,
+                "latest_daily_bar": latest_bar,
+                "source_components": ["quote", "daily_bars"],
+            }
+        else:
+            blockers.append("market_display_facts_missing_validated_values")
+    else:
+        blockers.append("market_display_facts_unavailable")
+    if fundamentals_available:
+        periods = summary.get("fundamentals")
+        latest = _selected_facts(periods[0], _FUNDAMENTAL_FACTS) if isinstance(periods, list) and periods else {}
+        if latest.get("report_period") and latest.get("announced_at"):
+            facts["fundamentals"] = {
+                "latest_period": latest,
+                "source_components": ["fundamentals", "balance_sheet", "income_statement", "cash_flow"],
+            }
+        else:
+            blockers.append("fundamentals_display_facts_missing_validated_values")
+    else:
+        blockers.append("fundamentals_display_facts_unavailable")
+    return facts, blockers
+
+
 def _packet_row(ticker: str, summary: Mapping[str, Any]) -> dict[str, Any]:
     if str((summary.get("instrument") or {}).get("ticker") or "").upper() != ticker.upper():
         raise ValueError("market packet identity does not match requested ticker")
@@ -70,10 +133,16 @@ def _packet_row(ticker: str, summary: Mapping[str, Any]) -> dict[str, Any]:
     market_available = all((sources.get(key) or {}).get("publishable") for key in ("quote", "daily_bars"))
     fundamentals_available = all((sources.get(key) or {}).get("publishable") for key in required[2:])
     latest_fundamental = next(iter(summary.get("fundamentals") or ()), {})
+    display_facts, display_fact_blockers = _display_facts(
+        summary, market_available=market_available, fundamentals_available=fundamentals_available,
+    )
     return {
         "ticker": ticker.upper(), "status": "captured" if market_available or fundamentals_available else "partial",
         "data_kind": "real", "market_available": market_available,
-        "fundamentals_available": fundamentals_available, "blockers": blockers,
+        "fundamentals_available": fundamentals_available,
+        "display_facts": display_facts,
+        "display_fact_blockers": display_fact_blockers,
+        "blockers": blockers,
         "latest_financial_period": latest_fundamental.get("report_period") if isinstance(latest_fundamental, Mapping) else None,
         "latest_financial_announced_at": latest_fundamental.get("announced_at") if isinstance(latest_fundamental, Mapping) else None,
         "source_receipts": {key: {

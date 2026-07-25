@@ -19,6 +19,9 @@ from .evidence_gate import EvidenceCandidate, EvidenceGatePolicy, EvidenceRequir
 
 E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION = "e4-s4-partial-report-model-v1"
 OFFICIAL_DOCUMENT_HOSTS = frozenset({"static.cninfo.com.cn", "static.sse.com.cn", "www.sse.com.cn", "disc.static.szse.cn", "www.szse.cn", "www.bse.cn", "static.bse.cn"})
+_QUOTE_FACTS = ("last_price", "change_pct", "high", "low", "pe_ttm", "circulating_market_cap", "market_cap", "pb", "observed_at")
+_BAR_FACTS = ("trade_date", "adjustment", "open", "close", "high", "low", "volume")
+_FUNDAMENTAL_FACTS = ("report_period", "announced_at", "report_type", "revenue", "net_profit_parent", "total_assets", "total_liabilities", "total_equity", "total_operating_income", "net_profit_parent_statement", "net_cash_operating")
 
 
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
@@ -50,6 +53,48 @@ def _companion_by_ticker(path: Path, official_payload: Mapping[str, Any]) -> dic
     if not payload.get("official_receipt_sha256"):
         raise ValueError("market companion receipt is missing official lineage")
     return {str(row.get("ticker") or "").upper(): row for row in payload.get("tickers") or []}
+
+
+def _source_identity_present(source: object) -> bool:
+    if not isinstance(source, Mapping):
+        return False
+    raw_hash, manifest_hash, known_at = source.get("raw_hash"), source.get("manifest_hash"), source.get("known_at")
+    return (
+        isinstance(raw_hash, str) and len(raw_hash) == 64
+        and isinstance(manifest_hash, str) and len(manifest_hash) == 64
+        and bool(str(known_at or ""))
+    )
+
+
+def _selected_facts(value: object, keys: tuple[str, ...]) -> dict[str, Any]:
+    return {key: value[key] for key in keys if isinstance(value, Mapping) and value.get(key) is not None}
+
+
+def _companion_display_facts(companion: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Carry only a source-bound runtime projection into a partial model.
+
+    Older receipts legitimately have no ``display_facts``.  They remain
+    availability-only rather than being reinterpreted or filled from a newer
+    source response.
+    """
+    if not companion or not isinstance(companion.get("display_facts"), Mapping):
+        return {}
+    facts = companion["display_facts"]
+    sources = companion.get("source_receipts") or {}
+    output: dict[str, Any] = {}
+    market = facts.get("market") if isinstance(facts, Mapping) else None
+    if isinstance(market, Mapping) and set(market.get("source_components") or ()) == {"quote", "daily_bars"}:
+        quote = _selected_facts(market.get("quote"), _QUOTE_FACTS)
+        bar = _selected_facts(market.get("latest_daily_bar"), _BAR_FACTS)
+        if quote and bar and all(_source_identity_present(sources.get(component)) for component in ("quote", "daily_bars")):
+            output["market"] = {"quote": quote, "latest_daily_bar": bar, "source_components": ["quote", "daily_bars"]}
+    financial = facts.get("fundamentals") if isinstance(facts, Mapping) else None
+    financial_components = ("fundamentals", "balance_sheet", "income_statement", "cash_flow")
+    if isinstance(financial, Mapping) and set(financial.get("source_components") or ()) == set(financial_components):
+        latest = _selected_facts(financial.get("latest_period"), _FUNDAMENTAL_FACTS)
+        if latest.get("report_period") and latest.get("announced_at") and all(_source_identity_present(sources.get(component)) for component in financial_components):
+            output["fundamentals"] = {"latest_period": latest, "source_components": list(financial_components)}
+    return output
 
 
 def _partial_model(row: Mapping[str, Any], runtime_root: Path, companion: Mapping[str, Any] | None = None) -> dict[str, Any]:
@@ -100,12 +145,14 @@ def _partial_model(row: Mapping[str, Any], runtime_root: Path, companion: Mappin
         ),
     )
     context = build_context_pack(evidence_set)
+    input_facts = _companion_display_facts(companion)
     material = {
         "schema_version": E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION, "ticker": instrument.ticker,
         "as_of": known_at,
         "evidence_set_id": context.evidence_set_id, "evidence_manifest_hash": context.manifest_hash,
         "raw_hash": raw_hash, "document_id": row["document_id"],
         "sections": {"filings": "available", "market": "available" if companion and companion.get("market_available") else "missing_evidence", "fundamentals": "available" if companion and companion.get("fundamentals_available") else "missing_evidence", "valuation": "missing_evidence", "sell_side": "missing_evidence", "industry_position": "missing_evidence"},
+        "input_facts": input_facts,
         "decision_boundary": {"tier": "C", "action": "no_action", "target_price": None, "position_range": None},
     }
     model_hash = digest(material)
