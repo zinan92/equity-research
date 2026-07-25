@@ -191,3 +191,8 @@
 
 - 现在在哪里：PR #441 merged. A content-addressed, runtime-only list now freezes 20 real fact-bearing E4 partial models for numeric and page-citation review; it contains 20 pending human reviews and zero completed audits, with no raw paths or Tier/action escalation.
 - 下一步：an independent reviewer must produce identity-bound numeric and page review records before #218 can count any spot audit. In parallel, #218 remains failed at 40/95 report models and 0/80 Tier A/B; official coverage, governed valuation inputs and reviewed sell-side claims remain separate gates.
+
+## 2026-07-25 · E4-S4ah human spot-audit decision store
+
+- 现在在哪里：PR #445 merged. Active owners can append and export identity-bound numeric/page audit decisions; duplicate writes, member access and silent updates are rejected. This is a record path only: no automated or empty record receives audit credit.
+- 下一步：#218 remains at 0/20 completed spot audits until an independent reviewer records actual checks. Official evidence coverage (40/95), governed valuation inputs and reviewed sell-side claims remain separate acceptance gates.
