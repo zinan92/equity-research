@@ -171,3 +171,8 @@
 
 - 现在在哪里：PR #427 merged. The real matching E4 lineage now compiles 40 official-input partial models, with 27 carrying available market and fundamentals sections; 60 rows retain their official-input blockers.
 - 下一步：turn real reviewed sell-side claims, governed valuation inputs and page/numeric spot audits into acceptance evidence. Until then, all partial models remain Tier C/no_action rather than full reports.
+
+## 2026-07-25 · E4-S4ad source-bound display facts
+
+- 现在在哪里：PR #431 merged. E4 now retains a whitelisted, source-bound market and financial input projection rather than only availability flags. A fresh real `000001.SZ` receipt compiled into a partial model with both fact sections, while preserving Tier C/no_action.
+- 下一步：scale this runtime capture only where real provider packets succeed; separately resolve official filing coverage, reviewer decisions, governed valuation inputs, and page/numeric audit before treating any partial model as a publishable research report.
