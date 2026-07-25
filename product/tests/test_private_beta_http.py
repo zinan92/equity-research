@@ -17,6 +17,7 @@ if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
 from auth_store import create_invite, create_owner, redeem_invite  # noqa: E402
+from data_core.contracts import digest  # noqa: E402
 from data_store import initialize  # noqa: E402
 
 
@@ -25,6 +26,27 @@ class PrivateBetaHttpTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.tmp = tempfile.TemporaryDirectory()
         cls.db = Path(cls.tmp.name) / "private-beta.db"
+        cls.partial_model_root = Path(cls.tmp.name) / "partial-models"
+        cls.partial_model_root.mkdir()
+        partial_model = {
+            "schema_version": "e4-s4-partial-report-model-v1", "ticker": "300750.SZ", "data_kind": "real",
+            "as_of": "2026-07-25T00:00:00Z", "evidence_set_id": "set", "evidence_manifest_hash": "a" * 64,
+            "raw_hash": "b" * 64, "document_id": "official:1", "report_model_hash": "c" * 64,
+            "sections": {"filings": "available"}, "input_facts": {"market": {"quote": {"last_price": 123.0}}},
+            "blockers": ["partial_model_missing_valuation"], "numeric_spot_audit": False, "page_citation_spot_audit": False,
+            "decision_boundary": {"tier": "C", "action": "no_action", "target_price": None, "position_range": None},
+        }
+        partial_receipt = {
+            "schema_version": "e4-s4-partial-report-model-v1", "data_kind": "real",
+            "truth_boundary": {"tier_is_c_only": True, "counts_as_tier_a_or_b": False},
+            "models": [{"ticker": "300750.SZ", "status": "compiled", "model": partial_model}],
+        }
+        partial_receipt["receipt_hash"] = digest(partial_receipt)
+        receipt_name = "partial-report-models-test.json"
+        (cls.partial_model_root / receipt_name).write_text(json.dumps(partial_receipt), encoding="utf-8")
+        (cls.partial_model_root / "partial-report-models-latest.json").write_text(
+            json.dumps({"receipt": receipt_name, "receipt_hash": partial_receipt["receipt_hash"]}), encoding="utf-8",
+        )
         initialize(cls.db, force_seed=True)
         owner = create_owner("park@example.com", "owner-password-2026", "Park", cls.db)
         preview = create_invite(owner["id"], "preview", cls.db)
@@ -36,7 +58,7 @@ class PrivateBetaHttpTest(unittest.TestCase):
             sock.bind(("127.0.0.1", 0))
             cls.port = sock.getsockname()[1]
         env = dict(os.environ)
-        env.update({"PARK_DASHBOARD_DB": str(cls.db), "PARK_AUTH_REQUIRED": "1", "PARK_COOKIE_SECURE": "0"})
+        env.update({"PARK_DASHBOARD_DB": str(cls.db), "PARK_AUTH_REQUIRED": "1", "PARK_COOKIE_SECURE": "0", "PARK_PARTIAL_MODELS_ROOT": str(cls.partial_model_root)})
         cls.server = subprocess.Popen(
             [sys.executable, str(PRODUCT / "server.py"), "--host", "127.0.0.1", "--port", str(cls.port)],
             cwd=PRODUCT.parent, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
@@ -139,6 +161,8 @@ class PrivateBetaHttpTest(unittest.TestCase):
         self.assertEqual((status, payload["error"]), (403, "entitlement_required"))
         status, payload, _ = self.request("GET", "/api/research/batches/latest", cookie=cookie)
         self.assertEqual((status, payload["error"]), (403, "entitlement_required"))
+        status, payload, _ = self.request("GET", "/api/research/partial-model/300750", cookie=cookie)
+        self.assertEqual((status, payload["error"]), (403, "entitlement_required"))
 
     def test_paid_member_can_open_deep_reports(self) -> None:
         auth, cookie, _ = self.login("paid@example.com", "paid-password-2026")
@@ -146,6 +170,12 @@ class PrivateBetaHttpTest(unittest.TestCase):
         status, payload, _ = self.request("GET", "/api/reports/300750.SZ", cookie=cookie)
         self.assertEqual(status, 200)
         self.assertEqual(payload["ticker"], "300750.SZ")
+        status, payload, _ = self.request("GET", "/api/research/partial-model/300750", cookie=cookie)
+        self.assertEqual((status, payload["ticker"], payload["status"]), (200, "300750.SZ", "available"))
+        self.assertEqual(payload["decision_boundary"], {"tier": "C", "action": "no_action", "target_price": None, "position_range": None})
+        self.assertEqual(payload["input_facts"]["market"]["quote"]["last_price"], 123.0)
+        status, payload, _ = self.request("GET", "/api/research/partial-model/000001", cookie=cookie)
+        self.assertEqual((status, payload["ticker"], payload["status"]), (200, "000001.SZ", "unavailable"))
 
     def test_one_time_access_code_opens_industry_map_and_dossier_without_email(self) -> None:
         status, auth, headers = self.request("POST", "/api/auth/access-code", {"code": self.access_code})
