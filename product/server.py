@@ -272,7 +272,10 @@ def private_preview_get_entitlement(route: str) -> str | None:
         return "dashboard"
     if route.startswith("/api/reports/"):
         return "deep_reports"
-    if route in {"/api/members", "/api/members/audit", "/api/feedback", "/api/feedback/export", "/api/research/sell-side-claim-review/export"}:
+    if route in {
+        "/api/members", "/api/members/audit", "/api/feedback", "/api/feedback/export",
+        "/api/research/sell-side-claim-review/export", "/api/research/spot-audit-review/export",
+    } or route.startswith("/api/research/spot-audit-assignment/"):
         return "manage_members"
     if MANUAL_PAID_PILOT and route == "/api/billing/me":
         return "dashboard"
