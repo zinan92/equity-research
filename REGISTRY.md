@@ -151,3 +151,8 @@
 
 - 现在在哪里：PR #412 merged. The sell-side candidate extractor now resumes from a lineage-bound runtime checkpoint; the completed real corpus contains 71 compiled documents, 1 blocked document, and 1,047 unreviewed broker-assertion candidates.
 - 下一步：add the separate accept/reject gate before any candidate can become a C3 research claim; candidates remain non-actionable and cannot affect Tier, audit, target, position, or action.
+
+## 2026-07-25 · E4-S4aa governed claim admission
+
+- 现在在哪里：PR #416 merged. The only admission path now requires an explicit, identity-bound human review decision; the real runtime corpus truthfully records 1,047 candidates and zero admitted claims because no reviewer decision was fabricated.
+- 下一步：collect actual reviewer decisions for selected candidates, then execute the separately contracted numeric/page audit and governed valuation inputs; no admission alone changes Tier, target, position, or action.
