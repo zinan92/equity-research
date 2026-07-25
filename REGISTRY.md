@@ -211,3 +211,8 @@
 
 - 现在在哪里：PR #458 merged. The future review workstation can request one validated, owner-safe audit assignment without parsing runtime files or exposing raw paths/PDF bytes.
 - 下一步：the read API does not make an assignment completed. Claude-owned frontend work in #456 remains required before Park can perform a usable source/page review.
+
+## 2026-07-25 · E5-S5b private-preview audit route access
+
+- 现在在哪里：PR #462 merged. Private preview now explicitly admits the existing owner-only assignment read/export routes; anonymous and member sessions remain rejected, while POST review retains CSRF and append-only guards.
+- 下一步：complete Claude-owned #456 against this live allowlist, then verify the owner workbench can load an assignment and preserve failed form submissions without treating any assignment as complete.
