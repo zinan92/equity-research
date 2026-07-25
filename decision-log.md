@@ -1745,6 +1745,17 @@
 - display facts 是 runtime-only input projection；没有新产生 raw capture、估值 assumption、numeric/page spot audit 或 Tier A/B credit。
 - 旧 receipt 没有 display facts 时必须保持 availability-only，不能重新请求当前行情去填历史研究模型；某一次 provider packet 不完整时，整块 display facts 为空并写 blocker。
 
+## 2026-07-25 · E4-S4ae component failure receipts and retries
+
+- Decision：E4 packet batch 将每个 required source 的 non-real/non-publishable 状态和已有 data-gap reason 写成 `component_blockers`；仅对相同 collector、相同注册 source plan 最多尝试两次，记录每次 blocker history。
+- Why：原先任一 component 失效会被压缩为 `packet_validation_failed`，无法区分真实 source gap 与短暂 transport failure，也无法诚实指导后续补采。
+- Evidence：`test_e4_market_fundamentals_batch.py` 覆盖 component-level non-real/timeout taxonomy、无 display facts 和 bounded same-plan retry history。
+
+### Gotchas · E4-S4ae
+
+- retry 不得替换 source key、调用另一个 provider、读取 cache 或填入推断值；最终成功的 raw/source identity 是本次成功 attempt 的 identity，先前失败只保留 typed gap。
+- 同一个 completed receipt 不能因重试策略变化被续跑；`max_component_attempts` 进入 config identity，配置变化必须另开 runtime lineage。
+
 ## 2026-07-25 · E4-S4k official document failure taxonomy
 
 - Decision：E4 official-filing batch now classifies failed document captures as access denial, TLS failure, timeout, non-PDF response, or generic capture failure without retaining response body text in the receipt.

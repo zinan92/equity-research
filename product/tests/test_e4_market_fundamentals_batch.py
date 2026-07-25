@@ -4,7 +4,7 @@ from pathlib import Path
 import unittest
 PRODUCT=Path(__file__).resolve().parents[1]
 if str(PRODUCT) not in sys.path: sys.path.insert(0,str(PRODUCT))
-from data_core.e4_market_fundamentals_batch import run_market_fundamentals_batch  # noqa: E402
+from data_core.e4_market_fundamentals_batch import _collect_with_component_retries, _packet_row, run_market_fundamentals_batch  # noqa: E402
 
 REQUIRED=("quote","daily_bars","fundamentals","balance_sheet","income_statement","cash_flow")
 def identity(): return {"schema_version":"ashare-security-master-v1","data_kind":"real","truth_boundary":{"identity_only":True},"records":[{"ticker":f"{i:06d}.SZ"} for i in range(100)]}
@@ -45,6 +45,15 @@ class MarketFundamentalsBatchTest(unittest.TestCase):
    self.assertEqual(row['display_facts']['fundamentals']['latest_period']['report_period'],'2026-03-31')
    self.assertEqual(row['display_facts']['fundamentals']['source_components'],['fundamentals','balance_sheet','income_statement','cash_flow'])
    self.assertEqual(row['display_fact_blockers'],[])
+
+ def test_component_gaps_are_typed_and_retried_without_fallback(self):
+  summary={"instrument":{"ticker":"000001.SZ"},"data_gaps":[{"domain":"income_statement","reason":"transport_timeout"}],"sources":{k:{"data_kind":"real","publishable":True,"selected_source":k,"raw_hash":"a"*64,"manifest_hash":"b"*64,"known_at":"2026-07-24T00:00:00Z"} for k in REQUIRED}}
+  summary['sources']['income_statement']={"data_kind":"unknown","publishable":False,"selected_source":"income_statement"}
+  row=_packet_row('000001.SZ',summary)
+  self.assertEqual(row['status'],'partial');self.assertEqual(row['component_blockers']['income_statement'],['non_real_source_data','transport_timeout']);self.assertNotIn('fundamentals',row['display_facts'])
+  rows=iter([row,{**row,"status":"captured","market_available":True,"fundamentals_available":True,"component_blockers":{},"blockers":[]}])
+  replay=_collect_with_component_retries('000001.SZ',1,good_worker,max_attempts=2,collect_once=lambda *_:next(rows))
+  self.assertEqual(replay['collection_attempts'],2);self.assertEqual(replay['attempt_history'][0]['component_blockers']['income_statement'],['non_real_source_data','transport_timeout'])
 
  def test_interrupted_run_resumes_checkpoint_without_recollecting(self):
   with tempfile.TemporaryDirectory() as d:
