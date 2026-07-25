@@ -147,3 +147,7 @@
 
 - 现在在哪里：PR #408 merged. Candidate extraction now writes a content-addressed runtime-only receipt and latest pointer, preserving all input hashes and non-actionable truth boundaries.
 - 下一步：execute the corpus in bounded/checkpointed slices and report actual candidate counts; candidates remain unreviewed until a separate accept/reject gate exists.
+## 2026-07-25 · E4-S4z bounded candidate extraction
+
+- 现在在哪里：PR #412 merged. The sell-side candidate extractor now resumes from a lineage-bound runtime checkpoint; the completed real corpus contains 71 compiled documents, 1 blocked document, and 1,047 unreviewed broker-assertion candidates.
+- 下一步：add the separate accept/reject gate before any candidate can become a C3 research claim; candidates remain non-actionable and cannot affect Tier, audit, target, position, or action.
