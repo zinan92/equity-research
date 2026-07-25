@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E4-S4ah human spot-audit decision store
+
+- Decision：审计结论只能由 active owner 通过追加不可改的记录写入；每条记录绑定 assignment receipt 的 SHA-256、ticker、model/document/raw identity、reviewer、时间、数字/页码结果、页码、引用标签与理由，并可确定性导出。
+- Why：E4-S4ag 冻结了待审对象，但没有可信的审阅结论存储就无法证明谁核过哪一条来源；append-only 使重新审阅成为新记录而非覆盖历史。
+- Evidence：`test_spot_audit_store.py` 覆盖 owner append/export、member 拒绝和 duplicate 拒绝；private-beta HTTP suite 保持通过。
+
+### Gotchas · E4-S4ah
+
+- 这只是记录人类审阅的系统，不会由 agent、fixture 或空记录生成 `pass`；没有独立人类核验时 #218 spot audit 仍为 0。
+- exported decision 不会改写 partial model 或 E4 acceptance flags，也不产生 Tier A/B、target、position 或 action。
+
 ## 2026-07-25 · E4-S4ag pending human spot-audit assignments
 
 - Decision：从同一张已验 hash 的 real Tier-C partial-model receipt 中确定性选择 20 个同时具备 official document identity、完整 market/fundamentals source components 与数值事实的 ticker，生成 runtime-only assignment receipt 和 reviewer guide；所有 assignment 都是 `pending_human_review`。
