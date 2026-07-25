@@ -196,3 +196,8 @@
 
 - 现在在哪里：PR #445 merged. Active owners can append and export identity-bound numeric/page audit decisions; duplicate writes, member access and silent updates are rejected. This is a record path only: no automated or empty record receives audit credit.
 - 下一步：#218 remains at 0/20 completed spot audits until an independent reviewer records actual checks. Official evidence coverage (40/95), governed valuation inputs and reviewed sell-side claims remain separate acceptance gates.
+
+## 2026-07-25 · E4-S4ai explicit valuation assumptions
+
+- 现在在哪里：PR #449 merged. The valuation path now rejects omitted/default scenario values: every future assumption receipt must state its author, rationale, source identities, cutoff and complete bear/base/bull parameters.
+- 下一步：this is only a governed input contract. #218 gets no valuation, Tier, target or action credit until real analysts author and independently review source-bound assumptions, while official evidence coverage and sell-side review stay separate gates.
