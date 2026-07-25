@@ -161,3 +161,8 @@
 
 - 现在在哪里：PR #419 merged. Official evidence receipts now distinguish non-PDF, access-denied, TLS and timeout document failures; the fresh SSE/BJ probes remain explicit source gaps rather than fabricated coverage.
 - 下一步：#274 remains open. Expand only through a registered official source when it is actually reachable; do not bypass the official BSE/SSE access boundary or substitute an aggregator.
+
+## 2026-07-25 · E4-S4ab persisted reviewer decisions
+
+- 现在在哪里：PR #423 merged. An owner can append a hash-bound candidate review through the product backend and export it into the existing admission contract; duplicate, member and unauthenticated writes are rejected.
+- 下一步：obtain real reviewer decisions for selected candidates, then perform the required independent numeric/page audit. No stored decision alone changes Tier, target, position or action.
