@@ -52,6 +52,7 @@ from industry_intelligence import IndustryIntelligenceError, dossier_payload, ov
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
 from claim_review_store import ClaimReviewError, append_claim_review, export_claim_review_decisions, initialize_claim_reviews
 from spot_audit_store import SpotAuditReviewError, append_spot_audit_review, export_spot_audit_reviews, initialize_spot_audit_reviews
+from spot_audit_assignment_reader import SpotAuditAssignmentReadError, load_assignment
 from partial_model_store import PartialModelStoreError, load_partial_model
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
@@ -252,6 +253,8 @@ def route_entitlement(route: str) -> str:
     if route.startswith("/api/research/sell-side-claim-review"):
         return "manage_members"
     if route.startswith("/api/research/spot-audit-review"):
+        return "manage_members"
+    if route.startswith("/api/research/spot-audit-assignment/"):
         return "manage_members"
     if route.startswith("/api/research/partial-model/"):
         return "deep_reports"
@@ -595,6 +598,11 @@ class DashboardHandler(BaseHTTPRequestHandler):
             member = self._member()
             try: self._json(export_spot_audit_reviews(member, spot_audit_assignment_receipt()), headers={"Content-Disposition": "attachment; filename=spot-audit-review-decisions.json"})
             except (SpotAuditReviewError, PermissionError) as exc: self._json({"error": "spot_audit_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route.startswith("/api/research/spot-audit-assignment/"):
+            ticker = unquote(route.removeprefix("/api/research/spot-audit-assignment/"))
+            try: self._json(load_assignment(ticker, spot_audit_assignment_receipt()))
+            except SpotAuditAssignmentReadError as exc: self._json({"error":"spot_audit_assignment_unavailable","detail":str(exc)}, HTTPStatus.CONFLICT)
             return
         if route == "/api/dashboard":
             payload = dashboard_payload()
