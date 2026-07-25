@@ -1876,3 +1876,14 @@
 
 - assumption receipt 是可审计的研究判断输入，不是 provider fact；没有它不允许默认 bear/base/bull 参数。
 - 即便 C2 输出可复算，receipt 也只提供 valuation section input，绝不产生 Tier A/B、target、position 或 action。
+
+## 2026-07-25 · E4-S4z bounded sell-side candidate extraction
+
+- Decision：复用 E4-S4q/r 的既有 evidence batch 与 page-evidence contracts，以同一输入哈希生成 lineage-bound runtime checkpoint；每次只解析一个有界文档切片，完成时直接由 checkpoint rows 写最终 candidate receipt，不重跑整批 PDF。
+- Why：72 份真实 PDF 的整批重新解析在交互式运行中不稳定。断点和恢复必须保留已验证的 per-document output，同时不能让性能优化改变候选、来源或证据边界。
+- Evidence：`test_e4_sell_side_claim_candidates.py` 覆盖中断后的 continuation、最终 receipt 和 non-actionable boundary；真实 runtime corpus 完成为 72 documents：71 compiled、1 blocked、1,047 unreviewed candidates。
+
+### Gotchas · E4-S4z
+
+- checkpoint 仅对完全相同 batch/page-evidence input hashes 有效；换输入必须新建 lineage，不得混用旧 rows。
+- candidate 是 broker assertion candidate，不是已接纳的 C3 claim；必须经过后续 accept/reject gate 才可被任何研究输出引用，且本 story 不改变 Tier、审计、target、position 或 action。
