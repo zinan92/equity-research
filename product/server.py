@@ -50,6 +50,7 @@ from auth_store import (
 )
 from industry_intelligence import IndustryIntelligenceError, dossier_payload, overview_payload
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
+from claim_review_store import ClaimReviewError, append_claim_review, export_claim_review_decisions, initialize_claim_reviews
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
     payment_controls, record_payment, record_refund, set_payment_controls,
@@ -84,6 +85,22 @@ def private_report_root() -> Path:
 
 def private_research_pack_root() -> Path:
     return Path(os.environ.get("PARK_PRIVATE_RESEARCH_PACK", ROOT / "runtime" / "private-preview-research-pack"))
+
+
+def claim_review_candidate_receipt() -> Path:
+    root = Path(os.environ.get("PARK_SELL_SIDE_EVIDENCE_ROOT", ROOT / "runtime" / "sell-side-evidence")).resolve()
+    try:
+        pointer = json.loads((root / "sell-side-claim-candidates-latest.json").read_text(encoding="utf-8"))
+        name = str(pointer.get("receipt") or "")
+        if not name or Path(name).name != name:
+            raise ValueError("unsafe candidate receipt pointer")
+        target = (root / name).resolve()
+        target.relative_to(root)
+        if not target.is_file() or target.is_symlink():
+            raise ValueError("candidate receipt unavailable")
+        return target
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise ClaimReviewError("sell-side candidate receipt is unavailable") from exc
 
 
 def _sha256_file(path: Path) -> str:
@@ -214,6 +231,8 @@ def route_entitlement(route: str) -> str:
         return "manage_members"
     if route.startswith("/api/research/batches") or route == "/api/research/editorial-queue":
         return "manage_members"
+    if route.startswith("/api/research/sell-side-claim-review"):
+        return "manage_members"
     if route.startswith("/api/publication-packs") or route.startswith("/downloads/publication-packs"):
         return "publication_downloads"
     if route.startswith(("/api/reports/", "/api/research/evidence/", "/api/research/editorial", "/api/report-versions/")):
@@ -228,7 +247,7 @@ def private_preview_get_entitlement(route: str) -> str | None:
         return "dashboard"
     if route.startswith("/api/reports/"):
         return "deep_reports"
-    if route in {"/api/members", "/api/members/audit", "/api/feedback", "/api/feedback/export"}:
+    if route in {"/api/members", "/api/members/audit", "/api/feedback", "/api/feedback/export", "/api/research/sell-side-claim-review/export"}:
         return "manage_members"
     if MANUAL_PAID_PILOT and route == "/api/billing/me":
         return "dashboard"
@@ -543,6 +562,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
             else:
                 self._json(payload, headers={"Content-Disposition": "attachment; filename=private-preview-feedback.json"})
             return
+        if route == "/api/research/sell-side-claim-review/export":
+            member = self._member()
+            try:
+                self._json(export_claim_review_decisions(member, claim_review_candidate_receipt()), headers={"Content-Disposition": "attachment; filename=sell-side-claim-review-decisions.json"})
+            except (ClaimReviewError, PermissionError) as exc:
+                self._json({"error": "claim_review_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
         if route == "/api/dashboard":
             payload = dashboard_payload()
             payload["validation_errors"] = validate_invariants(payload)
@@ -675,7 +701,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if AUTH_REQUIRED and not verify_csrf(member, self.headers.get("X-CSRF-Token")):
             self._json({"error": "csrf_rejected"}, HTTPStatus.FORBIDDEN)
             return
-        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status", "/api/members/role"}
+        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status", "/api/members/role", "/api/research/sell-side-claim-review"}
         if MANUAL_PAID_PILOT:
             private_post_routes.update({"/api/billing/payment", "/api/billing/refund", "/api/billing/settings"})
         if PRIVATE_PREVIEW and route not in private_post_routes:
@@ -699,6 +725,17 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 self._json({"error": "private_preview_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
             else:
                 self._json({"status": "accepted", "feedback": result}, HTTPStatus.CREATED)
+            return
+        if route == "/api/research/sell-side-claim-review":
+            if not has_entitlement(member, "manage_members"):
+                self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN)
+                return
+            try:
+                result = append_claim_review(member, claim_review_candidate_receipt(), self._read_json())
+            except (ClaimReviewError, PermissionError) as exc:
+                self._json({"error": "claim_review_rejected", "detail": str(exc)}, HTTPStatus.BAD_REQUEST)
+            else:
+                self._json({"status": "accepted", "review": result}, HTTPStatus.CREATED)
             return
         if route == "/api/invites":
             if not has_entitlement(member, "manage_members"):
@@ -986,6 +1023,7 @@ def main() -> None:
     initialize(DB_PATH, force_seed=args.reset_demo)
     if AUTH_REQUIRED:
         initialize_auth()
+        initialize_claim_reviews()
     if MANUAL_PAID_PILOT:
         initialize_feedback()
         initialize_billing()
