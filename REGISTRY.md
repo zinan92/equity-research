@@ -156,3 +156,8 @@
 
 - 现在在哪里：PR #416 merged. The only admission path now requires an explicit, identity-bound human review decision; the real runtime corpus truthfully records 1,047 candidates and zero admitted claims because no reviewer decision was fabricated.
 - 下一步：collect actual reviewer decisions for selected candidates, then execute the separately contracted numeric/page audit and governed valuation inputs; no admission alone changes Tier, target, position, or action.
+
+## 2026-07-25 · E4-S4k official document taxonomy
+
+- 现在在哪里：PR #419 merged. Official evidence receipts now distinguish non-PDF, access-denied, TLS and timeout document failures; the fresh SSE/BJ probes remain explicit source gaps rather than fabricated coverage.
+- 下一步：#274 remains open. Expand only through a registered official source when it is actually reachable; do not bypass the official BSE/SSE access boundary or substitute an aggregator.
