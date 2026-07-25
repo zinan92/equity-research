@@ -1745,6 +1745,17 @@
 - A 200 response is not a successful official document capture unless it is validated PDF bytes; HTML challenge/denial pages cannot be treated as evidence.
 - Classification is observability only. It does not bypass an official source, substitute a mirror, or increase report/Tier/audit/target/position/action coverage.
 
+## 2026-07-25 · E4-S4ab persisted sell-side reviewer decisions
+
+- Decision：复用现有独立 auth DB 与 owner entitlement，以 append-only store 保存 sell-side candidate 的单次人工接纳/拒绝；导出严格复用 E4-S4aa decision receipt schema，再由既有 admission compiler 验证。
+- Why：候选必须经真实人工判断，不能让产品流程依赖手工编辑 JSON，也不能允许 member 或匿名访问伪造 reviewer 决策。
+- Evidence：`test_claim_review_store.py` 验证 owner 接纳→schema export→admission compile、重复拒绝和 member 拒绝；`test_private_preview_v1.py` 回归私有预览 auth 流程。
+
+### Gotchas · E4-S4ab
+
+- server 仅从受控 runtime root 的 content-addressed latest pointer 读取 candidate receipt；客户端不能指定任意路径或传入伪造 candidate identity。
+- 接纳的内容仍是已签名的 broker assertion，不是 verified company fact；它不自动增加 Tier、numeric/page audit、target、position 或 action。
+
 ## 2026-07-25 · E7-S1 三层 cadence receipt
 
 - Decision：在既有 A5 orchestration receipt 中附加 versioned slow/periodic/fast cadence plan；fast lane 的 last-good 只读取 canonical active 的 `activated_at`，slow/periodic 在没有各自独立成功 receipt 时显式为 missing。
