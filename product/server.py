@@ -51,6 +51,7 @@ from auth_store import (
 from industry_intelligence import IndustryIntelligenceError, dossier_payload, overview_payload
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
 from claim_review_store import ClaimReviewError, append_claim_review, export_claim_review_decisions, initialize_claim_reviews
+from spot_audit_store import SpotAuditReviewError, append_spot_audit_review, export_spot_audit_reviews, initialize_spot_audit_reviews
 from partial_model_store import PartialModelStoreError, load_partial_model
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
@@ -106,6 +107,18 @@ def claim_review_candidate_receipt() -> Path:
 
 def partial_model_root() -> Path:
     return Path(os.environ.get("PARK_PARTIAL_MODELS_ROOT", ROOT / "runtime" / "partial-report-models"))
+
+
+def spot_audit_assignment_receipt() -> Path:
+    root = Path(os.environ.get("PARK_SPOT_AUDIT_ROOT", ROOT / "runtime" / "spot-audits")).resolve()
+    try:
+        pointer = json.loads((root / "spot-audit-assignments-latest.json").read_text(encoding="utf-8")); name = str(pointer.get("receipt") or "")
+        if not name or Path(name).name != name: raise ValueError("unsafe audit assignment pointer")
+        target = (root / name).resolve(); target.relative_to(root)
+        if not target.is_file() or target.is_symlink(): raise ValueError("audit assignment unavailable")
+        return target
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        raise SpotAuditReviewError("spot-audit assignment receipt is unavailable") from exc
 
 
 def _sha256_file(path: Path) -> str:
@@ -237,6 +250,8 @@ def route_entitlement(route: str) -> str:
     if route.startswith("/api/research/batches") or route == "/api/research/editorial-queue":
         return "manage_members"
     if route.startswith("/api/research/sell-side-claim-review"):
+        return "manage_members"
+    if route.startswith("/api/research/spot-audit-review"):
         return "manage_members"
     if route.startswith("/api/research/partial-model/"):
         return "deep_reports"
@@ -576,6 +591,11 @@ class DashboardHandler(BaseHTTPRequestHandler):
             except (ClaimReviewError, PermissionError) as exc:
                 self._json({"error": "claim_review_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
             return
+        if route == "/api/research/spot-audit-review/export":
+            member = self._member()
+            try: self._json(export_spot_audit_reviews(member, spot_audit_assignment_receipt()), headers={"Content-Disposition": "attachment; filename=spot-audit-review-decisions.json"})
+            except (SpotAuditReviewError, PermissionError) as exc: self._json({"error": "spot_audit_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
         if route == "/api/dashboard":
             payload = dashboard_payload()
             payload["validation_errors"] = validate_invariants(payload)
@@ -715,7 +735,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if AUTH_REQUIRED and not verify_csrf(member, self.headers.get("X-CSRF-Token")):
             self._json({"error": "csrf_rejected"}, HTTPStatus.FORBIDDEN)
             return
-        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status", "/api/members/role", "/api/research/sell-side-claim-review"}
+        private_post_routes = {"/api/auth/logout", "/api/feedback", "/api/invites", "/api/members/status", "/api/members/role", "/api/research/sell-side-claim-review", "/api/research/spot-audit-review"}
         if MANUAL_PAID_PILOT:
             private_post_routes.update({"/api/billing/payment", "/api/billing/refund", "/api/billing/settings"})
         if PRIVATE_PREVIEW and route not in private_post_routes:
@@ -750,6 +770,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 self._json({"error": "claim_review_rejected", "detail": str(exc)}, HTTPStatus.BAD_REQUEST)
             else:
                 self._json({"status": "accepted", "review": result}, HTTPStatus.CREATED)
+            return
+        if route == "/api/research/spot-audit-review":
+            if not has_entitlement(member, "manage_members"):
+                self._json({"error": "owner_required"}, HTTPStatus.FORBIDDEN); return
+            try: result = append_spot_audit_review(member, spot_audit_assignment_receipt(), self._read_json())
+            except (SpotAuditReviewError, PermissionError) as exc: self._json({"error": "spot_audit_rejected", "detail": str(exc)}, HTTPStatus.BAD_REQUEST)
+            else: self._json({"status": "accepted", "review": result}, HTTPStatus.CREATED)
             return
         if route == "/api/invites":
             if not has_entitlement(member, "manage_members"):
