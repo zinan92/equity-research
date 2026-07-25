@@ -1734,6 +1734,16 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E5-S5a spot-audit assignment read API
+
+- Decision：review workstation 通过 owner-only API 读取单条经 receipt identity 验证的 assignment projection；只返回 ticker、数值目标、document identity、页码要求和审阅状态，不返回 raw path 或 PDF bytes。
+- Why：前端审阅界面需要一条稳定的安全数据合同，不能自行解析 runtime 文件或把技术路径暴露给用户。
+- Evidence：`test_spot_audit_assignment_reader.py` 覆盖安全投影、缺失 ticker 与 receipt 篡改拒绝；private-beta HTTP 与全量 suite 通过。
+
+### Gotchas · E5-S5a
+
+- 可读 assignment 仍是 pending human review，不等于可提交结论；API 不产生任何 E4 acceptance、Tier、target、position 或 action credit。
+
 ## 2026-07-25 · E4-S4ai explicit valuation assumptions
 
 - Decision：估值假设必须由具名作者显式提交，绑定研究截止日、理由、来源身份与完整 bear/base/bull 参数；缺任何输入即拒绝，不存在默认参数。
