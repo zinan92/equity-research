@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E4-S4ag pending human spot-audit assignments
+
+- Decision：从同一张已验 hash 的 real Tier-C partial-model receipt 中确定性选择 20 个同时具备 official document identity、完整 market/fundamentals source components 与数值事实的 ticker，生成 runtime-only assignment receipt 和 reviewer guide；所有 assignment 都是 `pending_human_review`。
+- Why：#218 需要 20 个独立、数字与页码级别的检查，但自动检查无法替代具名的人类审阅。先冻结可审对象和身份，避免审阅时换 ticker、换模型或用未绑定的 PDF。
+- Evidence：`test_e4_spot_audit_assignments.py` 覆盖确定性选择、少于 20 个/篡改输入拒绝、无 raw path 和 guide 输出。真实 receipt `d1822a2cd6e51232ba01382b3bb6c6b22a9d9af64a656b467fb452c65edd6443` 已生成 20/20 pending assignments。
+
+### Gotchas · E4-S4ag
+
+- assignment 不等于 audit result：它明确产生 completed=0，也不修改 E4 acceptance 的 `numeric_spot_audit` 或 `page_citation_spot_audit` 标志。
+- guide 仅包含 document/hash identity 和待核数值，不含 runtime raw path 或 PDF bytes；实际 reviewer record 必须独立记录 reviewer、时间、page、quoted label、pass/fail 和理由。
+
 ## 2026-07-25 · E4-S4af partial-model product read API
 
 - Decision：新增只读、会员权限受控的 `/api/research/partial-model/{ticker}`，只从配置 runtime root 内的 content-addressed latest pointer 读取，并重验 pointer、receipt hash、schema、ticker 与 Tier-C decision boundary；对合法但未编译的 ticker 返回明确 `unavailable`，不回退或猜测数据。
