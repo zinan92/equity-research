@@ -166,3 +166,8 @@
 
 - 现在在哪里：PR #423 merged. An owner can append a hash-bound candidate review through the product backend and export it into the existing admission contract; duplicate, member and unauthenticated writes are rejected.
 - 下一步：obtain real reviewer decisions for selected candidates, then perform the required independent numeric/page audit. No stored decision alone changes Tier, target, position or action.
+
+## 2026-07-25 · E4-S4ac companion-bound partial models
+
+- 现在在哪里：PR #427 merged. The real matching E4 lineage now compiles 40 official-input partial models, with 27 carrying available market and fundamentals sections; 60 rows retain their official-input blockers.
+- 下一步：turn real reviewed sell-side claims, governed valuation inputs and page/numeric spot audits into acceptance evidence. Until then, all partial models remain Tier C/no_action rather than full reports.
