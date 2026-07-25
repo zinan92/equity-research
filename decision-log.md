@@ -1734,6 +1734,16 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E4-S4ai explicit valuation assumptions
+
+- Decision：估值假设必须由具名作者显式提交，绑定研究截止日、理由、来源身份与完整 bear/base/bull 参数；缺任何输入即拒绝，不存在默认参数。
+- Why：C2 能复算但不能替代分析判断；将假设与事实来源分开，才能让未来估值输入可审计且不伪装为 provider fact。
+- Evidence：`test_e4_valuation_assumptions.py` 覆盖确定性与缺少情景拒绝；全量产品测试通过。
+
+### Gotchas · E4-S4ai
+
+- 收据只记录 analyst judgment，不构成 Tier、target、position 或 action；实际 authoring 与独立审阅仍未发生。
+
 ## 2026-07-25 · E4-S4ah human spot-audit decision store
 
 - Decision：审计结论只能由 active owner 通过追加不可改的记录写入；每条记录绑定 assignment receipt 的 SHA-256、ticker、model/document/raw identity、reviewer、时间、数字/页码结果、页码、引用标签与理由，并可确定性导出。
