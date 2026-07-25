@@ -43,3 +43,11 @@ def compile_sell_side_claim_candidates(batch_path:Path,page_evidence_path:Path,r
    except Exception as exc:rows.append({**base,'status':'blocked','blockers':['claim_candidate_input_invalid'],'error':type(exc).__name__})
  receipt={'schema_version':E4_SELL_SIDE_CLAIM_CANDIDATE_SCHEMA_VERSION,'data_kind':'real','batch_receipt_sha256':hashlib.sha256(braw).hexdigest(),'page_evidence_receipt_sha256':hashlib.sha256(eraw).hexdigest(),'documents':rows,'counts':{'compiled':sum(x['status']=='compiled' for x in rows),'candidates':sum(len(x.get('candidates',[])) for x in rows),'blocked':sum(x['status']=='blocked' for x in rows)},'truth_boundary':{'candidates_are_not_accepted_claims':True,'counts_as_tier_a_or_b':False,'counts_as_numeric_page_audit':False,'counts_as_position_or_target':False}}
  receipt['receipt_hash']=digest(receipt);return receipt
+
+def write_sell_side_claim_candidates(batch_path:Path,page_evidence_path:Path,runtime_root:Path)->dict[str,Any]:
+ """Persist a runtime-only, content-addressed candidate receipt."""
+ receipt=compile_sell_side_claim_candidates(batch_path,page_evidence_path,runtime_root)
+ path=runtime_root/f"sell-side-claim-candidates-{receipt['receipt_hash'][:16]}.json"
+ temporary=path.with_suffix(path.suffix+'.tmp');temporary.write_text(json.dumps(receipt,ensure_ascii=False,sort_keys=True,indent=2)+'\n',encoding='utf-8');temporary.replace(path)
+ pointer=runtime_root/'sell-side-claim-candidates-latest.json';tmp=pointer.with_suffix(pointer.suffix+'.tmp');tmp.write_text(json.dumps({'receipt':path.name,'receipt_hash':receipt['receipt_hash']},ensure_ascii=False,sort_keys=True,indent=2)+'\n',encoding='utf-8');tmp.replace(pointer)
+ return {'path':str(path),'receipt':receipt}
