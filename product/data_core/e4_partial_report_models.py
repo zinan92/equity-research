@@ -28,7 +28,13 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
 
 
 def _inside(root: Path, value: str) -> Path:
-    candidate = Path(value).resolve()
+    declared = Path(value)
+    candidate = declared.resolve() if declared.is_absolute() else (root / declared).resolve()
+    if not candidate.is_file() and not declared.is_absolute():
+        # Older E4 runtime receipts recorded the caller-relative raw path.  The
+        # raw hash is still rechecked below; only the basename can be resolved
+        # from the supplied batch root, never an arbitrary parent path.
+        candidate = (root / "raw" / declared.name).resolve()
     try:
         candidate.relative_to(root.resolve())
     except ValueError as exc:
@@ -139,8 +145,10 @@ def compile_partial_report_models(batch_receipt_path: Path, runtime_root: Path, 
     return receipt
 
 
-def write_partial_report_models(batch_receipt_path: Path, runtime_root: Path) -> dict[str, Any]:
-    receipt = compile_partial_report_models(batch_receipt_path, runtime_root)
+def write_partial_report_models(
+    batch_receipt_path: Path, runtime_root: Path, companion_receipt_path: Path | None = None,
+) -> dict[str, Any]:
+    receipt = compile_partial_report_models(batch_receipt_path, runtime_root, companion_receipt_path)
     path = runtime_root / f"partial-report-models-{receipt['receipt_hash'][:16]}.json"
     _write_json(path, receipt)
     _write_json(runtime_root / "partial-report-models-latest.json", {"receipt": path.name, "receipt_hash": receipt["receipt_hash"]})

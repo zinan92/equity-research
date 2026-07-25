@@ -11,7 +11,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
-from data_core.e4_partial_report_models import compile_partial_report_models  # noqa: E402
+from data_core.e4_partial_report_models import compile_partial_report_models, write_partial_report_models  # noqa: E402
 
 
 class PartialReportModelsTest(unittest.TestCase):
@@ -63,6 +63,17 @@ class PartialReportModelsTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "real E4-S4c"):
                 compile_partial_report_models(path, root)
 
+    def test_replays_legacy_caller_relative_raw_path_inside_supplied_root(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = self.batch_receipt(root)
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            filename = Path(payload["tickers"][0]["runtime_raw_path"]).name
+            payload["tickers"][0]["runtime_raw_path"] = f"product/runtime/old/raw/{filename}"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            result = compile_partial_report_models(path, root)
+            self.assertEqual(result["models"][0]["status"], "compiled")
+
     def test_rejects_companion_with_other_official_lineage(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -75,3 +86,20 @@ class PartialReportModelsTest(unittest.TestCase):
             }), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "does not match"):
                 compile_partial_report_models(path, root, companion)
+
+    def test_writer_binds_matching_real_market_companion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = self.batch_receipt(root)
+            companion = root / "companion.json"
+            companion.write_text(json.dumps({
+                "schema_version": "e4-s4-market-fundamentals-batch-v1", "data_kind": "real",
+                "official_receipt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                "truth_boundary": {"counts_as_tier_a_or_b": False},
+                "tickers": [{"ticker": "000001.SZ", "market_available": True, "fundamentals_available": True}],
+            }), encoding="utf-8")
+            written = write_partial_report_models(path, root, companion)
+            model = written["receipt"]["models"][0]["model"]
+            self.assertEqual(model["sections"]["market"], "available")
+            self.assertEqual(model["sections"]["fundamentals"], "available")
+            self.assertIsNotNone(written["receipt"]["companion_receipt_sha256"])

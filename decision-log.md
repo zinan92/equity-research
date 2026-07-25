@@ -1756,6 +1756,17 @@
 - server 仅从受控 runtime root 的 content-addressed latest pointer 读取 candidate receipt；客户端不能指定任意路径或传入伪造 candidate identity。
 - 接纳的内容仍是已签名的 broker assertion，不是 verified company fact；它不自动增加 Tier、numeric/page audit、target、position 或 action。
 
+## 2026-07-25 · E4-S4ac companion-bound partial report models
+
+- Decision：复用既有 partial-model compiler 的 companion contract，将 exact-lineage 的 market/fundamentals runtime receipt 接入 writer/CLI；同时兼容早期 caller-relative raw path，但只能在 supplied runtime root 的 `raw/<hash>.pdf` 内按 basename 重定位并重验 SHA-256。
+- Why：市场与财务数据已经存在，却因 writer/CLI 未传 companion 而未进入实际 report model。恢复这条已定义的数据链比再造报告框架更直接提升真实可交付内容。
+- Evidence：focused tests 覆盖 matching lineage、mismatch fail-closed 与 legacy runtime path replay。真实 runtime replay 编译 40 个 partial models，其中 27 个 market 和 fundamentals sections available；60 个未捕获官方 PDF 保持 blocked。
+
+### Gotchas · E4-S4ac
+
+- relative-path compatibility 不是放宽路径边界：候选文件仍必须在 supplied root，且 raw bytes/hash/PDF identity 全部复验。
+- `available` 只表示该 model 的 input section 可用；没有 valuation、industry position、accepted sell-side claims 或 audit 时，模型仍为 Tier C/no_action，不能称为完整 equity research report。
+
 ## 2026-07-25 · E7-S1 三层 cadence receipt
 
 - Decision：在既有 A5 orchestration receipt 中附加 versioned slow/periodic/fast cadence plan；fast lane 的 last-good 只读取 canonical active 的 `activated_at`，slow/periodic 在没有各自独立成功 receipt 时显式为 missing。
