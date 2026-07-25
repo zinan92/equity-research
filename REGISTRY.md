@@ -142,3 +142,8 @@
 
 - 现在在哪里：PR #404 merged. Page-verified sell-side PDFs can now yield deterministic sentence candidates retaining report/raw/parser/page/chunk identity. Every item is labelled an unreviewed broker assertion, not a verified company fact or accepted C3 claim.
 - 下一步：run the candidate extractor over the runtime corpus, then define a separate accept/reject review gate before any candidate can enter C3 claims, Tier A/B or the required page audit.
+
+## 2026-07-25 · E4-S4y candidate runtime receipt
+
+- 现在在哪里：PR #408 merged. Candidate extraction now writes a content-addressed runtime-only receipt and latest pointer, preserving all input hashes and non-actionable truth boundaries.
+- 下一步：execute the corpus in bounded/checkpointed slices and report actual candidate counts; candidates remain unreviewed until a separate accept/reject gate exists.
