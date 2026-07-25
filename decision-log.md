@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E4-S4ad source-bound display facts
+
+- Decision：E4 market/fundamentals runtime receipt 只投影 A4 已验证 packet 中白名单行情、最新复权日线和最新已披露财务字段；partial model 仅在每个引用 component 都保有 raw hash、manifest hash 与 known-at 时携带该 projection。
+- Why：原收据只保存 availability 与 identity，导致产品无法展示真实数值。直接复制已验证的 packet 值并保留各 component identity，既能支持摘要输入，又不将数据可用性错误提升为估值、审计或建议。
+- Evidence：`test_e4_market_fundamentals_batch.py` 与 `test_e4_partial_report_models.py` 覆盖白名单、缺值拒绝、来源身份与 legacy availability-only receipt；真实 `000001.SZ` bounded runtime receipt `market-fundamentals-batch-1efd59226b58e28a.json` 同时写入 market/fundamentals display facts。
+
+### Gotchas · E4-S4ad
+
+- display facts 是 runtime-only input projection；没有新产生 raw capture、估值 assumption、numeric/page spot audit 或 Tier A/B credit。
+- 旧 receipt 没有 display facts 时必须保持 availability-only，不能重新请求当前行情去填历史研究模型；某一次 provider packet 不完整时，整块 display facts 为空并写 blocker。
+
 ## 2026-07-25 · E4-S4k official document failure taxonomy
 
 - Decision：E4 official-filing batch now classifies failed document captures as access denial, TLS failure, timeout, non-PDF response, or generic capture failure without retaining response body text in the receipt.

@@ -96,10 +96,16 @@ class PartialReportModelsTest(unittest.TestCase):
                 "schema_version": "e4-s4-market-fundamentals-batch-v1", "data_kind": "real",
                 "official_receipt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                 "truth_boundary": {"counts_as_tier_a_or_b": False},
-                "tickers": [{"ticker": "000001.SZ", "market_available": True, "fundamentals_available": True}],
+                "tickers": [{"ticker": "000001.SZ", "market_available": True, "fundamentals_available": True,
+                    "source_receipts": {key: {"raw_hash": "a" * 64, "manifest_hash": "b" * 64, "known_at": "2026-07-24T00:00:00Z"} for key in ("quote", "daily_bars", "fundamentals", "balance_sheet", "income_statement", "cash_flow")},
+                    "display_facts": {"market": {"quote": {"last_price": 10.2, "invented": 999}, "latest_daily_bar": {"trade_date": "2026-07-24"}, "source_components": ["quote", "daily_bars"]},
+                        "fundamentals": {"latest_period": {"report_period": "2026-03-31"}, "source_components": ["fundamentals", "balance_sheet", "income_statement", "cash_flow"]}},
+                }],
             }), encoding="utf-8")
             written = write_partial_report_models(path, root, companion)
             model = written["receipt"]["models"][0]["model"]
             self.assertEqual(model["sections"]["market"], "available")
             self.assertEqual(model["sections"]["fundamentals"], "available")
             self.assertIsNotNone(written["receipt"]["companion_receipt_sha256"])
+            self.assertEqual(model["input_facts"]["market"]["quote"]["last_price"], 10.2)
+            self.assertNotIn("invented", model["input_facts"]["market"]["quote"])
