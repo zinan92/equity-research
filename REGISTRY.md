@@ -201,3 +201,8 @@
 
 - 现在在哪里：PR #449 merged. The valuation path now rejects omitted/default scenario values: every future assumption receipt must state its author, rationale, source identities, cutoff and complete bear/base/bull parameters.
 - 下一步：this is only a governed input contract. #218 gets no valuation, Tier, target or action credit until real analysts author and independently review source-bound assumptions, while official evidence coverage and sell-side review stay separate gates.
+
+## 2026-07-25 · E4-S4aj valuation-assumption store
+
+- 现在在哪里：PR #453 merged. Explicit valuation assumptions can now be owner-authored through append-only storage and exported with their source identity; duplicate receipts are rejected.
+- 下一步：the store does not create a real analyst judgment. #218 remains unchanged until real assumptions and review evidence are supplied, alongside its official-coverage, sell-side and spot-audit gates.
