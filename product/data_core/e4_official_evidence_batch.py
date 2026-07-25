@@ -199,6 +199,25 @@ def _discovery_failure_blockers(discovery: Any) -> list[str]:
     return ["official_filing_discovery_failed"]
 
 
+def _document_failure_blockers(outcome: Any) -> list[str]:
+    """Classify a failed official document capture without retaining response text."""
+    attempts = tuple(getattr(outcome, "attempts", ()) or ())
+    attempt = attempts[-1] if attempts else None
+    error = str(getattr(attempt, "error", "") or "").lower()
+    fetched = getattr(attempt, "fetched", None)
+    status_code = getattr(fetched, "status_code", None)
+    body = bytes(getattr(fetched, "body", b"") or b"").lower()
+    if status_code in {401, 403, 429} or b"denied by bot" in body or b"access denied" in body:
+        return ["official_filing_document_access_denied"]
+    if "handshake" in error or "ssl" in error or "tls" in error:
+        return ["official_filing_document_tls_failure"]
+    if "timed out" in error or "timeout" in error:
+        return ["official_filing_document_timeout"]
+    if "not a pdf" in error:
+        return ["official_filing_document_not_pdf"]
+    return ["official_filing_document_capture_failed"]
+
+
 def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -> dict[str, Any]:
     summary = batch.to_summary() if hasattr(batch, "to_summary") else {}
     discovery_pages = summary.get("discovery_pages", [])
@@ -218,7 +237,7 @@ def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -
     if not outcome.publishable:
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
-            "document_id": document_id, "blockers": ["official_filing_document_capture_failed"], "discovery_pages": discovery_pages,
+            "document_id": document_id, "blockers": _document_failure_blockers(outcome), "discovery_pages": discovery_pages,
         }
     try:
         return {"ticker": ticker, "discovery_pages": discovery_pages, **_raw_receipt(outcome, raw_root)}
