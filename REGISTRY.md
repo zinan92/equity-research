@@ -176,3 +176,8 @@
 
 - 现在在哪里：PR #431 merged. E4 now retains a whitelisted, source-bound market and financial input projection rather than only availability flags. A fresh real `000001.SZ` receipt compiled into a partial model with both fact sections, while preserving Tier C/no_action.
 - 下一步：scale this runtime capture only where real provider packets succeed; separately resolve official filing coverage, reviewer decisions, governed valuation inputs, and page/numeric audit before treating any partial model as a publishable research report.
+
+## 2026-07-25 · E4-S4ae component failure taxonomy
+
+- 现在在哪里：PR #434 merged. E4 market/fundamental collection now preserves source-component blockers and bounded same-plan retry history instead of collapsing all failures into one packet validation error.
+- 下一步：run the new receipt contract against the remaining 100-ticker baseline, use only its typed source gaps to guide recovery, and retain every unavailable section as input-only / no_action.
