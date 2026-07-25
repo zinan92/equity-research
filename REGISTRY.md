@@ -181,3 +181,8 @@
 
 - 现在在哪里：PR #434 merged. E4 market/fundamental collection now preserves source-component blockers and bounded same-plan retry history instead of collapsing all failures into one packet validation error.
 - 下一步：run the new receipt contract against the remaining 100-ticker baseline, use only its typed source gaps to guide recovery, and retain every unavailable section as input-only / no_action.
+
+## 2026-07-25 · E4-S4af source-bound partial-model API
+
+- 现在在哪里：PR #437 merged. Deep-report members can read a source-bound partial model through a fail-closed endpoint that validates receipt identity, root containment and the Tier C/no_action boundary; unavailable tickers receive an explicit status rather than fallback prose or facts.
+- 下一步：#218 remains failed at 40/95 report models, 0/80 Tier A/B and 0/20 page/numeric audits. Continue real official evidence coverage, governed valuation inputs, reviewed sell-side claims and auditable spot checks; the new read API cannot be used to claim a full report or recommendation.
