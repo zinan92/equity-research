@@ -216,3 +216,8 @@
 
 - 现在在哪里：PR #462 merged. Private preview now explicitly admits the existing owner-only assignment read/export routes; anonymous and member sessions remain rejected, while POST review retains CSRF and append-only guards.
 - 下一步：complete Claude-owned #456 against this live allowlist, then verify the owner workbench can load an assignment and preserve failed form submissions without treating any assignment as complete.
+
+## 2026-07-25 · E5-S5 evidence-first spot-audit workstation
+
+- 现在在哪里：PR #464 merged. The private-preview Owner surface can load one signed E4 audit assignment, render numeric/page evidence identity and the raw-document boundary, and submit only a validated append-only decision after the backend accepts it. Browser smoke loaded the real `000001.SZ` assignment without submitting a fabricated review.
+- 下一步：perform genuine independent source/page checks for the 20 assigned tickers. #218 remains at 0/20 completed audits until those actual reviewer records exist; the workbench itself adds no Tier, target, position or action credit.
