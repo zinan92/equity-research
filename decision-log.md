@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E4-S4k official document failure taxonomy
+
+- Decision：E4 official-filing batch now classifies failed document captures as access denial, TLS failure, timeout, non-PDF response, or generic capture failure without retaining response body text in the receipt.
+- Why：SH discovery may succeed while the same official static-document endpoint returns a bot-denial HTML page. Treating that as a generic failure hides the boundary and encourages unsafe fallback; a typed receipt makes source work auditable.
+- Evidence：focused official evidence tests cover content/transport taxonomy. A live `600000.SH` probe is classified `official_filing_document_not_pdf`; live `920002.BJ` remains `official_filing_index_empty` from the registered CNINFO official index.
+
+### Gotchas · E4-S4k document taxonomy
+
+- A 200 response is not a successful official document capture unless it is validated PDF bytes; HTML challenge/denial pages cannot be treated as evidence.
+- Classification is observability only. It does not bypass an official source, substitute a mirror, or increase report/Tier/audit/target/position/action coverage.
+
 ## 2026-07-25 · E7-S1 三层 cadence receipt
 
 - Decision：在既有 A5 orchestration receipt 中附加 versioned slow/periodic/fast cadence plan；fast lane 的 last-good 只读取 canonical active 的 `activated_at`，slow/periodic 在没有各自独立成功 receipt 时显式为 missing。
@@ -1898,3 +1909,14 @@
 
 - `--init-empty` 仅写明确的零决策 receipt，绝不伪造 reviewer 或 LLM 审核；实际接纳需要独立提供 decision receipt。
 - 接纳输出是 C3-compatible page-cited broker assertion，不自动升为 Tier A/B、numeric/page audit、target、position 或 action；这些需要其各自的后续验证合同。
+
+## 2026-07-25 · E4-S4k SSE 同源 TLS transport fallback
+
+- Decision：仅当 Python urllib 对 `query.sse.com.cn` 的官方 SSE index 出现 TLS/SSL handshake failure 时，使用系统 curl 对完全相同的官方 URL、headers 与 HTTPS host allowlist 进行一次有界 transport fallback；curl 失败或跳出 host 仍失败。
+- Why：同一 URL 在本运行环境中 curl 可成功返回 SSE 官方 index，而 urllib 会在 TLS handshake 超时。保持同源和 raw capture 能恢复 discovery，不需要 aggregator 或跨交易所 fallback。
+- Evidence：live probe `600519.SH` 成功捕获 30 条 SSE official discovery；focused adapter tests 覆盖 final-header parsing。
+
+### Gotchas · E4-S4k SSE fallback
+
+- fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
+- curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。

@@ -104,6 +104,22 @@ class OfficialEvidenceBatchTest(unittest.TestCase):
             row = _result_for_batch("600519.SH", batch, root)
             self.assertEqual(row["blockers"], [expected])
 
+    def test_document_failures_preserve_access_transport_and_content_taxonomy(self) -> None:
+        root = Path(tempfile.mkdtemp())
+        cases = (
+            (SimpleNamespace(error="not a PDF", fetched=SimpleNamespace(status_code=200, body=b"html")), "official_filing_document_not_pdf"),
+            (SimpleNamespace(error="URLError: TLS handshake timed out", fetched=None), "official_filing_document_tls_failure"),
+            (SimpleNamespace(error="HTTP error", fetched=SimpleNamespace(status_code=200, body=b"denied by bot")), "official_filing_document_access_denied"),
+        )
+        for attempt, expected in cases:
+            outcome = SimpleNamespace(publishable=False, attempts=(attempt,))
+            batch = SimpleNamespace(
+                discovery=SimpleNamespace(publishable=True), documents={"document": outcome},
+                to_summary=lambda: {"discovery_pages": []},
+            )
+            row = _result_for_batch("600519.SH", batch, root)
+            self.assertEqual(row["blockers"], [expected])
+
     def test_hard_timeout_terminates_hung_child_and_continues(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
