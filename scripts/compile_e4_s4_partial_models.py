@@ -10,7 +10,10 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("batch_receipt", type=Path)
     parser.add_argument("--runtime-root", type=Path, required=True)
+    parser.add_argument("--market-fundamentals-companion", type=Path)
     args = parser.parse_args()
-    result = write_partial_report_models(args.batch_receipt, args.runtime_root)
+    result = write_partial_report_models(
+        args.batch_receipt, args.runtime_root, args.market_fundamentals_companion,
+    )
     print(json.dumps({"path": result["path"], "counts": result["receipt"]["counts"], "truth_boundary": result["receipt"]["truth_boundary"]}, ensure_ascii=False, sort_keys=True, indent=2))
 if __name__ == "__main__": main()
