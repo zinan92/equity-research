@@ -206,3 +206,8 @@
 
 - 现在在哪里：PR #453 merged. Explicit valuation assumptions can now be owner-authored through append-only storage and exported with their source identity; duplicate receipts are rejected.
 - 下一步：the store does not create a real analyst judgment. #218 remains unchanged until real assumptions and review evidence are supplied, alongside its official-coverage, sell-side and spot-audit gates.
+
+## 2026-07-25 · E5-S5a audit assignment read API
+
+- 现在在哪里：PR #458 merged. The future review workstation can request one validated, owner-safe audit assignment without parsing runtime files or exposing raw paths/PDF bytes.
+- 下一步：the read API does not make an assignment completed. Claude-owned frontend work in #456 remains required before Park can perform a usable source/page review.
