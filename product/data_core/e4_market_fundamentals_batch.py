@@ -38,7 +38,7 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
 
 def _run_config(
     identity_receipt_path: Path, official_receipt_path: Path, *, max_tickers: int,
-    inter_ticker_delay_seconds: float, collector_timeout_seconds: float,
+    inter_ticker_delay_seconds: float, collector_timeout_seconds: float, max_component_attempts: int,
 ) -> dict[str, Any]:
     return {
         "identity_receipt_sha256": hashlib.sha256(identity_receipt_path.read_bytes()).hexdigest(),
@@ -46,6 +46,7 @@ def _run_config(
         "max_tickers": max_tickers,
         "inter_ticker_delay_seconds": inter_ticker_delay_seconds,
         "collector_timeout_seconds": collector_timeout_seconds,
+        "max_component_attempts": max_component_attempts,
     }
 
 
@@ -126,22 +127,31 @@ def _packet_row(ticker: str, summary: Mapping[str, Any]) -> dict[str, Any]:
         raise ValueError("market packet identity does not match requested ticker")
     sources = summary.get("sources") or {}
     required = ("quote", "daily_bars", "fundamentals", "balance_sheet", "income_statement", "cash_flow")
-    if any((sources.get(key) or {}).get("data_kind") != "real" for key in required):
-        raise ValueError("market packet contains non-real source data")
-    gaps = list(summary.get("data_gaps") or [])
-    blockers = [f"{gap.get('domain')}: {gap.get('reason')}" for gap in gaps]
-    market_available = all((sources.get(key) or {}).get("publishable") for key in ("quote", "daily_bars"))
-    fundamentals_available = all((sources.get(key) or {}).get("publishable") for key in required[2:])
+    gaps = {str(gap.get("domain") or ""): str(gap.get("reason") or "source_not_publishable") for gap in summary.get("data_gaps") or [] if isinstance(gap, Mapping)}
+    component_blockers: dict[str, list[str]] = {}
+    for key in required:
+        source = sources.get(key) or {}
+        reasons: list[str] = []
+        if source.get("data_kind") != "real":
+            reasons.append("non_real_source_data")
+        if not source.get("publishable"):
+            reasons.append(gaps.get(key, "source_not_publishable"))
+        if reasons:
+            component_blockers[key] = sorted(set(reasons))
+    blockers = [f"{key}: {reason}" for key, reasons in component_blockers.items() for reason in reasons]
+    market_available = not any(key in component_blockers for key in ("quote", "daily_bars"))
+    fundamentals_available = not any(key in component_blockers for key in required[2:])
     latest_fundamental = next(iter(summary.get("fundamentals") or ()), {})
     display_facts, display_fact_blockers = _display_facts(
         summary, market_available=market_available, fundamentals_available=fundamentals_available,
     )
     return {
-        "ticker": ticker.upper(), "status": "captured" if market_available or fundamentals_available else "partial",
+        "ticker": ticker.upper(), "status": "captured" if market_available and fundamentals_available else "partial" if market_available or fundamentals_available else "failed",
         "data_kind": "real", "market_available": market_available,
         "fundamentals_available": fundamentals_available,
         "display_facts": display_facts,
         "display_fact_blockers": display_fact_blockers,
+        "component_blockers": component_blockers,
         "blockers": blockers,
         "latest_financial_period": latest_fundamental.get("report_period") if isinstance(latest_fundamental, Mapping) else None,
         "latest_financial_announced_at": latest_fundamental.get("announced_at") if isinstance(latest_fundamental, Mapping) else None,
@@ -188,21 +198,46 @@ def _collect_isolated(
         return {"ticker": ticker.upper(), "status": "failed", "data_kind": "real", "market_available": False, "fundamentals_available": False, "blockers": ["packet_validation_failed"], "error": type(exc).__name__, "message": str(exc)[:240]}
 
 
+def _collect_with_component_retries(
+    ticker: str, timeout_seconds: float, worker: Callable[[str, Any], None], *, max_attempts: int,
+    collect_once: Callable[[str, float, Callable[[str, Any], None]], dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Retry only the unchanged worker/source plan and retain every attempt's gap."""
+    if not 1 <= max_attempts <= 3:
+        raise ValueError("max component attempts must be 1-3")
+    collect_once = collect_once or (lambda symbol, timeout, runner: _collect_isolated(symbol, timeout, runner))
+    history: list[dict[str, Any]] = []
+    last: dict[str, Any] | None = None
+    for attempt in range(1, max_attempts + 1):
+        current = collect_once(ticker, timeout_seconds, worker)
+        history.append({
+            "attempt": attempt, "status": current.get("status"),
+            "component_blockers": current.get("component_blockers") or {},
+            "blockers": list(current.get("blockers") or ()),
+        })
+        last = current
+        if current.get("status") == "captured":
+            break
+    if last is None:
+        raise RuntimeError("component retry collector produced no result")
+    return {**last, "collection_attempts": len(history), "attempt_history": history}
+
+
 def run_market_fundamentals_batch(
     identity_receipt_path: Path, official_receipt_path: Path, runtime_root: Path, *,
     max_tickers: int = 100, inter_ticker_delay_seconds: float = 1.0,
-    collector_timeout_seconds: float = 30.0,
+    collector_timeout_seconds: float = 30.0, max_component_attempts: int = 2,
     worker: Callable[[str, Any], None] = _collector_worker,
     sleep: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
     if not isinstance(max_tickers, int) or not 1 <= max_tickers <= 100:
         raise ValueError("max_tickers must be 1-100")
-    if collector_timeout_seconds <= 0 or inter_ticker_delay_seconds < 0:
+    if collector_timeout_seconds <= 0 or inter_ticker_delay_seconds < 0 or not 1 <= max_component_attempts <= 3:
         raise ValueError("batch timeout and delay must be valid")
     _validate_official_receipt(official_receipt_path)
     tickers = load_real_identity_tickers(identity_receipt_path)[:max_tickers]
     runtime_root.mkdir(parents=True, exist_ok=True)
-    config = _run_config(identity_receipt_path, official_receipt_path, max_tickers=max_tickers, inter_ticker_delay_seconds=inter_ticker_delay_seconds, collector_timeout_seconds=collector_timeout_seconds)
+    config = _run_config(identity_receipt_path, official_receipt_path, max_tickers=max_tickers, inter_ticker_delay_seconds=inter_ticker_delay_seconds, collector_timeout_seconds=collector_timeout_seconds, max_component_attempts=max_component_attempts)
     latest_path = runtime_root / "market-fundamentals-batch-latest.json"
     previous: dict[str, Mapping[str, Any]] = {}
     resuming_checkpoint = False
@@ -231,7 +266,7 @@ def run_market_fundamentals_batch(
         if prior:
             rows.append({"ticker": ticker, "status": "skipped", "data_kind": "real", "market_available": bool(prior.get("market_available")), "fundamentals_available": bool(prior.get("fundamentals_available")), "blockers": ["already_completed"]})
             continue
-        rows.append(_collect_isolated(ticker, collector_timeout_seconds, worker))
+        rows.append(_collect_with_component_retries(ticker, collector_timeout_seconds, worker, max_attempts=max_component_attempts))
         _write_checkpoint(runtime_root, config=config, rows=rows)
         if index < len(tickers) - 1 and inter_ticker_delay_seconds:
             sleep(inter_ticker_delay_seconds)
