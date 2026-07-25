@@ -132,3 +132,8 @@
 
 - 现在在哪里：PR #396 merged. At the explicit `2026-07-25T23:59:59Z` research cutoff, the real 100-ticker replay compiled 40 official-primary Context Pack model inputs; 27 have market/fundamentals and 18 have page-verified C3 sell-side sections. Actual source `known_at` and official-context timestamps remain separately auditable.
 - 下一步：E4-S4 acceptance remains failed: convert legitimate valuation inputs and page-cited analyst claims, perform the required numeric/page audit, and recover official coverage without counting rating-only matrices as Tier A/B, target, position or action evidence.
+
+## 2026-07-25 · E4-S4w valuation receipt adapter
+
+- 现在在哪里：PR #400 merged. C2 valuation can now be replayed only from explicit canonical source hashes, an explicit assumption receipt and matching E4 partial Context Pack identity; missing or future-known source inputs are blocked and every output remains Tier C/no_action.
+- 下一步：produce governed, real assumption/source receipts for the corpus, then separately extract page-cited analyst claims and complete the required numeric/page audit. The adapter itself adds no valuation coverage until those real inputs exist.
