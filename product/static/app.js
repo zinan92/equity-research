@@ -3,6 +3,7 @@ const state = {
   reportOpener: null, reportPushed: false, auth: null, privatePreview: null,
   industry: null, industryLoading: false, industryTab: "segments", industrySelections: {},
   industryPromise: null, dossierQuery: "", dossierResults: [], dossierCode: null, industryResizeObserver: null,
+  spotAudit: null,
 };
 const colors = ["#17332d", "#245346", "#35685a", "#497a6b", "#5d8c7d", "#739c90", "#8caaa0", "#a7bcb4"];
 
@@ -306,6 +307,113 @@ async function loadOwnerPreview() {
     $("#owner-billing-events").innerHTML = `<p>账单数据读取失败：${escapeHtml(error.message)}</p>`;
   }
 }
+
+function renderSpotAuditEvidence(assignment) {
+  const numeric = assignment.numeric_check || {};
+  const pageCheck = assignment.page_citation_check || {};
+  const identity = assignment.document_identity || {};
+  const context = assignment.financial_context || {};
+  const sourceComponents = Array.isArray(numeric.source_components) ? numeric.source_components.join("、") : (numeric.source_components ?? "—");
+  const rows = [
+    ["股票代码", assignment.ticker],
+    ["复核状态", assignment.review_status === "pending_human_review" ? "待人工复核" : assignment.review_status],
+    ["任务收据哈希", assignment.receipt_hash],
+    ["报告模型哈希", assignment.report_model_hash],
+    ["文档 ID", identity.document_id],
+    ["文档原始哈希", identity.raw_hash],
+    ["数值目标路径", numeric.fact_path],
+    ["期望数值", numeric.expected_value],
+    ["观测时间", numeric.observed_at],
+    ["数值来源构成", sourceComponents],
+    ["页码引用要求", pageCheck.required_reviewer_record ? "需复核人记录引用页码与原文" : "—"],
+    ["页码引用文档 ID", pageCheck.document_id],
+    ["页码引用文档哈希", pageCheck.raw_hash],
+    ["报告期", context.report_period],
+    ["披露时间", context.announced_at],
+  ];
+  $("#spot-audit-evidence-fields").innerHTML = rows.map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value ?? "—")}</dd></div>`).join("");
+}
+
+function setSpotAuditStatus(message, tone = "") {
+  const status = $("#spot-audit-status");
+  status.textContent = message;
+  status.dataset.tone = tone;
+}
+
+async function loadSpotAuditAssignment(ticker) {
+  const evidence = $("#spot-audit-evidence");
+  const reviewForm = $("#spot-audit-review-form");
+  evidence.hidden = true;
+  reviewForm.reset();
+  $("#spot-audit-review-status").textContent = "";
+  state.spotAudit = null;
+  setSpotAuditStatus("正在读取抽核任务…");
+  try {
+    const assignment = await fetchJson(`/api/research/spot-audit-assignment/${encodeURIComponent(ticker)}`);
+    if (assignment.status === "unavailable") {
+      setSpotAuditStatus(`${ticker} 当前没有待复核的抽核任务，或原始文档不可用。`, "empty");
+      return;
+    }
+    state.spotAudit = assignment;
+    renderSpotAuditEvidence(assignment);
+    evidence.hidden = false;
+    setSpotAuditStatus(`已加载 ${assignment.ticker} 的抽核任务；复核前请核对以下证据字段。`, "loaded");
+  } catch (error) {
+    setSpotAuditStatus(`抽核任务读取失败：${error.message}`, "error");
+  }
+}
+
+$("#spot-audit-lookup-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const ticker = new FormData(event.currentTarget).get("ticker").trim();
+  if (!ticker) return;
+  loadSpotAuditAssignment(ticker);
+});
+
+$("#spot-audit-review-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const output = $("#spot-audit-review-status");
+  output.textContent = "";
+  if (!state.spotAudit || state.spotAudit.status !== "available") {
+    output.textContent = "请先加载一个可用的抽核任务。";
+    return;
+  }
+  const data = Object.fromEntries(new FormData(form).entries());
+  const pageNumber = Number(data.page_number);
+  const quotedLabel = String(data.quoted_label || "").trim();
+  const rationale = String(data.rationale || "").trim();
+  if (data.numeric_result !== "pass" && data.numeric_result !== "fail") { output.textContent = "请选择数值核对结果。"; return; }
+  if (data.page_result !== "pass" && data.page_result !== "fail") { output.textContent = "请选择页码引用核对结果。"; return; }
+  if (!Number.isInteger(pageNumber) || pageNumber < 1) { output.textContent = "引用页码必须是正整数。"; return; }
+  if (!quotedLabel) { output.textContent = "请填写引用原文标签或句子。"; return; }
+  if (rationale.length < 10) { output.textContent = "复核理由至少需要 10 个字。"; return; }
+  const button = form.querySelector("button[type=submit]");
+  button.disabled = true;
+  try {
+    const result = await fetchJson("/api/research/spot-audit-review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ticker: state.spotAudit.ticker,
+        numeric_result: data.numeric_result,
+        page_result: data.page_result,
+        page_number: pageNumber,
+        quoted_label: quotedLabel,
+        rationale,
+      }),
+    });
+    output.textContent = `已保存复核决定：${result.review.review_id}`;
+    output.dataset.state = "saved";
+    setSpotAuditStatus(`${state.spotAudit.ticker} 的复核决定已提交，不可再修改。`, "saved");
+    $("#spot-audit-evidence").hidden = true;
+  } catch (error) {
+    output.dataset.state = "error";
+    output.textContent = `提交失败，输入已保留：${error.message}`;
+  } finally {
+    button.disabled = false;
+  }
+});
 
 function regimeTitle(regime) {
   if (String(regime).includes("防守")) return `保留火力，<br><em>先让现金替你等待。</em>`;

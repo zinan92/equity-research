@@ -1587,6 +1587,32 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
 .owner-list strong { color: var(--ink); font-size: 10px; }
 .owner-list small { margin-top: 5px; color: var(--muted); font-size: 8px; line-height: 1.5; }
 .owner-list button { margin-top: 7px; padding: 5px 8px; color: var(--vermilion); background: transparent; border: 1px solid #e0b5b0; font-size: 8px; }
+.spot-audit-workstation { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+.spot-audit-workstation h3 { margin: 0; color: var(--ink); font-size: 13px; }
+.spot-audit-boundary { margin: 12px 0; padding: 12px 14px; color: var(--muted); background: #f4f6f8; border-left: 2px solid #8a6a38; font-size: 10px; line-height: 1.65; }
+.spot-audit-lookup { display: flex; align-items: end; gap: 12px; max-width: 420px; }
+.spot-audit-lookup label { flex: 1; display: grid; gap: 5px; color: var(--muted); font-size: 9px; }
+.spot-audit-lookup input { width: 100%; padding: 9px; border: 1px solid var(--line); font: inherit; }
+.spot-audit-lookup button { min-height: 38px; padding: 0 16px; }
+.spot-audit-status { margin: 12px 0; color: var(--muted); font-size: 10px; }
+.spot-audit-status[data-tone="error"] { color: var(--vermilion); }
+.spot-audit-status[data-tone="saved"] { color: var(--positive); }
+.spot-audit-evidence { margin-top: 16px; }
+#spot-audit-evidence-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin: 0 0 4px; padding: 18px; background: #f7f9fb; border-left: 2px solid #a9bacb; }
+#spot-audit-evidence-fields dt { color: var(--muted); font-size: 9px; }
+#spot-audit-evidence-fields dd { margin: 5px 0 0; color: var(--ink); font-family: var(--mono); font-size: 9px; overflow-wrap: anywhere; }
+.spot-audit-review-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; padding: 16px; background: #f4f6f8; }
+.spot-audit-review-form fieldset { display: grid; gap: 7px; padding: 0; border: 0; }
+.spot-audit-review-form legend { padding: 0; margin-bottom: 4px; color: var(--muted); font-size: 9px; }
+.spot-audit-review-form fieldset label { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-size: 11px; }
+.spot-audit-review-form label:not(fieldset label) { display: grid; gap: 5px; color: var(--muted); font-size: 9px; }
+.spot-audit-review-form input:not([type=radio]), .spot-audit-review-form textarea { width: 100%; padding: 9px; border: 1px solid var(--line); font: inherit; }
+.spot-audit-review-form textarea { min-height: 70px; resize: vertical; }
+.spot-audit-wide { grid-column: 1 / -1; }
+.spot-audit-review-form button { grid-column: 1 / -1; min-height: 38px; justify-self: start; padding: 0 18px; }
+.spot-audit-review-status { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 10px; }
+.spot-audit-review-status[data-state="saved"] { color: var(--positive); }
+.spot-audit-review-status[data-state="error"] { color: var(--vermilion); }
 
 @media (max-width: 1000px) {
   .canonical-position { grid-template-columns: minmax(160px,1fr) repeat(3,85px) minmax(180px,1.2fr); }
@@ -1640,6 +1666,15 @@ body.report-export .report-section { box-shadow: none; border: 1px solid var(--p
   .owner-list strong { font-size: 14px; }
   .owner-list small { font-size: 12px; }
   .canonical-lower-grid, .feedback-panel, .owner-grid, .owner-billing-grid { grid-template-columns: 1fr; }
+  .spot-audit-boundary, .spot-audit-status, .spot-audit-review-status { font-size: 13px; }
+  .spot-audit-lookup { flex-direction: column; align-items: stretch; max-width: none; }
+  .spot-audit-lookup label { font-size: 12px; }
+  .spot-audit-lookup input, .spot-audit-lookup button { min-height: 44px; font-size: 16px; }
+  #spot-audit-evidence-fields, .spot-audit-review-form { grid-template-columns: 1fr; }
+  #spot-audit-evidence-fields dt, #spot-audit-evidence-fields dd { font-size: 12px; line-height: 1.55; }
+  .spot-audit-review-form label:not(fieldset label) { font-size: 12px; }
+  .spot-audit-review-form input:not([type=radio]), .spot-audit-review-form textarea, .spot-audit-review-form button { min-height: 44px; font-size: 16px; }
+  .spot-audit-review-form fieldset label { font-size: 13px; }
   #feedback-form { grid-template-columns: 1fr; }
   #feedback-form .feedback-message, #feedback-status { grid-column: 1; }
   .canonical-receipt-panel dl { grid-template-columns: 1fr; }

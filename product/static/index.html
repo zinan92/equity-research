@@ -189,6 +189,38 @@
                 </form>
                 <div><h3>账单事件</h3><div id="owner-billing-events" class="owner-list"></div></div>
               </div>
+              <section id="spot-audit-workstation" class="spot-audit-workstation" aria-labelledby="spot-audit-title">
+                <div class="section-heading compact">
+                  <div><p class="eyebrow">SPOT AUDIT / EVIDENCE REVIEW</p><h3 id="spot-audit-title">逐票抽核复核工作台</h3></div>
+                </div>
+                <p class="spot-audit-boundary"><strong>研究边界：</strong>这里只显示已核验的抽核任务身份、数值目标与页码引用要求。原始文档、PDF 预览与来源链接可能不可用；本面板不会伪造它们，也不会仅因表单已加载就认定复核完成。</p>
+                <form id="spot-audit-lookup-form" class="spot-audit-lookup">
+                  <label>股票代码<input name="ticker" autocomplete="off" spellcheck="false" placeholder="例如 300223" required></label>
+                  <button class="primary-button" type="submit">加载抽核任务</button>
+                </form>
+                <p id="spot-audit-status" class="spot-audit-status" role="status"></p>
+                <div id="spot-audit-evidence" class="spot-audit-evidence" hidden>
+                  <dl id="spot-audit-evidence-fields"></dl>
+                  <p class="spot-audit-boundary"><strong>证据边界：</strong>以上字段来自受签名保护的抽核任务收据；不包含原始 PDF 内容、页面截图或可点击来源链接。若需要核对页码引用，复核人须自行取得原始文档。</p>
+                  <form id="spot-audit-review-form" class="spot-audit-review-form">
+                    <fieldset>
+                      <legend>数值核对结果</legend>
+                      <label><input type="radio" name="numeric_result" value="pass" required> 通过</label>
+                      <label><input type="radio" name="numeric_result" value="fail"> 不通过</label>
+                    </fieldset>
+                    <fieldset>
+                      <legend>页码引用核对结果</legend>
+                      <label><input type="radio" name="page_result" value="pass" required> 通过</label>
+                      <label><input type="radio" name="page_result" value="fail"> 不通过</label>
+                    </fieldset>
+                    <label>引用页码<input type="number" name="page_number" min="1" step="1" required></label>
+                    <label class="spot-audit-wide">引用原文标签/句子<input name="quoted_label" maxlength="500" required></label>
+                    <label class="spot-audit-wide">复核理由（至少 10 字）<textarea name="rationale" minlength="10" maxlength="2000" required></textarea></label>
+                    <button class="primary-button" type="submit">提交复核决定</button>
+                    <p id="spot-audit-review-status" class="spot-audit-review-status" role="alert"></p>
+                  </form>
+                </div>
+              </section>
             </section>
           </section>
           <div id="legacy-decision-dashboard">
