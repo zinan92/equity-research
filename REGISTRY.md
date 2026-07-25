@@ -137,3 +137,8 @@
 
 - 现在在哪里：PR #400 merged. C2 valuation can now be replayed only from explicit canonical source hashes, an explicit assumption receipt and matching E4 partial Context Pack identity; missing or future-known source inputs are blocked and every output remains Tier C/no_action.
 - 下一步：produce governed, real assumption/source receipts for the corpus, then separately extract page-cited analyst claims and complete the required numeric/page audit. The adapter itself adds no valuation coverage until those real inputs exist.
+
+## 2026-07-25 · E4-S4x page-cited claim candidates
+
+- 现在在哪里：PR #404 merged. Page-verified sell-side PDFs can now yield deterministic sentence candidates retaining report/raw/parser/page/chunk identity. Every item is labelled an unreviewed broker assertion, not a verified company fact or accepted C3 claim.
+- 下一步：run the candidate extractor over the runtime corpus, then define a separate accept/reject review gate before any candidate can enter C3 claims, Tier A/B or the required page audit.
