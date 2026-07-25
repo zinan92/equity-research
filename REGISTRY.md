@@ -186,3 +186,8 @@
 
 - 现在在哪里：PR #437 merged. Deep-report members can read a source-bound partial model through a fail-closed endpoint that validates receipt identity, root containment and the Tier C/no_action boundary; unavailable tickers receive an explicit status rather than fallback prose or facts.
 - 下一步：#218 remains failed at 40/95 report models, 0/80 Tier A/B and 0/20 page/numeric audits. Continue real official evidence coverage, governed valuation inputs, reviewed sell-side claims and auditable spot checks; the new read API cannot be used to claim a full report or recommendation.
+
+## 2026-07-25 · E4-S4ag immutable spot-audit assignments
+
+- 现在在哪里：PR #441 merged. A content-addressed, runtime-only list now freezes 20 real fact-bearing E4 partial models for numeric and page-citation review; it contains 20 pending human reviews and zero completed audits, with no raw paths or Tier/action escalation.
+- 下一步：an independent reviewer must produce identity-bound numeric and page review records before #218 can count any spot audit. In parallel, #218 remains failed at 40/95 report models and 0/80 Tier A/B; official coverage, governed valuation inputs and reviewed sell-side claims remain separate gates.
