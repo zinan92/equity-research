@@ -51,6 +51,7 @@ from auth_store import (
 from industry_intelligence import IndustryIntelligenceError, dossier_payload, overview_payload
 from feedback_store import FeedbackError, feedback_export, initialize_feedback, list_feedback, submit_feedback
 from claim_review_store import ClaimReviewError, append_claim_review, export_claim_review_decisions, initialize_claim_reviews
+from partial_model_store import PartialModelStoreError, load_partial_model
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
     payment_controls, record_payment, record_refund, set_payment_controls,
@@ -101,6 +102,10 @@ def claim_review_candidate_receipt() -> Path:
         return target
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         raise ClaimReviewError("sell-side candidate receipt is unavailable") from exc
+
+
+def partial_model_root() -> Path:
+    return Path(os.environ.get("PARK_PARTIAL_MODELS_ROOT", ROOT / "runtime" / "partial-report-models"))
 
 
 def _sha256_file(path: Path) -> str:
@@ -233,6 +238,8 @@ def route_entitlement(route: str) -> str:
         return "manage_members"
     if route.startswith("/api/research/sell-side-claim-review"):
         return "manage_members"
+    if route.startswith("/api/research/partial-model/"):
+        return "deep_reports"
     if route.startswith("/api/publication-packs") or route.startswith("/downloads/publication-packs"):
         return "publication_downloads"
     if route.startswith(("/api/reports/", "/api/research/evidence/", "/api/research/editorial", "/api/report-versions/")):
@@ -646,6 +653,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
             return
         if route == "/api/research/editorial-queue":
             self._json(editorial_queue())
+            return
+        if route.startswith("/api/research/partial-model/"):
+            ticker = unquote(route.removeprefix("/api/research/partial-model/"))
+            try:
+                self._json(load_partial_model(ticker, partial_model_root()))
+            except PartialModelStoreError as exc:
+                self._json({"error": "partial_model_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
             return
         if route.startswith("/api/research/evidence/"):
             ticker = unquote(route.removeprefix("/api/research/evidence/"))

@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E4-S4af partial-model product read API
+
+- Decision：新增只读、会员权限受控的 `/api/research/partial-model/{ticker}`，只从配置 runtime root 内的 content-addressed latest pointer 读取，并重验 pointer、receipt hash、schema、ticker 与 Tier-C decision boundary；对合法但未编译的 ticker 返回明确 `unavailable`，不回退或猜测数据。
+- Why：现有部分模型已有真实的市场/财务输入和证据身份，但只存在 runtime receipt。产品需要安全读取面，不能把文件路径、未验证 receipt 或不完整模型直接暴露给调用方。
+- Evidence：`test_partial_model_store.py` 覆盖安全投影、blocked row、receipt 篡改与 pointer escape；`test_private_beta_http.py` 覆盖付费成员访问、preview 拒绝与真实模型缺失时的明确响应。实际 runtime receipt `partial-report-models-cb023224c7b23f82.json` 已返回 `000001.SZ` 的 source-bound facts，且 `600519.SH` 返回 unavailable。
+
+### Gotchas · E4-S4af
+
+- endpoint 不是 full report API：所有可用返回仍为 Tier C / `no_action`，target price 与 position range 必为 null；它不能成为付费推荐或 action 的后门。
+- runtime root 是部署配置，不进入版本库；pointer 只能选择 root 下的普通文件，hash 不匹配、schema drift、symlink 或 ticker identity drift 一律冲突失败，不能悄悄读旧 receipt。
+
 ## 2026-07-25 · E4-S4ad source-bound display facts
 
 - Decision：E4 market/fundamentals runtime receipt 只投影 A4 已验证 packet 中白名单行情、最新复权日线和最新已披露财务字段；partial model 仅在每个引用 component 都保有 raw hash、manifest hash 与 known-at 时携带该 projection。
