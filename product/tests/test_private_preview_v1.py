@@ -23,6 +23,7 @@ if str(PRODUCT / "deployment") not in sys.path:
     sys.path.insert(0, str(PRODUCT / "deployment"))
 
 from auth_store import create_invite, create_owner, redeem_invite  # noqa: E402
+from data_core.contracts import digest as contract_digest  # noqa: E402
 from data_store import initialize, stock_payload  # noqa: E402
 from feedback_store import initialize_feedback  # noqa: E402
 from install_private_preview import app_plist  # noqa: E402
@@ -83,6 +84,26 @@ class PrivatePreviewV1Test(unittest.TestCase):
                 json.dumps(report, ensure_ascii=False), encoding="utf-8",
             )
 
+        cls.spot_audit_root = cls.root / "spot-audits"
+        cls.spot_audit_root.mkdir()
+        assignment = {
+            "ticker": "300750.SZ", "report_model_hash": "a" * 64,
+            "document_identity": {"document_id": "official:test", "raw_hash": "b" * 64},
+            "numeric_check": {"fact_path": "input_facts.market.quote.last_price", "expected_value": 123.0},
+            "page_citation_check": {"document_id": "official:test", "raw_hash": "b" * 64},
+            "review_status": "pending_human_review",
+        }
+        audit_receipt = {
+            "schema_version": "e4-s4-spot-audit-assignments-v1", "data_kind": "runtime_only_audit",
+            "assignments": [assignment],
+        }
+        audit_receipt["receipt_hash"] = contract_digest(audit_receipt)
+        audit_name = "spot-audit-assignments-test.json"
+        (cls.spot_audit_root / audit_name).write_text(json.dumps(audit_receipt), encoding="utf-8")
+        (cls.spot_audit_root / "spot-audit-assignments-latest.json").write_text(
+            json.dumps({"receipt": audit_name, "receipt_hash": audit_receipt["receipt_hash"]}), encoding="utf-8",
+        )
+
         owner = create_owner("park@example.com", "owner-password-2026", "Park", cls.auth_db)
         preview_invite = create_invite(owner["id"], "preview", cls.auth_db)
         member_invite = create_invite(owner["id"], "member", cls.auth_db)
@@ -99,6 +120,7 @@ class PrivatePreviewV1Test(unittest.TestCase):
             "PARK_CANONICAL_PORTFOLIO_ROOT": str(cls.state),
             "PARK_CANONICAL_PORTFOLIO_SOURCE_DB": str(cls.db),
             "PARK_PRIVATE_REPORT_ROOT": str(cls.reports),
+            "PARK_SPOT_AUDIT_ROOT": str(cls.spot_audit_root),
             "PARK_AUTH_REQUIRED": "1",
             "PARK_COOKIE_SECURE": "1",
             "PARK_PRIVATE_PREVIEW": "1",
@@ -401,6 +423,34 @@ class PrivatePreviewV1Test(unittest.TestCase):
             "GET", "/downloads/publication-packs/fake/fake.zip", cookie=cookie,
         )
         self.assertEqual((status, payload["error"]), (404, "private_preview_route_unavailable"))
+
+    def test_owner_spot_audit_routes_are_private_preview_only(self) -> None:
+        status, payload, _ = self.request("GET", "/api/research/spot-audit-assignment/300750.SZ")
+        self.assertEqual((status, payload["error"]), (401, "authentication_required"))
+
+        member_auth, member_cookie, _ = self.login("member@example.com", "member-" + "password-2026")
+        status, payload, _ = self.request("GET", "/api/research/spot-audit-assignment/300750.SZ", cookie=member_cookie)
+        self.assertEqual((status, payload["error"]), (403, "entitlement_required"))
+
+        owner_auth, owner_cookie, _ = self.login("park@example.com", "owner-" + "password-2026")
+        status, assignment, _ = self.request("GET", "/api/research/spot-audit-assignment/300750.SZ", cookie=owner_cookie)
+        self.assertEqual((status, assignment["status"], assignment["ticker"]), (200, "available", "300750.SZ"))
+        self.assertEqual(assignment["review_status"], "pending_human_review")
+
+        review = {
+            "ticker": "300750.SZ", "numeric_result": "pass", "page_result": "pass",
+            "page_number": 1, "quoted_label": "fixture page label", "rationale": "fixture review proves the owner-only route remains append-only",
+        }
+        status, payload, _ = self.request(
+            "POST", "/api/research/spot-audit-review", review,
+            cookie=member_cookie, csrf=member_auth["csrf_token"],
+        )
+        self.assertEqual((status, payload["error"]), (403, "owner_required"))
+        status, payload, _ = self.request(
+            "POST", "/api/research/spot-audit-review", review,
+            cookie=owner_cookie, csrf=owner_auth["csrf_token"],
+        )
+        self.assertEqual((status, payload["status"], payload["review"]["ticker"]), (201, "accepted", "300750.SZ"))
 
     def test_repeated_and_rotating_identity_failed_logins_are_rate_limited(self) -> None:
         body = {"email": "rate-limit-probe@example.com", "password": "invalid-password-value"}

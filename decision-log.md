@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-25 · E5-S5b private-preview spot-audit route allowlist
+
+- Decision：将 owner-only spot-audit assignment read 与 review export 纳入 private-preview 的显式 GET allowlist；review POST 沿用既有 owner entitlement、CSRF 与 append-only store，不新增成员权限。
+- Why：审阅工作台必须能在私测产品实际运行时读取任务。仅在普通模式可用会让前端呈现无效表单；扩大到 dashboard/member 又会泄露审阅身份和证据元数据。
+- Evidence：`test_private_preview_v1.py` 覆盖匿名 401、成员 403、Owner 读取任务和 Owner 成功写入 append-only review；全 private-preview suite 通过。
+
+### Gotchas · E5-S5b
+
+- allowlist 只开放准确的 assignment path 和 review export；私测模式依旧对未列 API 返回 `private_preview_route_unavailable`。
+- Owner 成功写入的是显式人工决定，并不改变 E4 acceptance、Tier、target、position 或 action；表单加载或 assignment 可读都不能被称为审计完成。
+
 ## 2026-07-25 · E5-S5a spot-audit assignment read API
 
 - Decision：review workstation 通过 owner-only API 读取单条经 receipt identity 验证的 assignment projection；只返回 ticker、数值目标、document identity、页码要求和审阅状态，不返回 raw path 或 PDF bytes。
