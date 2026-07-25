@@ -1887,3 +1887,14 @@
 
 - checkpoint 仅对完全相同 batch/page-evidence input hashes 有效；换输入必须新建 lineage，不得混用旧 rows。
 - candidate 是 broker assertion candidate，不是已接纳的 C3 claim；必须经过后续 accept/reject gate 才可被任何研究输出引用，且本 story 不改变 Tier、审计、target、position 或 action。
+
+## 2026-07-25 · E4-S4aa sell-side claim admission gate
+
+- Decision：候选卖方断言只能由显式、具名、带时间和理由的 reviewer decision 接纳；decision 必须重述并精确匹配 candidate 的 raw hash、parser、页面、chunk、字符范围和文本，接纳后仍标为 broker assertion 而非公司事实。
+- Why：页面文本抽取能定位可能有价值的断言，却不能判断语义、立场或是否适合引用。将自动候选与人工研究判断分隔，才可让 C3-compatible claim 具备可审计来源与责任边界。
+- Evidence：`test_e4_sell_side_claim_admission.py` 覆盖显式接纳、无决策不接纳和 identity drift fail-closed；真实 runtime receipt 绑定 1,047 candidates，因无真实 reviewer decision 而 accepted=0、rejected=0、unreviewed=1,047。
+
+### Gotchas · E4-S4aa
+
+- `--init-empty` 仅写明确的零决策 receipt，绝不伪造 reviewer 或 LLM 审核；实际接纳需要独立提供 decision receipt。
+- 接纳输出是 C3-compatible page-cited broker assertion，不自动升为 Tier A/B、numeric/page audit、target、position 或 action；这些需要其各自的后续验证合同。
