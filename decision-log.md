@@ -1734,6 +1734,17 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-27 · Official filing transport resilience
+
+- Decision：以单一可复用 HTTP session 的有限指数退避策略替换 SSE 专用 curl fallback；SH、SZ、BJ 均使用 CNINFO 这个统一官方披露平台，SSE adapter 保留为显式组件而非 SH 采集的单点依赖。
+- Why：实测 CNINFO 官方 PDF 只是间歇性连接中断，不是源端封锁；把失败行当成终态并只依赖 SSE 会把可恢复的官方 primary evidence 错判为不可用。
+- Evidence：100 ticker 重跑将 captured official-primary / evidence-bound partial Report Model 从 40 提升到 80；剩余 20 条 BJ 返回 HTTP 200 且索引为空，没有 TLS、429 或 5xx retry exhaust。
+
+### Gotchas · Official filing transport resilience
+
+- completed receipt 重跑时必须保留原先 captured row 的 raw identity；把它降为 `skipped` 会让 partial-model compiler 遗失旧证据，造成计数表面不变。
+- HTTP 200 空索引不是传输重试的适用对象；不能把它伪装成 TLS/WAF 失败或用聚合器补成 primary evidence。
+
 ## 2026-07-25 · E5-S5b private-preview spot-audit route allowlist
 
 - Decision：将 owner-only spot-audit assignment read 与 review export 纳入 private-preview 的显式 GET allowlist；review POST 沿用既有 owner entitlement、CSRF 与 append-only store，不新增成员权限。

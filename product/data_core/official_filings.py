@@ -6,17 +6,16 @@ import asyncio
 import hashlib
 import json
 import re
-import shutil
-import subprocess
-import tempfile
+import random
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from html import unescape
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlencode, urljoin, urlsplit
-from urllib.error import URLError
-from urllib.request import HTTPRedirectHandler, Request, build_opener
 from uuid import uuid4
+
+import requests
 
 from .ashare import MemoryAuthoritySink, normalize_ashare_ticker
 from .contracts import RawCapture, RecordDomain, RecordEnvelope, SourceManifest
@@ -97,47 +96,6 @@ def _host(url: str) -> str:
     return parsed.hostname.lower().rstrip(".")
 
 
-def _curl_headers(raw_headers: str) -> tuple[int, tuple[tuple[str, str], ...]]:
-    blocks = [block for block in re.split(r"\r?\n\r?\n", raw_headers) if block.strip()]
-    final = next((block for block in reversed(blocks) if block.lstrip().startswith("HTTP/")), "")
-    lines = final.splitlines()
-    match = re.match(r"HTTP/\S+\s+(\d{3})", lines[0].strip() if lines else "")
-    if not match:
-        raise ValueError("curl fallback returned invalid HTTP status")
-    headers = tuple(sorted({
-        (key.strip().lower(), value.strip())
-        for line in lines[1:] if ":" in line
-        for key, value in (line.split(":", 1),)
-        if key.strip().lower() in HTTP_HEADER_ALLOWLIST and value.strip()
-    }))
-    return int(match.group(1)), headers
-
-
-def _sse_curl_fallback(url: str, request_headers: Mapping[str, str]) -> HttpResponse:
-    """Retry exactly the official SSE index URL after a urllib TLS timeout."""
-    if _host(url) != "query.sse.com.cn":
-        raise ValueError("curl fallback is only registered for the SSE official index")
-    curl = shutil.which("curl")
-    if not curl:
-        raise URLError("curl unavailable for bounded SSE transport fallback")
-    with tempfile.TemporaryDirectory(prefix="park-sse-") as directory:
-        headers_path, body_path = f"{directory}/headers", f"{directory}/body"
-        command = [curl, "--silent", "--show-error", "--location", "--proto", "=https", "--connect-timeout", "15", "--max-time", "20", "--dump-header", headers_path, "--output", body_path, "--write-out", "%{url_effective}"]
-        for key, value in {"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)}.items():
-            command.extend(["--header", f"{key}: {value}"])
-        completed = subprocess.run(command + [url], check=False, capture_output=True, text=True, timeout=25)
-        if completed.returncode:
-            raise URLError(f"curl SSE transport fallback failed: {completed.stderr.strip()}")
-        final_url = completed.stdout.strip()
-        if _host(final_url) != "query.sse.com.cn":
-            raise ValueError("curl SSE transport fallback left the source allowlist")
-        with open(headers_path, encoding="iso-8859-1") as handle:
-            status_code, headers = _curl_headers(handle.read())
-        with open(body_path, "rb") as handle:
-            body = handle.read()
-    return HttpResponse(body, final_url, status_code, headers, (url, final_url))
-
-
 def validate_official_source_role(
     manifest: SourceManifest,
     source_url: str,
@@ -156,54 +114,140 @@ def validate_official_source_role(
         raise ValueError("aggregator or cross-source URL cannot act as official primary")
 
 
-class _AllowlistedRedirectHandler(HTTPRedirectHandler):
-    def __init__(self, allowed_hosts: frozenset[str]) -> None:
-        super().__init__()
-        self.allowed_hosts = allowed_hosts
-        self.redirect_chain: list[str] = []
+class OfficialTransportError(RuntimeError):
+    """A bounded official-host request failure with its actual attempt count."""
 
-    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
-        target = urljoin(req.full_url, newurl)
-        if _host(target) not in self.allowed_hosts:
+    def __init__(self, detail: str, *, attempts: int, status_code: int | None = None) -> None:
+        self.attempts = attempts
+        self.status_code = status_code
+        super().__init__(f"{detail}; attempts={attempts}")
+
+
+class OfficialHttpTransport:
+    """Sequential, reusable-session transport for every registered official host."""
+
+    def __init__(
+        self,
+        *,
+        session: requests.Session | None = None,
+        max_attempts: int = 4,
+        base_delay_seconds: float = 1.0,
+        max_delay_seconds: float = 30.0,
+        timeout_seconds: float = 15.0,
+        min_request_interval_seconds: float = 0.0,
+        sleep: Callable[[float], None] = time.sleep,
+        jitter: Callable[[float, float], float] = random.uniform,
+        monotonic: Callable[[], float] = time.monotonic,
+    ) -> None:
+        if not 3 <= max_attempts <= 5:
+            raise ValueError("official transport max_attempts must be 3-5")
+        if base_delay_seconds <= 0 or max_delay_seconds < base_delay_seconds:
+            raise ValueError("official transport backoff bounds are invalid")
+        if timeout_seconds <= 0 or min_request_interval_seconds < 0:
+            raise ValueError("official transport timeout/interval is invalid")
+        self.session = session or requests.Session()
+        self.session.headers.update({"User-Agent": "ParkEquityResearch/1.0", "Connection": "keep-alive"})
+        self.max_attempts = max_attempts
+        self.base_delay_seconds = base_delay_seconds
+        self.max_delay_seconds = max_delay_seconds
+        self.timeout_seconds = timeout_seconds
+        self.min_request_interval_seconds = min_request_interval_seconds
+        self.sleep = sleep
+        self.jitter = jitter
+        self.monotonic = monotonic
+        self._last_request_at: float | None = None
+
+    def _pace(self) -> None:
+        if self._last_request_at is None or not self.min_request_interval_seconds:
+            return
+        remaining = self.min_request_interval_seconds - (self.monotonic() - self._last_request_at)
+        if remaining > 0:
+            self.sleep(remaining)
+
+    @staticmethod
+    def _retry_after_seconds(value: str | None) -> float | None:
+        if not value:
+            return None
+        try:
+            return max(0.0, float(value))
+        except ValueError:
+            try:
+                retry_at = datetime.strptime(value, "%a, %d %b %Y %H:%M:%S %Z").replace(tzinfo=timezone.utc)
+            except ValueError:
+                return None
+            return max(0.0, (retry_at - datetime.now(timezone.utc)).total_seconds())
+
+    def _retry_delay(self, attempt: int, retry_after: str | None = None) -> float:
+        server_delay = self._retry_after_seconds(retry_after)
+        if server_delay is not None:
+            return min(self.max_delay_seconds, server_delay)
+        ceiling = min(self.max_delay_seconds, self.base_delay_seconds * (2 ** (attempt - 1)))
+        return self.jitter(0.0, ceiling)
+
+    @staticmethod
+    def _allowed_redirect_chain(response: requests.Response, allowed_hosts: frozenset[str]) -> tuple[str, ...]:
+        chain = tuple(item.url for item in (*response.history, response))
+        if not chain or any(_host(item) not in allowed_hosts for item in chain):
             raise ValueError("official filing redirect left the source allowlist")
-        self.redirect_chain.append(target)
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        return chain
 
+    def __call__(self, url: str, request_headers: Mapping[str, str]) -> HttpResponse:
+        allowed_hosts = frozenset({_host(url)})
+        last_detail = "official transport exhausted retries"
+        last_status: int | None = None
+        for attempt in range(1, self.max_attempts + 1):
+            self._pace()
+            try:
+                response = self.session.get(
+                    url,
+                    headers={"Accept": "*/*", **dict(request_headers)},
+                    timeout=self.timeout_seconds,
+                    allow_redirects=True,
+                )
+                self._last_request_at = self.monotonic()
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError) as exc:
+                last_detail = f"official transport {type(exc).__name__}: {exc}"
+                if attempt == self.max_attempts:
+                    raise OfficialTransportError(last_detail, attempts=attempt) from exc
+                self.sleep(self._retry_delay(attempt))
+                continue
 
-def default_http_transport(
-    url: str,
-    request_headers: Mapping[str, str],
-    *,
-    timeout_seconds: float = 15.0,
-) -> HttpResponse:
-    if timeout_seconds <= 0:
-        raise ValueError("official filing timeout must be positive")
-    allowed_hosts = frozenset({_host(url)})
-    redirect_handler = _AllowlistedRedirectHandler(allowed_hosts)
-    redirect_handler.redirect_chain.append(url)
-    opener = build_opener(redirect_handler)
-    request = Request(
-        url,
-        headers={"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)},
-    )
-    try:
-        with opener.open(request, timeout=timeout_seconds) as response:
-            final_url = response.geturl()
-            if _host(final_url) not in allowed_hosts:
-                raise ValueError("official filing final URL left the source allowlist")
-            headers = tuple(sorted({(str(key).lower(), str(value).strip()) for key, value in response.headers.items() if str(key).lower() in HTTP_HEADER_ALLOWLIST and str(value).strip()}))
-            chain = list(redirect_handler.redirect_chain)
-            if chain[-1] != final_url:
-                chain.append(final_url)
-            result = HttpResponse(response.read(), final_url, int(response.status), headers, tuple(chain))
+            last_status = int(response.status_code)
+            if response.status_code in {401, 403, 404}:
+                raise OfficialTransportError(
+                    f"official transport terminal HTTP {response.status_code}",
+                    attempts=attempt,
+                    status_code=response.status_code,
+                )
+            if response.status_code == 429 or 500 <= response.status_code < 600:
+                last_detail = f"official transport HTTP {response.status_code}"
+                if attempt == self.max_attempts:
+                    raise OfficialTransportError(last_detail, attempts=attempt, status_code=response.status_code)
+                self.sleep(self._retry_delay(attempt, response.headers.get("Retry-After")))
+                continue
+            if not 200 <= response.status_code < 300:
+                raise OfficialTransportError(
+                    f"official transport terminal HTTP {response.status_code}",
+                    attempts=attempt,
+                    status_code=response.status_code,
+                )
+            chain = self._allowed_redirect_chain(response, allowed_hosts)
+            headers = tuple(sorted({
+                (str(key).lower(), str(value).strip())
+                for key, value in response.headers.items()
+                if str(key).lower() in HTTP_HEADER_ALLOWLIST and str(value).strip()
+            }))
+            result = HttpResponse(response.content, response.url, int(response.status_code), headers, chain)
             result.validate()
             return result
-    except URLError as exc:
-        if _host(url) != "query.sse.com.cn" or "handshake" not in str(exc).lower():
-            raise
-        result = _sse_curl_fallback(url, request_headers)
-        result.validate()
-        return result
+        raise OfficialTransportError(last_detail, attempts=self.max_attempts, status_code=last_status)
+
+
+_DEFAULT_OFFICIAL_TRANSPORT = OfficialHttpTransport()
+
+
+def default_http_transport(url: str, request_headers: Mapping[str, str]) -> HttpResponse:
+    return _DEFAULT_OFFICIAL_TRANSPORT(url, request_headers)
 
 
 def _utc_now() -> str:
@@ -820,11 +864,14 @@ def sync_sse_filings(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
 
 
 async def sync_exchange_filings_async(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
-    """Select the registered exchange index; never silently fall back."""
+    """Use the registered official index for every A-share exchange.
+
+    CNINFO is the designated unified disclosure platform for SH, SZ, and BJ.
+    SSE's own bulletin endpoint remains an explicit adapter, but a transient
+    SSE transport failure must not make the official evidence chain unavailable.
+    """
     instrument = normalize_ashare_ticker(ticker)
-    if instrument.exchange == "SSE":
-        return await sync_sse_filings_async(ticker, **kwargs)
-    if instrument.exchange in {"SZSE", "BSE"}:
+    if instrument.exchange in {"SSE", "SZSE", "BSE"}:
         return await sync_cninfo_filings_async(ticker, **kwargs)
     raise ValueError(f"no official filing index registered for {instrument.exchange}")
 

@@ -8,6 +8,8 @@ import unittest
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+import requests
+
 
 PRODUCT = Path(__file__).resolve().parents[1]
 if str(PRODUCT) not in sys.path:
@@ -31,7 +33,7 @@ from data_core import (  # noqa: E402
     sync_sse_filings,
     validate_official_source_role,
 )
-from data_core.official_filings import _curl_headers  # noqa: E402
+from data_core.official_filings import OfficialHttpTransport, OfficialTransportError  # noqa: E402
 
 
 INDEX_PREFIX = "https://www.cninfo.com.cn/new/fulltextSearch/full?"
@@ -141,13 +143,54 @@ class PageTwoTransport(FakeTransport):
 
 
 class OfficialFilingIngestTest(unittest.TestCase):
-    def test_curl_header_parser_uses_final_redirect_block_and_allowlist(self) -> None:
-        status, headers = _curl_headers(
-            "HTTP/1.1 302 Found\r\nLocation: https://query.sse.com.cn/next\r\n\r\n"
-            "HTTP/2 200\r\nContent-Type: application/json\r\nX-Ignore: no\r\n\r\n"
-        )
-        self.assertEqual(status, 200)
-        self.assertEqual(headers, (("content-type", "application/json"),))
+    def test_transport_retries_tls_drop_and_5xx_before_success(self) -> None:
+        class Session:
+            def __init__(self) -> None:
+                self.headers = {}
+                self.calls = 0
+
+            def get(self, url, **_kwargs):
+                self.calls += 1
+                if self.calls == 1:
+                    raise requests.exceptions.SSLError("UNEXPECTED_EOF")
+                if self.calls == 2:
+                    return type("Response", (), {"status_code": 503, "headers": {}, "history": (), "url": url, "content": b""})()
+                return type("Response", (), {"status_code": 200, "headers": {"Content-Type": "application/json"}, "history": (), "url": url, "content": b"{}"})()
+
+        delays: list[float] = []
+        session = Session()
+        transport = OfficialHttpTransport(session=session, sleep=delays.append, jitter=lambda _low, high: high)
+        response = transport("https://www.cninfo.com.cn/new/fulltextSearch/full", {"Accept": "application/json"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(session.calls, 3)
+        self.assertEqual(delays, [1.0, 2.0])
+        self.assertEqual(session.headers["Connection"], "keep-alive")
+
+    def test_transport_honors_retry_after_and_stops_terminal_statuses(self) -> None:
+        class Session:
+            def __init__(self, responses) -> None:
+                self.headers = {}
+                self.responses = iter(responses)
+                self.calls = 0
+
+            def get(self, _url, **_kwargs):
+                self.calls += 1
+                return next(self.responses)
+
+        def response(status: int, url: str, headers=None):
+            return type("Response", (), {"status_code": status, "headers": headers or {}, "history": (), "url": url, "content": b"{}"})()
+
+        url = "https://www.cninfo.com.cn/new/fulltextSearch/full"
+        delays: list[float] = []
+        retry_session = Session([response(429, url, {"Retry-After": "7"}), response(200, url)])
+        transport = OfficialHttpTransport(session=retry_session, sleep=delays.append, jitter=lambda _low, high: high)
+        self.assertEqual(transport(url, {}).status_code, 200)
+        self.assertEqual((retry_session.calls, delays), (2, [7.0]))
+
+        terminal_session = Session([response(403, url)])
+        with self.assertRaisesRegex(OfficialTransportError, "terminal HTTP 403; attempts=1"):
+            OfficialHttpTransport(session=terminal_session, sleep=lambda _delay: None)(url, {})
+        self.assertEqual(terminal_session.calls, 1)
     def test_incremental_cninfo_sync_captures_raw_pdf_and_http_receipt(self) -> None:
         transport = FakeTransport()
         sink = MemoryAuthoritySink()
@@ -225,6 +268,18 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertEqual(set(result.documents), {"annual"})
         self.assertEqual(result.documents["annual"].records[0].payload["document_type"], "annual_report")
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
+
+    def test_sh_exchange_uses_cninfo_unified_official_index(self) -> None:
+        transport = FakeTransport()
+        payload = json.loads(transport.index_body.decode("utf-8"))
+        payload["announcements"][0]["secCode"] = "600519"
+        transport.index_body = json.dumps({"announcements": [payload["announcements"][0]]}, ensure_ascii=False).encode()
+        result = sync_exchange_filings(
+            "600519.SH", transport=transport, financial_reports_only=True, max_documents=1,
+        )
+        self.assertTrue(result.publishable)
+        self.assertEqual(result.discovery.selected_source, "cninfo_official_filing_index_v1")
+        self.assertEqual(result.documents["annual"].selected_source, CNINFO_FILING_DOCUMENT_SOURCE)
 
     def test_limited_sync_rejects_zero_document_cap(self) -> None:
         with self.assertRaisesRegex(ValueError, "max_documents"):
@@ -369,11 +424,17 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertFalse(result.publishable)
         self.assertIn("outside official SSE", result.discovery.attempts[-1].error)
 
-    def test_exchange_selection_is_explicit_and_never_falls_back(self) -> None:
-        sse = sync_exchange_filings("600036.SH", transport=FakeTransport())
+    def test_exchange_selection_uses_registered_official_index(self) -> None:
+        sh_transport = FakeTransport()
+        sh_payload = json.loads(sh_transport.index_body.decode("utf-8"))
+        for row in sh_payload["announcements"]:
+            row["secCode"] = "600036"
+        sh_transport.index_body = json.dumps(sh_payload, ensure_ascii=False).encode()
+        sse = sync_exchange_filings("600036.SH", transport=sh_transport)
         cninfo = sync_exchange_filings("300750.SZ", transport=FakeTransport())
         self.assertTrue(sse.publishable)
         self.assertTrue(cninfo.publishable)
+        self.assertEqual(sse.discovery.selected_source, "cninfo_official_filing_index_v1")
 
 
 if __name__ == "__main__":

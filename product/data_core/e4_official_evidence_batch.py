@@ -8,8 +8,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import multiprocessing
-import queue
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,7 +15,7 @@ from typing import Any, Callable, Mapping
 
 from .ashare import MemoryAuthoritySink
 from .contracts import digest
-from .official_filings import OfficialFilingBatch, sync_exchange_filings
+from .official_filings import OfficialFilingBatch, OfficialHttpTransport, sync_exchange_filings
 
 
 E4_OFFICIAL_EVIDENCE_BATCH_SCHEMA_VERSION = "e4-s4-official-evidence-batch-v1"
@@ -25,45 +23,6 @@ E4_OFFICIAL_EVIDENCE_CHECKPOINT_SCHEMA_VERSION = "e4-s4-official-evidence-checkp
 QUALIFYING_DOCUMENT_TYPES = frozenset({"annual_report", "semiannual_report", "quarterly_report"})
 MAX_OFFICIAL_FILING_AGE_DAYS = 365
 SyncFn = Callable[..., OfficialFilingBatch]
-
-
-def _isolated_collector_worker(
-    ticker: str, raw_root_text: str, max_discovery_pages: int, result_queue: Any,
-) -> None:
-    """Run the provider call and raw write outside the parent batch process."""
-    try:
-        sink = MemoryAuthoritySink()
-        batch = sync_exchange_filings(
-            ticker, authority_sink=sink, limit=30, financial_reports_only=True,
-            max_documents=1, max_discovery_pages=max_discovery_pages,
-        )
-        result_queue.put({"status": "ok", "row": _result_for_batch(ticker, batch, Path(raw_root_text))})
-    except Exception as exc:
-        result_queue.put({"status": "error", "error": type(exc).__name__})
-
-
-def _collect_with_hard_timeout(
-    ticker: str, raw_root: Path, max_discovery_pages: int, timeout_seconds: float,
-    *, worker: Callable[[str, str, int, Any], None] = _isolated_collector_worker,
-) -> dict[str, Any]:
-    if timeout_seconds <= 0:
-        raise ValueError("collector_timeout_seconds must be positive")
-    context = multiprocessing.get_context("spawn")
-    result_queue = context.Queue(maxsize=1)
-    process = context.Process(target=worker, args=(ticker, str(raw_root), max_discovery_pages, result_queue))
-    process.start()
-    process.join(timeout_seconds)
-    if process.is_alive():
-        process.terminate()
-        process.join(5)
-        return {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_timeout"]}
-    try:
-        result = result_queue.get_nowait()
-    except queue.Empty:
-        return {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_worker_no_receipt"]}
-    if result.get("status") != "ok":
-        return {"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_exception"], "error": result.get("error")}
-    return dict(result["row"])
 
 
 def _canonical_json(value: Any) -> str:
@@ -218,6 +177,21 @@ def _document_failure_blockers(outcome: Any) -> list[str]:
     return ["official_filing_document_capture_failed"]
 
 
+def _attempt_diagnostic(outcome: Any) -> dict[str, Any]:
+    """Expose the existing ingestion attempt's raw transport outcome in the batch row."""
+    attempts = tuple(getattr(outcome, "attempts", ()) or ())
+    attempt = attempts[-1] if attempts else None
+    if attempt is None:
+        return {}
+    fetched = getattr(attempt, "fetched", None)
+    detail: dict[str, Any] = {}
+    if getattr(fetched, "status_code", None) is not None:
+        detail["http_status"] = fetched.status_code
+    if getattr(attempt, "error", None):
+        detail["error"] = str(attempt.error)
+    return detail
+
+
 def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -> dict[str, Any]:
     summary = batch.to_summary() if hasattr(batch, "to_summary") else {}
     discovery_pages = summary.get("discovery_pages", [])
@@ -225,6 +199,7 @@ def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
             "blockers": _discovery_failure_blockers(batch.discovery), "discovery_pages": discovery_pages,
+            **_attempt_diagnostic(batch.discovery),
         }
     if len(batch.documents) > 1:
         raise ValueError("official evidence batch may capture at most one document per ticker")
@@ -238,6 +213,7 @@ def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -
         return {
             "status": "failed", "data_kind": "real", "ticker": ticker,
             "document_id": document_id, "blockers": _document_failure_blockers(outcome), "discovery_pages": discovery_pages,
+            **_attempt_diagnostic(outcome),
         }
     try:
         return {"ticker": ticker, "discovery_pages": discovery_pages, **_raw_receipt(outcome, raw_root)}
@@ -259,7 +235,6 @@ def run_official_evidence_batch(
     max_discovery_pages: int = 3,
     collector_timeout_seconds: float = 45.0,
     sync: SyncFn = sync_exchange_filings,
-    isolated_worker: Callable[[str, str, int, Any], None] = _isolated_collector_worker,
     sleep: Callable[[float], None] = time.sleep,
 ) -> dict[str, Any]:
     """Capture one qualifying official filing per ticker, sequentially and resumably."""
@@ -282,7 +257,6 @@ def run_official_evidence_batch(
         collector_timeout_seconds=collector_timeout_seconds,
     )
     previous: dict[str, Mapping[str, Any]] = {}
-    resuming_checkpoint = False
     if latest_path.exists():
         pointer = json.loads(latest_path.read_text(encoding="utf-8"))
         previous_path = runtime_root / str(pointer.get("receipt") or "")
@@ -298,31 +272,46 @@ def run_official_evidence_batch(
                 previous = {
                     str(item.get("ticker") or "").upper(): item
                     for item in previous_payload.get("tickers") or []
-                    if item.get("status") in {"captured", "failed"}
+                    if item.get("status") == "captured"
                 }
-                resuming_checkpoint = True
             elif pointer.get("state") == "completed":
                 if previous_payload.get("config") != config:
                     raise ValueError("official evidence completed receipt does not match this corpus configuration")
-                previous = {str(item.get("ticker") or "").upper(): item for item in previous_payload.get("tickers") or []}
+                previous = {
+                    str(item.get("ticker") or "").upper(): item
+                    for item in previous_payload.get("tickers") or []
+                    if item.get("status") == "captured"
+                }
             else:
                 raise ValueError("official evidence latest pointer has unknown state")
 
     rows: list[dict[str, Any]] = []
     raw_root = runtime_root / "raw"
+    live_transport = (
+        OfficialHttpTransport(
+            timeout_seconds=collector_timeout_seconds,
+            min_request_interval_seconds=inter_ticker_delay_seconds,
+        )
+        if sync is sync_exchange_filings
+        else None
+    )
     for index, ticker in enumerate(tickers):
         prior = previous.get(ticker)
-        if prior and resuming_checkpoint:
-            rows.append(dict(prior))
-            continue
         if prior and prior.get("status") == "captured":
-            rows.append({"ticker": ticker, "status": "skipped", "data_kind": "real", "resumed_from_raw_hash": prior.get("raw_hash"), "blockers": ["already_captured"]})
+            # Keep the full captured row, including its immutable raw identity,
+            # so the completed receipt remains compilable after failed peers
+            # are retried.
+            rows.append(dict(prior))
             continue
         try:
             if sync is sync_exchange_filings:
-                rows.append(_collect_with_hard_timeout(
-                    ticker, raw_root, max_discovery_pages, collector_timeout_seconds, worker=isolated_worker,
-                ))
+                sink = MemoryAuthoritySink()
+                batch = sync(
+                    ticker, authority_sink=sink, transport=live_transport, limit=30,
+                    financial_reports_only=True, max_documents=1,
+                    max_discovery_pages=max_discovery_pages,
+                )
+                rows.append(_result_for_batch(ticker, batch, raw_root))
             else:  # test seam: custom adapters remain in-process and never represent live collection.
                 sink = MemoryAuthoritySink()
                 batch = sync(
@@ -333,7 +322,7 @@ def run_official_evidence_batch(
         except Exception as exc:  # a single issuer must never abort the corpus
             rows.append({"ticker": ticker, "status": "failed", "data_kind": "real", "blockers": ["collector_exception"], "error": type(exc).__name__})
         _write_checkpoint(runtime_root, config=config, rows=rows)
-        if index < len(tickers) - 1 and inter_ticker_delay_seconds:
+        if sync is not sync_exchange_filings and index < len(tickers) - 1 and inter_ticker_delay_seconds:
             sleep(inter_ticker_delay_seconds)
 
     captured = [row for row in rows if row.get("status") == "captured"]
@@ -349,7 +338,7 @@ def run_official_evidence_batch(
         "max_discovery_pages": max_discovery_pages,
         "collector_timeout_seconds": collector_timeout_seconds,
         "tickers": rows,
-        "counts": {"requested": len(tickers), "captured_official_primary": len(captured), "failed": sum(row.get("status") == "failed" for row in rows), "resumed": sum(row.get("status") == "skipped" for row in rows)},
+        "counts": {"requested": len(tickers), "captured_official_primary": len(captured), "failed": sum(row.get("status") == "failed" for row in rows), "resumed": sum(row.get("status") == "captured" and row.get("resumed_from_raw_hash") is not None for row in rows)},
         "truth_boundary": {
             "official_primary_is_input_not_report_model": True,
             "counts_as_report_model_coverage": False,
