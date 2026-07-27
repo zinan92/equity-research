@@ -6,7 +6,7 @@ import json
 import sys
 import unittest
 from pathlib import Path
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import urlsplit
 
 import requests
 
@@ -33,10 +33,11 @@ from data_core import (  # noqa: E402
     sync_sse_filings,
     validate_official_source_role,
 )
-from data_core.official_filings import OfficialHttpTransport, OfficialTransportError  # noqa: E402
+from data_core.official_filings import OfficialHttpTransport, OfficialTransportError, _cninfo_org_id  # noqa: E402
 
 
-INDEX_PREFIX = "https://www.cninfo.com.cn/new/fulltextSearch/full?"
+TOP_SEARCH_URL = "http://www.cninfo.com.cn/new/information/topSearch/query"
+HIS_ANNOUNCEMENT_URL = "http://www.cninfo.com.cn/new/hisAnnouncement/query"
 SSE_INDEX_PREFIX = "https://query.sse.com.cn/security/stock/queryCompanyBulletin.do?"
 DOCS = {
     "annual": "https://static.cninfo.com.cn/finalpage/2026-03-15/annual.PDF",
@@ -81,9 +82,18 @@ class FakeTransport:
         self.invalid_pdf = invalid_pdf
         self.calls: list[str] = []
 
-    def __call__(self, url: str, _headers) -> HttpResponse:
+    def __call__(self, url: str, _headers, *, method: str = "GET", data=None) -> HttpResponse:
         self.calls.append(url)
-        if url.startswith(INDEX_PREFIX):
+        if url == TOP_SEARCH_URL:
+            code = str((data or {}).get("keyWord") or "")
+            body = json.dumps({"keyBoardList": [{"code": code, "orgId": f"org-{code}"}]}, ensure_ascii=False).encode()
+            return HttpResponse(
+                body, url, 200,
+                (("content-length", str(len(body))), ("content-type", "application/json")),
+            )
+        if url == HIS_ANNOUNCEMENT_URL:
+            if method != "POST":
+                raise AssertionError("structured CNINFO history must use POST")
             return HttpResponse(
                 self.index_body,
                 url,
@@ -128,9 +138,9 @@ class FakeTransport:
 
 
 class PageTwoTransport(FakeTransport):
-    def __call__(self, url: str, headers) -> HttpResponse:
-        if url.startswith(INDEX_PREFIX):
-            page = parse_qs(urlsplit(url).query).get("pageNum", ["1"])[0]
+    def __call__(self, url: str, headers, *, method: str = "GET", data=None) -> HttpResponse:
+        if url == HIS_ANNOUNCEMENT_URL:
+            page = str((data or {}).get("pageNum") or "1")
             rows = (
                 [announcement("major", "宁德时代：关于重大合同的公告", 1777593600000)]
                 if page == "1"
@@ -139,17 +149,26 @@ class PageTwoTransport(FakeTransport):
             body = json.dumps({"announcements": rows}, ensure_ascii=False).encode()
             self.calls.append(url)
             return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
-        return super().__call__(url, headers)
+        return super().__call__(url, headers, method=method, data=data)
 
 
 class OfficialFilingIngestTest(unittest.TestCase):
+    def test_cninfo_top_search_requires_one_exact_code_and_org_id(self) -> None:
+        exact = json.dumps({"keyBoardList": [{"code": "835185", "orgId": "gfbj0835185"}]}).encode()
+        self.assertEqual(_cninfo_org_id(exact, "835185"), "gfbj0835185")
+        self.assertEqual(_cninfo_org_id(json.dumps([{"code": "835185", "orgId": "gfbj0835185"}]).encode(), "835185"), "gfbj0835185")
+        with self.assertRaisesRegex(ValueError, "no exact"):
+            _cninfo_org_id(json.dumps({"keyBoardList": [{"code": "835186", "orgId": "other"}]}).encode(), "835185")
+        with self.assertRaisesRegex(ValueError, "multiple"):
+            _cninfo_org_id(json.dumps({"keyBoardList": [{"code": "835185", "orgId": "a"}, {"code": "835185", "orgId": "b"}]}).encode(), "835185")
+
     def test_transport_retries_tls_drop_and_5xx_before_success(self) -> None:
         class Session:
             def __init__(self) -> None:
                 self.headers = {}
                 self.calls = 0
 
-            def get(self, url, **_kwargs):
+            def request(self, _method, url, **_kwargs):
                 self.calls += 1
                 if self.calls == 1:
                     raise requests.exceptions.SSLError("UNEXPECTED_EOF")
@@ -173,7 +192,7 @@ class OfficialFilingIngestTest(unittest.TestCase):
                 self.responses = iter(responses)
                 self.calls = 0
 
-            def get(self, _url, **_kwargs):
+            def request(self, _method, _url, **_kwargs):
                 self.calls += 1
                 return next(self.responses)
 
@@ -293,7 +312,8 @@ class OfficialFilingIngestTest(unittest.TestCase):
         )
         self.assertEqual(set(result.documents), {"annual"})
         self.assertEqual(len(result.discovery_pages), 2)
-        self.assertEqual(len([url for url in transport.calls if url.startswith(INDEX_PREFIX)]), 2)
+        self.assertEqual(transport.calls.count(TOP_SEARCH_URL), 2)
+        self.assertEqual(transport.calls.count(HIS_ANNOUNCEMENT_URL), 2)
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
 
     def test_financial_report_page_budget_exhaustion_preserves_all_index_receipts(self) -> None:
@@ -306,7 +326,8 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertTrue(result.discovery.publishable)
         self.assertEqual(result.documents, {})
         self.assertEqual(len(result.discovery_pages), 2)
-        self.assertEqual(len([url for url in transport.calls if url.startswith(INDEX_PREFIX)]), 2)
+        self.assertEqual(transport.calls.count(TOP_SEARCH_URL), 2)
+        self.assertEqual(transport.calls.count(HIS_ANNOUNCEMENT_URL), 2)
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 0)
 
     def test_cninfo_identity_mismatch_fails_closed_before_document_fetch(self) -> None:
@@ -315,7 +336,7 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertFalse(result.publishable)
         self.assertEqual(result.documents, {})
         self.assertIn("another security", result.discovery.attempts[-1].error)
-        self.assertEqual(len(transport.calls), 1)
+        self.assertEqual(len(transport.calls), 2)
 
     def test_aggregator_cannot_claim_official_primary_role(self) -> None:
         forged = SourceManifest(

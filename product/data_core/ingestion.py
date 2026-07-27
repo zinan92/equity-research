@@ -121,8 +121,11 @@ class FetchedPayload:
             raise ValueError("redirect_chain must be an immutable tuple")
         for url in self.redirect_chain:
             parsed = urlsplit(url)
-            if parsed.scheme != "https" or not parsed.netloc:
-                raise ValueError("redirect_chain must contain absolute HTTPS URLs")
+            cninfo_structured_index = (
+                parsed.scheme == "http" and (parsed.hostname or "").lower() == "www.cninfo.com.cn"
+            )
+            if (parsed.scheme != "https" and not cninfo_structured_index) or not parsed.netloc:
+                raise ValueError("redirect_chain must contain HTTPS URLs, except CNINFO structured index HTTP")
         if self.redirect_chain and self.redirect_chain[-1] != self.source_url:
             raise ValueError("redirect_chain must end at source_url")
         RawCapture(

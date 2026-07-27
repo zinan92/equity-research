@@ -70,8 +70,11 @@ class HttpResponse:
     def validate(self) -> None:
         if not self.body:
             raise ValueError("official filing response body is empty")
-        if urlsplit(self.final_url).scheme != "https":
-            raise ValueError("official filing final URL must use HTTPS")
+        parsed = urlsplit(self.final_url)
+        if parsed.scheme != "https" and not (
+            parsed.scheme == "http" and parsed.hostname == "www.cninfo.com.cn"
+        ):
+            raise ValueError("official filing final URL must use HTTPS (except CNINFO structured index)")
         if not 200 <= self.status_code < 300:
             raise ValueError(f"official filing HTTP status is {self.status_code}")
         FetchedPayload(
@@ -86,13 +89,16 @@ class HttpResponse:
         ).validate()
 
 
-HttpTransport = Callable[[str, Mapping[str, str]], HttpResponse]
+HttpTransport = Callable[..., HttpResponse]
 
 
 def _host(url: str) -> str:
     parsed = urlsplit(str(url))
-    if parsed.scheme != "https" or not parsed.hostname:
-        raise ValueError("official source URL must be absolute HTTPS")
+    if not parsed.hostname or (
+        parsed.scheme != "https"
+        and not (parsed.scheme == "http" and parsed.hostname.lower().rstrip(".") == "www.cninfo.com.cn")
+    ):
+        raise ValueError("official source URL must be HTTPS, except CNINFO structured index HTTP")
     return parsed.hostname.lower().rstrip(".")
 
 
@@ -191,16 +197,27 @@ class OfficialHttpTransport:
             raise ValueError("official filing redirect left the source allowlist")
         return chain
 
-    def __call__(self, url: str, request_headers: Mapping[str, str]) -> HttpResponse:
+    def request(
+        self,
+        url: str,
+        request_headers: Mapping[str, str],
+        *,
+        method: str = "GET",
+        data: Mapping[str, str] | None = None,
+    ) -> HttpResponse:
         allowed_hosts = frozenset({_host(url)})
+        if method not in {"GET", "POST"}:
+            raise ValueError("official transport only supports GET and POST")
         last_detail = "official transport exhausted retries"
         last_status: int | None = None
         for attempt in range(1, self.max_attempts + 1):
             self._pace()
             try:
-                response = self.session.get(
+                response = self.session.request(
+                    method,
                     url,
                     headers={"Accept": "*/*", **dict(request_headers)},
+                    data=dict(data) if data is not None else None,
                     timeout=self.timeout_seconds,
                     allow_redirects=True,
                 )
@@ -242,12 +259,40 @@ class OfficialHttpTransport:
             return result
         raise OfficialTransportError(last_detail, attempts=self.max_attempts, status_code=last_status)
 
+    def __call__(
+        self,
+        url: str,
+        request_headers: Mapping[str, str],
+        *,
+        method: str = "GET",
+        data: Mapping[str, str] | None = None,
+    ) -> HttpResponse:
+        return self.request(url, request_headers, method=method, data=data)
+
 
 _DEFAULT_OFFICIAL_TRANSPORT = OfficialHttpTransport()
 
 
-def default_http_transport(url: str, request_headers: Mapping[str, str]) -> HttpResponse:
-    return _DEFAULT_OFFICIAL_TRANSPORT(url, request_headers)
+def default_http_transport(
+    url: str,
+    request_headers: Mapping[str, str],
+    *,
+    method: str = "GET",
+    data: Mapping[str, str] | None = None,
+) -> HttpResponse:
+    return _DEFAULT_OFFICIAL_TRANSPORT.request(url, request_headers, method=method, data=data)
+
+
+def _transport_request(
+    transport: HttpTransport,
+    url: str,
+    request_headers: Mapping[str, str],
+    *,
+    method: str,
+    data: Mapping[str, str] | None = None,
+) -> HttpResponse:
+    """Use the shared extended transport while retaining lightweight test seams."""
+    return transport(url, request_headers, method=method, data=data)
 
 
 def _utc_now() -> str:
@@ -308,30 +353,76 @@ def _manifest(source_key: str, domain: RecordDomain, source_url: str) -> SourceM
     )
 
 
+def _cninfo_org_id(body: bytes, code: str) -> str:
+    """Resolve one and only one exact security match from CNINFO top search."""
+    payload = json.loads(body.decode("utf-8"))
+    candidates: list[Mapping[str, Any]] = []
+    if isinstance(payload, list):
+        candidates.extend(item for item in payload if isinstance(item, Mapping))
+    elif isinstance(payload, Mapping):
+        for key in ("keyBoardList", "results", "result", "data"):
+            value = payload.get(key)
+            if isinstance(value, list):
+                candidates.extend(item for item in value if isinstance(item, Mapping))
+            elif isinstance(value, Mapping):
+                nested = value.get("list") or value.get("results")
+                if isinstance(nested, list):
+                    candidates.extend(item for item in nested if isinstance(item, Mapping))
+    else:
+        raise ValueError("CNINFO top search returned an invalid payload")
+    matches = [
+        item for item in candidates
+        if str(item.get("code") or item.get("secCode") or item.get("stockCode") or "").strip() == code
+    ]
+    if not matches:
+        raise ValueError("CNINFO top search returned no exact security match")
+    if len(matches) != 1:
+        raise ValueError("CNINFO top search returned multiple exact security matches")
+    org_id = str(matches[0].get("orgId") or matches[0].get("orgid") or "").strip()
+    if not org_id:
+        raise ValueError("CNINFO top search exact security match has no orgId")
+    return org_id
+
+
 class CninfoFilingIndexAdapter:
     def __init__(self, *, transport: HttpTransport = default_http_transport) -> None:
         self.transport = transport
         self.manifest = _manifest(
             CNINFO_FILING_INDEX_SOURCE,
             RecordDomain.EVENT,
-            "https://www.cninfo.com.cn/new/fulltextSearch/full",
+            "http://www.cninfo.com.cn/new/hisAnnouncement/query",
         )
 
     async def fetch(self, request: FetchRequest) -> FetchedPayload:
         instrument = normalize_ashare_ticker(request.entity_key)
+        code = instrument.ticker[:6]
+        top_search_url = "http://www.cninfo.com.cn/new/information/topSearch/query"
+        top_search = await asyncio.to_thread(
+            _transport_request,
+            self.transport,
+            top_search_url,
+            {"Accept": "application/json"},
+            method="POST",
+            data={"keyWord": code, "maxNum": "10"},
+        )
+        top_search.validate()
+        org_id = _cninfo_org_id(top_search.body, code)
         params = {
-            "searchkey": instrument.ticker[:6],
-            "sdate": str(request.parameters.get("start_date") or "2020-01-01"),
-            "edate": str(request.parameters.get("end_date") or datetime.now().date()),
-            "isfulltext": "false",
-            "sortName": "time",
-            "sortType": "desc",
+            "stock": f"{code},{org_id}",
+            "column": {"SSE": "sse", "SZSE": "szse", "BSE": "bj"}[instrument.exchange],
+            "tabName": "fulltext",
+            "seDate": f"{request.parameters.get('start_date') or '2020-01-01'}~{request.parameters.get('end_date') or datetime.now().date()}",
             "pageNum": str(int(request.parameters.get("page") or 1)),
             "pageSize": str(int(request.parameters.get("limit") or 30)),
-            "type": "",
         }
-        url = self.manifest.source_url + "?" + urlencode(params)
-        response = await asyncio.to_thread(self.transport, url, {"Accept": "application/json"})
+        response = await asyncio.to_thread(
+            _transport_request,
+            self.transport,
+            self.manifest.source_url,
+            {"Accept": "application/json"},
+            method="POST",
+            data=params,
+        )
         response.validate()
         validate_official_source_role(self.manifest, response.final_url)
         fetched_at = _utc_now()

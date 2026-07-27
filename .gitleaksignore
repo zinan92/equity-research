@@ -1,6 +1,3 @@
-98add885919cb4fd2aede25348711d925a233a59:scripts/verify_data_foundation.py:generic-api-key:23
-98add885919cb4fd2aede25348711d925a233a59:product/tests/test_data_foundation.py:generic-api-key:23
-3126340248e0b9ca55daa06447d433f511209f1d:scripts/verify_data_foundation.py:generic-api-key:23
-3126340248e0b9ca55daa06447d433f511209f1d:product/tests/test_data_foundation.py:generic-api-key:23
-fce996c33e70eddce8e375f53cd252b549eb3d7c:skills/deep-analysis/scripts/lib/pipeline/fetchers/registry.py:generic-api-key:135
-fce996c33e70eddce8e375f53cd252b549eb3d7c:skills/deep-analysis/scripts/tests/pipeline/test_base_fetcher.py:generic-api-key:64
+# Audited deterministic test fixtures; no credential is used at runtime.
+product/tests/test_data_foundation.py:generic-api-key:23
+scripts/verify_data_foundation.py:generic-api-key:23

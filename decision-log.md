@@ -1745,6 +1745,17 @@
 - completed receipt 重跑时必须保留原先 captured row 的 raw identity；把它降为 `skipped` 会让 partial-model compiler 遗失旧证据，造成计数表面不变。
 - HTTP 200 空索引不是传输重试的适用对象；不能把它伪装成 TLS/WAF 失败或用聚合器补成 primary evidence。
 
+## 2026-07-27 · CNINFO structured issuer discovery
+
+- Decision：CNINFO filing discovery 先经 `topSearch/query` 对证券代码做唯一精确匹配并取得 `orgId`，再以 `hisAnnouncement/query`、交易所 column 和本地 document-type 过滤获取公告；不再用裸代码全文搜索判断披露可得性。
+- Why：全文搜索对北交所裸代码返回空，但官方结构化查询可返回同一 issuer 的公告及 PDF。100 ticker rerun 将 official-primary / partial Report Model 从 80 提升为 100。
+- Evidence：人工 session 请求 `835185 → gfbj0835185` 后，`hisAnnouncement/query` 返回 HTTP 200、`totalAnnouncement=615`；runtime receipt `official-evidence-batch-a999bb485985c945.json` 为 100 captured / 0 failed。
+
+### Gotchas · CNINFO structured issuer discovery
+
+- topSearch 的实际响应可以是顶层 list；必须支持它，但仍只允许一个 exact code match 和非空 orgId，绝不按第一个模糊结果猜测。
+- HTTP 200 空列表只说明该一次查询的参数或语义需要核实，不是“源端没有数据”的证据。任何不可得结论必须先保留人工原始请求与完整响应。
+
 ## 2026-07-25 · E5-S5b private-preview spot-audit route allowlist
 
 - Decision：将 owner-only spot-audit assignment read 与 review export 纳入 private-preview 的显式 GET allowlist；review POST 沿用既有 owner entitlement、CSRF 与 append-only store，不新增成员权限。
