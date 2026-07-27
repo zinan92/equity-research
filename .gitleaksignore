@@ -1,3 +1,6 @@
 # Audited deterministic test fixtures; no credential is used at runtime.
 product/tests/test_data_foundation.py:generic-api-key:23
 scripts/verify_data_foundation.py:generic-api-key:23
+# Audited UZI reference fixtures: the matched dim_key is not a credential.
+fce996c33e70eddce8e375f53cd252b549eb3d7c:skills/deep-analysis/scripts/lib/pipeline/fetchers/registry.py:generic-api-key:135
+fce996c33e70eddce8e375f53cd252b549eb3d7c:skills/deep-analysis/scripts/tests/pipeline/test_base_fetcher.py:generic-api-key:64

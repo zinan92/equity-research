@@ -335,8 +335,31 @@ class OfficialFilingIngestTest(unittest.TestCase):
         result = sync_cninfo_filings("300750.SZ", transport=transport)
         self.assertFalse(result.publishable)
         self.assertEqual(result.documents, {})
-        self.assertIn("another security", result.discovery.attempts[-1].error)
+        self.assertIn("does not belong to SZ", result.discovery.attempts[-1].error)
         self.assertEqual(len(transport.calls), 2)
+
+    def test_cninfo_code_migration_promotes_current_bj_code_with_official_fact(self) -> None:
+        class MigrationTransport(FakeTransport):
+            def __call__(self, url: str, headers, *, method: str = "GET", data=None) -> HttpResponse:
+                if url == TOP_SEARCH_URL:
+                    body = json.dumps([{"code": "835185", "orgId": "gfbj0835185", "delisted": "true"}]).encode()
+                    self.calls.append(url)
+                    return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
+                if url == HIS_ANNOUNCEMENT_URL:
+                    row = announcement("annual", "贝特瑞：2025年年度报告", 1773504000000)
+                    row["secCode"] = "920185"
+                    body = json.dumps({"announcements": [row]}, ensure_ascii=False).encode()
+                    self.calls.append(url)
+                    return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
+                return super().__call__(url, headers, method=method, data=data)
+
+        result = sync_cninfo_filings("835185.BJ", transport=MigrationTransport(), financial_reports_only=True, max_documents=1)
+        record = result.discovery.records[0]
+        self.assertEqual((result.ticker, result.resolved_ticker), ("835185.BJ", "920185.BJ"))
+        self.assertEqual(record.payload["requested_ticker"], "835185.BJ")
+        self.assertTrue(record.payload["cninfo_delisted"])
+        self.assertEqual(record.payload["code_migration"]["org_id"], "gfbj0835185")
+        self.assertEqual(result.documents["annual"].records[0].payload["ticker"], "920185.BJ")
 
     def test_aggregator_cannot_claim_official_primary_role(self) -> None:
         forged = SourceManifest(

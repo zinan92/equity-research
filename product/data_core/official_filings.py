@@ -353,7 +353,7 @@ def _manifest(source_key: str, domain: RecordDomain, source_url: str) -> SourceM
     )
 
 
-def _cninfo_org_id(body: bytes, code: str) -> str:
+def _cninfo_top_search_match(body: bytes, code: str) -> Mapping[str, Any]:
     """Resolve one and only one exact security match from CNINFO top search."""
     payload = json.loads(body.decode("utf-8"))
     candidates: list[Mapping[str, Any]] = []
@@ -381,7 +381,12 @@ def _cninfo_org_id(body: bytes, code: str) -> str:
     org_id = str(matches[0].get("orgId") or matches[0].get("orgid") or "").strip()
     if not org_id:
         raise ValueError("CNINFO top search exact security match has no orgId")
-    return org_id
+    return matches[0]
+
+
+def _cninfo_org_id(body: bytes, code: str) -> str:
+    match = _cninfo_top_search_match(body, code)
+    return str(match.get("orgId") or match.get("orgid"))
 
 
 class CninfoFilingIndexAdapter:
@@ -406,7 +411,8 @@ class CninfoFilingIndexAdapter:
             data={"keyWord": code, "maxNum": "10"},
         )
         top_search.validate()
-        org_id = _cninfo_org_id(top_search.body, code)
+        top_match = _cninfo_top_search_match(top_search.body, code)
+        org_id = str(top_match.get("orgId") or top_match.get("orgid"))
         params = {
             "stock": f"{code},{org_id}",
             "column": {"SSE": "sse", "SZSE": "szse", "BSE": "bj"}[instrument.exchange],
@@ -435,18 +441,35 @@ class CninfoFilingIndexAdapter:
             status_code=response.status_code,
             response_headers=response.headers,
             redirect_chain=response.redirect_chain or (response.final_url,),
+            provenance_context={
+                "cninfo_top_search": {
+                    "requested_code": code,
+                    "org_id": org_id,
+                    "delisted": str(top_match.get("delisted") or "").lower() == "true",
+                    "source_url": top_search.final_url,
+                    "raw_hash": hashlib.sha256(top_search.body).hexdigest(),
+                    "observed_at": fetched_at,
+                },
+            },
         )
 
     def parse(
         self, request: FetchRequest, fetched: FetchedPayload, raw: RawCapture
     ) -> Iterable[RecordEnvelope]:
         instrument = normalize_ashare_ticker(request.entity_key)
+        top_search = (fetched.provenance_context or {}).get("cninfo_top_search") or {}
+        requested_code = instrument.ticker[:6]
+        org_id = str(top_search.get("org_id") or "")
+        if not org_id:
+            raise ValueError("CNINFO history response is missing top-search orgId provenance")
         payload = json.loads(fetched.body.decode("utf-8"))
         announcements = payload.get("announcements") or []
         records: list[RecordEnvelope] = []
         for row in announcements:
-            if str(row.get("secCode") or "") != instrument.ticker[:6]:
-                raise ValueError("CNINFO filing index returned another security")
+            current_code = str(row.get("secCode") or "").strip()
+            if not re.fullmatch(r"\d{6}", current_code):
+                raise ValueError("CNINFO filing index returned invalid security code")
+            resolved = normalize_ashare_ticker(f"{current_code}.{instrument.ticker[-2:]}")
             document_id = str(row.get("announcementId") or "").strip()
             if not document_id:
                 continue
@@ -464,7 +487,7 @@ class CninfoFilingIndexAdapter:
             published_at = _published_at(row.get("announcementTime"))
             payload_value = {
                 "event_id": f"cninfo-discovery:{document_id}",
-                "instrument_id": instrument.instrument_id,
+                "instrument_id": resolved.instrument_id,
                 "event_type": "official_filing_discovered",
                 "occurred_at": published_at,
                 "title": title,
@@ -474,12 +497,24 @@ class CninfoFilingIndexAdapter:
                 "document_type": classify_filing_title(title),
                 "document_source_key": source_key,
                 "source_role": "official_index",
-                "ticker": instrument.ticker,
+                "ticker": resolved.ticker,
+                "requested_ticker": instrument.ticker,
+                "cninfo_delisted": bool(top_search.get("delisted")),
+                "cninfo_org_id": org_id,
             }
+            if current_code != requested_code:
+                payload_value["code_migration"] = {
+                    "old_code": requested_code,
+                    "current_code": current_code,
+                    "org_id": org_id,
+                    "observed_at": str(top_search.get("observed_at") or fetched.known_at),
+                    "top_search_raw_hash": str(top_search.get("raw_hash") or ""),
+                    "top_search_source_url": str(top_search.get("source_url") or ""),
+                }
             records.append(
                 RecordEnvelope.accepted(
                     domain=RecordDomain.EVENT,
-                    entity_key=f"{instrument.instrument_id}:filing-discovery:{document_id}",
+                    entity_key=f"{resolved.instrument_id}:filing-discovery:{document_id}",
                     payload=payload_value,
                     manifest=self.manifest,
                     raw=raw,
@@ -743,6 +778,8 @@ class OfficialFilingBatch:
     documents: Mapping[str, IngestionOutcome]
     skipped_document_ids: tuple[str, ...]
     discovery_pages: tuple[IngestionOutcome, ...] = ()
+    resolved_ticker: str | None = None
+    code_migrations: tuple[Mapping[str, Any], ...] = ()
 
     @property
     def publishable(self) -> bool:
@@ -768,6 +805,8 @@ class OfficialFilingBatch:
             }
         return {
             "ticker": self.ticker,
+            "resolved_ticker": self.resolved_ticker or self.ticker,
+            "code_migrations": [dict(item) for item in self.code_migrations],
             "status": "success" if self.publishable else "degraded",
             "publishable": self.publishable,
             "discovered": sum(len(item.records) for item in self.discovery_pages or (self.discovery,)),
@@ -843,10 +882,11 @@ async def sync_cninfo_filings_async(
                 skipped.append(document_id)
                 continue
             source_key = str(event["document_source_key"])
+            document_ticker = str(event.get("ticker") or instrument.ticker)
             request = FetchRequest.create(
                 request_id=f"filing-{request_token}-document-{document_id}",
                 domain=RecordDomain.DOCUMENT,
-                entity_key=instrument.ticker,
+                entity_key=document_ticker,
                 parameters={
                     "document_id": document_id,
                     "document_url": event["document_url"],
@@ -857,12 +897,20 @@ async def sync_cninfo_filings_async(
             documents[document_id] = await active_runtime.run(
                 request, (SourceChoice(source_key, "primary"),)
             )
+    migration_records = tuple(
+        record.payload["code_migration"]
+        for record in discovered_records
+        if isinstance(record.payload.get("code_migration"), Mapping)
+    )
+    resolved_ticker = str(discovered_records[0].payload.get("ticker") or instrument.ticker) if discovered_records else instrument.ticker
     return OfficialFilingBatch(
         ticker=instrument.ticker,
         discovery=discovery,
         documents=documents,
         skipped_document_ids=tuple(sorted(skipped)),
         discovery_pages=tuple(discovery_pages),
+        resolved_ticker=resolved_ticker,
+        code_migrations=migration_records,
     )
 
 

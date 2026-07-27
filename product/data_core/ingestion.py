@@ -89,6 +89,7 @@ class FetchedPayload:
     data_kind: str = "real"
     response_headers: tuple[tuple[str, str], ...] = ()
     redirect_chain: tuple[str, ...] = ()
+    provenance_context: Mapping[str, Any] | None = None
 
     def validate(self) -> None:
         if not isinstance(self.body, bytes):
@@ -128,6 +129,8 @@ class FetchedPayload:
                 raise ValueError("redirect_chain must contain HTTPS URLs, except CNINFO structured index HTTP")
         if self.redirect_chain and self.redirect_chain[-1] != self.source_url:
             raise ValueError("redirect_chain must end at source_url")
+        if self.provenance_context is not None and not isinstance(self.provenance_context, Mapping):
+            raise ValueError("provenance_context must be a mapping when provided")
         RawCapture(
             raw_hash=hashlib.sha256(self.body).hexdigest(),
             storage_uri="pending/storage-key",

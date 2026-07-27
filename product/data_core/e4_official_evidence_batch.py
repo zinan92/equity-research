@@ -194,10 +194,15 @@ def _attempt_diagnostic(outcome: Any) -> dict[str, Any]:
 
 def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -> dict[str, Any]:
     summary = batch.to_summary() if hasattr(batch, "to_summary") else {}
+    resolved_ticker = str(getattr(batch, "resolved_ticker", None) or ticker).upper()
+    identity = (
+        {"ticker": resolved_ticker, "requested_ticker": ticker}
+        if resolved_ticker != ticker else {"ticker": ticker}
+    )
     discovery_pages = summary.get("discovery_pages", [])
     if not batch.discovery.publishable:
         return {
-            "status": "failed", "data_kind": "real", "ticker": ticker,
+            "status": "failed", "data_kind": "real", **identity,
             "blockers": _discovery_failure_blockers(batch.discovery), "discovery_pages": discovery_pages,
             **_attempt_diagnostic(batch.discovery),
         }
@@ -205,21 +210,26 @@ def _result_for_batch(ticker: str, batch: OfficialFilingBatch, raw_root: Path) -
         raise ValueError("official evidence batch may capture at most one document per ticker")
     if not batch.documents:
         return {
-            "status": "failed", "data_kind": "real", "ticker": ticker,
+            "status": "failed", "data_kind": "real", **identity,
             "blockers": ["no_qualifying_report_within_page_budget"], "discovery_pages": discovery_pages,
         }
     document_id, outcome = next(iter(batch.documents.items()))
     if not outcome.publishable:
         return {
-            "status": "failed", "data_kind": "real", "ticker": ticker,
+            "status": "failed", "data_kind": "real", **identity,
             "document_id": document_id, "blockers": _document_failure_blockers(outcome), "discovery_pages": discovery_pages,
             **_attempt_diagnostic(outcome),
         }
     try:
-        return {"ticker": ticker, "discovery_pages": discovery_pages, **_raw_receipt(outcome, raw_root)}
+        return {
+            **identity,
+            "discovery_pages": discovery_pages,
+            "code_migrations": [dict(item) for item in getattr(batch, "code_migrations", ())],
+            **_raw_receipt(outcome, raw_root),
+        }
     except ValueError as exc:
         return {
-            "status": "failed", "data_kind": "real", "ticker": ticker,
+            "status": "failed", "data_kind": "real", **identity,
             "document_id": document_id,
             "blockers": ["official_filing_stale_or_unqualified"], "discovery_pages": discovery_pages,
             "error": type(exc).__name__,
@@ -270,7 +280,7 @@ def run_official_evidence_batch(
                 ):
                     raise ValueError("official evidence checkpoint does not match this corpus configuration")
                 previous = {
-                    str(item.get("ticker") or "").upper(): item
+                    str(item.get("requested_ticker") or item.get("ticker") or "").upper(): item
                     for item in previous_payload.get("tickers") or []
                     if item.get("status") == "captured"
                 }
@@ -278,7 +288,7 @@ def run_official_evidence_batch(
                 if previous_payload.get("config") != config:
                     raise ValueError("official evidence completed receipt does not match this corpus configuration")
                 previous = {
-                    str(item.get("ticker") or "").upper(): item
+                    str(item.get("requested_ticker") or item.get("ticker") or "").upper(): item
                     for item in previous_payload.get("tickers") or []
                     if item.get("status") == "captured"
                 }
