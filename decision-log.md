@@ -1734,6 +1734,13 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-28 · R2 world-model gate uses receipt-bound evidence, not count-only narratives
+
+- **Decision：** Record the current R2 pass only through the five receipt hashes and the existing fail-closed verifier; preserve the previous partial audit as historical evidence.
+- **Why：** The N3 structural counts were already present when R2 was partial. The pass became valid only after each of the five company questions had 20/20 receipt-bound coverage.
+- **Evidence：** `scripts/verify_r2_ai_compute_world_model.py` returned `status=passed` with 12 nodes, 108 segments, 30 accepted positions, 20 compiled dossiers and all five question dimensions at 20/20; see `docs/evidence/2026-07-28-r2-current-acceptance.md`.
+- **Gotchas：** Runtime receipt paths are reproducibility coordinates, not committed product facts. R2 does not promote the dossiers beyond `no_action`, and cannot substitute for R3's 100/95/80/20 acceptance or an independent numeric/page audit.
+
 ## 2026-07-28 · Retire benchmark-derived industry snapshot from product serving
 
 - **Decision：** Remove `product/data/industry-intelligence-v1.json` and make its API fail explicitly until canonical E1--E3 evidence-backed industry data is published.
