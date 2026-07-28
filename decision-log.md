@@ -1756,6 +1756,17 @@
 - 本批不接入 Report Model、审计工作台或任何结论层；它只是可供后续人工核验的 primary evidence。
 - 北交所 discovery 必须传 `category_ndbg_szsh` 取正式年度报告；否则最新“业绩说明会预告”会被误当作 financial report。
 
+## 2026-07-28 · E4 three-slice B6/C1 degradation bridge
+
+- Decision：宁德时代、贵州茅台、平安银行的真实官方页级事实先进入 B6 证据集，再以完全相同的 manifest hash 创建 live C1 合同，最后只调用既有 `assess_any_ticker` 判定 Tier。
+- Why：页级事实若停在 E4 partial side path，永远只能是 C；B 的正确含义是“证据门和合同已通，但章节仍不完整”，而不是伪造完整分析。
+- Evidence：三家 B6 receipt 均为 `passed`，filings 覆盖均为 primary 1/1；C1 合同均 live_eligible，章节为 1 full、1 partial、16 missing；原策略输出均为 B，理由仅为 `partial_or_missing_sections` 与 action-field block。
+
+### Gotchas · E4 B6/C1 bridge
+
+- 这条桥不能替代 B6 policy、freshness 或 conflict gate；任一真实官方文件被门禁拒绝时必须保持 C，而不是调低要求。
+- FULL 仅用于 evidence_and_methodology（有 evidence receipt、citation index 和方法）；财务章节因只有收入等事实、缺利润桥而是 PARTIAL，其余章节必须 MISSING。
+
 ## 2026-07-28 · R2 world-model gate uses receipt-bound evidence, not count-only narratives
 
 - **Decision：** Record the current R2 pass only through the five receipt hashes and the existing fail-closed verifier; preserve the previous partial audit as historical evidence.
