@@ -158,7 +158,7 @@ def run_financial_sequence_batch(
         # Keep each retry bounded.  The transport still retries four times
         # with exponential jitter, but a temporarily slow issuer cannot hold
         # the whole single-concurrency cohort indefinitely.
-        timeout_seconds=15.0, min_request_interval_seconds=delay_seconds,
+        timeout_seconds=5.0, min_request_interval_seconds=delay_seconds,
     )
     rows: list[dict[str, Any]] = []
     checkpoint_path = runtime_root / "financial-sequence-batch-checkpoint.json"
