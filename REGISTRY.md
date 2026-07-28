@@ -245,3 +245,8 @@
 
 - 现在在哪里：PR #482 merged. 宁德时代、贵州茅台、平安银行均用真实官方页级事实通过 B6（filings primary 1/1）并生成 manifest 对齐、live_eligible 的 C1 合同；现有策略自然输出 Tier B，三家 reasons 均为 `partial_or_missing_sections` 与 action-field block。
 - 下一步：三家都只有 1 FULL、1 PARTIAL、16 MISSING；例如决策摘要仍缺市场快照和决策摘要输入。不得把这三家外推至其他 ticker，也不得以此宣称 #218 的 80 家 Tier A/B 门槛有进展；继续补真实章节证据前，不安排 reviewer。
+
+## 2026-07-28 · E4 C1 completion inventory before any 80-ticker expansion
+
+- 现在在哪里：PR #485 merged. 三家 Tier-B 合同逐章盘点确认 1 FULL、1 PARTIAL、16 MISSING；距 Tier A 尚缺 33 项独立 required inputs，其中 17 项有现成模块可接、16 项未建。
+- 下一步：C1 v2 当前没有任何 required input 跨章节复用，所谓“输入杠杆”最高仅解锁 1 章。先由 Park 审核这份施工图，再决定补哪些真实能力；不得用机械扩到 80 家 Tier B 替代内容完成度。
