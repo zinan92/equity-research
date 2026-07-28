@@ -138,6 +138,24 @@ class CatlHistoryTest(unittest.TestCase):
             (3_115_628_975.55, "period_begin"),
         ])
 
+    def test_asset_subtotal_cannot_impersonate_total_assets(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw = b"%PDF-test"; digest = hashlib.sha256(raw).hexdigest()
+        page = DocumentPage(
+            "doc", 9, digest, "v",
+            "合并资产负债表\n单位：元\n期末余额 期初余额\n流动资产合计 15,830 13,898\n资产合计 35,829 33,347",
+            "a", "native", "table",
+        )
+        parsed = DocumentParseResult("doc", digest, "v", "p", (page,), (), ())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document", return_value=parsed):
+            facts = extract_report_facts(OfficialReport("2025FY", "doc", "https://official.example/doc.pdf"), raw)
+        total_assets = [(item.metric, item.value) for item in facts if item.metric == "total_assets"]
+        self.assertEqual(total_assets, [
+            ("total_assets", 35_829), ("total_assets", 33_347),
+        ])
+
     def test_missing_extraction_records_keep_a_raw_excerpt(self) -> None:
         from unittest.mock import patch
         from data_core.document_intelligence import DocumentPage, DocumentParseResult

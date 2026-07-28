@@ -27,6 +27,29 @@ class M4AssignmentSelectionTest(unittest.TestCase):
         selected = MODULE._select_fact(facts)
         self.assertEqual((selected["metric"], selected["value"]), ("total_assets", 2_924_099_340.75))
 
+    def test_disputed_cross_year_fact_is_not_selected(self) -> None:
+        facts = [
+            {
+                "metric": "revenue", "value": 10_000, "unit": "元", "report_period": "2024FY",
+                "document_id": "old", "column_identity": "current_period",
+                "quoted_label": "营业收入", "quoted_anchor": "营业收入 10,000",
+            },
+            {
+                "metric": "revenue", "value": 20_000, "unit": "元", "report_period": "2024FY",
+                "document_id": "new", "column_identity": "previous_period",
+                "quoted_label": "营业收入", "quoted_anchor": "营业收入 20,000",
+            },
+            {
+                "metric": "total_assets", "value": 50_000, "unit": "元", "report_period": "2025FY",
+                "document_id": "new", "column_identity": "period_end",
+                "quoted_label": "资产总计", "quoted_anchor": "资产总计 50,000",
+            },
+        ]
+        MODULE._annotate_cross_year_status(facts)
+        selected = MODULE._select_fact(facts)
+        self.assertEqual((facts[0]["cross_year_status"], facts[1]["cross_year_status"]), ("disputed", "disputed"))
+        self.assertEqual(selected["metric"], "total_assets")
+
 
 if __name__ == "__main__":
     unittest.main()
