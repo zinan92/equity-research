@@ -1745,6 +1745,17 @@
 - 页级事实是一个窄 Report Model projection，仍固定 Tier C/no_action；它不完成 #218，也不产生 Tier、目标价、仓位或人工审计 credit。
 - 下载或页内锚点失败必须保留为 missing；禁止改用东财/F10 等结构化聚合器伪装为页级原始事实。
 
+## 2026-07-28 · E4-S4 20-ticker page-fact batch
+
+- Decision：页级事实放量时只扫描已捕获官方 PDF 的合并利润表（或合并及银行/公司利润表）页面；自动抽取仅限营业收入和已明确标注的归母净利润，要求页面同时提供单位与币种。
+- Why：营业成本等字段在附注、分部表和会计政策中会出现同名词，宽松匹配会产生错误数值。宁可少抽，也不能将相邻或相似科目当作报表行。
+- Evidence：20 个既有池 ticker 的官方捕获在 SH/SZ/BJ 三个市场均产生至少一条符合完整身份字段的事实；批处理保留每个 ticker 的 missing 原因。
+
+### Gotchas · E4-S4 20-ticker facts
+
+- 本批不接入 Report Model、审计工作台或任何结论层；它只是可供后续人工核验的 primary evidence。
+- 北交所 discovery 必须传 `category_ndbg_szsh` 取正式年度报告；否则最新“业绩说明会预告”会被误当作 financial report。
+
 ## 2026-07-28 · R2 world-model gate uses receipt-bound evidence, not count-only narratives
 
 - **Decision：** Record the current R2 pass only through the five receipt hashes and the existing fail-closed verifier; preserve the previous partial audit as historical evidence.

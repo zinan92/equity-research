@@ -6,11 +6,11 @@ structured aggregators and it never changes an E4 decision boundary.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-import hashlib
+import re
 from typing import Any, Iterable
 
 from .contracts import digest
-from .document_intelligence import DocumentPage, parse_pdf_document
+from .document_intelligence import parse_pdf_document
 from .vertical_slices import OfficialEvidenceAnchor
 
 
@@ -43,6 +43,74 @@ class FilingNumericFact:
             raise ValueError("page-level fact raw_hash must be SHA-256")
         if self.page_number < 1 or not isinstance(self.value, (int, float)):
             raise ValueError("page-level fact has invalid page or value")
+
+
+@dataclass(frozen=True)
+class FilingFactSource:
+    """One already-captured official PDF; raw bytes remain runtime-only."""
+    ticker: str
+    document_id: str
+    raw_hash: str
+    source_url: str
+    report_period: str
+
+
+_METRICS = (
+    ("revenue", ("一、营业总收入", "营业总收入", "一、营业收入", "营业收入", "Operating revenue")),
+    ("net_profit_parent", ("归属于母公司股东的净利润", "归属于上市公司股东的净利润", "归属于本行股东的净利润")),
+)
+
+
+def _unit_and_currency(text: str) -> tuple[str, str] | None:
+    compact = " ".join(text.split())
+    if "人民币百万元" in compact or "货币单位：人民币百万元" in compact:
+        return "人民币百万元", "CNY"
+    if "单位：百万元" in compact:
+        return "百万元", "CNY"
+    if "单位：千元" in compact:
+        return "千元", "CNY"
+    if "单位：万元" in compact:
+        return "万元", "CNY"
+    if "单位：元" in compact or "Monetary Unit: Yuan Currency: RMB" in compact:
+        return "元", "CNY"
+    return None
+
+
+def _consolidated_scope(text: str) -> str | None:
+    compact = " ".join(text.split())
+    if "合并利润表" in compact or "合并及公司利润表" in compact or "合并及银行利润表" in compact or "未经审计合并利润表" in compact:
+        return "consolidated"
+    return None
+
+
+def extract_page_level_facts(source: FilingFactSource, pdf_bytes: bytes) -> tuple[FilingNumericFact, ...]:
+    """Extract only rows located on a consolidated statement page, or nothing."""
+    parsed = parse_pdf_document(source.document_id, pdf_bytes, expected_raw_hash=source.raw_hash)
+    facts: list[FilingNumericFact] = []
+    seen: set[str] = set()
+    for page in parsed.pages:
+        text = " ".join(page.text.split())
+        scope = _consolidated_scope(text)
+        unit = _unit_and_currency(text)
+        if scope is None or unit is None:
+            continue
+        for metric, labels in _METRICS:
+            if metric in seen:
+                continue
+            label = next((item for item in labels if item in text), None)
+            if label is None:
+                continue
+            suffix = text[text.index(label) + len(label): text.index(label) + len(label) + 140]
+            match = re.search(r"(?<![\d.])-?[\d][\d,]*(?:\.\d+)?", suffix)
+            if match is None:
+                continue
+            value = float(match.group(0).replace(",", ""))
+            anchor = text[text.index(label): min(len(text), text.index(label) + 280)]
+            fact = FilingNumericFact(source.ticker, metric, value, source.document_id, source.raw_hash,
+                                     page.page_number, label, anchor, source.report_period, scope,
+                                     unit[0], unit[1], source.source_url)
+            fact.validate(); facts.append(fact); seen.add(metric)
+    return tuple(facts)
 
 
 # Exact labels identify the row; values are read from the extracted page, not
@@ -95,16 +163,33 @@ def compile_page_level_filing_facts(
         "schema_version": E4_PAGE_FACTS_SCHEMA_VERSION,
         "data_kind": "real",
         "facts": rows,
-        # This is a deliberately narrow Report Model projection: it carries
-        # only the filing fact and preserves a no-action boundary.  It must
-        # not be mistaken for a complete E4 model or a recommendation.
-        "report_models": [
-            {"ticker": row["ticker"], "data_kind": "real", "decision_boundary": {"tier": "C", "action": "no_action", "target_price": None, "position_range": None},
-             "page_level_numeric_facts": [row["fact"]]}
-            for row in rows if row["status"] == "available"
-        ],
         "counts": {"companies": len(rows), "available": sum(row["status"] == "available" for row in rows),
                    "missing": sum(row["status"] == "missing" for row in rows)},
+        "truth_boundary": {"page_bound_primary_facts_only": True, "does_not_promote_tier_or_action": True,
+                           "does_not_complete_e4_s4": True},
+    }
+    output["receipt_hash"] = digest(output)
+    return output
+
+
+def compile_page_level_filing_fact_batch(
+    sources: Iterable[tuple[FilingFactSource, bytes]],
+) -> dict[str, Any]:
+    """Batch variant for real official captures; a failure never gets a substitute."""
+    rows: list[dict[str, Any]] = []
+    for source, pdf_bytes in sources:
+        try:
+            facts = extract_page_level_facts(source, pdf_bytes)
+            if not facts:
+                rows.append({"ticker": source.ticker, "status": "missing", "reason": "no_consolidated_statement_metric_with_unit"})
+            else:
+                rows.append({"ticker": source.ticker, "status": "available", "facts": [asdict(item) for item in facts]})
+        except Exception as exc:
+            rows.append({"ticker": source.ticker, "status": "missing", "reason": type(exc).__name__ + ": " + str(exc)})
+    output: dict[str, Any] = {
+        "schema_version": E4_PAGE_FACTS_SCHEMA_VERSION, "data_kind": "real", "facts": rows,
+        "counts": {"tickers": len(rows), "available_tickers": sum(row["status"] == "available" for row in rows),
+                   "facts": sum(len(row.get("facts") or ()) for row in rows), "missing_tickers": sum(row["status"] == "missing" for row in rows)},
         "truth_boundary": {"page_bound_primary_facts_only": True, "does_not_promote_tier_or_action": True,
                            "does_not_complete_e4_s4": True},
     }
