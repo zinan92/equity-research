@@ -230,3 +230,8 @@
 
 - 现在在哪里：PR #467 merged. CNINFO structured discovery, reusable transport and failed-row replay raised real official-primary partial models from 40 to 100. Current issuer codes are used for document identity; legacy BJ codes remain E1-S1 aliases when official orgId evidence proves a same-market migration. The default gitleaks history gate is green.
 - 下一步：perform the existing 20 genuine independent numeric/page audits. Do not treat 100/100 official-primary inputs as Tier A/B, valuation, target, position or a completed equity-research report.
+
+## 2026-07-28 · E4 page-bound facts precede any human audit
+
+- 现在在哪里：PR #476 merged. 宁德时代、贵州茅台和招商银行各有一条真实官方年报营业收入事实，均带同一 PDF 的 document_id、raw SHA-256、一基页码、原文锚点、报告期、合并口径、单位及币种；审计候选已改为“一个数字 + 它所在的一页”，不再把行情报价和年报页错误配对。
+- 下一步：#218 仍未通过，且不得安排 reviewer。当前 3 条仅是可审对象和窄 Tier-C/no_action Report Model projection，不产生 numeric/page audit、Tier A/B、目标价、仓位或行动 credit；先扩大真实页级 primary facts，再由 Park 决定是否安排人工核验。
