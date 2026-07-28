@@ -7,11 +7,10 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import digest
-from .e4_partial_report_models import E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION
+from .e4_page_level_filing_facts import E4_PAGE_FACTS_SCHEMA_VERSION
 
 
 E4_SPOT_AUDIT_ASSIGNMENTS_SCHEMA_VERSION = "e4-s4-spot-audit-assignments-v1"
-ASSIGNMENT_COUNT = 20
 
 
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
@@ -21,43 +20,27 @@ def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
 
 
 def _candidate(entry: Mapping[str, Any]) -> dict[str, Any] | None:
-    model = entry.get("model")
-    if entry.get("status") != "compiled" or not isinstance(model, Mapping):
+    fact = entry.get("fact")
+    if entry.get("status") != "available" or not isinstance(fact, Mapping):
         return None
-    boundary = model.get("decision_boundary")
-    facts = model.get("input_facts")
-    market = facts.get("market") if isinstance(facts, Mapping) else None
-    fundamentals = facts.get("fundamentals") if isinstance(facts, Mapping) else None
-    quote = market.get("quote") if isinstance(market, Mapping) else None
-    latest_period = fundamentals.get("latest_period") if isinstance(fundamentals, Mapping) else None
-    numeric_value = quote.get("last_price") if isinstance(quote, Mapping) else None
+    required = ("ticker", "document_id", "raw_hash", "metric", "value", "page_number", "quoted_label", "quoted_anchor", "report_period", "statement_scope", "unit", "currency", "source_url")
     if not (
-        model.get("schema_version") == E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION
-        and model.get("data_kind") == "real"
-        and isinstance(model.get("ticker"), str)
-        and isinstance(model.get("document_id"), str)
-        and isinstance(model.get("raw_hash"), str) and len(model["raw_hash"]) == 64 and all(char in "0123456789abcdef" for char in model["raw_hash"].lower())
-        and isinstance(model.get("report_model_hash"), str) and len(model["report_model_hash"]) == 64 and all(char in "0123456789abcdef" for char in model["report_model_hash"].lower())
-        and boundary == {"tier": "C", "action": "no_action", "target_price": None, "position_range": None}
-        and isinstance(numeric_value, (int, float))
-        and isinstance(latest_period, Mapping)
-        and latest_period.get("report_period")
-        and set(market.get("source_components") or ()) == {"quote", "daily_bars"}
-        and set(fundamentals.get("source_components") or ()) == {"fundamentals", "balance_sheet", "income_statement", "cash_flow"}
+        all(fact.get(key) not in (None, "") for key in required)
+        and isinstance(fact.get("value"), (int, float)) and isinstance(fact.get("page_number"), int)
+        and len(str(fact.get("raw_hash"))) == 64
+        and all(char in "0123456789abcdef" for char in str(fact.get("raw_hash")).lower())
     ):
         return None
     return {
-        "ticker": model["ticker"], "report_model_hash": model["report_model_hash"],
-        "document_identity": {"document_id": model["document_id"], "raw_hash": model["raw_hash"]},
+        "ticker": fact["ticker"], "document_identity": {"document_id": fact["document_id"], "raw_hash": fact["raw_hash"]},
         "numeric_check": {
-            "fact_path": "input_facts.market.quote.last_price", "expected_value": numeric_value,
-            "observed_at": quote.get("observed_at"), "source_components": list(market.get("source_components") or ()),
+            "metric": fact["metric"], "expected_value": fact["value"], "unit": fact["unit"], "currency": fact["currency"],
+            "report_period": fact["report_period"], "statement_scope": fact["statement_scope"],
         },
         "page_citation_check": {
-            "document_id": model["document_id"], "raw_hash": model["raw_hash"],
-            "required_reviewer_record": ["page_number", "quoted_label", "citation_note"],
+            "document_id": fact["document_id"], "raw_hash": fact["raw_hash"], "page_number": fact["page_number"],
+            "quoted_label": fact["quoted_label"], "quoted_anchor": fact["quoted_anchor"], "source_url": fact["source_url"],
         },
-        "financial_context": {"report_period": latest_period["report_period"], "announced_at": latest_period.get("announced_at")},
         "review_status": "pending_human_review",
     }
 
@@ -70,27 +53,25 @@ def compile_spot_audit_assignments(partial_receipt_path: Path) -> dict[str, Any]
         raise ValueError("partial model receipt is invalid") from exc
     boundary = receipt.get("truth_boundary") or {}
     if (
-        receipt.get("schema_version") != E4_PARTIAL_REPORT_MODEL_SCHEMA_VERSION
+        receipt.get("schema_version") != E4_PAGE_FACTS_SCHEMA_VERSION
         or receipt.get("data_kind") != "real"
-        or boundary.get("tier_is_c_only") is not True
+        or boundary.get("page_bound_primary_facts_only") is not True
         or receipt.get("receipt_hash") != digest({key: value for key, value in receipt.items() if key != "receipt_hash"})
     ):
-        raise ValueError("audit assignments require a real, identity-valid Tier-C partial receipt")
-    entries = receipt.get("models")
+        raise ValueError("audit assignments require a real, page-bound filing-facts receipt")
+    entries = receipt.get("facts")
     if not isinstance(entries, list):
-        raise ValueError("partial model rows are invalid")
+        raise ValueError("page-level filing fact rows are invalid")
     candidates = [candidate for candidate in (_candidate(entry) for entry in entries if isinstance(entry, Mapping)) if candidate]
     candidates.sort(key=lambda row: row["ticker"])
-    if len({row["ticker"] for row in candidates}) != len(candidates):
-        raise ValueError("partial model candidates contain duplicate tickers")
-    if len(candidates) < ASSIGNMENT_COUNT:
-        raise ValueError("insufficient fact-bearing real partial models for twenty audit assignments")
-    selected = candidates[:ASSIGNMENT_COUNT]
+    if not candidates:
+        raise ValueError("no page-bound filing facts are available for audit assignment")
+    selected = candidates
     output = {
         "schema_version": E4_SPOT_AUDIT_ASSIGNMENTS_SCHEMA_VERSION,
         "data_kind": "runtime_only_audit",
-        "partial_receipt_sha256": hashlib.sha256(raw).hexdigest(),
-        "partial_receipt_hash": receipt["receipt_hash"],
+        "page_facts_receipt_sha256": hashlib.sha256(raw).hexdigest(),
+        "page_facts_receipt_hash": receipt["receipt_hash"],
         "assignments": selected,
         "counts": {"assigned": len(selected), "pending_human_review": len(selected), "completed": 0},
         "truth_boundary": {
@@ -111,8 +92,8 @@ def render_spot_audit_guide(assignments: Mapping[str, Any]) -> str:
     for assignment in assignments.get("assignments") or []:
         lines.extend([
             f"## {assignment['ticker']}",
-            f"- Numeric check: verify `{assignment['numeric_check']['fact_path']}` equals `{assignment['numeric_check']['expected_value']}` against its declared source identity.",
-            f"- Page check: locate `{assignment['page_citation_check']['document_id']}` with raw SHA-256 `{assignment['page_citation_check']['raw_hash']}`, then record page number, quoted label and citation note.",
+            f"- Numeric check: verify `{assignment['numeric_check']['metric']}` equals `{assignment['numeric_check']['expected_value']}` {assignment['numeric_check']['unit']} for {assignment['numeric_check']['report_period']}.",
+            f"- Page check: open `{assignment['page_citation_check']['source_url']}`, verify raw SHA-256 `{assignment['page_citation_check']['raw_hash']}`, then compare page {assignment['page_citation_check']['page_number']} and label `{assignment['page_citation_check']['quoted_label']}`.",
             "- Required result: a named reviewer, timestamp, pass/fail for both checks, and an explanation for any failure.",
             "",
         ])
