@@ -2189,3 +2189,19 @@
 - **Gotchas:** Unknown headers do not authorize a guessed second column. A
   missing balance-sheet validation is safer than a balance calculation built
   from unqualified candidates.
+
+# 2026-07-28 — M2 uses CNINFO structured report categories for period retrieval
+
+- **Decision:** The 20-ticker financial-sequence collector sends CNINFO's
+  official report category with each bounded period window and captures only
+  one matching official filing per requested period.
+- **Why:** A broad announcement window is dominated by board notices and can
+  miss an annual report despite it being present in the issuer index.  A
+  category-constrained request is still the official CNINFO discovery route,
+  while avoiding needless downloads and preserving one-document provenance.
+- **Evidence:** `CninfoFilingIndexAdapter` now forwards the optional category
+  parameter; `test_cninfo_category_is_forwarded_to_structured_history_query`
+  proves it reaches the structured history POST unchanged.
+- **Gotchas:** The original 20-ticker raw receipt was intentionally runtime
+  only.  The M2 cohort records its replayable replacement selection separately;
+  issuer selection is never used as a substitute for page-bound financial data.

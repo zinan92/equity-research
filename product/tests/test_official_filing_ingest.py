@@ -81,9 +81,11 @@ class FakeTransport:
         }, ensure_ascii=False).encode()
         self.invalid_pdf = invalid_pdf
         self.calls: list[str] = []
+        self.request_data: list[tuple[str, dict | None]] = []
 
     def __call__(self, url: str, _headers, *, method: str = "GET", data=None) -> HttpResponse:
         self.calls.append(url)
+        self.request_data.append((url, dict(data) if data is not None else None))
         if url == TOP_SEARCH_URL:
             code = str((data or {}).get("keyWord") or "")
             body = json.dumps({"keyBoardList": [{"code": code, "orgId": f"org-{code}"}]}, ensure_ascii=False).encode()
@@ -287,6 +289,17 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertEqual(set(result.documents), {"annual"})
         self.assertEqual(result.documents["annual"].records[0].payload["document_type"], "annual_report")
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
+
+    def test_cninfo_category_is_forwarded_to_structured_history_query(self) -> None:
+        transport = FakeTransport()
+        result = sync_cninfo_filings(
+            "300750.SZ", transport=transport, financial_reports_only=True,
+            max_documents=1, category="category_ndbg_szsh",
+        )
+        self.assertTrue(result.publishable)
+        history = [data for url, data in transport.request_data if url == HIS_ANNOUNCEMENT_URL]
+        self.assertEqual(len(history), 1)
+        self.assertEqual(history[0]["category"], "category_ndbg_szsh")
 
     def test_sh_exchange_uses_cninfo_unified_official_index(self) -> None:
         transport = FakeTransport()
