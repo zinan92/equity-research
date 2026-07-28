@@ -58,6 +58,12 @@ HTTP_HEADER_ALLOWLIST = frozenset(
     {"content-type", "content-length", "etag", "last-modified", "content-disposition"}
 )
 
+# The outer async runtime must outlive the bounded retry budget of
+# ``OfficialHttpTransport``.  Twenty seconds can cancel a legitimate document
+# capture before its four connection-level attempts have finished, turning a
+# transport timeout into a misleading "not captured" result.
+OFFICIAL_INGESTION_TIMEOUT_SECONDS = 120.0
+
 
 @dataclass(frozen=True)
 class HttpResponse:
@@ -774,7 +780,7 @@ def build_official_filing_runtime(
         build_official_filing_registry(transport=transport),
         authority_sink or MemoryAuthoritySink(),
         quality_policy=QualityPolicy(min_accepted=1),
-        timeout_seconds=20.0,
+        timeout_seconds=OFFICIAL_INGESTION_TIMEOUT_SECONDS,
     )
 
 

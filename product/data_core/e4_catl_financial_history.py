@@ -11,7 +11,7 @@ import re
 from dataclasses import asdict, dataclass
 from typing import Iterable
 
-from .document_intelligence import parse_pdf_document
+from .document_intelligence import ParserConfig, parse_pdf_document
 from .official_filings import default_http_transport
 
 CATL_TICKER = "300750.SZ"
@@ -64,11 +64,11 @@ class OfficialFinancialFact:
 _METRICS = {
     "revenue": ("营业总收入", "营业收入"),
     "operating_cost": ("营业成本",),
-    "net_profit_parent": ("归属于母公司股东的净利润", "归属于母公司所有者的净利润"),
+    "net_profit_parent": ("归属于母公司股东的净利润", "归属于母公司所有者的净利润", "归属于本行股东的净利润"),
     "operating_cash_flow": ("经营活动产生的现金流量净额",),
-    "total_assets": ("资产总计",),
+    "total_assets": ("资产总计", "资产合计"),
     "total_liabilities": ("负债合计",),
-    "parent_equity": ("归属于母公司所有者权益合计",),
+    "parent_equity": ("归属于母公司所有者权益合计", "归属于本行股东权益合计"),
     "total_equity": ("所有者权益合计",),
     "operating_profit": ("营业利润",),
     "total_profit": ("利润总额",),
@@ -118,6 +118,8 @@ def _column_identity(text: str) -> tuple[str, str] | None:
     if "本期金额" in compact and "上期金额" in compact:
         return "current_period", compact[:240]
     if re.search(r"20\d{2}年度", compact) and re.search(r"20\d{2}年度", compact):
+        return "current_period", compact[:240]
+    if len(re.findall(r"20\d{2}年", compact)) >= 2:
         return "current_period", compact[:240]
     return None
 
@@ -216,8 +218,16 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
     # wide OCR here: a single scanned appendix otherwise makes an otherwise
     # native annual report spend minutes OCRing every page.  Entirely scanned
     # reports remain explicit missing evidence for the separate OCR path.
-    parsed = parse_pdf_document(report.document_id, pdf_bytes, expected_raw_hash=raw_hash,
-                                ocr_backend=lambda _bytes, _page: "")
+    # Keep any native page text, even when it is short or rotated.  Passing an
+    # empty OCR callback would erase such text; fully image-only pages remain
+    # explicitly unreadable here and are reserved for the separate OCR path.
+    parsed = parse_pdf_document(
+        report.document_id,
+        pdf_bytes,
+        expected_raw_hash=raw_hash,
+        config=ParserConfig(native_text_min_chars=0),
+        ocr_backend=lambda _bytes, _page: "",
+    )
     facts: list[OfficialFinancialFact] = []
     found: set[str] = set()
     active_scope: str | None = None
