@@ -519,14 +519,14 @@ class DashboardHandler(BaseHTTPRequestHandler):
             try:
                 self._json(overview_payload())
             except IndustryIntelligenceError as exc:
-                self._json({"error": "industry_intelligence_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+                self._json({"error": "industry_intelligence_unavailable", "detail": str(exc)}, HTTPStatus.GONE)
             return
         if route.startswith("/api/industry-intelligence/dossiers/"):
             code = unquote(route.removeprefix("/api/industry-intelligence/dossiers/"))
             try:
                 payload = dossier_payload(code)
             except IndustryIntelligenceError as exc:
-                self._json({"error": "industry_intelligence_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+                self._json({"error": "industry_intelligence_unavailable", "detail": str(exc)}, HTTPStatus.GONE)
                 return
             if payload is None:
                 self._json({"error": "dossier_not_found", "code": code}, HTTPStatus.NOT_FOUND)
