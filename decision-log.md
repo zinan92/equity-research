@@ -2231,3 +2231,20 @@
 - **Gotchas:** A human-visible PDF is not automatically a machine-admitted
   page fact. Do not promote a manually observed number into M4 until the
   extractor records the same PDF identity, page, unit, scope and anchor.
+
+# 2026-07-29 — M4 selects against cross-document disputes
+
+- **Decision:** Classify multi-document instances as `cross_verified` or
+  `disputed`, retain both source instances, and exclude disputed rows from the
+  pending-human-review M4 queue.
+- **Why:** A human audit is most valuable when it tests a consistent,
+  independently repeated number; a known mismatch must first be explained as
+  a restatement or extraction defect rather than presented as a normal fact.
+- **Evidence:** Runtime M4 v5 contains 20 distinct assignments: 5
+  cross-verified, 15 explicitly unverified, zero selected disputed candidates.
+  The CSCEC 2021 operating-cash-flow pair is retained as an inspectable
+  disputed example in the final handoff.
+- **Gotchas:** Cross verification is evidence of agreement, not a completed
+  human audit. `unverified` does not mean false, and `disputed` does not mean
+  an accounting error; neither status permits changing the evidence gate,
+  Tier, target, position or action policy.

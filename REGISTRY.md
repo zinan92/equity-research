@@ -272,3 +272,8 @@
 
 - 现在在哪里：PR #516 / #518 已合并。官方 CNINFO 传输的外层预算不再早于既有重试完成；短原生表格文本不再被空 OCR 回调抹掉。浦发与中石油已由官方直链恢复为页级事实。招行（600036.SH）和华东医药（000963.SZ）仍是明确的 parser/OCR 缺口，不能凑成审计任务。
 - 下一步：为这两种已定位 PDF 形态构建页界 OCR/表格解析后，重新生成 20 个不同 ticker 的真实审计任务；在此之前 #218 仍未达标，且不得安排 reviewer。
+
+## 2026-07-29 · M1–M6 final evidence handoff
+
+- 现在在哪里：M4 已重切为 20/20 个不同 ticker 的官方 PDF 页级待审任务（5 条 cross_verified、15 条 unverified、0 条已知 disputed 入队）；M3 重跑产出 20 份 no_action receipt。完整样本、边界与交接见 `docs/evidence/2026-07-29-six-milestone-final-handoff.md`。
+- 下一步：由 Park 决定是否把 20 个 pending task 送入现有 owner-only 审计工作台。#218 仍未达标；待审任务、no_action receipt 和页级事实都不等于人工 audit、Tier A/B 或投资建议。
