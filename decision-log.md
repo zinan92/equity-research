@@ -1734,6 +1734,39 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-27 · Official filing transport resilience
+
+- Decision：以单一可复用 HTTP session 的有限指数退避策略替换 SSE 专用 curl fallback；SH、SZ、BJ 均使用 CNINFO 这个统一官方披露平台，SSE adapter 保留为显式组件而非 SH 采集的单点依赖。
+- Why：实测 CNINFO 官方 PDF 只是间歇性连接中断，不是源端封锁；把失败行当成终态并只依赖 SSE 会把可恢复的官方 primary evidence 错判为不可用。
+- Evidence：100 ticker 重跑将 captured official-primary / evidence-bound partial Report Model 从 40 提升到 80；剩余 20 条 BJ 返回 HTTP 200 且索引为空，没有 TLS、429 或 5xx retry exhaust。
+
+### Gotchas · Official filing transport resilience
+
+- completed receipt 重跑时必须保留原先 captured row 的 raw identity；把它降为 `skipped` 会让 partial-model compiler 遗失旧证据，造成计数表面不变。
+- HTTP 200 空索引不是传输重试的适用对象；不能把它伪装成 TLS/WAF 失败或用聚合器补成 primary evidence。
+
+## 2026-07-27 · CNINFO structured issuer discovery
+
+- Decision：CNINFO filing discovery 先经 `topSearch/query` 对证券代码做唯一精确匹配并取得 `orgId`，再以 `hisAnnouncement/query`、交易所 column 和本地 document-type 过滤获取公告；不再用裸代码全文搜索判断披露可得性。
+- Why：全文搜索对北交所裸代码返回空，但官方结构化查询可返回同一 issuer 的公告及 PDF。100 ticker rerun 将 official-primary / partial Report Model 从 80 提升为 100。
+- Evidence：人工 session 请求 `835185 → gfbj0835185` 后，`hisAnnouncement/query` 返回 HTTP 200、`totalAnnouncement=615`；runtime receipt `official-evidence-batch-a999bb485985c945.json` 为 100 captured / 0 failed。
+
+### Gotchas · CNINFO structured issuer discovery
+
+- topSearch 的实际响应可以是顶层 list；必须支持它，但仍只允许一个 exact code match 和非空 orgId，绝不按第一个模糊结果猜测。
+- HTTP 200 空列表只说明该一次查询的参数或语义需要核实，不是“源端没有数据”的证据。任何不可得结论必须先保留人工原始请求与完整响应。
+
+## 2026-07-27 · CNINFO 北交所代码迁移 identity
+
+- Decision：当 CNINFO history 的 `secCode` 与请求旧代码不同，保留旧代码为 alias，并将当前代码、orgId、观察时间和 top-search raw hash 写为官方迁移事实；文档和 E4 partial-model identity 使用当前代码。该事实直接喂入 E1-S1 `UniverseCrosswalk.apply_code_migrations`，不建立第二张映射表。
+- Why：北交所历史代码可在同一稳定 orgId 下迁移到 `92xxxx`。若仍以旧 ticker 登记当前披露，会把 issuer identity 绑到失效代码。
+- Evidence：人工 CNINFO 请求显示 `835185 → 920185`，`orgId=gfbj0835185`；100 ticker pool 内 20 个 BJ 当前 ticker 的 structured check 为 0 个 code mismatch / 0 个 delisted。`832317` 则返回同码 25 条终止北交所上市与跨市场转登记公告，属于转板退出而非 92xxxx 迁移。
+
+### Gotchas · CNINFO 北交所代码迁移 identity
+
+- `delisted=true` 是必须保留的官方状态信号，但不能单独推断迁移；只有 history `secCode` 变化才形成 code migration fact。
+- checkpoint resume 必须按 `requested_ticker` 定位旧任务；否则已迁移 row 的 current ticker 会在后续重跑中被误认为未采集。
+
 ## 2026-07-25 · E5-S5b private-preview spot-audit route allowlist
 
 - Decision：将 owner-only spot-audit assignment read 与 review export 纳入 private-preview 的显式 GET allowlist；review POST 沿用既有 owner entitlement、CSRF 与 append-only store，不新增成员权限。

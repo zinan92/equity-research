@@ -139,6 +139,14 @@ changes unless Park asks for it.
 - AI-generated text is not a source of fact. It may only explain frozen evidence
   and must keep evidence identity intact.
 
+## Source-Unavailability Rule
+
+- Never conclude that a source is blocked, empty, unavailable, or rate-limited
+  from a classifier result alone. Before recording that conclusion, preserve one
+  manually issued raw request and its complete response (URL, method, payload,
+  status, and body or a safe body hash) as evidence. A failed or empty adapter
+  result is a debugging signal, not source evidence.
+
 ## UZI Reference Boundary
 
 The inherited UZI instructions and skills may be read only when useful for:

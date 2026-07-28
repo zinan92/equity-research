@@ -55,7 +55,7 @@ def _canonical_ticker(code: str, market: str) -> str | None:
             return f"{digits}.SH"
         if digits.startswith(("0", "3")):
             return f"{digits}.SZ"
-        if digits.startswith(("4", "8")):
+        if digits.startswith(("4", "8", "92")):
             return f"{digits}.BJ"
         return None
     if market == "HK":
@@ -85,6 +85,7 @@ class CrosswalkRecord:
     reason: str | None
     source_ref: str
     known_at: str
+    aliases: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         return self.__dict__.copy()
@@ -114,7 +115,7 @@ class UniverseCrosswalk:
         for record in materialized:
             if record.ticker:
                 self._by_ticker.setdefault(_alias(record.ticker), []).append(record)
-            for value in (record.source_code, record.source_name):
+            for value in (record.source_code, record.source_name, *record.aliases):
                 key = _alias(value)
                 if key:
                     self._by_alias.setdefault(key, []).append(record)
@@ -169,4 +170,45 @@ def build_crosswalk(
                 source_ref=source_ref,
                 known_at=known_at,
             ))
+    return tuple(output)
+
+
+def apply_code_migrations(
+    records: Iterable[CrosswalkRecord], migrations: Iterable[Mapping[str, Any]],
+) -> tuple[CrosswalkRecord, ...]:
+    """Promote CNINFO's current code while retaining its historical code as an alias.
+
+    Migration facts must already be backed by the official top-search raw hash.
+    This updates the existing E1-S1 crosswalk representation; it is not a
+    second identity table.
+    """
+    by_old = {
+        _text(item.get("old_code")): item
+        for item in migrations
+        if _text(item.get("old_code")) and _text(item.get("current_code"))
+    }
+    output: list[CrosswalkRecord] = []
+    for record in records:
+        migration = by_old.get(record.source_code)
+        if not migration or record.source_market != "CN":
+            output.append(record)
+            continue
+        current_code = _text(migration["current_code"])
+        ticker = _canonical_ticker(current_code, "CN")
+        if ticker is None:
+            raise ValueError("code migration current_code is not a supported mainland ticker")
+        aliases = tuple(sorted({_alias(record.source_code), _alias(record.ticker), *(_alias(item) for item in record.aliases)} - {""}))
+        output.append(CrosswalkRecord(
+            source_universe=record.source_universe,
+            source_code=current_code,
+            source_name=record.source_name,
+            source_market=record.source_market,
+            status="matched",
+            ticker=ticker,
+            company_id=_company_id(ticker),
+            reason=None,
+            source_ref=record.source_ref,
+            known_at=record.known_at,
+            aliases=aliases,
+        ))
     return tuple(output)

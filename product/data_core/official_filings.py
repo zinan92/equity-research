@@ -6,17 +6,16 @@ import asyncio
 import hashlib
 import json
 import re
-import shutil
-import subprocess
-import tempfile
+import random
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from html import unescape
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlencode, urljoin, urlsplit
-from urllib.error import URLError
-from urllib.request import HTTPRedirectHandler, Request, build_opener
 from uuid import uuid4
+
+import requests
 
 from .ashare import MemoryAuthoritySink, normalize_ashare_ticker
 from .contracts import RawCapture, RecordDomain, RecordEnvelope, SourceManifest
@@ -71,8 +70,11 @@ class HttpResponse:
     def validate(self) -> None:
         if not self.body:
             raise ValueError("official filing response body is empty")
-        if urlsplit(self.final_url).scheme != "https":
-            raise ValueError("official filing final URL must use HTTPS")
+        parsed = urlsplit(self.final_url)
+        if parsed.scheme != "https" and not (
+            parsed.scheme == "http" and parsed.hostname == "www.cninfo.com.cn"
+        ):
+            raise ValueError("official filing final URL must use HTTPS (except CNINFO structured index)")
         if not 200 <= self.status_code < 300:
             raise ValueError(f"official filing HTTP status is {self.status_code}")
         FetchedPayload(
@@ -87,55 +89,17 @@ class HttpResponse:
         ).validate()
 
 
-HttpTransport = Callable[[str, Mapping[str, str]], HttpResponse]
+HttpTransport = Callable[..., HttpResponse]
 
 
 def _host(url: str) -> str:
     parsed = urlsplit(str(url))
-    if parsed.scheme != "https" or not parsed.hostname:
-        raise ValueError("official source URL must be absolute HTTPS")
+    if not parsed.hostname or (
+        parsed.scheme != "https"
+        and not (parsed.scheme == "http" and parsed.hostname.lower().rstrip(".") == "www.cninfo.com.cn")
+    ):
+        raise ValueError("official source URL must be HTTPS, except CNINFO structured index HTTP")
     return parsed.hostname.lower().rstrip(".")
-
-
-def _curl_headers(raw_headers: str) -> tuple[int, tuple[tuple[str, str], ...]]:
-    blocks = [block for block in re.split(r"\r?\n\r?\n", raw_headers) if block.strip()]
-    final = next((block for block in reversed(blocks) if block.lstrip().startswith("HTTP/")), "")
-    lines = final.splitlines()
-    match = re.match(r"HTTP/\S+\s+(\d{3})", lines[0].strip() if lines else "")
-    if not match:
-        raise ValueError("curl fallback returned invalid HTTP status")
-    headers = tuple(sorted({
-        (key.strip().lower(), value.strip())
-        for line in lines[1:] if ":" in line
-        for key, value in (line.split(":", 1),)
-        if key.strip().lower() in HTTP_HEADER_ALLOWLIST and value.strip()
-    }))
-    return int(match.group(1)), headers
-
-
-def _sse_curl_fallback(url: str, request_headers: Mapping[str, str]) -> HttpResponse:
-    """Retry exactly the official SSE index URL after a urllib TLS timeout."""
-    if _host(url) != "query.sse.com.cn":
-        raise ValueError("curl fallback is only registered for the SSE official index")
-    curl = shutil.which("curl")
-    if not curl:
-        raise URLError("curl unavailable for bounded SSE transport fallback")
-    with tempfile.TemporaryDirectory(prefix="park-sse-") as directory:
-        headers_path, body_path = f"{directory}/headers", f"{directory}/body"
-        command = [curl, "--silent", "--show-error", "--location", "--proto", "=https", "--connect-timeout", "15", "--max-time", "20", "--dump-header", headers_path, "--output", body_path, "--write-out", "%{url_effective}"]
-        for key, value in {"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)}.items():
-            command.extend(["--header", f"{key}: {value}"])
-        completed = subprocess.run(command + [url], check=False, capture_output=True, text=True, timeout=25)
-        if completed.returncode:
-            raise URLError(f"curl SSE transport fallback failed: {completed.stderr.strip()}")
-        final_url = completed.stdout.strip()
-        if _host(final_url) != "query.sse.com.cn":
-            raise ValueError("curl SSE transport fallback left the source allowlist")
-        with open(headers_path, encoding="iso-8859-1") as handle:
-            status_code, headers = _curl_headers(handle.read())
-        with open(body_path, "rb") as handle:
-            body = handle.read()
-    return HttpResponse(body, final_url, status_code, headers, (url, final_url))
 
 
 def validate_official_source_role(
@@ -156,54 +120,179 @@ def validate_official_source_role(
         raise ValueError("aggregator or cross-source URL cannot act as official primary")
 
 
-class _AllowlistedRedirectHandler(HTTPRedirectHandler):
-    def __init__(self, allowed_hosts: frozenset[str]) -> None:
-        super().__init__()
-        self.allowed_hosts = allowed_hosts
-        self.redirect_chain: list[str] = []
+class OfficialTransportError(RuntimeError):
+    """A bounded official-host request failure with its actual attempt count."""
 
-    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
-        target = urljoin(req.full_url, newurl)
-        if _host(target) not in self.allowed_hosts:
+    def __init__(self, detail: str, *, attempts: int, status_code: int | None = None) -> None:
+        self.attempts = attempts
+        self.status_code = status_code
+        super().__init__(f"{detail}; attempts={attempts}")
+
+
+class OfficialHttpTransport:
+    """Sequential, reusable-session transport for every registered official host."""
+
+    def __init__(
+        self,
+        *,
+        session: requests.Session | None = None,
+        max_attempts: int = 4,
+        base_delay_seconds: float = 1.0,
+        max_delay_seconds: float = 30.0,
+        timeout_seconds: float = 15.0,
+        min_request_interval_seconds: float = 0.0,
+        sleep: Callable[[float], None] = time.sleep,
+        jitter: Callable[[float, float], float] = random.uniform,
+        monotonic: Callable[[], float] = time.monotonic,
+    ) -> None:
+        if not 3 <= max_attempts <= 5:
+            raise ValueError("official transport max_attempts must be 3-5")
+        if base_delay_seconds <= 0 or max_delay_seconds < base_delay_seconds:
+            raise ValueError("official transport backoff bounds are invalid")
+        if timeout_seconds <= 0 or min_request_interval_seconds < 0:
+            raise ValueError("official transport timeout/interval is invalid")
+        self.session = session or requests.Session()
+        self.session.headers.update({"User-Agent": "ParkEquityResearch/1.0", "Connection": "keep-alive"})
+        self.max_attempts = max_attempts
+        self.base_delay_seconds = base_delay_seconds
+        self.max_delay_seconds = max_delay_seconds
+        self.timeout_seconds = timeout_seconds
+        self.min_request_interval_seconds = min_request_interval_seconds
+        self.sleep = sleep
+        self.jitter = jitter
+        self.monotonic = monotonic
+        self._last_request_at: float | None = None
+
+    def _pace(self) -> None:
+        if self._last_request_at is None or not self.min_request_interval_seconds:
+            return
+        remaining = self.min_request_interval_seconds - (self.monotonic() - self._last_request_at)
+        if remaining > 0:
+            self.sleep(remaining)
+
+    @staticmethod
+    def _retry_after_seconds(value: str | None) -> float | None:
+        if not value:
+            return None
+        try:
+            return max(0.0, float(value))
+        except ValueError:
+            try:
+                retry_at = datetime.strptime(value, "%a, %d %b %Y %H:%M:%S %Z").replace(tzinfo=timezone.utc)
+            except ValueError:
+                return None
+            return max(0.0, (retry_at - datetime.now(timezone.utc)).total_seconds())
+
+    def _retry_delay(self, attempt: int, retry_after: str | None = None) -> float:
+        server_delay = self._retry_after_seconds(retry_after)
+        if server_delay is not None:
+            return min(self.max_delay_seconds, server_delay)
+        ceiling = min(self.max_delay_seconds, self.base_delay_seconds * (2 ** (attempt - 1)))
+        return self.jitter(0.0, ceiling)
+
+    @staticmethod
+    def _allowed_redirect_chain(response: requests.Response, allowed_hosts: frozenset[str]) -> tuple[str, ...]:
+        chain = tuple(item.url for item in (*response.history, response))
+        if not chain or any(_host(item) not in allowed_hosts for item in chain):
             raise ValueError("official filing redirect left the source allowlist")
-        self.redirect_chain.append(target)
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        return chain
+
+    def request(
+        self,
+        url: str,
+        request_headers: Mapping[str, str],
+        *,
+        method: str = "GET",
+        data: Mapping[str, str] | None = None,
+    ) -> HttpResponse:
+        allowed_hosts = frozenset({_host(url)})
+        if method not in {"GET", "POST"}:
+            raise ValueError("official transport only supports GET and POST")
+        last_detail = "official transport exhausted retries"
+        last_status: int | None = None
+        for attempt in range(1, self.max_attempts + 1):
+            self._pace()
+            try:
+                response = self.session.request(
+                    method,
+                    url,
+                    headers={"Accept": "*/*", **dict(request_headers)},
+                    data=dict(data) if data is not None else None,
+                    timeout=self.timeout_seconds,
+                    allow_redirects=True,
+                )
+                self._last_request_at = self.monotonic()
+            except (requests.exceptions.ConnectionError, requests.exceptions.Timeout, requests.exceptions.SSLError) as exc:
+                last_detail = f"official transport {type(exc).__name__}: {exc}"
+                if attempt == self.max_attempts:
+                    raise OfficialTransportError(last_detail, attempts=attempt) from exc
+                self.sleep(self._retry_delay(attempt))
+                continue
+
+            last_status = int(response.status_code)
+            if response.status_code in {401, 403, 404}:
+                raise OfficialTransportError(
+                    f"official transport terminal HTTP {response.status_code}",
+                    attempts=attempt,
+                    status_code=response.status_code,
+                )
+            if response.status_code == 429 or 500 <= response.status_code < 600:
+                last_detail = f"official transport HTTP {response.status_code}"
+                if attempt == self.max_attempts:
+                    raise OfficialTransportError(last_detail, attempts=attempt, status_code=response.status_code)
+                self.sleep(self._retry_delay(attempt, response.headers.get("Retry-After")))
+                continue
+            if not 200 <= response.status_code < 300:
+                raise OfficialTransportError(
+                    f"official transport terminal HTTP {response.status_code}",
+                    attempts=attempt,
+                    status_code=response.status_code,
+                )
+            chain = self._allowed_redirect_chain(response, allowed_hosts)
+            headers = tuple(sorted({
+                (str(key).lower(), str(value).strip())
+                for key, value in response.headers.items()
+                if str(key).lower() in HTTP_HEADER_ALLOWLIST and str(value).strip()
+            }))
+            result = HttpResponse(response.content, response.url, int(response.status_code), headers, chain)
+            result.validate()
+            return result
+        raise OfficialTransportError(last_detail, attempts=self.max_attempts, status_code=last_status)
+
+    def __call__(
+        self,
+        url: str,
+        request_headers: Mapping[str, str],
+        *,
+        method: str = "GET",
+        data: Mapping[str, str] | None = None,
+    ) -> HttpResponse:
+        return self.request(url, request_headers, method=method, data=data)
+
+
+_DEFAULT_OFFICIAL_TRANSPORT = OfficialHttpTransport()
 
 
 def default_http_transport(
     url: str,
     request_headers: Mapping[str, str],
     *,
-    timeout_seconds: float = 15.0,
+    method: str = "GET",
+    data: Mapping[str, str] | None = None,
 ) -> HttpResponse:
-    if timeout_seconds <= 0:
-        raise ValueError("official filing timeout must be positive")
-    allowed_hosts = frozenset({_host(url)})
-    redirect_handler = _AllowlistedRedirectHandler(allowed_hosts)
-    redirect_handler.redirect_chain.append(url)
-    opener = build_opener(redirect_handler)
-    request = Request(
-        url,
-        headers={"User-Agent": "ParkEquityResearch/1.0", **dict(request_headers)},
-    )
-    try:
-        with opener.open(request, timeout=timeout_seconds) as response:
-            final_url = response.geturl()
-            if _host(final_url) not in allowed_hosts:
-                raise ValueError("official filing final URL left the source allowlist")
-            headers = tuple(sorted({(str(key).lower(), str(value).strip()) for key, value in response.headers.items() if str(key).lower() in HTTP_HEADER_ALLOWLIST and str(value).strip()}))
-            chain = list(redirect_handler.redirect_chain)
-            if chain[-1] != final_url:
-                chain.append(final_url)
-            result = HttpResponse(response.read(), final_url, int(response.status), headers, tuple(chain))
-            result.validate()
-            return result
-    except URLError as exc:
-        if _host(url) != "query.sse.com.cn" or "handshake" not in str(exc).lower():
-            raise
-        result = _sse_curl_fallback(url, request_headers)
-        result.validate()
-        return result
+    return _DEFAULT_OFFICIAL_TRANSPORT.request(url, request_headers, method=method, data=data)
+
+
+def _transport_request(
+    transport: HttpTransport,
+    url: str,
+    request_headers: Mapping[str, str],
+    *,
+    method: str,
+    data: Mapping[str, str] | None = None,
+) -> HttpResponse:
+    """Use the shared extended transport while retaining lightweight test seams."""
+    return transport(url, request_headers, method=method, data=data)
 
 
 def _utc_now() -> str:
@@ -264,30 +353,82 @@ def _manifest(source_key: str, domain: RecordDomain, source_url: str) -> SourceM
     )
 
 
+def _cninfo_top_search_match(body: bytes, code: str) -> Mapping[str, Any]:
+    """Resolve one and only one exact security match from CNINFO top search."""
+    payload = json.loads(body.decode("utf-8"))
+    candidates: list[Mapping[str, Any]] = []
+    if isinstance(payload, list):
+        candidates.extend(item for item in payload if isinstance(item, Mapping))
+    elif isinstance(payload, Mapping):
+        for key in ("keyBoardList", "results", "result", "data"):
+            value = payload.get(key)
+            if isinstance(value, list):
+                candidates.extend(item for item in value if isinstance(item, Mapping))
+            elif isinstance(value, Mapping):
+                nested = value.get("list") or value.get("results")
+                if isinstance(nested, list):
+                    candidates.extend(item for item in nested if isinstance(item, Mapping))
+    else:
+        raise ValueError("CNINFO top search returned an invalid payload")
+    matches = [
+        item for item in candidates
+        if str(item.get("code") or item.get("secCode") or item.get("stockCode") or "").strip() == code
+    ]
+    if not matches:
+        raise ValueError("CNINFO top search returned no exact security match")
+    if len(matches) != 1:
+        raise ValueError("CNINFO top search returned multiple exact security matches")
+    org_id = str(matches[0].get("orgId") or matches[0].get("orgid") or "").strip()
+    if not org_id:
+        raise ValueError("CNINFO top search exact security match has no orgId")
+    return matches[0]
+
+
+def _cninfo_org_id(body: bytes, code: str) -> str:
+    match = _cninfo_top_search_match(body, code)
+    return str(match.get("orgId") or match.get("orgid"))
+
+
 class CninfoFilingIndexAdapter:
     def __init__(self, *, transport: HttpTransport = default_http_transport) -> None:
         self.transport = transport
         self.manifest = _manifest(
             CNINFO_FILING_INDEX_SOURCE,
             RecordDomain.EVENT,
-            "https://www.cninfo.com.cn/new/fulltextSearch/full",
+            "http://www.cninfo.com.cn/new/hisAnnouncement/query",
         )
 
     async def fetch(self, request: FetchRequest) -> FetchedPayload:
         instrument = normalize_ashare_ticker(request.entity_key)
+        code = instrument.ticker[:6]
+        top_search_url = "http://www.cninfo.com.cn/new/information/topSearch/query"
+        top_search = await asyncio.to_thread(
+            _transport_request,
+            self.transport,
+            top_search_url,
+            {"Accept": "application/json"},
+            method="POST",
+            data={"keyWord": code, "maxNum": "10"},
+        )
+        top_search.validate()
+        top_match = _cninfo_top_search_match(top_search.body, code)
+        org_id = str(top_match.get("orgId") or top_match.get("orgid"))
         params = {
-            "searchkey": instrument.ticker[:6],
-            "sdate": str(request.parameters.get("start_date") or "2020-01-01"),
-            "edate": str(request.parameters.get("end_date") or datetime.now().date()),
-            "isfulltext": "false",
-            "sortName": "time",
-            "sortType": "desc",
+            "stock": f"{code},{org_id}",
+            "column": {"SSE": "sse", "SZSE": "szse", "BSE": "bj"}[instrument.exchange],
+            "tabName": "fulltext",
+            "seDate": f"{request.parameters.get('start_date') or '2020-01-01'}~{request.parameters.get('end_date') or datetime.now().date()}",
             "pageNum": str(int(request.parameters.get("page") or 1)),
             "pageSize": str(int(request.parameters.get("limit") or 30)),
-            "type": "",
         }
-        url = self.manifest.source_url + "?" + urlencode(params)
-        response = await asyncio.to_thread(self.transport, url, {"Accept": "application/json"})
+        response = await asyncio.to_thread(
+            _transport_request,
+            self.transport,
+            self.manifest.source_url,
+            {"Accept": "application/json"},
+            method="POST",
+            data=params,
+        )
         response.validate()
         validate_official_source_role(self.manifest, response.final_url)
         fetched_at = _utc_now()
@@ -300,18 +441,35 @@ class CninfoFilingIndexAdapter:
             status_code=response.status_code,
             response_headers=response.headers,
             redirect_chain=response.redirect_chain or (response.final_url,),
+            provenance_context={
+                "cninfo_top_search": {
+                    "requested_code": code,
+                    "org_id": org_id,
+                    "delisted": str(top_match.get("delisted") or "").lower() == "true",
+                    "source_url": top_search.final_url,
+                    "raw_hash": hashlib.sha256(top_search.body).hexdigest(),
+                    "observed_at": fetched_at,
+                },
+            },
         )
 
     def parse(
         self, request: FetchRequest, fetched: FetchedPayload, raw: RawCapture
     ) -> Iterable[RecordEnvelope]:
         instrument = normalize_ashare_ticker(request.entity_key)
+        top_search = (fetched.provenance_context or {}).get("cninfo_top_search") or {}
+        requested_code = instrument.ticker[:6]
+        org_id = str(top_search.get("org_id") or "")
+        if not org_id:
+            raise ValueError("CNINFO history response is missing top-search orgId provenance")
         payload = json.loads(fetched.body.decode("utf-8"))
         announcements = payload.get("announcements") or []
         records: list[RecordEnvelope] = []
         for row in announcements:
-            if str(row.get("secCode") or "") != instrument.ticker[:6]:
-                raise ValueError("CNINFO filing index returned another security")
+            current_code = str(row.get("secCode") or "").strip()
+            if not re.fullmatch(r"\d{6}", current_code):
+                raise ValueError("CNINFO filing index returned invalid security code")
+            resolved = normalize_ashare_ticker(f"{current_code}.{instrument.ticker[-2:]}")
             document_id = str(row.get("announcementId") or "").strip()
             if not document_id:
                 continue
@@ -329,7 +487,7 @@ class CninfoFilingIndexAdapter:
             published_at = _published_at(row.get("announcementTime"))
             payload_value = {
                 "event_id": f"cninfo-discovery:{document_id}",
-                "instrument_id": instrument.instrument_id,
+                "instrument_id": resolved.instrument_id,
                 "event_type": "official_filing_discovered",
                 "occurred_at": published_at,
                 "title": title,
@@ -339,12 +497,24 @@ class CninfoFilingIndexAdapter:
                 "document_type": classify_filing_title(title),
                 "document_source_key": source_key,
                 "source_role": "official_index",
-                "ticker": instrument.ticker,
+                "ticker": resolved.ticker,
+                "requested_ticker": instrument.ticker,
+                "cninfo_delisted": bool(top_search.get("delisted")),
+                "cninfo_org_id": org_id,
             }
+            if current_code != requested_code:
+                payload_value["code_migration"] = {
+                    "old_code": requested_code,
+                    "current_code": current_code,
+                    "org_id": org_id,
+                    "observed_at": str(top_search.get("observed_at") or fetched.known_at),
+                    "top_search_raw_hash": str(top_search.get("raw_hash") or ""),
+                    "top_search_source_url": str(top_search.get("source_url") or ""),
+                }
             records.append(
                 RecordEnvelope.accepted(
                     domain=RecordDomain.EVENT,
-                    entity_key=f"{instrument.instrument_id}:filing-discovery:{document_id}",
+                    entity_key=f"{resolved.instrument_id}:filing-discovery:{document_id}",
                     payload=payload_value,
                     manifest=self.manifest,
                     raw=raw,
@@ -608,6 +778,8 @@ class OfficialFilingBatch:
     documents: Mapping[str, IngestionOutcome]
     skipped_document_ids: tuple[str, ...]
     discovery_pages: tuple[IngestionOutcome, ...] = ()
+    resolved_ticker: str | None = None
+    code_migrations: tuple[Mapping[str, Any], ...] = ()
 
     @property
     def publishable(self) -> bool:
@@ -633,6 +805,8 @@ class OfficialFilingBatch:
             }
         return {
             "ticker": self.ticker,
+            "resolved_ticker": self.resolved_ticker or self.ticker,
+            "code_migrations": [dict(item) for item in self.code_migrations],
             "status": "success" if self.publishable else "degraded",
             "publishable": self.publishable,
             "discovered": sum(len(item.records) for item in self.discovery_pages or (self.discovery,)),
@@ -708,10 +882,11 @@ async def sync_cninfo_filings_async(
                 skipped.append(document_id)
                 continue
             source_key = str(event["document_source_key"])
+            document_ticker = str(event.get("ticker") or instrument.ticker)
             request = FetchRequest.create(
                 request_id=f"filing-{request_token}-document-{document_id}",
                 domain=RecordDomain.DOCUMENT,
-                entity_key=instrument.ticker,
+                entity_key=document_ticker,
                 parameters={
                     "document_id": document_id,
                     "document_url": event["document_url"],
@@ -722,12 +897,20 @@ async def sync_cninfo_filings_async(
             documents[document_id] = await active_runtime.run(
                 request, (SourceChoice(source_key, "primary"),)
             )
+    migration_records = tuple(
+        record.payload["code_migration"]
+        for record in discovered_records
+        if isinstance(record.payload.get("code_migration"), Mapping)
+    )
+    resolved_ticker = str(discovered_records[0].payload.get("ticker") or instrument.ticker) if discovered_records else instrument.ticker
     return OfficialFilingBatch(
         ticker=instrument.ticker,
         discovery=discovery,
         documents=documents,
         skipped_document_ids=tuple(sorted(skipped)),
         discovery_pages=tuple(discovery_pages),
+        resolved_ticker=resolved_ticker,
+        code_migrations=migration_records,
     )
 
 
@@ -820,11 +1003,14 @@ def sync_sse_filings(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
 
 
 async def sync_exchange_filings_async(ticker: str, **kwargs: Any) -> OfficialFilingBatch:
-    """Select the registered exchange index; never silently fall back."""
+    """Use the registered official index for every A-share exchange.
+
+    CNINFO is the designated unified disclosure platform for SH, SZ, and BJ.
+    SSE's own bulletin endpoint remains an explicit adapter, but a transient
+    SSE transport failure must not make the official evidence chain unavailable.
+    """
     instrument = normalize_ashare_ticker(ticker)
-    if instrument.exchange == "SSE":
-        return await sync_sse_filings_async(ticker, **kwargs)
-    if instrument.exchange in {"SZSE", "BSE"}:
+    if instrument.exchange in {"SSE", "SZSE", "BSE"}:
         return await sync_cninfo_filings_async(ticker, **kwargs)
     raise ValueError(f"no official filing index registered for {instrument.exchange}")
 

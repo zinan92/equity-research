@@ -10,7 +10,7 @@ from pathlib import Path
 PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
-from data_core.universe_crosswalk import UniverseCrosswalk, build_crosswalk  # noqa: E402
+from data_core.universe_crosswalk import UniverseCrosswalk, apply_code_migrations, build_crosswalk  # noqa: E402
 from scripts.verify_crosswalk_coverage import verify  # noqa: E402
 
 
@@ -49,6 +49,17 @@ class UniverseCrosswalkTest(unittest.TestCase):
         records = build_crosswalk([{"code": "600519", "name": "贵州茅台"}], [])
         self.assertEqual(records[0].status, "matched")
         self.assertEqual(records[0].ticker, "600519.SH")
+
+    def test_code_migration_promotes_current_ticker_and_resolves_old_alias(self) -> None:
+        records = build_crosswalk([{"code": "835185", "name": "贝特瑞", "market": "BSE"}], [])
+        migrated = apply_code_migrations(records, [{
+            "old_code": "835185", "current_code": "920185", "org_id": "gfbj0835185",
+            "top_search_raw_hash": "a" * 64,
+        }])
+        resolver = UniverseCrosswalk(migrated)
+        self.assertEqual(migrated[0].ticker, "920185.BJ")
+        self.assertEqual(resolver.resolve("835185").status, "matched")
+        self.assertEqual(resolver.resolve("835185").candidates[0].ticker, "920185.BJ")
 
     def test_golden_coverage_keeps_archive_absence_explicit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

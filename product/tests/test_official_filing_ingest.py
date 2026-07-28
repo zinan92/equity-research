@@ -6,7 +6,9 @@ import json
 import sys
 import unittest
 from pathlib import Path
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import urlsplit
+
+import requests
 
 
 PRODUCT = Path(__file__).resolve().parents[1]
@@ -31,10 +33,11 @@ from data_core import (  # noqa: E402
     sync_sse_filings,
     validate_official_source_role,
 )
-from data_core.official_filings import _curl_headers  # noqa: E402
+from data_core.official_filings import OfficialHttpTransport, OfficialTransportError, _cninfo_org_id  # noqa: E402
 
 
-INDEX_PREFIX = "https://www.cninfo.com.cn/new/fulltextSearch/full?"
+TOP_SEARCH_URL = "http://www.cninfo.com.cn/new/information/topSearch/query"
+HIS_ANNOUNCEMENT_URL = "http://www.cninfo.com.cn/new/hisAnnouncement/query"
 SSE_INDEX_PREFIX = "https://query.sse.com.cn/security/stock/queryCompanyBulletin.do?"
 DOCS = {
     "annual": "https://static.cninfo.com.cn/finalpage/2026-03-15/annual.PDF",
@@ -79,9 +82,18 @@ class FakeTransport:
         self.invalid_pdf = invalid_pdf
         self.calls: list[str] = []
 
-    def __call__(self, url: str, _headers) -> HttpResponse:
+    def __call__(self, url: str, _headers, *, method: str = "GET", data=None) -> HttpResponse:
         self.calls.append(url)
-        if url.startswith(INDEX_PREFIX):
+        if url == TOP_SEARCH_URL:
+            code = str((data or {}).get("keyWord") or "")
+            body = json.dumps({"keyBoardList": [{"code": code, "orgId": f"org-{code}"}]}, ensure_ascii=False).encode()
+            return HttpResponse(
+                body, url, 200,
+                (("content-length", str(len(body))), ("content-type", "application/json")),
+            )
+        if url == HIS_ANNOUNCEMENT_URL:
+            if method != "POST":
+                raise AssertionError("structured CNINFO history must use POST")
             return HttpResponse(
                 self.index_body,
                 url,
@@ -126,9 +138,9 @@ class FakeTransport:
 
 
 class PageTwoTransport(FakeTransport):
-    def __call__(self, url: str, headers) -> HttpResponse:
-        if url.startswith(INDEX_PREFIX):
-            page = parse_qs(urlsplit(url).query).get("pageNum", ["1"])[0]
+    def __call__(self, url: str, headers, *, method: str = "GET", data=None) -> HttpResponse:
+        if url == HIS_ANNOUNCEMENT_URL:
+            page = str((data or {}).get("pageNum") or "1")
             rows = (
                 [announcement("major", "宁德时代：关于重大合同的公告", 1777593600000)]
                 if page == "1"
@@ -137,17 +149,67 @@ class PageTwoTransport(FakeTransport):
             body = json.dumps({"announcements": rows}, ensure_ascii=False).encode()
             self.calls.append(url)
             return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
-        return super().__call__(url, headers)
+        return super().__call__(url, headers, method=method, data=data)
 
 
 class OfficialFilingIngestTest(unittest.TestCase):
-    def test_curl_header_parser_uses_final_redirect_block_and_allowlist(self) -> None:
-        status, headers = _curl_headers(
-            "HTTP/1.1 302 Found\r\nLocation: https://query.sse.com.cn/next\r\n\r\n"
-            "HTTP/2 200\r\nContent-Type: application/json\r\nX-Ignore: no\r\n\r\n"
-        )
-        self.assertEqual(status, 200)
-        self.assertEqual(headers, (("content-type", "application/json"),))
+    def test_cninfo_top_search_requires_one_exact_code_and_org_id(self) -> None:
+        exact = json.dumps({"keyBoardList": [{"code": "835185", "orgId": "gfbj0835185"}]}).encode()
+        self.assertEqual(_cninfo_org_id(exact, "835185"), "gfbj0835185")
+        self.assertEqual(_cninfo_org_id(json.dumps([{"code": "835185", "orgId": "gfbj0835185"}]).encode(), "835185"), "gfbj0835185")
+        with self.assertRaisesRegex(ValueError, "no exact"):
+            _cninfo_org_id(json.dumps({"keyBoardList": [{"code": "835186", "orgId": "other"}]}).encode(), "835185")
+        with self.assertRaisesRegex(ValueError, "multiple"):
+            _cninfo_org_id(json.dumps({"keyBoardList": [{"code": "835185", "orgId": "a"}, {"code": "835185", "orgId": "b"}]}).encode(), "835185")
+
+    def test_transport_retries_tls_drop_and_5xx_before_success(self) -> None:
+        class Session:
+            def __init__(self) -> None:
+                self.headers = {}
+                self.calls = 0
+
+            def request(self, _method, url, **_kwargs):
+                self.calls += 1
+                if self.calls == 1:
+                    raise requests.exceptions.SSLError("UNEXPECTED_EOF")
+                if self.calls == 2:
+                    return type("Response", (), {"status_code": 503, "headers": {}, "history": (), "url": url, "content": b""})()
+                return type("Response", (), {"status_code": 200, "headers": {"Content-Type": "application/json"}, "history": (), "url": url, "content": b"{}"})()
+
+        delays: list[float] = []
+        session = Session()
+        transport = OfficialHttpTransport(session=session, sleep=delays.append, jitter=lambda _low, high: high)
+        response = transport("https://www.cninfo.com.cn/new/fulltextSearch/full", {"Accept": "application/json"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(session.calls, 3)
+        self.assertEqual(delays, [1.0, 2.0])
+        self.assertEqual(session.headers["Connection"], "keep-alive")
+
+    def test_transport_honors_retry_after_and_stops_terminal_statuses(self) -> None:
+        class Session:
+            def __init__(self, responses) -> None:
+                self.headers = {}
+                self.responses = iter(responses)
+                self.calls = 0
+
+            def request(self, _method, _url, **_kwargs):
+                self.calls += 1
+                return next(self.responses)
+
+        def response(status: int, url: str, headers=None):
+            return type("Response", (), {"status_code": status, "headers": headers or {}, "history": (), "url": url, "content": b"{}"})()
+
+        url = "https://www.cninfo.com.cn/new/fulltextSearch/full"
+        delays: list[float] = []
+        retry_session = Session([response(429, url, {"Retry-After": "7"}), response(200, url)])
+        transport = OfficialHttpTransport(session=retry_session, sleep=delays.append, jitter=lambda _low, high: high)
+        self.assertEqual(transport(url, {}).status_code, 200)
+        self.assertEqual((retry_session.calls, delays), (2, [7.0]))
+
+        terminal_session = Session([response(403, url)])
+        with self.assertRaisesRegex(OfficialTransportError, "terminal HTTP 403; attempts=1"):
+            OfficialHttpTransport(session=terminal_session, sleep=lambda _delay: None)(url, {})
+        self.assertEqual(terminal_session.calls, 1)
     def test_incremental_cninfo_sync_captures_raw_pdf_and_http_receipt(self) -> None:
         transport = FakeTransport()
         sink = MemoryAuthoritySink()
@@ -226,6 +288,18 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertEqual(result.documents["annual"].records[0].payload["document_type"], "annual_report")
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
 
+    def test_sh_exchange_uses_cninfo_unified_official_index(self) -> None:
+        transport = FakeTransport()
+        payload = json.loads(transport.index_body.decode("utf-8"))
+        payload["announcements"][0]["secCode"] = "600519"
+        transport.index_body = json.dumps({"announcements": [payload["announcements"][0]]}, ensure_ascii=False).encode()
+        result = sync_exchange_filings(
+            "600519.SH", transport=transport, financial_reports_only=True, max_documents=1,
+        )
+        self.assertTrue(result.publishable)
+        self.assertEqual(result.discovery.selected_source, "cninfo_official_filing_index_v1")
+        self.assertEqual(result.documents["annual"].selected_source, CNINFO_FILING_DOCUMENT_SOURCE)
+
     def test_limited_sync_rejects_zero_document_cap(self) -> None:
         with self.assertRaisesRegex(ValueError, "max_documents"):
             sync_cninfo_filings("300750.SZ", transport=FakeTransport(), max_documents=0)
@@ -238,7 +312,8 @@ class OfficialFilingIngestTest(unittest.TestCase):
         )
         self.assertEqual(set(result.documents), {"annual"})
         self.assertEqual(len(result.discovery_pages), 2)
-        self.assertEqual(len([url for url in transport.calls if url.startswith(INDEX_PREFIX)]), 2)
+        self.assertEqual(transport.calls.count(TOP_SEARCH_URL), 2)
+        self.assertEqual(transport.calls.count(HIS_ANNOUNCEMENT_URL), 2)
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 1)
 
     def test_financial_report_page_budget_exhaustion_preserves_all_index_receipts(self) -> None:
@@ -251,7 +326,8 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertTrue(result.discovery.publishable)
         self.assertEqual(result.documents, {})
         self.assertEqual(len(result.discovery_pages), 2)
-        self.assertEqual(len([url for url in transport.calls if url.startswith(INDEX_PREFIX)]), 2)
+        self.assertEqual(transport.calls.count(TOP_SEARCH_URL), 2)
+        self.assertEqual(transport.calls.count(HIS_ANNOUNCEMENT_URL), 2)
         self.assertEqual(len([url for url in transport.calls if url in DOCS.values()]), 0)
 
     def test_cninfo_identity_mismatch_fails_closed_before_document_fetch(self) -> None:
@@ -259,8 +335,31 @@ class OfficialFilingIngestTest(unittest.TestCase):
         result = sync_cninfo_filings("300750.SZ", transport=transport)
         self.assertFalse(result.publishable)
         self.assertEqual(result.documents, {})
-        self.assertIn("another security", result.discovery.attempts[-1].error)
-        self.assertEqual(len(transport.calls), 1)
+        self.assertIn("does not belong to SZ", result.discovery.attempts[-1].error)
+        self.assertEqual(len(transport.calls), 2)
+
+    def test_cninfo_code_migration_promotes_current_bj_code_with_official_fact(self) -> None:
+        class MigrationTransport(FakeTransport):
+            def __call__(self, url: str, headers, *, method: str = "GET", data=None) -> HttpResponse:
+                if url == TOP_SEARCH_URL:
+                    body = json.dumps([{"code": "835185", "orgId": "gfbj0835185", "delisted": "true"}]).encode()
+                    self.calls.append(url)
+                    return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
+                if url == HIS_ANNOUNCEMENT_URL:
+                    row = announcement("annual", "贝特瑞：2025年年度报告", 1773504000000)
+                    row["secCode"] = "920185"
+                    body = json.dumps({"announcements": [row]}, ensure_ascii=False).encode()
+                    self.calls.append(url)
+                    return HttpResponse(body, url, 200, (("content-length", str(len(body))), ("content-type", "application/json")))
+                return super().__call__(url, headers, method=method, data=data)
+
+        result = sync_cninfo_filings("835185.BJ", transport=MigrationTransport(), financial_reports_only=True, max_documents=1)
+        record = result.discovery.records[0]
+        self.assertEqual((result.ticker, result.resolved_ticker), ("835185.BJ", "920185.BJ"))
+        self.assertEqual(record.payload["requested_ticker"], "835185.BJ")
+        self.assertTrue(record.payload["cninfo_delisted"])
+        self.assertEqual(record.payload["code_migration"]["org_id"], "gfbj0835185")
+        self.assertEqual(result.documents["annual"].records[0].payload["ticker"], "920185.BJ")
 
     def test_aggregator_cannot_claim_official_primary_role(self) -> None:
         forged = SourceManifest(
@@ -369,11 +468,17 @@ class OfficialFilingIngestTest(unittest.TestCase):
         self.assertFalse(result.publishable)
         self.assertIn("outside official SSE", result.discovery.attempts[-1].error)
 
-    def test_exchange_selection_is_explicit_and_never_falls_back(self) -> None:
-        sse = sync_exchange_filings("600036.SH", transport=FakeTransport())
+    def test_exchange_selection_uses_registered_official_index(self) -> None:
+        sh_transport = FakeTransport()
+        sh_payload = json.loads(sh_transport.index_body.decode("utf-8"))
+        for row in sh_payload["announcements"]:
+            row["secCode"] = "600036"
+        sh_transport.index_body = json.dumps(sh_payload, ensure_ascii=False).encode()
+        sse = sync_exchange_filings("600036.SH", transport=sh_transport)
         cninfo = sync_exchange_filings("300750.SZ", transport=FakeTransport())
         self.assertTrue(sse.publishable)
         self.assertTrue(cninfo.publishable)
+        self.assertEqual(sse.discovery.selected_source, "cninfo_official_filing_index_v1")
 
 
 if __name__ == "__main__":
