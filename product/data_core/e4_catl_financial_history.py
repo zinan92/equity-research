@@ -8,10 +8,14 @@ from __future__ import annotations
 
 import hashlib
 import re
+import shutil
+import subprocess
+import tempfile
 from dataclasses import asdict, dataclass
+from pathlib import Path
 from typing import Iterable
 
-from .document_intelligence import ParserConfig, parse_pdf_document
+from .document_intelligence import DocumentPage, ParserConfig, parse_pdf_document
 from .official_filings import default_http_transport
 
 CATL_TICKER = "300750.SZ"
@@ -62,14 +66,14 @@ class OfficialFinancialFact:
 
 
 _METRICS = {
-    "revenue": ("营业总收入", "营业收入"),
+    "revenue": ("营业总收入", "营业收入", "Revenue"),
     "operating_cost": ("营业成本",),
     "net_profit_parent": ("归属于母公司股东的净利润", "归属于母公司所有者的净利润", "归属于本行股东的净利润"),
     "operating_cash_flow": ("经营活动产生的现金流量净额",),
-    "total_assets": ("资产总计", "资产合计"),
-    "total_liabilities": ("负债合计",),
-    "parent_equity": ("归属于母公司所有者权益合计", "归属于本行股东权益合计"),
-    "total_equity": ("所有者权益合计",),
+    "total_assets": ("资产总计", "资产合计", "Total assets"),
+    "total_liabilities": ("负债合计", "Total liabilities"),
+    "parent_equity": ("归属于母公司所有者权益合计", "归属于本行股东权益合计", "Total owners' equity attributable to the parent company"),
+    "total_equity": ("所有者权益合计", "Total owners' equity"),
     "operating_profit": ("营业利润",),
     "total_profit": ("利润总额",),
     "income_tax_expense": ("所得税费用",),
@@ -85,7 +89,6 @@ _METRICS = {
     "cash": ("货币资金",),
     "current_assets": ("流动资产合计",),
     "current_liabilities": ("流动负债合计",),
-    "shares_outstanding": ("股本",),
 }
 
 _SHARE_COUNT_LABEL = "公司现有总股本"
@@ -105,6 +108,8 @@ def _unit(text: str) -> tuple[str, str] | None:
         return "元", "CNY"
     if "单位：元" in compact:
         return "元", "CNY"
+    if "Unit: RMB" in compact or "unit in the notes to financial statements is:RMB" in compact:
+        return "元", "CNY"
     return None
 
 
@@ -117,10 +122,12 @@ def _column_identity(text: str) -> tuple[str, str] | None:
         return "period_end", compact[:240]
     if "本期金额" in compact and "上期金额" in compact:
         return "current_period", compact[:240]
-    if re.search(r"20\d{2}年度", compact) and re.search(r"20\d{2}年度", compact):
+    if len(re.findall(r"20\d{2}年度", compact)) >= 2:
         return "current_period", compact[:240]
     if len(re.findall(r"20\d{2}年", compact)) >= 2:
         return "current_period", compact[:240]
+    if "Closing balance" in compact and "Opening balance" in compact:
+        return "period_end", compact[:240]
     return None
 
 
@@ -129,6 +136,8 @@ def _statement_scope(text: str) -> str | None:
     if "现金流量表补充资料" in compact:
         return "consolidated_cashflow_supplement"
     if any(value in compact for value in ("合并资产负债表", "合并利润表", "合并现金流量表", "合并及银行利润表", "合并及本行利润表")):
+        return "consolidated"
+    if any(value in compact for value in ("Consolidatedbalancesheet", "Consolidatedincomestatement", "Consolidatedcashflowstatement")):
         return "consolidated"
     if any(value in compact for value in ("母公司资产负债表", "母公司利润表", "母公司现金流量表")):
         return "parent"
@@ -177,11 +186,57 @@ def _page_lines(text: str) -> tuple[str, ...]:
     return tuple(" ".join(line.split()) for line in text.splitlines() if line.strip())
 
 
+def _native_layout_pages(document_id: str, raw_hash: str, pdf_bytes: bytes) -> tuple[DocumentPage, ...]:
+    """Use Poppler's native layout text only when pypdf yields no admissible fact.
+
+    This is not OCR and does not invent coordinates: form-feed boundaries from
+    the official PDF become one-based document pages.  It handles a known
+    rotated-font layout where pypdf returns no usable CJK table text while
+    `pdftotext -layout` exposes the original text layer.
+    """
+    executable = shutil.which("pdftotext")
+    if not executable:
+        return ()
+    with tempfile.TemporaryDirectory(prefix="park-native-layout-") as directory:
+        pdf_path = Path(directory) / "source.pdf"
+        text_path = Path(directory) / "source.txt"
+        pdf_path.write_bytes(pdf_bytes)
+        try:
+            completed = subprocess.run(
+                [executable, "-layout", str(pdf_path), str(text_path)],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            return ()
+        if completed.returncode != 0 or not text_path.exists():
+            return ()
+        text = text_path.read_text(encoding="utf-8", errors="replace")
+    return tuple(
+        DocumentPage(
+            document_id=document_id,
+            page_number=index,
+            raw_hash=raw_hash,
+            parser_version="native-layout-fallback-v1",
+            text=page_text.strip(),
+            text_hash=hashlib.sha256(page_text.strip().encode("utf-8")).hexdigest(),
+            extraction_method="native_layout_fallback",
+            table_status="possible_unlocated",
+        )
+        for index, page_text in enumerate(text.split("\f"), start=1)
+        if page_text.strip()
+    )
+
+
 def _rows_with_context(
     page_text: str,
     *,
     active_scope: str | None,
     active_unit: tuple[str, str] | None,
+    active_column: str = "unknown",
+    active_column_excerpt: str = "",
 ) -> tuple[tuple[str, str | None, tuple[str, str] | None, str, str, str], ...]:
     """Return page rows with the statement context active at that exact row.
 
@@ -192,7 +247,7 @@ def _rows_with_context(
     """
     rows: list[tuple[str, str | None, tuple[str, str] | None, str, str, str]] = []
     lines = _page_lines(page_text)
-    active_column = "unknown"; column_excerpt = ""; unit_excerpt = ""
+    column_excerpt = active_column_excerpt; unit_excerpt = ""
     for index, line in enumerate(lines):
         active_scope = _statement_scope(line) or active_scope
         if _unit(line): active_unit = _unit(line); unit_excerpt = line[:240]
@@ -212,7 +267,12 @@ def _rows_with_context(
     return tuple(rows)
 
 
-def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[OfficialFinancialFact, ...]:
+def extract_report_facts(
+    report: OfficialReport,
+    pdf_bytes: bytes,
+    *,
+    _pages: tuple[DocumentPage, ...] | None = None,
+) -> tuple[OfficialFinancialFact, ...]:
     raw_hash = hashlib.sha256(pdf_bytes).hexdigest()
     # This batch needs native page-bound tables.  Suppress automatic document-
     # wide OCR here: a single scanned appendix otherwise makes an otherwise
@@ -221,21 +281,34 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
     # Keep any native page text, even when it is short or rotated.  Passing an
     # empty OCR callback would erase such text; fully image-only pages remain
     # explicitly unreadable here and are reserved for the separate OCR path.
-    parsed = parse_pdf_document(
-        report.document_id,
-        pdf_bytes,
-        expected_raw_hash=raw_hash,
-        config=ParserConfig(native_text_min_chars=0),
-        ocr_backend=lambda _bytes, _page: "",
-    )
+    using_layout_fallback = _pages is not None
+    if _pages is None:
+        parsed = parse_pdf_document(
+            report.document_id,
+            pdf_bytes,
+            expected_raw_hash=raw_hash,
+            config=ParserConfig(native_text_min_chars=0),
+            ocr_backend=lambda _bytes, _page: "",
+        )
+        pages = parsed.pages
+    else:
+        pages = _pages
     facts: list[OfficialFinancialFact] = []
     found: set[str] = set()
     active_scope: str | None = None
     active_unit: tuple[str, str] | None = None
-    for page in parsed.pages:
-        rows = _rows_with_context(page.text, active_scope=active_scope, active_unit=active_unit)
+    active_column = "unknown"
+    active_column_excerpt = ""
+    for page in pages:
+        rows = _rows_with_context(
+            page.text,
+            active_scope=active_scope,
+            active_unit=active_unit,
+            active_column=active_column,
+            active_column_excerpt=active_column_excerpt,
+        )
         if rows:
-            _, active_scope, active_unit, _, _, _ = rows[-1]
+            _, active_scope, active_unit, active_column, active_column_excerpt, _ = rows[-1]
         for compact, row_scope, row_unit, column_identity, column_header, unit_source in rows:
             if row_scope not in {"consolidated", "consolidated_cashflow_supplement"} or row_unit is None:
                 continue
@@ -254,10 +327,24 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
                 values = _numbers_after(label, compact)
                 if not values:
                     continue
+                suffix = compact[compact.index(label) + len(label):]
+                # Chinese annual reports commonly place a note reference such
+                # as ``六、22`` between the row label and the two values.
+                # It is table metadata, never a financial amount.
+                if re.match(r"\s*[一二三四五六七八九十]+、\d+\s+", suffix) and len(values) >= 3:
+                    values = values[1:]
+                # Some bank statements place the note reference immediately
+                # after ``股本`` (for example ``股本 35 25,220 25,220``).  A
+                # note number is not a monetary share-capital value.
+                if metric == "share_capital_amount" and len(values) >= 3 and values[0] < 1_000 <= values[1]:
+                    values = values[1:]
                 selected_values = values[:2] if column_identity != "unknown" else values[:1]
                 for index, value in enumerate(selected_values):
-                    identity = column_identity if index == 0 else ("previous_period" if column_identity == "current_period" else "unknown")
-                    period = report.period if identity != "previous_period" else str(int(report.period[:4]) - 1) + report.period[4:]
+                    identity = column_identity if index == 0 else {
+                        "current_period": "previous_period",
+                        "period_end": "period_begin",
+                    }.get(column_identity, "unknown")
+                    period = report.period if identity not in {"previous_period", "period_begin"} else str(int(report.period[:4]) - 1) + report.period[4:]
                     facts.append(OfficialFinancialFact(
                         report.ticker, metric, value, report.document_id, raw_hash,
                         page.page_number, label, compact[:420], period,
@@ -280,7 +367,10 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
                         report.period, "share_count_disclosure", "shares", "N/A", report.source_url,
                     ))
                     found.add("shares_outstanding")
-    return tuple(facts)
+    if facts or using_layout_fallback:
+        return tuple(facts)
+    fallback_pages = _native_layout_pages(report.document_id, raw_hash, pdf_bytes)
+    return extract_report_facts(report, pdf_bytes, _pages=fallback_pages) if fallback_pages else ()
 
 
 def _missing_metric_records(
