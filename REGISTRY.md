@@ -221,3 +221,8 @@
 
 - 现在在哪里：PR #464 merged. The private-preview Owner surface can load one signed E4 audit assignment, render numeric/page evidence identity and the raw-document boundary, and submit only a validated append-only decision after the backend accepts it. Browser smoke loaded the real `000001.SZ` assignment without submitting a fabricated review.
 - 下一步：perform genuine independent source/page checks for the 20 assigned tickers. #218 remains at 0/20 completed audits until those actual reviewer records exist; the workbench itself adds no Tier, target, position or action credit.
+
+## 2026-07-28 · Official filing coverage and issuer identity
+
+- 现在在哪里：PR #467 merged. CNINFO structured discovery, reusable transport and failed-row replay raised real official-primary partial models from 40 to 100. Current issuer codes are used for document identity; legacy BJ codes remain E1-S1 aliases when official orgId evidence proves a same-market migration. The default gitleaks history gate is green.
+- 下一步：perform the existing 20 genuine independent numeric/page audits. Do not treat 100/100 official-primary inputs as Tier A/B, valuation, target, position or a completed equity-research report.
