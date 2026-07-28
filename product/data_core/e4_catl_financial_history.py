@@ -320,6 +320,8 @@ def extract_report_facts(
                     continue
                 # Avoid accepting subtotal rows when the contract asks for the
                 # consolidated total, or the parent-equity row for total equity.
+                if metric == "total_assets" and not compact.startswith(("资产总计", "资产合计", "Total assets")):
+                    continue
                 if metric == "total_liabilities" and not compact.startswith("负债合计"):
                     continue
                 if metric == "total_equity" and not compact.startswith("所有者权益合计"):
