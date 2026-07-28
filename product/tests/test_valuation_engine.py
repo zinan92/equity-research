@@ -133,6 +133,17 @@ def test_dcf_reverse_dcf_comps_and_history_share_one_currency_unit_and_identity(
     )
 
 
+def test_missing_comps_are_visible_without_representing_dcf_as_a_cross_check() -> None:
+    value = engine_input()
+    result = run_deterministic_valuation(replace(value, peer_ev_ebitda=(), historical_pe=()))
+    assert [item.method for item in result.methods] == ["probability_weighted_dcf"]
+    assert result.valuation_completeness == "partial"
+    assert result.methods_missing == (
+        "peer_ev_ebitda: peer multiple input unavailable",
+        "historical_pe: historical multiple input unavailable",
+    )
+
+
 def test_currency_unit_market_cap_and_share_count_anomalies_fail_closed() -> None:
     value = engine_input()
     wrong_currency = replace(

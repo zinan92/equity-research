@@ -1095,8 +1095,6 @@ class ValuationEngineInput:
             scenario.validate()
         if abs(sum(item.probability for item in self.scenarios) - 1) > 1e-9:
             raise ReportContractError("scenario probabilities must sum to 1")
-        if not self.peer_ev_ebitda or not self.historical_pe:
-            raise ReportContractError("peer and historical valuation anchors are required")
         if any(value <= 0 or value > 200 for value in self.peer_ev_ebitda + self.historical_pe):
             raise ReportContractError("valuation multiple is out of bounds")
 
@@ -1142,6 +1140,8 @@ class DeterministicValuationResult:
     financial_bridge: tuple[FinancialBridgeRow, ...]
     scenario_results: tuple[DCFScenarioResult, ...]
     methods: tuple[ValuationMethodResult, ...]
+    methods_missing: tuple[str, ...]
+    valuation_completeness: str
     weighted_dcf_per_share: float
     reverse_dcf_implied_growth: float
     sensitivity: SensitivityTable
@@ -1275,18 +1275,22 @@ def run_deterministic_valuation(value: ValuationEngineInput) -> DeterministicVal
         raise ReportContractError("bear/base/bull DCF values are not ordered")
     weighted = sum(item.per_share_value * item.probability for item in scenario_results)
     latest = value.historical[-1]
-    ebitda = latest.ebit + latest.depreciation_amortization
-    net_debt = latest.debt - latest.cash
-    comps_equity = median(value.peer_ev_ebitda) * ebitda - net_debt
-    comps_per_share = comps_equity * value.unit_scale / value.shares_outstanding
-    eps = latest.net_income * value.unit_scale / value.shares_outstanding
-    history_per_share = median(value.historical_pe) * eps
     input_hash = value.input_hash
-    methods = (
-        ValuationMethodResult("probability_weighted_dcf", round(weighted, 6), value.currency, f"{value.currency}/share", input_hash),
-        ValuationMethodResult("peer_ev_ebitda", round(comps_per_share, 6), value.currency, f"{value.currency}/share", input_hash),
-        ValuationMethodResult("historical_pe", round(history_per_share, 6), value.currency, f"{value.currency}/share", input_hash),
-    )
+    methods = [ValuationMethodResult("probability_weighted_dcf", round(weighted, 6), value.currency, f"{value.currency}/share", input_hash)]
+    missing = []
+    if value.peer_ev_ebitda:
+        ebitda = latest.ebit + latest.depreciation_amortization
+        net_debt = latest.debt - latest.cash
+        comps_equity = median(value.peer_ev_ebitda) * ebitda - net_debt
+        methods.append(ValuationMethodResult("peer_ev_ebitda", round(comps_equity * value.unit_scale / value.shares_outstanding, 6), value.currency, f"{value.currency}/share", input_hash))
+    else:
+        missing.append("peer_ev_ebitda: peer multiple input unavailable")
+    if value.historical_pe:
+        eps = latest.net_income * value.unit_scale / value.shares_outstanding
+        methods.append(ValuationMethodResult("historical_pe", round(median(value.historical_pe) * eps, 6), value.currency, f"{value.currency}/share", input_hash))
+    else:
+        missing.append("historical_pe: historical multiple input unavailable")
+    methods = tuple(methods)
     if any(item.per_share_value <= 0 for item in methods):
         raise ReportContractError("valuation cross-check produced a nonpositive value")
     reverse_growth = _reverse_dcf_growth(value, by_name["base"])
@@ -1298,6 +1302,7 @@ def run_deterministic_valuation(value: ValuationEngineInput) -> DeterministicVal
         "bridge": [asdict(item) for item in bridge],
         "scenarios": [asdict(item) for item in scenario_results],
         "methods": [asdict(item) for item in methods],
+        "methods_missing": missing,
         "weighted_dcf_per_share": round(weighted, 6),
         "reverse_dcf_implied_growth": reverse_growth,
         "sensitivity": asdict(sensitivity),
@@ -1309,6 +1314,8 @@ def run_deterministic_valuation(value: ValuationEngineInput) -> DeterministicVal
         financial_bridge=bridge,
         scenario_results=scenario_results,
         methods=methods,
+        methods_missing=tuple(missing),
+        valuation_completeness="complete" if not missing else "partial",
         weighted_dcf_per_share=round(weighted, 6),
         reverse_dcf_implied_growth=reverse_growth,
         sensitivity=sensitivity,

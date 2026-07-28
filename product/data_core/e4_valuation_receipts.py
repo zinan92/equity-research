@@ -80,8 +80,8 @@ def _row(row: Mapping[str, Any], model: Mapping[str, Any], *, cutoff: datetime) 
         return {"ticker": ticker, "status": "blocked", "blockers": ["valuation_engine_input_rejected"], "error": type(exc).__name__}
     if result.input_hash != _engine(row["engine_input"]).input_hash:
         return {"ticker": ticker, "status": "blocked", "blockers": ["valuation_engine_input_hash_mismatch"]}
-    payload = {"ticker": ticker, "as_of": row.get("research_cutoff"), "context_evidence_set_id": model["evidence_set_id"], "context_manifest_hash": model["evidence_manifest_hash"], "valuation_input_hash": result.input_hash, "valuation_output_hash": result.output_hash, "source_hashes": {name: sources[name]["raw_hash"] for name in sorted(sources)}, "assumption_raw_hash": assumption["raw_hash"]}
-    return {"ticker": ticker, "status": "compiled", **payload, "receipt_hash": digest(payload), "valuation": {"engine_version": result.engine_version, "methods": [asdict(item) for item in result.methods]}}
+    payload = {"ticker": ticker, "as_of": row.get("research_cutoff"), "context_evidence_set_id": model["evidence_set_id"], "context_manifest_hash": model["evidence_manifest_hash"], "valuation_input_hash": result.input_hash, "valuation_output_hash": result.output_hash, "source_hashes": {name: sources[name]["raw_hash"] for name in sorted(sources)}, "assumption_raw_hash": assumption["raw_hash"], "methods_run": [item.method for item in result.methods], "methods_missing": list(result.methods_missing), "valuation_completeness": result.valuation_completeness}
+    return {"ticker": ticker, "status": "compiled", **payload, "receipt_hash": digest(payload), "valuation": {"engine_version": result.engine_version, "methods": [asdict(item) for item in result.methods], "methods_run": [item.method for item in result.methods], "methods_missing": list(result.methods_missing), "valuation_completeness": result.valuation_completeness}}
 
 
 def compile_real_valuation_receipts(partial_path: Path, inputs_path: Path, *, research_cutoff: str) -> dict[str, Any]:
