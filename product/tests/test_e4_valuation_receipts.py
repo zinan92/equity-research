@@ -16,7 +16,10 @@ class TestValuationReceipts(unittest.TestCase):
   i={'schema_version':E4_VALUATION_RECEIPT_SCHEMA_VERSION,'data_kind':'real','partial_receipt_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'research_cutoff':CUTOFF,'receipts':[row]};return p,self.write(r,'inputs.json',i)
  def test_compiles_replayable_tier_c_receipt(self):
   with tempfile.TemporaryDirectory() as d:
-   p,i=self.inputs(Path(d));a=compile_real_valuation_receipts(p,i,research_cutoff=CUTOFF);b=compile_real_valuation_receipts(p,i,research_cutoff=CUTOFF);self.assertEqual(a,b);self.assertEqual(a['counts']['compiled'],1);self.assertFalse(a['truth_boundary']['counts_as_tier_a_or_b'])
+   p,i=self.inputs(Path(d));a=compile_real_valuation_receipts(p,i,research_cutoff=CUTOFF);b=compile_real_valuation_receipts(p,i,research_cutoff=CUTOFF);self.assertEqual(a,b);self.assertEqual(a['counts']['compiled'],1);self.assertFalse(a['truth_boundary']['counts_as_tier_a_or_b']);self.assertEqual(a['receipts'][0]['valuation_completeness'],'complete')
+ def test_partial_comps_are_visible_in_receipt(self):
+  with tempfile.TemporaryDirectory() as d:
+   p,i=self.inputs(Path(d));v=json.loads(i.read_text());v['receipts'][0]['engine_input']['peer_ev_ebitda']=[];v['receipts'][0]['engine_input']['historical_pe']=[];i.write_text(json.dumps(v));a=compile_real_valuation_receipts(p,i,research_cutoff=CUTOFF);row=a['receipts'][0];self.assertEqual(row['valuation_completeness'],'partial');self.assertEqual(row['methods_run'],['probability_weighted_dcf']);self.assertEqual(len(row['methods_missing']),2)
  def test_mismatch_and_future_source_block(self):
   with tempfile.TemporaryDirectory() as d:
    p,i=self.inputs(Path(d));v=json.loads(i.read_text());v['receipts'][0]['source_receipts']['quote']={**v['receipts'][0]['source_receipts']['quote'],'known_at':'2026-07-26T00:00:00Z'};i.write_text(json.dumps(v));a=compile_real_valuation_receipts(p,i,research_cutoff=CUTOFF);self.assertIn('valuation_quote_known_at_after_cutoff',a['receipts'][0]['blockers'])

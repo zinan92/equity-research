@@ -2123,3 +2123,35 @@
 - **Gotchas:** Do not turn a shape-compatible vendor record into a FULL C1
   section.  Future module wiring must check an actual per-ticker receipt and
   its source identity, not only the module's Python API.
+# 2026-07-28 — CATL official-only vertical stops before C2
+
+- **Decision:** Stop the CATL fact-to-decision vertical after the multi-period
+  CNINFO extraction rather than manufacture the missing C2 inputs.
+- **Why:** C2 requires page-bound capital expenditure for every historical
+  period, plus peer EV/EBITDA and historical PE anchors.  Capital expenditure
+  was not safely extracted from any of the eight official PDF layouts, and the
+  two multiple anchors are not facts in one issuer's official PDFs.
+- **Evidence:** `docs/evidence/2026-07-28-e4-catl-vertical-stop.md` records
+  the eight runtime captures, admitted counts and the direct PDF sample.
+- **Gotchas:** A line wrapping over a PDF table boundary is not permission to
+  concatenate neighbouring text.  Do not label a company self-multiple as a
+  peer anchor or use a vendor multiple to make C2 look runnable.
+
+# 2026-07-28 — CATL page context and partial-C2 semantics
+
+- **Decision:** Official-PDF extraction carries statement scope and reporting
+  unit linearly across pages, changing only when a later statement title is
+  encountered. C2 may emit a visibly partial result when approved comparable
+  inputs are absent; the receipt records methods actually run and those missing.
+- **Why:** A page can contain the tail of a consolidated table before the title
+  of a parent-company table. Page-level title detection therefore misassigns a
+  correct number. A DCF must not impersonate an unavailable comps or
+  historical-multiple cross-check.
+- **Evidence:** CNINFO document `1216084559`, p109, contains CATL consolidated
+  capex `4,821,526.81` with the prior p108 statement/unit header; p110 then
+  contains the parent-company value. Tests cover this inherited-state shape and
+  C2 receipts expose partial methods explicitly.
+- **Gotchas:** Original units remain on the fact (`万元` in 2022 versus `千元` in
+  2025); conversion belongs to an explicitly identified downstream calculation.
+  Every missing/indeterminate extraction conclusion must retain a bounded raw
+  source excerpt, not a speculative diagnosis.

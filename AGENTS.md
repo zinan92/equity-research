@@ -138,6 +138,10 @@ changes unless Park asks for it.
 - Secrets must live outside the repository or in platform secret storage.
 - AI-generated text is not a source of fact. It may only explain frozen evidence
   and must keep evidence identity intact.
+- Any conclusion that an item is unavailable, indeterminate, or unsupported by
+  extraction must include the bounded raw text excerpt around that location.
+  A truthful observation without that source snippet is not enough to claim a
+  causal explanation for the extraction failure.
 
 ## Source-Unavailability Rule
 
