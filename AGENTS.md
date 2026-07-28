@@ -68,30 +68,24 @@ contract.
 
 ## Workflow Rules
 
-Follow Park Operating System for execution:
+Execution process is governed by one global manual and is not restated here:
+`~/work/park-operating-system/manual.md` (意图 → 合同 → 执行 → 合并 → 汇报).
 
-- One user story = one GitHub issue = one branch = one PR.
-- Chain PRs when milestones depend on each other: M2 bases on M1, M3 bases on
-  M2, and so on.
-- Do not merge execution PRs unless Park explicitly asks in this thread.
+That manual is the authority for issue contracts, branch/PR shape, WIP limits,
+merge gates, and completion obligations. Read it before starting work. A
+project-level copy of those rules will drift out of date, so this file carries
+only what is specific to this repo.
+
+Project-local additions:
+
 - Convert a completed PR to Ready for Review after the contract evidence is
   present.
-- Keep parallel WIP at or below 3 PRs.
 - Use `park-ai-bot` identity for GitHub work.
-- Do not use `git add -A`; stage named files only.
-
-PR bodies must include:
-
-- What
-- Why
-- Validation
-- `Closes #N`
 
 ## Decision Log
 
-Material decisions must be recorded in `decision-log.md`.
-
-Every material entry must include:
+`decision-log.md` is a completion obligation under manual.md. This repo's entry
+schema:
 
 - Decision
 - Why
@@ -103,22 +97,24 @@ would otherwise be rediscovered later.
 
 ## Testing Policy
 
-Scale testing to risk:
+manual.md sets test depth by S/M/L complexity self-assessment (S 专项测试,
+M 上下游测试, L 计划先审). This is how the scale maps onto this repo:
 
-- Documentation-only or instruction-only changes: readback and diff-scope check.
-- Local UI or copy changes: targeted product tests and, when visual, screenshot
-  evidence.
-- Shared data contracts, schema, auth, provenance, report compiler, or
-  publication gates: focused tests plus one full relevant suite.
-- Database/storage changes: test clean installs and idempotent re-runs when
-  possible.
+- S — documentation-only or instruction-only changes (readback and diff-scope
+  check); local UI or copy changes (targeted product tests, plus screenshot
+  evidence when visual).
+- M — shared data contracts and other cross-module changes: focused tests plus
+  one full relevant suite. Database/storage changes additionally test clean
+  installs and idempotent re-runs when possible.
+- L — the high-risk paths listed under Review Policy: plan reviewed first, then
+  M-level testing.
 
 Avoid over-testing small changes. Do not skip focused tests on critical data,
 identity, provenance, permission, billing, or report-output paths.
 
 ## Review Policy
 
-Use adversarial or architecture review only for high-risk changes:
+The L tier above (计划先审) applies to these high-risk paths:
 
 - database schema
 - raw storage and provenance

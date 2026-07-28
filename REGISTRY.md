@@ -257,3 +257,8 @@
 
 - 现在在哪里：PR #488 merged. 宁德时代、贵州茅台、平安银行的官方、页级营业收入事实现已接入 C1 的 `revenue_history`；三家均为 1 FULL / 2 PARTIAL / 15 MISSING，新增的只是 `revenue_quality_and_kpis` 从 MISSING 到 PARTIAL，`operating_kpis` 仍明确缺失。模块名不再被视作输入已可用的证据：市场/财务批次属聚合器包，估值、卖方、事件和催化模块均没有三家合格的运行收据。#112 东财 F10 虽结构上可形成 `segment_financials`，但因 `supplementary_only` / `vendor_f10` 不得作为本路径的真实输入。
 - 下一步：停止在本票范围内扩展。先为剩余缺口取得真实、ticker-bound、provenance-bound 输出（而非仅接模块 API）；不得用 F10 或其他聚合器把 `business_model` 标成 FULL，也不得因此宣称 #218 的 Tier A/B 门槛有进展。
+
+## 2026-07-29 · AGENTS.md 去重，流程只认 manual.md
+
+- 现在在哪里：治理修订，非产品进展。根 `AGENTS.md` 的 `## Workflow Rules` 不再抄写全局流程，改为一行指向 `~/work/park-operating-system/manual.md`；与 manual.md 直接矛盾的两条（链式叠 PR、执行 PR 须 Park 批准后合并）已删——两条都停在旧版，而 Codex 实际按 manual.md 自行合并。`## Testing Policy` / `## Review Policy` 改挂 manual.md 的 S/M/L 尺度，只保留本仓特有的高风险路径清单。产品边界、数据与密钥边界、UZI 边界均未动。
+- 下一步：manual.md 侧的配套修订（完整合同免代笔、REGISTRY 允许攒批更新）在 POS PR #17，属法律层，等 Park 亲合后生效；生效前本仓仍按现行 manual.md 走。另有两条只活在本文件里的全局规则（完工转 Ready、`park-ai-bot` 身份）暂留项目层，是否升进 manual.md 由 Park 定。

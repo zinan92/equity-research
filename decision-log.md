@@ -1,5 +1,19 @@
 # Decision Log
 
+## 2026-07-29 · AGENTS.md stops restating the global manual
+
+- Decision: `## Workflow Rules` no longer restates Park Operating System process. It now points at `~/work/park-operating-system/manual.md` as the single authority and keeps only two project-local items (Ready for Review after contract evidence, `park-ai-bot` identity for GitHub work).
+- Decision: the deleted clauses are the ones that had gone stale and now contradict manual.md — "chain PRs when milestones depend on each other" (manual.md 三: 链式叠 PR 已废止, 做完一环当场自行合并) and "do not merge execution PRs unless Park explicitly asks" (manual.md 四: 三道机器闸全绿即自行 merge; 红线只有真钱/live 和法律层两条). Also removed as pure duplicates: one issue = one branch = one PR, WIP ≤ 3, no `git add -A`, PR body What/Why/Validation/`Closes #N`, and the restatement of the decision-log obligation.
+- Decision: `## Testing Policy` and `## Review Policy` are re-anchored onto manual.md's S/M/L complexity scale rather than running a parallel taxonomy. The repo-specific content — which paths count as L — is kept; the competing framework is not.
+- Why: two copies of one process rule cannot both be current. Codex has been executing manual.md (self-merging each story) while this file told it to stack PRs and wait for Park, so whichever file it happened to read decided the behavior. Global process now lives in exactly one place.
+- Evidence: manual.md 三 and 四 as of POS `194d3fe`; this repo's own history shows the self-merge regime in use (each story merged before the next branch starts, recorded in REGISTRY). No behavior in the repo depended on the deleted clauses.
+
+## Gotchas · AGENTS.md dedupe
+
+- Two rules in the deleted block are global process that is **not** in manual.md today: "convert a completed PR to Ready for Review" (legislated in POS #4, dropped when #7 精简 rewrote the executor manual) and "use `park-ai-bot` identity for GitHub work". They are kept here as project-local items rather than deleted, because deleting them would silently retire a rule Park once passed. They belong in manual.md; that call is Park's, not this PR's.
+- `~/Documents/投研面板` sits on a detached HEAD behind `origin/main`, and the repo carries 218 registered worktrees. Branch from `origin/main` explicitly — branching from HEAD silently bases the PR on a stale commit.
+- `gh` in this repo resolves to `upstream` (`wbh604/UZI-Skill`), not origin. Every `gh` call needs `-R zinan92/equity-research` or it targets the wrong repository.
+
 ## 2026-07-23 · N1-3 cross-market price history boundary
 
 - Decision: reuse the existing A-share Tencent/Eastmoney/Sina chain; add Yahoo Chart only for HK/US/JP historical close validation. The adapter preserves raw source URLs and hashes through the canonical ingestion boundary.
