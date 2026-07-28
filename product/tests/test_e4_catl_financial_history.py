@@ -80,6 +80,23 @@ class CatlHistoryTest(unittest.TestCase):
             ("consolidated", "人民币百万元", 146_695),
         ])
 
+    def test_bank_date_columns_and_issuer_specific_labels_are_page_bound(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw = b"%PDF-test"; digest = hashlib.sha256(raw).hexdigest()
+        page = DocumentPage(
+            "doc", 126, digest, "v",
+            "合并资产负债表\n（货币单位均以人民币百万元列示）\n2025年12月31日 2024年12月31日\n"
+            "资产合计 13,070,523 12,152,036\n负债合计 11,789,624 10,918,561\n归属于本行股东权益合计 1,272,875 1,226,014",
+            "bank", "native", "table",
+        )
+        parsed = DocumentParseResult("doc", digest, "v", "p", (page,), (), ())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document", return_value=parsed):
+            facts = extract_report_facts(OfficialReport("2025FY", "doc", "https://official.example/doc.pdf"), raw)
+        self.assertEqual({item.metric for item in facts}, {"total_assets", "total_liabilities", "parent_equity"})
+        self.assertTrue(all(item.column_identity in {"current_period", "previous_period"} for item in facts))
+
     def test_missing_extraction_records_keep_a_raw_excerpt(self) -> None:
         from unittest.mock import patch
         from data_core.document_intelligence import DocumentPage, DocumentParseResult
