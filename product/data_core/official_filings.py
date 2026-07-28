@@ -421,6 +421,13 @@ class CninfoFilingIndexAdapter:
             "pageNum": str(int(request.parameters.get("page") or 1)),
             "pageSize": str(int(request.parameters.get("limit") or 30)),
         }
+        # CNINFO's structured categories are part of the official index query,
+        # not an inference after a broad announcement search.  Keeping this
+        # optional preserves existing callers while allowing historical-series
+        # collection to ask the index directly for annual/interim filings.
+        category = request.parameters.get("category")
+        if category:
+            params["category"] = str(category)
         response = await asyncio.to_thread(
             _transport_request,
             self.transport,
@@ -839,6 +846,7 @@ async def sync_cninfo_filings_async(
     financial_reports_only: bool = False,
     max_documents: int | None = None,
     max_discovery_pages: int = 1,
+    category: str | None = None,
 ) -> OfficialFilingBatch:
     instrument = normalize_ashare_ticker(ticker)
     active_runtime = runtime or build_official_filing_runtime(
@@ -855,7 +863,7 @@ async def sync_cninfo_filings_async(
         discovery_request = FetchRequest.create(
             request_id=f"filing-{request_token}-index-{page}", domain=RecordDomain.EVENT,
             entity_key=instrument.ticker,
-            parameters={"start_date": start_date, "end_date": end_date or str(datetime.now().date()), "limit": limit, "page": page, "known_document_ids": list(known_ids)},
+            parameters={"start_date": start_date, "end_date": end_date or str(datetime.now().date()), "limit": limit, "page": page, "known_document_ids": list(known_ids), "category": category},
         )
         discovery = await active_runtime.run(discovery_request, (SourceChoice(CNINFO_FILING_INDEX_SOURCE, "primary"),))
         discovery_pages.append(discovery)
