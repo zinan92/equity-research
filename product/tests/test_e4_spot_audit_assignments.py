@@ -14,51 +14,52 @@ from data_core.contracts import digest  # noqa: E402
 from data_core.e4_spot_audit_assignments import compile_spot_audit_assignments, render_spot_audit_guide, write_spot_audit_assignments  # noqa: E402
 
 
-def partial(count: int = 20) -> dict:
+def page_facts(count: int = 3) -> dict:
     rows = []
     for index in range(count):
-        ticker = f"{index + 1:06d}.SZ"
-        model = {
-            "schema_version": "e4-s4-partial-report-model-v1", "data_kind": "real", "ticker": ticker,
-            "report_model_hash": f"{index + 1:064x}", "document_id": f"official:{index}", "raw_hash": f"{index + 10:064x}",
-            "decision_boundary": {"tier": "C", "action": "no_action", "target_price": None, "position_range": None},
-            "input_facts": {"market": {"quote": {"last_price": index + 1, "observed_at": "2026-07-25T00:00:00Z"}, "source_components": ["quote", "daily_bars"]}, "fundamentals": {"latest_period": {"report_period": "2026-03-31", "announced_at": "2026-04-30"}, "source_components": ["fundamentals", "balance_sheet", "income_statement", "cash_flow"]}},
-        }
-        rows.append({"ticker": ticker, "status": "compiled", "model": model})
-    value = {"schema_version": "e4-s4-partial-report-model-v1", "data_kind": "real", "truth_boundary": {"tier_is_c_only": True}, "models": rows}
+        rows.append({"ticker": f"{index + 1:06d}.SZ", "status": "available", "fact": {
+            "ticker": f"{index + 1:06d}.SZ", "metric": "revenue", "value": index + 1.0,
+            "document_id": f"official:{index}", "raw_hash": f"{index + 10:064x}", "page_number": 7,
+            "quoted_label": "营业收入", "quoted_anchor": "营业收入 1", "report_period": "2024年度",
+            "statement_scope": "consolidated", "unit": "元", "currency": "CNY", "source_url": "https://example.com/report.pdf",
+        }})
+    value = {"schema_version": "e4-page-level-filing-facts-v1", "data_kind": "real", "truth_boundary": {"page_bound_primary_facts_only": True}, "facts": rows}
     value["receipt_hash"] = digest(value)
     return value
 
 
 class SpotAuditAssignmentsTest(unittest.TestCase):
     def write(self, root: Path, value: dict) -> Path:
-        path = root / "partial.json"; path.write_text(json.dumps(value), encoding="utf-8"); return path
+        path = root / "facts.json"; path.write_text(json.dumps(value), encoding="utf-8"); return path
 
-    def test_selects_deterministic_pending_assignments_without_credit(self) -> None:
+    def test_binds_numeric_and_page_to_the_same_filing_fact_without_credit(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            path = self.write(Path(directory), partial(22))
+            path = self.write(Path(directory), page_facts())
             first = compile_spot_audit_assignments(path); second = compile_spot_audit_assignments(path)
         self.assertEqual(first["receipt_hash"], second["receipt_hash"])
-        self.assertEqual((first["counts"], first["assignments"][0]["review_status"]), ({"assigned": 20, "pending_human_review": 20, "completed": 0}, "pending_human_review"))
+        assignment = first["assignments"][0]
+        self.assertEqual(first["counts"], {"assigned": 3, "pending_human_review": 3, "completed": 0})
+        self.assertEqual(assignment["document_identity"]["document_id"], assignment["page_citation_check"]["document_id"])
+        self.assertEqual(assignment["numeric_check"]["metric"], "revenue")
         self.assertFalse(first["truth_boundary"]["counts_as_numeric_page_audit"])
-        self.assertNotIn("runtime_raw_path", json.dumps(first))
 
-    def test_rejects_less_than_twenty_or_tampered_inputs(self) -> None:
+    def test_rejects_quote_only_or_tampered_inputs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory); short = self.write(root, partial(19))
-            with self.assertRaisesRegex(ValueError, "insufficient"):
-                compile_spot_audit_assignments(short)
-            value = partial(); value["models"][0]["model"]["raw_hash"] = "bad"; tampered = self.write(root, value)
-            with self.assertRaisesRegex(ValueError, "identity-valid"):
-                compile_spot_audit_assignments(tampered)
+            root = Path(directory); value = page_facts(1); value["facts"][0]["fact"].pop("page_number")
+            value["receipt_hash"] = digest({key: item for key, item in value.items() if key != "receipt_hash"})
+            with self.assertRaisesRegex(ValueError, "page-bound"):
+                compile_spot_audit_assignments(self.write(root, value))
+            value = page_facts(1); value["facts"][0]["fact"]["raw_hash"] = "bad"
+            with self.assertRaisesRegex(ValueError, "page-bound"):
+                compile_spot_audit_assignments(self.write(root, value))
 
     def test_writes_human_readable_guide(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory); result = write_spot_audit_assignments(self.write(root, partial()), root)
+            root = Path(directory); result = write_spot_audit_assignments(self.write(root, page_facts()), root)
             guide = Path(result["guide_path"]).read_text(encoding="utf-8")
         self.assertIn("not an audit result", guide)
         self.assertIn("000001.SZ", guide)
-        self.assertEqual(result["receipt"]["counts"]["completed"], 0)
+        self.assertIn("page 7", guide)
 
 
 if __name__ == "__main__":
