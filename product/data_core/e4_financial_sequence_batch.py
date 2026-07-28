@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-import signal
+import multiprocessing
 import time
 from dataclasses import asdict
 from datetime import date
@@ -19,7 +19,7 @@ from typing import Any, Callable, Iterable, Mapping
 
 from .ashare import MemoryAuthoritySink
 from .contracts import digest
-from .e4_catl_financial_history import OfficialReport, _missing_metric_records, extract_report_facts
+from .e4_catl_financial_history import OfficialFinancialFact, OfficialReport, _missing_metric_records, extract_report_facts
 from .official_filings import OfficialFilingBatch, OfficialHttpTransport, sync_exchange_filings
 
 
@@ -36,21 +36,36 @@ E4_AUDIT_COHORT_V2 = (
 ANNUAL_YEARS = tuple(range(2021, 2026))
 
 
-class _ParseTimeout(TimeoutError):
-    pass
+class _ParseTimeout(TimeoutError): pass
 
 
-def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 15):
-    """Do not let one pathological PDF stall a single-concurrency cohort."""
-    def expired(_signum, _frame):
-        raise _ParseTimeout(f"page parser exceeded {seconds}s")
-    previous = signal.signal(signal.SIGALRM, expired)
-    signal.setitimer(signal.ITIMER_REAL, seconds)
+def _extract_child(report: OfficialReport, body: bytes, connection) -> None:
     try:
-        return extract_report_facts(report, body)
+        connection.send(("ok", [asdict(item) for item in extract_report_facts(report, body)]))
+    except BaseException as exc:
+        connection.send(("error", f"{type(exc).__name__}: {exc}"))
     finally:
-        signal.setitimer(signal.ITIMER_REAL, 0)
-        signal.signal(signal.SIGALRM, previous)
+        connection.close()
+
+
+def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 20) -> tuple[OfficialFinancialFact, ...]:
+    """Run parsing in a killable process; pypdf/OCR can ignore Python signals."""
+    context = multiprocessing.get_context("fork")
+    parent, child = context.Pipe(duplex=False)
+    worker = context.Process(target=_extract_child, args=(report, body, child), daemon=True)
+    worker.start(); child.close()
+    try:
+        if not parent.poll(seconds):
+            worker.terminate(); worker.join(5)
+            raise _ParseTimeout(f"page parser exceeded {seconds}s in isolated worker")
+        status, payload = parent.recv(); worker.join(5)
+        if status != "ok":
+            raise ValueError(f"isolated page parser failed: {payload}")
+        return tuple(OfficialFinancialFact(**item) for item in payload)
+    finally:
+        parent.close()
+        if worker.is_alive():
+            worker.terminate(); worker.join(5)
 
 
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:

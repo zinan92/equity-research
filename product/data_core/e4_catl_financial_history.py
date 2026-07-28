@@ -62,7 +62,7 @@ class OfficialFinancialFact:
 
 
 _METRICS = {
-    "revenue": ("营业总收入",),
+    "revenue": ("营业总收入", "营业收入"),
     "operating_cost": ("营业成本",),
     "net_profit_parent": ("归属于母公司股东的净利润", "归属于母公司所有者的净利润"),
     "operating_cash_flow": ("经营活动产生的现金流量净额",),
@@ -122,7 +122,7 @@ def _statement_scope(text: str) -> str | None:
     compact = "".join(text.split())
     if "现金流量表补充资料" in compact:
         return "consolidated_cashflow_supplement"
-    if any(value in compact for value in ("合并资产负债表", "合并利润表", "合并现金流量表")):
+    if any(value in compact for value in ("合并资产负债表", "合并利润表", "合并现金流量表", "合并及银行利润表")):
         return "consolidated"
     if any(value in compact for value in ("母公司资产负债表", "母公司利润表", "母公司现金流量表")):
         return "parent"
