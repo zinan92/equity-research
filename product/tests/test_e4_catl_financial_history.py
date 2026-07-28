@@ -97,6 +97,47 @@ class CatlHistoryTest(unittest.TestCase):
         self.assertEqual({item.metric for item in facts}, {"total_assets", "total_liabilities", "parent_equity"})
         self.assertTrue(all(item.column_identity in {"current_period", "previous_period"} for item in facts))
 
+    def test_english_statement_context_and_balance_columns_carry_to_next_page(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw = b"%PDF-test"; digest = hashlib.sha256(raw).hexdigest()
+        header = DocumentPage(
+            "doc", 10, digest, "v",
+            "1. Consolidated balance sheet\nUnit: RMB\nClosing balance Opening balance",
+            "a", "native", "table",
+        )
+        values = DocumentPage(
+            "doc", 11, digest, "v",
+            "Total assets 39,038,036,320.92 37,879,046,367.15",
+            "b", "native", "table",
+        )
+        parsed = DocumentParseResult("doc", digest, "v", "p", (header, values), (), ())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document", return_value=parsed):
+            facts = extract_report_facts(OfficialReport("2025FY", "doc", "https://official.example/doc.pdf"), raw)
+        self.assertEqual([(item.report_period, item.column_identity, item.value) for item in facts], [
+            ("2025FY", "period_end", 39_038_036_320.92),
+            ("2024FY", "period_begin", 37_879_046_367.15),
+        ])
+
+    def test_chinese_note_reference_is_not_admitted_as_cash_value(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw = b"%PDF-test"; digest = hashlib.sha256(raw).hexdigest()
+        page = DocumentPage(
+            "doc", 84, digest, "v",
+            "合并资产负债表\n单位：元\n期末余额 期初余额\n货币资金 六、1 2,924,099,340.75 3,115,628,975.55",
+            "a", "native", "table",
+        )
+        parsed = DocumentParseResult("doc", digest, "v", "p", (page,), (), ())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document", return_value=parsed):
+            facts = extract_report_facts(OfficialReport("2025FY", "doc", "https://official.example/doc.pdf"), raw)
+        self.assertEqual([(item.value, item.column_identity) for item in facts], [
+            (2_924_099_340.75, "period_end"),
+            (3_115_628_975.55, "period_begin"),
+        ])
+
     def test_missing_extraction_records_keep_a_raw_excerpt(self) -> None:
         from unittest.mock import patch
         from data_core.document_intelligence import DocumentPage, DocumentParseResult
