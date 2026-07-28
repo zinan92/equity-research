@@ -240,3 +240,8 @@
 
 - 现在在哪里：PR #479 merged. 来自现有池的 20 个 SH/SZ/BJ ticker 已形成 23 条官方 PDF 页级事实；每条含 document/raw SHA-256、同页锚点、合并口径、单位与币种，且不使用聚合器补位。市场分布为 SZ 6、SH 10、BJ 4。
 - 下一步：#218 仍未达标，也不得邀请 reviewer。本批只补足“20 个可翻页审的 ticker”这一前置对象，未产生人工 audit、Tier A/B、目标价、仓位或 action credit；Park 决定何时开始独立人工核验。
+
+## 2026-07-28 · E4 three vertical slices enter the canonical degradation path
+
+- 现在在哪里：PR #482 merged. 宁德时代、贵州茅台、平安银行均用真实官方页级事实通过 B6（filings primary 1/1）并生成 manifest 对齐、live_eligible 的 C1 合同；现有策略自然输出 Tier B，三家 reasons 均为 `partial_or_missing_sections` 与 action-field block。
+- 下一步：三家都只有 1 FULL、1 PARTIAL、16 MISSING；例如决策摘要仍缺市场快照和决策摘要输入。不得把这三家外推至其他 ticker，也不得以此宣称 #218 的 80 家 Tier A/B 门槛有进展；继续补真实章节证据前，不安排 reviewer。
