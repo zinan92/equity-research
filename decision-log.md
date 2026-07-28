@@ -2217,3 +2217,17 @@
 - **Gotchas:** A process timeout is a local runtime failure, not evidence that
   CNINFO lacks a filing. The next worker must enforce a process-level timeout
   before the M4 gap can be called a collection result.
+
+# 2026-07-29 — Official recovery keeps parser gaps distinct from missing filings
+
+- **Decision:** Treat the remaining audit gaps as documented parser/OCR work,
+  not missing source evidence, after direct official CNINFO PDF retrieval.
+- **Why:** The structured index and direct official document URLs returned
+  valid PDFs for issuers previously recorded as uncaptured; one recovery path
+  yielded page facts while two PDF layouts still require dedicated parsing.
+- **Evidence:** PR #516 preserves the transport retry budget; PR #518 preserves
+  short native text. CNINFO `1225047590` is a valid CMB annual report whose
+  PDF p127 displays the RMB-million consolidated balance sheet.
+- **Gotchas:** A human-visible PDF is not automatically a machine-admitted
+  page fact. Do not promote a manually observed number into M4 until the
+  extractor records the same PDF identity, page, unit, scope and anchor.
