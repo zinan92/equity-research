@@ -235,3 +235,8 @@
 
 - 现在在哪里：PR #476 merged. 宁德时代、贵州茅台和招商银行各有一条真实官方年报营业收入事实，均带同一 PDF 的 document_id、raw SHA-256、一基页码、原文锚点、报告期、合并口径、单位及币种；审计候选已改为“一个数字 + 它所在的一页”，不再把行情报价和年报页错误配对。
 - 下一步：#218 仍未通过，且不得安排 reviewer。当前 3 条仅是可审对象和窄 Tier-C/no_action Report Model projection，不产生 numeric/page audit、Tier A/B、目标价、仓位或行动 credit；先扩大真实页级 primary facts，再由 Park 决定是否安排人工核验。
+
+## 2026-07-28 · E4 20-ticker page-bound filing facts
+
+- 现在在哪里：PR #479 merged. 来自现有池的 20 个 SH/SZ/BJ ticker 已形成 23 条官方 PDF 页级事实；每条含 document/raw SHA-256、同页锚点、合并口径、单位与币种，且不使用聚合器补位。市场分布为 SZ 6、SH 10、BJ 4。
+- 下一步：#218 仍未达标，也不得邀请 reviewer。本批只补足“20 个可翻页审的 ticker”这一前置对象，未产生人工 audit、Tier A/B、目标价、仓位或 action credit；Park 决定何时开始独立人工核验。
