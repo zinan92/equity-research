@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import signal
 import time
 from dataclasses import asdict
 from datetime import date
@@ -33,6 +34,23 @@ E4_AUDIT_COHORT_V2 = (
     "920027.BJ", "920118.BJ", "920185.BJ", "920751.BJ",
 )
 ANNUAL_YEARS = tuple(range(2021, 2026))
+
+
+class _ParseTimeout(TimeoutError):
+    pass
+
+
+def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 45):
+    """Do not let one pathological PDF stall a single-concurrency cohort."""
+    def expired(_signum, _frame):
+        raise _ParseTimeout(f"page parser exceeded {seconds}s")
+    previous = signal.signal(signal.SIGALRM, expired)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        return extract_report_facts(report, body)
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous)
 
 
 def _write_json(path: Path, payload: Mapping[str, Any]) -> None:
@@ -107,7 +125,11 @@ def _capture_one(
                 "discovery_summary": batch.to_summary()}
     identity, body = selected
     report = OfficialReport(period, identity["document_id"], identity["source_url"], ticker=ticker)
-    facts = extract_report_facts(report, body)
+    try:
+        facts = _extract_bounded(report, body)
+    except _ParseTimeout as exc:
+        return {"period": period, "status": "missing", "reason": "page_parse_timeout",
+                "raw_text_excerpt": str(exc), "document": identity}
     present = {fact.metric for fact in facts}
     return {
         "period": period, "status": "available", "document": identity,
@@ -139,10 +161,18 @@ def run_financial_sequence_batch(
         timeout_seconds=15.0, min_request_interval_seconds=delay_seconds,
     )
     rows: list[dict[str, Any]] = []
+    checkpoint_path = runtime_root / "financial-sequence-batch-checkpoint.json"
+    if checkpoint_path.exists():
+        prior = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        if prior.get("data_kind") == "real" and prior.get("configured_max_concurrency") == 1:
+            rows = list(prior.get("tickers") or [])
+    completed = {str(item.get("ticker") or "").upper() for item in rows}
     # 2026H1 filings are not universally available by the collection date;
     # use Q1 as the common latest interim floor and retain absence explicitly.
     periods = tuple(f"{year}FY" for year in ANNUAL_YEARS) + ("2026Q1",)
     for index, ticker in enumerate(requested):
+        if ticker in completed:
+            continue
         reports = [_capture_one(ticker, period, transport=active_transport, sync=sync) for period in periods]
         rows.append({"ticker": ticker, "reports": reports})
         checkpoint = {
@@ -150,7 +180,7 @@ def run_financial_sequence_batch(
             "data_kind": "real", "configured_max_concurrency": 1,
             "inter_ticker_delay_seconds": delay_seconds, "tickers": rows,
         }
-        _write_json(runtime_root / "financial-sequence-batch-checkpoint.json", checkpoint)
+        _write_json(checkpoint_path, checkpoint)
         if index < len(requested) - 1 and delay_seconds:
             sleep(delay_seconds)
     facts = [fact for row in rows for report in row["reports"] for fact in report.get("facts", ())]
