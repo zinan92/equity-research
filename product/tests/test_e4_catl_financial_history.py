@@ -61,6 +61,25 @@ class CatlHistoryTest(unittest.TestCase):
         self.assertEqual(capex[0].statement_scope, "consolidated")
         self.assertEqual(capex[0].unit, "万元")
 
+    def test_bank_consolidated_statement_uses_its_declared_million_unit(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw = b"%PDF-test"; digest = hashlib.sha256(raw).hexdigest()
+        page = DocumentPage(
+            "doc", 120, digest, "v",
+            "合并及银行利润表\\n货币单位：人民币百万元\\n本期发生额 上期发生额\\n营业收入 131,442 146,695",
+            "bank", "native", "table",
+        )
+        parsed = DocumentParseResult("doc", digest, "v", "p", (page,), (), ())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document", return_value=parsed):
+            facts = extract_report_facts(OfficialReport("2025FY", "doc", "https://official.example/doc.pdf"), raw)
+        revenue = [item for item in facts if item.metric == "revenue"]
+        self.assertEqual([(item.statement_scope, item.unit, item.value) for item in revenue], [
+            ("consolidated", "人民币百万元", 131_442),
+            ("consolidated", "人民币百万元", 146_695),
+        ])
+
     def test_missing_extraction_records_keep_a_raw_excerpt(self) -> None:
         from unittest.mock import patch
         from data_core.document_intelligence import DocumentPage, DocumentParseResult
