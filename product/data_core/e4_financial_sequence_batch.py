@@ -40,7 +40,7 @@ class _ParseTimeout(TimeoutError):
     pass
 
 
-def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 45):
+def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 15):
     """Do not let one pathological PDF stall a single-concurrency cohort."""
     def expired(_signum, _frame):
         raise _ParseTimeout(f"page parser exceeded {seconds}s")
