@@ -62,7 +62,7 @@ class OfficialFinancialFact:
 
 
 _METRICS = {
-    "revenue": ("营业总收入",),
+    "revenue": ("营业总收入", "营业收入"),
     "operating_cost": ("营业成本",),
     "net_profit_parent": ("归属于母公司股东的净利润", "归属于母公司所有者的净利润"),
     "operating_cash_flow": ("经营活动产生的现金流量净额",),
@@ -93,6 +93,10 @@ _SHARE_COUNT_LABEL = "公司现有总股本"
 
 def _unit(text: str) -> tuple[str, str] | None:
     compact = " ".join(text.split())
+    if "人民币百万元" in compact or "货币单位：人民币百万元" in compact:
+        return "人民币百万元", "CNY"
+    if "单位：百万元" in compact:
+        return "百万元", "CNY"
     if "单位：千元" in compact or "单位为：千元" in compact:
         return "千元", "CNY"
     if "单位：万元" in compact or "单位为：万元" in compact:
@@ -122,7 +126,7 @@ def _statement_scope(text: str) -> str | None:
     compact = "".join(text.split())
     if "现金流量表补充资料" in compact:
         return "consolidated_cashflow_supplement"
-    if any(value in compact for value in ("合并资产负债表", "合并利润表", "合并现金流量表")):
+    if any(value in compact for value in ("合并资产负债表", "合并利润表", "合并现金流量表", "合并及银行利润表", "合并及本行利润表")):
         return "consolidated"
     if any(value in compact for value in ("母公司资产负债表", "母公司利润表", "母公司现金流量表")):
         return "parent"
@@ -208,7 +212,12 @@ def _rows_with_context(
 
 def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[OfficialFinancialFact, ...]:
     raw_hash = hashlib.sha256(pdf_bytes).hexdigest()
-    parsed = parse_pdf_document(report.document_id, pdf_bytes, expected_raw_hash=raw_hash)
+    # This batch needs native page-bound tables.  Suppress automatic document-
+    # wide OCR here: a single scanned appendix otherwise makes an otherwise
+    # native annual report spend minutes OCRing every page.  Entirely scanned
+    # reports remain explicit missing evidence for the separate OCR path.
+    parsed = parse_pdf_document(report.document_id, pdf_bytes, expected_raw_hash=raw_hash,
+                                ocr_backend=lambda _bytes, _page: "")
     facts: list[OfficialFinancialFact] = []
     found: set[str] = set()
     active_scope: str | None = None
