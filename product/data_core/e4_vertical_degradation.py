@@ -56,10 +56,19 @@ def compile_vertical_degradation(
         ),
     )
     citation_index = [asdict(item) for item in materialized]
+    # A revenue row extracted from an official, immutable filing page is also
+    # a real (albeit one-period) revenue-history observation.  Keep the full
+    # page identity instead of substituting a vendor F10 series.  This is
+    # intentionally insufficient for a FULL section: operating KPIs remain
+    # absent until an evidence-bound source supplies them.
+    revenue_history = [
+        asdict(item) for item in materialized if item.metric == "revenue"
+    ]
     section_inputs = {
         # A page-cited filing proves these objects exist, not a valuation,
         # thesis, peer set, or investment decision.
         "profitability_and_earnings_quality": {"income_history": citation_index},
+        "revenue_quality_and_kpis": {"revenue_history": revenue_history},
         "evidence_and_methodology": {
             "evidence_set_receipt": {"id": evidence_set.evidence_set_id, "status": evidence_set.receipt.status},
             "citation_index": citation_index,
