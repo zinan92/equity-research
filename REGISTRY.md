@@ -43,6 +43,8 @@
 
 ## 下一步
 
+- 2026-07-28: PR #473 re-ran and recorded R2 as passed using five hash-bound runtime receipt lineages: 12 nodes, 108 segments, 30 accepted company positions, 20/20 evidence-bound dossiers and all five company evidence questions at 20/20. This closes only the R2 world-model evidence gate; all dossiers remain `no_action`. Next hard release gate is R3/#218: ≥95 Report Models, ≥80 Tier A/B and 20 independent numeric/page audits.
+
 - 2026-07-28: PR #470 retired the benchmark-derived Industry Intelligence snapshot from product-serving paths. The product no longer ships `product/data/industry-intelligence-v1.json`; both historical endpoints fail closed with `410 industry_intelligence_unavailable` until canonical E1--E3 evidence is published. The archival builder rejects any output below `product/`. Next: replace the retired surface only through the canonical industry/evidence path and Claude-owned frontend work; do not restore an archive fallback.
 
 - R0 approved on 2026-07-24: [Epic Execution Plan](docs/plans/2026-07-23-epic-execution-plan.md). Execute through existing #113–#116 first; only create missing child issues after current WIP clears.
