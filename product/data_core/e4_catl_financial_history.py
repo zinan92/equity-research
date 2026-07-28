@@ -22,6 +22,7 @@ class OfficialReport:
     period: str
     document_id: str
     source_url: str
+    ticker: str = CATL_TICKER
 
 
 # IDs and URLs are declared by CNINFO's annual/quarterly-report index.  Raw
@@ -209,7 +210,7 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
                 if value is None:
                     continue
                 facts.append(OfficialFinancialFact(
-                    CATL_TICKER, metric, value, report.document_id, raw_hash,
+                    report.ticker, metric, value, report.document_id, raw_hash,
                     page.page_number, label, compact[:420], report.period,
                     row_scope, row_unit[0], row_unit[1], report.source_url,
                 ))
@@ -223,7 +224,7 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
                 value = _number_after(_SHARE_COUNT_LABEL, compact_page)
                 if value is not None:
                     facts.append(OfficialFinancialFact(
-                        CATL_TICKER, "shares_outstanding", value, report.document_id, raw_hash,
+                        report.ticker, "shares_outstanding", value, report.document_id, raw_hash,
                         page.page_number, _SHARE_COUNT_LABEL, compact_page[max(0, compact_page.index(_SHARE_COUNT_LABEL) - 80):compact_page.index(_SHARE_COUNT_LABEL) + 260],
                         report.period, "share_count_disclosure", "shares", "N/A", report.source_url,
                     ))
