@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the reviewed industry-intelligence snapshot from the archived browser payload."""
+"""Build a read-only benchmark artifact for archival research, never product data."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 SCHEMA_VERSION = "industry-intelligence-snapshot-v1"
-DEFAULT_OUTPUT = Path(__file__).resolve().parents[1] / "product" / "data" / "industry-intelligence-v1.json"
+DEFAULT_OUTPUT = Path(__file__).resolve().parents[1] / "research" / "ainiusq-niu" / "derived" / "industry-intelligence-v1.json"
 
 
 def sha256(path: Path) -> str:
@@ -230,12 +230,20 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
     payload = build(args.source.expanduser().resolve())
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
+    output = args.output.expanduser().resolve()
+    product_root = Path(__file__).resolve().parents[1] / "product"
+    try:
+        output.relative_to(product_root)
+    except ValueError:
+        pass
+    else:
+        raise ValueError("benchmark artifacts must not be written under product/")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
         json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n",
         encoding="utf-8",
     )
-    print(json.dumps({"output": str(args.output), "summary": payload["summary"]}, ensure_ascii=False))
+    print(json.dumps({"output": str(output), "summary": payload["summary"]}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

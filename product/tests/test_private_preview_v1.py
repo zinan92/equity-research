@@ -240,7 +240,7 @@ class PrivatePreviewV1Test(unittest.TestCase):
             receipt = prepare(self.db, self.state, deep, runtime)
             values = load_env(runtime / "preview.env")
             self.assertEqual(verify_packaged_release(runtime, values)["release_id"], receipt["release_id"])
-            self.assertTrue((runtime / "current" / "product" / "data" / "industry-intelligence-v1.json").is_file())
+            self.assertFalse((runtime / "current" / "product" / "data" / "industry-intelligence-v1.json").exists())
             manifest = runtime / "current" / "manifest.json"
             hidden = manifest.with_suffix(".hidden")
             manifest.rename(hidden)
@@ -315,14 +315,11 @@ class PrivatePreviewV1Test(unittest.TestCase):
         self.assertTrue(payload["preview"]["exact_report_bindings_verified"])
         self.assertEqual(payload["preview"]["route_surface"], "explicit_allowlist")
         status, industry, _ = self.request("GET", "/api/industry-intelligence", cookie=cookie)
-        self.assertEqual(status, 200)
-        self.assertEqual(industry["summary"]["dossier_count"], 489)
-        self.assertEqual(industry["summary"]["materials_node_count"], 94)
+        self.assertEqual((status, industry["error"]), (410, "industry_intelligence_unavailable"))
         status, dossier, _ = self.request(
             "GET", "/api/industry-intelligence/dossiers/300223", cookie=cookie,
         )
-        self.assertEqual(status, 200)
-        self.assertEqual(dossier["dossier"]["code"], "300223")
+        self.assertEqual((status, dossier["error"]), (410, "industry_intelligence_unavailable"))
         status, error, _ = self.request("GET", "/api/reports/300750.SZ", cookie=cookie)
         self.assertEqual((status, error["error"]), (403, "entitlement_required"))
         for path in (

@@ -1734,6 +1734,13 @@
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
 
+## 2026-07-28 · Retire benchmark-derived industry snapshot from product serving
+
+- **Decision：** Remove `product/data/industry-intelligence-v1.json` and make its API fail explicitly until canonical E1--E3 evidence-backed industry data is published.
+- **Why：** The artifact was deterministically built from the archived benchmark payload and carried scores, ratings, dossiers and derived judgments. A truthful label was insufficient because the product API still served it as research content.
+- **Evidence：** `scripts/build_industry_intelligence.py` identified `http://ainiusq.com/niu/` as its source; the retired payload had 489 dossier, 649 score and 1,138 rating/score fields.
+- **Gotchas：** Do not replace this with an empty but implicit success response, a fixture fallback, or copied archive content. The existing frontend must be updated only by Claude Code when canonical data is ready; backend 410 is intentionally fail-closed in the meantime.
+
 ## 2026-07-27 · Official filing transport resilience
 
 - Decision：以单一可复用 HTTP session 的有限指数退避策略替换 SSE 专用 curl fallback；SH、SZ、BJ 均使用 CNINFO 这个统一官方披露平台，SSE adapter 保留为显式组件而非 SH 采集的单点依赖。

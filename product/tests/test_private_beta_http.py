@@ -177,23 +177,18 @@ class PrivateBetaHttpTest(unittest.TestCase):
         status, payload, _ = self.request("GET", "/api/research/partial-model/000001", cookie=cookie)
         self.assertEqual((status, payload["ticker"], payload["status"]), (200, "000001.SZ", "unavailable"))
 
-    def test_one_time_access_code_opens_industry_map_and_dossier_without_email(self) -> None:
+    def test_one_time_access_code_keeps_retired_industry_snapshot_unavailable(self) -> None:
         status, auth, headers = self.request("POST", "/api/auth/access-code", {"code": self.access_code})
         self.assertEqual(status, 200)
         self.assertTrue(auth["member"]["email"].endswith("@access.invalid"))
         cookie = headers["Set-Cookie"].split(";", 1)[0]
         status, overview, _ = self.request("GET", "/api/industry-intelligence", cookie=cookie)
-        self.assertEqual(status, 200)
-        self.assertEqual(overview["summary"]["dossier_count"], 489)
-        self.assertEqual(len(overview["three_high_map"]["nodes"]), 38)
-        self.assertEqual(len(overview["materials_map"]["nodes"]), 94)
-        self.assertNotIn("md", overview["dossiers"][0])
+        self.assertEqual((status, overview["error"]), (410, "industry_intelligence_unavailable"))
+        self.assertIn("canonical evidence-backed", overview["detail"])
         status, dossier, _ = self.request(
             "GET", "/api/industry-intelligence/dossiers/300223", cookie=cookie,
         )
-        self.assertEqual(status, 200)
-        self.assertEqual(dossier["dossier"]["code"], "300223")
-        self.assertIn("一句话定位", dossier["dossier"]["md"])
+        self.assertEqual((status, dossier["error"]), (410, "industry_intelligence_unavailable"))
         status, payload, _ = self.request("POST", "/api/auth/access-code", {"code": self.access_code})
         self.assertEqual((status, payload["error"]), (400, "auth_rejected"))
 
