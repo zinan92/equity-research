@@ -2123,3 +2123,16 @@
 - **Gotchas:** Do not turn a shape-compatible vendor record into a FULL C1
   section.  Future module wiring must check an actual per-ticker receipt and
   its source identity, not only the module's Python API.
+# 2026-07-28 — CATL official-only vertical stops before C2
+
+- **Decision:** Stop the CATL fact-to-decision vertical after the multi-period
+  CNINFO extraction rather than manufacture the missing C2 inputs.
+- **Why:** C2 requires page-bound capital expenditure for every historical
+  period, plus peer EV/EBITDA and historical PE anchors.  Capital expenditure
+  was not safely extracted from any of the eight official PDF layouts, and the
+  two multiple anchors are not facts in one issuer's official PDFs.
+- **Evidence:** `docs/evidence/2026-07-28-e4-catl-vertical-stop.md` records
+  the eight runtime captures, admitted counts and the direct PDF sample.
+- **Gotchas:** A line wrapping over a PDF table boundary is not permission to
+  concatenate neighbouring text.  Do not label a company self-multiple as a
+  peer anchor or use a vendor multiple to make C2 look runnable.
