@@ -2162,3 +2162,16 @@
 - **Why:** Moutai exposed label/column collisions, while Ping An Bank's balance sheet and valuation economics are structurally different.
 - **Evidence:** `docs/evidence/2026-07-28-m2-moutai-generalization.md`, `docs/evidence/2026-07-28-m3-pingan-bank-pressure.md`, and `docs/evidence/2026-07-28-m4-vertical-handoff.md`.
 - **Gotchas:** Share-capital amount and share count are separate fields; a plausible target price still remains non-actionable while assumptions and independent valuation methods are incomplete.
+
+# 2026-07-28 — Page fact column identity and duplicate-source validation
+
+- **Decision:** Retain a separate fact for every recognized numeric column;
+  do not deduplicate same ticker/metric/report-period values from different PDFs.
+- **Why:** The later filing's prior-period column is the independent audit
+  object for the earlier filing's current-period fact.
+- **Evidence:** CATL 2024FY revenue `362,012,554 千元` is present in
+  `1222806982` p119 and `1225002214` p116; automated comparison reports it
+  consistent.
+- **Gotchas:** Unknown headers do not authorize a guessed second column. A
+  missing balance-sheet validation is safer than a balance calculation built
+  from unqualified candidates.

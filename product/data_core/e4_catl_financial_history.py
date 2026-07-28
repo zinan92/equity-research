@@ -54,6 +54,11 @@ class OfficialFinancialFact:
     unit: str
     currency: str
     source_url: str
+    column_identity: str = "unknown"
+    column_header_excerpt: str = ""
+    unit_source_excerpt: str = ""
+    validation_status: str = "unvalidated"
+    as_of_date: str | None = None
 
 
 _METRICS = {
@@ -99,6 +104,20 @@ def _unit(text: str) -> tuple[str, str] | None:
     return None
 
 
+def _column_identity(text: str) -> tuple[str, str] | None:
+    """Recognize a table header; never infer first-column semantics by order."""
+    compact = " ".join(text.split())
+    if "本期发生额" in compact and "上期发生额" in compact:
+        return "current_period", compact[:240]
+    if "期末余额" in compact and "期初余额" in compact:
+        return "period_end", compact[:240]
+    if "本期金额" in compact and "上期金额" in compact:
+        return "current_period", compact[:240]
+    if re.search(r"20\d{2}年度", compact) and re.search(r"20\d{2}年度", compact):
+        return "current_period", compact[:240]
+    return None
+
+
 def _statement_scope(text: str) -> str | None:
     compact = "".join(text.split())
     if "现金流量表补充资料" in compact:
@@ -114,6 +133,11 @@ def _number_after(label: str, line: str) -> float | None:
     suffix = line[line.index(label) + len(label):]
     match = re.search(r"(?<![\d.])-?[\d][\d,]*(?:\.\d+)?", suffix)
     return float(match.group(0).replace(",", "")) if match else None
+
+
+def _numbers_after(label: str, line: str) -> tuple[float, ...]:
+    suffix = line[line.index(label) + len(label):]
+    return tuple(float(item.replace(",", "")) for item in re.findall(r"(?<![\d.])-?\d[\d,]*(?:\.\d+)?", suffix))
 
 
 def _statement_rows(text: str) -> tuple[str, ...]:
@@ -152,7 +176,7 @@ def _rows_with_context(
     *,
     active_scope: str | None,
     active_unit: tuple[str, str] | None,
-) -> tuple[tuple[str, str | None, tuple[str, str] | None], ...]:
+) -> tuple[tuple[str, str | None, tuple[str, str] | None, str, str, str], ...]:
     """Return page rows with the statement context active at that exact row.
 
     Annual-report tables can end on the next page after their title, and a
@@ -160,23 +184,25 @@ def _rows_with_context(
     title and first rows of a parent-company statement.  Context must therefore
     move linearly, not be inferred from the page as a whole.
     """
-    rows: list[tuple[str, str | None, tuple[str, str] | None]] = []
+    rows: list[tuple[str, str | None, tuple[str, str] | None, str, str, str]] = []
     lines = _page_lines(page_text)
+    active_column = "unknown"; column_excerpt = ""; unit_excerpt = ""
     for index, line in enumerate(lines):
         active_scope = _statement_scope(line) or active_scope
-        active_unit = _unit(line) or active_unit
-        rows.append((line, active_scope, active_unit))
+        if _unit(line): active_unit = _unit(line); unit_excerpt = line[:240]
+        if _column_identity(line): active_column, column_excerpt = _column_identity(line)
+        rows.append((line, active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
         if index + 2 < len(lines):
             left, numbers, right = lines[index:index + 3]
             if (re.search(r"[\u4e00-\u9fff]", left)
                     and re.fullmatch(r"[-\d,\.\s]+", numbers)
                     and re.search(r"[\u4e00-\u9fff]", right)):
-                rows.append((left + right + " " + numbers, active_scope, active_unit))
+                rows.append((left + right + " " + numbers, active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
         if index + 1 < len(lines):
             left, right = lines[index:index + 2]
             match = re.match(r"^(.*[\u4e00-\u9fff][^0-9]*?)\s+([\d,.\s-]+)$", left)
             if match and re.search(r"[\u4e00-\u9fff]", right):
-                rows.append((match.group(1) + right + " " + match.group(2), active_scope, active_unit))
+                rows.append((match.group(1) + right + " " + match.group(2), active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
     return tuple(rows)
 
 
@@ -190,8 +216,8 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
     for page in parsed.pages:
         rows = _rows_with_context(page.text, active_scope=active_scope, active_unit=active_unit)
         if rows:
-            _, active_scope, active_unit = rows[-1]
-        for compact, row_scope, row_unit in rows:
+            _, active_scope, active_unit, _, _, _ = rows[-1]
+        for compact, row_scope, row_unit, column_identity, column_header, unit_source in rows:
             if row_scope not in {"consolidated", "consolidated_cashflow_supplement"} or row_unit is None:
                 continue
             for metric, labels in _METRICS.items():
@@ -206,14 +232,20 @@ def extract_report_facts(report: OfficialReport, pdf_bytes: bytes) -> tuple[Offi
                     continue
                 if metric == "total_equity" and not compact.startswith("所有者权益合计"):
                     continue
-                value = _number_after(label, compact)
-                if value is None:
+                values = _numbers_after(label, compact)
+                if not values:
                     continue
-                facts.append(OfficialFinancialFact(
-                    report.ticker, metric, value, report.document_id, raw_hash,
-                    page.page_number, label, compact[:420], report.period,
-                    row_scope, row_unit[0], row_unit[1], report.source_url,
-                ))
+                selected_values = values[:2] if column_identity != "unknown" else values[:1]
+                for index, value in enumerate(selected_values):
+                    identity = column_identity if index == 0 else ("previous_period" if column_identity == "current_period" else "unknown")
+                    period = report.period if identity != "previous_period" else str(int(report.period[:4]) - 1) + report.period[4:]
+                    facts.append(OfficialFinancialFact(
+                        report.ticker, metric, value, report.document_id, raw_hash,
+                        page.page_number, label, compact[:420], period,
+                        row_scope, row_unit[0], row_unit[1], report.source_url,
+                        identity, column_header, unit_source,
+                        "column_identity_unresolved" if identity == "unknown" else "pending_magnitude_validation",
+                    ))
                 found.add(metric)
         # Share count is not a balance-sheet amount.  It is disclosed in the
         # distribution narrative and has its own unit/scope so it cannot be
@@ -253,6 +285,42 @@ def _missing_metric_records(
             "raw_text_excerpt": " ".join(excerpt.split())[:520],
         })
     return records
+
+
+_UNIT_MULTIPLIER = {"元": 1, "千元": 1_000, "万元": 10_000, "人民币百万元": 1_000_000, "百万元": 1_000_000}
+
+
+def validate_balance_sheet(facts: Iterable[OfficialFinancialFact]) -> dict[str, object]:
+    """Validate the free accounting identity without mutating raw fact units."""
+    rows = {fact.metric: fact for fact in facts if fact.column_identity in {"current_period", "period_end"}}
+    required = ("total_assets", "total_liabilities", "total_equity")
+    if any(key not in rows for key in required):
+        return {"status": "missing", "reason": "missing_balance_sheet_component", "raw_text_excerpt": " | ".join(item.quoted_anchor[:160] for item in rows.values())[:520]}
+    try:
+        values = {key: rows[key].value * _UNIT_MULTIPLIER[rows[key].unit] for key in required}
+    except KeyError:
+        return {"status": "missing", "reason": "unsupported_balance_sheet_unit", "raw_text_excerpt": " | ".join(rows[key].quoted_anchor[:120] for key in required)}
+    difference = values["total_assets"] - values["total_liabilities"] - values["total_equity"]
+    tolerance = max(1, abs(values["total_assets"]) * .000001)
+    return {"status": "passed" if abs(difference) <= tolerance else "failed", "difference": difference, "tolerance": tolerance, "components": {key: {"document_id": rows[key].document_id, "page_number": rows[key].page_number, "value": rows[key].value, "unit": rows[key].unit} for key in required}}
+
+
+def compare_cross_year(current: Iterable[OfficialFinancialFact], previous: Iterable[OfficialFinancialFact]) -> list[dict[str, object]]:
+    """Compare a later filing's prior-period column to the prior filing current column."""
+    now = {fact.metric: fact for fact in current if fact.column_identity == "previous_period"}
+    prior = {fact.metric: fact for fact in previous if fact.column_identity in {"current_period", "period_end"}}
+    results = []
+    for metric in sorted(set(now) & set(prior)):
+        left, right = now[metric], prior[metric]
+        if left.unit not in _UNIT_MULTIPLIER or right.unit not in _UNIT_MULTIPLIER:
+            status, nature = "inconsistent", "unsupported_unit"
+        else:
+            a, b = left.value * _UNIT_MULTIPLIER[left.unit], right.value * _UNIT_MULTIPLIER[right.unit]
+            ratio = abs(a / b) if b else None
+            status = "consistent" if abs(a - b) <= max(1, abs(b) * .000001) else "inconsistent"
+            nature = "exact_or_rounding" if status == "consistent" else ("quantity_scale" if ratio and (ratio > 100 or ratio < .01) else "different_value")
+        results.append({"metric": metric, "status": status, "nature": nature, "current_document_id": left.document_id, "current_page_number": left.page_number, "current_value": left.value, "previous_document_id": right.document_id, "previous_page_number": right.page_number, "previous_value": right.value})
+    return results
 
 
 def capture_catl_history(reports: Iterable[OfficialReport] = CATL_REPORTS) -> dict[str, object]:
