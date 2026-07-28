@@ -80,15 +80,19 @@ def _scores(history: Mapping[str, Any], periods: tuple[HistoricalFinancialPeriod
     return {"quality": quality, "risk": risk, "liquidity": liquidity}, {"assumption_status": "provisional_unreviewed", "formula": {"quality": "mean(clamp(gross_margin/40%), clamp(net_margin/15%), clamp(ROE/20%), clamp(CFO/net_income))", "risk": "mean(clamp(debt/assets/60%), clamp(pstdev(net_margins)/20%))", "liquidity": "mean(clamp(market_cap/5000亿元), clamp(avg_30d_close_times_volume/1亿元))"}, "inputs": {"gross_margin": gross_margin, "net_margin": net_margin, "roe": roe, "cash_conversion": conversion, "leverage": leverage, "earnings_margin_volatility": volatility, "market_cap": quote.get("market_cap"), "daily_value_count": len(daily_values)}}
 
 
-def compile_catl_vertical(history: Mapping[str, Any], market: Mapping[str, Any], *, context_manifest_hash: str, dossier_id: str) -> dict[str, Any]:
+def compile_vertical(history: Mapping[str, Any], market: Mapping[str, Any], *, ticker: str, context_manifest_hash: str, dossier_id: str) -> dict[str, Any]:
     periods, missing = _historical(history); quote = market.get("quote") or {}
     if len(periods) < 5 or missing or not quote.get("last_price") or not quote.get("market_cap"):
-        decision = decide(DecisionInput("300750.SZ", context_manifest_hash, dossier_id, float(quote["last_price"]) if quote.get("last_price") else None, None, None, None, None, False, 0, 0, 1))
-        return {"ticker": "300750.SZ", "financial_history_status": "partial", "valuation": {"status": "blocked", "valuation_completeness": "missing", "methods_run": [], "methods_missing": ["probability_weighted_dcf: page-bound C2 inputs incomplete", "peer_ev_ebitda: not collected", "historical_pe: canonical market-history receipt not supplied"], "missing_history": missing}, "market_snapshot": dict(quote), "current_market": dict(quote), "decision": {**asdict(decision), "valuation_completeness": "missing"}}
+        decision = decide(DecisionInput(ticker, context_manifest_hash, dossier_id, float(quote["last_price"]) if quote.get("last_price") else None, None, None, None, None, False, 0, 0, 1))
+        return {"ticker": ticker, "financial_history_status": "partial", "valuation": {"status": "blocked", "valuation_completeness": "missing", "methods_run": [], "methods_missing": ["probability_weighted_dcf: page-bound C2 inputs incomplete", "peer_ev_ebitda: not collected", "historical_pe: canonical market-history receipt not supplied"], "missing_history": missing}, "market_snapshot": dict(quote), "current_market": dict(quote), "decision": {**asdict(decision), "valuation_completeness": "missing"}}
     scenarios, assumptions = _scenarios(periods)
-    result = run_deterministic_valuation(ValuationEngineInput("300750.SZ", "CNY", 100_000_000, float(quote["last_price"]), float(quote["market_cap"]) * 100_000_000, periods[-1].shares_outstanding, periods, scenarios, (), ()))
+    result = run_deterministic_valuation(ValuationEngineInput(ticker, "CNY", 100_000_000, float(quote["last_price"]), float(quote["market_cap"]) * 100_000_000, periods[-1].shares_outstanding, periods, scenarios, (), ()))
     target = result.weighted_dcf_per_share
     # Provisional assumptions intentionally hold policy coverage false.
     scores, score_receipt = _scores(history, periods, market)
-    decision = decide(DecisionInput("300750.SZ", context_manifest_hash, dossier_id, float(quote["last_price"]), target, scores["quality"], scores["risk"], scores["liquidity"], False, 0, 0, 1))
-    return {"ticker": "300750.SZ", "financial_history_status": "available", "valuation": {"status": "compiled", "valuation_completeness": result.valuation_completeness, "methods_run": [item.method for item in result.methods], "methods_missing": list(result.methods_missing), "target_price": target, "assumptions": assumptions, "receipt": asdict(result)}, "scores": scores, "score_receipt": score_receipt, "market_snapshot": dict(quote), "current_market": dict(quote), "decision": {**asdict(decision), "valuation_completeness": result.valuation_completeness}}
+    decision = decide(DecisionInput(ticker, context_manifest_hash, dossier_id, float(quote["last_price"]), target, scores["quality"], scores["risk"], scores["liquidity"], False, 0, 0, 1))
+    return {"ticker": ticker, "financial_history_status": "available", "valuation": {"status": "compiled", "valuation_completeness": result.valuation_completeness, "methods_run": [item.method for item in result.methods], "methods_missing": list(result.methods_missing), "target_price": target, "assumptions": assumptions, "receipt": asdict(result)}, "scores": scores, "score_receipt": score_receipt, "market_snapshot": dict(quote), "current_market": dict(quote), "decision": {**asdict(decision), "valuation_completeness": result.valuation_completeness}}
+
+
+def compile_catl_vertical(history: Mapping[str, Any], market: Mapping[str, Any], *, context_manifest_hash: str, dossier_id: str) -> dict[str, Any]:
+    return compile_vertical(history, market, ticker="300750.SZ", context_manifest_hash=context_manifest_hash, dossier_id=dossier_id)
