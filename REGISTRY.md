@@ -250,3 +250,8 @@
 
 - 现在在哪里：PR #485 merged. 三家 Tier-B 合同逐章盘点确认 1 FULL、1 PARTIAL、16 MISSING；距 Tier A 尚缺 33 项独立 required inputs，其中 17 项有现成模块可接、16 项未建。
 - 下一步：C1 v2 当前没有任何 required input 跨章节复用，所谓“输入杠杆”最高仅解锁 1 章。先由 Park 审核这份施工图，再决定补哪些真实能力；不得用机械扩到 80 家 Tier B 替代内容完成度。
+
+## 2026-07-28 · E4 existing-module wiring readback
+
+- 现在在哪里：PR #488 merged. 宁德时代、贵州茅台、平安银行的官方、页级营业收入事实现已接入 C1 的 `revenue_history`；三家均为 1 FULL / 2 PARTIAL / 15 MISSING，新增的只是 `revenue_quality_and_kpis` 从 MISSING 到 PARTIAL，`operating_kpis` 仍明确缺失。模块名不再被视作输入已可用的证据：市场/财务批次属聚合器包，估值、卖方、事件和催化模块均没有三家合格的运行收据。#112 东财 F10 虽结构上可形成 `segment_financials`，但因 `supplementary_only` / `vendor_f10` 不得作为本路径的真实输入。
+- 下一步：停止在本票范围内扩展。先为剩余缺口取得真实、ticker-bound、provenance-bound 输出（而非仅接模块 API）；不得用 F10 或其他聚合器把 `business_model` 标成 FULL，也不得因此宣称 #218 的 Tier A/B 门槛有进展。
