@@ -22,6 +22,10 @@ class VerticalDegradationTest(unittest.TestCase):
         self.assertEqual(result["section_contract"]["evidence_manifest_hash"], result["evidence_set"]["manifest_hash"])
         self.assertEqual(result["degradation"]["tier"], "B")
         self.assertEqual(result["degradation"]["reasons"], ("partial_or_missing_sections", "investment_action_fields_blocked"))
+        sections = {item["section_id"]: item for item in result["section_contract"]["sections"]}
+        self.assertEqual(sections["revenue_quality_and_kpis"]["status"], "partial")
+        self.assertEqual(sections["revenue_quality_and_kpis"]["present_required"], ("revenue_history",))
+        self.assertEqual(sections["revenue_quality_and_kpis"]["missing_required"], ("operating_kpis",))
 
 
 if __name__ == "__main__":

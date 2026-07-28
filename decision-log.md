@@ -2108,3 +2108,18 @@
 
 - fallback 只修复 discovery transport，不保证 PDF document capture，也不产生 Report Model、Tier、target、position 或 action credit。
 - curl 是运行环境依赖；缺失、失败或 redirect 超出 `query.sse.com.cn` 时必须 fail closed，不能替换为其他下载器或非官方 URL。
+# 2026-07-28 — Existing module names do not satisfy C1 inputs
+
+- **Decision:** Wire `e4_page_level_filing_facts.revenue` to
+  `revenue_quality_and_kpis.revenue_history` only when it carries the official
+  document/page/hash accounting identity; reject the proposed F10 connection
+  in this story.
+- **Why:** C1 input presence must mean a real, ticker-specific and
+  evidence-bound object.  A module map is not runtime evidence, and the F10
+  manifest explicitly marks its output supplementary/vendor data.
+- **Evidence:** `product/data_core/e4_page_level_filing_facts.py` emits the
+  page identity and accounting fields; `product/data_core/eastmoney_periodic.py`
+  declares `authority_tier="supplementary_only"` and `vendor_f10`.
+- **Gotchas:** Do not turn a shape-compatible vendor record into a FULL C1
+  section.  Future module wiring must check an actual per-ticker receipt and
+  its source identity, not only the module's Python API.
