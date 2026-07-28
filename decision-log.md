@@ -2205,3 +2205,15 @@
 - **Gotchas:** The original 20-ticker raw receipt was intentionally runtime
   only.  The M2 cohort records its replayable replacement selection separately;
   issuer selection is never used as a substitute for page-bound financial data.
+
+# 2026-07-29 — M1–M6 handoff keeps incomplete audit coverage visible
+
+- **Decision:** Record M4's seven real page-bound assignments and thirteen
+  gaps as the final state of this batch; do not create synthetic audit objects.
+- **Why:** An incomplete reviewable set is safer than a 20-row façade when a
+  PDF worker timeout prevented capture.
+- **Evidence:** `docs/evidence/2026-07-29-m1-m6-handoff.md` and M2 runtime
+  receipt `4502bb32938478ea`.
+- **Gotchas:** A process timeout is a local runtime failure, not evidence that
+  CNINFO lacks a filing. The next worker must enforce a process-level timeout
+  before the M4 gap can be called a collection result.

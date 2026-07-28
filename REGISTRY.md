@@ -262,3 +262,8 @@
 
 - 现在在哪里：治理修订，非产品进展。根 `AGENTS.md` 的 `## Workflow Rules` 不再抄写全局流程，改为一行指向 `~/work/park-operating-system/manual.md`；与 manual.md 直接矛盾的两条（链式叠 PR、执行 PR 须 Park 批准后合并）已删——两条都停在旧版，而 Codex 实际按 manual.md 自行合并。`## Testing Policy` / `## Review Policy` 改挂 manual.md 的 S/M/L 尺度，只保留本仓特有的高风险路径清单。产品边界、数据与密钥边界、UZI 边界均未动。
 - 下一步：manual.md 侧的配套修订（完整合同免代笔、REGISTRY 允许攒批更新）在 POS PR #17，属法律层，等 Park 亲合后生效；生效前本仓仍按现行 manual.md 走。另有两条只活在本文件里的全局规则（完工转 Ready、`park-ai-bot` 身份）暂留项目层，是否升进 manual.md 由 Park 定。
+
+## 2026-07-29 · M1–M6 official-fact batch handoff
+
+- 现在在哪里：M1–M6 收敛完成但未达 #218。M2 的 runtime receipt 有 20 ticker、52 份官方报告、951 条页级事实；M3 为 20 份 no-action；M4 仅有 7 份真实可审任务、13 个明确缺口。详见 `docs/evidence/2026-07-29-m1-m6-handoff.md`。
+- 下一步：先修复 PDF worker 的硬墙钟隔离并重采集 13 个 M4 缺口；在有 20 个真实页级审计对象前不得邀请 reviewer 或声称 #218 达标。
