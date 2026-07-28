@@ -2155,3 +2155,10 @@
   2025); conversion belongs to an explicitly identified downstream calculation.
   Every missing/indeterminate extraction conclusion must retain a bounded raw
   source excerpt, not a speculative diagnosis.
+
+# 2026-07-28 — Vertical validation boundaries
+
+- **Decision:** Keep CATL's partial C2 as an explicit no-action artifact; do not generalize its numerical extraction to Moutai or banks without column validation and sector profiles.
+- **Why:** Moutai exposed label/column collisions, while Ping An Bank's balance sheet and valuation economics are structurally different.
+- **Evidence:** `docs/evidence/2026-07-28-m2-moutai-generalization.md`, `docs/evidence/2026-07-28-m3-pingan-bank-pressure.md`, and `docs/evidence/2026-07-28-m4-vertical-handoff.md`.
+- **Gotchas:** Share-capital amount and share count are separate fields; a plausible target price still remains non-actionable while assumptions and independent valuation methods are incomplete.
