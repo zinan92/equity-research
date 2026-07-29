@@ -1,0 +1,113 @@
+{
+  "status": "passed",
+  "receipt_id": "e4-model-judgments-v1:a1398e135d132d6b547f70217fa8026e601a61cac3a800657550b88a6cdd9fb0",
+  "ticker": "300750.SZ",
+  "model": "deepseek-v4-pro",
+  "available_judgments": 7,
+  "name_swap": {
+    "passed_sentences": 11,
+    "total_sentences": 11,
+    "pass_rate": 1.0
+  },
+  "concrete_sentence_ratio": 1.0,
+  "numeric_traceability": {
+    "traced_tokens": 12,
+    "total_tokens": 12,
+    "pass_rate": 1.0
+  },
+  "source_scan": {
+    "generator_path": "product/data_core/e4_model_judgments.py",
+    "f_strings": 0,
+    "issuer_hardcoding": []
+  },
+  "judgments": [
+    {
+      "judgment_id": "accounting_checks",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 2,
+      "specific_sentences": 2
+    },
+    {
+      "judgment_id": "action_triggers",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 1,
+      "specific_sentences": 1
+    },
+    {
+      "judgment_id": "falsification_tests",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 1,
+      "specific_sentences": 1
+    },
+    {
+      "judgment_id": "governance_events",
+      "status": "missing",
+      "reason": "no official governance-event extraction receipt in supplied inputs"
+    },
+    {
+      "judgment_id": "investment_thesis",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 1,
+      "specific_sentences": 1
+    },
+    {
+      "judgment_id": "macro_exposures",
+      "status": "missing",
+      "reason": "no official issuer-specific macro-sensitivity evidence in supplied inputs"
+    },
+    {
+      "judgment_id": "management_record",
+      "status": "missing",
+      "reason": "no page-bound management track-record series in supplied receipts"
+    },
+    {
+      "judgment_id": "margin_bridge",
+      "status": "missing",
+      "reason": "generation_validation_failure"
+    },
+    {
+      "judgment_id": "market_size",
+      "status": "missing",
+      "reason": "no accepted official market-size evidence in supplied inputs"
+    },
+    {
+      "judgment_id": "moat_assessment",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 2,
+      "specific_sentences": 2
+    },
+    {
+      "judgment_id": "monitoring_kpis",
+      "status": "missing",
+      "reason": "generation_validation_failure"
+    },
+    {
+      "judgment_id": "operating_kpis",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 2,
+      "specific_sentences": 2
+    },
+    {
+      "judgment_id": "peer_comparison",
+      "status": "missing",
+      "reason": "no page-bound peer-company facts in supplied receipts"
+    },
+    {
+      "judgment_id": "risk_register",
+      "status": "ai_generated_judgment_unreviewed",
+      "sentences": 2,
+      "specific_sentences": 2
+    },
+    {
+      "judgment_id": "segment_financials",
+      "status": "missing",
+      "reason": "no accepted official segment-financial table in supplied inputs"
+    },
+    {
+      "judgment_id": "variant_view",
+      "status": "missing",
+      "reason": "no page-bound market-expectations or consensus evidence in supplied receipts"
+    }
+  ],
+  "errors": []
+}

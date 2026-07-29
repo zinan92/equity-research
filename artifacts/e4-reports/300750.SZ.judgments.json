@@ -1,145 +1,1091 @@
 {
-  "schema_version": "e4-m3-catl-judgments-v2",
+  "schema_version": "e4-model-judgments-v1",
   "data_kind": "real",
   "ticker": "300750.SZ",
+  "issuer_identity": {
+    "ticker": "300750.SZ",
+    "name": "宁德时代",
+    "exchange": "深圳证券交易所",
+    "industry": "动力电池"
+  },
+  "source_financial_receipt_sha256": "3dd58a1c24d4eb2589c86b51f5ddf5ed0711bf93e5b5872e6ae1ff9ba43831f9",
   "source_narrative_receipt": "e4-official-narrative-evidence-v1:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-  "source_financial_receipt_sha256": "371e98cef256dbf58b450ee37ede8280f858fff16266d1dc71bec2ce90197a34",
+  "source_dossier_receipt": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6",
+  "generator_version": "e4-model-judgments-v1",
+  "prompt_version": "e4-model-judgments-prompt-v1",
+  "validator_version": "e4-model-judgments-validator-v1",
+  "input_hash": "01bd86f93037000fba0fea80283b821cf4fb6a9621f2309010e8f2a01613fbdb",
+  "prompt_hash": "52c42e8187accf34e2e273b7ef88384896d0fb342cebdeeb93d17a5067a4a17e",
+  "response_hashes": [
+    "0bf7c736f3a512a4a8af2df8833069beb0a5ca8d006b5b7086a0a18081e421c9",
+    "0bf7c736f3a512a4a8af2df8833069beb0a5ca8d006b5b7086a0a18081e421c9",
+    "0bf7c736f3a512a4a8af2df8833069beb0a5ca8d006b5b7086a0a18081e421c9",
+    "0158095b92377ad876b858e0b85d108b93d00bb5aaa3e335df98906bc5ebdc85",
+    "9f339cd0e6dc931f470bad1286425cf43da3e4d9a047fafdb7b41ff564cbd03e",
+    "4dd15b17c4d3fd2ed702a92d72f4155d50a1eb23fa6cefc5a2e9f7811f129bb2",
+    "86266c8dc6651e7dffc2da23be0c673a299b96b4ff535824dc7d4b5278210c4b",
+    "d4014d7f59deb1d9e160931c4a67ac8a96cb19dc0fd703df07816a1aab95c811",
+    "2c7acdbb319be71cb38d9917731520e43298001d25b51a6946ccc36f54f2596a",
+    "416ced6821b9d5e4532d20e59e2add5be15d8ee656a25c2e5e373d9eb5b32ff8",
+    "8627b3d8c485a0c27d1b11f0e0f064bb49b2315078284ed7c7ff3d0652d0afa0",
+    "e5dbe2a3084edcfca945d430d510de749d824d70985bd59f18cf9f49cd582cd8",
+    "e5dbe2a3084edcfca945d430d510de749d824d70985bd59f18cf9f49cd582cd8",
+    "4e1a5d26dd5f169ba2d8e10fb9226f0e6d309ead5effa160b30c579917139ab5",
+    "8e76c513d581c24e7b5e57f49840c82db6250d28ab61cb16e122aeb375fb4642",
+    "0c9f2443d1794252fa179ee9ffafd3e9d6f32b6a0f22220d209ef2fb7d0563fa",
+    "ac369095434f01cc262748fee54aee86b5b75742b5c46d34e8b040686ec65dd8",
+    "e77de36f16885323cd5e620c4ff03d060c9d42902fb59ae1b31a1557607b2814",
+    "7533fbbe7fb0d634da5f9734c593e01a494916ff31da57de9d328f4553e23af9",
+    "19fa051f6adc4f815ff130f0e88d185cfcdd68f9dce9315a2fe164685d9eaf97",
+    "c408f41274c1156adb2089501cdd37cccba7481dfa6a6420f47f509f750d7c88",
+    "c408f41274c1156adb2089501cdd37cccba7481dfa6a6420f47f509f750d7c88",
+    "c408f41274c1156adb2089501cdd37cccba7481dfa6a6420f47f509f750d7c88",
+    "cbd13ff554e7a478ccc8c1b550e6a0a7e4d97b1a0556c35d1638a40ab495f449",
+    "d6a11876902c450d27761b5a4dc2057a4ae0e79cd6bca12cdab43ed2e8272bd6",
+    "564f0e5525691221c0535348e8010b9a22b740109af33834c4ba31e671733a3f",
+    "564f0e5525691221c0535348e8010b9a22b740109af33834c4ba31e671733a3f",
+    "957b56de0ff33fcb5e1bb376a02720f5cdd41de366f4e011f3b5ceb8204c78fd",
+    "0f9ad025c9e3e946fd4fef599437b51717ee5c50e5a5eb10734e121a12917787",
+    "ddbb6d22cafdf654e79def04517832833914ef3b05c5528385467af4ce9ca42b",
+    "87a442ee2415a837316b17dfa321071182ef8a632de70b0ecfd5a0f9273d44f6",
+    "72694440ee101dacb0f38e62440204b592d661d4d03726d0506e21c7becf1e3f",
+    "353ebc8eea71499f0d1064d2357bfa0cdea0fa6ca50f899d394755c2fafee3d6",
+    "30a27fb4d04328aa6e15172f691360308193acb2c148e1a23bdb9045b854a79c",
+    "e55e30dd32187b7b979a0544efbbe6939f6ed8a80dbdb4bd50ec4032220862ee",
+    "a8e67179744a50f84f964088a113075839f3c15ebb5d19abd7a83a2038ab1d5b",
+    "25098f5f156637e9e6bda6e4e14338b4b26284e2db4ac4d31ff9e2479e770901",
+    "65e15a887623715286021c5640cda4ed041a32de6e4cc2cd17fb38443abf237c",
+    "00964e6aa067050fe45aef5988262041511fc2b248d11a8fe5d105997c170b5f",
+    "da57b934862956091448efb6bbc11f2766760bb7b39c2f8fcfc6d7a4014699a6",
+    "186c9782283b4a9e34a3dfb6e150c019baaa960c6addbc3fc866628c1aaa5289",
+    "186c9782283b4a9e34a3dfb6e150c019baaa960c6addbc3fc866628c1aaa5289",
+    "15d30745e03677ea4186e75606b0a888887df324a52e0a0bf4d8dbda0d986bda",
+    "c9d44058c444862270e5572ac94a71df813e3d39bb7bdcf0e79bc8b8e7cf43d5",
+    "cbd99f33406d493611c653ae3a29bd06f7e4ed4eb8709fa4480b235e76e258d0"
+  ],
+  "model_receipts": [
+    {
+      "request_id": "93a359f8-de66-48b8-8866-052715f6c66f",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4522,
+        "completion_tokens": 505,
+        "total_tokens": 5027,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 4138
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:investment_thesis"
+    },
+    {
+      "request_id": "11689a72-bf27-47f3-8130-3053761c8d7a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 5026,
+        "completion_tokens": 505,
+        "total_tokens": 5531,
+        "prompt_tokens_details": {
+          "cached_tokens": 384
+        },
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 4642
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:investment_thesis:1"
+    },
+    {
+      "request_id": "5c87f4d4-98d1-4486-a6b8-aea1df411ba9",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 5026,
+        "completion_tokens": 505,
+        "total_tokens": 5531,
+        "prompt_tokens_details": {
+          "cached_tokens": 4992
+        },
+        "prompt_cache_hit_tokens": 4992,
+        "prompt_cache_miss_tokens": 34
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:investment_thesis:2"
+    },
+    {
+      "request_id": "37aab379-514c-451a-b232-7705a6abd641",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3742,
+        "completion_tokens": 351,
+        "total_tokens": 4093,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 3230
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:moat_assessment"
+    },
+    {
+      "request_id": "68d3dfcb-20ef-4c11-8017-daf69f4f3876",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4123,
+        "completion_tokens": 376,
+        "total_tokens": 4499,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 3611
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:moat_assessment:1"
+    },
+    {
+      "request_id": "ca2c0cb8-2c4e-4c2c-914b-cada46259e62",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4160,
+        "completion_tokens": 619,
+        "total_tokens": 4779,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 3648
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:moat_assessment:2"
+    },
+    {
+      "request_id": "e6a2e98a-e176-4ab5-a1e0-0656cce8e121",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2743,
+        "completion_tokens": 337,
+        "total_tokens": 3080,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2231
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:risk_register"
+    },
+    {
+      "request_id": "5cbd1af0-61ae-43f8-ae18-31b52bac7edc",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1661,
+        "completion_tokens": 377,
+        "total_tokens": 2038,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 1149
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:falsification_tests"
+    },
+    {
+      "request_id": "f80d754f-05bb-4a17-8e37-49059dc753a4",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2087,
+        "completion_tokens": 394,
+        "total_tokens": 2481,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 1575
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:falsification_tests:1"
+    },
+    {
+      "request_id": "ef4cf678-d6c6-46d3-a295-e4babc7f2e9a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2056,
+        "completion_tokens": 374,
+        "total_tokens": 2430,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 1288
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:falsification_tests:2"
+    },
+    {
+      "request_id": "e3690233-3c54-4cc1-9263-32024157b85a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4378,
+        "completion_tokens": 556,
+        "total_tokens": 4934,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 3866
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "2a399ff2-4e3a-4c49-bc91-79c03f847900",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4985,
+        "completion_tokens": 502,
+        "total_tokens": 5487,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 4473
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "f0d60a28-1cc1-4f30-99e8-e715bcddd00e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4899,
+        "completion_tokens": 514,
+        "total_tokens": 5413,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 4387
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "abf04dde-47b3-4ad6-946c-74454f25dc4e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1538,
+        "completion_tokens": 162,
+        "total_tokens": 1700,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 770
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:action_triggers"
+    },
+    {
+      "request_id": "90533f5c-1d68-4a04-80dc-a20e459e351a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2029,
+        "completion_tokens": 341,
+        "total_tokens": 2370,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 1261
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:accounting_checks"
+    },
+    {
+      "request_id": "4c6a663a-e614-4601-a721-71690d35f185",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4369,
+        "completion_tokens": 297,
+        "total_tokens": 4666,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 3857
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:operating_kpis"
+    },
+    {
+      "request_id": "1c06bdd3-849a-4190-8e76-49ecd9c2976b",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4684,
+        "completion_tokens": 329,
+        "total_tokens": 5013,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 4172
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:operating_kpis:1"
+    },
+    {
+      "request_id": "e4c89e5c-593a-44db-8bf2-b14c6d80fea2",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2104,
+        "completion_tokens": 415,
+        "total_tokens": 2519,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 1592
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:margin_bridge"
+    },
+    {
+      "request_id": "7934be3e-d3e7-4089-a2a2-45b4cfdeb362",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2591,
+        "completion_tokens": 496,
+        "total_tokens": 3087,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2079
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:1"
+    },
+    {
+      "request_id": "33b3255d-8149-4a9a-8dc3-4fb51022905f",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2660,
+        "completion_tokens": 492,
+        "total_tokens": 3152,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 1252
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:2"
+    },
+    {
+      "request_id": "c5e5c19a-d35c-4876-90cb-f5d5c4f14e34",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4522,
+        "completion_tokens": 414,
+        "total_tokens": 4936,
+        "prompt_tokens_details": {
+          "cached_tokens": 4480
+        },
+        "prompt_cache_hit_tokens": 4480,
+        "prompt_cache_miss_tokens": 42
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:investment_thesis"
+    },
+    {
+      "request_id": "2e196c64-3f67-4080-a9aa-eca21e6de36b",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4943,
+        "completion_tokens": 414,
+        "total_tokens": 5357,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4175
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:investment_thesis:1"
+    },
+    {
+      "request_id": "5e603ae7-f84e-46fa-958c-58bab00c69f3",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4943,
+        "completion_tokens": 414,
+        "total_tokens": 5357,
+        "prompt_tokens_details": {
+          "cached_tokens": 4864
+        },
+        "prompt_cache_hit_tokens": 4864,
+        "prompt_cache_miss_tokens": 79
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:investment_thesis:2"
+    },
+    {
+      "request_id": "c65a9d06-cb02-41b2-8e1a-c95f6a71656f",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3742,
+        "completion_tokens": 402,
+        "total_tokens": 4144,
+        "prompt_tokens_details": {
+          "cached_tokens": 3712
+        },
+        "prompt_cache_hit_tokens": 3712,
+        "prompt_cache_miss_tokens": 30
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:moat_assessment"
+    },
+    {
+      "request_id": "f2334d99-f82c-4c17-b709-f7760c704cbf",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4378,
+        "completion_tokens": 331,
+        "total_tokens": 4709,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 26
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "4ba53284-863f-4c8e-826f-88779aea245a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4754,
+        "completion_tokens": 342,
+        "total_tokens": 5096,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 3346
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "e6b64356-5f65-4012-be87-fc4c26a47027",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4728,
+        "completion_tokens": 342,
+        "total_tokens": 5070,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 376
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "58a197a1-b587-4876-aac5-d975b5137fef",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2104,
+        "completion_tokens": 397,
+        "total_tokens": 2501,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 56
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:margin_bridge"
+    },
+    {
+      "request_id": "9c316b81-bd83-489f-af89-a1dbdf096466",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2573,
+        "completion_tokens": 478,
+        "total_tokens": 3051,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 397
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:1"
+    },
+    {
+      "request_id": "7091767d-68db-4770-81fd-cf9c974359f8",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2621,
+        "completion_tokens": 468,
+        "total_tokens": 3089,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 445
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:2"
+    },
+    {
+      "request_id": "f1f832bb-779e-40d3-99e0-b6bc16ae8c45",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4522,
+        "completion_tokens": 308,
+        "total_tokens": 4830,
+        "prompt_tokens_details": {
+          "cached_tokens": 4480
+        },
+        "prompt_cache_hit_tokens": 4480,
+        "prompt_cache_miss_tokens": 42
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:investment_thesis"
+    },
+    {
+      "request_id": "8b221992-720a-4d84-9a31-92cfdda7a11e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4858,
+        "completion_tokens": 330,
+        "total_tokens": 5188,
+        "prompt_tokens_details": {
+          "cached_tokens": 4480
+        },
+        "prompt_cache_hit_tokens": 4480,
+        "prompt_cache_miss_tokens": 378
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:investment_thesis:1"
+    },
+    {
+      "request_id": "551f5097-1009-44a1-a70b-740c10889469",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4866,
+        "completion_tokens": 331,
+        "total_tokens": 5197,
+        "prompt_tokens_details": {
+          "cached_tokens": 4480
+        },
+        "prompt_cache_hit_tokens": 4480,
+        "prompt_cache_miss_tokens": 386
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:investment_thesis:2"
+    },
+    {
+      "request_id": "e670e0d7-1629-439a-bf9b-17a7054ce312",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4378,
+        "completion_tokens": 483,
+        "total_tokens": 4861,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 26
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "92de8861-7e9c-45ec-9b7d-8614b29dabd2",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4929,
+        "completion_tokens": 495,
+        "total_tokens": 5424,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 577
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "d2a1b4b3-a5b6-41fc-883c-18d3c2f1b1fb",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4919,
+        "completion_tokens": 502,
+        "total_tokens": 5421,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 567
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "04bc4c59-87b6-4265-a009-08b0a9928b97",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2104,
+        "completion_tokens": 407,
+        "total_tokens": 2511,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 56
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:margin_bridge"
+    },
+    {
+      "request_id": "fdd306ab-a0b8-4aec-af5f-b78832838a38",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2583,
+        "completion_tokens": 476,
+        "total_tokens": 3059,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 407
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:1"
+    },
+    {
+      "request_id": "169c954b-46c0-445c-b20b-1d907c7becd0",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2640,
+        "completion_tokens": 472,
+        "total_tokens": 3112,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 464
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:2"
+    },
+    {
+      "request_id": "f7e4c3aa-f26e-4a16-a950-e5fbec7395cb",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4378,
+        "completion_tokens": 482,
+        "total_tokens": 4860,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 26
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "87e556f7-f542-4b9d-80ba-8822d427bec8",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4905,
+        "completion_tokens": 478,
+        "total_tokens": 5383,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 553
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "9148063b-4102-4da5-bfd4-3423d1442897",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4880,
+        "completion_tokens": 478,
+        "total_tokens": 5358,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 528
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "9cb7fbac-804b-47bb-917f-3fb109d08b68",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2104,
+        "completion_tokens": 358,
+        "total_tokens": 2462,
+        "prompt_tokens_details": {
+          "cached_tokens": 2048
+        },
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 56
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:margin_bridge"
+    },
+    {
+      "request_id": "def8295d-ee34-46e4-8cac-46db7a4f277e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2527,
+        "completion_tokens": 456,
+        "total_tokens": 2983,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 1119
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:1"
+    },
+    {
+      "request_id": "6bf3b6d5-4384-444d-a92d-35e6771a0d7e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2620,
+        "completion_tokens": 452,
+        "total_tokens": 3072,
+        "prompt_tokens_details": {
+          "cached_tokens": 2176
+        },
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 444
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:2"
+    }
+  ],
+  "resume_lineage": [
+    "e4-model-judgments-v1:8d2d01db94692c4e1ca7cf9b14d0dbbe3e28486e63b1bffb09d5554f9cbc7c35",
+    "e4-model-judgments-v1:06aeff86ddba0bea7ccfa4af61c4b9c90afbb8f57baac7b655aca4b0825c2a84",
+    "e4-model-judgments-v1:ef484513b292de86e5f7f1575c0796e1bab85e40d36d4b6b49fef8f504ab7f8e"
+  ],
+  "content_hash": "0461b4f8dc689c3baa90d551fe31680b37c65e50cd479bb49c220e5f972482e7",
   "content": {
+    "variant_view": {
+      "status": "missing",
+      "reason": "no page-bound market-expectations or consensus evidence in supplied receipts",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
     "peer_comparison": {
       "status": "missing",
-      "reason": "no page-bound peer facts",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
+      "reason": "no page-bound peer-company facts in supplied receipts",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
     },
     "management_record": {
       "status": "missing",
-      "reason": "no page-bound management track-record series",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
+      "reason": "no page-bound management track-record series in supplied receipts",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
     },
     "governance_events": {
       "status": "missing",
-      "reason": "no official event extraction receipt",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
+      "reason": "no official governance-event extraction receipt in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
     },
     "macro_exposures": {
       "status": "missing",
-      "reason": "no official macro sensitivity extraction",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
+      "reason": "no official issuer-specific macro-sensitivity evidence in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
     },
     "segment_financials": {
       "status": "missing",
-      "reason": "no official segment table extracted into frozen Context Pack",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
+      "reason": "no accepted official segment-financial table in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
     },
     "market_size": {
       "status": "missing",
-      "reason": "no official market-size source admitted",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
-    },
-    "variant_view": {
-      "status": "missing",
-      "reason": "no broker consensus or market-expectations receipt",
-      "raw_text_excerpt": "no qualifying issuer-specific, page-bound evidence in supplied receipts"
+      "reason": "no accepted official market-size evidence in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
     },
     "investment_thesis": {
       "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代的未审阅经营判断以其披露的主营业务描述和unresolved营业收入为条件，不能替代投资建议。",
+      "text": "如果宁德时代在乘用车中高端市场持续保持主导地位，并且骁遥增混电池搭载超40款REV车型，那么公司可能凭借性能溢价和优质服务实现2026年第一季度营业总收入129,131,041千元。",
       "facts": [
         {
+          "evidence_id": "N0258",
           "evidence_type": "narrative_block",
           "metric": "narrative_evidence",
-          "value": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
+          "value": "高端市场主导地位稳固，细分市场取得突破。 公司以性能溢价、优质服务铸就长期口碑，在乘用车中高端市场持续独占鳌头。2025 年福布斯中国智能纯电汽车新豪华度评选榜单中，超 6成上榜车型搭载公司电池；公司还凭借骁遥增混电池，全面开启增混“大电量”时代，搭载超 40款 REV车型，助力公司在REV市场占据主导地位。此外，公司亦通过开发周期短、适配成本低的大单品解决方案，助力乘用车客深化战略客户合作，落地多元场景。公司以有针对性的场景解决方案、各类优势资源的高效整合持续获得商用车客户认可。报告期内，公司与一汽解放、北汽福田、东风商用车等深化战略合作，共同引领商用车电动化进程加速；公司还与多个合作伙伴共同推进无人物流、无人矿山等场景的绿色、低碳转海外业务稳步推进，售后体系持续完善。随着公司海外基地建设、运营的逐渐成熟，及与海外客户战略合作的逐渐深入，报告期内，公司海外市场份额及交付能力稳步提升，并以领先的产品及优质的服务，持续获得VW、BMW、Stellantis、Volvo、DMG等海外客户诸多定点。为支持业务发展，公司持续完善售后服务体系。截至报告期末，公司售后服务网络覆盖 75个国家或地区、约 1,200家售后服务站。公司设有全球“宁家服务”直营体验中心 11家，依托于“宁家服务”品牌，将售后服务延伸至整车端，为用户提供包括维修、电池保养、健康检测、年检及移动救援等在内的一站式的全方位服务。",
           "citation": {
-            "document_id": "1225441586",
-            "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-            "page_number": 16,
-            "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-            "report_period": "2026H1",
-            "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
+            "document_id": "1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 21,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "高端市场主导地位稳固，细分市场取得突破。 公司以性能溢价、优质服务铸就长期口碑，在乘用车中高端市场持续独占鳌头。2025 年福布斯中国智能纯电汽车新豪华度评选榜单中，超 6成上榜车型搭载公司电池；公司还凭借骁遥增混电池，全面开启增混“大电量”时代，搭载超 40款 REV车型，助力公司在REV市场占据主导地位。此外，公司亦通过开发周期短、适配成本低的大单品解决方案，助力乘用车客深化战略客户合作，落地多元场景。公司以有针对性的场景解决方案、各类优势资源的高效整合持续获得商用车客户认可。报告期内，公司与一汽解放、北汽福田、东风商用车等深化战略合作，共同引领商用车电动化进程加速；公司还与多个合作伙伴共同推进无人物流、无人矿山等场景的绿色、低碳转海外业务稳步推进，售后体系持续完善。随着公司海外基地建设、运营的逐渐成熟，及与海外客户战略合作的逐渐深入，报告期内，公司海外市场份额及交付能力稳步提升，并以领先的产品及优质的服务，持续获得VW、BMW、Stellantis、Volvo、DMG等海外客户诸多定点。为支持业务发展，公司持续完善售后服务体系。截至报告期末，公司售后服务网络覆盖 75个国家或地区、约 1,200家售后服务站。公司设有全球“宁家服务”直营体验中心 11家，依托于“宁家服务”品牌，将售后服务延伸至整车端，为用户提供包括维修、电池保养、健康检测、年检及移动救援等在内的一站式的全方位服务。",
             "unit": "narrative_text",
-            "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子"
+            "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
           }
         },
         {
+          "evidence_id": "F0001",
           "evidence_type": "financial_fact",
           "metric": "revenue",
-          "value": 40091704.49,
+          "value": 129131041.0,
+          "display_value": "129,131,041",
           "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-            "page_number": 120,
-            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "unit": "千元",
+            "statement_scope": "consolidated"
           }
         }
       ],
       "claims": [
         {
-          "text": "宁德时代披露了主营业务描述。",
-          "citations": [
+          "text": "如果宁德时代在乘用车中高端市场持续保持主导地位，并且骁遥增混电池搭载超40款REV车型，那么公司可能凭借性能溢价和优质服务实现2026年第一季度营业总收入129,131,041千元。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0258",
+            "F0001"
+          ],
+          "supporting_quotes": [
             {
-              "document_id": "1225441586",
-              "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-              "page_number": 16,
-              "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-              "report_period": "2026H1",
-              "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
-              "unit": "narrative_text",
-              "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子"
+              "evidence_id": "N0258",
+              "quote": "在乘用车中高端市场持续独占鳌头"
+            },
+            {
+              "evidence_id": "N0258",
+              "quote": "骁遥增混电池，全面开启增混“大电量”时代，搭载超 40款 REV车型"
+            },
+            {
+              "evidence_id": "N0258",
+              "quote": "以性能溢价、优质服务铸就长期口碑"
+            },
+            {
+              "evidence_id": "F0001",
+              "quote": "营业总收入 129,131,041"
             }
-          ]
-        },
-        {
-          "text": "宁德时代披露了unresolved营业收入。",
+          ],
           "citations": [
             {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-              "page_number": 120,
-              "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
+              "document_id": "1225002214",
+              "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+              "page_number": 21,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "高端市场主导地位稳固，细分市场取得突破。 公司以性能溢价、优质服务铸就长期口碑，在乘用车中高端市场持续独占鳌头。2025 年福布斯中国智能纯电汽车新豪华度评选榜单中，超 6成上榜车型搭载公司电池；公司还凭借骁遥增混电池，全面开启增混“大电量”时代，搭载超 40款 REV车型，助力公司在REV市场占据主导地位。此外，公司亦通过开发周期短、适配成本低的大单品解决方案，助力乘用车客深化战略客户合作，落地多元场景。公司以有针对性的场景解决方案、各类优势资源的高效整合持续获得商用车客户认可。报告期内，公司与一汽解放、北汽福田、东风商用车等深化战略合作，共同引领商用车电动化进程加速；公司还与多个合作伙伴共同推进无人物流、无人矿山等场景的绿色、低碳转海外业务稳步推进，售后体系持续完善。随着公司海外基地建设、运营的逐渐成熟，及与海外客户战略合作的逐渐深入，报告期内，公司海外市场份额及交付能力稳步提升，并以领先的产品及优质的服务，持续获得VW、BMW、Stellantis、Volvo、DMG等海外客户诸多定点。为支持业务发展，公司持续完善售后服务体系。截至报告期末，公司售后服务网络覆盖 75个国家或地区、约 1,200家售后服务站。公司设有全球“宁家服务”直营体验中心 11家，依托于“宁家服务”品牌，将售后服务延伸至整车端，为用户提供包括维修、电池保养、健康检测、年检及移动救援等在内的一站式的全方位服务。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+              "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+              "page_number": 8,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+              "report_period": "2026Q1",
+              "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+              "unit": "千元",
+              "statement_scope": "consolidated"
             }
           ]
         }
       ],
       "name_swap_test": {
         "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果宁德时代在乘用车中高端市场持续保持主导地位，并且骁遥增混电池搭载超40款REV车型，那么公司可能凭借性能溢价和优质服务实现2026年第一季度营业总收入129,131,041千元。",
+            "replaced_sentence": "如果该公司在乘用车中高端市场持续保持主导地位，并且骁遥增混电池搭载超40款REV车型，那么公司可能凭借性能溢价和优质服务实现2026年第一季度营业总收入129,131,041千元。",
+            "status": "passed",
+            "specific_anchors": [
+              "129,131,041",
+              "乘用车中高端市场",
+              "在乘用车中高端市",
+              "用车中高端市场持",
+              "车中高端市场持续",
+              "中高端市场持续",
+              "乘用车中高端市",
+              "在乘用车中高端"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
       },
       "citation_mix": {
         "narrative_blocks": 1,
-        "financial_facts": 1
-      }
+        "financial_facts": 1,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
     },
     "moat_assessment": {
       "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代在官方披露中描述核心竞争力；该未审阅判断仅基于公司自述，缺独立同行验证。",
+      "text": "公司基于覆盖材料、电芯、系统及回收的全链条自主研发能力，并将AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计60,319项，可能形成技术护城河。公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持产品竞争力持续大幅领先，可能巩固其市场地位。",
       "facts": [
         {
+          "evidence_id": "N0091",
           "evidence_type": "narrative_block",
           "metric": "narrative_evidence",
-          "value": "公司电池材料产品主要包括锂盐、前驱体及正极材料等。公司亦通过回收方式，对废旧电池中的镍、钴、锰、锂、磷、铁、铝、铜等金属材料及其他材料进行加工、提纯、合成等工艺，生产锂电池生产所需的正极材料、三元前驱体、磷铁前驱体、锂盐等材料，并将收集后的铜、铝等金属材料通过第三方回收利用，最终推进电池生产所需的关键金属资源实现有效循环利用。",
+          "value": "公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。报告期内，公司举办超级科技日，发布第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池、钠新电池等在服务优质方面，公司全面、先进产品矩阵取得客户广泛认可，动力电池使用量连续九年位居全球",
           "citation": {
             "document_id": "1225441586",
             "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
             "page_number": 12,
             "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
             "report_period": "2026H1",
-            "quoted_anchor": "公司电池材料产品主要包括锂盐、前驱体及正极材料等。公司亦通过回收方式，对废旧电池中的镍、钴、锰、锂、磷、铁、铝、铜等金属材料及其他材料进行加工、提纯、合成等工艺，生产锂电池生产所需的正极材料、三元前驱体、磷铁前驱体、锂盐等材料，并将收集后的铜、铝等金属材料通过第三方回收利用，最终推进电池生产所需的关键金属资源实现有效循环利用。",
+            "quoted_anchor": "公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。报告期内，公司举办超级科技日，发布第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池、钠新电池等在服务优质方面，公司全面、先进产品矩阵取得客户广泛认可，动力电池使用量连续九年位居全球",
             "unit": "narrative_text",
             "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析"
+          }
+        },
+        {
+          "evidence_id": "N0207",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "应对措施：公司将以更优质的产品和服务应对市场竞争。公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持公司的产品竞争力持续大幅领先。在前期累积的广泛、深度客户关系基础上，积极推进创新商业合作模式，服务终端消费者多元化需求。公司加速品牌推广，充分利用线上及线下传播渠道，提升终端消费者对公司产品及品牌的认知，提升产品的综合竞争力。此外，公司设立服务品牌，为终端消费者提供包括维修、电池保养、健康检测等",
+          "citation": {
+            "document_id": "1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 39,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "应对措施：公司将以更优质的产品和服务应对市场竞争。公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持公司的产品竞争力持续大幅领先。在前期累积的广泛、深度客户关系基础上，积极推进创新商业合作模式，服务终端消费者多元化需求。公司加速品牌推广，充分利用线上及线下传播渠道，提升终端消费者对公司产品及品牌的认知，提升产品的综合竞争力。此外，公司设立服务品牌，为终端消费者提供包括维修、电池保养、健康检测等",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > 1、行业格局和趋势 > 4、可能面对的风险"
           }
         }
       ],
       "claims": [
         {
-          "text": "宁德时代在官方披露中描述核心竞争力。",
+          "text": "公司基于覆盖材料、电芯、系统及回收的全链条自主研发能力，并将AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计60,319项，可能形成技术护城河。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0091"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0091",
+              "quote": "公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项"
+            }
+          ],
           "citations": [
             {
               "document_id": "1225441586",
@@ -147,473 +1093,723 @@
               "page_number": 12,
               "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
               "report_period": "2026H1",
-              "quoted_anchor": "公司电池材料产品主要包括锂盐、前驱体及正极材料等。公司亦通过回收方式，对废旧电池中的镍、钴、锰、锂、磷、铁、铝、铜等金属材料及其他材料进行加工、提纯、合成等工艺，生产锂电池生产所需的正极材料、三元前驱体、磷铁前驱体、锂盐等材料，并将收集后的铜、铝等金属材料通过第三方回收利用，最终推进电池生产所需的关键金属资源实现有效循环利用。",
+              "quoted_anchor": "公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。报告期内，公司举办超级科技日，发布第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池、钠新电池等在服务优质方面，公司全面、先进产品矩阵取得客户广泛认可，动力电池使用量连续九年位居全球",
               "unit": "narrative_text",
               "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析"
             }
           ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 1,
-        "financial_facts": 0
-      }
-    },
-    "risk_register": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代风险登记仅记录官方披露的风险因素，未审阅且不表示风险概率或投资结论。",
-      "facts": [
-        {
-          "evidence_type": "narrative_block",
-          "metric": "narrative_evidence",
-          "value": "1）本期公司开展商品套期保值业务，以金属远期等衍生品合约为套期工具，部分预期采购、销售交易中商品价格风险成分为被套期项目，以此来规避本公司承担的随着商品市场价格的波动，预期采购、销售带来的预计未来现金流量发生波动的风险。该类套期为现金流量套期。",
-          "citation": {
-            "document_id": "1225441586",
-            "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-            "page_number": 165,
-            "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-            "report_period": "2026H1",
-            "quoted_anchor": "1）本期公司开展商品套期保值业务，以金属远期等衍生品合约为套期工具，部分预期采购、销售交易中商品价格风险成分为被套期项目，以此来规避本公司承担的随着商品市场价格的波动，预期采购、销售带来的预计未来现金流量发生波动的风险。该类套期为现金流量套期。",
-            "unit": "narrative_text",
-            "section_path": "第八节 财务报告 > 十一、与金融工具相关的风险 > 1、金融工具产生的各类风险 > 3、套期"
-          }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了对应风险因素。",
-          "citations": [
-            {
-              "document_id": "1225441586",
-              "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-              "page_number": 165,
-              "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-              "report_period": "2026H1",
-              "quoted_anchor": "1）本期公司开展商品套期保值业务，以金属远期等衍生品合约为套期工具，部分预期采购、销售交易中商品价格风险成分为被套期项目，以此来规避本公司承担的随着商品市场价格的波动，预期采购、销售带来的预计未来现金流量发生波动的风险。该类套期为现金流量套期。",
-              "unit": "narrative_text",
-              "section_path": "第八节 财务报告 > 十一、与金融工具相关的风险 > 1、金融工具产生的各类风险 > 3、套期"
-            }
-          ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 1,
-        "financial_facts": 0
-      }
-    },
-    "falsification_tests": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "若宁德时代下一份年度报告的营业收入低于 4.00917e+07 万元，则该未审阅经营判断被推翻并须重审。",
-      "facts": [
-        {
-          "evidence_type": "financial_fact",
-          "metric": "revenue",
-          "value": 40091704.49,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-            "page_number": 120,
-            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
-          }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了证伪阈值所依据的unresolved营业收入。",
-          "citations": [
-            {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-              "page_number": 120,
-              "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            }
-          ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 0,
-        "financial_facts": 1
-      },
-      "tests": [
-        {
-          "metric": "revenue",
-          "direction": "down",
-          "threshold": 40091704.49,
-          "unit": "万元",
-          "time_window": "next annual filing",
-          "rule": "若宁德时代下一份年度报告的营业收入低于 4.00917e+07 万元，则该未审阅经营判断被推翻并须重审。"
-        }
-      ]
-    },
-    "monitoring_kpis": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代的未审阅监控清单跟踪已披露营业收入及研发相关进展，并在下一次定期披露时复核。",
-      "facts": [
-        {
-          "evidence_type": "financial_fact",
-          "metric": "revenue",
-          "value": 40091704.49,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-            "page_number": 120,
-            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
-          }
         },
         {
-          "evidence_type": "narrative_block",
-          "metric": "narrative_evidence",
-          "value": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
-          "citation": {
-            "document_id": "1225441586",
-            "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-            "page_number": 158,
-            "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-            "report_period": "2026H1",
-            "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
-            "unit": "narrative_text",
-            "section_path": "第八节 财务报告 > 八、研发支出"
-          }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了监控项所依据的页级证据。",
+          "text": "公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持产品竞争力持续大幅领先，可能巩固其市场地位。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0207"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0207",
+              "quote": "公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持公司的产品竞争力持续大幅领先"
+            }
+          ],
           "citations": [
             {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-              "page_number": 120,
-              "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            },
-            {
-              "document_id": "1225441586",
-              "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-              "page_number": 158,
-              "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-              "report_period": "2026H1",
-              "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
+              "document_id": "1225002214",
+              "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+              "page_number": 39,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "应对措施：公司将以更优质的产品和服务应对市场竞争。公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持公司的产品竞争力持续大幅领先。在前期累积的广泛、深度客户关系基础上，积极推进创新商业合作模式，服务终端消费者多元化需求。公司加速品牌推广，充分利用线上及线下传播渠道，提升终端消费者对公司产品及品牌的认知，提升产品的综合竞争力。此外，公司设立服务品牌，为终端消费者提供包括维修、电池保养、健康检测等",
               "unit": "narrative_text",
-              "section_path": "第八节 财务报告 > 八、研发支出"
+              "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > 1、行业格局和趋势 > 4、可能面对的风险"
             }
           ]
         }
       ],
       "name_swap_test": {
         "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 1,
-        "financial_facts": 1
-      },
-      "items": [
-        "reported_revenue",
-        "research_and_product_progress"
-      ]
-    },
-    "action_triggers": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代触发复核的未审阅条件是下一份年度报告营业收入低于已引用阈值。",
-      "facts": [
-        {
-          "evidence_type": "financial_fact",
-          "metric": "revenue",
-          "value": 40091704.49,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-            "page_number": 120,
-            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "公司基于覆盖材料、电芯、系统及回收的全链条自主研发能力，并将AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计60,319项，可能形成技术护城河。",
+            "replaced_sentence": "公司基于覆盖材料、电芯、系统及回收的全链条自主研发能力，并将AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计60,319项，可能形成技术护城河。",
+            "status": "passed",
+            "specific_anchors": [
+              "入研发与制造环节",
+              "全链条自主研发能",
+              "及回收的全链条自",
+              "及申请的国内外专",
+              "告期末拥有及申请",
+              "回收的全链条自主",
+              "截至报告期末拥有",
+              "报告期末拥有及申"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持产品竞争力持续大幅领先，可能巩固其市场地位。",
+            "replaced_sentence": "公司持续将研发创新作为发展的根本驱动力，不断升级产品性能和质量、提升运营效率及降低生产成本，从而保持产品竞争力持续大幅领先，可能巩固其市场地位。",
+            "status": "passed",
+            "specific_anchors": [
+              "不断升级产品性能",
+              "为发展的根本驱动",
+              "争力持续大幅领先",
+              "产品竞争力持续大",
+              "作为发展的根本驱",
+              "公司持续将研发创",
+              "创新作为发展的根",
+              "升级产品性能和质"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
           }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了证伪阈值所依据的unresolved营业收入。",
-          "citations": [
-            {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-              "page_number": 120,
-              "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            }
-          ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 0,
-        "financial_facts": 1
-      },
-      "items": [
-        {
-          "metric": "revenue",
-          "direction": "down",
-          "threshold": 40091704.49,
-          "unit": "万元",
-          "time_window": "next annual filing",
-          "rule": "若宁德时代下一份年度报告的营业收入低于 4.00917e+07 万元，则该未审阅经营判断被推翻并须重审。"
-        }
-      ]
-    },
-    "accounting_checks": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代的未审阅会计检查并列其已披露营业收入与营业成本，不构成审计意见。",
-      "facts": [
-        {
-          "evidence_type": "financial_fact",
-          "metric": "revenue",
-          "value": 40091704.49,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-            "page_number": 120,
-            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
-          }
-        },
-        {
-          "evidence_type": "financial_fact",
-          "metric": "operating_cost",
-          "value": 9609372.23,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
-            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
-            "page_number": 114,
-            "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
-          }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了营业收入和营业成本。",
-          "citations": [
-            {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-              "page_number": 120,
-              "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            },
-            {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
-              "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
-              "page_number": 114,
-              "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            }
-          ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 0,
-        "financial_facts": 2
-      }
-    },
-    "margin_bridge": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代的未审阅毛利起点为已披露营业收入减营业成本 3.04823e+07 万元；完整利润率桥缺少其余成本层证据。",
-      "facts": [
-        {
-          "evidence_type": "financial_fact",
-          "metric": "revenue",
-          "value": 40091704.49,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-            "page_number": 120,
-            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
-          }
-        },
-        {
-          "evidence_type": "financial_fact",
-          "metric": "operating_cost",
-          "value": 9609372.23,
-          "citation": {
-            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
-            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
-            "page_number": 114,
-            "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
-            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
-            "report_period": "unresolved",
-            "unit": "万元"
-          }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了计算该起点的营业收入和营业成本。",
-          "citations": [
-            {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
-              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
-              "page_number": 120,
-              "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            },
-            {
-              "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
-              "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
-              "page_number": 114,
-              "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
-              "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
-              "report_period": "unresolved",
-              "unit": "万元"
-            }
-          ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
-      },
-      "citation_mix": {
-        "narrative_blocks": 0,
-        "financial_facts": 2
-      }
-    },
-    "operating_kpis": {
-      "status": "ai_generated_judgment_unreviewed",
-      "dossier_id": "e4-l1-m2:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
-      "text": "宁德时代的未审阅经营指标以主营业务与研发披露中的具体进展为观察对象。",
-      "facts": [
-        {
-          "evidence_type": "narrative_block",
-          "metric": "narrative_evidence",
-          "value": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
-          "citation": {
-            "document_id": "1225441586",
-            "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-            "page_number": 16,
-            "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-            "report_period": "2026H1",
-            "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
-            "unit": "narrative_text",
-            "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子"
-          }
-        },
-        {
-          "evidence_type": "narrative_block",
-          "metric": "narrative_evidence",
-          "value": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
-          "citation": {
-            "document_id": "1225441586",
-            "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-            "page_number": 158,
-            "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-            "report_period": "2026H1",
-            "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
-            "unit": "narrative_text",
-            "section_path": "第八节 财务报告 > 八、研发支出"
-          }
-        }
-      ],
-      "claims": [
-        {
-          "text": "宁德时代披露了经营指标观察所依据的业务或研发进展。",
-          "citations": [
-            {
-              "document_id": "1225441586",
-              "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-              "page_number": 16,
-              "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-              "report_period": "2026H1",
-              "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
-              "unit": "narrative_text",
-              "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子"
-            },
-            {
-              "document_id": "1225441586",
-              "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
-              "page_number": 158,
-              "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
-              "report_period": "2026H1",
-              "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
-              "unit": "narrative_text",
-              "section_path": "第八节 财务报告 > 八、研发支出"
-            }
-          ]
-        }
-      ],
-      "name_swap_test": {
-        "status": "passed",
-        "issuer_token": "宁德时代",
-        "generic_claims": 0
+        ]
       },
       "citation_mix": {
         "narrative_blocks": 2,
-        "financial_facts": 0
+        "financial_facts": 0,
+        "derived_metrics": 0
       },
-      "items": [
-        "business_and_product_progress",
-        "research_progress"
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
+    },
+    "risk_register": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。若未来出现经济增长放缓和市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+      "facts": [
+        {
+          "evidence_id": "N0050",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "全球宏观经济存在不确定性，地缘政治及贸易政策变化可能影响产业链布局与国际业务开展；若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。",
+          "citation": {
+            "document_id": "1225441586",
+            "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+            "page_number": 28,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+            "report_period": "2026H1",
+            "quoted_anchor": "全球宏观经济存在不确定性，地缘政治及贸易政策变化可能影响产业链布局与国际业务开展；若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 十一、公司面临的风险和应对措施 > 1、宏观经济与市场波动风险 > 4、原材料价格波动及供应风险"
+          }
+        },
+        {
+          "evidence_id": "N0587",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "全球宏观经济存在不确定性，若未来 出现经济增长放缓和 市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+          "citation": {
+            "document_id": "1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 39,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+            "report_period": "2023FY",
+            "quoted_anchor": "全球宏观经济存在不确定性，若未来 出现经济增长放缓和 市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > （四）可能面对的风险 > 1、宏观经济与市场波动风险"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0050"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0050",
+              "quote": "若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "1225441586",
+              "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+              "page_number": 28,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+              "report_period": "2026H1",
+              "quoted_anchor": "全球宏观经济存在不确定性，地缘政治及贸易政策变化可能影响产业链布局与国际业务开展；若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 十一、公司面临的风险和应对措施 > 1、宏观经济与市场波动风险 > 4、原材料价格波动及供应风险"
+            }
+          ]
+        },
+        {
+          "text": "若未来出现经济增长放缓和市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0587"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0587",
+              "quote": "若未来 出现经济增长放缓和 市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "1219313047",
+              "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+              "page_number": 39,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "全球宏观经济存在不确定性，若未来 出现经济增长放缓和 市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > （四）可能面对的风险 > 1、宏观经济与市场波动风险"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。",
+            "replaced_sentence": "若市场需求增长不及预期，将影响新能源行业发展，进而对公司的经营业绩和财务状况产生不利影响。",
+            "status": "passed",
+            "specific_anchors": [
+              "业绩和财务状况产",
+              "公司的经营业绩和",
+              "务状况产生不利影",
+              "司的经营业绩和财",
+              "和财务状况产生不",
+              "响新能源行业发展",
+              "场需求增长不及预",
+              "对公司的经营业绩"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "若未来出现经济增长放缓和市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+            "replaced_sentence": "若未来出现经济增长放缓和市场需求下滑，将影响整个新能源以及动力和储能电池行业的发展，进而对公司的经营业绩和财务状况产生不利影响。",
+            "status": "passed",
+            "specific_anchors": [
+              "业绩和财务状况产",
+              "个新能源以及动力",
+              "以及动力和储能电",
+              "储能电池行业的发",
+              "公司的经营业绩和",
+              "出现经济增长放缓",
+              "力和储能电池行业",
+              "务状况产生不利影"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 2,
+        "financial_facts": 0,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
+    },
+    "falsification_tests": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果宁德时代在下一份正式披露中营业总收入低于129,131,041千元，则可能表明其收入未达到2026年第一季度水平。",
+      "facts": [
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 129131041.0,
+          "display_value": "129,131,041",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "unit": "千元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果宁德时代在下一份正式披露中营业总收入低于129,131,041千元，则可能表明其收入未达到2026年第一季度水平。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 129,131,041"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+              "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+              "page_number": 8,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+              "report_period": "2026Q1",
+              "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+              "unit": "千元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果宁德时代在下一份正式披露中营业总收入低于129,131,041千元，则可能表明其收入未达到2026年第一季度水平。",
+            "replaced_sentence": "如果该公司在下一份正式披露中营业总收入低于129,131,041千元，则可能表明其收入未达到2026年第一季度水平。",
+            "status": "passed",
+            "specific_anchors": [
+              "129,131,041",
+              "营业总收入",
+              "2026",
+              "业总收入",
+              "营业总收",
+              "1"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 1,
+        "derived_metrics": 0
+      },
+      "tests": [
+        {
+          "direction": "below",
+          "threshold": "129,131,041",
+          "threshold_evidence_id": "F0001",
+          "unit": "千元",
+          "time_window": "下一份正式披露",
+          "latest_actual_baseline": {
+            "display_value": "129,131,041",
+            "evidence_id": "F0001",
+            "period": "2026Q1",
+            "unit": "千元"
+          },
+          "reason": "如果后续报告的收入低于2026年第一季度，可能反映动力电池业务需求减弱或客户订单减少。",
+          "evidence_ids": [
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 129,131,041"
+            }
+          ]
+        }
+      ],
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
+    },
+    "action_triggers": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "若宁德时代后续正式披露的营业总收入低于129,131,041千元，则触发研究重审。",
+      "facts": [
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 129131041.0,
+          "display_value": "129,131,041",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "unit": "千元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "若宁德时代后续正式披露的营业总收入低于129,131,041千元，则触发研究重审。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "营业总收入 129,131,041"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+              "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+              "page_number": 8,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+              "report_period": "2026Q1",
+              "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+              "unit": "千元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "若宁德时代后续正式披露的营业总收入低于129,131,041千元，则触发研究重审。",
+            "replaced_sentence": "若该公司后续正式披露的营业总收入低于129,131,041千元，则触发研究重审。",
+            "status": "passed",
+            "specific_anchors": [
+              "129,131,041",
+              "营业总收入",
+              "业总收入",
+              "营业总收",
+              "1"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 1,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
+    },
+    "accounting_checks": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果2026年第一季度营业成本占营业总收入的比例与上年同期相比发生显著变化，则可能表明成本结构或会计估计存在变动。若货币资金余额较高且无重大资本支出计划，则公司可能面临资金使用效率不足的风险。",
+      "facts": [
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 129131041.0,
+          "display_value": "129,131,041",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "unit": "千元",
+            "statement_scope": "consolidated"
+          }
+        },
+        {
+          "evidence_id": "F0002",
+          "evidence_type": "financial_fact",
+          "metric": "operating_cost",
+          "value": 97086370.0,
+          "display_value": "97,086,370",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "quoted_anchor": "二、营业总成本其中：营业成本 97,086,370 64,030,111 107,104,438 70,591,547",
+            "unit": "千元",
+            "statement_scope": "consolidated"
+          }
+        },
+        {
+          "evidence_id": "F0004",
+          "evidence_type": "financial_fact",
+          "metric": "cash",
+          "value": 351997422.0,
+          "display_value": "351,997,422",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 5,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "quoted_anchor": "货币资金 351,997,422 333,512,927",
+            "unit": "千元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果2026年第一季度营业成本占营业总收入的比例与上年同期相比发生显著变化，则可能表明成本结构或会计估计存在变动。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0001",
+            "F0002"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 129,131,041 84,704,589"
+            },
+            {
+              "evidence_id": "F0002",
+              "quote": "其中：营业成本 97,086,370 64,030,111"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+              "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+              "page_number": 8,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+              "report_period": "2026Q1",
+              "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+              "unit": "千元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+              "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+              "page_number": 8,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+              "report_period": "2026Q1",
+              "quoted_anchor": "二、营业总成本其中：营业成本 97,086,370 64,030,111 107,104,438 70,591,547",
+              "unit": "千元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        },
+        {
+          "text": "若货币资金余额较高且无重大资本支出计划，则公司可能面临资金使用效率不足的风险。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0004"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0004",
+              "quote": "货币资金 351,997,422 333,512,927"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+              "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+              "page_number": 5,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+              "report_period": "2026Q1",
+              "quoted_anchor": "货币资金 351,997,422 333,512,927",
+              "unit": "千元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果2026年第一季度营业成本占营业总收入的比例与上年同期相比发生显著变化，则可能表明成本结构或会计估计存在变动。",
+            "replaced_sentence": "如果2026年第一季度营业成本占营业总收入的比例与上年同期相比发生显著变化，则可能表明成本结构或会计估计存在变动。",
+            "status": "passed",
+            "specific_anchors": [
+              "营业总收入",
+              "2026",
+              "业总收入",
+              "营业总收",
+              "营业成本"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "若货币资金余额较高且无重大资本支出计划，则公司可能面临资金使用效率不足的风险。",
+            "replaced_sentence": "若货币资金余额较高且无重大资本支出计划，则公司可能面临资金使用效率不足的风险。",
+            "status": "passed",
+            "specific_anchors": [
+              "货币资金"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 3,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
+    },
+    "operating_kpis": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果公司下一代拉线成功投产，则较原有拉线单线产能可能大幅提升，单位投资额可能显著下降。如果公司拥有锂电行业仅有的两座“灯塔工厂”，则可能表明其在极限制造方面具备领先优势。",
+      "facts": [
+        {
+          "evidence_id": "N0762",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "公司致力于打造领先的极限制造体系，从产品质量、生产效 率、安全保障等方面入手着力提升制造能力，利用先进分析、数字孪生仿真、5G 和边缘计算/云计算等技术，创新性推进工艺、设计智能化，大幅提升生产效率和产品质量。公司构建了以 5G为基础的工业互联网架构，依托其高带宽、低时延、广连接的技术先进性，解决极限制造的关键问题。公司下一代拉线成功投产，实现工艺、工程升级，较原有拉线单线产能大幅提升，单位投资额显著下降，产品质量上新的台阶。继宁德工厂获评达沃斯世界经济论坛（WEF）“灯塔工厂”后，四川时代宜宾工厂再度获评“灯塔工厂”，截至报告期末，公司拥有锂电行业仅有的两座“灯塔工厂”。同时，四川时代宜宾工厂也获全球知名认证机构SGS 认证，成为全球首家公司积极打造高效敏捷、技术创新、持续降本和绿色低碳的韧性供应链。公司已通过投资参股、技术赋能等方式，在正极材料、负极材料、隔膜、电解液等材料及设备等上游重要环节与优质供应商进行深度合作，在确保重要原材料及设备供应安全、成本可控的同时，与供应商共同推进新技术研发及海外产能布局，共同打造具有持续全球竞争力的锂电产业链。同时，公司进一步开展优质电池矿产资源的布局，包括锂、镍、钴、磷等方面，已拥有一定的资源储备量；通过布局电池回收，构建自循环的供应链动力电池方面，公司拥有最广泛的客户群体覆盖，助力客户打造全球领先的竞争力，在海外，公司与Tesla、BMW、Daimler、Stellantis、VW、Ford、Hyundai、Honda等车企深化全球合作，在国内，公司与上汽、吉利、蔚来、理想、宇通等车企强化合作关系。储能电池方面，公司加大各环节客户覆盖，在海外，与 Tesla、Fluence、Wärtsilä、Flexgen、Sungrow、Hyosung等全球新能源行业领先客户深度开展多区域、多领域的业务合作；在国内，与国家能源集团、国家电力投资集团、中国华能、中国华电、中国广核集团、中国长江三峡集团、 中国能源建设集团等在新能源领域合作达成战略协议。中型电池方面，公司与 ATL成立合资公司，推进家储、工商业储能、电动二轮、无人机、电动工具等细分市场发展。此",
+          "citation": {
+            "document_id": "1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 14,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+            "report_period": "2022FY",
+            "quoted_anchor": "公司致力于打造领先的极限制造体系，从产品质量、生产效 率、安全保障等方面入手着力提升制造能力，利用先进分析、数字孪生仿真、5G 和边缘计算/云计算等技术，创新性推进工艺、设计智能化，大幅提升生产效率和产品质量。公司构建了以 5G为基础的工业互联网架构，依托其高带宽、低时延、广连接的技术先进性，解决极限制造的关键问题。公司下一代拉线成功投产，实现工艺、工程升级，较原有拉线单线产能大幅提升，单位投资额显著下降，产品质量上新的台阶。继宁德工厂获评达沃斯世界经济论坛（WEF）“灯塔工厂”后，四川时代宜宾工厂再度获评“灯塔工厂”，截至报告期末，公司拥有锂电行业仅有的两座“灯塔工厂”。同时，四川时代宜宾工厂也获全球知名认证机构SGS 认证，成为全球首家公司积极打造高效敏捷、技术创新、持续降本和绿色低碳的韧性供应链。公司已通过投资参股、技术赋能等方式，在正极材料、负极材料、隔膜、电解液等材料及设备等上游重要环节与优质供应商进行深度合作，在确保重要原材料及设备供应安全、成本可控的同时，与供应商共同推进新技术研发及海外产能布局，共同打造具有持续全球竞争力的锂电产业链。同时，公司进一步开展优质电池矿产资源的布局，包括锂、镍、钴、磷等方面，已拥有一定的资源储备量；通过布局电池回收，构建自循环的供应链动力电池方面，公司拥有最广泛的客户群体覆盖，助力客户打造全球领先的竞争力，在海外，公司与Tesla、BMW、Daimler、Stellantis、VW、Ford、Hyundai、Honda等车企深化全球合作，在国内，公司与上汽、吉利、蔚来、理想、宇通等车企强化合作关系。储能电池方面，公司加大各环节客户覆盖，在海外，与 Tesla、Fluence、Wärtsilä、Flexgen、Sungrow、Hyosung等全球新能源行业领先客户深度开展多区域、多领域的业务合作；在国内，与国家能源集团、国家电力投资集团、中国华能、中国华电、中国广核集团、中国长江三峡集团、 中国能源建设集团等在新能源领域合作达成战略协议。中型电池方面，公司与 ATL成立合资公司，推进家储、工商业储能、电动二轮、无人机、电动工具等细分市场发展。此",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果公司下一代拉线成功投产，则较原有拉线单线产能可能大幅提升，单位投资额可能显著下降。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0762"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0762",
+              "quote": "公司下一代拉线成功投产，实现工艺、工程升级，较原有拉线单线产能大幅提升，单位投资额显著下降，产品质量上新的台阶。"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "1216084559",
+              "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+              "page_number": 14,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+              "report_period": "2022FY",
+              "quoted_anchor": "公司致力于打造领先的极限制造体系，从产品质量、生产效 率、安全保障等方面入手着力提升制造能力，利用先进分析、数字孪生仿真、5G 和边缘计算/云计算等技术，创新性推进工艺、设计智能化，大幅提升生产效率和产品质量。公司构建了以 5G为基础的工业互联网架构，依托其高带宽、低时延、广连接的技术先进性，解决极限制造的关键问题。公司下一代拉线成功投产，实现工艺、工程升级，较原有拉线单线产能大幅提升，单位投资额显著下降，产品质量上新的台阶。继宁德工厂获评达沃斯世界经济论坛（WEF）“灯塔工厂”后，四川时代宜宾工厂再度获评“灯塔工厂”，截至报告期末，公司拥有锂电行业仅有的两座“灯塔工厂”。同时，四川时代宜宾工厂也获全球知名认证机构SGS 认证，成为全球首家公司积极打造高效敏捷、技术创新、持续降本和绿色低碳的韧性供应链。公司已通过投资参股、技术赋能等方式，在正极材料、负极材料、隔膜、电解液等材料及设备等上游重要环节与优质供应商进行深度合作，在确保重要原材料及设备供应安全、成本可控的同时，与供应商共同推进新技术研发及海外产能布局，共同打造具有持续全球竞争力的锂电产业链。同时，公司进一步开展优质电池矿产资源的布局，包括锂、镍、钴、磷等方面，已拥有一定的资源储备量；通过布局电池回收，构建自循环的供应链动力电池方面，公司拥有最广泛的客户群体覆盖，助力客户打造全球领先的竞争力，在海外，公司与Tesla、BMW、Daimler、Stellantis、VW、Ford、Hyundai、Honda等车企深化全球合作，在国内，公司与上汽、吉利、蔚来、理想、宇通等车企强化合作关系。储能电池方面，公司加大各环节客户覆盖，在海外，与 Tesla、Fluence、Wärtsilä、Flexgen、Sungrow、Hyosung等全球新能源行业领先客户深度开展多区域、多领域的业务合作；在国内，与国家能源集团、国家电力投资集团、中国华能、中国华电、中国广核集团、中国长江三峡集团、 中国能源建设集团等在新能源领域合作达成战略协议。中型电池方面，公司与 ATL成立合资公司，推进家储、工商业储能、电动二轮、无人机、电动工具等细分市场发展。此",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+            }
+          ]
+        },
+        {
+          "text": "如果公司拥有锂电行业仅有的两座“灯塔工厂”，则可能表明其在极限制造方面具备领先优势。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0762"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0762",
+              "quote": "截至报告期末，公司拥有锂电行业仅有的两座“灯塔工厂”。"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "1216084559",
+              "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+              "page_number": 14,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+              "report_period": "2022FY",
+              "quoted_anchor": "公司致力于打造领先的极限制造体系，从产品质量、生产效 率、安全保障等方面入手着力提升制造能力，利用先进分析、数字孪生仿真、5G 和边缘计算/云计算等技术，创新性推进工艺、设计智能化，大幅提升生产效率和产品质量。公司构建了以 5G为基础的工业互联网架构，依托其高带宽、低时延、广连接的技术先进性，解决极限制造的关键问题。公司下一代拉线成功投产，实现工艺、工程升级，较原有拉线单线产能大幅提升，单位投资额显著下降，产品质量上新的台阶。继宁德工厂获评达沃斯世界经济论坛（WEF）“灯塔工厂”后，四川时代宜宾工厂再度获评“灯塔工厂”，截至报告期末，公司拥有锂电行业仅有的两座“灯塔工厂”。同时，四川时代宜宾工厂也获全球知名认证机构SGS 认证，成为全球首家公司积极打造高效敏捷、技术创新、持续降本和绿色低碳的韧性供应链。公司已通过投资参股、技术赋能等方式，在正极材料、负极材料、隔膜、电解液等材料及设备等上游重要环节与优质供应商进行深度合作，在确保重要原材料及设备供应安全、成本可控的同时，与供应商共同推进新技术研发及海外产能布局，共同打造具有持续全球竞争力的锂电产业链。同时，公司进一步开展优质电池矿产资源的布局，包括锂、镍、钴、磷等方面，已拥有一定的资源储备量；通过布局电池回收，构建自循环的供应链动力电池方面，公司拥有最广泛的客户群体覆盖，助力客户打造全球领先的竞争力，在海外，公司与Tesla、BMW、Daimler、Stellantis、VW、Ford、Hyundai、Honda等车企深化全球合作，在国内，公司与上汽、吉利、蔚来、理想、宇通等车企强化合作关系。储能电池方面，公司加大各环节客户覆盖，在海外，与 Tesla、Fluence、Wärtsilä、Flexgen、Sungrow、Hyosung等全球新能源行业领先客户深度开展多区域、多领域的业务合作；在国内，与国家能源集团、国家电力投资集团、中国华能、中国华电、中国广核集团、中国长江三峡集团、 中国能源建设集团等在新能源领域合作达成战略协议。中型电池方面，公司与 ATL成立合资公司，推进家储、工商业储能、电动二轮、无人机、电动工具等细分市场发展。此",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果公司下一代拉线成功投产，则较原有拉线单线产能可能大幅提升，单位投资额可能显著下降。",
+            "replaced_sentence": "如果公司下一代拉线成功投产，则较原有拉线单线产能可能大幅提升，单位投资额可能显著下降。",
+            "status": "passed",
+            "specific_anchors": [
+              "一代拉线成功投产",
+              "下一代拉线成功投",
+              "公司下一代拉线成",
+              "原有拉线单线产能",
+              "司下一代拉线成功",
+              "较原有拉线单线产",
+              "一代拉线成功投",
+              "下一代拉线成功"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "如果公司拥有锂电行业仅有的两座“灯塔工厂”，则可能表明其在极限制造方面具备领先优势。",
+            "replaced_sentence": "如果公司拥有锂电行业仅有的两座“灯塔工厂”，则可能表明其在极限制造方面具备领先优势。",
+            "status": "passed",
+            "specific_anchors": [
+              "公司拥有锂电行业",
+              "司拥有锂电行业仅",
+              "拥有锂电行业仅有",
+              "有锂电行业仅有的",
+              "电行业仅有的两座",
+              "锂电行业仅有的两",
+              "公司拥有锂电行",
+              "司拥有锂电行业"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 0,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:0b58c108d9d5e41175130e09fe62d2ebda3f68960904719e0adcf1a2b431fdc6"
+    },
+    "monitoring_kpis": {
+      "status": "missing",
+      "reason": "generation_validation_failure",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment",
+      "validation_errors": [
+        "claims[0] inference lacks explicit conditional language",
+        "claims[0].supporting_quotes[2] is not verbatim source text",
+        "claims[0].supporting_quotes[3] must contain a substantive source span"
+      ]
+    },
+    "margin_bridge": {
+      "status": "missing",
+      "reason": "generation_validation_failure",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment",
+      "validation_errors": [
+        "claims[0].supporting_quotes[2] is not verbatim source text",
+        "claims[0].supporting_quotes[3] must contain a substantive source span",
+        "claims[1] inference lacks explicit conditional language",
+        "claims[1] lacks source-specific content"
       ]
     }
   },
-  "receipt_hash": "ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e"
+  "validation": {
+    "status": "partial",
+    "errors": {
+      "monitoring_kpis": [
+        "claims[0] inference lacks explicit conditional language",
+        "claims[0].supporting_quotes[2] is not verbatim source text",
+        "claims[0].supporting_quotes[3] must contain a substantive source span"
+      ],
+      "margin_bridge": [
+        "claims[0].supporting_quotes[2] is not verbatim source text",
+        "claims[0].supporting_quotes[3] must contain a substantive source span",
+        "claims[1] inference lacks explicit conditional language",
+        "claims[1] lacks source-specific content"
+      ]
+    },
+    "name_swap": {
+      "passed_sentences": 11,
+      "total_sentences": 11,
+      "pass_rate": 1.0
+    }
+  },
+  "receipt_hash": "a1398e135d132d6b547f70217fa8026e601a61cac3a800657550b88a6cdd9fb0"
 }

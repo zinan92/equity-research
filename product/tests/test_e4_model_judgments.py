@@ -55,14 +55,14 @@ def identity(ticker: str = "111111.SZ", name: str = "样本公司") -> dict:
     }
 
 
-def missing_row(judgment_id: str) -> dict:
+def missing_row(judgment_id: str, evidence_ids: list[str] | None = None) -> dict:
     return {
         "judgment_id": judgment_id,
         "status": "missing",
         "missing_reason": {
             "gap_code": "unsupported_by_frozen_input",
             "detail": "supplied page evidence does not support the requested research task",
-            "searched_evidence_ids": ["N0001", "F0001"],
+            "searched_evidence_ids": evidence_ids or [],
         },
     }
 
@@ -90,7 +90,10 @@ class ModelJudgmentTest(unittest.TestCase):
                 rows.append(
                     available_value
                     if judgment_id == available_id
-                    else missing_row(judgment_id)
+                    else missing_row(
+                        judgment_id,
+                        list(original["evidence_registry"])[:2],
+                    )
                 )
             return {"judgments": rows}
 
@@ -141,6 +144,80 @@ class ModelJudgmentTest(unittest.TestCase):
             "official-doc",
         )
 
+    def test_resume_revalidates_and_skips_an_accepted_judgment(self) -> None:
+        body = "如果动力电池系统产品持续交付客户项目，那么营业收入100万元可作为经营验证线索。"
+        value = {
+            "judgment_id": "investment_thesis",
+            "status": "available",
+            "text": body,
+            "claims": [
+                {
+                    "text": body,
+                    "claim_type": "inference",
+                    "evidence_ids": ["N0001", "F0001"],
+                    "supporting_quotes": [
+                        {
+                            "evidence_id": "N0001",
+                            "quote": "动力电池系统产品已经交付客户项目",
+                        },
+                        {
+                            "evidence_id": "F0001",
+                            "quote": "营业收入 100 万元",
+                        },
+                    ],
+                }
+            ],
+        }
+        first = generate_model_judgments(
+            ticker="111111.SZ",
+            issuer_identity=identity(),
+            page_facts=self.facts,
+            narrative_blocks=[narrative()],
+            source_receipts={"financial": "f", "narrative": "n"},
+            dossier_id="dossier",
+            key_file=self.key_file,
+            judgment_ids=["investment_thesis"],
+            transport=self._transport("investment_thesis", value),
+        )
+        first["schema_version"] = "e4-model-judgments-v1"
+        first["receipt_hash"] = "test-resume-receipt"
+        first["model_receipts"][0]["request_id"] = "test-request-id"
+        first["model_receipts"][0]["finish_reason"] = "stop"
+
+        def unexpected_transport(_payload, _secret):
+            raise AssertionError("accepted resumed judgment must not call model")
+
+        resumed = generate_model_judgments(
+            ticker="111111.SZ",
+            issuer_identity=identity(),
+            page_facts=self.facts,
+            narrative_blocks=[narrative()],
+            source_receipts={"financial": "f", "narrative": "n"},
+            dossier_id="dossier",
+            key_file=self.key_file,
+            judgment_ids=["investment_thesis"],
+            transport=unexpected_transport,
+            resume_receipt=first,
+        )
+        self.assertEqual(
+            resumed["content"]["investment_thesis"]["text"],
+            body,
+        )
+        tampered = json.loads(json.dumps(first))
+        tampered["content"]["investment_thesis"]["text"] = "tampered"
+        with self.assertRaisesRegex(ValueError, "content hash mismatch"):
+            generate_model_judgments(
+                ticker="111111.SZ",
+                issuer_identity=identity(),
+                page_facts=self.facts,
+                narrative_blocks=[narrative()],
+                source_receipts={"financial": "f", "narrative": "n"},
+                dossier_id="dossier",
+                key_file=self.key_file,
+                judgment_ids=["investment_thesis"],
+                transport=unexpected_transport,
+                resume_receipt=tampered,
+            )
     def test_untraceable_model_number_fails_closed_without_prose_fallback(self) -> None:
         body = "动力电池系统产品已经交付客户项目可作为营业收入101万元的验证线索。"
         value = {
@@ -252,13 +329,13 @@ class ModelJudgmentTest(unittest.TestCase):
         self.assertEqual(thesis["status"], "missing")
         self.assertTrue(
             any(
-                "fact text must equal" in item
+                "claim_type must be inference" in item
                 for item in thesis["validation_errors"]
             )
         )
 
     def test_falsification_requires_direction_threshold_window_and_baseline(self) -> None:
-        body = "营业收入100万元若在下一年度披露中低于100万元，将表明产品交付未能维持当前收入基线并触发研究重审。"
+        body = "如果营业收入100万元在下一年度披露中低于100万元，那么当前经营规模可能无法维持并触发研究重审。"
         value = {
             "judgment_id": "falsification_tests",
             "status": "available",
@@ -267,12 +344,8 @@ class ModelJudgmentTest(unittest.TestCase):
                 {
                     "text": body,
                     "claim_type": "inference",
-                    "evidence_ids": ["N0001", "F0001"],
+                    "evidence_ids": ["F0001"],
                     "supporting_quotes": [
-                        {
-                            "evidence_id": "N0001",
-                            "quote": "动力电池系统产品已经交付客户项目",
-                        },
                         {
                             "evidence_id": "F0001",
                             "quote": "营业收入 100 万元",
@@ -287,11 +360,11 @@ class ModelJudgmentTest(unittest.TestCase):
                     "threshold": "100",
                     "unit": "万元",
                     "time_window": "下一份年度正式披露",
-                    "evidence_ids": ["N0001", "F0001"],
+                    "evidence_ids": ["F0001"],
                     "supporting_quotes": [
                         {
-                            "evidence_id": "N0001",
-                            "quote": "动力电池系统产品已经交付客户项目",
+                            "evidence_id": "F0001",
+                            "quote": "营业收入 100 万元",
                         }
                     ],
                     "latest_actual_baseline": {
@@ -300,7 +373,7 @@ class ModelJudgmentTest(unittest.TestCase):
                         "unit": "万元",
                         "period": "2025FY",
                     },
-                    "reason": "收入跌破当前披露基线意味着动力电池系统产品交付未能继续支撑现有经营规模",
+                    "reason": "营业收入跌破当前披露基线意味着现有经营规模可能无法维持",
                 }
             ],
         }
@@ -318,6 +391,74 @@ class ModelJudgmentTest(unittest.TestCase):
         self.assertEqual(test["direction"], "below")
         self.assertEqual(test["latest_actual_baseline"]["period"], "2025FY")
         self.assertNotRegex(json.dumps(test), r"\d[eE][+-]\d")
+
+        invalid_window = json.loads(json.dumps(value))
+        invalid_window["tests"][0]["time_window"] = "2025FY"
+        rejected = generate_model_judgments(
+            ticker="111111.SZ",
+            issuer_identity=identity(),
+            page_facts=self.facts,
+            narrative_blocks=[narrative()],
+            source_receipts={"financial": "f", "narrative": "n"},
+            dossier_id="dossier",
+            key_file=self.key_file,
+            transport=self._transport(
+                "falsification_tests",
+                invalid_window,
+            ),
+        )
+        self.assertEqual(
+            rejected["content"]["falsification_tests"]["status"],
+            "missing",
+        )
+        self.assertTrue(
+            any(
+                "future or next formal disclosure" in item
+                for item in rejected["content"]["falsification_tests"][
+                    "validation_errors"
+                ]
+            )
+        )
+
+    def test_single_period_fact_cannot_support_a_growth_claim(self) -> None:
+        body = "如果营业收入100万元表明业务增长，那么经营趋势可能继续改善。"
+        value = {
+            "judgment_id": "investment_thesis",
+            "status": "available",
+            "text": body,
+            "claims": [
+                {
+                    "text": body,
+                    "claim_type": "inference",
+                    "evidence_ids": ["F0001"],
+                    "supporting_quotes": [
+                        {
+                            "evidence_id": "F0001",
+                            "quote": "营业收入 100 万元",
+                        }
+                    ],
+                }
+            ],
+        }
+        result = generate_model_judgments(
+            ticker="111111.SZ",
+            issuer_identity=identity(),
+            page_facts=self.facts,
+            narrative_blocks=[narrative()],
+            source_receipts={"financial": "f", "narrative": "n"},
+            dossier_id="dossier",
+            key_file=self.key_file,
+            judgment_ids=["investment_thesis"],
+            transport=self._transport("investment_thesis", value),
+        )
+        thesis = result["content"]["investment_thesis"]
+        self.assertEqual(thesis["status"], "missing")
+        self.assertTrue(
+            any(
+                "unsupported temporal comparison" in item
+                for item in thesis["validation_errors"]
+            )
+        )
 
     def test_falsification_structured_fields_cannot_bypass_numeric_gate(self) -> None:
         body = "营业收入100万元若低于当前基线，则需要重审产品交付假设。"

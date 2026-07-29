@@ -126,6 +126,16 @@ def main() -> int:
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--key-file", type=Path, default=DEFAULT_KEY_FILE)
     parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument(
+        "--resume",
+        type=Path,
+        help="validated prior full receipt; only missing judgments are rerun",
+    )
+    parser.add_argument(
+        "--judgment-id",
+        action="append",
+        help="optional bounded generation subset for diagnostics",
+    )
     args = parser.parse_args()
 
     ticker = args.ticker.upper()
@@ -152,6 +162,28 @@ def main() -> int:
             sort_keys=True,
         ).encode()
     ).hexdigest()
+    resume_receipt = None
+    if args.resume is not None:
+        resume_receipt = json.loads(args.resume.read_bytes())
+        resume_payload = {
+            key: value
+            for key, value in resume_receipt.items()
+            if key != "receipt_hash"
+        }
+        resume_hash = hashlib.sha256(
+            json.dumps(resume_payload, sort_keys=True).encode()
+        ).hexdigest()
+        if (
+            resume_receipt.get("schema_version") != "e4-model-judgments-v1"
+            or resume_receipt.get("data_kind") != "real"
+            or resume_receipt.get("receipt_hash") != resume_hash
+            or str(resume_receipt.get("ticker") or "").upper() != ticker
+            or resume_receipt.get("source_financial_receipt_sha256")
+            != sources["financial_receipt_sha256"]
+            or resume_receipt.get("source_narrative_receipt")
+            != sources["narrative_receipt_id"]
+        ):
+            raise ValueError("resume receipt source lineage mismatch")
     generated = generate_model_judgments(
         ticker=ticker,
         issuer_identity=identity,
@@ -161,6 +193,8 @@ def main() -> int:
         dossier_id=dossier_id,
         key_file=args.key_file,
         model=args.model,
+        judgment_ids=args.judgment_id,
+        resume_receipt=resume_receipt,
     )
     output = {
         "schema_version": "e4-model-judgments-v1",

@@ -76,6 +76,16 @@ _UNSUPPORTED_COMPARATIVES = (
     "唯一",
     "最强",
 )
+_TEMPORAL_COMPARATIVES = (
+    "增长",
+    "下降",
+    "改善",
+    "恶化",
+    "趋势",
+    "上升",
+    "下滑",
+)
+_FUTURE_WINDOW_MARKERS = ("下一", "下次", "后续", "未来")
 
 _TASKS: dict[str, dict[str, Any]] = {
     "investment_thesis": {
@@ -129,15 +139,17 @@ _SYSTEM_PROMPT = """你是机构股票研究的判断生成器。只返回一个
 硬规则：
 1. 只能使用 request.evidence_registry；不得使用外部知识、行业常识或训练记忆补事实。
 2. 每个可用判断的 text 由若干完整中文句子组成；claims 必须与 text 逐句、逐字、顺序一致。
-3. 每个 claim 必须含 claim_type、evidence_ids 和 supporting_quotes。supporting_quotes 必须逐字摘自对应页级证据。claim_type=fact 时，原文摘录必须逐字出现在句子中；claim_type=inference 时，句子必须显式使用条件或推断措辞，不得把比较、领先、排名或因果判断伪装成事实。
+3. 每个判断 claim 的 claim_type 必须是 inference，不得用 fact。supporting_quotes 必须逐字摘自对应页级证据，句子必须显式使用条件或推断措辞，不得把比较、领先、排名或因果判断伪装成事实。
 4. 每个句子必须包含引用证据中的具体产品、技术、客户、渠道、业务机制、金额、比率或时间。公司名和“主营业务”“核心竞争力”等栏目词本身不算具体内容。
-5. 任何阿拉伯数字必须逐字复制自该字段引用证据的 allowed_numeric_displays。不得改写精度、去掉千分位、换算单位、估算或使用科学计数法。
+5. 任何阿拉伯数字必须逐字复制自该字段引用证据的 allowed_numeric_displays。即使 quoted_anchor 中还有其他数字，只要不在 allowed_numeric_displays 就禁止使用。不得改写精度、添加“.0”、去掉千分位、换算单位、估算或使用科学计数法；输出前逐个核对数字 token。
 6. D 类证据是调用前由确定性代码计算的派生值，可以使用；不得自行计算任何新数字。
 7. 证据不足时 status 写 missing；missing_reason 必须含 gap_code、detail、searched_evidence_ids，明确缺哪类证据和已经检查哪些输入；不得用免责声明或空泛文字填充。
 8. 不得输出目标价、估值结论、买卖、仓位、止损或执行建议。
-9. falsification_tests 必须返回 tests；每项除 direction、threshold、unit、time_window、latest_actual_baseline、reason 外，还必须含 evidence_ids 与 supporting_quotes。direction 只能是 below 或 above；threshold 与 baseline 必须直接引用证据。
-10. items 中每一项只能含 text、evidence_ids、supporting_quotes，并通过与 claim 相同的证据和数字规则。
-11. 不要输出 Markdown，不要增加 schema 外字段。"""
+9. falsification_tests 必须返回 tests；每项除 direction、threshold、unit、time_window、latest_actual_baseline、reason 外，还必须含 evidence_ids 与 supporting_quotes。direction 只能是 below 或 above；threshold 与 baseline 必须直接引用证据；time_window 必须写“下一份正式披露”“后续正式披露”等未来窗口，禁止把 baseline 已发生期间当作未来窗口。
+10. supporting_quotes 每条必须是对应 evidence.value 中逐字连续出现的实质性片段，至少含 8 个非空白字符；不得只摘数字、单位或栏目名，也不得拼接不连续片段。
+11. items 字段一律禁止。
+12. “增长、下降、改善、恶化、趋势、上升、下滑”等时间比较，只能在同一指标有两个可比期间，或引用原文逐字包含该趋势词时使用；单期绝对值不得推出趋势。
+13. 不要输出 Markdown，不要增加 schema 外字段。"""
 
 
 @dataclass(frozen=True)
@@ -241,7 +253,7 @@ def _resolved_narratives(
         ),
         reverse=True,
     )
-    return rows[:80]
+    return rows
 
 
 def _resolved_financials(
@@ -362,7 +374,9 @@ def freeze_judgment_input(
             "text": block["text"],
             "section_path": block["section_path"],
             "citation": _citation(block, narrative=True),
-            "allowed_numeric_displays": [],
+            "allowed_numeric_displays": list(
+                dict.fromkeys(_NUMBER.findall(str(block["text"])))
+            ),
         }
     financial_ids: dict[tuple[str, str, str, int], str] = {}
     for index, (fact, display) in enumerate(financial, 1):
@@ -480,7 +494,7 @@ def freeze_judgment_input(
                     "claims": [
                         {
                             "text": "one sentence copied exactly from text",
-                            "claim_type": "fact or inference",
+                            "claim_type": "inference",
                             "evidence_ids": ["one or more registry ids"],
                             "supporting_quotes": [
                                 {
@@ -491,7 +505,7 @@ def freeze_judgment_input(
                         }
                     ],
                     "tests": "required only for falsification_tests",
-                    "items": "optional structured monitoring rows",
+                    "items": "forbidden",
                     "missing_reason": {
                         "gap_code": "required only when missing",
                         "detail": "specific input gap",
@@ -685,6 +699,31 @@ def _validate_structured_text(
             + " contains unsupported comparative assertion: "
             + ", ".join(unsupported)
         )
+    unsupported_temporal = [
+        term
+        for term in _TEMPORAL_COMPARATIVES
+        if term in text and term not in quoted_text
+    ]
+    if unsupported_temporal:
+        financial_periods_by_metric: dict[str, set[str]] = {}
+        for evidence_id in normalized_ids:
+            evidence = registry[evidence_id]
+            if evidence.get("kind") != "financial_fact":
+                continue
+            metric = str(evidence.get("metric") or "")
+            financial_periods_by_metric.setdefault(metric, set()).add(
+                str(evidence.get("period") or "")
+            )
+        has_comparable_periods = any(
+            len(periods - {""}) >= 2
+            for periods in financial_periods_by_metric.values()
+        )
+        if not has_comparable_periods:
+            errors.append(
+                prefix
+                + " contains unsupported temporal comparison: "
+                + ", ".join(unsupported_temporal)
+            )
     allowed_numbers = {
         token
         for evidence_id in normalized_ids
@@ -804,8 +843,14 @@ def _validate_falsification(
                 ):
                     if str(baseline.get(key) or "") != str(expected_value or ""):
                         errors.append(prefix + " baseline " + key + " mismatch")
-        if not str(test.get("time_window") or "").strip():
+        time_window = str(test.get("time_window") or "").strip()
+        if not time_window:
             errors.append(prefix + " time_window is required")
+        elif not any(marker in time_window for marker in _FUTURE_WINDOW_MARKERS):
+            errors.append(
+                prefix
+                + " time_window must identify a future or next formal disclosure"
+            )
         if len(str(test.get("reason") or "").strip()) < 18:
             errors.append(prefix + " reason lacks a meaningful business mechanism")
         serialized = json.dumps(test, ensure_ascii=False)
@@ -917,6 +962,8 @@ def _validate_item(
         errors.append("available item requires claims")
         claims = []
     sentences = _sentences(text)
+    if not 1 <= len(sentences) <= 2:
+        errors.append("available item requires one or two sentences")
     claim_texts = [
         str(claim.get("text") or "").strip()
         for claim in claims
@@ -932,6 +979,9 @@ def _validate_item(
         prefix = "claims[" + str(index) + "]"
         if not isinstance(claim, Mapping):
             errors.append(prefix + " must be an object")
+            continue
+        if claim.get("claim_type") != "inference":
+            errors.append(prefix + " claim_type must be inference")
             continue
         sentence = str(claim.get("text") or "").strip()
         structured, claim_errors = _validate_structured_text(
@@ -983,6 +1033,10 @@ def _validate_item(
         )
     if judgment_id == "falsification_tests":
         errors.extend(_validate_falsification(value, frozen.registry, issuer_name))
+    elif "tests" in value:
+        errors.append("tests field is forbidden for this judgment")
+    if "items" in value:
+        errors.append("items field is forbidden for model judgments")
     adapted_items, item_errors, item_ids = _validate_items(
         value,
         frozen.registry,
@@ -1015,8 +1069,6 @@ def _validate_item(
     }
     if "tests" in value:
         result["tests"] = deepcopy(value["tests"])
-    if "items" in value:
-        result["items"] = adapted_items
     return result, []
 
 
@@ -1062,6 +1114,124 @@ def _validate_response(
     return output, errors
 
 
+def _task_registry(
+    judgment_id: str,
+    registry: Mapping[str, Mapping[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    narrative_terms = {
+        "investment_thesis": ("业务", "产品", "客户", "经营", "战略"),
+        "moat_assessment": ("竞争", "技术", "研发", "品牌", "客户", "产品", "渠道"),
+        "risk_register": ("风险", "不利", "波动", "挑战"),
+        "falsification_tests": ("业务", "产品", "客户", "经营"),
+        "monitoring_kpis": ("业务", "产品", "研发", "客户", "经营", "风险"),
+        "action_triggers": ("风险", "业务", "产品", "经营"),
+        "accounting_checks": ("经营", "风险", "财务"),
+        "operating_kpis": ("业务", "产品", "研发", "客户", "渠道", "产能"),
+        "margin_bridge": ("成本", "盈利", "产品", "业务"),
+    }.get(judgment_id, ())
+    selected_ids: list[str] = []
+    if judgment_id in {
+        "investment_thesis",
+        "moat_assessment",
+        "risk_register",
+        "monitoring_kpis",
+        "operating_kpis",
+    }:
+        narrative_candidates = []
+        for evidence_id, evidence in registry.items():
+            if evidence.get("kind") != "narrative":
+                continue
+            path = str(evidence.get("section_path") or "")
+            text = str(evidence.get("text") or "")
+            combined = path + text
+            term_score = sum(4 for term in narrative_terms if term in combined)
+            if not term_score:
+                continue
+            score = term_score
+            if "管理层讨论与分析" in path:
+                score += 18
+            if "经营情况讨论与分析" in path:
+                score += 12
+            if "财务报告" in path:
+                score -= 10
+            if "会计政策" in path or "金融工具" in path:
+                score -= 8
+            if judgment_id == "risk_register" and "风险" in path:
+                score += 12
+            narrative_candidates.append(
+                (
+                    score,
+                    str(evidence.get("citation", {}).get("report_period") or ""),
+                    evidence_id,
+                )
+            )
+        narrative_candidates.sort(reverse=True)
+        narrative_ids = [row[2] for row in narrative_candidates[:4]]
+        if not narrative_ids:
+            narrative_ids = [
+                evidence_id
+                for evidence_id, evidence in registry.items()
+                if evidence.get("kind") == "narrative"
+            ][:6]
+        selected_ids.extend(narrative_ids)
+    metric_priority = {
+        "investment_thesis": (
+            "revenue",
+            "net_profit_parent",
+            "operating_cash_flow",
+            "operating_cost",
+        ),
+        "falsification_tests": (
+            "revenue",
+            "net_profit_parent",
+            "operating_cash_flow",
+        ),
+        "monitoring_kpis": (
+            "revenue",
+            "net_profit_parent",
+            "operating_cash_flow",
+            "operating_cost",
+        ),
+        "action_triggers": (
+            "revenue",
+            "net_profit_parent",
+            "operating_cash_flow",
+        ),
+        "accounting_checks": (
+            "revenue",
+            "operating_cost",
+            "net_profit_parent",
+            "operating_cash_flow",
+            "total_assets",
+            "total_liabilities",
+            "cash",
+        ),
+        "margin_bridge": ("revenue", "operating_cost"),
+    }.get(judgment_id, ())
+    for metric in metric_priority:
+        matches = [
+            evidence_id
+            for evidence_id, evidence in registry.items()
+            if evidence.get("kind") == "financial_fact"
+            and evidence.get("metric") == metric
+        ]
+        selected_ids.extend(matches[:1])
+    if judgment_id in {"margin_bridge", "monitoring_kpis"}:
+        derived_ids = [
+            evidence_id
+            for evidence_id, evidence in registry.items()
+            if evidence.get("kind") == "deterministic_derived_metric"
+        ]
+        selected_ids.extend(derived_ids)
+        for evidence_id in derived_ids:
+            selected_ids.extend(registry[evidence_id]["component_evidence_ids"])
+    unique = list(dict.fromkeys(selected_ids))
+    return {
+        evidence_id: deepcopy(dict(registry[evidence_id]))
+        for evidence_id in unique
+    }
+
+
 def generate_model_judgments(
     *,
     ticker: str,
@@ -1073,6 +1243,8 @@ def generate_model_judgments(
     key_file: Path,
     model: str = DEFAULT_MODEL,
     transport: Any = None,
+    judgment_ids: Iterable[str] | None = None,
+    resume_receipt: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Generate and validate issuer judgments with no deterministic prose path."""
     frozen = freeze_judgment_input(
@@ -1082,6 +1254,30 @@ def generate_model_judgments(
         narrative_blocks=narrative_blocks,
         source_receipts=source_receipts,
     )
+    selected_judgment_ids = (
+        {str(item) for item in judgment_ids}
+        if judgment_ids is not None
+        else None
+    )
+    if selected_judgment_ids is not None:
+        known_ids = {item["judgment_id"] for item in frozen.request["tasks"]}
+        unknown_ids = selected_judgment_ids - known_ids
+        if unknown_ids:
+            raise ValueError(
+                "requested judgment ids are not runnable: "
+                + ", ".join(sorted(unknown_ids))
+            )
+        frozen.request["tasks"] = [
+            item
+            for item in frozen.request["tasks"]
+            if item["judgment_id"] in selected_judgment_ids
+        ]
+        frozen = FrozenJudgmentInput(
+            request=frozen.request,
+            registry=frozen.registry,
+            preflight_missing=frozen.preflight_missing,
+            input_hash=_canonical_hash(frozen.request),
+        )
     content = {
         judgment_id: _missing(reason)
         for judgment_id, reason in frozen.preflight_missing.items()
@@ -1090,50 +1286,292 @@ def generate_model_judgments(
     response_hashes: list[str] = []
     validation_errors: dict[str, list[str]] = {}
     validated: dict[str, Any] = {}
-    if frozen.request["tasks"]:
-        response, receipt = call_structured_deepseek(
-            system_prompt=_SYSTEM_PROMPT,
-            request_object=frozen.request,
-            key_file=key_file,
-            model=model,
-            max_tokens=14000,
-            reasoning_effort="high",
-            temperature=0.1,
-            transport=transport,
+    resume_lineage: list[str] = []
+    if resume_receipt is not None:
+        expected_resume_fields = {
+            "generator_version": GENERATOR_VERSION,
+            "prompt_version": PROMPT_VERSION,
+            "validator_version": VALIDATOR_VERSION,
+            "input_hash": frozen.input_hash,
+            "prompt_hash": _canonical_hash(_SYSTEM_PROMPT),
+        }
+        mismatches = [
+            key
+            for key, expected in expected_resume_fields.items()
+            if resume_receipt.get(key) != expected
+        ]
+        if mismatches:
+            raise ValueError(
+                "resume receipt is incompatible: " + ", ".join(mismatches)
+            )
+        prior_content = resume_receipt.get("content") or {}
+        if resume_receipt.get("content_hash") != _canonical_hash(prior_content):
+            raise ValueError("resume receipt content hash mismatch")
+        prior_model_receipts = list(
+            resume_receipt.get("model_receipts") or ()
         )
-        receipt["purpose"] = "draft"
-        model_receipts.append(receipt)
-        response_hashes.append(_canonical_hash(response))
-        validated, validation_errors = _validate_response(response, frozen)
-        if validation_errors:
-            repair_request = {
-                "task": "Repair the draft so every requested judgment passes the supplied rules. Return the original output_shape only.",
-                "validation_errors": validation_errors,
-                "rejected_draft": response,
-                "original_request": frozen.request,
-            }
-            repaired, repair_receipt = call_structured_deepseek(
+        prior_response_hashes = list(
+            resume_receipt.get("response_hashes") or ()
+        )
+        if len(prior_model_receipts) != len(prior_response_hashes):
+            raise ValueError("resume receipt model/response cardinality mismatch")
+        if any(
+            not row.get("request_id")
+            or not row.get("model")
+            or row.get("finish_reason") != "stop"
+            or not row.get("purpose")
+            for row in prior_model_receipts
+        ):
+            raise ValueError("resume receipt contains incomplete model provenance")
+        resume_lineage.extend(
+            str(item) for item in resume_receipt.get("resume_lineage") or ()
+        )
+        prior_schema = str(resume_receipt.get("schema_version") or "")
+        prior_hash = str(resume_receipt.get("receipt_hash") or "")
+        if not prior_schema or not prior_hash:
+            raise ValueError("resume receipt identity is incomplete")
+        resume_lineage.append(prior_schema + ":" + prior_hash)
+        model_receipts.extend(
+            deepcopy(prior_model_receipts)
+        )
+        response_hashes.extend(
+            str(item) for item in prior_response_hashes
+        )
+        for task in frozen.request["tasks"]:
+            judgment_id = str(task["judgment_id"])
+            prior_value = prior_content.get(judgment_id)
+            if not isinstance(prior_value, Mapping):
+                continue
+            if prior_value.get("status") != JUDGMENT_STATUS:
+                continue
+            resume_value = deepcopy(dict(prior_value))
+            resume_value["status"] = "available"
+            resumed, resume_errors = _validate_item(
+                judgment_id=judgment_id,
+                value=resume_value,
+                frozen=frozen,
+            )
+            if resume_errors or resumed is None:
+                continue
+            validated[judgment_id] = resumed
+            content[judgment_id] = resumed
+    for task in frozen.request["tasks"]:
+        judgment_id = str(task["judgment_id"])
+        if judgment_id in validated:
+            continue
+        task_request = {
+            key: deepcopy(value)
+            for key, value in frozen.request.items()
+            if key != "evidence_registry"
+        }
+        task_request["tasks"] = [deepcopy(task)]
+        task_request["evidence_registry"] = _task_registry(
+            judgment_id,
+            frozen.registry,
+        )
+        task_request["task_execution"] = {
+            "return_exactly_one_judgment_id": judgment_id,
+            "sentence_count": "one or two",
+            "sentence_length": "40 to 120 Chinese characters",
+            "claims_must_equal_text_sentences": True,
+            "text_must_equal_claim_texts_concatenated_in_order": True,
+            "prefer_inference_claims_with_explicit_conditional_language": True,
+            "claim_type_policy": "every claim must use inference; fact is forbidden",
+            "allowed_evidence_ids": list(task_request["evidence_registry"]),
+            "tests_policy": (
+                "exactly one test is required"
+                if judgment_id == "falsification_tests"
+                else "tests field is forbidden"
+            ),
+            "items_policy": "items field is forbidden",
+            "numeric_copy_policy": (
+                "Every numeric token must appear byte-for-byte in the cited "
+                "evidence allowed_numeric_displays; numbers found only in "
+                "quoted_anchor are forbidden; never append .0."
+            ),
+            "supporting_quote_policy": (
+                "Each quote must be one verbatim contiguous substring from "
+                "the cited evidence value, with at least 8 non-space "
+                "characters and substantive words, never a number-only span."
+            ),
+        }
+        if judgment_id == "action_triggers":
+            task_request["task_execution"]["task_specific_guidance"] = (
+                "Use one current financial display as both the observable "
+                "baseline and review threshold. Do not calculate percentages "
+                "or copy comparison-column numbers from quoted_anchor."
+            )
+        if judgment_id == "margin_bridge":
+            task_request["task_execution"]["task_specific_guidance"] = (
+                "Cite D evidence for deterministic derived values, but quote "
+                "only the component F evidence because D has no verbatim "
+                "source text. Copy each D display_value exactly, including "
+                "comma and decimal formatting as supplied."
+            )
+        task_request["output_shape"] = {
+            "judgments": [
+                {
+                    "judgment_id": judgment_id,
+                    "status": "available or missing",
+                    "text": "one or two sentences when available",
+                    "claims": [
+                        {
+                            "text": "exactly one sentence from text",
+                            "claim_type": "inference",
+                            "evidence_ids": ["allowed evidence ids"],
+                            "supporting_quotes": [
+                                {
+                                    "evidence_id": "one cited evidence id",
+                                    "quote": "verbatim source span",
+                                }
+                            ],
+                        }
+                    ],
+                    **(
+                        {
+                            "tests": [
+                                {
+                                    "direction": "below or above",
+                                    "threshold_evidence_id": "one F or D id",
+                                    "threshold": "exact allowed display",
+                                    "unit": "exact evidence unit",
+                                    "time_window": "specific disclosure window without invented digits",
+                                    "latest_actual_baseline": {
+                                        "evidence_id": "one F id",
+                                        "display_value": "exact allowed display",
+                                        "unit": "exact evidence unit",
+                                        "period": "exact evidence period",
+                                    },
+                                    "reason": "conditional business mechanism",
+                                    "evidence_ids": ["cited F, D, or N ids"],
+                                    "supporting_quotes": [
+                                        {
+                                            "evidence_id": "one cited evidence id",
+                                            "quote": "verbatim source span",
+                                        }
+                                    ],
+                                }
+                            ]
+                        }
+                        if judgment_id == "falsification_tests"
+                        else {}
+                    ),
+                    "missing_reason": {
+                        "gap_code": "required only when missing",
+                        "detail": "specific input gap",
+                        "searched_evidence_ids": ["ids actually checked"],
+                    },
+                }
+            ]
+        }
+        task_frozen = FrozenJudgmentInput(
+            request=task_request,
+            registry=task_request["evidence_registry"],
+            preflight_missing={},
+            input_hash=_canonical_hash(task_request),
+        )
+        try:
+            response, receipt = call_structured_deepseek(
                 system_prompt=_SYSTEM_PROMPT,
-                request_object=repair_request,
+                request_object=task_request,
                 key_file=key_file,
                 model=model,
-                max_tokens=14000,
-                reasoning_effort="high",
+                max_tokens=6000,
+                reasoning_effort="medium",
                 temperature=0,
+                thinking_type="disabled",
                 transport=transport,
             )
-            repair_receipt["purpose"] = "validation_repair"
-            model_receipts.append(repair_receipt)
-            response_hashes.append(_canonical_hash(repaired))
-            repaired_validated, repaired_errors = _validate_response(repaired, frozen)
-            validated.update(repaired_validated)
-            validation_errors = repaired_errors
-        content.update(validated)
-        for judgment_id, errors in validation_errors.items():
-            if judgment_id != "__response__" and judgment_id not in validated:
+        except (json.JSONDecodeError, KeyError) as exc:
+            validation_errors[judgment_id] = [
+                "model response parse failure: " + type(exc).__name__
+            ]
+            content[judgment_id] = _missing(
+                "generation_validation_failure",
+                errors=validation_errors[judgment_id],
+            )
+            continue
+        except RuntimeError as exc:
+            if "did not finish cleanly: length" not in str(exc):
+                raise
+            validation_errors[judgment_id] = [
+                "model response exceeded per-judgment output budget"
+            ]
+            content[judgment_id] = _missing(
+                "generation_validation_failure",
+                errors=validation_errors[judgment_id],
+            )
+            continue
+        receipt["purpose"] = "draft:" + judgment_id
+        model_receipts.append(receipt)
+        response_hashes.append(_canonical_hash(response))
+        item_validated, item_errors = _validate_response(response, task_frozen)
+        rejected_response = response
+        for repair_attempt in range(1, 3):
+            if not item_errors:
+                break
+            repair_request = {
+                "task": "Repair this one rejected judgment so it passes every supplied rule. Return the original output_shape only.",
+                "validation_errors": item_errors,
+                "rejected_draft": rejected_response,
+                "original_request": task_request,
+            }
+            try:
+                repaired, repair_receipt = call_structured_deepseek(
+                    system_prompt=_SYSTEM_PROMPT,
+                    request_object=repair_request,
+                    key_file=key_file,
+                    model=model,
+                    max_tokens=6000,
+                    reasoning_effort="medium",
+                    temperature=0,
+                    thinking_type="disabled",
+                    transport=transport,
+                )
+            except (json.JSONDecodeError, KeyError) as exc:
+                item_errors = {
+                    judgment_id: [
+                        "model repair parse failure: " + type(exc).__name__
+                    ]
+                }
+                break
+            except RuntimeError as exc:
+                if "did not finish cleanly: length" not in str(exc):
+                    raise
+                item_errors = {
+                    judgment_id: [
+                        "model repair exceeded per-judgment output budget"
+                    ]
+                }
+                break
+            else:
+                repair_receipt["purpose"] = (
+                    "validation_repair:"
+                    + judgment_id
+                    + ":"
+                    + str(repair_attempt)
+                )
+                model_receipts.append(repair_receipt)
+                response_hashes.append(_canonical_hash(repaired))
+                rejected_response = repaired
+                item_validated, item_errors = _validate_response(
+                    repaired,
+                    task_frozen,
+                )
+        if judgment_id in item_validated:
+            validated[judgment_id] = item_validated[judgment_id]
+            content[judgment_id] = item_validated[judgment_id]
+        if item_errors:
+            errors = [
+                message
+                for messages in item_errors.values()
+                for message in messages
+            ]
+            validation_errors[judgment_id] = sorted(set(errors))
+            if judgment_id not in validated:
                 content[judgment_id] = _missing(
                     "generation_validation_failure",
-                    errors=errors,
+                    errors=validation_errors[judgment_id],
                 )
     for value in content.values():
         if value.get("status") == JUDGMENT_STATUS:
@@ -1160,6 +1598,7 @@ def generate_model_judgments(
         "prompt_hash": _canonical_hash(_SYSTEM_PROMPT),
         "response_hashes": response_hashes,
         "model_receipts": model_receipts,
+        "resume_lineage": list(dict.fromkeys(resume_lineage)),
         "content_hash": _canonical_hash(content),
         "content": content,
         "validation": {
