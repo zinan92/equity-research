@@ -1,0 +1,1262 @@
+{
+  "schema_version": "e4-quarter-column-audit-v1",
+  "facts_examined": 1241,
+  "counts": {
+    "passed": 1102,
+    "invalid_share_currency_unit": 42,
+    "unresolved_quarter_column": 97
+  },
+  "findings": [
+    {
+      "ticker": "000001.SZ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+      "page_number": 117,
+      "raw_text_excerpt": "股本 31 19,406 19,406"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225067794",
+      "page_number": 153,
+      "raw_text_excerpt": "股本 (五)36 11,930,709,471.00 11,930,709,471.00"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 9,
+      "raw_text_excerpt": "货币资金 60,492,624,678.93 67,240,949,734.90"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 9,
+      "raw_text_excerpt": "其他流动资产流动资产合计 679,339,333,420.28 697,373,854,032.79 40,775,625,823.12 41,350,571,707.60"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 9,
+      "raw_text_excerpt": "非流动资产合计资产总计 997,406,724,022.05 1,020,622,831,532.86 318,067,390,601.77 323,248,977,500.07"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 9,
+      "raw_text_excerpt": "短期借款 30,918,830,500.13 26,331,384,862.38"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "其他流动负债流动负债合计 557,101,329,229.73 565,197,947,462.75 8,208,072,794.70 8,711,792,075.11"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "long_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "长期借款 149,584,289,699.57 157,185,809,950.29"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "负债合计 769,344,739,328.43 784,762,773,496.17"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "股本 11,930,709,471.00 11,930,709,471.00"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "股本 11,930,709,471.00 11,930,709,471.00"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "parent_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "归属于母公司所有者权益合计 110,535,199,285.20 116,905,224,808.46"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "total_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "所有者权益合计 228,061,984,693.62 235,860,058,036.69"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "income_tax_expense",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 11,
+      "raw_text_excerpt": "减：所得税费用 1,105,087,155.11 (315,777,572.96)"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "2026Q1",
+      "metric": "net_profit_parent",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 11,
+      "raw_text_excerpt": "1.归属于母公司所有者的净利润（净亏损） (5,952,156,227.34) (6,246,208,543.03)"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2021FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1213059469",
+      "page_number": 82,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2022FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1216593484",
+      "page_number": 84,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219823600",
+      "page_number": 80,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223303879",
+      "page_number": 78,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223303879",
+      "page_number": 78,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225204194",
+      "page_number": 76,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225204194",
+      "page_number": 76,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 7,
+      "raw_text_excerpt": "货币资金 3,182,547,430 3,141,975,147"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 7,
+      "raw_text_excerpt": "其他流动资产流动资产合计 9,978,242,926 9,765,417,584 540,610,776 474,226,753"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 7,
+      "raw_text_excerpt": "非流动资产合计资产总计 31,689,536,306 31,305,028,835 21,711,293,380 21,539,611,251"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 7,
+      "raw_text_excerpt": "短期借款 831,891,601 1,158,648,329"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "流动负债合计 9,956,692,623 9,831,197,464"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "long_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "长期借款 7,225,451,856 6,882,862,147"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "负债合计 18,251,073,666 17,750,341,253"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "股本 3,042,468,811 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "股本 3,042,468,811 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "parent_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "未分配利润归属于母公司所有者权益合计 13,034,107,139 13,145,488,958 7,990,350,445 8,088,993,418"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2026Q1",
+      "metric": "total_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "所有者权益合计 13,438,462,640 13,554,687,582"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2021FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1212635843",
+      "page_number": 100,
+      "raw_text_excerpt": "股本 959,825,277.00 546,129,449.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2022FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1216373040",
+      "page_number": 92,
+      "raw_text_excerpt": "股本 1,926,656,122.00 959,825,277.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219402767",
+      "page_number": 87,
+      "raw_text_excerpt": "股本 1,924,156,740.00 1,926,656,122.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223095035",
+      "page_number": 79,
+      "raw_text_excerpt": "股本 1,918,825,051.00 1,924,156,740.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225002090",
+      "page_number": 81,
+      "raw_text_excerpt": "股本 2,033,891,587.00 1,918,825,051.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 5,
+      "raw_text_excerpt": "货币资金 1,697,818,246.44 1,914,714,559.64"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 6,
+      "raw_text_excerpt": "其他流动资产流动资产合计 16,268,932,441.92 13,057,034,200.55 607,304,136.03 773,467,255.59"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 6,
+      "raw_text_excerpt": "非流动资产合计资产总计 29,880,646,770.13 26,926,733,976.62 13,611,714,328.21 13,869,699,776.07"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 6,
+      "raw_text_excerpt": "短期借款 1,292,846,798.00 1,079,045,710.89"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 6,
+      "raw_text_excerpt": "其他流动负债流动负债合计 9,297,260,513.07 7,493,304,755.59 37,769,657.49 10,020,792.67"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "long_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 6,
+      "raw_text_excerpt": "长期借款 950,145,000.00 987,488,500.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 7,
+      "raw_text_excerpt": "负债合计 10,626,722,564.40 8,890,557,351.16"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 7,
+      "raw_text_excerpt": "股本 2,038,561,744.00 2,033,891,587.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 7,
+      "raw_text_excerpt": "股本 2,038,561,744.00 2,033,891,587.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "parent_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 7,
+      "raw_text_excerpt": "未分配利润归属于母公司所有者权益合计 19,081,476,347.82 17,851,651,235.87 10,928,292,915.71 9,700,202,089.82"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "total_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 7,
+      "raw_text_excerpt": "所有者权益合计 19,253,924,205.73 18,036,176,625.46"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "operating_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 8,
+      "raw_text_excerpt": "资产处置收益（损失以“-”号填列）三、营业利润（亏损以“－”号填列） 1,937,064,282.36 184,842,393.80 773,406.10 623,389.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "total_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 8,
+      "raw_text_excerpt": "减：营业外支出四、利润总额（亏损总额以“－”号填列） 2,019,612,772.76 182,918,777.52 3,820,667.90 3,382,846.61"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "2026Q1",
+      "metric": "net_profit_parent",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 8,
+      "raw_text_excerpt": "1.归属于母公司所有者的净利润 1,654,404,644.44 149,618,189.51"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2021FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+      "page_number": 110,
+      "raw_text_excerpt": "股本 233,085.12 232,947.40"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+      "page_number": 117,
+      "raw_text_excerpt": "股本 439,904.12 244,251.45"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+      "page_number": 116,
+      "raw_text_excerpt": "股本 4,403,466 4,399,041"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 5,
+      "raw_text_excerpt": "货币资金 351,997,422 333,512,927"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 5,
+      "raw_text_excerpt": "其他流动资产流动资产合计 692,498,192 638,481,543 13,617,668 12,379,304"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 6,
+      "raw_text_excerpt": "非流动资产合计资产总计 1,046,329,036 974,827,544 353,830,843 336,346,001"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 6,
+      "raw_text_excerpt": "短期借款 12,207,200 12,935,498"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 7,
+      "raw_text_excerpt": "其他流动负债流动负债合计 434,010,194 399,625,988 6,599,036 5,830,358"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "long_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 7,
+      "raw_text_excerpt": "长期借款 76,221,312 78,234,935"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 7,
+      "raw_text_excerpt": "负债合计 652,096,744 603,801,220"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 7,
+      "raw_text_excerpt": "股本 4,564,063 4,563,803"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 7,
+      "raw_text_excerpt": "股本 4,564,063 4,563,803"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "parent_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 8,
+      "raw_text_excerpt": "未分配利润归属于母公司所有者权益合计 357,262,588 337,107,747 195,371,206 174,628,837"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "total_equity",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 8,
+      "raw_text_excerpt": "所有者权益合计 394,232,291 371,026,324"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "operating_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 9,
+      "raw_text_excerpt": "资产处置收益（损失以“-”号填列）三、营业利润（亏损以“－”号填列） 26,651,291 17,340,443 3,211 21,392"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "total_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 9,
+      "raw_text_excerpt": "减：营业外支出四、利润总额（亏损总额以“－”号填列） 26,681,603 17,375,031 44,867 73,444"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "income_tax_expense",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 9,
+      "raw_text_excerpt": "四、利润总额（亏损总额以“－”号填列）减：所得税费用 3,944,350 2,513,397 26,681,603 17,375,031"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "net_profit_parent",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 9,
+      "raw_text_excerpt": "1.归属于母公司所有者的净利润 20,737,710 13,962,558"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "operating_cash_flow",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 11,
+      "raw_text_excerpt": "经营活动现金流出小计经营活动产生的现金流量净额 33,680,852 32,868,257 98,336,402 86,238,809"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "2026Q1",
+      "metric": "capital_expenditure",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 11,
+      "raw_text_excerpt": "购建固定资产、无形资产和其他长期资产支付的现金 12,416,302 10,342,606"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2021FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1212941560",
+      "page_number": 61,
+      "raw_text_excerpt": "实收资本（或股本） （五十三） 1,926,958,448.00 1,926,958,448.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2022FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1216688257",
+      "page_number": 70,
+      "raw_text_excerpt": "实收资本（或股本） （五十三） 2,488,481,340.00 1,926,958,448.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219461720",
+      "page_number": 69,
+      "raw_text_excerpt": "实收资本（或股本） （五十三） 2,488,481,340.00 2,488,481,340.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223389433",
+      "page_number": 73,
+      "raw_text_excerpt": "实收资本（或股本） 53 2,488,481,340.00 2,488,481,340.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264362",
+      "page_number": 69,
+      "raw_text_excerpt": "实收资本（或股本） 53 2,488,313,040.00 2,488,481,340.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 5,
+      "raw_text_excerpt": "货币资金 17,511,890,385.86 16,763,111,526.17"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 5,
+      "raw_text_excerpt": "其他流动资产流动资产合计 21,219,990,584.15 21,423,160,477.26 72,244,307.55 1,659,295,419.12"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 6,
+      "raw_text_excerpt": "非流动资产合计资产总计 71,178,546,313.73 71,678,547,661.74 49,958,555,729.58 50,255,387,184.48"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 6,
+      "raw_text_excerpt": "短期借款 7,045,745.59 7,006,853.04"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 7,
+      "raw_text_excerpt": "其他流动负债流动负债合计 7,769,496,749.18 8,724,550,945.97 2,004,099,444.44 2,012,685,807.11"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 7,
+      "raw_text_excerpt": "负债合计 25,989,368,992.89 27,139,427,653.70"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 7,
+      "raw_text_excerpt": "实收资本（或股本） 2,488,313,040.00 2,488,313,040.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 7,
+      "raw_text_excerpt": "实收资本（或股本） 2,488,313,040.00 2,488,313,040.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "revenue",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 8,
+      "raw_text_excerpt": "一、营业总收入 3,198,103,002.00 3,172,262,268.56"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "operating_cost",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 8,
+      "raw_text_excerpt": "二、营业总成本其中：营业成本 2,400,669,216.35 2,319,851,825.84 2,707,245,785.31 2,670,112,628.73"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "operating_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 8,
+      "raw_text_excerpt": "资产处置收益（损失以“-”号填列）三、营业利润（亏损以“-”号填列） 810,967,632.73 717,833,536.74 861,319.59 -1,588,455.41"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "total_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 8,
+      "raw_text_excerpt": "减：营业外支出四、利润总额（亏损总额以“-”号填列） 811,410,356.89 717,773,072.16 236,886.98 541,584.34"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "income_tax_expense",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 9,
+      "raw_text_excerpt": "减：所得税费用 169,471,918.80 131,711,512.35"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "net_profit_parent",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 9,
+      "raw_text_excerpt": "1.归属于母公司股东的净利润（净亏 577,796,194.02 518,983,551.43"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "2026Q1",
+      "metric": "operating_cash_flow",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 10,
+      "raw_text_excerpt": "经营活动现金流出小计经营活动产生的现金流量净额 660,423,049.85 704,585,525.09 2,839,578,073.75 2,491,509,333.26"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219348207",
+      "page_number": 93,
+      "raw_text_excerpt": "泰君安的约定购回式证券交易中的股本购回，处于质押状态下的 3,306万股也已解押，大连城投持有"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225029354",
+      "page_number": 131,
+      "raw_text_excerpt": "实收资本（或股本） 53 15,698,093,359 15,698,093,359"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 7,
+      "raw_text_excerpt": "货币资金 21,734,771,622 19,455,512,962"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 7,
+      "raw_text_excerpt": "其他流动资产流动资产合计 93,716,863,599 91,469,357,295 5,011,768,658 5,196,748,985"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 7,
+      "raw_text_excerpt": "非流动资产合计资产总计 614,698,358,430 611,789,826,893 520,981,494,831 520,320,469,598"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "短期借款 75,933,402,190 61,931,728,636"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "其他流动负债流动负债合计 181,145,583,684 174,781,263,127 12,850,731,616 12,510,304,471"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "long_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "衍生金融负债长期借款 159,129,797,786 157,066,581,848 263,855,567 387,029,296"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "负债合计 407,690,988,572 399,271,744,759"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "实收资本（或股本） 15,698,093,359 15,698,093,359"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "实收资本（或股本） 15,698,093,359 15,698,093,359"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "revenue",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 9,
+      "raw_text_excerpt": "一、营业总收入 56,782,594,376 60,334,914,635"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "operating_cost",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 9,
+      "raw_text_excerpt": "二、营业总成本其中：营业成本 45,698,005,871 48,844,078,005 49,934,076,547 52,949,916,780"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "operating_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 9,
+      "raw_text_excerpt": "三、营业利润（亏损以“-”号填列） 7,655,202,117 8,157,391,458"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "total_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 9,
+      "raw_text_excerpt": "减：营业外支出四、利润总额（亏损总额以“-”号填 7,694,202,874 8,203,136,711 95,895,780 63,069,995"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "income_tax_expense",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 9,
+      "raw_text_excerpt": "减：所得税费用 1,187,118,083 1,243,755,966"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "net_profit_parent",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 9,
+      "raw_text_excerpt": "1.归属于母公司股东的净利润（净 4,483,918,670 4,972,738,942"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "operating_cash_flow",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 11,
+      "raw_text_excerpt": "经营活动产生的现金流量净额 12,436,770,516 17,395,885,484"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "2026Q1",
+      "metric": "capital_expenditure",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 11,
+      "raw_text_excerpt": "购建固定资产、无形资产和其他长期资产支付的现金 9,154,311,108 9,053,639,993"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2021FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1213210388",
+      "page_number": 88,
+      "raw_text_excerpt": "共56,370,812股上市流通。本次限制性股票解锁上市后，公司总股本为 22,269,447,650股，其"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223329102",
+      "page_number": 115,
+      "raw_text_excerpt": "实收资本（或股本） 44 21,985,240,734.00 22,119,857,984.00"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257227",
+      "page_number": 95,
+      "raw_text_excerpt": "实收资本（或股本） 44 21,782,084,749.00 21,985,240,734.00"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "cash",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 6,
+      "raw_text_excerpt": "货币资金 21,764,694,071.49 19,158,391,896.40"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "current_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 7,
+      "raw_text_excerpt": "流动资产合计 121,851,478,921.62 118,390,292,268.53"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "total_assets",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 7,
+      "raw_text_excerpt": "非流动资产合计资产总计 366,162,658,919.55 363,020,038,344.87 244,311,179,997.93 244,629,746,076.34"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "short_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 7,
+      "raw_text_excerpt": "短期借款 7,417,865,701.16 5,251,507,266.14"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "current_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 7,
+      "raw_text_excerpt": "其他流动负债流动负债合计 126,057,095,310.06 119,638,588,102.44 7,799,276,570.35 5,637,083,124.45"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "long_term_borrowings",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 7,
+      "raw_text_excerpt": "长期借款 4,324,401,334.38 4,841,077,595.94"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "total_liabilities",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 7,
+      "raw_text_excerpt": "负债合计 138,519,424,297.69 137,829,752,534.84"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "share_capital_amount",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 8,
+      "raw_text_excerpt": "实收资本（或股本） 21,782,084,749.00 21,782,084,749.00"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 8,
+      "raw_text_excerpt": "实收资本（或股本） 21,782,084,749.00 21,782,084,749.00"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "revenue",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 8,
+      "raw_text_excerpt": "一、营业总收入 77,061,220,744.65 72,879,660,120.95"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "operating_cost",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 8,
+      "raw_text_excerpt": "二、营业总成本其中：营业成本 71,958,190,207.66 67,616,953,173.66 74,556,791,813.96 70,318,439,799.32"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "operating_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 8,
+      "raw_text_excerpt": "资产处置收益（损失以“-”号填列）三、营业利润（亏损以“-”号填列） 3,220,968,389.74 3,474,906,776.54 -2,255,618.15 2,226,323.59"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "total_profit",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 9,
+      "raw_text_excerpt": "减：营业外支出四、利润总额（亏损总额以“-”号填列） 3,033,394,315.72 3,291,559,543.48 215,944,192.38 192,504,142.83"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "income_tax_expense",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 9,
+      "raw_text_excerpt": "四、利润总额（亏损总额以“-”号填列）减：所得税费用 516,823,424.89 525,427,142.54 3,033,394,315.72 3,291,559,543.48"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "net_profit_parent",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 9,
+      "raw_text_excerpt": "1.归属于母公司股东的净利润（净亏损以“-” 2,224,542,172.81 2,434,085,745.80"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "operating_cash_flow",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 10,
+      "raw_text_excerpt": "经营活动现金流出小计经营活动产生的现金流量净额 4,417,351,113.40 4,355,039,917.42 83,342,083,414.87 75,090,002,808.03"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "2026Q1",
+      "metric": "capital_expenditure",
+      "status": "unresolved_quarter_column",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 10,
+      "raw_text_excerpt": "购建固定资产、无形资产和其他长期资产支付的现金 4,516,034,174.61 4,512,971,443.26"
+    },
+    {
+      "ticker": "600276.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225032585",
+      "page_number": 134,
+      "raw_text_excerpt": "实收资本（或股本） 七、53 6,637,199,874.00 6,379,002,274.00"
+    },
+    {
+      "ticker": "600519.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+      "page_number": 58,
+      "raw_text_excerpt": "实收资本（或股本） 37 1,252,270,215.00 1,256,197,800.00"
+    },
+    {
+      "ticker": "600941.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225036280",
+      "page_number": 87,
+      "raw_text_excerpt": "股本 四(34) 468,445 461,838"
+    },
+    {
+      "ticker": "601000.SH",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225040947",
+      "page_number": 62,
+      "raw_text_excerpt": "实收资本（或股本） 5,925,928,614.00 5,925,928,614.00"
+    },
+    {
+      "ticker": "920027.BJ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225267593",
+      "page_number": 94,
+      "raw_text_excerpt": "股本 三、（五）、36 79,203,500.00 57,250,000.00"
+    },
+    {
+      "ticker": "920118.BJ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225165599",
+      "page_number": 72,
+      "raw_text_excerpt": "股本 五、29 50,896,000.00 50,896,000.00"
+    },
+    {
+      "ticker": "920751.BJ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225133785",
+      "page_number": 116,
+      "raw_text_excerpt": "2026年4月 17日公司第六届董事会第十六次会议审议通过 2025年度利润分配预案，拟以截止年4月 17日，公司最新总股本 86,780,000股为基数（最终以权益分派股权登记日登记的股份数为准）， 2026"
+    },
+    {
+      "ticker": "920751.BJ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225133785",
+      "page_number": 116,
+      "raw_text_excerpt": "2026年4月 17日公司第六届董事会第十六次会议审议通过 2025年度利润分配预案，拟以截止年4月 17日，公司最新总股本 86,780,000股为基数（最终以权益分派股权登记日登记的股份数为准）， 2026"
+    }
+  ]
+}
