@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product"))
 
-from data_core.e4_financial_sequence_batch import _timeout_reports, run_financial_sequence_batch  # noqa: E402
+from data_core.e4_financial_sequence_batch import _ticker_exception_reports, _timeout_reports, run_financial_sequence_batch  # noqa: E402
 
 
 class FinancialSequenceScaleTest(unittest.TestCase):
@@ -30,3 +30,8 @@ class FinancialSequenceScaleTest(unittest.TestCase):
         reports = _timeout_reports(("2021FY", "2026Q1"), seconds=300)
         self.assertEqual([row["reason"] for row in reports], ["ticker_collection_timeout", "ticker_collection_timeout"])
         self.assertTrue(all("300s" in row["raw_text_excerpt"] for row in reports))
+
+    def test_ticker_worker_exception_keeps_all_periods_as_typed_missing(self) -> None:
+        reports = _ticker_exception_reports(("2021FY", "2026Q1"), EOFError("worker pipe closed"))
+        self.assertEqual([row["reason"] for row in reports], ["ticker_collection_exception", "ticker_collection_exception"])
+        self.assertTrue(all("EOFError" in row["raw_text_excerpt"] for row in reports))

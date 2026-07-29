@@ -85,6 +85,12 @@ def _timeout_reports(periods: tuple[str, ...], *, seconds: int) -> list[dict[str
              "raw_text_excerpt": f"ticker collector exceeded {seconds}s in isolated worker"} for period in periods]
 
 
+def _ticker_exception_reports(periods: tuple[str, ...], exc: BaseException) -> list[dict[str, Any]]:
+    excerpt = f"{type(exc).__name__}: {exc}"[:520]
+    return [{"period": period, "status": "missing", "reason": "ticker_collection_exception",
+             "raw_text_excerpt": excerpt} for period in periods]
+
+
 def _capture_ticker_bounded(ticker: str, periods: tuple[str, ...], *, delay_seconds: float, seconds: int = 300) -> list[dict[str, Any]]:
     """Collect one issuer in a killable child while retaining one-at-a-time semantics."""
     context = multiprocessing.get_context("fork")
@@ -237,6 +243,10 @@ def run_financial_sequence_batch(
                 reports = _capture_ticker_bounded(ticker, periods, delay_seconds=delay_seconds)
             except _TickerTimeout:
                 reports = _timeout_reports(periods, seconds=300)
+            except Exception as exc:
+                # A worker crash is an issuer-level collection gap, never a
+                # reason to abandon the remaining identities in the cohort.
+                reports = _ticker_exception_reports(periods, exc)
         else:
             reports = [_capture_one(ticker, period, transport=active_transport, sync=sync) for period in periods]
         rows.append({"ticker": ticker, "reports": reports})
