@@ -4,7 +4,7 @@
   "data_kind": "real",
   "report_model_hash": "f6259e94e68f61721d0a832d35d5be170a8d16285450dd7de182486c085e2fb7",
   "html_path": "artifacts/e4-reports/600519.SH.html",
-  "word_count": 501,
+  "word_count": 485,
   "sections": [
     {
       "section_id": "executive_summary",
@@ -451,5 +451,5 @@
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "ea75ebfa73f84a9ed555b513a74ee9b9761723b3eb7ca43d9772391839d259b7"
+  "receipt_hash": "5b1e8dd7a72bf64654e60fef724648abcea898815a5d9256628f696ad5dd41eb"
 }

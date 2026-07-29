@@ -5,8 +5,8 @@ import argparse, hashlib, html, json
 from pathlib import Path
 def h(x): return hashlib.sha256(json.dumps(x,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
 def main():
- p=argparse.ArgumentParser();p.add_argument('m1',type=Path);p.add_argument('m2',type=Path);p.add_argument('m3',type=Path);p.add_argument('--ticker',default='300750.SZ');p.add_argument('--out',type=Path,required=True);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args();ticker=a.ticker.upper()
- m1=json.loads(a.m1.read_text());m2=json.loads(a.m2.read_text());m3=json.loads(a.m3.read_text());catl=next(x for x in m2['rows'] if x['ticker']==ticker);d=next(x for x in m1['rows'] if x['ticker']==ticker)['decision'];sections=catl['result']['section_contract']['sections'];facts=catl['result']['page_facts']
+ p=argparse.ArgumentParser();p.add_argument('m1',type=Path);p.add_argument('m2',type=Path);p.add_argument('m3',type=Path);p.add_argument('--audit',type=Path);p.add_argument('--ticker',default='300750.SZ');p.add_argument('--out',type=Path,required=True);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args();ticker=a.ticker.upper()
+ m1=json.loads(a.m1.read_text());m2=json.loads(a.m2.read_text());m3=json.loads(a.m3.read_text());audit=json.loads(a.audit.read_text()) if a.audit else {'findings':[]};bad={(x.get('document_id'),x.get('page_number')) for x in audit.get('findings',[])};catl=next(x for x in m2['rows'] if x['ticker']==ticker);d=next(x for x in m1['rows'] if x['ticker']==ticker)['decision'];sections=catl['result']['section_contract']['sections'];facts=catl['result']['page_facts']
  if m3.get('ticker') != ticker: m3={'content':{key:{'status':'missing','reason':'no issuer-specific judgment receipt'} for key in ('investment_thesis','variant_view','moat_assessment','peer_comparison','management_record','governance_events','risk_register','falsification_tests','monitoring_kpis','action_triggers','macro_exposures','accounting_checks','segment_financials','market_size','operating_kpis','margin_bridge')}}
  # Historical receipts predate the share-unit fix.  A monetary value may be
  # shown only as share_capital_amount, never as shares_outstanding.
@@ -30,7 +30,9 @@ def main():
  ev=''.join(line(x) for x in lead)
  trends=''.join(f"<h3>{html.escape(metric)}</h3><ul>{''.join(line(x) for x in values[-4:])}</ul>" for metric,values in sorted(by_metric.items()))
  def judgment_text(v): return v.get('text') or '; '.join(str(item.get('name',item)) if isinstance(item,dict) else str(item) for item in v.get('items',[])) or v.get('reason','')
- j=''.join(f"<article class='judgment'><h3>{html.escape(k)} <em>{html.escape(v['status'])}</em></h3><p>{html.escape(judgment_text(v))}</p><ul>{''.join(line({'metric':f['metric'],'report_period':f['citation']['report_period'],'value':f['value'],'unit':f['citation']['unit'],'source_url':f['citation']['source_url'],'page_number':f['citation']['page_number'],'quoted_anchor':f['citation']['quoted_anchor']}) for f in v.get('facts',[]))}</ul></article>" for k,v in m3['content'].items())
+ def judgment(v):
+  unreliable=any((f['citation'].get('document_id'),f['citation'].get('page_number')) in bad for f in v.get('facts',[])); status='unreliable' if unreliable else v['status']; return f"<article class='judgment'><h3><em>{html.escape(status)}</em></h3><p>{html.escape(judgment_text(v))}</p><ul>{''.join(line({'metric':f['metric'],'report_period':f['citation']['report_period'],'value':f['value'],'unit':f['citation']['unit'],'source_url':f['citation']['source_url'],'page_number':f['citation']['page_number'],'quoted_anchor':f['citation']['quoted_anchor']}) for f in v.get('facts',[]))}</ul></article>"
+ j=''.join(f"<h3>{html.escape(k)}</h3>"+judgment(v) for k,v in m3['content'].items())
  nav=[]
  for label,sid in [('产业链位置','industry_structure'),('壁垒','competition_and_moat'),('财务兑现','profitability_and_earnings_quality'),('市场交易的未来','valuation'),('推翻信号','risks_and_falsification')]:
   sec=next(x for x in sections if x['section_id']==sid); nav.append(f"<li>{label}：{'可回答，见 '+sid if sec['status']!='missing' else '尚无证据支撑；缺 '+', '.join(sec['missing_required'])}</li>")
