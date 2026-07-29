@@ -1,0 +1,415 @@
+{
+  "schema_version": "e4-m3-catl-judgments-v1",
+  "data_kind": "real",
+  "ticker": "300750.SZ",
+  "source_dossier_receipt": "n3-dossier-batch-10dd875e32907e14",
+  "content": {
+    "investment_thesis": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "text": "The evidence-bound thesis is conditional on the issuer sustaining the operating trajectory shown in its official filings; this is an unreviewed AI judgment, not an investment recommendation."
+    },
+    "variant_view": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "text": "No sell-side consensus is admitted, so the only defensible variant view is a conditional reading of filing evidence rather than a claim about market expectations."
+    },
+    "moat_assessment": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "text": "A durable-advantage conclusion requires independent peer evidence; current wording records only an unreviewed hypothesis anchored to company filings."
+    },
+    "peer_comparison": {
+      "status": "missing",
+      "reason": "no page-bound peer facts",
+      "raw_text_excerpt": "no qualifying official page-bound input in frozen Context Pack"
+    },
+    "management_record": {
+      "status": "missing",
+      "reason": "no page-bound management track-record series",
+      "raw_text_excerpt": "no qualifying official page-bound input in frozen Context Pack"
+    },
+    "governance_events": {
+      "status": "missing",
+      "reason": "no official event extraction receipt",
+      "raw_text_excerpt": "no qualifying official page-bound input in frozen Context Pack"
+    },
+    "risk_register": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "text": "Risk remains elevated if reported earnings or operating cash conversion deteriorate versus the cited filing baseline."
+    },
+    "falsification_tests": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "tests": [
+        {
+          "direction": "down",
+          "threshold": "below the cited annual revenue baseline",
+          "time_window": "next annual filing",
+          "rule": "If reported annual revenue is below the cited baseline, reassess the conditional operating-thesis judgment."
+        }
+      ]
+    },
+    "monitoring_kpis": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "items": [
+        "annual revenue",
+        "parent net profit",
+        "operating cash flow"
+      ]
+    },
+    "action_triggers": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "items": [
+        "review on next annual filing",
+        "review if the falsification condition occurs"
+      ]
+    },
+    "macro_exposures": {
+      "status": "missing",
+      "reason": "no official macro sensitivity extraction",
+      "raw_text_excerpt": "no qualifying official page-bound input in frozen Context Pack"
+    },
+    "accounting_checks": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "text": "This is a mechanical filing-based check only; it is not an audit opinion."
+    },
+    "segment_financials": {
+      "status": "missing",
+      "reason": "no official segment table extracted into frozen Context Pack",
+      "raw_text_excerpt": "no qualifying official page-bound input in frozen Context Pack"
+    },
+    "market_size": {
+      "status": "missing",
+      "reason": "no official market-size source admitted",
+      "raw_text_excerpt": "no qualifying official page-bound input in frozen Context Pack"
+    },
+    "operating_kpis": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "items": [
+        {
+          "name": "reported revenue",
+          "facts": [
+            {
+              "metric": "revenue",
+              "value": 129131041.0,
+              "citation": {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+                "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+                "page_number": 8,
+                "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+                "report_period": "2026Q1",
+                "unit": "千元"
+              }
+            },
+            {
+              "metric": "net_profit_parent",
+              "value": 20737710.0,
+              "citation": {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+                "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+                "page_number": 9,
+                "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+                "report_period": "2026Q1",
+                "unit": "千元"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "margin_bridge": {
+      "status": "ai_generated_judgment_unreviewed",
+      "dossier_id": "dossier_ca972793f77867a8eb06fa9817de09e3e9a4c3f4",
+      "facts": [
+        {
+          "metric": "revenue",
+          "value": 129131041.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        },
+        {
+          "metric": "net_profit_parent",
+          "value": 20737710.0,
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+            "report_period": "2026Q1",
+            "unit": "千元"
+          }
+        }
+      ],
+      "text": "A complete margin bridge is unavailable; cited revenue and parent-profit facts are retained as the auditable starting point."
+    }
+  },
+  "receipt_hash": "dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d"
+}
