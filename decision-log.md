@@ -2287,3 +2287,24 @@
 - **Gotchas:** Do not infer a receipt from a module name or a dossier ID.  A
   receipt with missing page citations, a mismatched ticker, a changed hash, or
   fixture data is not a C1 input and must remain missing.
+
+# 2026-07-29 — R2 industry inputs require an issuer-specific bridge
+
+- **Decision:** Project the passed R2 world model into C1 only for an issuer
+  that has both an accepted page-cited industry position and a compiled R2
+  dossier.  For CATL this wires `company_profile` and `industry_profile`;
+  it does not synthesize `market_size`, `segment_financials`, events, or a
+  dated `catalyst_calendar`.
+- **Why:** Nodes and segments describe an industry model, not company facts.
+  CATL's accepted battery position supplies the required issuer bridge, while
+  R2's catalyst profiles contain no issuer-specific future date/mechanism
+  object suitable for the C1 catalyst calendar.
+- **Evidence:** R2 acceptance rerun receipt
+  `8d0b6122b8ce78edca201ce6299590f27c6b2ef6b12ecef7848758e3c8323989`
+  passed all gates; N3 dossier receipt
+  `10dd875e32907e146963ff7161fe5fef9539b9fd3f60f39d67e823aec95c4d21`
+  identifies CATL's dossier and the official CNINFO page-cited position.
+- **Gotchas:** A passed R2 count gate is not a universal company profile.
+  Moutai and Ping An have no accepted R2 position, and sector-wide catalyst
+  text without issuer, date and mechanism remains a shape mismatch rather
+  than a report input.

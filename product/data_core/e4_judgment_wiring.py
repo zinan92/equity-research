@@ -33,7 +33,9 @@ JUDGMENT_INPUTS: dict[str, tuple[tuple[str, str, str], ...]] = {
 
 def _digest_without_receipt_hash(value: Mapping[str, Any]) -> str:
     payload = {key: item for key, item in value.items() if key != "receipt_hash"}
-    return hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    # Match the v1 runtime writer exactly.  Receipt identity is about the
+    # bytes the producer emitted, not a re-serialized approximation.
+    return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
 
 
 def _validate_judgment(value: Mapping[str, Any], *, key: str) -> None:

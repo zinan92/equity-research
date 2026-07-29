@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from hashlib import sha256
+import json
 from pathlib import Path
 from typing import Iterable, Mapping
 
@@ -207,7 +209,7 @@ def audit_r2(
         "five_questions": all(value["covered"] >= value["required"] for value in questions.values()),
         "archive_isolation": bool(isolation["passed"]),
     }
-    return {
+    result = {
         "schema_version": R2_ACCEPTANCE_SCHEMA_VERSION,
         "status": "passed" if all(gates.values()) else "partial",
         "gates": gates,
@@ -220,3 +222,7 @@ def audit_r2(
         "archive_isolation": isolation,
         "truth_boundary": {"count_only_cannot_pass": True, "no_action_is_not_recommendation": True},
     }
+    result["receipt_hash"] = sha256(
+        json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    return result
