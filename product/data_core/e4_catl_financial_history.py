@@ -63,6 +63,7 @@ class OfficialFinancialFact:
     unit_source_excerpt: str = ""
     validation_status: str = "unvalidated"
     as_of_date: str | None = None
+    audit_status: str = "unknown"
 
 
 _METRICS = {
@@ -122,12 +123,27 @@ def _column_identity(text: str) -> tuple[str, str] | None:
         return "period_end", compact[:240]
     if "本期金额" in compact and "上期金额" in compact:
         return "current_period", compact[:240]
+    if "本报告期" in compact and "上年同期" in compact:
+        return "current_period", compact[:240]
+    if "年初至报告期末" in compact and "上年年初至报告期末" in compact:
+        return "current_period", compact[:240]
     if len(re.findall(r"20\d{2}年度", compact)) >= 2:
         return "current_period", compact[:240]
     if len(re.findall(r"20\d{2}年", compact)) >= 2:
         return "current_period", compact[:240]
     if "Closing balance" in compact and "Opening balance" in compact:
         return "period_end", compact[:240]
+    if "Current period" in compact and "Prior period" in compact:
+        return "current_period", compact[:240]
+    return None
+
+
+def _audit_status(text: str) -> str | None:
+    compact = " ".join(text.split()).lower()
+    if "未经审计" in compact or "unaudited" in compact:
+        return "unaudited"
+    if "审计报告" in compact or "经审计" in compact or "audited" in compact:
+        return "audited"
     return None
 
 
@@ -250,7 +266,9 @@ def _rows_with_context(
     active_unit: tuple[str, str] | None,
     active_column: str = "unknown",
     active_column_excerpt: str = "",
-) -> tuple[tuple[str, str | None, tuple[str, str] | None, str, str, str], ...]:
+    active_unit_source_excerpt: str = "",
+    active_audit_status: str = "unknown",
+) -> tuple[tuple[str, str | None, tuple[str, str] | None, str, str, str, str], ...]:
     """Return page rows with the statement context active at that exact row.
 
     Annual-report tables can end on the next page after their title, and a
@@ -258,9 +276,9 @@ def _rows_with_context(
     title and first rows of a parent-company statement.  Context must therefore
     move linearly, not be inferred from the page as a whole.
     """
-    rows: list[tuple[str, str | None, tuple[str, str] | None, str, str, str]] = []
+    rows: list[tuple[str, str | None, tuple[str, str] | None, str, str, str, str]] = []
     lines = _page_lines(page_text)
-    column_excerpt = active_column_excerpt; unit_excerpt = ""
+    column_excerpt = active_column_excerpt; unit_excerpt = active_unit_source_excerpt
     for index, line in enumerate(lines):
         # A statement title is a hard table boundary.  Scope and unit may
         # legitimately carry across the *pages* of one statement, but a
@@ -275,18 +293,19 @@ def _rows_with_context(
             column_excerpt = ""
         if _unit(line): active_unit = _unit(line); unit_excerpt = line[:240]
         if _column_identity(line): active_column, column_excerpt = _column_identity(line)
-        rows.append((line, active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
+        active_audit_status = _audit_status(line) or active_audit_status
+        rows.append((line, active_scope, active_unit, active_column, column_excerpt, unit_excerpt, active_audit_status))
         if index + 2 < len(lines):
             left, numbers, right = lines[index:index + 3]
             if (re.search(r"[\u4e00-\u9fff]", left)
                     and re.fullmatch(r"[-\d,\.\s]+", numbers)
                     and re.search(r"[\u4e00-\u9fff]", right)):
-                rows.append((left + right + " " + numbers, active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
+                rows.append((left + right + " " + numbers, active_scope, active_unit, active_column, column_excerpt, unit_excerpt, active_audit_status))
         if index + 1 < len(lines):
             left, right = lines[index:index + 2]
             match = re.match(r"^(.*[\u4e00-\u9fff][^0-9]*?)\s+([\d,.\s-]+)$", left)
             if match and re.search(r"[\u4e00-\u9fff]", right):
-                rows.append((match.group(1) + right + " " + match.group(2), active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
+                rows.append((match.group(1) + right + " " + match.group(2), active_scope, active_unit, active_column, column_excerpt, unit_excerpt, active_audit_status))
     return tuple(rows)
 
 
@@ -322,6 +341,8 @@ def extract_report_facts(
     active_unit: tuple[str, str] | None = None
     active_column = "unknown"
     active_column_excerpt = ""
+    active_unit_source_excerpt = ""
+    active_audit_status = "unknown"
     for page in pages:
         rows = _rows_with_context(
             page.text,
@@ -329,10 +350,12 @@ def extract_report_facts(
             active_unit=active_unit,
             active_column=active_column,
             active_column_excerpt=active_column_excerpt,
+            active_unit_source_excerpt=active_unit_source_excerpt,
+            active_audit_status=active_audit_status,
         )
         if rows:
-            _, active_scope, active_unit, active_column, active_column_excerpt, _ = rows[-1]
-        for compact, row_scope, row_unit, column_identity, column_header, unit_source in rows:
+            _, active_scope, active_unit, active_column, active_column_excerpt, active_unit_source_excerpt, active_audit_status = rows[-1]
+        for compact, row_scope, row_unit, column_identity, column_header, unit_source, audit_status in rows:
             if row_scope not in {"consolidated", "consolidated_cashflow_supplement"} or row_unit is None:
                 continue
             for metric, labels in _METRICS.items():
@@ -376,6 +399,7 @@ def extract_report_facts(
                         row_scope, row_unit[0], row_unit[1], report.source_url,
                         identity, column_header, unit_source,
                         "column_identity_unresolved" if identity == "unknown" else "pending_magnitude_validation",
+                        audit_status=audit_status,
                     ))
                 found.add(metric)
         # Share count is not a balance-sheet amount.  It is disclosed in the
