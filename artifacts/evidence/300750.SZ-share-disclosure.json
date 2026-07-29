@@ -1,0 +1,20 @@
+{
+  "as_of_date": null,
+  "column_header_excerpt": "",
+  "column_identity": "unknown",
+  "currency": "N/A",
+  "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+  "metric": "shares_outstanding",
+  "page_number": 6,
+  "quoted_anchor": "润分配预案或公积金转增股本预案 适用 □不适用 经公司第四届董事会第十四次会议审议通过的 2025年度利润分配预案为：拟以 4,531,886,650股（即 公司现有总股本 4,563,868,956股剔除A股回购专用账户中已回购股份 31,982,306股）为基数，向全体股 东每 10股派发现金分红 69.57元（含税）。2025年度，公司不实施资本公积金转增股本，不送红股。本次 利润分配预案尚需提交公司 2025年年度股东会审议。 6",
+  "quoted_label": "公司现有总股本",
+  "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+  "report_period": "2025FY",
+  "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+  "statement_scope": "share_count_disclosure",
+  "ticker": "300750.SZ",
+  "unit": "股",
+  "unit_source_excerpt": "",
+  "validation_status": "unvalidated",
+  "value": 4563868956.0
+}
