@@ -2308,3 +2308,21 @@
   Moutai and Ping An have no accepted R2 position, and sector-wide catalyst
   text without issuer, date and mechanism remains a shape mismatch rather
   than a report input.
+
+# 2026-07-29 — Human review is the only completion path for AI judgments
+
+- **Decision:** Generate a receipt-bound review queue that contains each draft
+  judgment's full body, page-level citations, review writeback state, impact
+  rank, and the precise C1 section outcome after approval.  The report banner
+  and receipt expose the count of unreviewed judgments.
+- **Why:** A reviewer needs a usable work item rather than a vague “AI content
+  exists” flag, while the product must visibly distinguish a pending draft from
+  a completed chapter.
+- **Evidence:** CATL queue source receipt
+  `e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d`
+  produces 10 pending items.  The Tier regression test proves a contract with
+  otherwise complete inputs remains Tier B when one required input is
+  unreviewed.
+- **Gotchas:** Reviewing one half of a multi-input chapter is not enough.  The
+  queue reports the status after all pending inputs in that section are
+  approved, and still keeps independently missing requirements explicit.

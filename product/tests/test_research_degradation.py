@@ -48,6 +48,15 @@ class ResearchDegradationTest(unittest.TestCase):
         self.assertEqual(receipt.blocked_fields, ("action", "target_price", "position_range"))
         self.assertIn("partial_or_missing_sections", receipt.reasons)
 
+    def test_unreviewed_judgment_cannot_trigger_tier_a(self) -> None:
+        set_ = evidence()
+        inputs = full_inputs()
+        inputs["investment_thesis"]["investment_thesis"] = {"status": "ai_generated_judgment_unreviewed"}
+        contract = build_research_section_contract_v2(inputs, structure_only=False, evidence_set=set_)
+        receipt = assess_any_ticker("300750.SZ", evidence_set=set_, section_contract=contract)
+        section = next(item for item in contract.sections if item.section_id == "investment_thesis")
+        self.assertEqual((section.status.value, section.status_reason, receipt.tier), ("partial", "pending_judgment_review", ResearchTier.B))
+
     def test_c_and_missing_preserve_source_actions_and_reject_fixture_upgrade(self) -> None:
         insufficient = evidence(passed=False, gaps=(SourceCoverageGap("valuation", "valuation", "not captured", required=True),))
         c = assess_any_ticker("300750.SZ", evidence_set=insufficient, section_contract=None)
