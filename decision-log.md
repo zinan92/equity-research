@@ -2387,3 +2387,22 @@
 - **Why:** Backup, rollback, cache performance, auth and cadence proofs are useful only when their runtime and unimplemented deployment boundaries remain visible.
 - **Evidence:** L3-M1 through L3-M10 evidence records under `docs/evidence/2026-07-29-l3-*`; recovery and performance receipts remain external runtime artifacts.
 - **Gotchas:** No L3 artifact upgrades #218, Tier, reviewer approval, production Supabase/RLS, slow/periodic live cadence, correction SLA, or member deletion/export.
+
+# 2026-07-30 — Model judgments accumulate only validator-accepted outputs
+
+- **Decision:** Generate each judgment with an independent real DeepSeek call,
+  allow at most two model repair attempts, and resume only outputs that are
+  revalidated against the identical frozen input, prompt, generator and
+  validator hashes.  Failed tasks remain MISSING.
+- **Why:** One malformed response must not discard unrelated valid judgments,
+  while a restart must never smuggle stale or differently sourced prose into
+  the final receipt.
+- **Evidence:** CATL receipt
+  `e4-model-judgments-v1:a1398e135d132d6b547f70217fa8026e601a61cac3a800657550b88a6cdd9fb0`
+  contains seven accepted judgments from real `deepseek-v4-pro` calls.  Its M2
+  verifier passes 11/11 name-swap sentences, 12/12 numeric tokens and reports zero
+  generator f-strings or issuer hardcoding.
+- **Gotchas:** Retry is not review and does not change
+  `ai_generated_judgment_unreviewed`.  Two model outputs still fail strict
+  inference or quote validation and remain MISSING; cumulative model
+  receipts are audit history, not independent research facts.

@@ -88,10 +88,14 @@ def tracked_file_audit() -> dict[str, object]:
 def unit_tests() -> dict[str, object]:
     result = run([sys.executable, "-m", "unittest", "discover", "-s", "product/tests", "-q"])
     output = (result.stdout + result.stderr).strip()
-    lines = [line for line in output.splitlines() if line.startswith("Ran ") or line == "OK"]
+    lines = [
+        line
+        for line in output.splitlines()
+        if line.startswith("Ran ") or line.startswith("OK")
+    ]
     match = re.search(r"Ran (\d+) tests?", output)
     count = int(match.group(1)) if match else 0
-    if count < 79 or "OK" not in lines:
+    if count < 79 or not any(line.startswith("OK") for line in lines):
         raise RuntimeError(f"expected at least 79 passing product tests, got: {output}")
     return {"status": "passed", "test_count": count, "summary": lines}
 

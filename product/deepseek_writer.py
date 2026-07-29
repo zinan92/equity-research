@@ -730,6 +730,7 @@ def call_structured_deepseek(
     max_tokens: int = 14000,
     reasoning_effort: str = "high",
     temperature: float = 0.1,
+    thinking_type: str = "enabled",
     transport: Any = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """Call the repository's DeepSeek JSON path for a frozen request object.
@@ -755,13 +756,14 @@ def call_structured_deepseek(
                 ),
             },
         ],
-        "thinking": {"type": "enabled"},
-        "reasoning_effort": reasoning_effort,
+        "thinking": {"type": thinking_type},
         "response_format": {"type": "json_object"},
         "max_tokens": max_tokens,
         "temperature": temperature,
         "stream": False,
     }
+    if thinking_type == "enabled":
+        request_payload["reasoning_effort"] = reasoning_effort
 
     response_payload: dict[str, Any] | None = None
     failure: BaseException | None = None
@@ -815,6 +817,7 @@ def call_structured_deepseek(
             "finish_reason": finish_reason,
             "usage": response_payload.get("usage") or {},
             "system_fingerprint": response_payload.get("system_fingerprint"),
+            "thinking_type": thinking_type,
         }
     else:
         result = response_payload
@@ -824,6 +827,7 @@ def call_structured_deepseek(
             "finish_reason": "test_transport",
             "usage": {},
             "system_fingerprint": None,
+            "thinking_type": thinking_type,
         }
     if not isinstance(result, dict):
         raise RuntimeError("DeepSeek structured response is not a JSON object")
