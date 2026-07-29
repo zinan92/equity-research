@@ -1,0 +1,33 @@
+{
+  "schema_version": "e4-l2-m1-financial-batch-verification-v1",
+  "data_kind": "real",
+  "identity_receipt_hash": "630acdb221751f3cc576de5e1ad24237b5652a5dba805fe7eb25f9a38ee6b05b",
+  "financial_sequence_receipt_hash": "7534f6a9f3b2c81b93340676e11019f8548631676edee9bb5bd2d6a324fd08fc",
+  "coverage": {
+    "requested_tickers": 100,
+    "tickers_with_at_least_one_page_fact": 98,
+    "available_reports": 492,
+    "missing_reports": 108,
+    "page_facts": 14483,
+    "periods_attempted_per_ticker": 6,
+    "exchange_counts": {
+      "BSE": 32,
+      "SSE": 34,
+      "SZSE": 34
+    }
+  },
+  "missing_reason_counts": {
+    "official_annual_report_not_captured": 90,
+    "page_parse_exception": 5,
+    "page_parse_timeout": 1,
+    "ticker_collection_timeout": 12
+  },
+  "truth_boundary": {
+    "identity_is_not_financial_fact": true,
+    "official_cninfo_pdf_only": true,
+    "page_bound_only": true,
+    "does_not_promote_tier_or_action": true,
+    "missing_is_retained_not_filled": true
+  },
+  "verification_hash": "ec9c52334dc96b07094035aa526de74c6ebed5db0345f67ab892a4ccb03cca8b"
+}
