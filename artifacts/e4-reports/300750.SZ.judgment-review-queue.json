@@ -1,0 +1,473 @@
+{
+  "schema_version": "e4-judgment-review-queue-v1",
+  "data_kind": "real",
+  "ticker": "300750.SZ",
+  "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+  "sort": "impact_rank ascending; equal ranks by section and judgment identifier",
+  "counts": {
+    "pending_human_review": 10,
+    "would_promote_section_to_full": 8
+  },
+  "items": [
+    {
+      "judgment_id": "investment_thesis",
+      "ticker": "300750.SZ",
+      "section_id": "investment_thesis",
+      "impact_rank": 1,
+      "impact": "核心结论",
+      "body": {
+        "text": "The evidence-bound thesis is conditional on the issuer sustaining the operating trajectory shown in its official filings; this is an unreviewed AI judgment, not an investment recommendation."
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "variant_view",
+      "ticker": "300750.SZ",
+      "section_id": "investment_thesis",
+      "impact_rank": 1,
+      "impact": "核心结论",
+      "body": {
+        "text": "No sell-side consensus is admitted, so the only defensible variant view is a conditional reading of filing evidence rather than a claim about market expectations."
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "falsification_tests",
+      "ticker": "300750.SZ",
+      "section_id": "risks_and_falsification",
+      "impact_rank": 2,
+      "impact": "反方与失效条件",
+      "body": {
+        "tests": [
+          {
+            "direction": "down",
+            "threshold": "below the cited annual revenue baseline",
+            "time_window": "next annual filing",
+            "rule": "If reported annual revenue is below the cited baseline, reassess the conditional operating-thesis judgment."
+          }
+        ]
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "risk_register",
+      "ticker": "300750.SZ",
+      "section_id": "risks_and_falsification",
+      "impact_rank": 2,
+      "impact": "反方与失效条件",
+      "body": {
+        "text": "Risk remains elevated if reported earnings or operating cash conversion deteriorate versus the cited filing baseline."
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "moat_assessment",
+      "ticker": "300750.SZ",
+      "section_id": "competition_and_moat",
+      "impact_rank": 3,
+      "impact": "竞争优势",
+      "body": {
+        "text": "A durable-advantage conclusion requires independent peer evidence; current wording records only an unreviewed hypothesis anchored to company filings."
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "peer_comparison"
+      ]
+    },
+    {
+      "judgment_id": "margin_bridge",
+      "ticker": "300750.SZ",
+      "section_id": "profitability_and_earnings_quality",
+      "impact_rank": 4,
+      "impact": "盈利质量",
+      "body": {
+        "text": "A complete margin bridge is unavailable; cited revenue and parent-profit facts are retained as the auditable starting point."
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "operating_kpis",
+      "ticker": "300750.SZ",
+      "section_id": "revenue_quality_and_kpis",
+      "impact_rank": 5,
+      "impact": "经营兑现",
+      "body": {
+        "items": [
+          {
+            "name": "reported revenue",
+            "facts": [
+              {
+                "metric": "revenue",
+                "value": 129131041.0,
+                "citation": {
+                  "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+                  "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+                  "page_number": 8,
+                  "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+                  "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+                  "report_period": "2026Q1",
+                  "unit": "千元"
+                }
+              },
+              {
+                "metric": "net_profit_parent",
+                "value": 20737710.0,
+                "citation": {
+                  "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+                  "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+                  "page_number": 9,
+                  "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+                  "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+                  "report_period": "2026Q1",
+                  "unit": "千元"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "accounting_checks",
+      "ticker": "300750.SZ",
+      "section_id": "accounting_quality",
+      "impact_rank": 6,
+      "impact": "会计质量",
+      "body": {
+        "text": "This is a mechanical filing-based check only; it is not an audit opinion."
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "audit_opinions"
+      ]
+    },
+    {
+      "judgment_id": "action_triggers",
+      "ticker": "300750.SZ",
+      "section_id": "monitoring_and_action_triggers",
+      "impact_rank": 7,
+      "impact": "持续跟踪",
+      "body": {
+        "items": [
+          "review on next annual filing",
+          "review if the falsification condition occurs"
+        ]
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    },
+    {
+      "judgment_id": "monitoring_kpis",
+      "ticker": "300750.SZ",
+      "section_id": "monitoring_and_action_triggers",
+      "impact_rank": 7,
+      "impact": "持续跟踪",
+      "body": {
+        "items": [
+          "annual revenue",
+          "parent net profit",
+          "operating cash flow"
+        ]
+      },
+      "citations": [
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        },
+        {
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 9,
+          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "report_period": "2026Q1",
+          "unit": "千元"
+        }
+      ],
+      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "review_status": "pending_human_review",
+      "approval_writeback": {
+        "status": "human_reviewed_judgment",
+        "review_status": "approved"
+      },
+      "current_section_status": "partial",
+      "current_section_reason": "pending_judgment_review",
+      "section_status_after_all_pending_judgments_approved": "full",
+      "would_promote_section_to_full": true,
+      "remaining_required_inputs_after_approval": []
+    }
+  ]
+}
