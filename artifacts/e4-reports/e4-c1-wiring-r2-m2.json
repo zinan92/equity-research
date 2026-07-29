@@ -1,0 +1,4313 @@
+{
+  "schema_version": "e4-m2-research-wiring-v1",
+  "data_kind": "real",
+  "rows": [
+    {
+      "ticker": "300750.SZ",
+      "status": "available",
+      "result": {
+        "ticker": "300750.SZ",
+        "data_kind": "real",
+        "page_facts": [
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 8907188.97,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 108,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 8,907,188.97 6,842,411.61",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 17773493.87,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 108,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 17,773,493.87 11,286,498.93 529,223.19 96,924.05",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_assets",
+            "value": 30766686.09,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 109,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 30,766,686.09 15,661,842.69 12,993,192.23 4,375,343.76",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "short_term_borrowings",
+            "value": 1212305.69,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 109,
+            "quoted_label": "短期借款",
+            "quoted_anchor": "短期借款 1,212,305.69 633,508.02",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_liabilities",
+            "value": 14934483.26,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 110,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "其他流动负债流动负债合计 14,934,483.26 5,497,718.98 124,249.03 76,000.90",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "long_term_borrowings",
+            "value": 2211907.88,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 110,
+            "quoted_label": "长期借款",
+            "quoted_anchor": "长期借款 2,211,907.88 606,816.33",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_liabilities",
+            "value": 21504468.64,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 110,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 21,504,468.64 8,742,371.05",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "share_capital_amount",
+            "value": 233085.12,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 110,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 233,085.12 232,947.40",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "shares_outstanding",
+            "value": 233085.12,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 110,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 233,085.12 232,947.40",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "parent_equity",
+            "value": 8451327.13,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 111,
+            "quoted_label": "归属于母公司所有者权益合计",
+            "quoted_anchor": "未分配利润归属于母公司所有者权益合计 8,451,327.13 6,420,729.94 3,409,546.75 1,864,091.87",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_equity",
+            "value": 9262217.45,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 111,
+            "quoted_label": "所有者权益合计",
+            "quoted_anchor": "所有者权益合计 9,262,217.45 6,919,471.64",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 13035579.64,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 113,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 13,035,579.64 5,031,948.77",
+            "report_period": "2021FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 5031948.77,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 113,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 13,035,579.64 5,031,948.77",
+            "report_period": "2019FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 9609372.23,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 114,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 1982372.92,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 115,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 1,982,372.92 695,948.96",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_profit",
+            "value": 1988712.91,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 115,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "减：营业外支出四、利润总额（亏损总额以“－”号填列） 1,988,712.91 698,255.34 11,963.98 7,125.42",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "income_tax_expense",
+            "value": 202639.9,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 115,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "四、利润总额（亏损总额以“－”号填列）减：所得税费用 202,639.90 87,863.54 1,988,712.91 698,255.34",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "net_profit_parent",
+            "value": 1593131.79,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 115,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "1.归属于母公司股东的净利润 1,593,131.79 558,333.87",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cash_flow",
+            "value": 4290800.87,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 119,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动现金流出小计经营活动产生的现金流量净额 4,290,800.87 1,842,990.26 10,242,165.90 4,212,235.03",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "capital_expenditure",
+            "value": 4376777.08,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+            "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+            "page_number": 119,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 4,376,777.08 1,330,235.58",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 19104340.95,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 100,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 19,104,340.95 8,907,188.97",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 38773485.7,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 101,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 38,773,485.70 17,773,493.87 1,190,702.86 529,223.19",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_assets",
+            "value": 60095235.19,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 101,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 60,095,235.19 30,766,686.09 21,321,749.49 12,993,192.23",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "short_term_borrowings",
+            "value": 1441540.25,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 101,
+            "quoted_label": "短期借款",
+            "quoted_anchor": "短期借款 1,441,540.25 1,212,305.69",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_liabilities",
+            "value": 29576141.93,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 102,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "其他流动负债流动负债合计 29,576,141.93 14,934,483.26 162,203.26 124,249.03",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "long_term_borrowings",
+            "value": 5909935.84,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 102,
+            "quoted_label": "长期借款",
+            "quoted_anchor": "长期借款 5,909,935.84 2,211,907.88",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_liabilities",
+            "value": 42404318.99,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 102,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 42,404,318.99 21,504,468.64",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "share_capital_amount",
+            "value": 244251.45,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 102,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 244,251.45 233,085.12",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "parent_equity",
+            "value": 16448125.16,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 102,
+            "quoted_label": "归属于母公司所有者权益合计",
+            "quoted_anchor": "未分配利润归属于母公司所有者权益合计 16,448,125.16 8,451,327.13 6,324,275.31 3,409,546.75",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_equity",
+            "value": 17690916.2,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 102,
+            "quoted_label": "所有者权益合计",
+            "quoted_anchor": "所有者权益合计 17,690,916.20 9,262,217.45",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 32859398.75,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 105,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 32,859,398.75 13,035,579.64",
+            "report_period": "2022FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 13035579.64,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 105,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 32,859,398.75 13,035,579.64",
+            "report_period": "2020FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 26204960.92,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 105,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 26,204,960.92 9,609,372.23 29,374,563.20 11,136,729.06",
+            "report_period": "2022FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 9609372.23,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 105,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 26,204,960.92 9,609,372.23 29,374,563.20 11,136,729.06",
+            "report_period": "2020FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 3682198.31,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 105,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 3,682,198.31 1,982,372.92",
+            "report_period": "2022FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 1982372.92,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 105,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 3,682,198.31 1,982,372.92",
+            "report_period": "2020FY",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_profit",
+            "value": 3667285.62,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 106,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "减：营业外支出四、利润总额（亏损总额以“－”号填 3,667,285.62 1,988,712.91 30,855.36 11,963.98",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "income_tax_expense",
+            "value": 321571.27,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 106,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "减：所得税费用 321,571.27 202,639.90",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "net_profit_parent",
+            "value": 3072916.35,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 106,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "1.归属于母公司股东的净利润 3,072,916.35 1,593,131.79",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cash_flow",
+            "value": 6120884.33,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 109,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动现金流出小计经营活动产生的现金流量净额 6,120,884.33 4,290,800.87 26,860,230.96 10,242,165.90",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "capital_expenditure",
+            "value": 4821526.81,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+            "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+            "page_number": 109,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 4,821,526.81 4,376,777.08",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 26430651.47,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 115,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 26,430,651.47 19,104,340.95",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 44978800.17,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 115,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 44,978,800.17 38,773,485.70 828,602.46 1,190,702.86",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_assets",
+            "value": 71716804.11,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 116,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 71,716,804.11 60,095,235.19 26,738,003.94 21,321,749.49",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "short_term_borrowings",
+            "value": 1518101.21,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 116,
+            "quoted_label": "短期借款",
+            "quoted_anchor": "短期借款 1,518,101.21 1,441,540.25",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_liabilities",
+            "value": 28700106.91,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 116,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "其他流动负债流动负债合计 28,700,106.91 29,576,141.93 209,162.78 162,203.26",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "long_term_borrowings",
+            "value": 8344898.17,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 117,
+            "quoted_label": "长期借款",
+            "quoted_anchor": "长期借款 8,344,898.17 5,909,935.84",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_liabilities",
+            "value": 49728489.05,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 117,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 49,728,489.05 42,404,318.99",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "share_capital_amount",
+            "value": 439904.12,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 117,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 439,904.12 244,251.45",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "shares_outstanding",
+            "value": 439904.12,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 117,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 439,904.12 244,251.45",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "parent_equity",
+            "value": 19770805.24,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 117,
+            "quoted_label": "归属于母公司所有者权益合计",
+            "quoted_anchor": "未分配利润归属于母公司所有者权益合计 19,770,805.24 16,448,125.16 10,324,462.59 6,324,275.31",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_equity",
+            "value": 21988315.06,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 117,
+            "quoted_label": "所有者权益合计",
+            "quoted_anchor": "所有者权益合计 21,988,315.06 17,690,916.20",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 40091704.49,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 120,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 30907043.4,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 120,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 30,907,043.40 26,204,960.92 35,061,061.75 29,374,563.20",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 5371830.21,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 120,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 5,371,830.21 3,682,198.31",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_profit",
+            "value": 5391405.33,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 121,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "四、利润总额（亏损总额以“－”号填 5,391,405.33 3,667,285.62",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "income_tax_expense",
+            "value": 715301.88,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 121,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "减：所得税费用 715,301.88 321,571.27",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "net_profit_parent",
+            "value": 4412124.83,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 121,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "1.归属于母公司股东的净利润 4,412,124.83 3,072,916.35",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cash_flow",
+            "value": 9282612.44,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 124,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动现金流出小计经营活动产生的现金流量净额 9,282,612.44 6,120,884.33 35,358,137.27 26,860,230.96",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "capital_expenditure",
+            "value": 3362489.65,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+            "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+            "page_number": 124,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 3,362,489.65 4,821,526.81",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 303511993.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 114,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 303,511,993 264,306,515",
+            "report_period": "2024FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 264306515.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 114,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 303,511,993 264,306,515",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 510142089.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 114,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 510,142,089 449,788,002 6,286,465 8,286,025",
+            "report_period": "2024FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 449788002.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 114,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 510,142,089 449,788,002 6,286,465 8,286,025",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_assets",
+            "value": 786658123.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 115,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 786,658,123 717,168,041 276,516,035 267,380,039",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "short_term_borrowings",
+            "value": 19696282.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 115,
+            "quoted_label": "短期借款",
+            "quoted_anchor": "短期借款 19,696,282 15,181,012",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_liabilities",
+            "value": 317171534.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "流动负债合计 317,171,534 287,001,069",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "long_term_borrowings",
+            "value": 81238456.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "长期借款",
+            "quoted_anchor": "长期借款 81,238,456 83,448,982",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_liabilities",
+            "value": 513201949.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 513,201,949 497,284,890",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "share_capital_amount",
+            "value": 4403466.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 4,403,466 4,399,041",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "shares_outstanding",
+            "value": 4403466.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 4,403,466 4,399,041",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "parent_equity",
+            "value": 246930033.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "归属于母公司所有者权益合计",
+            "quoted_anchor": "未分配利润归属于母公司所有者权益合计 246,930,033 197,708,052 126,601,541 103,244,626",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_equity",
+            "value": 273456174.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 116,
+            "quoted_label": "所有者权益合计",
+            "quoted_anchor": "所有者权益合计 273,456,174 219,883,151",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 362012554.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 119,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 362,012,554 400,917,045",
+            "report_period": "2024FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 400917045.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 119,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 362,012,554 400,917,045",
+            "report_period": "2022FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 273518959.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 119,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 273,518,959 323,982,130 303,303,900 350,610,618",
+            "report_period": "2024FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 323982130.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 119,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 273,518,959 323,982,130 303,303,900 350,610,618",
+            "report_period": "2022FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 64051799.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 120,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 64,051,799 53,718,302",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_profit",
+            "value": 63182039.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 120,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "减：营业外支出四、利润总额（亏损总额以“－”号填 63,182,039 53,914,053 1,005,182 307,924",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "income_tax_expense",
+            "value": 9175245.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 120,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "减：所得税费用 9,175,245 7,153,019",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "net_profit_parent",
+            "value": 50744682.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 120,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "1.归属于母公司股东的净利润 50,744,682 44,121,248",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cash_flow",
+            "value": 96990345.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 123,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动现金流出小计经营活动产生的现金流量净额 96,990,345 92,826,124 347,889,072 353,581,373",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "capital_expenditure",
+            "value": 31179943.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+            "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+            "page_number": 123,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 31,179,943 33,624,897",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 333512927.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 111,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 333,512,927 303,511,993",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 303511993.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 111,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 333,512,927 303,511,993",
+            "report_period": "2024FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 638481543.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 111,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 638,481,543 510,142,089 12,379,304 6,286,465",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 510142089.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 111,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 638,481,543 510,142,089 12,379,304 6,286,465",
+            "report_period": "2024FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_assets",
+            "value": 974827544.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 112,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 974,827,544 786,658,123 336,346,001 276,516,035",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "short_term_borrowings",
+            "value": 12935498.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 112,
+            "quoted_label": "短期借款",
+            "quoted_anchor": "短期借款 12,935,498 19,696,282",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_liabilities",
+            "value": 399625988.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 113,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "其他流动负债流动负债合计 399,625,988 317,171,534 5,830,358 2,058,196",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "long_term_borrowings",
+            "value": 78234935.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 113,
+            "quoted_label": "长期借款",
+            "quoted_anchor": "长期借款 78,234,935 81,238,456",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_liabilities",
+            "value": 603801220.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 113,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 603,801,220 513,201,949",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "share_capital_amount",
+            "value": 4563803.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 113,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 4,563,803 4,403,466",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "parent_equity",
+            "value": 337107747.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 113,
+            "quoted_label": "归属于母公司所有者权益合计",
+            "quoted_anchor": "未分配利润归属于母公司所有者权益合计 337,107,747 246,930,033 174,628,837 126,601,541",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_equity",
+            "value": 371026324.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 113,
+            "quoted_label": "所有者权益合计",
+            "quoted_anchor": "所有者权益合计 371,026,324 273,456,174",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 423701834.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 116,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 423,701,834 362,012,554",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 362012554.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 116,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 423,701,834 362,012,554",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 312383297.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 116,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 312,383,297 273,518,959 344,824,196 303,303,900",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 273518959.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 116,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 312,383,297 273,518,959 344,824,196 303,303,900",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 89518636.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 117,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 89,518,636 64,051,799",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_profit",
+            "value": 89526545.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 117,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "减：营业外支出四、利润总额（亏损总额以“－”号填 89,526,545 63,182,039 455,611 1,005,182",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "income_tax_expense",
+            "value": 12740236.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 117,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "减：所得税费用 12,740,236 9,175,245",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "net_profit_parent",
+            "value": 72201282.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 117,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "1.归属于母公司股东的净利润 72,201,282 50,744,682",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cash_flow",
+            "value": 133219982.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 120,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动现金流出小计经营活动产生的现金流量净额 133,219,982 96,990,345 378,648,372 347,889,072",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "capital_expenditure",
+            "value": 42344558.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+            "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+            "page_number": 120,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 42,344,558 31,179,943",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 351997422.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 5,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 351,997,422 333,512,927",
+            "report_period": "2026Q1",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "cash",
+            "value": 333512927.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 5,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 351,997,422 333,512,927",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 692498192.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 5,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 692,498,192 638,481,543 13,617,668 12,379,304",
+            "report_period": "2026Q1",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_assets",
+            "value": 638481543.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 5,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 692,498,192 638,481,543 13,617,668 12,379,304",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_assets",
+            "value": 1046329036.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 6,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 1,046,329,036 974,827,544 353,830,843 336,346,001",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "short_term_borrowings",
+            "value": 12207200.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 6,
+            "quoted_label": "短期借款",
+            "quoted_anchor": "短期借款 12,207,200 12,935,498",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "current_liabilities",
+            "value": 434010194.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 7,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "其他流动负债流动负债合计 434,010,194 399,625,988 6,599,036 5,830,358",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "long_term_borrowings",
+            "value": 76221312.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 7,
+            "quoted_label": "长期借款",
+            "quoted_anchor": "长期借款 76,221,312 78,234,935",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_liabilities",
+            "value": 652096744.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 7,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 652,096,744 603,801,220",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "share_capital_amount",
+            "value": 4564063.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 7,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 4,564,063 4,563,803",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "shares_outstanding",
+            "value": 4564063.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 7,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 4,564,063 4,563,803",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "parent_equity",
+            "value": 357262588.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_label": "归属于母公司所有者权益合计",
+            "quoted_anchor": "未分配利润归属于母公司所有者权益合计 357,262,588 337,107,747 195,371,206 174,628,837",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_equity",
+            "value": 394232291.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_label": "所有者权益合计",
+            "quoted_anchor": "所有者权益合计 394,232,291 371,026,324",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 129131041.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "report_period": "2026Q1",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "revenue",
+            "value": 84704589.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+            "report_period": "2024Q1",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 97086370.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 97,086,370 64,030,111 107,104,438 70,591,547",
+            "report_period": "2026Q1",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cost",
+            "value": 64030111.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 8,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 97,086,370 64,030,111 107,104,438 70,591,547",
+            "report_period": "2024Q1",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_profit",
+            "value": 26651291.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "资产处置收益（损失以“-”号填列）三、营业利润（亏损以“－”号填列） 26,651,291 17,340,443 3,211 21,392",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "total_profit",
+            "value": 26681603.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "减：营业外支出四、利润总额（亏损总额以“－”号填列） 26,681,603 17,375,031 44,867 73,444",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "income_tax_expense",
+            "value": 3944350.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "四、利润总额（亏损总额以“－”号填列）减：所得税费用 3,944,350 2,513,397 26,681,603 17,375,031",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "net_profit_parent",
+            "value": 20737710.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 9,
+            "quoted_label": "归属于母公司所有者的净利润",
+            "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "operating_cash_flow",
+            "value": 33680852.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 11,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动现金流出小计经营活动产生的现金流量净额 33,680,852 32,868,257 98,336,402 86,238,809",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          },
+          {
+            "ticker": "300750.SZ",
+            "metric": "capital_expenditure",
+            "value": 12416302.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+            "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+            "page_number": 11,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 12,416,302 10,342,606",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "千元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+          }
+        ],
+        "evidence_set": {
+          "evidence_set_id": "evidence_set_a2a46f372afe722a0925ebe73b0d2f8c4c723501",
+          "manifest_hash": "a2a46f372afe722a0925ebe73b0d2f8c4c7235010d064a28fbe096db7855154e",
+          "status": "passed",
+          "coverage": {
+            "requirements": [
+              {
+                "component": "filings",
+                "required_primary": 1,
+                "actual_primary": 1,
+                "required_independent": 0,
+                "actual_independent": 0,
+                "required_total": 1,
+                "actual_total": 1,
+                "missing": []
+              }
+            ],
+            "source_gaps": []
+          }
+        },
+        "section_contract": {
+          "evidence_manifest_hash": "a2a46f372afe722a0925ebe73b0d2f8c4c7235010d064a28fbe096db7855154e",
+          "live_eligible": true,
+          "sections": [
+            {
+              "section_id": "executive_summary",
+              "order": 1,
+              "title": "一页决策摘要",
+              "status": "full",
+              "present_required": [
+                "market_snapshot",
+                "decision_summary"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "key_chart"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "015689392d6e16feb0d75e52b82153b3216ccf2ab9db6cb331f68fe5a74f9779",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "fb18fd2c2a37de5c320090e09d7893f841718ad6a4224a69d044a4e5e9485cb7"
+            },
+            {
+              "section_id": "investment_thesis",
+              "order": 2,
+              "title": "投资逻辑与预期差",
+              "status": "partial",
+              "present_required": [
+                "investment_thesis",
+                "variant_view"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "bear_case"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "investment_thesis",
+                "variant_view"
+              ],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0d478ef75e9a6f83a25c3643af878e6e064bf494c0551d6bc120bad836bdfa5d",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "47bb548304430e9e5d61736ef925543bd62c1c4cd55a2f62e9ee1d1f8cbc3e26"
+            },
+            {
+              "section_id": "business_model",
+              "order": 3,
+              "title": "业务模式与收入结构",
+              "status": "partial",
+              "present_required": [
+                "company_profile"
+              ],
+              "missing_required": [
+                "segment_financials"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "customer_concentration",
+                "partner_ecosystem"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "2ed1965b0dcae533e7d2ca52035eaa65495a07c2ec1fd1809845cfbb27c9c931",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "95d88bd901d87e55bec572431f6007946819af241fd8b930980f4eb77177b852"
+            },
+            {
+              "section_id": "industry_structure",
+              "order": 4,
+              "title": "行业空间与价值链",
+              "status": "partial",
+              "present_required": [
+                "industry_profile"
+              ],
+              "missing_required": [
+                "market_size"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "value_chain"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "e74ed60cdbff8d1292f2993ba7bd5993bdca1f94a63d2838a296124f86b3e31e",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "4144600138d70514e69eaac5e0c5cab55295b01374bef016fd542c1f278a6e4a"
+            },
+            {
+              "section_id": "competition_and_moat",
+              "order": 5,
+              "title": "竞争格局与护城河",
+              "status": "partial",
+              "present_required": [
+                "moat_assessment"
+              ],
+              "missing_required": [
+                "peer_comparison"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "competitive_events"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "moat_assessment"
+              ],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "3d11bb93f0db7ffca05a209092f4fbb45ccc6885ba4f4ef00c6bbddca8885c62",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "3a10e17e81502350386066863ee35dc8ec12f72be8b812c41663e0453f8cca2c"
+            },
+            {
+              "section_id": "management_and_governance",
+              "order": 6,
+              "title": "管理层、治理与资本配置",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "management_record",
+                "governance_events"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "ownership_structure",
+                "capital_allocation"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "ec377573788feff6fc09c29f83265d0886650761c01280a09b454e50ae96353a",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "revenue_quality_and_kpis",
+              "order": 7,
+              "title": "收入质量与经营 KPI",
+              "status": "partial",
+              "present_required": [
+                "revenue_history",
+                "operating_kpis"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "guidance_history",
+                "rd_efficiency"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "operating_kpis"
+              ],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "ed5b04faaaa77d5304672f50b8ad9a429dd9b42639237b1386c690b09df55a02"
+            },
+            {
+              "section_id": "profitability_and_earnings_quality",
+              "order": 8,
+              "title": "盈利能力与利润质量",
+              "status": "partial",
+              "present_required": [
+                "income_history",
+                "margin_bridge"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "adjusted_earnings_bridge"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "margin_bridge"
+              ],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "eca20d8883ebe76a655393165205965ae8c400bd72894b1334fb55344591615a"
+            },
+            {
+              "section_id": "cash_flow_and_balance_sheet",
+              "order": 9,
+              "title": "现金流与资产负债表",
+              "status": "full",
+              "present_required": [
+                "cash_flow_history",
+                "balance_sheet_history"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "liquidity_stress"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0c0f400eb63877b0c4f0df310b9c9d9bccfb867c3e57633e573a2410a08d1c4d",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "0d70ad8be0c4fc470c33cb4a2228cd785ea0040260c9c4f278d61df4ed2a68e0"
+            },
+            {
+              "section_id": "accounting_quality",
+              "order": 10,
+              "title": "会计质量与审计检查",
+              "status": "partial",
+              "present_required": [
+                "accounting_checks"
+              ],
+              "missing_required": [
+                "audit_opinions"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "restatement_history"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "accounting_checks"
+              ],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "8f847653edee37d1dec89b5a13918ea7a0aa4866f130b476728a0d662df8af51",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "93277a92a0d2e37a4c507a90261ebebe644b5d3eba48fdaca01ec4f65ab7217d"
+            },
+            {
+              "section_id": "forecasts_and_consensus",
+              "order": 11,
+              "title": "盈利预测、共识与修订",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "broker_estimates",
+                "consensus_history"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "forecast_model",
+                "guidance_vs_consensus"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "fe319931ebd2d6d5cd2f33ac29ed370daf4ffa5cbbc6545e506090f05bb53e30",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "valuation",
+              "order": 12,
+              "title": "估值与市场隐含预期",
+              "status": "partial",
+              "present_required": [
+                "current_market"
+              ],
+              "missing_required": [
+                "valuation_scenarios",
+                "valuation_assumptions"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "reverse_dcf",
+                "sotp",
+                "epv"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                3,
+                4
+              ],
+              "section_hash": "270e681c6433908b04145bd6a3a81c666ac7aef1106844cfbb77135b697ffe9f",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "839bcff5092f9307d1a34d6a18bc61804faacc0ad6984694e8286a59b51f1cce"
+            },
+            {
+              "section_id": "macro_policy_and_costs",
+              "order": 13,
+              "title": "宏观、政策与成本传导",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "macro_exposures",
+                "policy_events"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "commodity_sensitivity"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "ea3e9c3c0fcac2a20a3be4c1fdb9f743b6bc73b125cb12b92c21572ad6bfa891",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "catalysts_and_events",
+              "order": 14,
+              "title": "事件、催化剂与时间表",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "event_timeline",
+                "catalyst_calendar"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "event_impact_inference"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "a029779614223f41799d526a1d2f5055ddb224cd9ee3f0283036fcc4635e4ceb",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "risks_and_falsification",
+              "order": 15,
+              "title": "风险、反证与 Kill Conditions",
+              "status": "partial",
+              "present_required": [
+                "risk_register",
+                "falsification_tests"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "bias_check",
+                "esg_screen"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "risk_register",
+                "falsification_tests"
+              ],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0b613a53664df2d993f3c526e2b2c98be55513ecdd2e5876590e5ff92b0838cc",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "ba64949fdabea16a52c511ac5b89fefcd803ec9a20a4a27807d28372c6e6ed6e"
+            },
+            {
+              "section_id": "decision_framework",
+              "order": 16,
+              "title": "结论、目标价与仓位框架",
+              "status": "full",
+              "present_required": [
+                "recommendation_policy_output"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "committee_synthesis"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "96aa708d55b412a131cf858dcba3939d036fbeb5626564a2825dbc93243f4429",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "d65f0227e39ba06cf74c9d6e264b45be29cc0594f5c813879d09a48f2ba06fcc"
+            },
+            {
+              "section_id": "monitoring_and_action_triggers",
+              "order": 17,
+              "title": "跟踪指标与行动触发器",
+              "status": "partial",
+              "present_required": [
+                "monitoring_kpis",
+                "action_triggers"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "next_update_calendar"
+              ],
+              "status_reason": "pending_judgment_review",
+              "pending_judgment_inputs": [
+                "monitoring_kpis",
+                "action_triggers"
+              ],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "9a336944d6089541672bd83723685e95cc9c747c2a284e90ab70943ca68e8780",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "b4d69241d9f009293cf7cd5d9956daeff0cf095cc06df899bf4f691f40ca4a51"
+            },
+            {
+              "section_id": "evidence_and_methodology",
+              "order": 18,
+              "title": "证据台账、方法与附录",
+              "status": "full",
+              "present_required": [
+                "evidence_set_receipt",
+                "citation_index",
+                "methodology"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "coverage_gaps",
+                "industry_appendix"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "cd3f3923246a31ef7b029d07563d529fde7008c17ae605f9014cd700b10d0d1a",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "f8796d8b9797f764ede02d55fd696b05ae07d4d41ec054d027ec7ef15e093057"
+            }
+          ]
+        },
+        "degradation": {
+          "ticker": "300750.SZ",
+          "tier": "B",
+          "evidence_set_id": "evidence_set_a2a46f372afe722a0925ebe73b0d2f8c4c723501",
+          "evidence_manifest_hash": "a2a46f372afe722a0925ebe73b0d2f8c4c7235010d064a28fbe096db7855154e",
+          "section_statuses": [
+            [
+              "executive_summary",
+              "full"
+            ],
+            [
+              "investment_thesis",
+              "partial"
+            ],
+            [
+              "business_model",
+              "partial"
+            ],
+            [
+              "industry_structure",
+              "partial"
+            ],
+            [
+              "competition_and_moat",
+              "partial"
+            ],
+            [
+              "management_and_governance",
+              "missing"
+            ],
+            [
+              "revenue_quality_and_kpis",
+              "partial"
+            ],
+            [
+              "profitability_and_earnings_quality",
+              "partial"
+            ],
+            [
+              "cash_flow_and_balance_sheet",
+              "full"
+            ],
+            [
+              "accounting_quality",
+              "partial"
+            ],
+            [
+              "forecasts_and_consensus",
+              "missing"
+            ],
+            [
+              "valuation",
+              "partial"
+            ],
+            [
+              "macro_policy_and_costs",
+              "missing"
+            ],
+            [
+              "catalysts_and_events",
+              "missing"
+            ],
+            [
+              "risks_and_falsification",
+              "partial"
+            ],
+            [
+              "decision_framework",
+              "full"
+            ],
+            [
+              "monitoring_and_action_triggers",
+              "partial"
+            ],
+            [
+              "evidence_and_methodology",
+              "full"
+            ]
+          ],
+          "allowed_fields": [
+            "status",
+            "summary",
+            "partial_report",
+            "evidence",
+            "next_steps"
+          ],
+          "blocked_fields": [
+            "action",
+            "target_price",
+            "position_range"
+          ],
+          "source_gap_actions": [],
+          "reasons": [
+            "partial_or_missing_sections",
+            "investment_action_fields_blocked"
+          ],
+          "policy_version": "park-any-ticker-degradation-v1",
+          "receipt_hash": "d7b3ae6144f08aabaa3a0cbf4a8041c04f86432c9a66e15d3d8a7d655daea7d5"
+        }
+      },
+      "input_receipts": {
+        "financial_sequences_sha256": "bd32af80e7bed49d0902a9932b5141b1a746acbf1e02e89a11adde6cb2c957cd",
+        "m1_sha256": "cadf11d4edeca264204d3293d4d2285b7ca6c64f76782fb88e9304cc1fb2f741",
+        "r2_receipt_id": "n3-dossier-batch-v1:10dd875e32907e146963ff7161fe5fef9539b9fd3f60f39d67e823aec95c4d21",
+        "r2_acceptance_receipt_id": "r2-ai-compute-world-model-acceptance-v1:8d0b6122b8ce78edca201ce6299590f27c6b2ef6b12ecef7848758e3c8323989",
+        "judgment_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d"
+      }
+    },
+    {
+      "ticker": "600519.SH",
+      "status": "available",
+      "result": {
+        "ticker": "600519.SH",
+        "data_kind": "real",
+        "page_facts": [
+          {
+            "ticker": "600519.SH",
+            "metric": "cash",
+            "value": 1.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 56,
+            "quoted_label": "货币资金",
+            "quoted_anchor": "货币资金 1 51,690,610,946.5059,295,822,956.89",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "current_assets",
+            "value": 252518662398.57,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 57,
+            "quoted_label": "流动资产合计",
+            "quoted_anchor": "其他流动资产流动资产合计 252,518,662,398.57 251,726,674,636.66 12 51,027,010.56 160,176,582.69",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "total_assets",
+            "value": 303834844021.44,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 57,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "非流动资产合计资产总计 303,834,844,021.44 298,944,579,918.70 51,316,181,622.87 47,217,905,282.04",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "current_liabilities",
+            "value": 49610476817.81,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 58,
+            "quoted_label": "流动负债合计",
+            "quoted_anchor": "其他流动负债流动负债合计 49,610,476,817.81 56,515,990,618.96 35 994,959,710.24 1,222,693,799.51",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "total_liabilities",
+            "value": 49875590112.37,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 58,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 49,875,590,112.37 56,933,264,798.10",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "share_capital_amount",
+            "value": 37.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 58,
+            "quoted_label": "股本",
+            "quoted_anchor": "实收资本（或股本） 37 1,252,270,215.00 1,256,197,800.00",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "shares_outstanding",
+            "value": 37.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 58,
+            "quoted_label": "股本",
+            "quoted_anchor": "实收资本（或股本） 37 1,252,270,215.00 1,256,197,800.00",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "revenue",
+            "value": 172054171890.91,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "revenue",
+            "value": 174144069958.25,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "quoted_label": "营业总收入",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "operating_cost",
+            "value": 44.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "operating_cost",
+            "value": 14892277570.91,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "quoted_label": "营业成本",
+            "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "operating_profit",
+            "value": 114808950164.2412,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 62,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、营业利润（亏损以“－”号填列） 114,808,950,164.24119,688,579,453.23",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "total_profit",
+            "value": 114755261605.08119,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 62,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "减：营业外支出四、利润总额（亏损总额以“－”号 114,755,261,605.08119,638,578,194.46 57 128,635,598.86 120,937,834.74",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "income_tax_expense",
+            "value": 58.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 62,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "减：所得税费用 58 29,444,936,771.4130,303,850,168.56",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "net_profit_parent",
+            "value": 82320067101.6886,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 62,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "1.归属于母公司股东的净利润 82,320,067,101.6886,228,146,421.62",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "operating_cash_flow",
+            "value": 61522204989.35,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 65,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动产生的现金流量净额 61,522,204,989.35 92,463,692,168.43",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          },
+          {
+            "ticker": "600519.SH",
+            "metric": "capital_expenditure",
+            "value": 3127594916.41,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 65,
+            "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+            "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 3,127,594,916.41 4,678,712,053.56",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF"
+          }
+        ],
+        "evidence_set": {
+          "evidence_set_id": "evidence_set_37e495d933418027beb2abc10f8a664b3eb1bd0d",
+          "manifest_hash": "37e495d933418027beb2abc10f8a664b3eb1bd0ddf184cf23ff6548b3d5bd509",
+          "status": "passed",
+          "coverage": {
+            "requirements": [
+              {
+                "component": "filings",
+                "required_primary": 1,
+                "actual_primary": 1,
+                "required_independent": 0,
+                "actual_independent": 0,
+                "required_total": 1,
+                "actual_total": 1,
+                "missing": []
+              }
+            ],
+            "source_gaps": []
+          }
+        },
+        "section_contract": {
+          "evidence_manifest_hash": "37e495d933418027beb2abc10f8a664b3eb1bd0ddf184cf23ff6548b3d5bd509",
+          "live_eligible": true,
+          "sections": [
+            {
+              "section_id": "executive_summary",
+              "order": 1,
+              "title": "一页决策摘要",
+              "status": "full",
+              "present_required": [
+                "market_snapshot",
+                "decision_summary"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "key_chart"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "015689392d6e16feb0d75e52b82153b3216ccf2ab9db6cb331f68fe5a74f9779",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "c8207c0e672d9ffb842575e9fc3bfa5cf74448f8c7c70471860517bdb20f84b6"
+            },
+            {
+              "section_id": "investment_thesis",
+              "order": 2,
+              "title": "投资逻辑与预期差",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "investment_thesis",
+                "variant_view"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "bear_case"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0d478ef75e9a6f83a25c3643af878e6e064bf494c0551d6bc120bad836bdfa5d",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "business_model",
+              "order": 3,
+              "title": "业务模式与收入结构",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "company_profile",
+                "segment_financials"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "customer_concentration",
+                "partner_ecosystem"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "2ed1965b0dcae533e7d2ca52035eaa65495a07c2ec1fd1809845cfbb27c9c931",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "industry_structure",
+              "order": 4,
+              "title": "行业空间与价值链",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "industry_profile",
+                "market_size"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "value_chain"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "e74ed60cdbff8d1292f2993ba7bd5993bdca1f94a63d2838a296124f86b3e31e",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "competition_and_moat",
+              "order": 5,
+              "title": "竞争格局与护城河",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "peer_comparison",
+                "moat_assessment"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "competitive_events"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "3d11bb93f0db7ffca05a209092f4fbb45ccc6885ba4f4ef00c6bbddca8885c62",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "management_and_governance",
+              "order": 6,
+              "title": "管理层、治理与资本配置",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "management_record",
+                "governance_events"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "ownership_structure",
+                "capital_allocation"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "ec377573788feff6fc09c29f83265d0886650761c01280a09b454e50ae96353a",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "revenue_quality_and_kpis",
+              "order": 7,
+              "title": "收入质量与经营 KPI",
+              "status": "partial",
+              "present_required": [
+                "revenue_history"
+              ],
+              "missing_required": [
+                "operating_kpis"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "guidance_history",
+                "rd_efficiency"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "cd051d460f05c6d5d7f8cbaf5629a64e3ae930bdb84366a794bf45543c62c220"
+            },
+            {
+              "section_id": "profitability_and_earnings_quality",
+              "order": 8,
+              "title": "盈利能力与利润质量",
+              "status": "partial",
+              "present_required": [
+                "income_history"
+              ],
+              "missing_required": [
+                "margin_bridge"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "adjusted_earnings_bridge"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "b6b1af37844304a728d87be0532739e2dbb3a99b5ddeb0fda6e3e07adce43997"
+            },
+            {
+              "section_id": "cash_flow_and_balance_sheet",
+              "order": 9,
+              "title": "现金流与资产负债表",
+              "status": "full",
+              "present_required": [
+                "cash_flow_history",
+                "balance_sheet_history"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "liquidity_stress"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0c0f400eb63877b0c4f0df310b9c9d9bccfb867c3e57633e573a2410a08d1c4d",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "1a11eb50d4272539b0a328b141b33d170a77b075c093771b414fba3191e4113b"
+            },
+            {
+              "section_id": "accounting_quality",
+              "order": 10,
+              "title": "会计质量与审计检查",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "accounting_checks",
+                "audit_opinions"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "restatement_history"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "8f847653edee37d1dec89b5a13918ea7a0aa4866f130b476728a0d662df8af51",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "forecasts_and_consensus",
+              "order": 11,
+              "title": "盈利预测、共识与修订",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "broker_estimates",
+                "consensus_history"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "forecast_model",
+                "guidance_vs_consensus"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "fe319931ebd2d6d5cd2f33ac29ed370daf4ffa5cbbc6545e506090f05bb53e30",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "valuation",
+              "order": 12,
+              "title": "估值与市场隐含预期",
+              "status": "partial",
+              "present_required": [
+                "current_market"
+              ],
+              "missing_required": [
+                "valuation_scenarios",
+                "valuation_assumptions"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "reverse_dcf",
+                "sotp",
+                "epv"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                3,
+                4
+              ],
+              "section_hash": "270e681c6433908b04145bd6a3a81c666ac7aef1106844cfbb77135b697ffe9f",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "16aa3a5fe3a484e83ef57abe2fbccf021cadf45aa7d0e4e7b7bf489f1089d93e"
+            },
+            {
+              "section_id": "macro_policy_and_costs",
+              "order": 13,
+              "title": "宏观、政策与成本传导",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "macro_exposures",
+                "policy_events"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "commodity_sensitivity"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "ea3e9c3c0fcac2a20a3be4c1fdb9f743b6bc73b125cb12b92c21572ad6bfa891",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "catalysts_and_events",
+              "order": 14,
+              "title": "事件、催化剂与时间表",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "event_timeline",
+                "catalyst_calendar"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "event_impact_inference"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "a029779614223f41799d526a1d2f5055ddb224cd9ee3f0283036fcc4635e4ceb",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "risks_and_falsification",
+              "order": 15,
+              "title": "风险、反证与 Kill Conditions",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "risk_register",
+                "falsification_tests"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "bias_check",
+                "esg_screen"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0b613a53664df2d993f3c526e2b2c98be55513ecdd2e5876590e5ff92b0838cc",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "decision_framework",
+              "order": 16,
+              "title": "结论、目标价与仓位框架",
+              "status": "full",
+              "present_required": [
+                "recommendation_policy_output"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "committee_synthesis"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "96aa708d55b412a131cf858dcba3939d036fbeb5626564a2825dbc93243f4429",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "f73e8135c3c426269debd3bd8ccf21a672b5fe29ef3e4946cc044ce6d7d499e8"
+            },
+            {
+              "section_id": "monitoring_and_action_triggers",
+              "order": 17,
+              "title": "跟踪指标与行动触发器",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "monitoring_kpis",
+                "action_triggers"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "next_update_calendar"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "9a336944d6089541672bd83723685e95cc9c747c2a284e90ab70943ca68e8780",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "evidence_and_methodology",
+              "order": 18,
+              "title": "证据台账、方法与附录",
+              "status": "full",
+              "present_required": [
+                "evidence_set_receipt",
+                "citation_index",
+                "methodology"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "coverage_gaps",
+                "industry_appendix"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "cd3f3923246a31ef7b029d07563d529fde7008c17ae605f9014cd700b10d0d1a",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "42553c955a9534f958ddc9629727bfeac6a7eec99afa1826c092d11d3d16fd89"
+            }
+          ]
+        },
+        "degradation": {
+          "ticker": "600519.SH",
+          "tier": "B",
+          "evidence_set_id": "evidence_set_37e495d933418027beb2abc10f8a664b3eb1bd0d",
+          "evidence_manifest_hash": "37e495d933418027beb2abc10f8a664b3eb1bd0ddf184cf23ff6548b3d5bd509",
+          "section_statuses": [
+            [
+              "executive_summary",
+              "full"
+            ],
+            [
+              "investment_thesis",
+              "missing"
+            ],
+            [
+              "business_model",
+              "missing"
+            ],
+            [
+              "industry_structure",
+              "missing"
+            ],
+            [
+              "competition_and_moat",
+              "missing"
+            ],
+            [
+              "management_and_governance",
+              "missing"
+            ],
+            [
+              "revenue_quality_and_kpis",
+              "partial"
+            ],
+            [
+              "profitability_and_earnings_quality",
+              "partial"
+            ],
+            [
+              "cash_flow_and_balance_sheet",
+              "full"
+            ],
+            [
+              "accounting_quality",
+              "missing"
+            ],
+            [
+              "forecasts_and_consensus",
+              "missing"
+            ],
+            [
+              "valuation",
+              "partial"
+            ],
+            [
+              "macro_policy_and_costs",
+              "missing"
+            ],
+            [
+              "catalysts_and_events",
+              "missing"
+            ],
+            [
+              "risks_and_falsification",
+              "missing"
+            ],
+            [
+              "decision_framework",
+              "full"
+            ],
+            [
+              "monitoring_and_action_triggers",
+              "missing"
+            ],
+            [
+              "evidence_and_methodology",
+              "full"
+            ]
+          ],
+          "allowed_fields": [
+            "status",
+            "summary",
+            "partial_report",
+            "evidence",
+            "next_steps"
+          ],
+          "blocked_fields": [
+            "action",
+            "target_price",
+            "position_range"
+          ],
+          "source_gap_actions": [],
+          "reasons": [
+            "partial_or_missing_sections",
+            "investment_action_fields_blocked"
+          ],
+          "policy_version": "park-any-ticker-degradation-v1",
+          "receipt_hash": "74351871496d927515b62b22854cd1d0bf7fa534e57b2ff5989057bcf4526c90"
+        }
+      },
+      "input_receipts": {
+        "financial_sequences_sha256": "bd32af80e7bed49d0902a9932b5141b1a746acbf1e02e89a11adde6cb2c957cd",
+        "m1_sha256": "cadf11d4edeca264204d3293d4d2285b7ca6c64f76782fb88e9304cc1fb2f741",
+        "r2_receipt_id": "n3-dossier-batch-v1:10dd875e32907e146963ff7161fe5fef9539b9fd3f60f39d67e823aec95c4d21",
+        "r2_acceptance_receipt_id": "r2-ai-compute-world-model-acceptance-v1:8d0b6122b8ce78edca201ce6299590f27c6b2ef6b12ecef7848758e3c8323989",
+        "judgment_receipt_id": null
+      }
+    },
+    {
+      "ticker": "000001.SZ",
+      "status": "available",
+      "result": {
+        "ticker": "000001.SZ",
+        "data_kind": "real",
+        "page_facts": [
+          {
+            "ticker": "000001.SZ",
+            "metric": "total_assets",
+            "value": 5925777.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 116,
+            "quoted_label": "资产总计",
+            "quoted_anchor": "其他资产资产总计 5,925,777 5,769,270 18 20,412 18,962",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "total_liabilities",
+            "value": 5374593.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 117,
+            "quoted_label": "负债合计",
+            "quoted_anchor": "负债合计 5,374,593 5,274,428",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "share_capital_amount",
+            "value": 31.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 117,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 31 19,406 19,406",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "shares_outstanding",
+            "value": 31.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 117,
+            "quoted_label": "股本",
+            "quoted_anchor": "股本 31 19,406 19,406",
+            "report_period": "unresolved",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "revenue",
+            "value": 131442.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "营业收入",
+            "quoted_anchor": "其他收益营业收入合计 131,442 146,695 65 178",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "revenue",
+            "value": 146695.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "营业收入",
+            "quoted_anchor": "其他收益营业收入合计 131,442 146,695 65 178",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "operating_profit",
+            "value": 91975.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、减值损失前营业利润 91,975 104,634",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "operating_profit",
+            "value": 104634.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "营业利润",
+            "quoted_anchor": "三、减值损失前营业利润 91,975 104,634",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "total_profit",
+            "value": 51159.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "五、利润总额 51,159 54,738",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "total_profit",
+            "value": 54738.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "利润总额",
+            "quoted_anchor": "五、利润总额 51,159 54,738",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "income_tax_expense",
+            "value": 46.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "五、利润总额减：所得税费用 46 (8,526) (10,230) 51,159 54,738",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "income_tax_expense",
+            "value": 8526.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 120,
+            "quoted_label": "所得税费用",
+            "quoted_anchor": "五、利润总额减：所得税费用 46 (8,526) (10,230) 51,159 54,738",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "operating_cash_flow",
+            "value": 315858.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 128,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动产生的现金流量净额 315,858 63,336",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "operating_cash_flow",
+            "value": 63336.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 128,
+            "quoted_label": "经营活动产生的现金流量净额",
+            "quoted_anchor": "经营活动产生的现金流量净额 315,858 63,336",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "depreciation_fixed_assets",
+            "value": 44.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 130,
+            "quoted_label": "固定资产折旧",
+            "quoted_anchor": "投资性房地产折旧固定资产折旧 44 1,328 1,591 13 15",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "depreciation_fixed_assets",
+            "value": 1328.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 130,
+            "quoted_label": "固定资产折旧",
+            "quoted_anchor": "投资性房地产折旧固定资产折旧 44 1,328 1,591 13 15",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "amortization_intangible",
+            "value": 44.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 130,
+            "quoted_label": "无形资产摊销",
+            "quoted_anchor": "使用权资产折旧无形资产摊销 44 849 814 44 1,927 2,247",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "amortization_intangible",
+            "value": 849.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 130,
+            "quoted_label": "无形资产摊销",
+            "quoted_anchor": "使用权资产折旧无形资产摊销 44 849 814 44 1,927 2,247",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "net_profit_parent",
+            "value": 42633.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 288,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "归属于母公司股东的净利润 42,633 44,508",
+            "report_period": "2025FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          },
+          {
+            "ticker": "000001.SZ",
+            "metric": "net_profit_parent",
+            "value": 44508.0,
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+            "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+            "page_number": 288,
+            "quoted_label": "归属于母公司股东的净利润",
+            "quoted_anchor": "归属于母公司股东的净利润 42,633 44,508",
+            "report_period": "2023FY",
+            "statement_scope": "consolidated",
+            "unit": "人民币百万元",
+            "currency": "CNY",
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF"
+          }
+        ],
+        "evidence_set": {
+          "evidence_set_id": "evidence_set_7f589bf11c41ab25ccf722e90806a8e175df8b80",
+          "manifest_hash": "7f589bf11c41ab25ccf722e90806a8e175df8b80e9ca183743354b5542a54782",
+          "status": "passed",
+          "coverage": {
+            "requirements": [
+              {
+                "component": "filings",
+                "required_primary": 1,
+                "actual_primary": 1,
+                "required_independent": 0,
+                "actual_independent": 0,
+                "required_total": 1,
+                "actual_total": 1,
+                "missing": []
+              }
+            ],
+            "source_gaps": []
+          }
+        },
+        "section_contract": {
+          "evidence_manifest_hash": "7f589bf11c41ab25ccf722e90806a8e175df8b80e9ca183743354b5542a54782",
+          "live_eligible": true,
+          "sections": [
+            {
+              "section_id": "executive_summary",
+              "order": 1,
+              "title": "一页决策摘要",
+              "status": "full",
+              "present_required": [
+                "market_snapshot",
+                "decision_summary"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "key_chart"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "015689392d6e16feb0d75e52b82153b3216ccf2ab9db6cb331f68fe5a74f9779",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "ba2f2fb3e9d431d76fa2589205a71f6024566a5f9eae4a1aaa92372c7de39e25"
+            },
+            {
+              "section_id": "investment_thesis",
+              "order": 2,
+              "title": "投资逻辑与预期差",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "investment_thesis",
+                "variant_view"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "bear_case"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0d478ef75e9a6f83a25c3643af878e6e064bf494c0551d6bc120bad836bdfa5d",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "business_model",
+              "order": 3,
+              "title": "业务模式与收入结构",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "company_profile",
+                "segment_financials"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "customer_concentration",
+                "partner_ecosystem"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "2ed1965b0dcae533e7d2ca52035eaa65495a07c2ec1fd1809845cfbb27c9c931",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "industry_structure",
+              "order": 4,
+              "title": "行业空间与价值链",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "industry_profile",
+                "market_size"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "value_chain"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "e74ed60cdbff8d1292f2993ba7bd5993bdca1f94a63d2838a296124f86b3e31e",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "competition_and_moat",
+              "order": 5,
+              "title": "竞争格局与护城河",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "peer_comparison",
+                "moat_assessment"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "competitive_events"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "3d11bb93f0db7ffca05a209092f4fbb45ccc6885ba4f4ef00c6bbddca8885c62",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "management_and_governance",
+              "order": 6,
+              "title": "管理层、治理与资本配置",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "management_record",
+                "governance_events"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "ownership_structure",
+                "capital_allocation"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "ec377573788feff6fc09c29f83265d0886650761c01280a09b454e50ae96353a",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "revenue_quality_and_kpis",
+              "order": 7,
+              "title": "收入质量与经营 KPI",
+              "status": "partial",
+              "present_required": [
+                "revenue_history"
+              ],
+              "missing_required": [
+                "operating_kpis"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "guidance_history",
+                "rd_efficiency"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "642382bc7759098e6aec0b7c3812e4967f47beba91f3ab6cb3cb2ea4cab70e47"
+            },
+            {
+              "section_id": "profitability_and_earnings_quality",
+              "order": 8,
+              "title": "盈利能力与利润质量",
+              "status": "partial",
+              "present_required": [
+                "income_history"
+              ],
+              "missing_required": [
+                "margin_bridge"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "adjusted_earnings_bridge"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "12d200a245cf0eb61d04c335267df107283b6a5f39356cb62819d90e2cbaba37"
+            },
+            {
+              "section_id": "cash_flow_and_balance_sheet",
+              "order": 9,
+              "title": "现金流与资产负债表",
+              "status": "full",
+              "present_required": [
+                "cash_flow_history",
+                "balance_sheet_history"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "liquidity_stress"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0c0f400eb63877b0c4f0df310b9c9d9bccfb867c3e57633e573a2410a08d1c4d",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "5a34e84618749952006f38dafeb5ef02ed2dcef2423e3f2b9ed64f960d111211"
+            },
+            {
+              "section_id": "accounting_quality",
+              "order": 10,
+              "title": "会计质量与审计检查",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "accounting_checks",
+                "audit_opinions"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "restatement_history"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "8f847653edee37d1dec89b5a13918ea7a0aa4866f130b476728a0d662df8af51",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "forecasts_and_consensus",
+              "order": 11,
+              "title": "盈利预测、共识与修订",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "broker_estimates",
+                "consensus_history"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "forecast_model",
+                "guidance_vs_consensus"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "fe319931ebd2d6d5cd2f33ac29ed370daf4ffa5cbbc6545e506090f05bb53e30",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "valuation",
+              "order": 12,
+              "title": "估值与市场隐含预期",
+              "status": "partial",
+              "present_required": [
+                "current_market"
+              ],
+              "missing_required": [
+                "valuation_scenarios",
+                "valuation_assumptions"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "reverse_dcf",
+                "sotp",
+                "epv"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                3,
+                4
+              ],
+              "section_hash": "270e681c6433908b04145bd6a3a81c666ac7aef1106844cfbb77135b697ffe9f",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "ea09f2d614985877b92f45c4b2523419de76747828ec00859e4ffbba58164c89"
+            },
+            {
+              "section_id": "macro_policy_and_costs",
+              "order": 13,
+              "title": "宏观、政策与成本传导",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "macro_exposures",
+                "policy_events"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "commodity_sensitivity"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "ea3e9c3c0fcac2a20a3be4c1fdb9f743b6bc73b125cb12b92c21572ad6bfa891",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "catalysts_and_events",
+              "order": 14,
+              "title": "事件、催化剂与时间表",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "event_timeline",
+                "catalyst_calendar"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "event_impact_inference"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "a029779614223f41799d526a1d2f5055ddb224cd9ee3f0283036fcc4635e4ceb",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "risks_and_falsification",
+              "order": 15,
+              "title": "风险、反证与 Kill Conditions",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "risk_register",
+                "falsification_tests"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "bias_check",
+                "esg_screen"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "0b613a53664df2d993f3c526e2b2c98be55513ecdd2e5876590e5ff92b0838cc",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "decision_framework",
+              "order": 16,
+              "title": "结论、目标价与仓位框架",
+              "status": "full",
+              "present_required": [
+                "recommendation_policy_output"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "committee_synthesis"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "96aa708d55b412a131cf858dcba3939d036fbeb5626564a2825dbc93243f4429",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "cbac988df86a7be4ea027aa42efd1fa408c43552597840127d9ef43ceb5ddc0c"
+            },
+            {
+              "section_id": "monitoring_and_action_triggers",
+              "order": 17,
+              "title": "跟踪指标与行动触发器",
+              "status": "missing",
+              "present_required": [],
+              "missing_required": [
+                "monitoring_kpis",
+                "action_triggers"
+              ],
+              "present_optional": [],
+              "missing_optional": [
+                "next_update_calendar"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                1,
+                2
+              ],
+              "section_hash": "9a336944d6089541672bd83723685e95cc9c747c2a284e90ab70943ca68e8780",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+            },
+            {
+              "section_id": "evidence_and_methodology",
+              "order": 18,
+              "title": "证据台账、方法与附录",
+              "status": "full",
+              "present_required": [
+                "evidence_set_receipt",
+                "citation_index",
+                "methodology"
+              ],
+              "missing_required": [],
+              "present_optional": [],
+              "missing_optional": [
+                "coverage_gaps",
+                "industry_appendix"
+              ],
+              "status_reason": null,
+              "pending_judgment_inputs": [],
+              "page_budget": [
+                2,
+                3
+              ],
+              "section_hash": "cd3f3923246a31ef7b029d07563d529fde7008c17ae605f9014cd700b10d0d1a",
+              "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
+              "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
+              "input_hash": "a8f72b99d209a2f8ab42aa5a631b89921a046e7ac4f7f00bae264bdabe5fd089"
+            }
+          ]
+        },
+        "degradation": {
+          "ticker": "000001.SZ",
+          "tier": "B",
+          "evidence_set_id": "evidence_set_7f589bf11c41ab25ccf722e90806a8e175df8b80",
+          "evidence_manifest_hash": "7f589bf11c41ab25ccf722e90806a8e175df8b80e9ca183743354b5542a54782",
+          "section_statuses": [
+            [
+              "executive_summary",
+              "full"
+            ],
+            [
+              "investment_thesis",
+              "missing"
+            ],
+            [
+              "business_model",
+              "missing"
+            ],
+            [
+              "industry_structure",
+              "missing"
+            ],
+            [
+              "competition_and_moat",
+              "missing"
+            ],
+            [
+              "management_and_governance",
+              "missing"
+            ],
+            [
+              "revenue_quality_and_kpis",
+              "partial"
+            ],
+            [
+              "profitability_and_earnings_quality",
+              "partial"
+            ],
+            [
+              "cash_flow_and_balance_sheet",
+              "full"
+            ],
+            [
+              "accounting_quality",
+              "missing"
+            ],
+            [
+              "forecasts_and_consensus",
+              "missing"
+            ],
+            [
+              "valuation",
+              "partial"
+            ],
+            [
+              "macro_policy_and_costs",
+              "missing"
+            ],
+            [
+              "catalysts_and_events",
+              "missing"
+            ],
+            [
+              "risks_and_falsification",
+              "missing"
+            ],
+            [
+              "decision_framework",
+              "full"
+            ],
+            [
+              "monitoring_and_action_triggers",
+              "missing"
+            ],
+            [
+              "evidence_and_methodology",
+              "full"
+            ]
+          ],
+          "allowed_fields": [
+            "status",
+            "summary",
+            "partial_report",
+            "evidence",
+            "next_steps"
+          ],
+          "blocked_fields": [
+            "action",
+            "target_price",
+            "position_range"
+          ],
+          "source_gap_actions": [],
+          "reasons": [
+            "partial_or_missing_sections",
+            "investment_action_fields_blocked"
+          ],
+          "policy_version": "park-any-ticker-degradation-v1",
+          "receipt_hash": "a98d22ce841a456b4292802499a4ada5f50b714bdd3ea1bd368840b2e3dd92ef"
+        }
+      },
+      "input_receipts": {
+        "financial_sequences_sha256": "bd32af80e7bed49d0902a9932b5141b1a746acbf1e02e89a11adde6cb2c957cd",
+        "m1_sha256": "cadf11d4edeca264204d3293d4d2285b7ca6c64f76782fb88e9304cc1fb2f741",
+        "r2_receipt_id": "n3-dossier-batch-v1:10dd875e32907e146963ff7161fe5fef9539b9fd3f60f39d67e823aec95c4d21",
+        "r2_acceptance_receipt_id": "r2-ai-compute-world-model-acceptance-v1:8d0b6122b8ce78edca201ce6299590f27c6b2ef6b12ecef7848758e3c8323989",
+        "judgment_receipt_id": null
+      }
+    }
+  ],
+  "receipt_hash": "129130f26d55ad9b4069506e2233ef11aeffdeb163c9baf8eccf79db885db841"
+}

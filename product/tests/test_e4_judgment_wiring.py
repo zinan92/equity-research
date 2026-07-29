@@ -17,7 +17,7 @@ def receipt() -> dict:
     citation = {"document_id": "official:1", "raw_hash": "a" * 64, "page_number": 8, "quoted_anchor": "收入", "source_url": "https://static.cninfo.com.cn/a.pdf"}
     judgment = {"status": "ai_generated_judgment_unreviewed", "facts": [{"metric": "revenue", "citation": citation}], "text": "draft"}
     value = {"schema_version": "e4-m3-catl-judgments-v1", "data_kind": "real", "ticker": "300750.SZ", "source_dossier_receipt": "r2", "content": {key: dict(judgment) for key in ("investment_thesis", "variant_view", "moat_assessment", "risk_register", "falsification_tests", "monitoring_kpis", "action_triggers", "accounting_checks", "operating_kpis", "margin_bridge")}}
-    value["receipt_hash"] = hashlib.sha256(json.dumps(value, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    value["receipt_hash"] = hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
     return value
 
 
