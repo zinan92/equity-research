@@ -2,9 +2,9 @@
   "schema_version": "e4-m4-report-v1",
   "ticker": "600519.SH",
   "data_kind": "real",
-  "report_model_hash": "78aacc45bc011f2a79c167afc5e12b495eb2e1bc8bd46c639b05ab1b3e892674",
+  "report_model_hash": "6c6b91b10376cd00dcaf0a5aa39901be0494dc66d4c9a408446ffa8ffb375dfd",
   "html_path": "artifacts/e4-reports/600519.SH.html",
-  "word_count": 488,
+  "word_count": 495,
   "sections": [
     {
       "section_id": "executive_summary",
@@ -20,6 +20,8 @@
       "missing_optional": [
         "key_chart"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -43,6 +45,8 @@
       "missing_optional": [
         "bear_case"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -67,6 +71,8 @@
         "customer_concentration",
         "partner_ecosystem"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -90,6 +96,8 @@
       "missing_optional": [
         "value_chain"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -113,6 +121,8 @@
       "missing_optional": [
         "competitive_events"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -137,6 +147,8 @@
         "ownership_structure",
         "capital_allocation"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -162,6 +174,8 @@
         "guidance_history",
         "rd_efficiency"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -186,6 +200,8 @@
       "missing_optional": [
         "adjusted_earnings_bridge"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -209,6 +225,8 @@
       "missing_optional": [
         "liquidity_stress"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -232,6 +250,8 @@
       "missing_optional": [
         "restatement_history"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         1,
         2
@@ -256,6 +276,8 @@
         "forecast_model",
         "guidance_vs_consensus"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -283,6 +305,8 @@
         "sotp",
         "epv"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         3,
         4
@@ -306,6 +330,8 @@
       "missing_optional": [
         "commodity_sensitivity"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         1,
         2
@@ -329,6 +355,8 @@
       "missing_optional": [
         "event_impact_inference"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         1,
         2
@@ -353,6 +381,8 @@
         "bias_check",
         "esg_screen"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -375,6 +405,8 @@
       "missing_optional": [
         "committee_synthesis"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         1,
         2
@@ -398,6 +430,8 @@
       "missing_optional": [
         "next_update_calendar"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         1,
         2
@@ -423,6 +457,8 @@
         "coverage_gaps",
         "industry_appendix"
       ],
+      "status_reason": null,
+      "pending_judgment_inputs": [],
       "page_budget": [
         2,
         3
@@ -440,9 +476,11 @@
   ],
   "input_hashes": {
     "m1": "d020ca69cab942599611918a624c758a8be50790beb9468b0ba6fcd5a0aef25d",
-    "m2": "4b4e2d3356970ebda9bad4e3e6eceb2330460e7aa1513885f3f17a5221969c18",
+    "m2": "aa93c0aa53f8bbbee4e2a82d6570565d659528832bfd250b7a9c323d8348fff1",
     "m3": "520e701d311dc2e963097836fbbaa2d3b2ae4563997c04ceffcdb3b1a4206f32"
   },
+  "unreviewed_judgment_count": 0,
+  "unreviewed_judgment_ids": [],
   "citation_gate": {
     "passed": true,
     "facts_rendered": 16
@@ -451,5 +489,5 @@
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "76655c294c838efcaf724f1b51a39d4a63730978a4e268e6e1d424bd128c04d9"
+  "receipt_hash": "6dd20f4382aac421e0fc7a11067254caf133d109ba080ce33afaf9f7565d0bdf"
 }
