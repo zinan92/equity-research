@@ -2342,3 +2342,27 @@
   judgment-backed content and must stay visibly marked pending review.  A
   Moutai report with zero unreviewed drafts is not more complete; it still has
   its own independently missing inputs.
+
+# 2026-07-29 — L1 human-review handoff remains deliberately incomplete
+
+- **Decision:** Finish L1 with an explicit human-review pack rather than
+  synthetic approvals: CATL has nine receipt-bound, page-linkable judgment
+  drafts, zero approvals, and only `risks_and_falsification` plus
+  `monitoring_and_action_triggers` can become FULL solely after all of their
+  listed human approvals.  Retire stale spot-audit assignments instead of
+  calling the old 20-item list current.
+- **Why:** The unresolved boundary is human judgment, not a machine status
+  gap.  A document identity that no longer appears in the current financial
+  sequence cannot honestly remain an active audit task.
+- **Evidence:** L1-M6 verification receipt
+  `artifacts/e4-reports/e4-l1-m6-review-prep-verification.json` binds the
+  judgment queue to `e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e`;
+  all nine items have `pdf_page_url` links.  Against financial-sequence receipt
+  `4502bb32938478ea07f8e01b6a7793b9369bdb87f3f122ee4a7d556c1ff1f0f5`,
+  eight legacy assignments retain document/hash lineage, twelve are stale,
+  and the conservative regenerated receipt has seven current assignments plus
+  thirteen coverage gaps.
+- **Gotchas:** Lineage-valid is not a completed audit, and the current seven
+  assignments do not restore the missing thirteen.  No reviewer record was
+  written, no unreviewed judgment became FULL, and neither Tier nor issue #218
+  receives credit from this preparation.

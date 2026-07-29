@@ -20,6 +20,7 @@ class JudgmentReviewQueueTest(unittest.TestCase):
         self.assertEqual(thesis["current_section_reason"], "pending_judgment_review")
         self.assertTrue(thesis["would_promote_section_to_full"])
         self.assertEqual(thesis["citations"][0]["document_id"], "official:1")
+        self.assertEqual(thesis["citations"][0]["pdf_page_url"], "https://static.cninfo.com.cn/a.pdf#page=8")
         moat = next(item for item in queue["items"] if item["judgment_id"] == "moat_assessment")
         self.assertFalse(moat["would_promote_section_to_full"])
         self.assertIn("peer_comparison", moat["remaining_required_inputs_after_approval"])

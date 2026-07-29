@@ -1,0 +1,227 @@
+{
+  "schema_version": "e4-m4-page-bound-assignments-v2",
+  "data_kind": "runtime_only_audit",
+  "assignments": [
+    {
+      "ticker": "000002.SZ",
+      "numeric_check": {
+        "metric": "total_assets",
+        "expected_value": 997406724022.05,
+        "unit": "元",
+        "currency": "CNY",
+        "report_period": "2026Q1",
+        "statement_scope": "consolidated",
+        "column_identity": "period_end",
+        "cross_year_status": "unverified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+        "raw_hash": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "page_number": 9,
+        "quoted_label": "资产总计",
+        "quoted_anchor": "非流动资产合计资产总计 997,406,724,022.05 1,020,622,831,532.86 318,067,390,601.77 323,248,977,500.07",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF"
+      },
+      "review_status": "pending_human_review"
+    },
+    {
+      "ticker": "000012.SZ",
+      "numeric_check": {
+        "metric": "revenue",
+        "expected_value": 15455386401.0,
+        "unit": "元",
+        "currency": "CNY",
+        "report_period": "2024FY",
+        "statement_scope": "consolidated",
+        "column_identity": "current_period",
+        "cross_year_status": "cross_verified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1223303879",
+        "raw_hash": "d9b60e11ebb75c717455bd09c87fd763d95b1dd67c764694cff97e694000e1ab",
+        "page_number": 79,
+        "quoted_label": "营业总收入",
+        "quoted_anchor": "一、营业总收入 15,455,386,401 18,194,864,366",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2025-04-28/1223303879.PDF"
+      },
+      "review_status": "pending_human_review"
+    },
+    {
+      "ticker": "002709.SZ",
+      "numeric_check": {
+        "metric": "revenue",
+        "expected_value": 11090801692.82,
+        "unit": "元",
+        "currency": "CNY",
+        "report_period": "2021FY",
+        "statement_scope": "consolidated",
+        "column_identity": "current_period",
+        "cross_year_status": "cross_verified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1212635843",
+        "raw_hash": "93015011ea30023895646c0349f8339d3eee5846958ed12efe2f3da25b37e208",
+        "page_number": 103,
+        "quoted_label": "营业总收入",
+        "quoted_anchor": "一、营业总收入 11,090,801,692.82 4,119,046,395.55",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2022-03-22/1212635843.PDF"
+      },
+      "review_status": "pending_human_review"
+    },
+    {
+      "ticker": "300750.SZ",
+      "numeric_check": {
+        "metric": "revenue",
+        "expected_value": 13035579.64,
+        "unit": "万元",
+        "currency": "CNY",
+        "report_period": "2021FY",
+        "statement_scope": "consolidated",
+        "column_identity": "current_period",
+        "cross_year_status": "cross_verified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+        "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+        "page_number": 113,
+        "quoted_label": "营业总收入",
+        "quoted_anchor": "一、营业总收入 13,035,579.64 5,031,948.77",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF"
+      },
+      "review_status": "pending_human_review"
+    },
+    {
+      "ticker": "600009.SH",
+      "numeric_check": {
+        "metric": "revenue",
+        "expected_value": 5480447621.36,
+        "unit": "元",
+        "currency": "CNY",
+        "report_period": "2022FY",
+        "statement_scope": "consolidated",
+        "column_identity": "current_period",
+        "cross_year_status": "cross_verified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1216688257",
+        "raw_hash": "2c015b3b3c051be0f1a1cf74f96eb452f05f3b64e624aaaecfd875d394eaa9dc",
+        "page_number": 73,
+        "quoted_label": "营业总收入",
+        "quoted_anchor": "一、营业总收入 5,480,447,621.36 8,154,776,878.02",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2023-04-29/1216688257.PDF"
+      },
+      "review_status": "pending_human_review"
+    },
+    {
+      "ticker": "600011.SH",
+      "numeric_check": {
+        "metric": "total_assets",
+        "expected_value": 611789826893.0,
+        "unit": "元",
+        "currency": "CNY",
+        "report_period": "2025FY",
+        "statement_scope": "consolidated",
+        "column_identity": "period_end",
+        "cross_year_status": "unverified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225029354",
+        "raw_hash": "94d5af3bf6ca4db52511994dc55dcd291aafd1a7d39b7b9af505b815fa6de462",
+        "page_number": 130,
+        "quoted_label": "资产总计",
+        "quoted_anchor": "非流动资产合计资产总计 611,789,826,893 586,842,753,960 520,320,469,598 490,543,099,456",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-25/1225029354.PDF"
+      },
+      "review_status": "pending_human_review"
+    },
+    {
+      "ticker": "600019.SH",
+      "numeric_check": {
+        "metric": "revenue",
+        "expected_value": 322115845919.76,
+        "unit": "元",
+        "currency": "CNY",
+        "report_period": "2024FY",
+        "statement_scope": "consolidated",
+        "column_identity": "current_period",
+        "cross_year_status": "cross_verified"
+      },
+      "page_citation_check": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1223329102",
+        "raw_hash": "0f607360d5977d9ede8ade0fc4c9de176545b04c30ec269059dd7754b4ebebaa",
+        "page_number": 118,
+        "quoted_label": "营业总收入",
+        "quoted_anchor": "一、营业总收入 322,115,845,919.76 344,868,073,284.20",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2025-04-26/1223329102.PDF"
+      },
+      "review_status": "pending_human_review"
+    }
+  ],
+  "coverage_gaps": [
+    {
+      "ticker": "000001.SZ",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "000963.SZ",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "600000.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "600036.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "600276.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "600519.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "600941.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "601000.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "601857.SH",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "920027.BJ",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "920118.BJ",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "920185.BJ",
+      "reason": "no_conservative_page_bound_fact"
+    },
+    {
+      "ticker": "920751.BJ",
+      "reason": "no_conservative_page_bound_fact"
+    }
+  ],
+  "counts": {
+    "assigned": 7,
+    "unassigned": 13
+  },
+  "selection_policy": {
+    "note_reference_rejected": true,
+    "minimum_absolute_value": 1000
+  },
+  "truth_boundary": {
+    "assignments_are_not_completed_audits": true,
+    "counts_as_numeric_page_audit": false,
+    "counts_as_tier_a_or_b": false
+  }
+}
