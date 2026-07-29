@@ -2,7 +2,7 @@
   "schema_version": "e4-m4-report-v1",
   "ticker": "300750.SZ",
   "data_kind": "real",
-  "report_model_hash": "81d88d3b183213eed3d3bbaeb649e7a62818142360ab69e84663d22109ec7992",
+  "report_model_hash": "e84837111e0127eab35c5203fbe76d3f26a84c6742ffbd336680e6e72d85552f",
   "html_path": "artifacts/e4-reports/300750.SZ.html",
   "word_count": 1438,
   "sections": [
@@ -170,7 +170,7 @@
       "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "8914401fc0c32c6ea84654eb09fa235d2476c0109023a658389898cd54933863"
+      "input_hash": "a4a5211648be37c84d0a4d58c82b7b3ad697c88bcb786bb374b6184687dfa2fa"
     },
     {
       "section_id": "profitability_and_earnings_quality",
@@ -194,7 +194,7 @@
       "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "4b8e977f3732b3924dfadab317fd6543ff6acd760942cce794f54ba8ab917d2c"
+      "input_hash": "de7369bf693c64869ad7a3b59e6ffe534d25bfce3ab8efef7f18f58a1da1fe1b"
     },
     {
       "section_id": "cash_flow_and_balance_sheet",
@@ -217,7 +217,7 @@
       "section_hash": "0c0f400eb63877b0c4f0df310b9c9d9bccfb867c3e57633e573a2410a08d1c4d",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "6cf7cc8cf4a9f1978e6592ab37e53b2ff0835a11dbaed04c8c58cfb97f99419f"
+      "input_hash": "fa865d367f42d3655cd3e1689e8074fed7f90eb8426f17a4501968129a3dd2e0"
     },
     {
       "section_id": "accounting_quality",
@@ -431,7 +431,7 @@
       "section_hash": "cd3f3923246a31ef7b029d07563d529fde7008c17ae605f9014cd700b10d0d1a",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "48e6d40d2fa409ad15fdd528e62cfd59659b4b18a15f2e866c4600f6fbdbd556"
+      "input_hash": "114ef0eacb1b28cdf74e5c09e92eb1d5bfbb9ddabbf14653c4f7b2bedc0751eb"
     }
   ],
   "tier": "B",
@@ -441,7 +441,7 @@
   ],
   "input_hashes": {
     "m1": "d020ca69cab942599611918a624c758a8be50790beb9468b0ba6fcd5a0aef25d",
-    "m2": "c93e3f56ae207df55392c4e5bd077ee48ed54bdc315140951a5adb01c8d50ce8",
+    "m2": "0702bed8c101e4ef3491eae75374992ca18b25f7c3112f5f21e356f1d623e98b",
     "m3": "ee00aab7719c4003679bcf3a932c976d7077cd38d9c6884494e1214c7e855a99"
   },
   "citation_gate": {
@@ -452,5 +452,5 @@
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "caf14993471cc5d649427099878dbe71870a760c7f15115ac67966784ec9b536"
+  "receipt_hash": "af12a8414f7ab5ba065173ca2b46255ed5dd136ca5cb9e1740892f828b56d9b0"
 }
