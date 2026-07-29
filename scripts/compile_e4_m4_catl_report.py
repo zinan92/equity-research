@@ -7,6 +7,11 @@ def h(x): return hashlib.sha256(json.dumps(x,sort_keys=True,ensure_ascii=False).
 def main():
  p=argparse.ArgumentParser();p.add_argument('m1',type=Path);p.add_argument('m2',type=Path);p.add_argument('m3',type=Path);p.add_argument('--out',type=Path,required=True);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args()
  m1=json.loads(a.m1.read_text());m2=json.loads(a.m2.read_text());m3=json.loads(a.m3.read_text());catl=next(x for x in m2['rows'] if x['ticker']=='300750.SZ');d=next(x for x in m1['rows'] if x['ticker']=='300750.SZ')['decision'];sections=catl['result']['section_contract']['sections'];facts=catl['result']['page_facts']
+ # Historical receipts predate the share-unit fix.  A monetary value may be
+ # shown only as share_capital_amount, never as shares_outstanding.
+ facts=[x for x in facts if x.get('metric')!='shares_outstanding' or x.get('unit') in {'股','shares'}]
+ for x in facts:
+  if x.get('metric')=='shares_outstanding': x['unit']='股'
  need=('document_id','raw_hash','page_number','quoted_anchor','source_url')
  if not all(all(x.get(k) for k in need) for x in facts): raise ValueError('citation gate rejected uncited fact')
  hashes={'m1':h(m1),'m2':h(m2),'m3':h(m3)};model=h({'ticker':'300750.SZ','inputs':hashes,'sections':sections,'decision':d})
