@@ -11,7 +11,7 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from data_store import DB_PATH
 from company_research import CROSS_COMPANY_PROMPT_VERSION
@@ -719,6 +719,115 @@ def _read_secret(path: Path) -> str:
     if "=" in secret and "\n" not in secret:
         secret = secret.split("=", 1)[1].strip().strip('"').strip("'")
     return secret
+
+
+def call_structured_deepseek(
+    *,
+    system_prompt: str,
+    request_object: Mapping[str, Any],
+    key_file: Path,
+    model: str = DEFAULT_MODEL,
+    max_tokens: int = 14000,
+    reasoning_effort: str = "high",
+    temperature: float = 0.1,
+    transport: Any = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Call the repository's DeepSeek JSON path for a frozen request object.
+
+    This is the shared transport boundary for product-specific structured
+    generation.  Callers own their prompt and output validation; this function
+    owns credential loading, retries, response parsing, and the provider
+    receipt.  ``transport`` is test-only and receives the exact payload plus
+    the loaded secret.
+    """
+    api_key = _read_secret(key_file)
+    request_payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {
+                "role": "user",
+                "content": json.dumps(
+                    request_object,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    default=str,
+                ),
+            },
+        ],
+        "thinking": {"type": "enabled"},
+        "reasoning_effort": reasoning_effort,
+        "response_format": {"type": "json_object"},
+        "max_tokens": max_tokens,
+        "temperature": temperature,
+        "stream": False,
+    }
+
+    response_payload: dict[str, Any] | None = None
+    failure: BaseException | None = None
+    for attempt in range(3):
+        try:
+            if transport is not None:
+                response_payload = transport(deepcopy(request_payload), api_key)
+            else:
+                request = urllib.request.Request(
+                    API_URL,
+                    data=json.dumps(request_payload, ensure_ascii=False).encode(),
+                    headers={
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json",
+                    },
+                    method="POST",
+                )
+                with urllib.request.urlopen(request, timeout=360) as response:
+                    response_payload = json.loads(response.read().decode())
+            break
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode(errors="replace")[:1000]
+            if exc.code not in {429, 500, 502, 503, 504}:
+                raise RuntimeError(
+                    f"DeepSeek structured API HTTP {exc.code}: {detail}"
+                ) from exc
+            failure = exc
+        except (urllib.error.URLError, TimeoutError, ssl.SSLError) as exc:
+            failure = exc
+        if attempt < 2:
+            time.sleep(1.5 * (attempt + 1))
+    if response_payload is None:
+        raise RuntimeError(
+            "DeepSeek structured API unavailable after retries: "
+            + type(failure).__name__
+        ) from failure
+
+    if "choices" in response_payload:
+        choice = response_payload["choices"][0]
+        finish_reason = choice.get("finish_reason")
+        content = choice.get("message", {}).get("content") or ""
+        if finish_reason != "stop" or not str(content).strip():
+            raise RuntimeError(
+                "DeepSeek structured response did not finish cleanly: "
+                + str(finish_reason)
+            )
+        result = json.loads(content) if isinstance(content, str) else content
+        receipt = {
+            "request_id": response_payload.get("id"),
+            "model": response_payload.get("model") or model,
+            "finish_reason": finish_reason,
+            "usage": response_payload.get("usage") or {},
+            "system_fingerprint": response_payload.get("system_fingerprint"),
+        }
+    else:
+        result = response_payload
+        receipt = {
+            "request_id": None,
+            "model": model,
+            "finish_reason": "test_transport",
+            "usage": {},
+            "system_fingerprint": None,
+        }
+    if not isinstance(result, dict):
+        raise RuntimeError("DeepSeek structured response is not a JSON object")
+    return result, receipt
 
 
 def _system_prompt() -> str:
