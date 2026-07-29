@@ -23,10 +23,10 @@ from .e4_catl_financial_history import OfficialFinancialFact, OfficialReport, _m
 from .official_filings import OfficialFilingBatch, OfficialHttpTransport, sync_exchange_filings
 
 
-# The original 20-ticker receipt is runtime-only by design.  This is its
-# replayable replacement cohort: it retains the three independently published
-# #479 samples, SH/SZ/BJ coverage, and the same broad industry mix.  It is an
-# issuer-selection input, never a source of financial facts.
+# The original 20-ticker receipt is runtime-only by design.  This remains the
+# small replay cohort; the L2 runner may instead bind a fresh, real
+# security-master identity receipt for the 100-ticker acceptance batch.  An
+# issuer selection input is never a source of financial facts.
 E4_AUDIT_COHORT_V2 = (
     "000001.SZ", "000002.SZ", "000012.SZ", "000963.SZ", "002709.SZ", "300750.SZ",
     "600000.SH", "600009.SH", "600011.SH", "600019.SH", "600036.SH", "600276.SH",
@@ -164,8 +164,8 @@ def run_financial_sequence_batch(
 ) -> dict[str, Any]:
     """Collect 5 FY + latest currently available interim, one issuer at a time."""
     requested = tuple(dict.fromkeys(str(value).upper() for value in tickers))
-    if len(requested) != 20:
-        raise ValueError("M2 requires exactly 20 distinct tickers")
+    if not 1 <= len(requested) <= 100:
+        raise ValueError("financial sequence batch requires 1-100 distinct tickers")
     if delay_seconds < 0:
         raise ValueError("delay_seconds must be non-negative")
     runtime_root.mkdir(parents=True, exist_ok=True)
@@ -181,6 +181,8 @@ def run_financial_sequence_batch(
         prior = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         if prior.get("data_kind") == "real" and prior.get("configured_max_concurrency") == 1:
             rows = list(prior.get("tickers") or [])
+    if any(str(item.get("ticker") or "").upper() not in requested for item in rows):
+        raise ValueError("financial sequence checkpoint contains a different cohort")
     completed = {str(item.get("ticker") or "").upper() for item in rows}
     # 2026H1 filings are not universally available by the collection date;
     # use Q1 as the common latest interim floor and retain absence explicitly.
