@@ -11,7 +11,9 @@ if str(PRODUCT) not in sys.path:
     sys.path.insert(0, str(PRODUCT))
 
 from data_core.local_cache import SQLiteReportTaskCache  # noqa: E402
-from data_core.performance_budget import evaluate_cost_budget, measure_cache_reads, record_cost, run_report_task_workload  # noqa: E402
+from data_core.performance_budget import (  # noqa: E402
+    evaluate_cost_budget, measure_cache_reads, measure_cached_report_payloads, record_cost, run_report_task_workload,
+)
 from data_core.report_task_runtime import ReportTask, ReportTaskResult  # noqa: E402
 
 
@@ -40,6 +42,9 @@ class PerformanceBudgetTest(unittest.TestCase):
         self.assertEqual({row["task"]["ticker"] for row in output["batch"]["results"]}, {task.ticker for task in tasks})
         cached = measure_cache_reads(tasks, self.cache)
         self.assertEqual((cached["status"], cached["hits"], cached["misses"]), ("passed", 10, 0))
+        payload = measure_cached_report_payloads(tasks, self.cache)
+        self.assertEqual((payload["status"], payload["hits"], payload["misses"]), ("passed", 10, 0))
+        self.assertGreater(payload["payload_bytes"], 0)
 
     def test_known_cost_alerts_and_unknown_provider_costs_are_distinct(self) -> None:
         record_cost(self.root, category="parse", quantity=4, unit="documents", observed_cost_minor=120, receipt_id="parse-001")
