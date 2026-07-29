@@ -1,0 +1,1427 @@
+{
+  "counts": {
+    "identity": 100,
+    "report_models": 0,
+    "spot_audits": 0,
+    "tier_a_or_b": 0
+  },
+  "failure_taxonomy": {
+    "000001.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000002.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000006.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000007.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000008.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000009.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000010.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000011.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000012.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000014.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000016.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000017.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000019.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000020.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000021.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000025.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000026.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000027.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000028.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000029.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000030.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000031.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000032.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000034.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000035.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000036.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000037.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000039.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000042.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000045.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000048.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000049.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000050.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "000055.SZ": [
+      "missing_canonical_evidence"
+    ],
+    "600000.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600004.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600006.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600007.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600008.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600009.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600010.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600011.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600012.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600015.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600016.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600017.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600018.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600019.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600020.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600021.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600022.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600023.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600025.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600026.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600027.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600028.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600029.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600030.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600031.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600032.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600033.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600035.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600036.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600037.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600038.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600039.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600048.SH": [
+      "missing_canonical_evidence"
+    ],
+    "600050.SH": [
+      "missing_canonical_evidence"
+    ],
+    "920000.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920001.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920002.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920003.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920005.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920006.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920007.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920008.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920009.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920010.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920011.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920012.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920014.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920015.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920016.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920017.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920018.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920019.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920020.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920021.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920022.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920023.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920026.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920027.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920028.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920029.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920030.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920033.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920035.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920036.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920037.BJ": [
+      "missing_canonical_evidence"
+    ],
+    "920039.BJ": [
+      "missing_canonical_evidence"
+    ]
+  },
+  "identity_receipt_hash": "630acdb221751f3cc576de5e1ad24237b5652a5dba805fe7eb25f9a38ee6b05b",
+  "receipt_hash": "9d4d9ea64a28503e4fc10543e6ab07e46894e4d12b3f715fdcfbb9aacf4b60be",
+  "schema_version": "e4-s4-real-coverage-acceptance-v1",
+  "status": "failed",
+  "thresholds": {
+    "identity": 100,
+    "report_models": 95,
+    "spot_audits": 20,
+    "tier_a_or_b": 80
+  },
+  "ticker_coverage": [
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000001.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000002.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000006.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000007.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000008.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000009.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000010.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000011.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000012.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000014.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000016.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000017.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000019.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000020.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000021.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000025.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000026.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000027.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000028.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000029.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000030.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000031.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000032.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000034.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000035.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000036.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000037.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000039.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000042.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000045.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000048.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000049.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000050.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "000055.SZ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600000.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600004.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600006.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600007.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600008.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600009.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600010.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600011.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600012.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600015.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600016.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600017.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600018.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600019.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600020.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600021.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600022.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600023.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600025.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600026.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600027.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600028.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600029.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600030.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600031.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600032.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600033.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600035.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600036.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600037.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600038.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600039.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600048.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "600050.SH",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920000.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920001.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920002.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920003.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920005.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920006.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920007.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920008.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920009.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920010.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920011.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920012.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920014.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920015.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920016.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920017.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920018.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920019.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920020.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920021.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920022.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920023.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920026.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920027.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920028.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920029.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920030.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920033.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920035.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920036.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920037.BJ",
+      "tier": null
+    },
+    {
+      "blockers": [
+        "missing_canonical_evidence"
+      ],
+      "data_kind": "missing",
+      "numeric_spot_audit": false,
+      "page_citation_spot_audit": false,
+      "report_model_hash": null,
+      "ticker": "920039.BJ",
+      "tier": null
+    }
+  ],
+  "truth_boundary": {
+    "fixture_or_cached_coverage_is_not_counted": true,
+    "identity_only_corpus_is_not_evidence": true,
+    "thresholds_are_not_relaxed": true
+  }
+}
