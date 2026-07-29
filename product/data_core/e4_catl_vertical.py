@@ -82,9 +82,19 @@ def _scores(history: Mapping[str, Any], periods: tuple[HistoricalFinancialPeriod
 
 def compile_vertical(history: Mapping[str, Any], market: Mapping[str, Any], *, ticker: str, context_manifest_hash: str, dossier_id: str) -> dict[str, Any]:
     periods, missing = _historical(history); quote = market.get("quote") or {}
+    # Scores are independent of the valuation engine.  Compute them as soon as
+    # the page-bound history and canonical market receipt provide the required
+    # inputs; an incomplete DCF must not erase otherwise real inputs.
+    scores: dict[str, float | None] = {"quality": None, "risk": None, "liquidity": None}
+    score_receipt: dict[str, Any] = {
+        "assumption_status": "provisional_unreviewed",
+        "formula": {}, "inputs": {},
+    }
+    if periods:
+        scores, score_receipt = _scores(history, periods, market)
     if len(periods) < 5 or missing or not quote.get("last_price") or not quote.get("market_cap"):
-        decision = decide(DecisionInput(ticker, context_manifest_hash, dossier_id, float(quote["last_price"]) if quote.get("last_price") else None, None, None, None, None, False, 0, 0, 1))
-        return {"ticker": ticker, "financial_history_status": "partial", "valuation": {"status": "blocked", "valuation_completeness": "missing", "methods_run": [], "methods_missing": ["probability_weighted_dcf: page-bound C2 inputs incomplete", "peer_ev_ebitda: not collected", "historical_pe: canonical market-history receipt not supplied"], "missing_history": missing}, "market_snapshot": dict(quote), "current_market": dict(quote), "decision": {**asdict(decision), "valuation_completeness": "missing"}}
+        decision = decide(DecisionInput(ticker, context_manifest_hash, dossier_id, float(quote["last_price"]) if quote.get("last_price") else None, None, scores["quality"], scores["risk"], scores["liquidity"], False, 0, 0, 1))
+        return {"ticker": ticker, "financial_history_status": "partial", "valuation": {"status": "blocked", "valuation_completeness": "missing", "methods_run": [], "methods_missing": ["probability_weighted_dcf: page-bound C2 inputs incomplete", "peer_ev_ebitda: not collected", "historical_pe: canonical market-history receipt not supplied"], "missing_history": missing}, "scores": scores, "score_receipt": score_receipt, "market_snapshot": dict(quote), "current_market": dict(quote), "decision": {**asdict(decision), "valuation_completeness": "missing"}}
     scenarios, assumptions = _scenarios(periods)
     result = run_deterministic_valuation(ValuationEngineInput(ticker, "CNY", 100_000_000, float(quote["last_price"]), float(quote["market_cap"]) * 100_000_000, periods[-1].shares_outstanding, periods, scenarios, (), ()))
     target = result.weighted_dcf_per_share
