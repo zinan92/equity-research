@@ -281,3 +281,8 @@ Now: frozen, evidence-bound CATL HTML report compilation is available; Tier and 
 
 - 现在在哪里：M4 已重切为 20/20 个不同 ticker 的官方 PDF 页级待审任务（5 条 cross_verified、15 条 unverified、0 条已知 disputed 入队）；M3 重跑产出 20 份 no_action receipt。完整样本、边界与交接见 `docs/evidence/2026-07-29-six-milestone-final-handoff.md`。
 - 下一步：由 Park 决定是否把 20 个 pending task 送入现有 owner-only 审计工作台。#218 仍未达标；待审任务、no_action receipt 和页级事实都不等于人工 audit、Tier A/B 或投资建议。
+
+## 2026-07-29 · Cross-page statement context repair
+
+- 现在在哪里：官方 PDF 重放了 1,241 条既有页级事实；870 条以精确同页同值的方式刷新列身份，371 条仍显式 unresolved/invalid。宁德时代季报 p7 的流动负债已正确继承 p5 表头，报告数据时点为 2026Q1，内部矛盾为 0。
+- 下一步：剩余 unresolved 必须以原始页片段逐项分类和修复；不得因报告已能显示最新期而降低事实身份或人工审计门槛。

@@ -2255,3 +2255,16 @@
   human audit. `unverified` does not mean false, and `disputed` does not mean
   an accounting error; neither status permits changing the evidence gate,
   Tier, target, position or action policy.
+
+# 2026-07-29 — Statement metadata is linear document state
+
+- **Decision:** Carry a recognized table header, unit/currency source, and
+  audit status through following pages until the next statement title; reset
+  only the column header at that table boundary.
+- **Why:** CNINFO 1225107946 places the balance-sheet header on p5 while the
+  valid consolidated current-liabilities row is on p7.
+- **Evidence:** Official-PDF replay resolves p7 `流动负债合计` as period-end
+  434,010,194 for 2026Q1; regression coverage exercises p5-to-p7 inheritance.
+- **Gotchas:** Never replace missing context with a first-column heuristic.
+  An unresolved fact is safer than a page-cited fact assigned to the wrong
+  period.

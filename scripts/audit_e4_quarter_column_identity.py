@@ -11,14 +11,20 @@ def main():
     period=str(fact.get('report_period','')); identity=str(fact.get('column_identity','unknown'))
     quarter=('Q' in period or 'H1' in period)
     status='passed'
-    if quarter and identity not in {'period_end','period_begin','current_period','previous_period'}: status='unresolved_quarter_column'
+    if identity not in {'period_end','period_begin','current_period','previous_period'} or period=='unresolved': status='unresolved_column_context'
     if fact.get('metric')=='shares_outstanding' and fact.get('unit') not in {'股','shares'}: status='invalid_share_currency_unit'
     counts[status]+=1
     if status!='passed': rows.append({'ticker':fact.get('ticker'), 'period':period,'metric':fact.get('metric'),'status':status,'document_id':fact.get('document_id'),'page_number':fact.get('page_number'),'raw_text_excerpt':str(fact.get('quoted_anchor',''))[:520]})
  groups={}
  for ticker in src.get('tickers',[]):
   for report in ticker.get('reports',[]):
-   for fact in report.get('facts',[]): groups.setdefault((fact.get('document_id'),fact.get('page_number'),fact.get('metric'),fact.get('report_period')),set()).add(fact.get('value'))
+   for fact in report.get('facts',[]):
+    # Unknown column context has no asserted period, so comparing its values
+    # together would manufacture a contradiction.  The identity is part of
+    # the claim being checked: opening and closing values are not competing
+    # values for one fact.
+    if fact.get('report_period') not in {'unknown','unresolved'}:
+     groups.setdefault((fact.get('document_id'),fact.get('page_number'),fact.get('metric'),fact.get('report_period'),fact.get('column_identity')),set()).add(fact.get('value'))
  contradictions=[{'document_id':k[0],'page_number':k[1],'metric':k[2],'report_period':k[3],'values':sorted(v),'status':'internal_contradiction'} for k,v in groups.items() if len(v)>1]
  out={'schema_version':'e4-quarter-column-audit-v2','facts_examined':sum(counts.values()),'counts':dict(counts),'findings':rows,'internal_contradictions':contradictions};a.out.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'facts_examined':out['facts_examined'],'counts':out['counts'],'internal_contradictions':len(contradictions)}))
 if __name__=='__main__':main()

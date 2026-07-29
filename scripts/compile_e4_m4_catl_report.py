@@ -25,7 +25,10 @@ def main():
  lead=[]
  for metric, values in sorted(by_metric.items()):
   values.sort(key=lambda x: str(x.get('report_period','')))
-  lead.append(values[-1])
+  resolved=[x for x in values if x.get('report_period') not in {'unknown','unresolved'}]
+  # An unresolved fact stays in the audit corpus, but must not become the
+  # reader-facing "latest" observation merely because its label sorts last.
+  lead.append((resolved or values)[-1])
  def line(x): return f"<li>{html.escape(x['metric'])} [{html.escape(x['report_period'])}]: {html.escape(str(x['value']))} {html.escape(x['unit'])} — <a href='{html.escape(x['source_url'])}'>PDF p.{x['page_number']}</a>; {html.escape(x['quoted_anchor'])}</li>"
  ev=''.join(line(x) for x in lead)
  trends=''.join(f"<h3>{html.escape(metric)}</h3><ul>{''.join(line(x) for x in values[-4:])}</ul>" for metric,values in sorted(by_metric.items()))
@@ -36,7 +39,8 @@ def main():
  nav=[]
  for label,sid in [('产业链位置','industry_structure'),('壁垒','competition_and_moat'),('财务兑现','profitability_and_earnings_quality'),('市场交易的未来','valuation'),('推翻信号','risks_and_falsification')]:
   sec=next(x for x in sections if x['section_id']==sid); nav.append(f"<li>{label}：{'可回答，见 '+sid if sec['status']!='missing' else '尚无证据支撑；缺 '+', '.join(sec['missing_required'])}</li>")
- latest=max((str(x.get('report_period','')) for x in facts),default='unknown'); market_quote=next(x for x in m1['rows'] if x['ticker']==ticker)['market']['quote']; market_asof=market_quote.get('observed_at','unknown')
+ resolved_periods=[str(x.get('report_period','')) for x in facts if x.get('report_period') not in {'unknown','unresolved'}]
+ latest=max(resolved_periods,default='unresolved'); market_quote=next(x for x in m1['rows'] if x['ticker']==ticker)['market']['quote']; market_asof=market_quote.get('observed_at','unknown')
  body=f'''<!doctype html><meta charset="utf-8"><title>宁德时代 | Evidence-bound Research Report</title><style>body{{font-family:Arial,"PingFang SC";max-width:900px;margin:48px auto;line-height:1.6;color:#162436}}h1{{border-bottom:3px solid #143b66}}table{{border-collapse:collapse;width:100%}}td,th{{border:1px solid #ccd6e0;padding:7px;text-align:left}}.note,.judgment{{background:#f2f6fa;padding:14px;margin:12px 0}}em{{color:#9d2d20}}</style><h1>宁德时代（300750.SZ）</h1><p class=note><b>数据时点：最新财报期 {latest}；行情 as_of {market_asof}</b><br>Offline report · Report Model {model} · Facts and unreviewed AI judgment are separate.</p><h2>一句话定位</h2><p>基于冻结官方披露证据的电池产业链研究对象；结论仍受未完成证据约束。</p><h2>五问导航</h2><ol>{''.join(nav)}</ol><h2>决策边界（实际输入）</h2><pre>{html.escape(json.dumps(d,ensure_ascii=False,indent=2,default=str))}</pre><h2>18章终态</h2><table><tr><th>章节</th><th>状态</th><th>缺失输入</th></tr>{rows}</table><h2>最新期页级事实</h2><ul>{ev}</ul><h2>历史趋势（每项实际期次）</h2>{trends}<h2>判断内容（未审阅，事实引用内联）</h2>{j}<h2>大白话点评</h2><p>这是一份可翻回官方 PDF 的底稿，不是直接买卖建议；缺口写在章节表里。</p>'''
  body=body.replace('Facts and unreviewed AI judgment are separate.</p>', 'Facts and unreviewed AI judgment are separate.<br><b>校验状态：'+html.escape(audit_summary)+'</b></p>')
  body=body.replace('<h2>决策边界（实际输入）</h2><pre>'+html.escape(json.dumps(d,ensure_ascii=False,indent=2,default=str))+'</pre>', '<h2>执行摘要（实际 required inputs）</h2><h3>市场快照</h3><pre>'+html.escape(json.dumps(market_quote,ensure_ascii=False,indent=2,default=str))+'</pre><h3>决策摘要</h3><pre>'+html.escape(json.dumps(d,ensure_ascii=False,indent=2,default=str))+'</pre>')
