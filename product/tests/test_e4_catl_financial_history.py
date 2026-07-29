@@ -192,6 +192,31 @@ class CatlHistoryTest(unittest.TestCase):
         opening={item.metric:item.report_period for item in facts if item.column_identity=="period_begin"}
         self.assertEqual(opening["cash"],"2025FY")
 
+    def test_quarter_column_header_carries_across_pages_but_resets_at_new_statement(self) -> None:
+        """CNINFO 1225107946 places the balance-sheet header on p5, not p7."""
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw=b"%PDF-test"; digest=hashlib.sha256(raw).hexdigest()
+        pages=(
+            DocumentPage("1225107946",5,digest,"v","1、合并资产负债表\n单位：千元\n项目 期末余额 期初余额\n货币资金 351,997,422 333,512,927\n流动资产合计 692,498,192 638,481,543","p5","native","table"),
+            DocumentPage("1225107946",6,digest,"v","递延所得税资产 10 9","p6","native","table"),
+            DocumentPage("1225107946",7,digest,"v","流动负债合计 434,010,194 399,625,988\n非流动负债合计 218,086,551 201,000,000","p7","native","table"),
+            DocumentPage("1225107946",8,digest,"v","2、合并利润表\n单位：千元\n本期发生额 上期发生额\n营业总收入 100 90","p8","native","table"),
+        )
+        parsed=DocumentParseResult("1225107946",digest,"v","p",pages,(),())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document",return_value=parsed):
+            facts=extract_report_facts(OfficialReport("2026Q1","1225107946","https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"),raw)
+        closing={item.metric:item for item in facts if item.column_identity=="period_end"}
+        self.assertEqual(closing["cash"].value,351_997_422)
+        self.assertEqual(closing["current_assets"].value,692_498_192)
+        self.assertEqual(closing["current_liabilities"].value,434_010_194)
+        self.assertEqual(closing["current_liabilities"].report_period,"2026Q1")
+        # New profit-statement title clears the balance-sheet column context,
+        # then its own header supplies a new identity.
+        revenue=next(item for item in facts if item.metric=="revenue" and item.column_identity=="current_period")
+        self.assertEqual(revenue.value,100)
+
     def test_same_statement_mixed_column_identity_fails(self) -> None:
         from data_core.e4_catl_financial_history import OfficialFinancialFact, validate_statement_column_consistency
         common=dict(ticker="300750.SZ",document_id="doc",raw_hash="a"*64,page_number=5,quoted_label="x",quoted_anchor="raw",report_period="2026Q1",statement_scope="consolidated",unit="千元",currency="CNY",source_url="https://official.example/doc.pdf")

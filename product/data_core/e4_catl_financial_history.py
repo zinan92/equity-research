@@ -262,7 +262,17 @@ def _rows_with_context(
     lines = _page_lines(page_text)
     column_excerpt = active_column_excerpt; unit_excerpt = ""
     for index, line in enumerate(lines):
-        active_scope = _statement_scope(line) or active_scope
+        # A statement title is a hard table boundary.  Scope and unit may
+        # legitimately carry across the *pages* of one statement, but a
+        # column header from a preceding statement must never bleed into the
+        # next one.  Conversely, leave the current header untouched when a
+        # later page contains no title: that is the common multi-page-table
+        # layout used by quarterly reports.
+        title_scope = _statement_scope(line)
+        if title_scope is not None:
+            active_scope = title_scope
+            active_column = "unknown"
+            column_excerpt = ""
         if _unit(line): active_unit = _unit(line); unit_excerpt = line[:240]
         if _column_identity(line): active_column, column_excerpt = _column_identity(line)
         rows.append((line, active_scope, active_unit, active_column, column_excerpt, unit_excerpt))
