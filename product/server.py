@@ -25,6 +25,7 @@ from research_reports import report_payload
 from research_evidence import evidence_coverage
 from deepseek_writer import editorial_queue, editorial_status
 from data_core import CanonicalPublicationError, canonical_active_report, canonical_active_summary
+from data_core.canonical_read_api import canonical_read_projection
 from refresh_engine import RefreshInProgressError, refresh_status, run_refresh
 from report_versions import report_version_history
 from portfolio_committee import committee_payload
@@ -624,6 +625,19 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if route == "/api/canonical/active":
             self._json(canonical_active_summary())
             return
+        if route.startswith("/api/canonical/"):
+            remainder = route.removeprefix("/api/canonical/")
+            kind, _, ticker = remainder.partition("/")
+            if kind in {"company", "sector", "dossier", "score", "roadmap", "report"} and ticker:
+                try:
+                    report = canonical_active_report(unquote(ticker))
+                    if report is None:
+                        self._json({"error": "canonical_report_unavailable", "ticker": ticker.upper(), "fallback": "none"}, HTTPStatus.NOT_FOUND)
+                    else:
+                        self._json(canonical_read_projection(kind, report))
+                except (CanonicalPublicationError, ValueError) as exc:
+                    self._json({"error": "canonical_read_unavailable", "ticker": ticker.upper(), "fallback": "none", "detail": str(exc)}, HTTPStatus.CONFLICT)
+                return
         if route == "/api/canonical/portfolio":
             try:
                 self._json(load_portfolio_state())
