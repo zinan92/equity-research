@@ -2,9 +2,9 @@
   "schema_version": "e4-m4-report-v1",
   "ticker": "300750.SZ",
   "data_kind": "real",
-  "report_model_hash": "27f1450a2f131256db635c856d4da08296ff395512261348fe1fcd5af109aad7",
+  "report_model_hash": "3cc65d1b01c62e0678a219edb7d917206fee07d4ed7f65a672c9bd78aad12445",
   "html_path": "artifacts/e4-reports/300750.SZ.html",
-  "word_count": 1437,
+  "word_count": 1292,
   "sections": [
     {
       "section_id": "executive_summary",
@@ -37,18 +37,18 @@
       "title": "投资逻辑与预期差",
       "status": "partial",
       "present_required": [
-        "investment_thesis",
+        "investment_thesis"
+      ],
+      "missing_required": [
         "variant_view"
       ],
-      "missing_required": [],
       "present_optional": [],
       "missing_optional": [
         "bear_case"
       ],
       "status_reason": "pending_judgment_review",
       "pending_judgment_inputs": [
-        "investment_thesis",
-        "variant_view"
+        "investment_thesis"
       ],
       "page_budget": [
         2,
@@ -57,7 +57,7 @@
       "section_hash": "0d478ef75e9a6f83a25c3643af878e6e064bf494c0551d6bc120bad836bdfa5d",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "47bb548304430e9e5d61736ef925543bd62c1c4cd55a2f62e9ee1d1f8cbc3e26"
+      "input_hash": "8b6b354fab15a6e96510a2740a2e93e0cd73af6ca0036e806e54a3e80d27d8cb"
     },
     {
       "section_id": "business_model",
@@ -138,18 +138,18 @@
       "section_hash": "3d11bb93f0db7ffca05a209092f4fbb45ccc6885ba4f4ef00c6bbddca8885c62",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "3a10e17e81502350386066863ee35dc8ec12f72be8b812c41663e0453f8cca2c"
+      "input_hash": "e884054a6dce544534463eed9836351563cdb98b098dbd66455b3e200dee3a26"
     },
     {
       "section_id": "management_and_governance",
       "order": 6,
       "title": "管理层、治理与资本配置",
-      "status": "missing",
-      "present_required": [],
-      "missing_required": [
+      "status": "full",
+      "present_required": [
         "management_record",
         "governance_events"
       ],
+      "missing_required": [],
       "present_optional": [],
       "missing_optional": [
         "ownership_structure",
@@ -164,7 +164,7 @@
       "section_hash": "ec377573788feff6fc09c29f83265d0886650761c01280a09b454e50ae96353a",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      "input_hash": "e3af43475357f4e6f48079b7ff5ee7271838eebde2e387054667fc7a8bfe1071"
     },
     {
       "section_id": "revenue_quality_and_kpis",
@@ -172,10 +172,11 @@
       "title": "收入质量与经营 KPI",
       "status": "partial",
       "present_required": [
-        "revenue_history",
         "operating_kpis"
       ],
-      "missing_required": [],
+      "missing_required": [
+        "revenue_history"
+      ],
       "present_optional": [],
       "missing_optional": [
         "guidance_history",
@@ -192,7 +193,7 @@
       "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "ed5b04faaaa77d5304672f50b8ad9a429dd9b42639237b1386c690b09df55a02"
+      "input_hash": "86de463e0502d7d0aa44265cb490d14aed42ebd2e27479fd5e65faffe5332a0f"
     },
     {
       "section_id": "profitability_and_earnings_quality",
@@ -200,10 +201,11 @@
       "title": "盈利能力与利润质量",
       "status": "partial",
       "present_required": [
-        "income_history",
         "margin_bridge"
       ],
-      "missing_required": [],
+      "missing_required": [
+        "income_history"
+      ],
       "present_optional": [],
       "missing_optional": [
         "adjusted_earnings_bridge"
@@ -219,7 +221,7 @@
       "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "eca20d8883ebe76a655393165205965ae8c400bd72894b1334fb55344591615a"
+      "input_hash": "f90588f6d8dd4212513eeae14cc94c7fb59597a69c28ed35a68811d2278a8726"
     },
     {
       "section_id": "cash_flow_and_balance_sheet",
@@ -272,7 +274,7 @@
       "section_hash": "8f847653edee37d1dec89b5a13918ea7a0aa4866f130b476728a0d662df8af51",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "93277a92a0d2e37a4c507a90261ebebe644b5d3eba48fdaca01ec4f65ab7217d"
+      "input_hash": "ad73b0adad894abbfca1d7d026c693781519685ae76cc491569874c768b2a55d"
     },
     {
       "section_id": "forecasts_and_consensus",
@@ -406,7 +408,7 @@
       "section_hash": "0b613a53664df2d993f3c526e2b2c98be55513ecdd2e5876590e5ff92b0838cc",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "ba64949fdabea16a52c511ac5b89fefcd803ec9a20a4a27807d28372c6e6ed6e"
+      "input_hash": "164880a7a2f93a455b02f2762e5c88e11d85c2d135c0eaa84b625394ca08b0ed"
     },
     {
       "section_id": "decision_framework",
@@ -458,7 +460,7 @@
       "section_hash": "9a336944d6089541672bd83723685e95cc9c747c2a284e90ab70943ca68e8780",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "b4d69241d9f009293cf7cd5d9956daeff0cf095cc06df899bf4f691f40ca4a51"
+      "input_hash": "ea45ada965f6efeb20f026c48d376f6f962d5191515de7cbd6cbf04c53119e08"
     },
     {
       "section_id": "evidence_and_methodology",
@@ -495,21 +497,20 @@
   ],
   "input_hashes": {
     "m1": "d020ca69cab942599611918a624c758a8be50790beb9468b0ba6fcd5a0aef25d",
-    "m2": "aa93c0aa53f8bbbee4e2a82d6570565d659528832bfd250b7a9c323d8348fff1",
-    "m3": "ee00aab7719c4003679bcf3a932c976d7077cd38d9c6884494e1214c7e855a99"
+    "m2": "e283d372fcb7306f949dfcf3230fbf392c4acb6653ed5ac5883cb61b39240475",
+    "m3": "88af42fa555a1302a2f990c22262df201255d906eb660e10132c9b4a7b010c62"
   },
-  "unreviewed_judgment_count": 10,
+  "unreviewed_judgment_count": 9,
   "unreviewed_judgment_ids": [
     "investment_thesis",
-    "variant_view",
     "moat_assessment",
     "risk_register",
     "falsification_tests",
     "monitoring_kpis",
     "action_triggers",
     "accounting_checks",
-    "operating_kpis",
-    "margin_bridge"
+    "margin_bridge",
+    "operating_kpis"
   ],
   "citation_gate": {
     "passed": true,
@@ -519,5 +520,5 @@
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "6971b393425d1c04c01c7d5582ffb2848f312caf4159cfd6d56c6ebada68a5a2"
+  "receipt_hash": "96b4f65dbf825b748359988ee0bf3a546fb5f08f230de3d9c60a487d263d9e2e"
 }
