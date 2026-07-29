@@ -174,8 +174,15 @@ def _receipt(batch_key: str, tasks: tuple[ReportTask, ...], results: dict[str, R
         status = "completed"
     return {
         "schema_version": REPORT_TASK_RUNTIME_VERSION, "batch_key": batch_key,
+        "data_kind": "runtime_only",
         "started_at": started_at, "finished_at": _now(), "resumed": resumed,
         "execution": {"configured_max_concurrency": max_concurrency, "effective_concurrency": 1, "min_interval_seconds": min_interval_seconds, "queue_order": [task.ticker.upper() for task in tasks]},
         "status": status, "counts": counts,
         "results": [{"task": asdict(item.task), "status": item.status, "report_export_hash": item.report_export_hash, "artifact": item.artifact, "reason": item.reason} for item in ordered],
+        "truth_boundary": {
+            "cache_is_not_authority": True,
+            "requires_immutable_snapshot_and_evidence_manifest": True,
+            "partial_or_failed_row_is_never_hidden": True,
+            "does_not_change_tier_target_position_or_action": True,
+        },
     }

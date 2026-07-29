@@ -81,6 +81,9 @@ class ReportTaskRuntimeTest(unittest.TestCase):
         self.assertEqual(receipt["execution"]["queue_order"], ["000001.SZ", "600519.SH"])
         self.assertEqual(sleeps, [0.25])
         self.assertEqual(receipt["counts"]["partial"], 1)
+        self.assertEqual(receipt["data_kind"], "runtime_only")
+        self.assertTrue(receipt["truth_boundary"]["cache_is_not_authority"])
+        self.assertTrue(receipt["truth_boundary"]["partial_or_failed_row_is_never_hidden"])
 
     def test_builder_cannot_cross_write_ticker_identity(self) -> None:
         task = self.task("300750.SZ")
