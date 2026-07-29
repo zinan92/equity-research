@@ -1,0 +1,389 @@
+{
+  "schema_version": "e4-quarter-column-audit-v2",
+  "facts_examined": 1241,
+  "counts": {
+    "passed": 1199,
+    "invalid_share_currency_unit": 42
+  },
+  "findings": [
+    {
+      "ticker": "000001.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+      "page_number": 117,
+      "raw_text_excerpt": "股本 31 19,406 19,406"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225067794",
+      "page_number": 153,
+      "raw_text_excerpt": "股本 (五)36 11,930,709,471.00 11,930,709,471.00"
+    },
+    {
+      "ticker": "000002.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264061",
+      "page_number": 10,
+      "raw_text_excerpt": "股本 11,930,709,471.00 11,930,709,471.00"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1213059469",
+      "page_number": 82,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1216593484",
+      "page_number": 84,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219823600",
+      "page_number": 80,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223303879",
+      "page_number": 78,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223303879",
+      "page_number": 78,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225204194",
+      "page_number": 76,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "2024FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225204194",
+      "page_number": 76,
+      "raw_text_excerpt": "股本 3,070,692,107 3,070,692,107"
+    },
+    {
+      "ticker": "000012.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225203844",
+      "page_number": 8,
+      "raw_text_excerpt": "股本 3,042,468,811 3,070,692,107"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1212635843",
+      "page_number": 100,
+      "raw_text_excerpt": "股本 959,825,277.00 546,129,449.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1216373040",
+      "page_number": 92,
+      "raw_text_excerpt": "股本 1,926,656,122.00 959,825,277.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219402767",
+      "page_number": 87,
+      "raw_text_excerpt": "股本 1,924,156,740.00 1,926,656,122.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223095035",
+      "page_number": 79,
+      "raw_text_excerpt": "股本 1,918,825,051.00 1,924,156,740.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225002090",
+      "page_number": 81,
+      "raw_text_excerpt": "股本 2,033,891,587.00 1,918,825,051.00"
+    },
+    {
+      "ticker": "002709.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225208714",
+      "page_number": 7,
+      "raw_text_excerpt": "股本 2,038,561,744.00 2,033,891,587.00"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+      "page_number": 110,
+      "raw_text_excerpt": "股本 233,085.12 232,947.40"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+      "page_number": 117,
+      "raw_text_excerpt": "股本 439,904.12 244,251.45"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+      "page_number": 116,
+      "raw_text_excerpt": "股本 4,403,466 4,399,041"
+    },
+    {
+      "ticker": "300750.SZ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+      "page_number": 7,
+      "raw_text_excerpt": "股本 4,564,063 4,563,803"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1212941560",
+      "page_number": 61,
+      "raw_text_excerpt": "实收资本（或股本） （五十三） 1,926,958,448.00 1,926,958,448.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1216688257",
+      "page_number": 70,
+      "raw_text_excerpt": "实收资本（或股本） （五十三） 2,488,481,340.00 1,926,958,448.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219461720",
+      "page_number": 69,
+      "raw_text_excerpt": "实收资本（或股本） （五十三） 2,488,481,340.00 2,488,481,340.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223389433",
+      "page_number": 73,
+      "raw_text_excerpt": "实收资本（或股本） 53 2,488,481,340.00 2,488,481,340.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264362",
+      "page_number": 69,
+      "raw_text_excerpt": "实收资本（或股本） 53 2,488,313,040.00 2,488,481,340.00"
+    },
+    {
+      "ticker": "600009.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225264154",
+      "page_number": 7,
+      "raw_text_excerpt": "实收资本（或股本） 2,488,313,040.00 2,488,313,040.00"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1219348207",
+      "page_number": 93,
+      "raw_text_excerpt": "泰君安的约定购回式证券交易中的股本购回，处于质押状态下的 3,306万股也已解押，大连城投持有"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225029354",
+      "page_number": 131,
+      "raw_text_excerpt": "实收资本（或股本） 53 15,698,093,359 15,698,093,359"
+    },
+    {
+      "ticker": "600011.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225237875",
+      "page_number": 8,
+      "raw_text_excerpt": "实收资本（或股本） 15,698,093,359 15,698,093,359"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1213210388",
+      "page_number": 88,
+      "raw_text_excerpt": "共56,370,812股上市流通。本次限制性股票解锁上市后，公司总股本为 22,269,447,650股，其"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1223329102",
+      "page_number": 115,
+      "raw_text_excerpt": "实收资本（或股本） 44 21,985,240,734.00 22,119,857,984.00"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257227",
+      "page_number": 95,
+      "raw_text_excerpt": "实收资本（或股本） 44 21,782,084,749.00 21,985,240,734.00"
+    },
+    {
+      "ticker": "600019.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225257456",
+      "page_number": 8,
+      "raw_text_excerpt": "实收资本（或股本） 21,782,084,749.00 21,782,084,749.00"
+    },
+    {
+      "ticker": "600276.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225032585",
+      "page_number": 134,
+      "raw_text_excerpt": "实收资本（或股本） 七、53 6,637,199,874.00 6,379,002,274.00"
+    },
+    {
+      "ticker": "600519.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+      "page_number": 58,
+      "raw_text_excerpt": "实收资本（或股本） 37 1,252,270,215.00 1,256,197,800.00"
+    },
+    {
+      "ticker": "600941.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225036280",
+      "page_number": 87,
+      "raw_text_excerpt": "股本 四(34) 468,445 461,838"
+    },
+    {
+      "ticker": "601000.SH",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225040947",
+      "page_number": 62,
+      "raw_text_excerpt": "实收资本（或股本） 5,925,928,614.00 5,925,928,614.00"
+    },
+    {
+      "ticker": "920027.BJ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225267593",
+      "page_number": 94,
+      "raw_text_excerpt": "股本 三、（五）、36 79,203,500.00 57,250,000.00"
+    },
+    {
+      "ticker": "920118.BJ",
+      "period": "unresolved",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225165599",
+      "page_number": 72,
+      "raw_text_excerpt": "股本 五、29 50,896,000.00 50,896,000.00"
+    },
+    {
+      "ticker": "920751.BJ",
+      "period": "2025FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225133785",
+      "page_number": 116,
+      "raw_text_excerpt": "2026年4月 17日公司第六届董事会第十六次会议审议通过 2025年度利润分配预案，拟以截止年4月 17日，公司最新总股本 86,780,000股为基数（最终以权益分派股权登记日登记的股份数为准）， 2026"
+    },
+    {
+      "ticker": "920751.BJ",
+      "period": "2023FY",
+      "metric": "shares_outstanding",
+      "status": "invalid_share_currency_unit",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225133785",
+      "page_number": 116,
+      "raw_text_excerpt": "2026年4月 17日公司第六届董事会第十六次会议审议通过 2025年度利润分配预案，拟以截止年4月 17日，公司最新总股本 86,780,000股为基数（最终以权益分派股权登记日登记的股份数为准）， 2026"
+    }
+  ],
+  "internal_contradictions": []
+}

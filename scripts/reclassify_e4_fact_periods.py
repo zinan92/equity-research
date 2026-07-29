@@ -13,6 +13,13 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('receipt',type=Path);p.add_argument('--out',type=Path,required=True);a=p.parse_args();x=json.loads(a.receipt.read_text());n=0
  for ticker in x.get('tickers',[]):
   for report in ticker.get('reports',[]):
+   grouped={}
+   for fact in report.get('facts',[]): grouped.setdefault((fact.get('document_id'),fact.get('page_number'),fact.get('metric')),[]).append(fact)
+   for values in grouped.values():
+    known=[f for f in values if f.get('column_identity') in {'period_end','current_period'}]
+    unknown=[f for f in values if f.get('column_identity')=='unknown']
+    if len(known)==1 and len(unknown)==1:
+     unknown[0]['column_identity']='period_begin' if known[0]['column_identity']=='period_end' else 'previous_period'
    for fact in report.get('facts',[]):
     old=fact.get('report_period','');new=period(old,fact.get('column_identity','unknown'))
     if new!=old:n+=1;fact['report_period']=new

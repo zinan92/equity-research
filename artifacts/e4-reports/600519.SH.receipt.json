@@ -2,7 +2,7 @@
   "schema_version": "e4-m4-report-v1",
   "ticker": "600519.SH",
   "data_kind": "real",
-  "report_model_hash": "7d2477318896bb3c7b7db228a2afc9718eec954e44f4790c155f72ba2f6dfd6c",
+  "report_model_hash": "78aacc45bc011f2a79c167afc5e12b495eb2e1bc8bd46c639b05ab1b3e892674",
   "html_path": "artifacts/e4-reports/600519.SH.html",
   "word_count": 485,
   "sections": [
@@ -440,7 +440,7 @@
   ],
   "input_hashes": {
     "m1": "d020ca69cab942599611918a624c758a8be50790beb9468b0ba6fcd5a0aef25d",
-    "m2": "0702bed8c101e4ef3491eae75374992ca18b25f7c3112f5f21e356f1d623e98b",
+    "m2": "4b4e2d3356970ebda9bad4e3e6eceb2330460e7aa1513885f3f17a5221969c18",
     "m3": "520e701d311dc2e963097836fbbaa2d3b2ae4563997c04ceffcdb3b1a4206f32"
   },
   "citation_gate": {
@@ -451,5 +451,5 @@
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "6caf33f50da010028a07885025b96062004c6621f78e6014ff59c5145864c764"
+  "receipt_hash": "58b42147a23cdd8a6317e1fa20020ca89f769de455f9c8cafdcf910306237932"
 }
