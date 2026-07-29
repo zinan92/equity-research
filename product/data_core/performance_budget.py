@@ -19,6 +19,7 @@ from .report_task_runtime import ReportTask, ReportTaskBuilder, ReportTaskResult
 PERFORMANCE_SCHEMA_VERSION = "research-performance-budget-v1"
 CACHE_READ_P95_SECONDS = 2.0
 OFFLINE_REPORT_MODEL_P95_SECONDS = 3.0
+CACHE_REPORT_PAYLOAD_P95_SECONDS = 3.0
 
 
 def _p95(samples: list[float]) -> float:
@@ -49,6 +50,35 @@ def measure_cache_reads(tasks: Iterable[ReportTask], cache: SQLiteReportTaskCach
         "p95_seconds": _p95(samples), "budget_p95_seconds": CACHE_READ_P95_SECONDS,
     }
     receipt["status"] = "passed" if receipt["p95_seconds"] <= CACHE_READ_P95_SECONDS else "budget_exceeded"
+    receipt["receipt_hash"] = digest(receipt)
+    return receipt
+
+
+def measure_cached_report_payloads(tasks: Iterable[ReportTask], cache: SQLiteReportTaskCache) -> dict[str, Any]:
+    """Measure a cached report payload read and serialization, never a cache miss disguised as a response."""
+    samples: list[float] = []
+    hits = 0
+    payload_bytes = 0
+    for task in tasks:
+        started = perf_counter()
+        item = cache.get(
+            cache_key=task.cache_key, ticker=task.ticker, snapshot_id=task.snapshot_id,
+            evidence_manifest_hash=task.evidence_manifest_hash,
+        )
+        if item is not None:
+            encoded = json.dumps(item.artifact, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            payload_bytes += len(encoded)
+            hits += 1
+        samples.append(perf_counter() - started)
+    receipt = {
+        "schema_version": PERFORMANCE_SCHEMA_VERSION,
+        "scope": "local_contract_harness",
+        "operation": "cached_report_payload_read",
+        "sample_count": len(samples), "hits": hits, "misses": len(samples) - hits,
+        "payload_bytes": payload_bytes,
+        "p95_seconds": _p95(samples), "budget_p95_seconds": CACHE_REPORT_PAYLOAD_P95_SECONDS,
+    }
+    receipt["status"] = "passed" if receipt["hits"] == len(samples) and receipt["p95_seconds"] <= CACHE_REPORT_PAYLOAD_P95_SECONDS else "budget_exceeded"
     receipt["receipt_hash"] = digest(receipt)
     return receipt
 

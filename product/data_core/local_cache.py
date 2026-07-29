@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import closing
 from pathlib import Path
 import sqlite3
 from dataclasses import dataclass
@@ -18,7 +19,7 @@ class SQLiteFetchCache:
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             connection.execute(
                 """
                 create table if not exists fetch_cache (
@@ -36,10 +37,11 @@ class SQLiteFetchCache:
                 )
                 """
             )
+            connection.commit()
 
     def put(self, source_key: str, request: FetchRequest, fetched: FetchedPayload) -> None:
         fetched.validate()
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             connection.execute(
                 """
                 insert into fetch_cache(
@@ -68,9 +70,10 @@ class SQLiteFetchCache:
                     fetched.status_code,
                 ),
             )
+            connection.commit()
 
     def get(self, source_key: str, request: FetchRequest) -> FetchedPayload | None:
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             row = connection.execute(
                 """
                 select body,source_url,fetched_at,known_at,mime_type,status_code
@@ -93,7 +96,7 @@ class SQLiteFetchCache:
         return fetched
 
     def count(self) -> int:
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             return int(connection.execute("select count(*) from fetch_cache").fetchone()[0])
 
 
@@ -120,7 +123,7 @@ class SQLiteReportTaskCache:
     def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             connection.execute(
                 """
                 create table if not exists report_task_cache (
@@ -134,6 +137,7 @@ class SQLiteReportTaskCache:
                 )
                 """
             )
+            connection.commit()
 
     def put(
         self, *, cache_key: str, ticker: str, snapshot_id: str,
@@ -141,7 +145,7 @@ class SQLiteReportTaskCache:
     ) -> CachedReportTask:
         cached_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         payload = json.dumps(artifact, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             connection.execute(
                 """
                 insert into report_task_cache(
@@ -153,12 +157,13 @@ class SQLiteReportTaskCache:
                 """,
                 (cache_key, ticker.upper(), snapshot_id, evidence_manifest_hash, report_export_hash, payload, cached_at),
             )
+            connection.commit()
         return CachedReportTask(cache_key, ticker.upper(), snapshot_id, evidence_manifest_hash, report_export_hash, dict(artifact), cached_at)
 
     def get(
         self, *, cache_key: str, ticker: str, snapshot_id: str, evidence_manifest_hash: str,
     ) -> CachedReportTask | None:
-        with sqlite3.connect(self.path) as connection:
+        with closing(sqlite3.connect(self.path)) as connection:
             row = connection.execute(
                 """
                 select cache_key,ticker,snapshot_id,evidence_manifest_hash,report_export_hash,artifact_json,cached_at
