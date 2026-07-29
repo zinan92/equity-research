@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 import http.client
 import json
 import os
@@ -31,7 +32,10 @@ from run_private_preview import load_env, verify_packaged_release  # noqa: E402
 from portfolio_allocation import digest, portfolio_diff  # noqa: E402
 from portfolio_ledger import PortfolioLedger, build_ledger_history  # noqa: E402
 from prepare_private_preview import PreviewReleaseError, point_current, prepare, sanitize_auth_store  # noqa: E402
-from recovery_drill import RecoveryDrillError, create_backup, restore_backup, verify_backup  # noqa: E402
+from recovery_drill import (  # noqa: E402
+    RecoveryDrillError, create_backup, evaluate_recovery_objectives, restore_backup,
+    run_recovery_drill, verify_backup,
+)
 from research_reports import _baseline_report  # noqa: E402
 from tests import test_canonical_portfolio_v1 as canonical_fixture  # noqa: E402
 
@@ -273,6 +277,32 @@ class PrivatePreviewV1Test(unittest.TestCase):
                 handle.write(b"tamper")
             with self.assertRaises(RecoveryDrillError):
                 verify_backup(root / "backup-store" / "backups" / backup["backup_id"])
+
+    def test_recovery_drill_records_independent_hashes_and_rpo_rto(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            runtime = root / "runtime"
+            deep = root / "deep"
+            deep.mkdir()
+            prepare(self.db, self.state, deep, runtime)
+            result = run_recovery_drill(runtime, root / "backup-store", root / "restored-runtime")
+            self.assertEqual(result["status"], "passed")
+            self.assertTrue(all(result["checks"].values()))
+            self.assertLessEqual(result["rpo_seconds"], 24 * 60 * 60)
+            self.assertLessEqual(result["rto_seconds"], 4 * 60 * 60)
+            receipt = root / "restored-runtime" / "recovery-objectives-receipt.json"
+            self.assertTrue(receipt.is_file())
+
+    def test_recovery_objectives_reject_stale_backup_without_relaxing_limits(self) -> None:
+        now = datetime.now(timezone.utc)
+        backup = {
+            "status": "verified", "created_at": (now - timedelta(hours=24, seconds=1)).isoformat(),
+            "auth_database_sha256": "a", "release_files_hash": "b", "release_id": "release", "snapshot_id": "snapshot",
+        }
+        restore = {"restored_at": now.isoformat(), "auth_database_sha256": "a", "current_release_verified": True}
+        result = evaluate_recovery_objectives(backup, restore, started_at=now - timedelta(seconds=1), completed_at=now)
+        self.assertEqual(result["status"], "failed")
+        self.assertFalse(result["checks"]["rpo_within_24_hours"])
 
     def test_private_preview_startup_rejects_shared_auth_and_research_database(self) -> None:
         env = dict(os.environ)

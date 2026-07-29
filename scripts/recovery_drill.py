@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import argparse
 from contextlib import closing
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import os
@@ -30,6 +30,9 @@ from prepare_private_preview import (  # noqa: E402
 
 
 SCHEMA_VERSION = "private-preview-recovery-drill-v1"
+RECOVERY_OBJECTIVE_SCHEMA_VERSION = "private-preview-recovery-objectives-v1"
+MAX_RPO = timedelta(hours=24)
+MAX_RTO = timedelta(hours=4)
 
 
 class RecoveryDrillError(RuntimeError):
@@ -38,6 +41,18 @@ class RecoveryDrillError(RuntimeError):
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def _parse_timestamp(value: object, *, field: str) -> datetime:
+    if not isinstance(value, str):
+        raise RecoveryDrillError(f"{field} is unavailable")
+    try:
+        parsed = datetime.fromisoformat(value)
+    except ValueError as exc:
+        raise RecoveryDrillError(f"{field} is invalid") from exc
+    if parsed.tzinfo is None:
+        raise RecoveryDrillError(f"{field} must include a timezone")
+    return parsed.astimezone(timezone.utc)
 
 
 def _external(path: Path) -> Path:
@@ -157,6 +172,70 @@ def restore_backup(backup: Path, target_runtime: Path) -> dict[str, Any]:
     return receipt
 
 
+def evaluate_recovery_objectives(
+    backup: dict[str, Any], restore: dict[str, Any], *, started_at: datetime, completed_at: datetime,
+) -> dict[str, Any]:
+    """Evaluate the explicit private-preview RPO/RTO objectives without changing release policy."""
+    if started_at.tzinfo is None or completed_at.tzinfo is None:
+        raise RecoveryDrillError("drill timestamps must include a timezone")
+    backup_at = _parse_timestamp(backup.get("created_at"), field="backup created_at")
+    restored_at = _parse_timestamp(restore.get("restored_at"), field="restore restored_at")
+    started_at = started_at.astimezone(timezone.utc)
+    completed_at = completed_at.astimezone(timezone.utc)
+    if completed_at < started_at:
+        raise RecoveryDrillError("drill completion precedes start")
+    if backup_at > completed_at or restored_at > completed_at:
+        raise RecoveryDrillError("recovery timestamps are inconsistent")
+
+    rpo = completed_at - backup_at
+    rto = completed_at - started_at
+    checks = {
+        "separate_database_backup": bool(backup.get("auth_database_sha256")),
+        "separate_storage_backup": bool(backup.get("release_files_hash")),
+        "backup_hash_verified": backup.get("status") == "verified",
+        "restored_database_hash_verified": restore.get("auth_database_sha256") == backup.get("auth_database_sha256"),
+        "restored_release_verified": restore.get("current_release_verified") is True,
+        "rpo_within_24_hours": timedelta(0) <= rpo <= MAX_RPO,
+        "rto_within_4_hours": timedelta(0) <= rto <= MAX_RTO,
+    }
+    return {
+        "schema_version": RECOVERY_OBJECTIVE_SCHEMA_VERSION,
+        "status": "passed" if all(checks.values()) else "failed",
+        "release_id": backup.get("release_id"),
+        "snapshot_id": backup.get("snapshot_id"),
+        "backup_created_at": backup_at.isoformat(),
+        "drill_started_at": started_at.isoformat(),
+        "drill_completed_at": completed_at.isoformat(),
+        "rpo_seconds": rpo.total_seconds(),
+        "rto_seconds": rto.total_seconds(),
+        "objectives": {"max_rpo_seconds": MAX_RPO.total_seconds(), "max_rto_seconds": MAX_RTO.total_seconds()},
+        "checks": checks,
+        "truth_boundary": {
+            "external_runtime_only": True,
+            "production_runtime_observed": False,
+            "note": "This is a clean isolated-runtime drill; a production deployment must run the same command against its own external runtime.",
+        },
+    }
+
+
+def run_recovery_drill(runtime: Path, backup_root: Path, restored_runtime: Path) -> dict[str, Any]:
+    """Create/verify independent backups, clean-restore them, and persist an objective receipt."""
+    started_at = _now()
+    created = create_backup(runtime, backup_root)
+    backup_path = backup_root.expanduser().resolve() / "backups" / created["backup_id"]
+    verified = verify_backup(backup_path)
+    restored = restore_backup(backup_path, restored_runtime)
+    completed_at = _now()
+    result = evaluate_recovery_objectives(verified, restored, started_at=started_at, completed_at=completed_at)
+    result["backup_id"] = verified["backup_id"]
+    result["backup_manifest_hash"] = verified["receipt_hash"]
+    result["restore_receipt_hash"] = restored["receipt_hash"]
+    result["receipt_hash"] = hashlib.sha256(canonical_json(result).encode()).hexdigest()
+    target = _external(restored_runtime)
+    _write_json(target / "recovery-objectives-receipt.json", result)
+    return result
+
+
 def rollback(runtime: Path, release_id: str) -> dict[str, Any]:
     runtime = _external(runtime)
     current = runtime / "current"
@@ -188,6 +267,9 @@ def main() -> None:
     backup.add_argument("--backup-root", type=Path, required=True)
     restore = commands.add_parser("restore")
     restore.add_argument("--backup", type=Path, required=True)
+    drill = commands.add_parser("drill")
+    drill.add_argument("--backup-root", type=Path, required=True)
+    drill.add_argument("--restored-runtime", type=Path, required=True)
     rollback_command = commands.add_parser("rollback")
     rollback_command.add_argument("release_id")
     args = parser.parse_args()
@@ -195,6 +277,8 @@ def main() -> None:
         result = create_backup(args.runtime, args.backup_root)
     elif args.command == "restore":
         result = restore_backup(args.backup, args.runtime)
+    elif args.command == "drill":
+        result = run_recovery_drill(args.runtime, args.backup_root, args.restored_runtime)
     else:
         result = rollback(args.runtime, args.release_id)
     print(json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2))
