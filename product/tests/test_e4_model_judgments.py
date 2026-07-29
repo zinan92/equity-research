@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from data_core.e4_model_judgments import (  # noqa: E402
     JUDGMENT_STATUS,
     _source_display_token,
+    _task_registry,
     freeze_judgment_input,
     generate_model_judgments,
 )
@@ -79,6 +80,27 @@ class ModelJudgmentTest(unittest.TestCase):
 
     def tearDown(self) -> None:
         self.temporary.cleanup()
+
+    def test_risk_registry_prioritizes_explicit_risk_sections(self) -> None:
+        registry = {
+            "N0001": {
+                "kind": "narrative",
+                "section_path": "第三节 管理层讨论与分析 > 可能面对的风险",
+                "text": "公司面临宏观经济、安全、舆情和环保风险，需要持续跟踪风险暴露。",
+                "citation": {"report_period": "2025FY"},
+            },
+            **{
+                "N00" + str(index): {
+                    "kind": "narrative",
+                    "section_path": "第三节 管理层讨论与分析 > 经营计划",
+                    "text": "公司推进产品、客户、渠道和业务经营计划。",
+                    "citation": {"report_period": "2025FY"},
+                }
+                for index in range(2, 8)
+            },
+        }
+        selected = _task_registry("risk_register", registry)
+        self.assertIn("N0001", selected)
 
     def _transport(self, available_id: str, available_value: dict):
         def send(payload, _secret):

@@ -1,0 +1,1666 @@
+{
+  "schema_version": "e4-model-judgments-v1",
+  "data_kind": "real",
+  "ticker": "600519.SH",
+  "issuer_identity": {
+    "ticker": "600519.SH",
+    "name": "贵州茅台",
+    "exchange": "上海证券交易所",
+    "industry": "白酒"
+  },
+  "source_financial_receipt_sha256": "3dd58a1c24d4eb2589c86b51f5ddf5ed0711bf93e5b5872e6ae1ff9ba43831f9",
+  "source_narrative_receipt": "e4-official-narrative-evidence-v1:a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da",
+  "source_dossier_receipt": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9",
+  "generator_version": "e4-model-judgments-v1",
+  "prompt_version": "e4-model-judgments-prompt-v1",
+  "validator_version": "e4-model-judgments-validator-v1",
+  "input_hash": "ff9fdbffdae2bfc3c22ad3ff7fb286f17944830d4c52d7371136d96335cd0482",
+  "prompt_hash": "52c42e8187accf34e2e273b7ef88384896d0fb342cebdeeb93d17a5067a4a17e",
+  "response_hashes": [
+    "c47119c040fc219a4d89a5fd09c3fe6722aa8a62dd02f3a5ab9346e57bfa3aaf",
+    "1864dbabb420b6bb77033cee8afbc89f6b7a6a883002688823e24b78d68931ca",
+    "304c1be5ff2582f115b69fa7a94b466293c98b1bb394e75b5f692e839a0c7731",
+    "1609f33b6aa7a579d0f5a471ec01ba533d6f8c35166849171bbdf055efab2a13",
+    "fb72b1e7d8a7579061fd7acb2cc25c8fa534b7b287e118a54d14c9b4b7122939",
+    "bef7fa6de02edc8bf931578bcf8f24431fd695a9efe3e90386c9b08ee55b9c69",
+    "8465552d9fe8abd6cf18e268ce7ed82a43b07831cc2cdf1d47bedc634e14370f",
+    "045a513d6150ec16933f41e9e02ba45a83e6399349e5c5b3084d48c6ffeebb09",
+    "b573dd99467179b35ef637ffd7a49db785e41edd39efc103780a95b90fda9a9b",
+    "b573dd99467179b35ef637ffd7a49db785e41edd39efc103780a95b90fda9a9b",
+    "1141e9b807389db9bc606800a4f0cef2d4c4f8c902a35c1bc96cefe1c8d1c541",
+    "59de66b358b154ef3a5d457d50dda3d86f3f86d80a74ea8ee7386286c5804c8e",
+    "0a7c65974644fac69fe868de0f7c9782c8d50f78013e57b70706549c799ef655",
+    "969001ff4cb649308415b4c9c256f25dc1a69d7889b1eb9357a0adb6e98e15f1",
+    "969001ff4cb649308415b4c9c256f25dc1a69d7889b1eb9357a0adb6e98e15f1",
+    "49f4c4f9f2041f29e10f11fc514a661d0926cbae058b8f91ccbf7dbe3018fcd9",
+    "bbca6ebd0cf20697b8b45549b7452b6ab0c5b847c02ad71e45b247ddbdf28d8b",
+    "70931a9a6527b5745f0c31c0e39cc3b1e2d340d6c5650f2ac0805d02826c2c93",
+    "d9644981b31a790466d41516441368c30df1d24653d9d06a47e4175f60afd328",
+    "7e5372da8f5e901f2efb6b4f4fc4ffd789b8e13624c6bc655371189864e92b59",
+    "7e5372da8f5e901f2efb6b4f4fc4ffd789b8e13624c6bc655371189864e92b59",
+    "c8d736098883270758cac9b251a79e6695009654e39ef87f5cdcbe9e41a50de1",
+    "0bd44734031a0af078f6ec011e246a5660db792f454e091632f3a4029f9cf67d",
+    "b4424eae53db076fd081608291f82acd0cbe29dc9e330d15d42b1a2bcddb5728",
+    "d9fb0cafcfd6e2f23585c8425d335c6ee6478bebebe01b68b5b5c8596ca0e9e4",
+    "d9fb0cafcfd6e2f23585c8425d335c6ee6478bebebe01b68b5b5c8596ca0e9e4",
+    "c87dddd7dc8beaf3061c02bc8aa5522d54a378de391f31d22f6fdd42056eb83c"
+  ],
+  "model_receipts": [
+    {
+      "request_id": "b924f553-3a3c-4308-9414-b5c7c0c0a90f",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3701,
+        "completion_tokens": 426,
+        "total_tokens": 4127,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 2549
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:investment_thesis"
+    },
+    {
+      "request_id": "29e7784f-4782-45c3-ae7e-f2e1d24a7af5",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4512,
+        "completion_tokens": 251,
+        "total_tokens": 4763,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 4000
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:moat_assessment"
+    },
+    {
+      "request_id": "d18b9030-34ae-491b-8613-5f53f513de3a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4775,
+        "completion_tokens": 253,
+        "total_tokens": 5028,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 4135
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:moat_assessment:1"
+    },
+    {
+      "request_id": "30e2d906-5aef-4d01-b278-00c932c3ef2d",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2808,
+        "completion_tokens": 424,
+        "total_tokens": 3232,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2296
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:risk_register"
+    },
+    {
+      "request_id": "fb20a232-7184-44bb-83f0-5a679fedb129",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3230,
+        "completion_tokens": 360,
+        "total_tokens": 3590,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 2590
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:risk_register:1"
+    },
+    {
+      "request_id": "2b9e2526-c3c8-4b3a-b5d5-03cd25d57cba",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1653,
+        "completion_tokens": 394,
+        "total_tokens": 2047,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 757
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:falsification_tests"
+    },
+    {
+      "request_id": "a492c8c2-f903-4200-af43-4ad390f9a4cb",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2043,
+        "completion_tokens": 394,
+        "total_tokens": 2437,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 1275
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:falsification_tests:1"
+    },
+    {
+      "request_id": "41f0bcaa-8bf3-4c5c-9507-551f4d5a2b41",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4244,
+        "completion_tokens": 321,
+        "total_tokens": 4565,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 2580
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "8d8c3986-9699-426b-bc45-eddfb7c987a8",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4616,
+        "completion_tokens": 236,
+        "total_tokens": 4852,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 2952
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "342f232b-ef35-46cd-afd0-a30a42cc936c",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4508,
+        "completion_tokens": 231,
+        "total_tokens": 4739,
+        "prompt_tokens_details": {
+          "cached_tokens": 3840
+        },
+        "prompt_cache_hit_tokens": 3840,
+        "prompt_cache_miss_tokens": 668
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "282c1f19-b4e7-418f-907e-cea8b239c8a3",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1530,
+        "completion_tokens": 173,
+        "total_tokens": 1703,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 634
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:action_triggers"
+    },
+    {
+      "request_id": "5359556d-d981-4244-ad4b-ec7628410b9f",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1781,
+        "completion_tokens": 125,
+        "total_tokens": 1906,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 629
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:accounting_checks"
+    },
+    {
+      "request_id": "dc88e665-5f63-493c-8efe-1c3ab5179cd3",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3459,
+        "completion_tokens": 306,
+        "total_tokens": 3765,
+        "prompt_tokens_details": {
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2947
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:operating_kpis"
+    },
+    {
+      "request_id": "567369fd-f91e-4956-9170-7bdd50fd9a80",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3790,
+        "completion_tokens": 334,
+        "total_tokens": 4124,
+        "prompt_tokens_details": {
+          "cached_tokens": 640
+        },
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 3150
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:operating_kpis:1"
+    },
+    {
+      "request_id": "18cc5a3b-d6d4-4962-83b6-9ffb189bd108",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3802,
+        "completion_tokens": 334,
+        "total_tokens": 4136,
+        "prompt_tokens_details": {
+          "cached_tokens": 3072
+        },
+        "prompt_cache_hit_tokens": 3072,
+        "prompt_cache_miss_tokens": 730
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:operating_kpis:2"
+    },
+    {
+      "request_id": "db9bb1a7-8240-4945-8889-4eba49093e03",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2364,
+        "completion_tokens": 359,
+        "total_tokens": 2723,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 700
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:margin_bridge"
+    },
+    {
+      "request_id": "795bf9a7-df70-422c-9de8-9283daa7c873",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2797,
+        "completion_tokens": 353,
+        "total_tokens": 3150,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 1133
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:1"
+    },
+    {
+      "request_id": "bb230bc1-d3b7-45de-a1ff-373dee2ece74",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2757,
+        "completion_tokens": 405,
+        "total_tokens": 3162,
+        "prompt_tokens_details": {
+          "cached_tokens": 1920
+        },
+        "prompt_cache_hit_tokens": 1920,
+        "prompt_cache_miss_tokens": 837
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:margin_bridge:2"
+    },
+    {
+      "request_id": "e31dcf5c-646a-401f-a549-5a2200bdd996",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4244,
+        "completion_tokens": 315,
+        "total_tokens": 4559,
+        "prompt_tokens_details": {
+          "cached_tokens": 4224
+        },
+        "prompt_cache_hit_tokens": 4224,
+        "prompt_cache_miss_tokens": 20
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "4cd4ae4e-0904-46b8-9f13-4fd65c6f53bc",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4610,
+        "completion_tokens": 324,
+        "total_tokens": 4934,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 258
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "c46b7853-a784-4bba-8a6d-9593687da20e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4596,
+        "completion_tokens": 324,
+        "total_tokens": 4920,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 244
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "d8526e7c-72ac-4f37-b76c-1df1225b2887",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1781,
+        "completion_tokens": 125,
+        "total_tokens": 1906,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 117
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:accounting_checks"
+    },
+    {
+      "request_id": "9a173022-4554-4572-a850-a05d8c2341bb",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3459,
+        "completion_tokens": 307,
+        "total_tokens": 3766,
+        "prompt_tokens_details": {
+          "cached_tokens": 3456
+        },
+        "prompt_cache_hit_tokens": 3456,
+        "prompt_cache_miss_tokens": 3
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:operating_kpis"
+    },
+    {
+      "request_id": "9130cbb0-aa91-4963-8e06-ff6ccd34ca0b",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4244,
+        "completion_tokens": 366,
+        "total_tokens": 4610,
+        "prompt_tokens_details": {
+          "cached_tokens": 4224
+        },
+        "prompt_cache_hit_tokens": 4224,
+        "prompt_cache_miss_tokens": 20
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:monitoring_kpis"
+    },
+    {
+      "request_id": "230cf6a9-c597-44c2-85c8-8a89596867b8",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4645,
+        "completion_tokens": 366,
+        "total_tokens": 5011,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 293
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:1"
+    },
+    {
+      "request_id": "649adf2a-459c-461d-b532-9f66fb71915e",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4631,
+        "completion_tokens": 366,
+        "total_tokens": 4997,
+        "prompt_tokens_details": {
+          "cached_tokens": 4352
+        },
+        "prompt_cache_hit_tokens": 4352,
+        "prompt_cache_miss_tokens": 279
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "validation_repair:monitoring_kpis:2"
+    },
+    {
+      "request_id": "c338a569-4837-4032-b77a-25f3ea3c1968",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 1781,
+        "completion_tokens": 273,
+        "total_tokens": 2054,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 117
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "purpose": "draft:accounting_checks"
+    }
+  ],
+  "resume_lineage": [
+    "e4-model-judgments-v1:723c8cfb02349557a5efb1f99c574f938faa50ab8fefb1b63ef111c81c848d58",
+    "e4-model-judgments-v1:1101d6693a2cba7f46f67fcb396811d78931aa4e6e9a7015c8fc4cbb53900738"
+  ],
+  "content_hash": "c628343a202b9b688736b7493b09d108cc7fd86ad7aefec9e221ffc87f6e1f8a",
+  "content": {
+    "variant_view": {
+      "status": "missing",
+      "reason": "no page-bound market-expectations or consensus evidence in supplied receipts",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "peer_comparison": {
+      "status": "missing",
+      "reason": "no page-bound peer-company facts in supplied receipts",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "management_record": {
+      "status": "missing",
+      "reason": "no page-bound management track-record series in supplied receipts",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "governance_events": {
+      "status": "missing",
+      "reason": "no official governance-event extraction receipt in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "macro_exposures": {
+      "status": "missing",
+      "reason": "no official issuer-specific macro-sensitivity evidence in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "segment_financials": {
+      "status": "missing",
+      "reason": "no accepted official segment-financial table in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "market_size": {
+      "status": "missing",
+      "reason": "no accepted official market-size evidence in supplied inputs",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment"
+    },
+    "investment_thesis": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果茅台酒、系列酒及国际化三大板块协同发力能稳住市场基本盘，那么2025年营业总收入172,054,171,890.91元可能反映了这一战略的初步成效。如果品牌强度评级达到最高的AAA+级且品牌价值较上一年增长16.50%，那么品牌影响力提升可能为未来收入增长提供支撑。",
+      "facts": [
+        {
+          "evidence_id": "N0077",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 9,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+          }
+        },
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 172054171890.91,
+          "display_value": "172,054,171,890.91",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果茅台酒、系列酒及国际化三大板块协同发力能稳住市场基本盘，那么2025年营业总收入172,054,171,890.91元可能反映了这一战略的初步成效。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0077",
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0077",
+              "quote": "茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘"
+            },
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 172,054,171,890.91"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 9,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        },
+        {
+          "text": "如果品牌强度评级达到最高的AAA+级且品牌价值较上一年增长16.50%，那么品牌影响力提升可能为未来收入增长提供支撑。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0077"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0077",
+              "quote": "品牌强度评级达到最高的 AAA+级，品牌影响稳步提升"
+            },
+            {
+              "evidence_id": "N0077",
+              "quote": "较上一年增长 16.50%"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 9,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果茅台酒、系列酒及国际化三大板块协同发力能稳住市场基本盘，那么2025年营业总收入172,054,171,890.91元可能反映了这一战略的初步成效。",
+            "replaced_sentence": "如果茅台酒、系列酒及国际化三大板块协同发力能稳住市场基本盘，那么2025年营业总收入172,054,171,890.91元可能反映了这一战略的初步成效。",
+            "status": "passed",
+            "specific_anchors": [
+              "172,054,171,890.91",
+              "三大板块协同发力",
+              "列酒及国际化三大",
+              "化三大板块协同发",
+              "及国际化三大板块",
+              "国际化三大板块协",
+              "系列酒及国际化三",
+              "酒及国际化三大板"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "如果品牌强度评级达到最高的AAA+级且品牌价值较上一年增长16.50%，那么品牌影响力提升可能为未来收入增长提供支撑。",
+            "replaced_sentence": "如果品牌强度评级达到最高的AAA+级且品牌价值较上一年增长16.50%，那么品牌影响力提升可能为未来收入增长提供支撑。",
+            "status": "passed",
+            "specific_anchors": [
+              "品牌强度评级达到",
+              "度评级达到最高的",
+              "强度评级达到最高",
+              "牌强度评级达到最",
+              "品牌强度评级达",
+              "度评级达到最高",
+              "强度评级达到最",
+              "牌强度评级达到"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 1,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "moat_assessment": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果公司能成功推进市场化转型和国际化战略，其不可复制的环境优势可能构成持续竞争优势。",
+      "facts": [
+        {
+          "evidence_id": "N0047",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "四是文化辐射力强。茅台文化从“濮人善酿”的农耕文明中走来，于现代文明中赓续发展，引领中国白酒文化发展潮流，成为中国酒文化极致。在不断的发展中，公司持续优化茅台文化体系，形成了“酿造高品质生活”的企业使命，“让世界爱上茅台，让茅台香飘世界”的企业愿景，“爱我茅台，为国争光”的企业精神，“顺天敬人、明理厚德”的企业价值观，“品质、品牌、五是环境不可复制。特殊的地形地貌、气候环境，优质的酿酒水源，独一无二的原产地保护和不可复制的微生物菌落群是贵州茅台酒核心产区的独特特征。公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 21,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "四是文化辐射力强。茅台文化从“濮人善酿”的农耕文明中走来，于现代文明中赓续发展，引领中国白酒文化发展潮流，成为中国酒文化极致。在不断的发展中，公司持续优化茅台文化体系，形成了“酿造高品质生活”的企业使命，“让世界爱上茅台，让茅台香飘世界”的企业愿景，“爱我茅台，为国争光”的企业精神，“顺天敬人、明理厚德”的企业价值观，“品质、品牌、五是环境不可复制。特殊的地形地貌、气候环境，优质的酿酒水源，独一无二的原产地保护和不可复制的微生物菌落群是贵州茅台酒核心产区的独特特征。公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+          }
+        },
+        {
+          "evidence_id": "N0041",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "茅台香飘世界”为愿景，锚定“产品卓越、品牌卓著、创新领先、治理现代”十六字方针，全面加强党的建设与关键职能建设，持续提升商业模式韧性、增强全球市场竞争力、培育新发展动能，2026年是“十五五”起步之年，总体要求是：坚持以习近平新时代中国特色社会主义思想为指导，深入学习贯彻党的二十大和二十届二中、三中、四中全会精神，认真贯彻习近平总书记在贵州考察时的重要讲话精神，全面贯彻省委经济工作会议和省两会部署，坚持稳中求进工作总基调，完整、准确、全面贯彻新发展理念，积极服务和融入新发展格局，紧紧围绕“坚持以消费者为中心，全面推进市场化转型”主题，扎实抓好生产经营各项工作，持续增强企业核心竞争力，一是持续筑牢质量根基。树牢“质量是生命之魂”信仰和“崇本守道、坚守工艺、贮足陈酿、不卖新酒”观念，构建品质更高、协同更优、韧性更强的产供质量保障体系。加强生产管理体系建设，深化应用“时空法”匠心质量管理模式，围绕“结果稳定、过程优化”的总体目标，系统提升生产质量管理水平，确保各项关键指标稳中有进。加快大曲研究成果转化应用，全面提升产品包装质量管理水平。加快构建现代化采购新生态，强化供应商全生命周期质量协同机制嵌入采购全流程，加快采购管理平台数字化升级，扎实推进有机原料基地建设，建立供应链敏捷响应机制，打造“亲清共赢、风险共防、价值共享”的合作生态，推动合作伙伴向“价值共同体”升级，二是全面推进市场化转型。以消费者为中心、市场需求为驱动，系统推进营销体系市场化转型。茅台酒营销方面，产品端打造稳固“金字塔”型产品结构，构建层次清晰、定位明确的价值矩阵。渠道端建立科学投放机制，建立多维协同的营销体系，持续优化渠道生态韧性。服务端聚焦丰富“三重价值”供给，不断提升品牌忠诚度与市场满意度。价格端以市场为导向，构建“随行就市、相对平稳”的自营体系零售价格动态调整机制。酱香系列酒营销方面，重点推进产品、价格、渠道、服务等方面市场化进阶。统筹推进渠道优化布局，强化多元化渠道协同，提升渠道运行效率与收益稳定性。围绕消费者的功能、体验与情绪价值提升，系统升级品质表达、消费体验与品牌共鸣体系，构建厂商与消费者共赢新生态。国际化营销方面，持续推进国际化“三步走”",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 22,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "茅台香飘世界”为愿景，锚定“产品卓越、品牌卓著、创新领先、治理现代”十六字方针，全面加强党的建设与关键职能建设，持续提升商业模式韧性、增强全球市场竞争力、培育新发展动能，2026年是“十五五”起步之年，总体要求是：坚持以习近平新时代中国特色社会主义思想为指导，深入学习贯彻党的二十大和二十届二中、三中、四中全会精神，认真贯彻习近平总书记在贵州考察时的重要讲话精神，全面贯彻省委经济工作会议和省两会部署，坚持稳中求进工作总基调，完整、准确、全面贯彻新发展理念，积极服务和融入新发展格局，紧紧围绕“坚持以消费者为中心，全面推进市场化转型”主题，扎实抓好生产经营各项工作，持续增强企业核心竞争力，一是持续筑牢质量根基。树牢“质量是生命之魂”信仰和“崇本守道、坚守工艺、贮足陈酿、不卖新酒”观念，构建品质更高、协同更优、韧性更强的产供质量保障体系。加强生产管理体系建设，深化应用“时空法”匠心质量管理模式，围绕“结果稳定、过程优化”的总体目标，系统提升生产质量管理水平，确保各项关键指标稳中有进。加快大曲研究成果转化应用，全面提升产品包装质量管理水平。加快构建现代化采购新生态，强化供应商全生命周期质量协同机制嵌入采购全流程，加快采购管理平台数字化升级，扎实推进有机原料基地建设，建立供应链敏捷响应机制，打造“亲清共赢、风险共防、价值共享”的合作生态，推动合作伙伴向“价值共同体”升级，二是全面推进市场化转型。以消费者为中心、市场需求为驱动，系统推进营销体系市场化转型。茅台酒营销方面，产品端打造稳固“金字塔”型产品结构，构建层次清晰、定位明确的价值矩阵。渠道端建立科学投放机制，建立多维协同的营销体系，持续优化渠道生态韧性。服务端聚焦丰富“三重价值”供给，不断提升品牌忠诚度与市场满意度。价格端以市场为导向，构建“随行就市、相对平稳”的自营体系零售价格动态调整机制。酱香系列酒营销方面，重点推进产品、价格、渠道、服务等方面市场化进阶。统筹推进渠道优化布局，强化多元化渠道协同，提升渠道运行效率与收益稳定性。围绕消费者的功能、体验与情绪价值提升，系统升级品质表达、消费体验与品牌共鸣体系，构建厂商与消费者共赢新生态。国际化营销方面，持续推进国际化“三步走”",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (三)经营计划"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果公司能成功推进市场化转型和国际化战略，其不可复制的环境优势可能构成持续竞争优势。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0047",
+            "N0041"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0047",
+              "quote": "特殊的地形地貌、气候环境，优质的酿酒水源，独一无二的原产地保护和不可复制的微生物菌落群是贵州茅台酒核心产区的独特特征"
+            },
+            {
+              "evidence_id": "N0041",
+              "quote": "以消费者为中心、市场需求为驱动，系统推进营销体系市场化转型"
+            },
+            {
+              "evidence_id": "N0041",
+              "quote": "持续推进国际化“三步走”"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 21,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "四是文化辐射力强。茅台文化从“濮人善酿”的农耕文明中走来，于现代文明中赓续发展，引领中国白酒文化发展潮流，成为中国酒文化极致。在不断的发展中，公司持续优化茅台文化体系，形成了“酿造高品质生活”的企业使命，“让世界爱上茅台，让茅台香飘世界”的企业愿景，“爱我茅台，为国争光”的企业精神，“顺天敬人、明理厚德”的企业价值观，“品质、品牌、五是环境不可复制。特殊的地形地貌、气候环境，优质的酿酒水源，独一无二的原产地保护和不可复制的微生物菌落群是贵州茅台酒核心产区的独特特征。公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 22,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "茅台香飘世界”为愿景，锚定“产品卓越、品牌卓著、创新领先、治理现代”十六字方针，全面加强党的建设与关键职能建设，持续提升商业模式韧性、增强全球市场竞争力、培育新发展动能，2026年是“十五五”起步之年，总体要求是：坚持以习近平新时代中国特色社会主义思想为指导，深入学习贯彻党的二十大和二十届二中、三中、四中全会精神，认真贯彻习近平总书记在贵州考察时的重要讲话精神，全面贯彻省委经济工作会议和省两会部署，坚持稳中求进工作总基调，完整、准确、全面贯彻新发展理念，积极服务和融入新发展格局，紧紧围绕“坚持以消费者为中心，全面推进市场化转型”主题，扎实抓好生产经营各项工作，持续增强企业核心竞争力，一是持续筑牢质量根基。树牢“质量是生命之魂”信仰和“崇本守道、坚守工艺、贮足陈酿、不卖新酒”观念，构建品质更高、协同更优、韧性更强的产供质量保障体系。加强生产管理体系建设，深化应用“时空法”匠心质量管理模式，围绕“结果稳定、过程优化”的总体目标，系统提升生产质量管理水平，确保各项关键指标稳中有进。加快大曲研究成果转化应用，全面提升产品包装质量管理水平。加快构建现代化采购新生态，强化供应商全生命周期质量协同机制嵌入采购全流程，加快采购管理平台数字化升级，扎实推进有机原料基地建设，建立供应链敏捷响应机制，打造“亲清共赢、风险共防、价值共享”的合作生态，推动合作伙伴向“价值共同体”升级，二是全面推进市场化转型。以消费者为中心、市场需求为驱动，系统推进营销体系市场化转型。茅台酒营销方面，产品端打造稳固“金字塔”型产品结构，构建层次清晰、定位明确的价值矩阵。渠道端建立科学投放机制，建立多维协同的营销体系，持续优化渠道生态韧性。服务端聚焦丰富“三重价值”供给，不断提升品牌忠诚度与市场满意度。价格端以市场为导向，构建“随行就市、相对平稳”的自营体系零售价格动态调整机制。酱香系列酒营销方面，重点推进产品、价格、渠道、服务等方面市场化进阶。统筹推进渠道优化布局，强化多元化渠道协同，提升渠道运行效率与收益稳定性。围绕消费者的功能、体验与情绪价值提升，系统升级品质表达、消费体验与品牌共鸣体系，构建厂商与消费者共赢新生态。国际化营销方面，持续推进国际化“三步走”",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (三)经营计划"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果公司能成功推进市场化转型和国际化战略，其不可复制的环境优势可能构成持续竞争优势。",
+            "replaced_sentence": "如果公司能成功推进市场化转型和国际化战略，其不可复制的环境优势可能构成持续竞争优势。",
+            "status": "passed",
+            "specific_anchors": [
+              "推进市场化转型",
+              "推进市场化转",
+              "进市场化转型",
+              "不可复制的",
+              "市场化转型",
+              "推进市场化",
+              "进市场化转",
+              "不可复制"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 2,
+        "financial_facts": 0,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "risk_register": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果美元或欧元汇率发生波动，公司以美元和欧元进行产品销售结算的外币货币性项目折算成人民币的金额可能受到影响。如果公司未能维持充足的现金以偿还到期债务，可能面临流动性短缺的风险。",
+      "facts": [
+        {
+          "evidence_id": "N0001",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。各子公司负责监控自身的现金流量预测，公司财务部门在汇总各子公司现金流量预测的基础上，在集团层面持续监控短期和长期的资金需公司面临的外汇变动风险主要与公司的经营活动(当收支以不同于本公司记账本位币的外币结算时)及其于境外子公司的净投资有关。公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。外币货币性项目折算成人民币的金额列示详见第十节财务报告七、合并财务报表项目注释 59、外币货币性项目。",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 122,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。各子公司负责监控自身的现金流量预测，公司财务部门在汇总各子公司现金流量预测的基础上，在集团层面持续监控短期和长期的资金需公司面临的外汇变动风险主要与公司的经营活动(当收支以不同于本公司记账本位币的外币结算时)及其于境外子公司的净投资有关。公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。外币货币性项目折算成人民币的金额列示详见第十节财务报告七、合并财务报表项目注释 59、外币货币性项目。",
+            "unit": "narrative_text",
+            "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果美元或欧元汇率发生波动，公司以美元和欧元进行产品销售结算的外币货币性项目折算成人民币的金额可能受到影响。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0001",
+              "quote": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。外币货币性项目折算成人民币的金额列示详见第十节财务报告七、合并财务报表项目注释 59、外币货币性项目。"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 122,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。各子公司负责监控自身的现金流量预测，公司财务部门在汇总各子公司现金流量预测的基础上，在集团层面持续监控短期和长期的资金需公司面临的外汇变动风险主要与公司的经营活动(当收支以不同于本公司记账本位币的外币结算时)及其于境外子公司的净投资有关。公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。外币货币性项目折算成人民币的金额列示详见第十节财务报告七、合并财务报表项目注释 59、外币货币性项目。",
+              "unit": "narrative_text",
+              "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+            }
+          ]
+        },
+        {
+          "text": "如果公司未能维持充足的现金以偿还到期债务，可能面临流动性短缺的风险。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0001",
+              "quote": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 122,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。各子公司负责监控自身的现金流量预测，公司财务部门在汇总各子公司现金流量预测的基础上，在集团层面持续监控短期和长期的资金需公司面临的外汇变动风险主要与公司的经营活动(当收支以不同于本公司记账本位币的外币结算时)及其于境外子公司的净投资有关。公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。外币货币性项目折算成人民币的金额列示详见第十节财务报告七、合并财务报表项目注释 59、外币货币性项目。",
+              "unit": "narrative_text",
+              "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果美元或欧元汇率发生波动，公司以美元和欧元进行产品销售结算的外币货币性项目折算成人民币的金额可能受到影响。",
+            "replaced_sentence": "如果美元或欧元汇率发生波动，公司以美元和欧元进行产品销售结算的外币货币性项目折算成人民币的金额可能受到影响。",
+            "status": "passed",
+            "specific_anchors": [
+              "以美元和欧元进行",
+              "元和欧元进行产品",
+              "元进行产品销售结",
+              "公司以美元和欧元",
+              "司以美元和欧元进",
+              "和欧元进行产品销",
+              "外币货币性项目折",
+              "币性项目折算成人"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "如果公司未能维持充足的现金以偿还到期债务，可能面临流动性短缺的风险。",
+            "replaced_sentence": "如果公司未能维持充足的现金以偿还到期债务，可能面临流动性短缺的风险。",
+            "status": "passed",
+            "specific_anchors": [
+              "充足的现金以偿还",
+              "现金以偿还到期债",
+              "的现金以偿还到期",
+              "足的现金以偿还到",
+              "金以偿还到期债务",
+              "以偿还到期债务",
+              "充足的现金以偿",
+              "现金以偿还到期"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 0,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "falsification_tests": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果贵州茅台在下一份正式披露中营业总收入低于172,054,171,890.91元，则可能表明其营收未达到2025年水平。",
+      "facts": [
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 172054171890.91,
+          "display_value": "172,054,171,890.91",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果贵州茅台在下一份正式披露中营业总收入低于172,054,171,890.91元，则可能表明其营收未达到2025年水平。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 172,054,171,890.91"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果贵州茅台在下一份正式披露中营业总收入低于172,054,171,890.91元，则可能表明其营收未达到2025年水平。",
+            "replaced_sentence": "如果该公司在下一份正式披露中营业总收入低于172,054,171,890.91元，则可能表明其营收未达到2025年水平。",
+            "status": "passed",
+            "specific_anchors": [
+              "172,054,171,890.91",
+              "营业总收入",
+              "2025",
+              "业总收入",
+              "营业总收"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 1,
+        "derived_metrics": 0
+      },
+      "tests": [
+        {
+          "direction": "below",
+          "threshold": "172,054,171,890.91",
+          "threshold_evidence_id": "F0001",
+          "unit": "元",
+          "time_window": "下一份正式披露",
+          "latest_actual_baseline": {
+            "display_value": "172,054,171,890.91",
+            "evidence_id": "F0001",
+            "period": "2025FY",
+            "unit": "元"
+          },
+          "reason": "如果未来营收低于2025年水平，可能反映需求减弱或竞争加剧。",
+          "evidence_ids": [
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 172,054,171,890.91"
+            }
+          ]
+        }
+      ],
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "action_triggers": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "若贵州茅台后续正式披露的营业总收入低于172,054,171,890.91元，则触发对收入假设的重审。",
+      "facts": [
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 172054171890.91,
+          "display_value": "172,054,171,890.91",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "若贵州茅台后续正式披露的营业总收入低于172,054,171,890.91元，则触发对收入假设的重审。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0001"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "172,054,171,890.91"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "若贵州茅台后续正式披露的营业总收入低于172,054,171,890.91元，则触发对收入假设的重审。",
+            "replaced_sentence": "若该公司后续正式披露的营业总收入低于172,054,171,890.91元，则触发对收入假设的重审。",
+            "status": "passed",
+            "specific_anchors": [
+              "172,054,171,890.91",
+              "营业总收入",
+              "业总收入",
+              "营业总收"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 1,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "operating_kpis": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "公司直销渠道包括自营和“i茅台”等数字营销平台渠道，若该渠道收入占比提升，可能增强盈利能力。贵州茅台品牌价值较上一年增长16.50%，若品牌强度评级维持AAA+级，可能支撑产品溢价。",
+      "facts": [
+        {
+          "evidence_id": "N0079",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "项目名称 期初余额 期末余额 当期变动 对当期利润的影响公司主要业务是茅台酒及系列酒的生产与销售。主导产品“贵州茅台酒”是我国大曲酱香型白酒的鼻祖和典型代表，集国家地理标志产品、有机食品和国家非物质文化遗产于一身，公司营2025年度，公司经营模式为：采购原料—生产产品—销售产品。原料采购模式为:茅台酒用高粱采取“公司+地方政府+供应商+合作社或农户”的模式，小麦采取“公司+供应商+合作社或农场”的模式，其他原辅料及包装材料采购主要根据公司生产和销售计划，通过集中采购方式向市场采购；产品生产工艺流程为：制曲—制酒—贮存—勾兑—包装；销售模式为：公司产品通过直销和批发代理渠道进行销售。直销渠道指自营和“i 茅台”等数字营销平台渠道，批发代理渠道详见本报告第 15页“行业基本情况”及第 21页“行业格局和趋势”。",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 8,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "项目名称 期初余额 期末余额 当期变动 对当期利润的影响公司主要业务是茅台酒及系列酒的生产与销售。主导产品“贵州茅台酒”是我国大曲酱香型白酒的鼻祖和典型代表，集国家地理标志产品、有机食品和国家非物质文化遗产于一身，公司营2025年度，公司经营模式为：采购原料—生产产品—销售产品。原料采购模式为:茅台酒用高粱采取“公司+地方政府+供应商+合作社或农户”的模式，小麦采取“公司+供应商+合作社或农场”的模式，其他原辅料及包装材料采购主要根据公司生产和销售计划，通过集中采购方式向市场采购；产品生产工艺流程为：制曲—制酒—贮存—勾兑—包装；销售模式为：公司产品通过直销和批发代理渠道进行销售。直销渠道指自营和“i 茅台”等数字营销平台渠道，批发代理渠道详见本报告第 15页“行业基本情况”及第 21页“行业格局和趋势”。",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 三、经营情况讨论与分析"
+          }
+        },
+        {
+          "evidence_id": "N0077",
+          "evidence_type": "narrative_block",
+          "metric": "narrative_evidence",
+          "value": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 9,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+            "unit": "narrative_text",
+            "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "公司直销渠道包括自营和“i茅台”等数字营销平台渠道，若该渠道收入占比提升，可能增强盈利能力。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0079"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0079",
+              "quote": "直销渠道指自营和“i 茅台”等数字营销平台渠道"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 8,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "项目名称 期初余额 期末余额 当期变动 对当期利润的影响公司主要业务是茅台酒及系列酒的生产与销售。主导产品“贵州茅台酒”是我国大曲酱香型白酒的鼻祖和典型代表，集国家地理标志产品、有机食品和国家非物质文化遗产于一身，公司营2025年度，公司经营模式为：采购原料—生产产品—销售产品。原料采购模式为:茅台酒用高粱采取“公司+地方政府+供应商+合作社或农户”的模式，小麦采取“公司+供应商+合作社或农场”的模式，其他原辅料及包装材料采购主要根据公司生产和销售计划，通过集中采购方式向市场采购；产品生产工艺流程为：制曲—制酒—贮存—勾兑—包装；销售模式为：公司产品通过直销和批发代理渠道进行销售。直销渠道指自营和“i 茅台”等数字营销平台渠道，批发代理渠道详见本报告第 15页“行业基本情况”及第 21页“行业格局和趋势”。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 三、经营情况讨论与分析"
+            }
+          ]
+        },
+        {
+          "text": "贵州茅台品牌价值较上一年增长16.50%，若品牌强度评级维持AAA+级，可能支撑产品溢价。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "N0077"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N0077",
+              "quote": "较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 9,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "二是市场基本盘保持稳固。公司坚持以消费者为中心、市场需求为驱动，深入开展市场调研与厂商协作，以公司自身的确定性应对市场不确定性。稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。贵州亿美元，较上一年增长 16.50%，品牌强度评级达到最高的 AAA+级，品牌影响稳步提升。",
+              "unit": "narrative_text",
+              "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 2,
+        "total_sentences": 2,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "公司直销渠道包括自营和“i茅台”等数字营销平台渠道，若该渠道收入占比提升，可能增强盈利能力。",
+            "replaced_sentence": "公司直销渠道包括自营和“i茅台”等数字营销平台渠道，若该渠道收入占比提升，可能增强盈利能力。",
+            "status": "passed",
+            "specific_anchors": [
+              "数字营销平台渠道",
+              "等数字营销平台渠",
+              "字营销平台渠道",
+              "数字营销平台渠",
+              "等数字营销平台",
+              "字营销平台渠",
+              "数字营销平台",
+              "等数字营销平"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          },
+          {
+            "sentence": "贵州茅台品牌价值较上一年增长16.50%，若品牌强度评级维持AAA+级，可能支撑产品溢价。",
+            "replaced_sentence": "该公司品牌价值较上一年增长16.50%，若品牌强度评级维持AAA+级，可能支撑产品溢价。",
+            "status": "passed",
+            "specific_anchors": [
+              "16.50%",
+              "品牌强度评级",
+              "较上一年增长",
+              "上一年增长",
+              "品牌强度评",
+              "牌强度评级",
+              "较上一年增",
+              "一年增长"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 2,
+        "financial_facts": 0,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "margin_bridge": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "若以2023年度贵州茅台合并口径的营业收入174,144,069,958.25元减去营业成本14,892,277,570.91元，则毛利可能为159251792387.34元，毛利率可能为91.45%。",
+      "facts": [
+        {
+          "evidence_id": "F0002",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 174144069958.25,
+          "display_value": "174,144,069,958.25",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2023FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        },
+        {
+          "evidence_id": "F0003",
+          "evidence_type": "financial_fact",
+          "metric": "operating_cost",
+          "value": 14892277570.91,
+          "display_value": "14,892,277,570.91",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2023FY",
+            "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        },
+        {
+          "evidence_id": "D0001",
+          "evidence_type": "deterministic_derived_metric",
+          "metric": "derived_gross_profit",
+          "value": "159251792387.34",
+          "display_value": "159251792387.34",
+          "operation": "revenue - operating_cost",
+          "component_evidence_ids": [
+            "F0002",
+            "F0003"
+          ],
+          "component_citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ],
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2023FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        },
+        {
+          "evidence_id": "D0002",
+          "evidence_type": "deterministic_derived_metric",
+          "metric": "derived_gross_margin",
+          "value": "91.45%",
+          "display_value": "91.45%",
+          "operation": "(revenue - operating_cost) / revenue * 100",
+          "component_evidence_ids": [
+            "F0002",
+            "F0003"
+          ],
+          "component_citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ],
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2023FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "若以2023年度贵州茅台合并口径的营业收入174,144,069,958.25元减去营业成本14,892,277,570.91元，则毛利可能为159251792387.34元，毛利率可能为91.45%。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0002",
+            "F0003",
+            "D0001",
+            "D0002"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0002",
+              "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+            },
+            {
+              "evidence_id": "F0003",
+              "quote": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98"
+            },
+            {
+              "evidence_id": "F0002",
+              "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+            },
+            {
+              "evidence_id": "F0003",
+              "quote": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "若以2023年度贵州茅台合并口径的营业收入174,144,069,958.25元减去营业成本14,892,277,570.91元，则毛利可能为159251792387.34元，毛利率可能为91.45%。",
+            "replaced_sentence": "若以2023年度该公司合并口径的营业收入174,144,069,958.25元减去营业成本14,892,277,570.91元，则毛利可能为159251792387.34元，毛利率可能为91.45%。",
+            "status": "passed",
+            "specific_anchors": [
+              "174,144,069,958.25",
+              "14,892,277,570.91",
+              "159251792387.34",
+              "91.45%",
+              "2023",
+              "营业成本"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 2,
+        "derived_metrics": 2
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    },
+    "monitoring_kpis": {
+      "status": "missing",
+      "reason": "generation_validation_failure",
+      "raw_text_excerpt": "no qualifying page-bound evidence or validated model judgment",
+      "validation_errors": [
+        "claims[0].supporting_quotes[1] must contain a substantive source span",
+        "claims[1].supporting_quotes[0] must contain a substantive source span"
+      ]
+    },
+    "accounting_checks": {
+      "status": "ai_generated_judgment_unreviewed",
+      "text": "如果贵州茅台2025年营业总收入172,054,171,890.91元对应的营业成本与2023年营业成本14,892,277,570.91元在可比口径下出现显著偏离，则可能表明成本归集或收入确认政策发生变化。",
+      "facts": [
+        {
+          "evidence_id": "F0001",
+          "evidence_type": "financial_fact",
+          "metric": "revenue",
+          "value": 172054171890.91,
+          "display_value": "172,054,171,890.91",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2025FY",
+            "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        },
+        {
+          "evidence_id": "F0003",
+          "evidence_type": "financial_fact",
+          "metric": "operating_cost",
+          "value": 14892277570.91,
+          "display_value": "14,892,277,570.91",
+          "citation": {
+            "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+            "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+            "page_number": 61,
+            "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+            "report_period": "2023FY",
+            "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+            "unit": "元",
+            "statement_scope": "consolidated"
+          }
+        }
+      ],
+      "claims": [
+        {
+          "text": "如果贵州茅台2025年营业总收入172,054,171,890.91元对应的营业成本与2023年营业成本14,892,277,570.91元在可比口径下出现显著偏离，则可能表明成本归集或收入确认政策发生变化。",
+          "claim_type": "inference",
+          "evidence_ids": [
+            "F0001",
+            "F0003"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "F0001",
+              "quote": "一、营业总收入 172,054,171,890.91"
+            },
+            {
+              "evidence_id": "F0003",
+              "quote": "营业成本 44 14,892,277,570.91"
+            }
+          ],
+          "citations": [
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2025FY",
+              "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            },
+            {
+              "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+              "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+              "page_number": 61,
+              "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+              "report_period": "2023FY",
+              "quoted_anchor": "二、营业总成本其中：营业成本 44 14,892,277,570.91 13,789,482,367.98 57,370,818,034.33 54,523,971,452.57",
+              "unit": "元",
+              "statement_scope": "consolidated"
+            }
+          ]
+        }
+      ],
+      "name_swap_test": {
+        "status": "passed",
+        "passed_sentences": 1,
+        "total_sentences": 1,
+        "pass_rate": 1.0,
+        "sentences": [
+          {
+            "sentence": "如果贵州茅台2025年营业总收入172,054,171,890.91元对应的营业成本与2023年营业成本14,892,277,570.91元在可比口径下出现显著偏离，则可能表明成本归集或收入确认政策发生变化。",
+            "replaced_sentence": "如果该公司2025年营业总收入172,054,171,890.91元对应的营业成本与2023年营业成本14,892,277,570.91元在可比口径下出现显著偏离，则可能表明成本归集或收入确认政策发生变化。",
+            "status": "passed",
+            "specific_anchors": [
+              "172,054,171,890.91",
+              "14,892,277,570.91",
+              "营业总收入",
+              "2023",
+              "2025",
+              "业总收入",
+              "营业总收",
+              "营业成本"
+            ],
+            "reason": "source-specific anchors survive issuer replacement"
+          }
+        ]
+      },
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 2,
+        "derived_metrics": 0
+      },
+      "dossier_id": "e4-model-judgments:cbae36d835de1ab99dfa3b387e6709d99fbb9780daa709dad7aa828584ff58f9"
+    }
+  },
+  "validation": {
+    "status": "partial",
+    "errors": {
+      "monitoring_kpis": [
+        "claims[0].supporting_quotes[1] must contain a substantive source span",
+        "claims[1].supporting_quotes[0] must contain a substantive source span"
+      ]
+    },
+    "name_swap": {
+      "passed_sentences": 11,
+      "total_sentences": 11,
+      "pass_rate": 1.0
+    }
+  },
+  "receipt_hash": "630a6c847bbbfdae4010c4aed71577c1892ab4d593ef4902f4c70366ab1f8892"
+}

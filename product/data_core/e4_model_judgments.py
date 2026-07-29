@@ -1156,8 +1156,11 @@ def _task_registry(
                 score -= 10
             if "会计政策" in path or "金融工具" in path:
                 score -= 8
-            if judgment_id == "risk_register" and "风险" in path:
-                score += 12
+            if judgment_id == "risk_register":
+                if "风险" in path:
+                    score += 100
+                if "风险" in text:
+                    score += 40
             narrative_candidates.append(
                 (
                     score,
