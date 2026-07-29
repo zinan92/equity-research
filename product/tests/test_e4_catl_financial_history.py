@@ -189,6 +189,8 @@ class CatlHistoryTest(unittest.TestCase):
         with patch("data_core.e4_catl_financial_history.parse_pdf_document",return_value=parsed): facts=extract_report_facts(OfficialReport("2026Q1","1225107946","https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"),raw)
         values={item.metric:item.value for item in facts if item.column_identity=="period_end"}
         self.assertEqual(values["cash"],351_997_422);self.assertEqual(values["current_assets"],692_498_192);self.assertEqual(values["current_liabilities"],434_010_194)
+        opening={item.metric:item.report_period for item in facts if item.column_identity=="period_begin"}
+        self.assertEqual(opening["cash"],"2025FY")
 
     def test_same_statement_mixed_column_identity_fails(self) -> None:
         from data_core.e4_catl_financial_history import OfficialFinancialFact, validate_statement_column_consistency
