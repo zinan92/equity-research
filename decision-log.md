@@ -2425,3 +2425,22 @@
   discussion; otherwise a model can falsely report that no risk evidence
   exists.  `monitoring_kpis` still fails quote validation and remains MISSING;
   it is not replaced with a company-specific template.
+
+# 2026-07-30 — Report completion requires human-reviewed judgments
+
+- **Decision:** Recompile CATL and Moutai from the issuer-generic model
+  receipts, bind every rendered draft to its source receipt and review queue,
+  and keep every draft-backed section at PARTIAL with
+  `pending_judgment_review`.
+- **Why:** A model output can make a required input present, but it is not a
+  completed research conclusion and must not unlock Tier A, target price,
+  position sizing, or an action recommendation.
+- **Evidence:** Verification artifact
+  `artifacts/e4-reports/e4-m4-model-report-verification.json` cross-checks the
+  report banner, source receipt, complete impact-sorted queue, full judgment
+  body, page-level citations and all 18 C1 section states. CATL is 5/10/3
+  with seven pending drafts; Moutai is 4/8/6 with eight; both remain Tier B.
+- **Gotchas:** Report HTML still uses a deterministic layout template; that is
+  presentation, not judgment prose. Missing model outputs remain missing, and
+  approving one draft does not fill another required input in the same
+  section.

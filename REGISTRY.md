@@ -1,5 +1,20 @@
 # REGISTRY
 
+## 2026-07-30 · Real model judgments recompiled for CATL and Moutai
+
+Now: the issuer-generic DeepSeek judgment path is wired into both persistent
+reports with receipt identity and directly reviewable page citations. CATL is
+Tier B at 5 FULL / 10 PARTIAL / 3 MISSING with seven unreviewed judgments;
+Moutai is Tier B at 4 FULL / 8 PARTIAL / 6 MISSING with eight. Every section
+containing an unreviewed judgment remains PARTIAL with
+`pending_judgment_review`; no approval, target price, position, action, Tier A
+credit, or issue #218 credit was created.
+
+Next: submit the two impact-sorted review queues to human reviewers. Preserve
+the explicit generation gaps (`monitoring_kpis` for both issuers and
+`margin_bridge` for CATL), plus all independent C1 coverage gaps, until real
+receipt-bound inputs exist.
+
 ## 2026-07-29 · L1 first-report vertical complete
 
 Now: L1-M1 through L1-M6 are merged as a bounded CATL vertical.  The CATL

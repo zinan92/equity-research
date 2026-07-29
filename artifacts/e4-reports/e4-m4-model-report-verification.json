@@ -1,0 +1,421 @@
+{
+  "schema_version": "e4-wired-report-verification-v1",
+  "status": "passed",
+  "reports": [
+    {
+      "ticker": "300750.SZ",
+      "html_path": "artifacts/e4-reports/300750.SZ.html",
+      "receipt_path": "artifacts/e4-reports/300750.SZ.receipt.json",
+      "review_queue_path": "artifacts/e4-reports/300750.SZ.judgment-review-queue.json",
+      "judgment_source_receipt_id": "e4-model-judgments-v1:a1398e135d132d6b547f70217fa8026e601a61cac3a800657550b88a6cdd9fb0",
+      "tier": "B",
+      "tier_reasons": [
+        "partial_or_missing_sections",
+        "investment_action_fields_blocked"
+      ],
+      "unreviewed_judgment_count": 7,
+      "section_counts": {
+        "full": 5,
+        "partial": 10,
+        "missing": 3
+      },
+      "sections": [
+        {
+          "section_id": "executive_summary",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "market_snapshot",
+            "decision_summary"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "investment_thesis",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "investment_thesis"
+          ],
+          "missing_required": [
+            "variant_view"
+          ]
+        },
+        {
+          "section_id": "business_model",
+          "status": "partial",
+          "status_reason": null,
+          "present_required": [
+            "company_profile"
+          ],
+          "missing_required": [
+            "segment_financials"
+          ]
+        },
+        {
+          "section_id": "industry_structure",
+          "status": "partial",
+          "status_reason": null,
+          "present_required": [
+            "industry_profile"
+          ],
+          "missing_required": [
+            "market_size"
+          ]
+        },
+        {
+          "section_id": "competition_and_moat",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "moat_assessment"
+          ],
+          "missing_required": [
+            "peer_comparison"
+          ]
+        },
+        {
+          "section_id": "management_and_governance",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "management_record",
+            "governance_events"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "revenue_quality_and_kpis",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "revenue_history",
+            "operating_kpis"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "profitability_and_earnings_quality",
+          "status": "partial",
+          "status_reason": null,
+          "present_required": [
+            "income_history"
+          ],
+          "missing_required": [
+            "margin_bridge"
+          ]
+        },
+        {
+          "section_id": "cash_flow_and_balance_sheet",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "cash_flow_history",
+            "balance_sheet_history"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "accounting_quality",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "accounting_checks"
+          ],
+          "missing_required": [
+            "audit_opinions"
+          ]
+        },
+        {
+          "section_id": "forecasts_and_consensus",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "broker_estimates",
+            "consensus_history"
+          ]
+        },
+        {
+          "section_id": "valuation",
+          "status": "partial",
+          "status_reason": null,
+          "present_required": [
+            "current_market"
+          ],
+          "missing_required": [
+            "valuation_scenarios",
+            "valuation_assumptions"
+          ]
+        },
+        {
+          "section_id": "macro_policy_and_costs",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "macro_exposures",
+            "policy_events"
+          ]
+        },
+        {
+          "section_id": "catalysts_and_events",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "event_timeline",
+            "catalyst_calendar"
+          ]
+        },
+        {
+          "section_id": "risks_and_falsification",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "risk_register",
+            "falsification_tests"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "decision_framework",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "recommendation_policy_output"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "monitoring_and_action_triggers",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "action_triggers"
+          ],
+          "missing_required": [
+            "monitoring_kpis"
+          ]
+        },
+        {
+          "section_id": "evidence_and_methodology",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "evidence_set_receipt",
+            "citation_index",
+            "methodology"
+          ],
+          "missing_required": []
+        }
+      ]
+    },
+    {
+      "ticker": "600519.SH",
+      "html_path": "artifacts/e4-reports/600519.SH.html",
+      "receipt_path": "artifacts/e4-reports/600519.SH.receipt.json",
+      "review_queue_path": "artifacts/e4-reports/600519.SH.judgment-review-queue.json",
+      "judgment_source_receipt_id": "e4-model-judgments-v1:630a6c847bbbfdae4010c4aed71577c1892ab4d593ef4902f4c70366ab1f8892",
+      "tier": "B",
+      "tier_reasons": [
+        "partial_or_missing_sections",
+        "investment_action_fields_blocked"
+      ],
+      "unreviewed_judgment_count": 8,
+      "section_counts": {
+        "full": 4,
+        "partial": 8,
+        "missing": 6
+      },
+      "sections": [
+        {
+          "section_id": "executive_summary",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "market_snapshot",
+            "decision_summary"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "investment_thesis",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "investment_thesis"
+          ],
+          "missing_required": [
+            "variant_view"
+          ]
+        },
+        {
+          "section_id": "business_model",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "company_profile",
+            "segment_financials"
+          ]
+        },
+        {
+          "section_id": "industry_structure",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "industry_profile",
+            "market_size"
+          ]
+        },
+        {
+          "section_id": "competition_and_moat",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "moat_assessment"
+          ],
+          "missing_required": [
+            "peer_comparison"
+          ]
+        },
+        {
+          "section_id": "management_and_governance",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "management_record",
+            "governance_events"
+          ]
+        },
+        {
+          "section_id": "revenue_quality_and_kpis",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "revenue_history",
+            "operating_kpis"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "profitability_and_earnings_quality",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "income_history",
+            "margin_bridge"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "cash_flow_and_balance_sheet",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "cash_flow_history",
+            "balance_sheet_history"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "accounting_quality",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "accounting_checks"
+          ],
+          "missing_required": [
+            "audit_opinions"
+          ]
+        },
+        {
+          "section_id": "forecasts_and_consensus",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "broker_estimates",
+            "consensus_history"
+          ]
+        },
+        {
+          "section_id": "valuation",
+          "status": "partial",
+          "status_reason": null,
+          "present_required": [
+            "current_market"
+          ],
+          "missing_required": [
+            "valuation_scenarios",
+            "valuation_assumptions"
+          ]
+        },
+        {
+          "section_id": "macro_policy_and_costs",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "macro_exposures",
+            "policy_events"
+          ]
+        },
+        {
+          "section_id": "catalysts_and_events",
+          "status": "missing",
+          "status_reason": null,
+          "present_required": [],
+          "missing_required": [
+            "event_timeline",
+            "catalyst_calendar"
+          ]
+        },
+        {
+          "section_id": "risks_and_falsification",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "risk_register",
+            "falsification_tests"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "decision_framework",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "recommendation_policy_output"
+          ],
+          "missing_required": []
+        },
+        {
+          "section_id": "monitoring_and_action_triggers",
+          "status": "partial",
+          "status_reason": "pending_judgment_review",
+          "present_required": [
+            "action_triggers"
+          ],
+          "missing_required": [
+            "monitoring_kpis"
+          ]
+        },
+        {
+          "section_id": "evidence_and_methodology",
+          "status": "full",
+          "status_reason": null,
+          "present_required": [
+            "evidence_set_receipt",
+            "citation_index",
+            "methodology"
+          ],
+          "missing_required": []
+        }
+      ]
+    }
+  ]
+}
