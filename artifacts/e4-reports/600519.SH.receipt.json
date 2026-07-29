@@ -1,10 +1,10 @@
 {
   "schema_version": "e4-m4-report-v1",
-  "ticker": "300750.SZ",
+  "ticker": "600519.SH",
   "data_kind": "real",
-  "report_model_hash": "81d88d3b183213eed3d3bbaeb649e7a62818142360ab69e84663d22109ec7992",
-  "html_path": "artifacts/e4-reports/300750.SZ.html",
-  "word_count": 1433,
+  "report_model_hash": "f6259e94e68f61721d0a832d35d5be170a8d16285450dd7de182486c085e2fb7",
+  "html_path": "artifacts/e4-reports/600519.SH.html",
+  "word_count": 480,
   "sections": [
     {
       "section_id": "executive_summary",
@@ -27,7 +27,7 @@
       "section_hash": "015689392d6e16feb0d75e52b82153b3216ccf2ab9db6cb331f68fe5a74f9779",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "fb18fd2c2a37de5c320090e09d7893f841718ad6a4224a69d044a4e5e9485cb7"
+      "input_hash": "c8207c0e672d9ffb842575e9fc3bfa5cf74448f8c7c70471860517bdb20f84b6"
     },
     {
       "section_id": "investment_thesis",
@@ -56,11 +56,10 @@
       "section_id": "business_model",
       "order": 3,
       "title": "业务模式与收入结构",
-      "status": "partial",
-      "present_required": [
-        "company_profile"
-      ],
+      "status": "missing",
+      "present_required": [],
       "missing_required": [
+        "company_profile",
         "segment_financials"
       ],
       "present_optional": [],
@@ -75,7 +74,7 @@
       "section_hash": "2ed1965b0dcae533e7d2ca52035eaa65495a07c2ec1fd1809845cfbb27c9c931",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "c6e71fb9673bca2f0eea8961afd5de6c6c4a84d4b326594a88f72e2f433dca36"
+      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
     },
     {
       "section_id": "industry_structure",
@@ -170,7 +169,7 @@
       "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "8914401fc0c32c6ea84654eb09fa235d2476c0109023a658389898cd54933863"
+      "input_hash": "dcb8d93e7c1286e41e20dab0c1da64bc4be1c3ffe4f833cca55e659a00ec2b5c"
     },
     {
       "section_id": "profitability_and_earnings_quality",
@@ -194,7 +193,7 @@
       "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "4b8e977f3732b3924dfadab317fd6543ff6acd760942cce794f54ba8ab917d2c"
+      "input_hash": "bded0d38f711b478c3451badb1ff0154b99bddd80020c59119f02f6bf912b719"
     },
     {
       "section_id": "cash_flow_and_balance_sheet",
@@ -217,7 +216,7 @@
       "section_hash": "0c0f400eb63877b0c4f0df310b9c9d9bccfb867c3e57633e573a2410a08d1c4d",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "6cf7cc8cf4a9f1978e6592ab37e53b2ff0835a11dbaed04c8c58cfb97f99419f"
+      "input_hash": "dcc175c504667e30c01daf154d465c878e790c655533780a73b80d08b9601829"
     },
     {
       "section_id": "accounting_quality",
@@ -291,7 +290,7 @@
       "section_hash": "270e681c6433908b04145bd6a3a81c666ac7aef1106844cfbb77135b697ffe9f",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "839bcff5092f9307d1a34d6a18bc61804faacc0ad6984694e8286a59b51f1cce"
+      "input_hash": "16aa3a5fe3a484e83ef57abe2fbccf021cadf45aa7d0e4e7b7bf489f1089d93e"
     },
     {
       "section_id": "macro_policy_and_costs",
@@ -383,7 +382,7 @@
       "section_hash": "96aa708d55b412a131cf858dcba3939d036fbeb5626564a2825dbc93243f4429",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "d65f0227e39ba06cf74c9d6e264b45be29cc0594f5c813879d09a48f2ba06fcc"
+      "input_hash": "f73e8135c3c426269debd3bd8ccf21a672b5fe29ef3e4946cc044ce6d7d499e8"
     },
     {
       "section_id": "monitoring_and_action_triggers",
@@ -431,7 +430,7 @@
       "section_hash": "cd3f3923246a31ef7b029d07563d529fde7008c17ae605f9014cd700b10d0d1a",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "48e6d40d2fa409ad15fdd528e62cfd59659b4b18a15f2e866c4600f6fbdbd556"
+      "input_hash": "1feab7226a6bb986adda0c98622e257b44c13f4a4dcdf482bd0f5a8d9d95e04b"
     }
   ],
   "tier": "B",
@@ -442,15 +441,15 @@
   "input_hashes": {
     "m1": "d020ca69cab942599611918a624c758a8be50790beb9468b0ba6fcd5a0aef25d",
     "m2": "c93e3f56ae207df55392c4e5bd077ee48ed54bdc315140951a5adb01c8d50ce8",
-    "m3": "ee00aab7719c4003679bcf3a932c976d7077cd38d9c6884494e1214c7e855a99"
+    "m3": "520e701d311dc2e963097836fbbaa2d3b2ae4563997c04ceffcdb3b1a4206f32"
   },
   "citation_gate": {
     "passed": true,
-    "facts_rendered": 124
+    "facts_rendered": 16
   },
   "deepseek_narrative": {
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "f88d984db8f1b80b3510bbf7d587dac80acd1d28007c95dea2a7364119916e15"
+  "receipt_hash": "55894168db37e2e5e8e0c11e135a94e155878a9ee5cba0c309c806507ac10212"
 }
