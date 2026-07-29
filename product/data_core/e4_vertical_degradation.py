@@ -39,6 +39,7 @@ def _candidate(ticker: str, facts: tuple[FilingNumericFact, ...], *, known_at: s
 
 def compile_vertical_degradation(
     ticker: str, facts: Iterable[FilingNumericFact], *, known_at: str,
+    additional_section_inputs: dict[str, dict[str, object]] | None = None,
 ) -> dict[str, Any]:
     materialized = tuple(facts)
     if not materialized:
@@ -75,6 +76,12 @@ def compile_vertical_degradation(
             "methodology": {"parser": "park-document-parser-v1", "source": "official_pdf_page_fact"},
         },
     }
+    # Callers may add only runtime-receipted objects.  This function does not
+    # alter C1's required input declarations or completion rules.
+    for section_id, values in (additional_section_inputs or {}).items():
+        if not isinstance(values, dict):
+            raise ValueError("section input additions must be objects")
+        section_inputs.setdefault(section_id, {}).update(values)
     contract = build_research_section_contract_v2(
         section_inputs, structure_only=False, evidence_set=evidence_set,
     )
