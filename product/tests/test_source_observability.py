@@ -76,6 +76,26 @@ class SourceObservabilityTest(unittest.TestCase):
             recovered = ledger.record(real, required_tickers=TICKERS, now=NOW)
             self.assertEqual(recovered["alerts"][0]["status"], "recovered")
 
+    def test_selected_source_failure_carries_a_15_minute_alert_deadline(self) -> None:
+        trace = build_run_trace(
+            receipt(selected="primary", status="failed", attempts=[
+                {"adapter": "primary", "role": "primary", "status": "failed", "data_kind": "real", "target_trade_date": "2026-07-24", "finished_at": NOW.isoformat()},
+            ]), required_tickers=TICKERS, now=NOW,
+        )
+        source = trace["source_health"][0]
+        self.assertEqual(source["consecutive_failures"], 1)
+        self.assertEqual(source["alert_due_at"], "2026-07-24T12:15:00+00:00")
+        self.assertEqual(alert_candidates(trace)[0]["severity"], "critical")
+
+    def test_trade_day_snapshot_is_overdue_at_19_shanghai_without_snapshot(self) -> None:
+        now = datetime(2026, 7, 24, 19, 1, tzinfo=__import__("zoneinfo").ZoneInfo("Asia/Shanghai"))
+        trace = build_run_trace(
+            {"run_id": "run", "status": "failed", "selected_adapter": "primary", "attempts": [{"adapter": "primary", "status": "failed", "data_kind": "real", "target_trade_date": "2026-07-24"}]},
+            required_tickers=TICKERS, now=now,
+        )
+        self.assertEqual(trace["daily_snapshot"]["status"], "overdue")
+        self.assertIn("daily_snapshot_deadline_missed", alert_candidates(trace)[-1]["reasons"])
+
 
 if __name__ == "__main__":
     unittest.main()

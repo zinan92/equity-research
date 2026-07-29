@@ -6,14 +6,18 @@ raw provider bodies outside the product runtime.
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
+from zoneinfo import ZoneInfo
 
 from .contracts import digest
 
 
 OBSERVABILITY_SCHEMA_VERSION = "source-observability-v1"
+SHANGHAI = ZoneInfo("Asia/Shanghai")
+CRITICAL_SOURCE_ALERT_WINDOW = timedelta(minutes=15)
+DAILY_SNAPSHOT_DEADLINE = time(19, 0)
 
 
 def _iso(value: datetime) -> str:
@@ -43,6 +47,22 @@ def _load_json(path: Path) -> dict[str, Any] | None:
     except (OSError, json.JSONDecodeError):
         return None
     return value if isinstance(value, dict) else None
+
+
+def _attempt_time(attempt: dict[str, Any]) -> datetime | None:
+    return _parse_time(attempt.get("finished_at") or attempt.get("started_at"))
+
+
+def _consecutive_failure_window(rows: list[dict[str, Any]]) -> tuple[int, datetime | None]:
+    failures: list[dict[str, Any]] = []
+    for row in reversed(rows):
+        if row.get("status") == "success":
+            break
+        failures.append(row)
+    if not failures:
+        return 0, None
+    times = [item for item in (_attempt_time(row) for row in failures) if item]
+    return len(failures), min(times) if times else None
 
 
 def build_source_health(
@@ -85,6 +105,7 @@ def build_source_health(
                 stale = True
         production_eligible = data_kind == "real"
         impact = expected if selected and (not succeeded or stale or not production_eligible) else []
+        consecutive_failures, failure_started_at = _consecutive_failure_window(rows)
         health.append({
             "adapter": adapter,
             "role": latest.get("role"),
@@ -95,11 +116,39 @@ def build_source_health(
             "freshness": "stale" if stale else "fresh" if freshness_at else "unknown",
             "data_kind": data_kind,
             "production_eligible": production_eligible,
-            "consecutive_failures": 0 if succeeded else len(rows),
+            "consecutive_failures": consecutive_failures,
+            "failure_started_at": _iso(failure_started_at) if failure_started_at else None,
+            "alert_due_at": _iso(failure_started_at + CRITICAL_SOURCE_ALERT_WINDOW) if failure_started_at else None,
             "affected_required_tickers": impact,
             "coverage_impact": len(impact),
         })
     return health
+
+
+def daily_snapshot_deadline(receipt: dict[str, Any], *, now: datetime) -> dict[str, Any]:
+    """State whether the trade-day 19:00 Shanghai snapshot obligation is met."""
+    if now.tzinfo is None:
+        raise ValueError("observability clock must be timezone-aware")
+    local = now.astimezone(SHANGHAI)
+    selected = receipt.get("selected_adapter")
+    row = next((item for item in reversed(receipt.get("attempts") or []) if item.get("adapter") == selected and item.get("target_trade_date")), None)
+    trade_date = row.get("target_trade_date") if row else None
+    snapshot_id = (receipt.get("snapshot") or {}).get("snapshot_id") or (receipt.get("active") or {}).get("snapshot_id")
+    deadline_at = None
+    if isinstance(trade_date, str):
+        try:
+            deadline_at = datetime.combine(datetime.fromisoformat(trade_date).date(), DAILY_SNAPSHOT_DEADLINE, tzinfo=SHANGHAI)
+        except ValueError:
+            pass
+    due = bool(deadline_at and local >= deadline_at)
+    met = bool(snapshot_id and deadline_at and local >= deadline_at)
+    return {
+        "trade_date": trade_date,
+        "deadline_at": _iso(deadline_at) if deadline_at else None,
+        "due": due,
+        "status": "met" if met else "overdue" if due else "not_due" if deadline_at else "unknown",
+        "snapshot_id": snapshot_id,
+    }
 
 
 def build_run_trace(
@@ -133,6 +182,7 @@ def build_run_trace(
         "snapshot_id": (receipt.get("snapshot") or {}).get("snapshot_id") or (receipt.get("active") or {}).get("snapshot_id"),
         "evidence_manifest_hash": ((receipt.get("snapshot") or {}).get("manifest_hash")),
         "source_health": health,
+        "daily_snapshot": daily_snapshot_deadline(receipt, now=now),
         "production_health": "healthy" if production_healthy else "attention",
         "generated_at": _iso(now),
     }
@@ -164,6 +214,18 @@ def alert_candidates(trace: dict[str, Any]) -> list[dict[str, Any]]:
             "coverage_impact": impact,
             "affected_required_tickers": source.get("affected_required_tickers") or [],
             "trace_hash": trace["trace_hash"],
+        })
+    daily = trace.get("daily_snapshot") or {}
+    if daily.get("status") == "overdue":
+        candidates.append({
+            "alert_key": f"daily_snapshot:{daily.get('trade_date')}:overdue",
+            "adapter": "canonical_snapshot",
+            "reasons": ["daily_snapshot_deadline_missed"],
+            "severity": "critical",
+            "coverage_impact": 0,
+            "affected_required_tickers": [],
+            "trace_hash": trace["trace_hash"],
+            "deadline_at": daily.get("deadline_at"),
         })
     return candidates
 
