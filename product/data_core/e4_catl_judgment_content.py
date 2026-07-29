@@ -13,8 +13,9 @@ def compile_catl_judgments(page_facts: list[Mapping[str, Any]], *, dossier_id: s
     This is an extension of the existing E3-S7 dossier lineage, not a new fact
     collector.  Missing source classes remain missing.
     """
-    revenue = next((x for x in page_facts if x.get("metric") == "revenue"), None)
-    profit = next((x for x in page_facts if x.get("metric") == "net_profit_parent"), None)
+    ordered = sorted(page_facts, key=lambda item: str(item.get("report_period", "")), reverse=True)
+    revenue = next((x for x in ordered if x.get("metric") == "revenue"), None)
+    profit = next((x for x in ordered if x.get("metric") == "net_profit_parent"), None)
     cited = [item for item in (revenue, profit) if item]
     facts = [{"metric": item["metric"], "value": item["value"], "citation": _citation(item)} for item in cited]
     available = {"status": JUDGMENT_STATUS, "dossier_id": dossier_id, "facts": facts}
