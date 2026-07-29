@@ -2268,3 +2268,22 @@
 - **Gotchas:** Never replace missing context with a first-column heuristic.
   An unresolved fact is safer than a page-cited fact assigned to the wrong
   period.
+
+# 2026-07-29 — Unreviewed AI judgments are receipt-bound partial inputs
+
+- **Decision:** Wire an AI judgment into its corresponding C1 input only when
+  its exact real-run receipt hash and every cited official page identity pass
+  validation.  A required input carrying
+  `ai_generated_judgment_unreviewed` makes the section `PARTIAL` with
+  `pending_judgment_review`; a reviewed successor may complete it without
+  changing C1 requirements or the Tier policy.
+- **Why:** “Content exists” is useful research-progress information, but it is
+  not the same as an analyst-approved conclusion.  Completion semantics must
+  make that distinction before any caller evaluates Tier A eligibility.
+- **Evidence:** `product/data_core/e4_judgment_wiring.py` verifies the receipt
+  hash, ticker, real data kind, and `document_id`/page/anchor/raw-hash/source
+  URL citation set; `product/tests/test_e4_judgment_wiring.py` covers both the
+  no-FULL rule and tamper rejection.
+- **Gotchas:** Do not infer a receipt from a module name or a dossier ID.  A
+  receipt with missing page citations, a mismatched ticker, a changed hash, or
+  fixture data is not a C1 input and must remain missing.

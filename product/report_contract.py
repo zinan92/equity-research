@@ -691,6 +691,8 @@ class SectionAssessment:
     missing_required: tuple[str, ...]
     present_optional: tuple[str, ...]
     missing_optional: tuple[str, ...]
+    status_reason: str | None
+    pending_judgment_inputs: tuple[str, ...]
     page_budget: tuple[int, int]
     section_hash: str
     profile_hash: str
@@ -844,6 +846,26 @@ def _input_type_matches(value: Any, value_type: str) -> bool:
     return False
 
 
+UNREVIEWED_JUDGMENT_STATUS = "ai_generated_judgment_unreviewed"
+
+
+def _contains_unreviewed_judgment(value: Any) -> bool:
+    """Return whether a supplied C1 input is backed only by an AI draft.
+
+    This checks data status, rather than the module that happened to create an
+    object.  A later human-reviewed revision may retain the same evidence and
+    text, but must carry a different review status before it can complete a
+    section.
+    """
+    if isinstance(value, dict):
+        if value.get("status") == UNREVIEWED_JUDGMENT_STATUS:
+            return True
+        return any(_contains_unreviewed_judgment(item) for item in value.values())
+    if isinstance(value, (list, tuple)):
+        return any(_contains_unreviewed_judgment(item) for item in value)
+    return False
+
+
 def assess_research_section(
     spec: ResearchSectionSpec,
     values: Mapping[str, Any],
@@ -865,12 +887,16 @@ def assess_research_section(
     missing_required = tuple(item.key for item in spec.required_inputs if item.key not in present_required)
     present_optional = tuple(item.key for item in spec.optional_inputs if _input_present(values.get(item.key)))
     missing_optional = tuple(item.key for item in spec.optional_inputs if item.key not in present_optional)
+    pending_judgment_inputs = tuple(
+        key for key in present_required if _contains_unreviewed_judgment(values[key])
+    )
     if not missing_required:
-        status = SectionCompletion.FULL
+        status = SectionCompletion.PARTIAL if pending_judgment_inputs else SectionCompletion.FULL
     elif present_required or present_optional:
         status = SectionCompletion.PARTIAL
     else:
         status = SectionCompletion.MISSING
+    status_reason = "pending_judgment_review" if pending_judgment_inputs else None
     supplied = {key: values[key] for key in sorted(values) if _input_present(values[key])}
     return SectionAssessment(
         section_id=spec.section_id,
@@ -881,6 +907,8 @@ def assess_research_section(
         missing_required=missing_required,
         present_optional=present_optional,
         missing_optional=missing_optional,
+        status_reason=status_reason,
+        pending_judgment_inputs=pending_judgment_inputs,
         page_budget=spec.page_budget,
         section_hash=spec.section_hash,
         profile_hash=profile_hash,
