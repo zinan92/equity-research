@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from copy import deepcopy
 from typing import Any, Mapping
 
@@ -16,8 +17,13 @@ from report_contract import UNREVIEWED_JUDGMENT_STATUS
 
 
 JUDGMENT_RECEIPT_SCHEMA = "e4-m3-catl-judgments-v1"
-JUDGMENT_RECEIPT_SCHEMAS = frozenset({JUDGMENT_RECEIPT_SCHEMA, "e4-m3-catl-judgments-v2"})
+JUDGMENT_RECEIPT_SCHEMAS = frozenset({
+    JUDGMENT_RECEIPT_SCHEMA,
+    "e4-m3-catl-judgments-v2",
+    "e4-model-judgments-v1",
+})
 _CITATION_KEYS = ("document_id", "raw_hash", "page_number", "quoted_anchor", "source_url")
+_HASH = re.compile(r"^[0-9a-f]{64}$")
 
 # C1 input types are fixed by the contract.  Array inputs retain one judgment
 # object per row; object inputs retain the complete judgment object.
@@ -51,6 +57,67 @@ def _validate_judgment(value: Mapping[str, Any], *, key: str) -> None:
             raise ValueError(f"{key} has an incomplete page-level citation")
 
 
+def _canonical_hash(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            default=str,
+        ).encode()
+    ).hexdigest()
+
+
+def _validate_model_receipt(receipt: Mapping[str, Any]) -> None:
+    if receipt.get("generator_version") != "e4-model-judgments-v1":
+        raise ValueError("model judgment generator version mismatch")
+    if receipt.get("prompt_version") != "e4-model-judgments-prompt-v1":
+        raise ValueError("model judgment prompt version mismatch")
+    if receipt.get("validator_version") != "e4-model-judgments-validator-v1":
+        raise ValueError("model judgment validator version mismatch")
+    for key in ("input_hash", "prompt_hash", "content_hash"):
+        if not _HASH.fullmatch(str(receipt.get(key) or "")):
+            raise ValueError("model judgment " + key + " is invalid")
+    content = receipt.get("content")
+    if not isinstance(content, Mapping) or receipt["content_hash"] != _canonical_hash(content):
+        raise ValueError("model judgment content hash mismatch")
+    available = [
+        value
+        for value in content.values()
+        if isinstance(value, Mapping)
+        and value.get("status") == UNREVIEWED_JUDGMENT_STATUS
+    ]
+    calls = receipt.get("model_receipts")
+    if available and (
+        not isinstance(calls, list)
+        or not calls
+        or any(
+            not row.get("request_id")
+            or not row.get("model")
+            or row.get("finish_reason") != "stop"
+            for row in calls
+        )
+    ):
+        raise ValueError("model judgment lacks a completed real model-call receipt")
+    response_hashes = receipt.get("response_hashes")
+    if available and (
+        not isinstance(response_hashes, list)
+        or len(response_hashes) != len(calls)
+        or any(not _HASH.fullmatch(str(value or "")) for value in response_hashes)
+    ):
+        raise ValueError("model judgment response hashes are incomplete")
+    validation = receipt.get("validation")
+    if not isinstance(validation, Mapping) or validation.get("status") not in {
+        "passed",
+        "partial",
+    }:
+        raise ValueError("model judgment validation receipt is missing")
+    errors = validation.get("errors") or {}
+    if "__response__" in errors:
+        raise ValueError("model judgment has response-level validation errors")
+
+
 def wire_unreviewed_judgment_receipt(receipt: Mapping[str, Any], *, ticker: str) -> dict[str, dict[str, Any]]:
     """Map qualifying draft judgments into their fixed C1 section inputs.
 
@@ -63,6 +130,8 @@ def wire_unreviewed_judgment_receipt(receipt: Mapping[str, Any], *, ticker: str)
         raise ValueError("judgment receipt ticker mismatch")
     if receipt.get("receipt_hash") != _digest_without_receipt_hash(receipt):
         raise ValueError("judgment receipt hash mismatch")
+    if receipt.get("schema_version") == "e4-model-judgments-v1":
+        _validate_model_receipt(receipt)
     content = receipt.get("content")
     if not isinstance(content, dict):
         raise ValueError("judgment receipt content is missing")

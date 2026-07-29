@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-07-30 · Model judgments are generated, never templated
+
+- Decision: replace the issuer-specific judgment template with one generic frozen-evidence request and the existing DeepSeek transport. Model text and claim text are retained byte-for-byte; deterministic code may only select evidence, calculate explicitly recorded derived metrics, validate output, and map evidence IDs to page citations.
+- Why: a fixed sentence containing a company name is neither analysis nor a rename-resistant issuer judgment. The research boundary requires each sentence and numeric token to be traceable to the exact frozen input that supported it.
+- Evidence: `e4_model_judgments.py` enforces sentence/claim equality, claim-local numeric whitelists, page-identity matching, falsification fields, per-sentence rename audits, and typed MISSING output. Focused tests cover poisoned numbers, model outage, same-path second identity, suspicious table-note numbers, and absence of generator f-strings or issuer constants.
+- Gotchas: the completed L2 100-ticker batch does not include either acceptance issuer; it cannot be cited for their runs. Existing page-fact receipts can contain column-note numbers that look syntactically valid, so the generator must reject suspicious small tokens rather than let the model rationalize them. A model transport failure propagates and writes no replacement prose or receipt.
+
 ## 2026-07-29 · First-report compilation remains offline and partial
 
 - Decision: compile CATL from frozen M1/M2/M3 receipts and bind HTML to a Report Model hash.
