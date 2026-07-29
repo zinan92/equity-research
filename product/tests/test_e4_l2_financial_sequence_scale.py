@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product"))
 
-from data_core.e4_financial_sequence_batch import _ticker_exception_reports, _timeout_reports, run_financial_sequence_batch  # noqa: E402
+from data_core.e4_financial_sequence_batch import _page_parse_exception, _retryable_parse_worker_row, _ticker_exception_reports, _timeout_reports, run_financial_sequence_batch  # noqa: E402
 
 
 class FinancialSequenceScaleTest(unittest.TestCase):
@@ -35,3 +35,10 @@ class FinancialSequenceScaleTest(unittest.TestCase):
         reports = _ticker_exception_reports(("2021FY", "2026Q1"), EOFError("worker pipe closed"))
         self.assertEqual([row["reason"] for row in reports], ["ticker_collection_exception", "ticker_collection_exception"])
         self.assertTrue(all("EOFError" in row["raw_text_excerpt"] for row in reports))
+
+    def test_malformed_pdf_text_is_one_report_gap_and_widened_rows_retry(self) -> None:
+        record = _page_parse_exception("2024FY", UnicodeEncodeError("utf-8", "\ud835", 0, 1, "surrogate"), document={"document_id": "official:1"})
+        self.assertEqual(record["reason"], "page_parse_exception")
+        self.assertEqual(record["document"]["document_id"], "official:1")
+        legacy = {"reports": [{"status": "missing", "reason": "ticker_collection_exception", "raw_text_excerpt": "ValueError: isolated page parser failed: UnicodeEncodeError"}] * 6}
+        self.assertTrue(_retryable_parse_worker_row(legacy))

@@ -91,6 +91,17 @@ def _ticker_exception_reports(periods: tuple[str, ...], exc: BaseException) -> l
              "raw_text_excerpt": excerpt} for period in periods]
 
 
+def _retryable_parse_worker_row(row: Mapping[str, Any]) -> bool:
+    """Retry only rows widened by the pre-fix parser-worker bug."""
+    reports = row.get("reports") or []
+    return bool(reports) and all(
+        item.get("status") == "missing"
+        and item.get("reason") == "ticker_collection_exception"
+        and "isolated page parser failed" in str(item.get("raw_text_excerpt") or "")
+        for item in reports
+    )
+
+
 def _capture_ticker_bounded(ticker: str, periods: tuple[str, ...], *, delay_seconds: float, seconds: int = 300) -> list[dict[str, Any]]:
     """Collect one issuer in a killable child while retaining one-at-a-time semantics."""
     context = multiprocessing.get_context("fork")
@@ -152,6 +163,11 @@ def _failure_excerpt(batch: OfficialFilingBatch) -> str:
     return (str(getattr(attempt, "error", "official discovery returned no raw response"))[:520])
 
 
+def _page_parse_exception(period: str, exc: BaseException, *, document: Mapping[str, Any]) -> dict[str, Any]:
+    return {"period": period, "status": "missing", "reason": "page_parse_exception",
+            "raw_text_excerpt": f"{type(exc).__name__}: {exc}"[:520], "document": dict(document)}
+
+
 def _capture_one(
     ticker: str,
     period: str,
@@ -190,6 +206,10 @@ def _capture_one(
     except _ParseTimeout as exc:
         return {"period": period, "status": "missing", "reason": "page_parse_timeout",
                 "raw_text_excerpt": str(exc), "document": identity}
+    except Exception as exc:
+        # Malformed PDF unicode is a report-level parse gap; it must not
+        # suppress the issuer's other report periods.
+        return _page_parse_exception(period, exc, document=identity)
     present = {fact.metric for fact in facts}
     return {
         "period": period, "status": "available", "document": identity,
@@ -226,6 +246,7 @@ def run_financial_sequence_batch(
         prior = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         if prior.get("data_kind") == "real" and prior.get("configured_max_concurrency") == 1:
             rows = list(prior.get("tickers") or [])
+            rows = [row for row in rows if not _retryable_parse_worker_row(row)]
     if any(str(item.get("ticker") or "").upper() not in requested for item in rows):
         raise ValueError("financial sequence checkpoint contains a different cohort")
     completed = {str(item.get("ticker") or "").upper() for item in rows}
