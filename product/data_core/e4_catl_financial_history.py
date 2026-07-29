@@ -421,6 +421,19 @@ def validate_balance_sheet(facts: Iterable[OfficialFinancialFact]) -> dict[str, 
     return {"status": "passed" if abs(difference) <= tolerance else "failed", "difference": difference, "tolerance": tolerance, "components": {key: {"document_id": rows[key].document_id, "page_number": rows[key].page_number, "value": rows[key].value, "unit": rows[key].unit} for key in required}}
 
 
+def validate_statement_column_consistency(facts: Iterable[OfficialFinancialFact]) -> dict[str, object]:
+    """Fail closed when one statement-period mixes end and opening columns."""
+    relevant = [item for item in facts if item.statement_scope == "consolidated" and item.metric in {"cash", "current_assets", "current_liabilities", "total_assets", "total_liabilities", "total_equity"}]
+    identities = sorted({item.column_identity for item in relevant})
+    if "unknown" in identities:
+        return {"status": "failed", "reason": "unresolved_statement_column", "raw_text_excerpt": " | ".join(item.quoted_anchor[:120] for item in relevant)[:520]}
+    # Both identities are expected only if every field is represented twice.
+    by_metric = {}
+    for item in relevant: by_metric.setdefault(item.metric, set()).add(item.column_identity)
+    mixed = {key: sorted(value) for key, value in by_metric.items() if value not in ({"period_end"}, {"period_begin"}, {"current_period"}, {"previous_period"}, {"period_end", "period_begin"}, {"current_period", "previous_period"})}
+    return {"status": "failed" if mixed else "passed", "identities": identities, "mixed": mixed}
+
+
 def compare_cross_year(current: Iterable[OfficialFinancialFact], previous: Iterable[OfficialFinancialFact]) -> list[dict[str, object]]:
     """Compare a later filing's prior-period column to the prior filing current column."""
     now = {fact.metric: fact for fact in current if fact.column_identity == "previous_period"}

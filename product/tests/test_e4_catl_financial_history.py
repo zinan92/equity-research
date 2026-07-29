@@ -180,6 +180,16 @@ class CatlHistoryTest(unittest.TestCase):
         facts[-1] = OfficialFinancialFact(metric="total_equity", value=4, **common)
         self.assertEqual(validate_balance_sheet(facts)["status"], "failed")
 
+    def test_quarter_end_columns_are_not_opening_columns(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+        raw=b"%PDF-test"; digest=hashlib.sha256(raw).hexdigest()
+        page=DocumentPage("1225107946",5,digest,"v","合并资产负债表\n单位：千元\n项目 期末余额 期初余额\n货币资金 351,997,422 333,512,927\n流动资产合计 692,498,192 638,481,543\n流动负债合计 434,010,194 399,625,988","x","native","table")
+        parsed=DocumentParseResult("1225107946",digest,"v","p",(page,),(),())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document",return_value=parsed): facts=extract_report_facts(OfficialReport("2026Q1","1225107946","https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"),raw)
+        values={item.metric:item.value for item in facts if item.column_identity=="period_end"}
+        self.assertEqual(values["cash"],351_997_422);self.assertEqual(values["current_assets"],692_498_192);self.assertEqual(values["current_liabilities"],434_010_194)
+
     def test_headered_two_column_row_keeps_both_period_instances(self) -> None:
         from unittest.mock import patch
         from data_core.document_intelligence import DocumentPage, DocumentParseResult
