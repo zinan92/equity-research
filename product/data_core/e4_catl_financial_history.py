@@ -155,6 +155,19 @@ def _numbers_after(label: str, line: str) -> tuple[float, ...]:
     return tuple(float(item.replace(",", "")) for item in re.findall(r"(?<![\d.])-?\d[\d,]*(?:\.\d+)?", suffix))
 
 
+def _period_for_column(report_period: str, identity: str) -> str:
+    """Map a table column identity to the factual period it actually represents."""
+    if identity == "unknown":
+        return "unresolved"
+    year = int(report_period[:4])
+    if identity == "period_begin":
+        # A Q1/H1/9M balance sheet opening balance is the prior FY close.
+        return f"{year - 1}FY" if not report_period.endswith("FY") else f"{year - 1}FY"
+    if identity == "previous_period":
+        return f"{year - 1}{report_period[4:]}"
+    return report_period
+
+
 def _statement_rows(text: str) -> tuple[str, ...]:
     """Preserve normal rows and deterministically reassemble a wrapped row.
 
@@ -346,7 +359,7 @@ def extract_report_facts(
                         "current_period": "previous_period",
                         "period_end": "period_begin",
                     }.get(column_identity, "unknown")
-                    period = report.period if identity not in {"previous_period", "period_begin"} else str(int(report.period[:4]) - 1) + report.period[4:]
+                    period = _period_for_column(report.period, identity)
                     facts.append(OfficialFinancialFact(
                         report.ticker, metric, value, report.document_id, raw_hash,
                         page.page_number, label, compact[:420], period,
