@@ -2326,3 +2326,19 @@
 - **Gotchas:** Reviewing one half of a multi-input chapter is not enough.  The
   queue reports the status after all pending inputs in that section are
   approved, and still keeps independently missing requirements explicit.
+
+# 2026-07-29 — Wired reports remain Tier B after recompilation
+
+- **Decision:** Recompile and retain both CATL and Moutai reports beneath
+  `artifacts/e4-reports/`, with data time, validation summary, 18-section
+  state, and an unreviewed-AI banner in each output.
+- **Why:** A durable reader artifact must show its actual receipt-bound inputs
+  and degradation outcome; it cannot imply that the new wiring made a target
+  price, position, or Tier A available.
+- **Evidence:** `e4-m4-wired-report-verification-v1` confirms CATL at
+  4 FULL / 10 PARTIAL / 4 MISSING and Moutai at 4 FULL / 3 PARTIAL / 11
+  MISSING; both receipts are Tier B with action fields blocked.
+- **Gotchas:** CATL's new answerable navigation entries include unreviewed
+  judgment-backed content and must stay visibly marked pending review.  A
+  Moutai report with zero unreviewed drafts is not more complete; it still has
+  its own independently missing inputs.

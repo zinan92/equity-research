@@ -2,7 +2,9 @@
 
 ## 2026-07-29 · CATL first-report vertical (M1–M4)
 
-Now: frozen, evidence-bound CATL HTML report compilation is available; Tier and missing C1 inputs remain explicit. Next: analyst review of provisional judgment and valuation gaps before any Tier-A claim.
+Now: CATL and Moutai persistent, evidence-bound HTML reports are recompiled from receipt-identified inputs. CATL is 4 FULL / 10 PARTIAL / 4 MISSING with 10 explicitly unreviewed AI judgments; Moutai remains 4 FULL / 3 PARTIAL / 11 MISSING with none. Both are Tier B / `no_action`.
+
+Next: a human may review the 10 CATL queue items against their page citations; approval can complete only the individually eligible C1 sections, while independent coverage gaps and the #218 audit gate remain unchanged.
 
 ## 现在在哪里
 
