@@ -23,10 +23,10 @@ from .e4_catl_financial_history import OfficialFinancialFact, OfficialReport, _m
 from .official_filings import OfficialFilingBatch, OfficialHttpTransport, sync_exchange_filings
 
 
-# The original 20-ticker receipt is runtime-only by design.  This is its
-# replayable replacement cohort: it retains the three independently published
-# #479 samples, SH/SZ/BJ coverage, and the same broad industry mix.  It is an
-# issuer-selection input, never a source of financial facts.
+# The original 20-ticker receipt is runtime-only by design.  This remains the
+# small replay cohort; the L2 runner may instead bind a fresh, real
+# security-master identity receipt for the 100-ticker acceptance batch.  An
+# issuer selection input is never a source of financial facts.
 E4_AUDIT_COHORT_V2 = (
     "000001.SZ", "000002.SZ", "000012.SZ", "000963.SZ", "002709.SZ", "300750.SZ",
     "600000.SH", "600009.SH", "600011.SH", "600019.SH", "600036.SH", "600276.SH",
@@ -37,6 +37,7 @@ ANNUAL_YEARS = tuple(range(2021, 2026))
 
 
 class _ParseTimeout(TimeoutError): pass
+class _TickerTimeout(TimeoutError): pass
 
 
 def _extract_child(report: OfficialReport, body: bytes, connection) -> None:
@@ -62,6 +63,61 @@ def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 20) 
         if status != "ok":
             raise ValueError(f"isolated page parser failed: {payload}")
         return tuple(OfficialFinancialFact(**item) for item in payload)
+    finally:
+        parent.close()
+        if worker.is_alive():
+            worker.terminate(); worker.join(5)
+
+
+def _capture_ticker_child(ticker: str, periods: tuple[str, ...], delay_seconds: float, connection) -> None:
+    """Keep an unresponsive issuer transport from stalling the sequential cohort."""
+    try:
+        transport = OfficialHttpTransport(timeout_seconds=5.0, min_request_interval_seconds=delay_seconds)
+        connection.send(("ok", [_capture_one(ticker, period, transport=transport) for period in periods]))
+    except BaseException as exc:
+        connection.send(("error", f"{type(exc).__name__}: {exc}"))
+    finally:
+        connection.close()
+
+
+def _timeout_reports(periods: tuple[str, ...], *, seconds: int) -> list[dict[str, Any]]:
+    return [{"period": period, "status": "missing", "reason": "ticker_collection_timeout",
+             "raw_text_excerpt": f"ticker collector exceeded {seconds}s in isolated worker"} for period in periods]
+
+
+def _ticker_exception_reports(periods: tuple[str, ...], exc: BaseException) -> list[dict[str, Any]]:
+    excerpt = f"{type(exc).__name__}: {exc}"[:520]
+    return [{"period": period, "status": "missing", "reason": "ticker_collection_exception",
+             "raw_text_excerpt": excerpt} for period in periods]
+
+
+def _retryable_parse_worker_row(row: Mapping[str, Any]) -> bool:
+    """Retry only rows widened by the pre-fix parser-worker bug."""
+    reports = row.get("reports") or []
+    return bool(reports) and all(
+        item.get("status") == "missing"
+        and item.get("reason") == "ticker_collection_exception"
+        and "isolated page parser failed" in str(item.get("raw_text_excerpt") or "")
+        for item in reports
+    )
+
+
+def _capture_ticker_bounded(ticker: str, periods: tuple[str, ...], *, delay_seconds: float, seconds: int = 300) -> list[dict[str, Any]]:
+    """Collect one issuer in a killable child while retaining one-at-a-time semantics."""
+    context = multiprocessing.get_context("fork")
+    parent, child = context.Pipe(duplex=False)
+    # This worker itself must not be daemonic: its page parser has a separate
+    # killable child process for the PDF deadline.
+    worker = context.Process(target=_capture_ticker_child, args=(ticker, periods, delay_seconds, child))
+    worker.start(); child.close()
+    try:
+        if not parent.poll(seconds):
+            worker.terminate(); worker.join(5)
+            raise _TickerTimeout(f"ticker collector exceeded {seconds}s in isolated worker")
+        status, payload = parent.recv(); worker.join(5)
+        if status != "ok":
+            raise ValueError(f"isolated ticker collector failed: {payload}")
+        return list(payload)
     finally:
         parent.close()
         if worker.is_alive():
@@ -107,6 +163,11 @@ def _failure_excerpt(batch: OfficialFilingBatch) -> str:
     return (str(getattr(attempt, "error", "official discovery returned no raw response"))[:520])
 
 
+def _page_parse_exception(period: str, exc: BaseException, *, document: Mapping[str, Any]) -> dict[str, Any]:
+    return {"period": period, "status": "missing", "reason": "page_parse_exception",
+            "raw_text_excerpt": f"{type(exc).__name__}: {exc}"[:520], "document": dict(document)}
+
+
 def _capture_one(
     ticker: str,
     period: str,
@@ -145,6 +206,10 @@ def _capture_one(
     except _ParseTimeout as exc:
         return {"period": period, "status": "missing", "reason": "page_parse_timeout",
                 "raw_text_excerpt": str(exc), "document": identity}
+    except Exception as exc:
+        # Malformed PDF unicode is a report-level parse gap; it must not
+        # suppress the issuer's other report periods.
+        return _page_parse_exception(period, exc, document=identity)
     present = {fact.metric for fact in facts}
     return {
         "period": period, "status": "available", "document": identity,
@@ -164,8 +229,8 @@ def run_financial_sequence_batch(
 ) -> dict[str, Any]:
     """Collect 5 FY + latest currently available interim, one issuer at a time."""
     requested = tuple(dict.fromkeys(str(value).upper() for value in tickers))
-    if len(requested) != 20:
-        raise ValueError("M2 requires exactly 20 distinct tickers")
+    if not 1 <= len(requested) <= 100:
+        raise ValueError("financial sequence batch requires 1-100 distinct tickers")
     if delay_seconds < 0:
         raise ValueError("delay_seconds must be non-negative")
     runtime_root.mkdir(parents=True, exist_ok=True)
@@ -181,6 +246,9 @@ def run_financial_sequence_batch(
         prior = json.loads(checkpoint_path.read_text(encoding="utf-8"))
         if prior.get("data_kind") == "real" and prior.get("configured_max_concurrency") == 1:
             rows = list(prior.get("tickers") or [])
+            rows = [row for row in rows if not _retryable_parse_worker_row(row)]
+    if any(str(item.get("ticker") or "").upper() not in requested for item in rows):
+        raise ValueError("financial sequence checkpoint contains a different cohort")
     completed = {str(item.get("ticker") or "").upper() for item in rows}
     # 2026H1 filings are not universally available by the collection date;
     # use Q1 as the common latest interim floor and retain absence explicitly.
@@ -188,7 +256,20 @@ def run_financial_sequence_batch(
     for index, ticker in enumerate(requested):
         if ticker in completed:
             continue
-        reports = [_capture_one(ticker, period, transport=active_transport, sync=sync) for period in periods]
+        # The live path receives an issuer-level deadline in addition to the
+        # document parser deadline.  Test/custom transport seams stay direct
+        # so their injected adapters remain inspectable and deterministic.
+        if sync is sync_exchange_filings and transport is None:
+            try:
+                reports = _capture_ticker_bounded(ticker, periods, delay_seconds=delay_seconds)
+            except _TickerTimeout:
+                reports = _timeout_reports(periods, seconds=300)
+            except Exception as exc:
+                # A worker crash is an issuer-level collection gap, never a
+                # reason to abandon the remaining identities in the cohort.
+                reports = _ticker_exception_reports(periods, exc)
+        else:
+            reports = [_capture_one(ticker, period, transport=active_transport, sync=sync) for period in periods]
         rows.append({"ticker": ticker, "reports": reports})
         checkpoint = {
             "schema_version": "e4-financial-sequence-batch-checkpoint-v1", "state": "in_progress",
