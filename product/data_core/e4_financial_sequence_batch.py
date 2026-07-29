@@ -37,6 +37,7 @@ ANNUAL_YEARS = tuple(range(2021, 2026))
 
 
 class _ParseTimeout(TimeoutError): pass
+class _TickerTimeout(TimeoutError): pass
 
 
 def _extract_child(report: OfficialReport, body: bytes, connection) -> None:
@@ -62,6 +63,44 @@ def _extract_bounded(report: OfficialReport, body: bytes, *, seconds: int = 20) 
         if status != "ok":
             raise ValueError(f"isolated page parser failed: {payload}")
         return tuple(OfficialFinancialFact(**item) for item in payload)
+    finally:
+        parent.close()
+        if worker.is_alive():
+            worker.terminate(); worker.join(5)
+
+
+def _capture_ticker_child(ticker: str, periods: tuple[str, ...], delay_seconds: float, connection) -> None:
+    """Keep an unresponsive issuer transport from stalling the sequential cohort."""
+    try:
+        transport = OfficialHttpTransport(timeout_seconds=5.0, min_request_interval_seconds=delay_seconds)
+        connection.send(("ok", [_capture_one(ticker, period, transport=transport) for period in periods]))
+    except BaseException as exc:
+        connection.send(("error", f"{type(exc).__name__}: {exc}"))
+    finally:
+        connection.close()
+
+
+def _timeout_reports(periods: tuple[str, ...], *, seconds: int) -> list[dict[str, Any]]:
+    return [{"period": period, "status": "missing", "reason": "ticker_collection_timeout",
+             "raw_text_excerpt": f"ticker collector exceeded {seconds}s in isolated worker"} for period in periods]
+
+
+def _capture_ticker_bounded(ticker: str, periods: tuple[str, ...], *, delay_seconds: float, seconds: int = 300) -> list[dict[str, Any]]:
+    """Collect one issuer in a killable child while retaining one-at-a-time semantics."""
+    context = multiprocessing.get_context("fork")
+    parent, child = context.Pipe(duplex=False)
+    # This worker itself must not be daemonic: its page parser has a separate
+    # killable child process for the PDF deadline.
+    worker = context.Process(target=_capture_ticker_child, args=(ticker, periods, delay_seconds, child))
+    worker.start(); child.close()
+    try:
+        if not parent.poll(seconds):
+            worker.terminate(); worker.join(5)
+            raise _TickerTimeout(f"ticker collector exceeded {seconds}s in isolated worker")
+        status, payload = parent.recv(); worker.join(5)
+        if status != "ok":
+            raise ValueError(f"isolated ticker collector failed: {payload}")
+        return list(payload)
     finally:
         parent.close()
         if worker.is_alive():
@@ -190,7 +229,16 @@ def run_financial_sequence_batch(
     for index, ticker in enumerate(requested):
         if ticker in completed:
             continue
-        reports = [_capture_one(ticker, period, transport=active_transport, sync=sync) for period in periods]
+        # The live path receives an issuer-level deadline in addition to the
+        # document parser deadline.  Test/custom transport seams stay direct
+        # so their injected adapters remain inspectable and deterministic.
+        if sync is sync_exchange_filings and transport is None:
+            try:
+                reports = _capture_ticker_bounded(ticker, periods, delay_seconds=delay_seconds)
+            except _TickerTimeout:
+                reports = _timeout_reports(periods, seconds=300)
+        else:
+            reports = [_capture_one(ticker, period, transport=active_transport, sync=sync) for period in periods]
         rows.append({"ticker": ticker, "reports": reports})
         checkpoint = {
             "schema_version": "e4-financial-sequence-batch-checkpoint-v1", "state": "in_progress",

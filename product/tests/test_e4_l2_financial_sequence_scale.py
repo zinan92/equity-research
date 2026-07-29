@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product"))
 
-from data_core.e4_financial_sequence_batch import run_financial_sequence_batch  # noqa: E402
+from data_core.e4_financial_sequence_batch import _timeout_reports, run_financial_sequence_batch  # noqa: E402
 
 
 class FinancialSequenceScaleTest(unittest.TestCase):
@@ -25,3 +25,8 @@ class FinancialSequenceScaleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaisesRegex(ValueError, "1-100"):
                 run_financial_sequence_batch(Path(directory), tickers=tuple(f"{index:06d}.SZ" for index in range(101)), delay_seconds=0)
+
+    def test_ticker_deadline_keeps_all_periods_as_typed_missing(self) -> None:
+        reports = _timeout_reports(("2021FY", "2026Q1"), seconds=300)
+        self.assertEqual([row["reason"] for row in reports], ["ticker_collection_timeout", "ticker_collection_timeout"])
+        self.assertTrue(all("300s" in row["raw_text_excerpt"] for row in reports))
