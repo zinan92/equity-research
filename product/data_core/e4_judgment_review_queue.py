@@ -45,8 +45,12 @@ def build_judgment_review_queue(
         for source_key in pending_keys:
             value = content[source_key]
             priority, impact = _IMPACT[source_key]
-            citations = [fact["citation"] for fact in value["facts"]]
-            body = {key: value[key] for key in ("text", "tests", "items") if key in value}
+            citations = []
+            for fact in value["facts"]:
+                citation = dict(fact["citation"])
+                citation["pdf_page_url"] = str(citation["source_url"]) + "#page=" + str(citation["page_number"])
+                citations.append(citation)
+            body = {key: deepcopy(value[key]) for key in ("text", "claims", "tests", "items") if key in value}
             section_current = current_by_id[section_id]
             section_approved = approved_by_id[section_id]
             # The queue may be built against the fully wired report receipt;

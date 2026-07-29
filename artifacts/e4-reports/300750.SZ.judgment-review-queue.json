@@ -2,11 +2,11 @@
   "schema_version": "e4-judgment-review-queue-v1",
   "data_kind": "real",
   "ticker": "300750.SZ",
-  "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+  "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
   "sort": "impact_rank ascending; equal ranks by section and judgment identifier",
   "counts": {
-    "pending_human_review": 10,
-    "would_promote_section_to_full": 8
+    "pending_human_review": 9,
+    "would_promote_section_to_full": 4
   },
   "items": [
     {
@@ -16,29 +16,63 @@
       "impact_rank": 1,
       "impact": "核心结论",
       "body": {
-        "text": "The evidence-bound thesis is conditional on the issuer sustaining the operating trajectory shown in its official filings; this is an unreviewed AI judgment, not an investment recommendation."
+        "text": "宁德时代的未审阅经营判断以其披露的主营业务描述和unresolved营业收入为条件，不能替代投资建议。",
+        "claims": [
+          {
+            "text": "宁德时代披露了主营业务描述。",
+            "citations": [
+              {
+                "document_id": "1225441586",
+                "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+                "page_number": 16,
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+                "report_period": "2026H1",
+                "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
+                "unit": "narrative_text",
+                "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子"
+              }
+            ]
+          },
+          {
+            "text": "宁德时代披露了unresolved营业收入。",
+            "citations": [
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+                "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+                "page_number": 120,
+                "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              }
+            ]
+          }
+        ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 16,
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "report_period": "2026H1",
+          "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
+          "unit": "narrative_text",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF#page=16"
         },
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 120,
+          "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF#page=120"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -46,50 +80,11 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
-      "would_promote_section_to_full": true,
-      "remaining_required_inputs_after_approval": []
-    },
-    {
-      "judgment_id": "variant_view",
-      "ticker": "300750.SZ",
-      "section_id": "investment_thesis",
-      "impact_rank": 1,
-      "impact": "核心结论",
-      "body": {
-        "text": "No sell-side consensus is admitted, so the only defensible variant view is a conditional reading of filing evidence rather than a claim about market expectations."
-      },
-      "citations": [
-        {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
-        },
-        {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
-        }
-      ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
-      "review_status": "pending_human_review",
-      "approval_writeback": {
-        "status": "human_reviewed_judgment",
-        "review_status": "approved"
-      },
-      "current_section_status": "partial",
-      "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
-      "would_promote_section_to_full": true,
-      "remaining_required_inputs_after_approval": []
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "variant_view"
+      ]
     },
     {
       "judgment_id": "falsification_tests",
@@ -98,36 +93,47 @@
       "impact_rank": 2,
       "impact": "反方与失效条件",
       "body": {
+        "text": "若宁德时代下一份年度报告的营业收入低于 4.00917e+07 万元，则该未审阅经营判断被推翻并须重审。",
+        "claims": [
+          {
+            "text": "宁德时代披露了证伪阈值所依据的unresolved营业收入。",
+            "citations": [
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+                "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+                "page_number": 120,
+                "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              }
+            ]
+          }
+        ],
         "tests": [
           {
+            "metric": "revenue",
             "direction": "down",
-            "threshold": "below the cited annual revenue baseline",
+            "threshold": 40091704.49,
+            "unit": "万元",
             "time_window": "next annual filing",
-            "rule": "If reported annual revenue is below the cited baseline, reassess the conditional operating-thesis judgment."
+            "rule": "若宁德时代下一份年度报告的营业收入低于 4.00917e+07 万元，则该未审阅经营判断被推翻并须重审。"
           }
         ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
-        },
-        {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 120,
+          "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF#page=120"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -146,29 +152,39 @@
       "impact_rank": 2,
       "impact": "反方与失效条件",
       "body": {
-        "text": "Risk remains elevated if reported earnings or operating cash conversion deteriorate versus the cited filing baseline."
+        "text": "宁德时代风险登记仅记录官方披露的风险因素，未审阅且不表示风险概率或投资结论。",
+        "claims": [
+          {
+            "text": "宁德时代披露了对应风险因素。",
+            "citations": [
+              {
+                "document_id": "1225441586",
+                "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+                "page_number": 165,
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+                "report_period": "2026H1",
+                "quoted_anchor": "1）本期公司开展商品套期保值业务，以金属远期等衍生品合约为套期工具，部分预期采购、销售交易中商品价格风险成分为被套期项目，以此来规避本公司承担的随着商品市场价格的波动，预期采购、销售带来的预计未来现金流量发生波动的风险。该类套期为现金流量套期。",
+                "unit": "narrative_text",
+                "section_path": "第八节 财务报告 > 十一、与金融工具相关的风险 > 1、金融工具产生的各类风险 > 3、套期"
+              }
+            ]
+          }
+        ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
-        },
-        {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 165,
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "report_period": "2026H1",
+          "quoted_anchor": "1）本期公司开展商品套期保值业务，以金属远期等衍生品合约为套期工具，部分预期采购、销售交易中商品价格风险成分为被套期项目，以此来规避本公司承担的随着商品市场价格的波动，预期采购、销售带来的预计未来现金流量发生波动的风险。该类套期为现金流量套期。",
+          "unit": "narrative_text",
+          "section_path": "第八节 财务报告 > 十一、与金融工具相关的风险 > 1、金融工具产生的各类风险 > 3、套期",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF#page=165"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -187,29 +203,39 @@
       "impact_rank": 3,
       "impact": "竞争优势",
       "body": {
-        "text": "A durable-advantage conclusion requires independent peer evidence; current wording records only an unreviewed hypothesis anchored to company filings."
+        "text": "宁德时代在官方披露中描述核心竞争力；该未审阅判断仅基于公司自述，缺独立同行验证。",
+        "claims": [
+          {
+            "text": "宁德时代在官方披露中描述核心竞争力。",
+            "citations": [
+              {
+                "document_id": "1225441586",
+                "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+                "page_number": 12,
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+                "report_period": "2026H1",
+                "quoted_anchor": "公司电池材料产品主要包括锂盐、前驱体及正极材料等。公司亦通过回收方式，对废旧电池中的镍、钴、锰、锂、磷、铁、铝、铜等金属材料及其他材料进行加工、提纯、合成等工艺，生产锂电池生产所需的正极材料、三元前驱体、磷铁前驱体、锂盐等材料，并将收集后的铜、铝等金属材料通过第三方回收利用，最终推进电池生产所需的关键金属资源实现有效循环利用。",
+                "unit": "narrative_text",
+                "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析"
+              }
+            ]
+          }
+        ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
-        },
-        {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 12,
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "report_period": "2026H1",
+          "quoted_anchor": "公司电池材料产品主要包括锂盐、前驱体及正极材料等。公司亦通过回收方式，对废旧电池中的镍、钴、锰、锂、磷、铁、铝、铜等金属材料及其他材料进行加工、提纯、合成等工艺，生产锂电池生产所需的正极材料、三元前驱体、磷铁前驱体、锂盐等材料，并将收集后的铜、铝等金属材料通过第三方回收利用，最终推进电池生产所需的关键金属资源实现有效循环利用。",
+          "unit": "narrative_text",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF#page=12"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -230,29 +256,56 @@
       "impact_rank": 4,
       "impact": "盈利质量",
       "body": {
-        "text": "A complete margin bridge is unavailable; cited revenue and parent-profit facts are retained as the auditable starting point."
+        "text": "宁德时代的未审阅毛利起点为已披露营业收入减营业成本 3.04823e+07 万元；完整利润率桥缺少其余成本层证据。",
+        "claims": [
+          {
+            "text": "宁德时代披露了计算该起点的营业收入和营业成本。",
+            "citations": [
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+                "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+                "page_number": 120,
+                "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              },
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+                "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+                "page_number": 114,
+                "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              }
+            ]
+          }
+        ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 120,
+          "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF#page=120"
         },
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+          "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+          "page_number": 114,
+          "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF#page=114"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -260,9 +313,11 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
-      "would_promote_section_to_full": true,
-      "remaining_required_inputs_after_approval": []
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "income_history"
+      ]
     },
     {
       "judgment_id": "operating_kpis",
@@ -271,61 +326,64 @@
       "impact_rank": 5,
       "impact": "经营兑现",
       "body": {
-        "items": [
+        "text": "宁德时代的未审阅经营指标以主营业务与研发披露中的具体进展为观察对象。",
+        "claims": [
           {
-            "name": "reported revenue",
-            "facts": [
+            "text": "宁德时代披露了经营指标观察所依据的业务或研发进展。",
+            "citations": [
               {
-                "metric": "revenue",
-                "value": 129131041.0,
-                "citation": {
-                  "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-                  "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-                  "page_number": 8,
-                  "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-                  "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-                  "report_period": "2026Q1",
-                  "unit": "千元"
-                }
+                "document_id": "1225441586",
+                "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+                "page_number": 16,
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+                "report_period": "2026H1",
+                "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
+                "unit": "narrative_text",
+                "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子"
               },
               {
-                "metric": "net_profit_parent",
-                "value": 20737710.0,
-                "citation": {
-                  "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-                  "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-                  "page_number": 9,
-                  "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-                  "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-                  "report_period": "2026Q1",
-                  "unit": "千元"
-                }
+                "document_id": "1225441586",
+                "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+                "page_number": 158,
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+                "report_period": "2026H1",
+                "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
+                "unit": "narrative_text",
+                "section_path": "第八节 财务报告 > 八、研发支出"
               }
             ]
           }
+        ],
+        "items": [
+          "business_and_product_progress",
+          "research_progress"
         ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 16,
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "report_period": "2026H1",
+          "quoted_anchor": "项目 营业收入 营业成本 毛利率 营业收入比上 营业成本比上 毛利率比上年（1）报告期内上市公司从事锂离子电池产业链相关业务的海外销售收入占同期营业收入 30%以上业收入 31.46%。公司主要业务地区的经营环境未发生重大变化，境外客户回款情况正常。",
+          "unit": "narrative_text",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 5、公司需遵守《深圳证券交易所上市公司自律监管指引第 4 号——创业板行业信息披露》中的“锂离子",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF#page=16"
         },
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 158,
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "report_period": "2026H1",
+          "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
+          "unit": "narrative_text",
+          "section_path": "第八节 财务报告 > 八、研发支出",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF#page=158"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -333,9 +391,11 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
-      "would_promote_section_to_full": true,
-      "remaining_required_inputs_after_approval": []
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "revenue_history"
+      ]
     },
     {
       "judgment_id": "accounting_checks",
@@ -344,29 +404,56 @@
       "impact_rank": 6,
       "impact": "会计质量",
       "body": {
-        "text": "This is a mechanical filing-based check only; it is not an audit opinion."
+        "text": "宁德时代的未审阅会计检查并列其已披露营业收入与营业成本，不构成审计意见。",
+        "claims": [
+          {
+            "text": "宁德时代披露了营业收入和营业成本。",
+            "citations": [
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+                "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+                "page_number": 120,
+                "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              },
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+                "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+                "page_number": 114,
+                "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              }
+            ]
+          }
+        ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 120,
+          "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF#page=120"
         },
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+          "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+          "page_number": 114,
+          "quoted_anchor": "二、营业总成本其中：营业成本 9,609,372.23 3,634,915.36 11,136,729.06 4,348,584.35",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF#page=114"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -387,32 +474,47 @@
       "impact_rank": 7,
       "impact": "持续跟踪",
       "body": {
+        "text": "宁德时代触发复核的未审阅条件是下一份年度报告营业收入低于已引用阈值。",
+        "claims": [
+          {
+            "text": "宁德时代披露了证伪阈值所依据的unresolved营业收入。",
+            "citations": [
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+                "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+                "page_number": 120,
+                "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              }
+            ]
+          }
+        ],
         "items": [
-          "review on next annual filing",
-          "review if the falsification condition occurs"
+          {
+            "metric": "revenue",
+            "direction": "down",
+            "threshold": 40091704.49,
+            "unit": "万元",
+            "time_window": "next annual filing",
+            "rule": "若宁德时代下一份年度报告的营业收入低于 4.00917e+07 万元，则该未审阅经营判断被推翻并须重审。"
+          }
         ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
-        },
-        {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 120,
+          "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF#page=120"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",
@@ -431,33 +533,62 @@
       "impact_rank": 7,
       "impact": "持续跟踪",
       "body": {
+        "text": "宁德时代的未审阅监控清单跟踪已披露营业收入及研发相关进展，并在下一次定期披露时复核。",
+        "claims": [
+          {
+            "text": "宁德时代披露了监控项所依据的页级证据。",
+            "citations": [
+              {
+                "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+                "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+                "page_number": 120,
+                "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+                "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+                "report_period": "unresolved",
+                "unit": "万元"
+              },
+              {
+                "document_id": "1225441586",
+                "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+                "page_number": 158,
+                "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+                "report_period": "2026H1",
+                "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
+                "unit": "narrative_text",
+                "section_path": "第八节 财务报告 > 八、研发支出"
+              }
+            ]
+          }
+        ],
         "items": [
-          "annual revenue",
-          "parent net profit",
-          "operating cash flow"
+          "reported_revenue",
+          "research_and_product_progress"
         ]
       },
       "citations": [
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 8,
-          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 120,
+          "quoted_anchor": "一、营业总收入 40,091,704.49 32,859,398.75",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "report_period": "unresolved",
+          "unit": "万元",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF#page=120"
         },
         {
-          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
-          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
-          "page_number": 9,
-          "quoted_anchor": "1.归属于母公司所有者的净利润 20,737,710 13,962,558",
-          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
-          "report_period": "2026Q1",
-          "unit": "千元"
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 158,
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "report_period": "2026H1",
+          "quoted_anchor": "项目 本期金额 上期金额 不属于现金及现金等价物的理由本公司引入第三方供应链信息服务平台、通过银行提供的供应链金融服务平台办理反向保理业务，为持有本公司电子债权凭证的供应商提供服务。本公司在电子债权凭证项下的付款义务是无条件且不可撤销的，不受电子债权凭证流转相关方之间任何商业纠纷的影响，本公司不就该付款责任主张抵销或者进行抗辩。本公司将根据业务规则于付款日划付等额电子债权凭证项下金额。电子债权凭证可转让、融资。",
+          "unit": "narrative_text",
+          "section_path": "第八节 财务报告 > 八、研发支出",
+          "pdf_page_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF#page=158"
         }
       ],
-      "source_receipt_id": "e4-m3-catl-judgments-v1:dd1922d6fa58f09dbaa6f853d27430f04a4995afc13733ee3749a523b8c6b01d",
+      "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
       "review_status": "pending_human_review",
       "approval_writeback": {
         "status": "human_reviewed_judgment",

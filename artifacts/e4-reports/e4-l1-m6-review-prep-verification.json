@@ -1,0 +1,114 @@
+{
+  "schema_version": "e4-l1-m6-review-prep-verification-v1",
+  "data_kind": "real",
+  "judgment_queue": {
+    "source_receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
+    "pending_human_review": 9,
+    "pdf_page_links_complete": true,
+    "approval_count": 0,
+    "only_review_remaining_sections": [
+      "monitoring_and_action_triggers",
+      "risks_and_falsification"
+    ]
+  },
+  "spot_audit_freshness": {
+    "financial_sequence_receipt_hash": "4502bb32938478ea07f8e01b6a7793b9369bdb87f3f122ee4a7d556c1ff1f0f5",
+    "legacy_assignment_count": 20,
+    "legacy_still_lineage_valid": [
+      "000001.SZ",
+      "000002.SZ",
+      "000012.SZ",
+      "002709.SZ",
+      "300750.SZ",
+      "600009.SH",
+      "600011.SH",
+      "600019.SH"
+    ],
+    "legacy_stale_requires_recovery": [
+      "000963.SZ",
+      "600000.SH",
+      "600036.SH",
+      "600276.SH",
+      "600519.SH",
+      "600941.SH",
+      "601000.SH",
+      "601857.SH",
+      "920027.BJ",
+      "920118.BJ",
+      "920185.BJ",
+      "920751.BJ"
+    ],
+    "current_assignment_count": 7,
+    "current_assignments_with_lineage": [
+      "000002.SZ",
+      "000012.SZ",
+      "002709.SZ",
+      "300750.SZ",
+      "600009.SH",
+      "600011.SH",
+      "600019.SH"
+    ],
+    "coverage_gaps": [
+      {
+        "ticker": "000001.SZ",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "000963.SZ",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "600000.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "600036.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "600276.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "600519.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "600941.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "601000.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "601857.SH",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "920027.BJ",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "920118.BJ",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "920185.BJ",
+        "reason": "no_conservative_page_bound_fact"
+      },
+      {
+        "ticker": "920751.BJ",
+        "reason": "no_conservative_page_bound_fact"
+      }
+    ],
+    "status": "partial_current_coverage"
+  },
+  "truth_boundary": {
+    "human_review_not_performed": true,
+    "stale_legacy_assignments_not_counted": true,
+    "no_tier_or_acceptance_credit": true,
+    "no_issue_218_claim": true
+  },
+  "verification_hash": "d8b9b4ab04a7f7a172b66685f108f26d45919c754ac0f9cb7c31894a3befc953"
+}

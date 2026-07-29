@@ -1,5 +1,20 @@
 # REGISTRY
 
+## 2026-07-29 · L1 first-report vertical complete
+
+Now: L1-M1 through L1-M6 are merged as a bounded CATL vertical.  The CATL
+report is Tier B at 5 FULL / 10 PARTIAL / 3 MISSING; nine AI judgments remain
+pending human review, with page-linkable citations and no review writeback.
+Only `risks_and_falsification` and `monitoring_and_action_triggers` lack only
+the required human approvals.  Of the prior 20 spot-audit assignments, eight
+still match current financial-sequence lineage, twelve are stale, and the
+fresh conservative assignment receipt has seven pending tasks plus thirteen
+coverage gaps.  None is a completed audit or issue #218 credit.
+
+Next: L2-M1 extends the existing official financial sequence to the 100-ticker
+acceptance cohort, retaining typed missing coverage rather than relaxing any
+gate.
+
 ## 2026-07-29 · CATL first-report vertical (M1–M4)
 
 Now: CATL and Moutai persistent, evidence-bound HTML reports are recompiled from receipt-identified inputs. CATL is 4 FULL / 10 PARTIAL / 4 MISSING with 10 explicitly unreviewed AI judgments; Moutai remains 4 FULL / 3 PARTIAL / 11 MISSING with none. Both are Tier B / `no_action`.
