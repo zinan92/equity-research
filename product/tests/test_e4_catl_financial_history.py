@@ -217,6 +217,22 @@ class CatlHistoryTest(unittest.TestCase):
         revenue=next(item for item in facts if item.metric=="revenue" and item.column_identity=="current_period")
         self.assertEqual(revenue.value,100)
 
+    def test_interim_headers_unit_and_audit_status_carry_across_pages(self) -> None:
+        from unittest.mock import patch
+        from data_core.document_intelligence import DocumentPage, DocumentParseResult
+
+        raw=b"%PDF-test"; digest=hashlib.sha256(raw).hexdigest()
+        pages=(
+            DocumentPage("doc",4,digest,"v","合并利润表\n单位：千元\n未经审计\n本报告期 上年同期\n营业总收入 100 90","p4","native","table"),
+            DocumentPage("doc",5,digest,"v","营业成本 60 55","p5","native","table"),
+        )
+        parsed=DocumentParseResult("doc",digest,"v","p",pages,(),())
+        with patch("data_core.e4_catl_financial_history.parse_pdf_document",return_value=parsed):
+            facts=extract_report_facts(OfficialReport("2026H1","doc","https://official.example/doc.pdf"),raw)
+        cost=next(item for item in facts if item.metric=="operating_cost" and item.column_identity=="current_period")
+        self.assertEqual((cost.report_period,cost.unit,cost.audit_status),("2026H1","千元","unaudited"))
+        self.assertIn("单位：千元",cost.unit_source_excerpt)
+
     def test_same_statement_mixed_column_identity_fails(self) -> None:
         from data_core.e4_catl_financial_history import OfficialFinancialFact, validate_statement_column_consistency
         common=dict(ticker="300750.SZ",document_id="doc",raw_hash="a"*64,page_number=5,quoted_label="x",quoted_anchor="raw",report_period="2026Q1",statement_scope="consolidated",unit="千元",currency="CNY",source_url="https://official.example/doc.pdf")
