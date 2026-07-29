@@ -16,6 +16,7 @@ from report_contract import UNREVIEWED_JUDGMENT_STATUS
 
 
 JUDGMENT_RECEIPT_SCHEMA = "e4-m3-catl-judgments-v1"
+JUDGMENT_RECEIPT_SCHEMAS = frozenset({JUDGMENT_RECEIPT_SCHEMA, "e4-m3-catl-judgments-v2"})
 _CITATION_KEYS = ("document_id", "raw_hash", "page_number", "quoted_anchor", "source_url")
 
 # C1 input types are fixed by the contract.  Array inputs retain one judgment
@@ -56,7 +57,7 @@ def wire_unreviewed_judgment_receipt(receipt: Mapping[str, Any], *, ticker: str)
     Missing fields remain absent: receipt existence alone is never treated as
     completion.  ``receipt_id`` is the content hash of the exact real run.
     """
-    if receipt.get("schema_version") != JUDGMENT_RECEIPT_SCHEMA or receipt.get("data_kind") != "real":
+    if receipt.get("schema_version") not in JUDGMENT_RECEIPT_SCHEMAS or receipt.get("data_kind") != "real":
         raise ValueError("judgment receipt is not a real E4 judgment run")
     if str(receipt.get("ticker", "")).upper() != ticker.upper():
         raise ValueError("judgment receipt ticker mismatch")
@@ -66,7 +67,7 @@ def wire_unreviewed_judgment_receipt(receipt: Mapping[str, Any], *, ticker: str)
     if not isinstance(content, dict):
         raise ValueError("judgment receipt content is missing")
     provenance = {
-        "receipt_id": f"{JUDGMENT_RECEIPT_SCHEMA}:{receipt['receipt_hash']}",
+        "receipt_id": f"{receipt['schema_version']}:{receipt['receipt_hash']}",
         "receipt_hash": receipt["receipt_hash"],
         "source_dossier_receipt": receipt.get("source_dossier_receipt"),
     }

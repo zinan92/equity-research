@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "receipt_id": "e4-m3-catl-judgments-v2:ba5e1b96eae378a3a116c88e39024ffbebcafab8bba54cd098d7b2a0f7b7281e",
+  "judgments": [
+    {
+      "id": "investment_thesis",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 1
+      }
+    },
+    {
+      "id": "variant_view",
+      "status": "missing",
+      "reason": "no broker consensus or market-expectations receipt",
+      "citation_mix": null
+    },
+    {
+      "id": "moat_assessment",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 0
+      }
+    },
+    {
+      "id": "risk_register",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 0
+      }
+    },
+    {
+      "id": "falsification_tests",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 1
+      }
+    },
+    {
+      "id": "monitoring_kpis",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 1,
+        "financial_facts": 1
+      }
+    },
+    {
+      "id": "action_triggers",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 1
+      }
+    },
+    {
+      "id": "accounting_checks",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 2
+      }
+    },
+    {
+      "id": "operating_kpis",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 2,
+        "financial_facts": 0
+      }
+    },
+    {
+      "id": "margin_bridge",
+      "status": "ai_generated_judgment_unreviewed",
+      "reason": null,
+      "citation_mix": {
+        "narrative_blocks": 0,
+        "financial_facts": 2
+      }
+    }
+  ],
+  "name_swap_pass_rate": 1.0,
+  "errors": []
+}
