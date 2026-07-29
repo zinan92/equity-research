@@ -366,9 +366,14 @@ def extract_report_facts(
                     facts.append(OfficialFinancialFact(
                         report.ticker, "shares_outstanding", value, report.document_id, raw_hash,
                         page.page_number, _SHARE_COUNT_LABEL, compact_page[max(0, compact_page.index(_SHARE_COUNT_LABEL) - 80):compact_page.index(_SHARE_COUNT_LABEL) + 260],
-                        report.period, "share_count_disclosure", "shares", "N/A", report.source_url,
+                        report.period, "share_count_disclosure", "股", "N/A", report.source_url,
                     ))
                     found.add("shares_outstanding")
+    # A money-denominated balance-sheet row can never stand in for shares.
+    # Keep this invariant at the extractor boundary, before valuation inputs.
+    for fact in facts:
+        if fact.metric == "shares_outstanding" and fact.unit != "股":
+            raise ValueError("shares_outstanding must use the independent shares unit")
     if facts or using_layout_fallback:
         return tuple(facts)
     fallback_pages = _native_layout_pages(report.document_id, raw_hash, pdf_bytes)

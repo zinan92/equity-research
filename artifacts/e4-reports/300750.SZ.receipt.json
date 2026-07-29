@@ -4,7 +4,7 @@
   "data_kind": "real",
   "report_model_hash": "35143aa218ace882c5d2711c5aec26261ccca84794101fc7893161503a6dcda1",
   "html_path": "artifacts/e4-reports/300750.SZ.html",
-  "word_count": 1483,
+  "word_count": 1433,
   "sections": [
     {
       "section_id": "executive_summary",
@@ -446,11 +446,11 @@
   },
   "citation_gate": {
     "passed": true,
-    "facts_rendered": 128
+    "facts_rendered": 124
   },
   "deepseek_narrative": {
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "9d9a5c22555390e39fd42c5b3abc9f2ea8076aee9df2296e387408fcc9f5bd53"
+  "receipt_hash": "eec7955fa171cb7bcf49611959665f215555ebee3b580f8470b96d7a45393c1a"
 }
