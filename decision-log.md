@@ -2406,3 +2406,22 @@
   `ai_generated_judgment_unreviewed`.  Two model outputs still fail strict
   inference or quote validation and remain MISSING; cumulative model
   receipts are audit history, not independent research facts.
+
+# 2026-07-30 — The same model path is issuer-generic
+
+- **Decision:** Generalize the official narrative capture receipt to any
+  requested ticker and run Moutai through the unchanged model-judgment
+  generator and verifier.
+- **Why:** A CATL-only success does not prove that reasoning comes from frozen
+  evidence rather than hidden issuer branches.
+- **Evidence:** Moutai narrative receipt
+  `e4-official-narrative-evidence-v1:a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da`
+  binds 86 resolved blocks across 34 pages to official document
+  `1225114741`.  Judgment receipt
+  `e4-model-judgments-v1:630a6c847bbbfdae4010c4aed71577c1892ab4d593ef4902f4c70366ab1f8892`
+  passes the same verifier with eight accepted judgments, 11/11 specific
+  sentences and 20/20 numeric tokens.
+- **Gotchas:** Explicit risk sections must outrank generic management
+  discussion; otherwise a model can falsely report that no risk evidence
+  exists.  `monitoring_kpis` still fails quote validation and remains MISSING;
+  it is not replaced with a company-specific template.

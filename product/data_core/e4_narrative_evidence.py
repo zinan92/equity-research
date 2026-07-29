@@ -14,7 +14,7 @@ from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
-from typing import Iterable
+from typing import Iterable, Mapping
 
 from .document_intelligence import DocumentPage, ParserConfig, parse_pdf_document
 from .e4_catl_financial_history import CATL_REPORTS, CATL_TICKER, OfficialReport
@@ -196,7 +196,10 @@ def _report_coverage(blocks: Iterable[NarrativeBlock]) -> dict[str, object]:
     }
 
 
-def _capture_report_narrative(report: OfficialReport) -> tuple[dict[str, object], tuple[NarrativeBlock, ...]]:
+def _capture_report_narrative(
+    report: OfficialReport,
+    expected_raw_hash: str | None = None,
+) -> tuple[dict[str, object], tuple[NarrativeBlock, ...]]:
     """One bounded official fetch; any failure becomes an explicit gap."""
     try:
         response = default_http_transport(report.source_url, {"Accept": "application/pdf"})
@@ -204,35 +207,118 @@ def _capture_report_narrative(report: OfficialReport) -> tuple[dict[str, object]
         return ({"period": report.period, "document_id": report.document_id, "status": "missing", "reason": f"official_pdf_fetch_failed:{type(exc).__name__}", "source_url": report.source_url}, ())
     if response.status_code != 200 or not response.body.startswith(b"%PDF"):
         return ({"period": report.period, "document_id": report.document_id, "status": "missing", "reason": "official_pdf_unavailable", "source_url": report.source_url}, ())
+    observed_raw_hash = hashlib.sha256(response.body).hexdigest()
+    if expected_raw_hash and observed_raw_hash != expected_raw_hash:
+        return ({
+            "period": report.period,
+            "document_id": report.document_id,
+            "status": "missing",
+            "reason": "official_pdf_raw_hash_mismatch",
+            "source_url": report.source_url,
+            "expected_raw_hash": expected_raw_hash,
+            "observed_raw_hash": observed_raw_hash,
+        }, ())
     blocks = extract_narrative_blocks(report, response.body)
     return ({
         "period": report.period, "document_id": report.document_id, "status": "available",
-        "raw_hash": hashlib.sha256(response.body).hexdigest(), "source_url": report.source_url,
+        "raw_hash": observed_raw_hash, "source_url": report.source_url,
         "coverage": _report_coverage(blocks),
     }, blocks)
 
 
-def capture_catl_narrative(reports: Iterable[OfficialReport] = CATL_REPORTS) -> dict[str, object]:
+def capture_issuer_narrative(
+    ticker: str,
+    reports: Iterable[OfficialReport],
+    *,
+    expected_raw_hashes: Mapping[str, str],
+    source_financial_receipt_sha256: str,
+) -> dict[str, object]:
     """Fetch only declared official CNINFO PDFs; retain source failures honestly."""
     reports = tuple(reports)
+    normalized_ticker = ticker.upper()
+    if not reports or any(report.ticker.upper() != normalized_ticker for report in reports):
+        raise ValueError("all narrative reports must match the requested ticker")
+    if not re.fullmatch(r"[0-9a-f]{64}", source_financial_receipt_sha256):
+        raise ValueError("source financial receipt SHA-256 is required")
+    for report in reports:
+        if (
+            not report.document_id
+            or not report.source_url.startswith(
+                "https://static.cninfo.com.cn/"
+            )
+        ):
+            raise ValueError("narrative report must be an official CNINFO identity")
+        expected = expected_raw_hashes.get(report.document_id)
+        if not expected or not re.fullmatch(r"[0-9a-f]{64}", expected):
+            raise ValueError(
+                "each narrative report requires a frozen raw SHA-256"
+            )
     report_rows: list[dict[str, object]] = []
     all_blocks: list[NarrativeBlock] = []
-    # Eight fixed official documents are independent.  Bounded concurrency
+    # Declared official documents are independent.  Bounded concurrency
     # keeps a recoverable source failure from delaying all remaining receipts.
     with ThreadPoolExecutor(max_workers=min(4, max(1, len(reports)))) as pool:
-        captured = list(pool.map(_capture_report_narrative, reports))
+        captured = list(
+            pool.map(
+                lambda report: _capture_report_narrative(
+                    report,
+                    expected_raw_hashes.get(report.document_id),
+                ),
+                reports,
+            )
+        )
     for row, blocks in captured:
         report_rows.append(row)
         all_blocks.extend(blocks)
     generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     payload = {
-        "schema_version": NARRATIVE_SCHEMA, "data_kind": "real", "ticker": CATL_TICKER,
+        "schema_version": NARRATIVE_SCHEMA, "data_kind": "real", "ticker": normalized_ticker,
         "generated_at": generated_at, "reports": report_rows,
         "blocks": [asdict(block) for block in all_blocks],
         "coverage": _report_coverage(all_blocks),
-        "truth_boundary": {"official_cninfo_pdf_only": True, "page_bound_only": True, "ai_judgment": False},
+        "truth_boundary": {
+            "official_cninfo_pdf_only": True,
+            "page_bound_only": True,
+            "ai_judgment": False,
+            "frozen_financial_receipt_bound": True,
+        },
     }
+    payload["source_financial_receipt_sha256"] = (
+        source_financial_receipt_sha256
+    )
     payload["receipt_hash"] = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    payload["receipt_id"] = f"{NARRATIVE_SCHEMA}:{payload['receipt_hash']}"
+    return payload
+
+
+def capture_catl_narrative(reports: Iterable[OfficialReport] = CATL_REPORTS) -> dict[str, object]:
+    """Legacy CATL capture; use the issuer-generic CLI for frozen lineage."""
+    reports = tuple(reports)
+    report_rows: list[dict[str, object]] = []
+    all_blocks: list[NarrativeBlock] = []
+    with ThreadPoolExecutor(max_workers=min(4, max(1, len(reports)))) as pool:
+        captured = list(pool.map(_capture_report_narrative, reports))
+    for row, blocks in captured:
+        report_rows.append(row)
+        all_blocks.extend(blocks)
+    payload = {
+        "schema_version": NARRATIVE_SCHEMA,
+        "data_kind": "real",
+        "ticker": CATL_TICKER,
+        "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+        "reports": report_rows,
+        "blocks": [asdict(block) for block in all_blocks],
+        "coverage": _report_coverage(all_blocks),
+        "truth_boundary": {
+            "official_cninfo_pdf_only": True,
+            "page_bound_only": True,
+            "ai_judgment": False,
+            "frozen_financial_receipt_bound": False,
+        },
+    }
+    payload["receipt_hash"] = hashlib.sha256(
+        json.dumps(payload, ensure_ascii=False, sort_keys=True).encode()
+    ).hexdigest()
     payload["receipt_id"] = f"{NARRATIVE_SCHEMA}:{payload['receipt_hash']}"
     return payload
 
@@ -246,13 +332,21 @@ def merge_narrative_receipts(receipts: Iterable[dict[str, object]]) -> dict[str,
     reports: list[dict[str, object]] = []
     blocks: list[NarrativeBlock] = []
     receipt_ids: list[str] = []
+    ticker = str(receipts[0].get("ticker") or "").upper()
     for receipt in receipts:
-        if receipt.get("schema_version") != NARRATIVE_SCHEMA or receipt.get("data_kind") != "real" or receipt.get("ticker") != CATL_TICKER:
-            raise ValueError("only real CATL narrative receipts can be merged")
+        if (
+            receipt.get("schema_version") != NARRATIVE_SCHEMA
+            or receipt.get("data_kind") != "real"
+            or str(receipt.get("ticker") or "").upper() != ticker
+        ):
+            raise ValueError("only same-issuer real narrative receipts can be merged")
         receipt_hash = str(receipt.get("receipt_hash") or "")
         copy = {key: value for key, value in receipt.items() if key not in {"receipt_hash", "receipt_id"}}
         if not receipt_hash or hashlib.sha256(json.dumps(copy, ensure_ascii=False, sort_keys=True).encode()).hexdigest() != receipt_hash:
             raise ValueError("source narrative receipt hash mismatch")
+        expected_id = NARRATIVE_SCHEMA + ":" + receipt_hash
+        if receipt.get("receipt_id") != expected_id:
+            raise ValueError("source narrative receipt id mismatch")
         receipt_ids.append(str(receipt.get("receipt_id")))
         for report in receipt.get("reports", []):
             document_id = str(report.get("document_id"))
@@ -262,7 +356,7 @@ def merge_narrative_receipts(receipts: Iterable[dict[str, object]]) -> dict[str,
             reports.append(report)
         blocks.extend(NarrativeBlock(**block) for block in receipt.get("blocks", []))
     payload = {
-        "schema_version": NARRATIVE_SCHEMA, "data_kind": "real", "ticker": CATL_TICKER,
+        "schema_version": NARRATIVE_SCHEMA, "data_kind": "real", "ticker": ticker,
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "reports": reports, "blocks": [asdict(block) for block in blocks], "coverage": _report_coverage(blocks),
         "source_run_receipts": receipt_ids,
