@@ -2,9 +2,11 @@
   "schema_version": "e4-m4-report-v1",
   "ticker": "600519.SH",
   "data_kind": "real",
-  "report_model_hash": "4bdcc89130ec22af6536e7c4097208ccc4d2a62ffd8f69f701acebb6dcfd680e",
+  "report_model_hash": "00fa32ca5b19719ed25060a5b30c2d4a3098dc52e004aa14e88d094301e993fe",
   "html_path": "artifacts/e4-reports/600519.SH.html",
-  "word_count": 495,
+  "html_sha256": "14fcb02914fc16f4e04135e741119d73051f7e59466ffb95c7c22a374be9b567",
+  "html_bytes": 34670,
+  "word_count": 665,
   "sections": [
     {
       "section_id": "executive_summary",
@@ -35,18 +37,21 @@
       "section_id": "investment_thesis",
       "order": 2,
       "title": "投资逻辑与预期差",
-      "status": "missing",
-      "present_required": [],
+      "status": "partial",
+      "present_required": [
+        "investment_thesis"
+      ],
       "missing_required": [
-        "investment_thesis",
         "variant_view"
       ],
       "present_optional": [],
       "missing_optional": [
         "bear_case"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "investment_thesis"
+      ],
       "page_budget": [
         2,
         3
@@ -54,7 +59,7 @@
       "section_hash": "0d478ef75e9a6f83a25c3643af878e6e064bf494c0551d6bc120bad836bdfa5d",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      "input_hash": "46ac74e9c4e3c9241144ee4876bf5a0724312f5d3912bafc5c1b74bb8c65a33c"
     },
     {
       "section_id": "business_model",
@@ -111,18 +116,21 @@
       "section_id": "competition_and_moat",
       "order": 5,
       "title": "竞争格局与护城河",
-      "status": "missing",
-      "present_required": [],
-      "missing_required": [
-        "peer_comparison",
+      "status": "partial",
+      "present_required": [
         "moat_assessment"
+      ],
+      "missing_required": [
+        "peer_comparison"
       ],
       "present_optional": [],
       "missing_optional": [
         "competitive_events"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "moat_assessment"
+      ],
       "page_budget": [
         2,
         3
@@ -130,7 +138,7 @@
       "section_hash": "3d11bb93f0db7ffca05a209092f4fbb45ccc6885ba4f4ef00c6bbddca8885c62",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      "input_hash": "16b4e01e4469ac694f0c13cbc1c8532984b01c10286afbb3c6e166c3d5588c03"
     },
     {
       "section_id": "management_and_governance",
@@ -164,18 +172,19 @@
       "title": "收入质量与经营 KPI",
       "status": "partial",
       "present_required": [
-        "revenue_history"
-      ],
-      "missing_required": [
+        "revenue_history",
         "operating_kpis"
       ],
+      "missing_required": [],
       "present_optional": [],
       "missing_optional": [
         "guidance_history",
         "rd_efficiency"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "operating_kpis"
+      ],
       "page_budget": [
         2,
         3
@@ -183,7 +192,7 @@
       "section_hash": "446311fb9e68ad61395b3eb29b317f9ce90f6d7734eeb039fdfa638829382afa",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "cd051d460f05c6d5d7f8cbaf5629a64e3ae930bdb84366a794bf45543c62c220"
+      "input_hash": "e4bf4520e2448b06043a0cab36420e6c6f7f9686c7aa3d328e5de1fc82909dd1"
     },
     {
       "section_id": "profitability_and_earnings_quality",
@@ -191,17 +200,18 @@
       "title": "盈利能力与利润质量",
       "status": "partial",
       "present_required": [
-        "income_history"
-      ],
-      "missing_required": [
+        "income_history",
         "margin_bridge"
       ],
+      "missing_required": [],
       "present_optional": [],
       "missing_optional": [
         "adjusted_earnings_bridge"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "margin_bridge"
+      ],
       "page_budget": [
         2,
         3
@@ -209,7 +219,7 @@
       "section_hash": "6693eda8ab96352e8929fecaeb347ac67c4af650c7b7f45ab66d46e72166b7a0",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "b6b1af37844304a728d87be0532739e2dbb3a99b5ddeb0fda6e3e07adce43997"
+      "input_hash": "1da71e79db287c3cc486aff8420022aa7e2cc6cbe4b0c6bfdc2185cafa55f806"
     },
     {
       "section_id": "cash_flow_and_balance_sheet",
@@ -240,18 +250,21 @@
       "section_id": "accounting_quality",
       "order": 10,
       "title": "会计质量与审计检查",
-      "status": "missing",
-      "present_required": [],
+      "status": "partial",
+      "present_required": [
+        "accounting_checks"
+      ],
       "missing_required": [
-        "accounting_checks",
         "audit_opinions"
       ],
       "present_optional": [],
       "missing_optional": [
         "restatement_history"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "accounting_checks"
+      ],
       "page_budget": [
         1,
         2
@@ -259,7 +272,7 @@
       "section_hash": "8f847653edee37d1dec89b5a13918ea7a0aa4866f130b476728a0d662df8af51",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      "input_hash": "69e585c0257e1c60e6f41fac5490867cf210a59e48647fa9cbe594ba13b3e6e4"
     },
     {
       "section_id": "forecasts_and_consensus",
@@ -370,19 +383,22 @@
       "section_id": "risks_and_falsification",
       "order": 15,
       "title": "风险、反证与 Kill Conditions",
-      "status": "missing",
-      "present_required": [],
-      "missing_required": [
+      "status": "partial",
+      "present_required": [
         "risk_register",
         "falsification_tests"
       ],
+      "missing_required": [],
       "present_optional": [],
       "missing_optional": [
         "bias_check",
         "esg_screen"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "risk_register",
+        "falsification_tests"
+      ],
       "page_budget": [
         2,
         3
@@ -390,7 +406,7 @@
       "section_hash": "0b613a53664df2d993f3c526e2b2c98be55513ecdd2e5876590e5ff92b0838cc",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      "input_hash": "8a3fed636eb72b2ebd117333c4e55f5dbc3c8f622b0b89d4f292869c17ec9e14"
     },
     {
       "section_id": "decision_framework",
@@ -420,18 +436,21 @@
       "section_id": "monitoring_and_action_triggers",
       "order": 17,
       "title": "跟踪指标与行动触发器",
-      "status": "missing",
-      "present_required": [],
-      "missing_required": [
-        "monitoring_kpis",
+      "status": "partial",
+      "present_required": [
         "action_triggers"
+      ],
+      "missing_required": [
+        "monitoring_kpis"
       ],
       "present_optional": [],
       "missing_optional": [
         "next_update_calendar"
       ],
-      "status_reason": null,
-      "pending_judgment_inputs": [],
+      "status_reason": "pending_judgment_review",
+      "pending_judgment_inputs": [
+        "action_triggers"
+      ],
       "page_budget": [
         1,
         2
@@ -439,7 +458,7 @@
       "section_hash": "9a336944d6089541672bd83723685e95cc9c747c2a284e90ab70943ca68e8780",
       "profile_hash": "a8d96d40b04fa0693d69d94483df5b18fb35d8315d2001595673cefbf5789786",
       "version_hash": "c855714664d4e66d2698ef6bd8716f1ba4b4b50d7028994f6f640bfafeaf367a",
-      "input_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      "input_hash": "9ec5410ee16c60f082f75665c00871311af431a158502f3f6c0c07e2a731bfa0"
     },
     {
       "section_id": "evidence_and_methodology",
@@ -476,11 +495,21 @@
   ],
   "input_hashes": {
     "m1": "d020ca69cab942599611918a624c758a8be50790beb9468b0ba6fcd5a0aef25d",
-    "m2": "e283d372fcb7306f949dfcf3230fbf392c4acb6653ed5ac5883cb61b39240475",
-    "m3": "520e701d311dc2e963097836fbbaa2d3b2ae4563997c04ceffcdb3b1a4206f32"
+    "m2": "acfd91f4c0069c001b3596893d12dab182095fa2a51a247a02a1446b59c59990",
+    "m3": "353306113b84112d45e711fd17a62b666da2840934667e88ebac5ff9657089bf"
   },
-  "unreviewed_judgment_count": 0,
-  "unreviewed_judgment_ids": [],
+  "judgment_source_receipt_id": "e4-model-judgments-v1:630a6c847bbbfdae4010c4aed71577c1892ab4d593ef4902f4c70366ab1f8892",
+  "unreviewed_judgment_count": 8,
+  "unreviewed_judgment_ids": [
+    "investment_thesis",
+    "moat_assessment",
+    "risk_register",
+    "falsification_tests",
+    "action_triggers",
+    "operating_kpis",
+    "margin_bridge",
+    "accounting_checks"
+  ],
   "citation_gate": {
     "passed": true,
     "facts_rendered": 16
@@ -489,5 +518,5 @@
     "used": false,
     "reason": "offline deterministic compile"
   },
-  "receipt_hash": "cfd2393ca51bb98ba6791cffe9e1632f1ae707805a626fcebb6b36d3f5eda3df"
+  "receipt_hash": "c51a8477ffb929ada4460209e290208b64f6c593b9c3a4684627180b3f89caaa"
 }

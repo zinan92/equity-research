@@ -59,8 +59,21 @@ def build_judgment_review_queue(
             recorded = (section_assessments or {}).get(section_id)
             current_status = str(recorded.get("status")) if recorded else section_current.status.value
             current_reason = recorded.get("status_reason") if recorded else section_current.status_reason
-            missing_after = list(recorded.get("missing_required") or ()) if recorded else list(section_approved.missing_required)
-            promotes = current_status == "partial" and not missing_after
+            independently_missing = list(recorded.get("missing_required") or ()) if recorded else list(section_approved.missing_required)
+            other_pending_inputs = [
+                input_key
+                for other_key, input_key, _input_type in mappings
+                if other_key != source_key
+                and other_key in content
+                and content[other_key].get("status") == "ai_generated_judgment_unreviewed"
+            ]
+            missing_after_one_approval = sorted(set(independently_missing + other_pending_inputs))
+            promotes = current_status == "partial" and not missing_after_one_approval
+            all_pending_status = (
+                "full"
+                if current_status == "partial" and not independently_missing
+                else section_approved.status.value
+            )
             rows.append({
                 "judgment_id": source_key,
                 "ticker": ticker.upper(),
@@ -74,9 +87,9 @@ def build_judgment_review_queue(
                 "approval_writeback": {"status": "human_reviewed_judgment", "review_status": "approved"},
                 "current_section_status": current_status,
                 "current_section_reason": current_reason,
-                "section_status_after_all_pending_judgments_approved": "full" if promotes else section_approved.status.value,
+                "section_status_after_all_pending_judgments_approved": all_pending_status,
                 "would_promote_section_to_full": promotes,
-                "remaining_required_inputs_after_approval": missing_after,
+                "remaining_required_inputs_after_approval": missing_after_one_approval,
             })
     rows.sort(key=lambda row: (row["impact_rank"], row["section_id"], row["judgment_id"]))
     return {

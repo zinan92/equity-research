@@ -18,9 +18,18 @@ class JudgmentReviewQueueTest(unittest.TestCase):
         self.assertEqual(queue["items"][0]["judgment_id"], "investment_thesis")
         thesis = next(item for item in queue["items"] if item["judgment_id"] == "investment_thesis")
         self.assertEqual(thesis["current_section_reason"], "pending_judgment_review")
-        self.assertTrue(thesis["would_promote_section_to_full"])
+        self.assertFalse(thesis["would_promote_section_to_full"])
+        self.assertIn("variant_view", thesis["remaining_required_inputs_after_approval"])
+        self.assertEqual(thesis["section_status_after_all_pending_judgments_approved"], "full")
         self.assertEqual(thesis["citations"][0]["document_id"], "official:1")
         self.assertEqual(thesis["citations"][0]["pdf_page_url"], "https://static.cninfo.com.cn/a.pdf#page=8")
         moat = next(item for item in queue["items"] if item["judgment_id"] == "moat_assessment")
         self.assertFalse(moat["would_promote_section_to_full"])
         self.assertIn("peer_comparison", moat["remaining_required_inputs_after_approval"])
+        risks = [item for item in queue["items"] if item["section_id"] == "risks_and_falsification"]
+        self.assertEqual(len(risks), 2)
+        self.assertTrue(all(not item["would_promote_section_to_full"] for item in risks))
+        self.assertEqual(
+            {tuple(item["remaining_required_inputs_after_approval"]) for item in risks},
+            {("falsification_tests",), ("risk_register",)},
+        )
