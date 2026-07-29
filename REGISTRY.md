@@ -1,5 +1,9 @@
 # REGISTRY
 
+## 2026-07-29 · CATL first-report vertical (M1–M4)
+
+Now: frozen, evidence-bound CATL HTML report compilation is available; Tier and missing C1 inputs remain explicit. Next: analyst review of provisional judgment and valuation gaps before any Tier-A claim.
+
 ## 现在在哪里
 
 - Product: Park Equity Research private-beta A-share research platform.

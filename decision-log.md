@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-07-29 · First-report compilation remains offline and partial
+
+- Decision: compile CATL from frozen M1/M2/M3 receipts and bind HTML to a Report Model hash.
+- Why: report output must preserve page citations and expose incompleteness rather than promote a partial pipeline.
+- Evidence: M4 receipt records input hashes, citation gate result and C1 section states.
+- Gotchas: no network or DeepSeek call is permitted during compile; unreviewed judgment content stays separate from deterministic facts.
+
 ## 2026-07-29 · AGENTS.md stops restating the global manual
 
 - Decision: `## Workflow Rules` no longer restates Park Operating System process. It now points at `~/work/park-operating-system/manual.md` as the single authority and keeps only two project-local items (Ready for Review after contract evidence, `park-ai-bot` identity for GitHub work).
