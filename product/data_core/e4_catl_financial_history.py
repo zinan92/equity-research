@@ -431,7 +431,23 @@ def validate_statement_column_consistency(facts: Iterable[OfficialFinancialFact]
     by_metric = {}
     for item in relevant: by_metric.setdefault(item.metric, set()).add(item.column_identity)
     mixed = {key: sorted(value) for key, value in by_metric.items() if value not in ({"period_end"}, {"period_begin"}, {"current_period"}, {"previous_period"}, {"period_end", "period_begin"}, {"current_period", "previous_period"})}
+    # If every metric occurs once, it must be the same statement column.  A
+    # mix (cash=opening, liabilities=closing) is a silent but fatal table bug.
+    singleton_identities = {next(iter(value)) for value in by_metric.values() if len(value) == 1}
+    if len(singleton_identities) > 1:
+        mixed["statement"] = sorted(singleton_identities)
     return {"status": "failed" if mixed else "passed", "identities": identities, "mixed": mixed}
+
+
+def validate_balance_sheet_by_column(facts: Iterable[OfficialFinancialFact]) -> dict[str, object]:
+    """Run the accounting identity independently for closing and opening columns."""
+    rows = tuple(facts)
+    result = {}
+    for identity in ("period_end", "period_begin", "current_period", "previous_period"):
+        selected = [item for item in rows if item.column_identity == identity]
+        if selected:
+            result[identity] = validate_balance_sheet(selected)
+    return result
 
 
 def compare_cross_year(current: Iterable[OfficialFinancialFact], previous: Iterable[OfficialFinancialFact]) -> list[dict[str, object]]:

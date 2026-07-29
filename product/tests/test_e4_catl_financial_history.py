@@ -190,6 +190,12 @@ class CatlHistoryTest(unittest.TestCase):
         values={item.metric:item.value for item in facts if item.column_identity=="period_end"}
         self.assertEqual(values["cash"],351_997_422);self.assertEqual(values["current_assets"],692_498_192);self.assertEqual(values["current_liabilities"],434_010_194)
 
+    def test_same_statement_mixed_column_identity_fails(self) -> None:
+        from data_core.e4_catl_financial_history import OfficialFinancialFact, validate_statement_column_consistency
+        common=dict(ticker="300750.SZ",document_id="doc",raw_hash="a"*64,page_number=5,quoted_label="x",quoted_anchor="raw",report_period="2026Q1",statement_scope="consolidated",unit="千元",currency="CNY",source_url="https://official.example/doc.pdf")
+        facts=[OfficialFinancialFact(metric="cash",value=1,column_identity="period_begin",**common),OfficialFinancialFact(metric="current_assets",value=2,column_identity="period_end",**common),OfficialFinancialFact(metric="current_liabilities",value=1,column_identity="period_end",**common)]
+        self.assertEqual(validate_statement_column_consistency(facts)["status"],"failed")
+
     def test_headered_two_column_row_keeps_both_period_instances(self) -> None:
         from unittest.mock import patch
         from data_core.document_intelligence import DocumentPage, DocumentParseResult
