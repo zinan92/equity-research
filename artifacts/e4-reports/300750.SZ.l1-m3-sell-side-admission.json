@@ -1,0 +1,42 @@
+{
+  "schema_version": "e4-l1-m3-sell-side-admission-v1",
+  "data_kind": "real",
+  "ticker": "300750.SZ",
+  "generated_at": "2026-07-29T05:46:10+00:00",
+  "inputs": {
+    "broker_estimates": {
+      "module": "B2 sell_side_archive",
+      "source_keys": [
+        "eastmoney_sell_side_catalog_v1",
+        "eastmoney_sell_side_pdf_v1"
+      ],
+      "status": "missing",
+      "reason": "source_policy_inadmissible_aggregator",
+      "observed": {
+        "run_status": "not_requested",
+        "reason": "Eastmoney catalog/PDF would be inadmissible before collection"
+      }
+    },
+    "consensus_history": {
+      "module": "B4 consensus_history",
+      "source_key": "ths_broker_forecast_v1",
+      "status": "missing",
+      "reason": "source_policy_inadmissible_aggregator",
+      "observed": {
+        "run_status": "responded",
+        "http_status": 200,
+        "raw_hash": "db2a9f8f24c165e05f9ba7ec181c41dc9b7f4972d96c67b5314c9a990d1e16bf",
+        "reference_count": 6,
+        "attempt_error": null
+      }
+    }
+  },
+  "admitted_c1_inputs": {},
+  "truth_boundary": {
+    "aggregator_output_not_research_fact": true,
+    "counts_as_tier_a_or_b": false,
+    "forecasts_and_consensus_remains_missing": true
+  },
+  "receipt_hash": "0757290aa73452bde5d43954750f1665682e96775989b3c3b5c948f88dc9ab52",
+  "receipt_id": "e4-l1-m3-sell-side-admission-v1:0757290aa73452bde5d43954750f1665682e96775989b3c3b5c948f88dc9ab52"
+}
