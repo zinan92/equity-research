@@ -303,3 +303,8 @@ Next: a human may review the 10 CATL queue items against their page citations; a
 
 - 现在在哪里：官方 PDF 重放了 1,241 条既有页级事实；870 条以精确同页同值的方式刷新列身份，371 条仍显式 unresolved/invalid。宁德时代季报 p7 的流动负债已正确继承 p5 表头，报告数据时点为 2026Q1，内部矛盾为 0。
 - 下一步：剩余 unresolved 必须以原始页片段逐项分类和修复；不得因报告已能显示最新期而降低事实身份或人工审计门槛。
+
+## 2026-07-29 · L2 arbitrary-ticker layer complete
+
+- 现在在哪里：L2-M1~M7 已合并。100 ticker 冻结身份池取得 14,483 条官方页级财务事实和 41,340 条官方页级叙述块；三行业估值 profile、输出降级矩阵、可恢复报告任务及 canonical 读 API 已落地。严格 #218 验收仍 failed：identity 100/100，Report Model 0/95，Tier A/B 0/80，spot audit 0/20。
+- 下一步：不得把 L2 identity/财务/叙述收据当作 #218 canonical Report Model。进入 L3 前保留这些明确缺口；后续可观测性、备份、成本和发布工作均不得抬升 Tier 或绕过人工审计。
