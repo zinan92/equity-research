@@ -308,3 +308,8 @@ Next: a human may review the 10 CATL queue items against their page citations; a
 
 - 现在在哪里：L2-M1~M7 已合并。100 ticker 冻结身份池取得 14,483 条官方页级财务事实和 41,340 条官方页级叙述块；三行业估值 profile、输出降级矩阵、可恢复报告任务及 canonical 读 API 已落地。严格 #218 验收仍 failed：identity 100/100，Report Model 0/95，Tier A/B 0/80，spot audit 0/20。
 - 下一步：不得把 L2 identity/财务/叙述收据当作 #218 canonical Report Model。进入 L3 前保留这些明确缺口；后续可观测性、备份、成本和发布工作均不得抬升 Tier 或绕过人工审计。
+
+## 2026-07-29 · L3 reliability layer complete
+
+- 现在在哪里：L3-M1~M10 已合并。可观测性、外部备份/恢复实测、性能/成本收据、回滚演练、三层 cadence、权限/私域交付、trigger/history、结果归因与受控扩张均有可复验边界记录。
+- 下一步：生产 Supabase/RLS、slow/periodic 真实运行、纠错 SLA 与成员自助数据权利仍未完成；这些缺口不得被 L3 的本地或私域验收记录覆盖。

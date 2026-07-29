@@ -2373,3 +2373,10 @@
 - **Why:** The new corpus proves official document coverage but does not create the canonical accepted Report Models, Tier A/B results, or independent page/numeric audits required by #218.
 - **Evidence:** L2 financial receipt `7534f6a9f3b2c81b93340676e11019f8548631676edee9bb5bd2d6a324fd08fc`; narrative receipt `b3afef60ddc186c83a36fd073a749a6f10e738cab4f080eb450d8034aeb60ab6`; strict acceptance receipt `9d4d9ea64a28503e4fc10543e6ab07e46894e4d12b3f715fdcfbb9aacf4b60be` reports 100/100 identity and 0/95 Report Models, 0/80 Tier A/B, 0/20 audits.
 - **Gotchas:** A runtime-only cache, page-level fact, narrative block, unreviewed valuation profile, or canonical read endpoint is never evidence that a report meets #218. Do not let a presentation layer or input receipt manufacture a Tier, target, position, action, or audit credit.
+
+# 2026-07-29 — L3 reliability evidence preserves explicit maturity boundaries
+
+- **Decision:** Record the L3 reliability layer as verified private-preview/local-contract capability, not production completion.
+- **Why:** Backup, rollback, cache performance, auth and cadence proofs are useful only when their runtime and unimplemented deployment boundaries remain visible.
+- **Evidence:** L3-M1 through L3-M10 evidence records under `docs/evidence/2026-07-29-l3-*`; recovery and performance receipts remain external runtime artifacts.
+- **Gotchas:** No L3 artifact upgrades #218, Tier, reviewer approval, production Supabase/RLS, slow/periodic live cadence, correction SLA, or member deletion/export.
