@@ -1,0 +1,28 @@
+{
+  "schema_version": "e4-l2-m2-narrative-batch-verification-v1",
+  "data_kind": "real",
+  "narrative_receipt_hash": "b3afef60ddc186c83a36fd073a749a6f10e738cab4f080eb450d8034aeb60ab6",
+  "financial_sequence_sha256": "c5de2b27cfeafc13d41a1a22fe99a2d088a400075fb70a406ddf27872870a7b9",
+  "coverage": {
+    "requested_tickers": 100,
+    "available_tickers": 98,
+    "missing_tickers": 2,
+    "annual_selections": 95,
+    "interim_fallback_selections": 3,
+    "page_bound_blocks": 41340,
+    "resolved_blocks": 13215,
+    "unresolved_blocks": 28125,
+    "resolved_pages": 4634
+  },
+  "missing_reason_counts": {
+    "no_available_official_report": 2
+  },
+  "truth_boundary": {
+    "official_cninfo_pdf_only": true,
+    "page_bound_only": true,
+    "financial_receipt_is_selection_lineage_only": true,
+    "does_not_promote_tier_or_action": true,
+    "missing_is_retained_not_filled": true
+  },
+  "verification_hash": "5c38f5a7b35511f459c9b064268d306f6818677da99dda04e4438b401f676b51"
+}
