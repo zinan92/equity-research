@@ -1,5 +1,16 @@
 # REGISTRY
 
+## 2026-07-30 · Round 7 north star frozen
+
+Now: R7-M1 machine-freezes the accepted nine-unit reader structure, five blind
+samples, NVDA replay, external 5/5 result, Park approval, reader quality gates
+and the existing B6/Tier/blocked-field safety baseline. CATL and Moutai's old
+Markdown samples are explicitly classified as legacy product samples rather
+than Round 7 canonical evidence.
+
+Next: R7-M2 replaces C1's 18-section taxonomy with a nine-section machine
+contract while preserving the frozen B6, Tier and blocked-field semantics.
+
 ## 2026-07-30 · Real model judgments recompiled for CATL and Moutai
 
 Now: the issuer-generic DeepSeek judgment path is wired into both persistent
