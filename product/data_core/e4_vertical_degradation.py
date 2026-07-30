@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import asdict
 from typing import Any, Iterable
 
-from report_contract import build_research_section_contract_v2
+from report_contract import build_research_section_contract_v3
 
 from .contracts import RecordDomain, SourceManifest, digest
 from .e4_page_level_filing_facts import FilingNumericFact
@@ -57,24 +57,10 @@ def compile_vertical_degradation(
         ),
     )
     citation_index = [asdict(item) for item in materialized]
-    # A revenue row extracted from an official, immutable filing page is also
-    # a real (albeit one-period) revenue-history observation.  Keep the full
-    # page identity instead of substituting a vendor F10 series.  This is
-    # intentionally insufficient for a FULL section: operating KPIs remain
-    # absent until an evidence-bound source supplies them.
-    revenue_history = [
-        asdict(item) for item in materialized if item.metric == "revenue"
-    ]
     section_inputs = {
-        # A page-cited filing proves these objects exist, not a valuation,
-        # thesis, peer set, or investment decision.
-        "profitability_and_earnings_quality": {"income_history": citation_index},
-        "revenue_quality_and_kpis": {"revenue_history": revenue_history},
-        "evidence_and_methodology": {
-            "evidence_set_receipt": {"id": evidence_set.evidence_set_id, "status": evidence_set.receipt.status},
-            "citation_index": citation_index,
-            "methodology": {"parser": "park-document-parser-v1", "source": "official_pdf_page_fact"},
-        },
+        # Page-cited filing rows are financial evidence. They do not prove a
+        # valuation, a complete chapter draft, or any investment conclusion.
+        "financials_and_valuation": {"financial_evidence": citation_index},
     }
     # Callers may add only runtime-receipted objects.  This function does not
     # alter C1's required input declarations or completion rules.
@@ -82,7 +68,7 @@ def compile_vertical_degradation(
         if not isinstance(values, dict):
             raise ValueError("section input additions must be objects")
         section_inputs.setdefault(section_id, {}).update(values)
-    contract = build_research_section_contract_v2(
+    contract = build_research_section_contract_v3(
         section_inputs, structure_only=False, evidence_set=evidence_set,
     )
     degradation = assess_any_ticker(ticker.upper(), evidence_set=evidence_set, section_contract=contract, data_kind="real")
@@ -96,6 +82,12 @@ def compile_vertical_degradation(
             },
         },
         "section_contract": {
+            "schema_version": contract.schema_version,
+            "contract_version": contract.contract_version,
+            "contract_hash": contract.contract_hash,
+            "profile_id": contract.profile_id,
+            "profile_hash": contract.profile_hash,
+            "target_body_characters": contract.target_body_characters,
             "evidence_manifest_hash": contract.evidence_manifest_hash, "live_eligible": contract.live_eligible,
             "sections": [asdict(item) for item in contract.sections],
         },

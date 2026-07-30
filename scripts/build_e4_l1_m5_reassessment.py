@@ -6,15 +6,15 @@ from dataclasses import asdict
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'product'))
 from data_core.e4_judgment_wiring import wire_unreviewed_judgment_receipt
-from report_contract import build_research_section_contract_v2
+from report_contract import build_research_section_contract_v3
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('wiring',type=Path);p.add_argument('judgments',type=Path);p.add_argument('governance',type=Path);p.add_argument('--out',type=Path,required=True);a=p.parse_args()
  base=json.loads(a.wiring.read_text());j=json.loads(a.judgments.read_text());g=json.loads(a.governance.read_text())
  catl=next(r for r in base['rows'] if r['ticker']=='300750.SZ')
  inputs=wire_unreviewed_judgment_receipt(j,ticker='300750.SZ')
- gi=g['inputs']; inputs['management_and_governance']={'management_record':{'records':gi['management_record']['records'],'source_receipt':g['receipt_id']},'governance_events':gi['governance_events']['records']}
- fresh=build_research_section_contract_v2(inputs)
+ gi=g['inputs']; inputs['founder_and_team']={'management_evidence':[{'records':gi['management_record']['records'],'source_receipt':g['receipt_id']}],'governance_evidence':gi['governance_events']['records']}
+ fresh=build_research_section_contract_v3(inputs)
  replace={s.section_id:asdict(s) for s in fresh.sections if s.section_id in inputs}
  sections=[replace.get(s['section_id'],s) for s in catl['result']['section_contract']['sections']]
  catl['result']['section_contract']['sections']=sections

@@ -1,5 +1,19 @@
 # REGISTRY
 
+## 2026-07-30 · Round 7 nine-section C1 contract active
+
+Now: R7-M2 replaces the 18-section C1 taxonomy with the accepted nine reader
+units and a 4,200–5,500 Chinese-character target. All direct contract
+consumers now use v3 section IDs. Every section requires a complete chapter
+draft; unreviewed chapters and transitional field judgments remain PARTIAL
+with `pending_judgment_review`. Production record and Sources remain required
+publication appendices outside Tier counting. B6, Tier escalation,
+decision-policy and blocked-field source hashes are unchanged.
+
+Next: R7-M3 reuses the existing structured DeepSeek transport to generate one
+complete chapter per call for CATL, retaining the three reasoning validators
+and all page-level evidence identity.
+
 ## 2026-07-30 · Round 7 north star frozen
 
 Now: R7-M1 machine-freezes the accepted nine-unit reader structure, five blind

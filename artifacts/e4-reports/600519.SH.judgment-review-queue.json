@@ -6,13 +6,13 @@
   "sort": "impact_rank ascending; equal ranks by section and judgment identifier",
   "counts": {
     "pending_human_review": 8,
-    "would_promote_section_to_full": 2
+    "would_promote_section_to_full": 0
   },
   "items": [
     {
       "judgment_id": "investment_thesis",
       "ticker": "600519.SH",
-      "section_id": "investment_thesis",
+      "section_id": "one_line_positioning",
       "impact_rank": 1,
       "impact": "核心结论",
       "body": {
@@ -124,13 +124,15 @@
       "section_status_after_all_pending_judgments_approved": "partial",
       "would_promote_section_to_full": false,
       "remaining_required_inputs_after_approval": [
-        "variant_view"
+        "chapter_draft",
+        "issuer_identity",
+        "positioning_evidence"
       ]
     },
     {
       "judgment_id": "falsification_tests",
       "ticker": "600519.SH",
-      "section_id": "risks_and_falsification",
+      "section_id": "core_risks",
       "impact_rank": 2,
       "impact": "反方与失效条件",
       "body": {
@@ -209,16 +211,20 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
+      "section_status_after_all_pending_judgments_approved": "partial",
       "would_promote_section_to_full": false,
       "remaining_required_inputs_after_approval": [
-        "risk_register"
+        "action_triggers",
+        "chapter_draft",
+        "risk_evidence",
+        "risk_register",
+        "trigger_evidence"
       ]
     },
     {
       "judgment_id": "risk_register",
       "ticker": "600519.SH",
-      "section_id": "risks_and_falsification",
+      "section_id": "core_risks",
       "impact_rank": 2,
       "impact": "反方与失效条件",
       "body": {
@@ -297,16 +303,20 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
+      "section_status_after_all_pending_judgments_approved": "partial",
       "would_promote_section_to_full": false,
       "remaining_required_inputs_after_approval": [
-        "falsification_tests"
+        "action_triggers",
+        "chapter_draft",
+        "falsification_tests",
+        "risk_evidence",
+        "trigger_evidence"
       ]
     },
     {
       "judgment_id": "moat_assessment",
       "ticker": "600519.SH",
-      "section_id": "competition_and_moat",
+      "section_id": "why_it_can_win",
       "impact_rank": 3,
       "impact": "竞争优势",
       "body": {
@@ -393,13 +403,15 @@
       "section_status_after_all_pending_judgments_approved": "partial",
       "would_promote_section_to_full": false,
       "remaining_required_inputs_after_approval": [
-        "peer_comparison"
+        "chapter_draft",
+        "falsification_evidence",
+        "moat_evidence"
       ]
     },
     {
       "judgment_id": "margin_bridge",
       "ticker": "600519.SH",
-      "section_id": "profitability_and_earnings_quality",
+      "section_id": "financials_and_valuation",
       "impact_rank": 4,
       "impact": "盈利质量",
       "body": {
@@ -551,14 +563,18 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
-      "would_promote_section_to_full": true,
-      "remaining_required_inputs_after_approval": []
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "accounting_checks",
+        "chapter_draft",
+        "valuation_evidence"
+      ]
     },
     {
       "judgment_id": "operating_kpis",
       "ticker": "600519.SH",
-      "section_id": "revenue_quality_and_kpis",
+      "section_id": "technology_products_and_business_model",
       "impact_rank": 5,
       "impact": "经营兑现",
       "body": {
@@ -648,14 +664,18 @@
       },
       "current_section_status": "partial",
       "current_section_reason": "pending_judgment_review",
-      "section_status_after_all_pending_judgments_approved": "full",
-      "would_promote_section_to_full": true,
-      "remaining_required_inputs_after_approval": []
+      "section_status_after_all_pending_judgments_approved": "partial",
+      "would_promote_section_to_full": false,
+      "remaining_required_inputs_after_approval": [
+        "business_evidence",
+        "chapter_draft",
+        "operating_evidence"
+      ]
     },
     {
       "judgment_id": "accounting_checks",
       "ticker": "600519.SH",
-      "section_id": "accounting_quality",
+      "section_id": "financials_and_valuation",
       "impact_rank": 6,
       "impact": "会计质量",
       "body": {
@@ -738,13 +758,15 @@
       "section_status_after_all_pending_judgments_approved": "partial",
       "would_promote_section_to_full": false,
       "remaining_required_inputs_after_approval": [
-        "audit_opinions"
+        "chapter_draft",
+        "margin_bridge",
+        "valuation_evidence"
       ]
     },
     {
       "judgment_id": "action_triggers",
       "ticker": "600519.SH",
-      "section_id": "monitoring_and_action_triggers",
+      "section_id": "core_risks",
       "impact_rank": 7,
       "impact": "持续跟踪",
       "body": {
@@ -801,7 +823,11 @@
       "section_status_after_all_pending_judgments_approved": "partial",
       "would_promote_section_to_full": false,
       "remaining_required_inputs_after_approval": [
-        "monitoring_kpis"
+        "chapter_draft",
+        "falsification_tests",
+        "risk_evidence",
+        "risk_register",
+        "trigger_evidence"
       ]
     }
   ]

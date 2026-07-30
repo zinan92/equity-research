@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product"))
 
 from data_core.e4_judgment_wiring import wire_unreviewed_judgment_receipt  # noqa: E402
-from report_contract import build_research_section_contract_v2  # noqa: E402
+from report_contract import build_research_section_contract_v3  # noqa: E402
 
 
 def receipt() -> dict:
@@ -75,18 +75,33 @@ def model_receipt() -> dict:
 class JudgmentWiringTest(unittest.TestCase):
     def test_receipt_identified_drafts_are_present_but_not_full(self) -> None:
         inputs = wire_unreviewed_judgment_receipt(receipt(), ticker="300750.SZ")
-        contract = build_research_section_contract_v2(inputs)
+        contract = build_research_section_contract_v3(inputs)
         by_section = {item.section_id: item for item in contract.sections}
-        self.assertEqual(by_section["investment_thesis"].status.value, "partial")
-        self.assertEqual(by_section["investment_thesis"].status_reason, "pending_judgment_review")
-        self.assertEqual(by_section["investment_thesis"].pending_judgment_inputs, ("investment_thesis", "variant_view"))
-        self.assertIn("receipt_id", inputs["investment_thesis"]["investment_thesis"]["source_receipt"])
+        self.assertEqual(by_section["one_line_positioning"].status.value, "partial")
+        self.assertEqual(by_section["one_line_positioning"].status_reason, "pending_judgment_review")
+        self.assertEqual(by_section["one_line_positioning"].pending_judgment_inputs, ("legacy_judgment_materials",))
+        self.assertIn("receipt_id", inputs["one_line_positioning"]["legacy_judgment_materials"][0]["source_receipt"])
 
     def test_unreviewed_input_cannot_upgrade_an_otherwise_complete_section(self) -> None:
         inputs = wire_unreviewed_judgment_receipt(receipt(), ticker="300750.SZ")
-        inputs["competition_and_moat"]["peer_comparison"] = [{"peer": "official"}]
-        contract = build_research_section_contract_v2(inputs)
-        section = next(item for item in contract.sections if item.section_id == "competition_and_moat")
+        inputs["why_it_can_win"].update({
+            "moat_evidence": [{"source": "official"}],
+            "falsification_evidence": [{"source": "official"}],
+            "chapter_draft": {
+                "status": "human_reviewed_judgment",
+                "review_status": "approved",
+                "text": "reviewed chapter",
+                "evidence_bindings": [
+                    {
+                        "document_id": "official:1",
+                        "page_number": 8,
+                        "quoted_anchor": "收入",
+                    }
+                ],
+            },
+        })
+        contract = build_research_section_contract_v3(inputs)
+        section = next(item for item in contract.sections if item.section_id == "why_it_can_win")
         self.assertEqual(section.status.value, "partial")
         self.assertEqual(section.status_reason, "pending_judgment_review")
 
@@ -103,7 +118,7 @@ class JudgmentWiringTest(unittest.TestCase):
             model_receipt(),
             ticker="300750.SZ",
         )
-        self.assertIn("investment_thesis", inputs)
+        self.assertIn("one_line_positioning", inputs)
         forged = model_receipt()
         forged["model_receipts"][0]["request_id"] = None
         forged["receipt_hash"] = hashlib.sha256(
