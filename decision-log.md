@@ -2444,3 +2444,21 @@
   presentation, not judgment prose. Missing model outputs remain missing, and
   approving one draft does not fill another required input in the same
   section.
+
+# 2026-07-30 — Round 7 is the product north star
+
+- **Decision:** Freeze the accepted Round 7 template, five blind samples and
+  NVDA replay as the sole reader-facing north star. Its nine reader units—not
+  the legacy CATL/Moutai pilot headings and not C1's 18-field-oriented
+  sections—define what later report iterations must approach.
+- **Why:** The Round 7 reader won the external blind comparison 5/5 and Park
+  explicitly approved it. The later 18-section system improved evidence
+  infrastructure but regressed the reader output into a status table, fact
+  dump and 632–673 characters of disconnected field judgments.
+- **Evidence:** `artifacts/evidence/round7-north-star-baseline.json` binds the
+  accepted structure signature, exact blind set, replay, approval receipts,
+  nine reader units, quality gates and current safety-boundary source hashes.
+- **Gotchas:** CATL and Moutai are `additional_product_samples`, not members of
+  the Round 7 blind canonical set. Body length is only a smoke check. B6,
+  Tier and blocked-field safety must survive the later section-contract
+  replacement even though the 18-section taxonomy itself will be retired.
