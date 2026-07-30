@@ -21,15 +21,49 @@ def digest(value: dict, *, omit_receipt_hash: bool = False) -> str:
     return hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
-def summary(receipt_path: Path, queue_path: Path, judgment_path: Path) -> dict:
+def canonical_receipt_digest(value: dict) -> str:
+    payload = {key: item for key, item in value.items() if key != "receipt_hash"}
+    return hashlib.sha256(
+        json.dumps(
+            payload,
+            sort_keys=True,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            default=str,
+        ).encode()
+    ).hexdigest()
+
+
+def summary(
+    receipt_path: Path,
+    queue_path: Path,
+    judgment_path: Path,
+    wiring_path: Path,
+) -> dict:
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     queue = json.loads(queue_path.read_text(encoding="utf-8"))
     judgment = json.loads(judgment_path.read_text(encoding="utf-8"))
+    wiring = json.loads(wiring_path.read_text(encoding="utf-8"))
     wire_unreviewed_judgment_receipt(judgment, ticker=receipt.get("ticker", ""))
+    if (
+        receipt.get("schema_version") != "round7-transitional-report-v1"
+        or receipt.get("section_contract_schema_version")
+        != "research-section-contract-v3"
+        or receipt.get("body_kind")
+        != "transitional_evidence_status_not_round7_chapter_dossier"
+    ):
+        raise ValueError("report receipt is not the Round 7 transitional schema")
     if receipt.get("receipt_hash") != digest(receipt, omit_receipt_hash=True):
         raise ValueError("report receipt hash mismatch")
     if receipt.get("input_hashes", {}).get("m3") != digest(judgment):
         raise ValueError("report does not bind the supplied judgment receipt")
+    if (
+        wiring.get("schema_version") != "round7-m2-wiring-migration-v1"
+        or wiring.get("receipt_hash") != canonical_receipt_digest(wiring)
+    ):
+        raise ValueError("Round 7 wiring receipt identity is invalid")
+    if receipt.get("input_hashes", {}).get("m2") != digest(wiring):
+        raise ValueError("report does not bind the supplied Round 7 wiring receipt")
     html = Path(receipt["html_path"])
     html_bytes = html.read_bytes() if html.is_file() else b""
     if (
@@ -45,8 +79,8 @@ def summary(receipt_path: Path, queue_path: Path, judgment_path: Path) -> dict:
     if f"含 {receipt.get('unreviewed_judgment_count')} 项未审阅 AI 判断" not in rendered:
         raise ValueError("report does not display the unreviewed judgment count")
     states = Counter(item["status"] for item in receipt["sections"])
-    if sum(states.values()) != 18:
-        raise ValueError("report does not contain 18 C1 sections")
+    if sum(states.values()) != 9:
+        raise ValueError("report does not contain the nine Round 7 sections")
     if queue.get("ticker") != receipt.get("ticker"):
         raise ValueError("review queue ticker does not match report receipt")
     if queue.get("source_receipt_id") != receipt.get("judgment_source_receipt_id"):
@@ -60,6 +94,22 @@ def summary(receipt_path: Path, queue_path: Path, judgment_path: Path) -> dict:
     if len(queue_items) != receipt.get("unreviewed_judgment_count"):
         raise ValueError("review queue count does not match report banner")
     section_by_id = {item["section_id"]: item for item in receipt["sections"]}
+    wiring_row = next(
+        (
+            item
+            for item in wiring.get("rows", [])
+            if str(item.get("ticker", "")).upper() == receipt["ticker"].upper()
+        ),
+        None,
+    )
+    if (
+        wiring_row is None
+        or wiring_row.get("result", {})
+        .get("section_contract", {})
+        .get("sections")
+        != receipt["sections"]
+    ):
+        raise ValueError("report sections do not match the supplied Round 7 wiring")
     expected_queue = build_judgment_review_queue(
         judgment,
         ticker=receipt["ticker"],
@@ -89,12 +139,20 @@ def main() -> None:
     parser.add_argument("receipts", nargs="+", type=Path)
     parser.add_argument("--review-queue", action="append", required=True, type=Path)
     parser.add_argument("--judgment", action="append", required=True, type=Path)
+    parser.add_argument("--wiring", required=True, type=Path)
     parser.add_argument("--out", required=True, type=Path)
     args = parser.parse_args()
     if len(args.receipts) != len(args.review_queue) or len(args.receipts) != len(args.judgment):
         raise ValueError("provide exactly one review queue and judgment receipt for each report receipt")
-    reports = [summary(receipt, queue, judgment) for receipt, queue, judgment in zip(args.receipts, args.review_queue, args.judgment)]
-    result = {"schema_version": "e4-wired-report-verification-v1", "status": "passed", "reports": reports}
+    reports = [
+        summary(receipt, queue, judgment, args.wiring)
+        for receipt, queue, judgment in zip(
+            args.receipts,
+            args.review_queue,
+            args.judgment,
+        )
+    ]
+    result = {"schema_version": "round7-wired-report-verification-v1", "status": "passed", "reports": reports}
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False, indent=2))

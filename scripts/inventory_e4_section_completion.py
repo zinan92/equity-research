@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read three C1 contracts and render their completion and leverage inventory."""
+"""Read three Round 7 contracts and render completion and leverage inventory."""
 from __future__ import annotations
 
 import argparse
@@ -11,21 +11,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "product"))
 
-from report_contract import RESEARCH_SECTION_SPECS_V2
+from report_contract import RESEARCH_SECTION_SPECS_V3
 
 
 # A source owner is deliberately not a claim that the module already supplies
 # the whole typed input; ``未建`` means no existing product module is its owner.
 OWNERS = {
-    "market_snapshot": "data_core.e4_market_fundamentals_batch", "current_market": "data_core.e4_market_fundamentals_batch",
-    "decision_summary": "data_core.decision_policy", "recommendation_policy_output": "data_core.decision_policy",
-    "company_profile": "data_core.company_positions", "industry_profile": "data_core.industry_profiles",
-    "cash_flow_history": "data_core.e4_market_fundamentals_batch", "balance_sheet_history": "data_core.e4_market_fundamentals_batch",
-    "income_history": "data_core.e4_page_level_filing_facts", "revenue_history": "data_core.e4_page_level_filing_facts",
-    "audit_opinions": "data_core.e4_page_level_filing_facts", "broker_estimates": "data_core.e4_sell_side_claim_admission",
-    "consensus_history": "data_core.e4_valuation_sellside_coverage", "valuation_scenarios": "data_core.e4_valuation_receipts",
-    "valuation_assumptions": "data_core.e4_valuation_assumptions", "event_timeline": "data_core.event_intelligence",
-    "policy_events": "data_core.event_intelligence", "catalyst_calendar": "data_core.industry_catalysts",
+    "issuer_identity": "data_core.security_master",
+    "positioning_evidence": "data_core.official_filing_ingest",
+    "industry_evidence": "data_core.e4_r2_industry_wiring",
+    "company_position": "data_core.e4_r2_industry_wiring",
+    "management_evidence": "data_core.e4_l1_m4_governance_events",
+    "governance_evidence": "data_core.e4_l1_m4_governance_events",
+    "timeline_evidence": "data_core.official_filing_ingest",
+    "business_evidence": "data_core.e4_r2_industry_wiring",
+    "operating_evidence": "data_core.official_filing_ingest",
+    "financial_evidence": "data_core.e4_page_level_filing_facts",
+    "valuation_evidence": "data_core.e4_market_fundamentals_batch",
+    "moat_evidence": "data_core.official_filing_ingest",
+    "falsification_evidence": "data_core.e4_model_judgments",
+    "risk_evidence": "data_core.official_filing_ingest",
+    "trigger_evidence": "data_core.e4_model_judgments",
+    "synthesis_evidence": "round7_chapter_generator",
+    "decision_policy_output": "data_core.decision_policy",
+    "chapter_draft": "round7_chapter_generator",
 }
 
 
@@ -37,7 +46,7 @@ def build_inventory(receipt: dict) -> dict:
     contracts = {ticker: {item["section_id"]: item for item in result["section_contract"]["sections"]} for ticker, result in by_ticker.items()}
     sections = []
     leverage: Counter[str] = Counter()
-    for spec in RESEARCH_SECTION_SPECS_V2:
+    for spec in RESEARCH_SECTION_SPECS_V3:
         issuer_rows = {}
         for ticker, by_section in contracts.items():
             assessment = by_section[spec.section_id]
@@ -66,8 +75,8 @@ def build_inventory(receipt: dict) -> dict:
 
 def markdown(inventory: dict) -> str:
     tickers = inventory["tickers"]
-    lines = ["# E4 三家 Tier-B 章节完成度盘点", "", "本文件只读取 C1 章节合同；不改变任何输入、Tier 或 B6 policy。", "",
-             "## 18 章 × 缺什么", "", "| section_id | required_inputs | 300750.SZ status / present / missing | 600519.SH status / present / missing | 000001.SZ status / present / missing | blocking source |", "|---|---|---|---|---|---|"]
+    lines = ["# E4 三家 Round 7 章节完成度盘点", "", "本文件只读取 9 章 C1 合同；不改变任何输入、Tier 或 B6 policy。", "",
+             "## 9 章 × 缺什么", "", "| section_id | required_inputs | 300750.SZ status / present / missing | 600519.SH status / present / missing | 000001.SZ status / present / missing | blocking source |", "|---|---|---|---|---|---|"]
     for row in inventory["sections"]:
         states = []
         missing = set()
@@ -81,7 +90,7 @@ def markdown(inventory: dict) -> str:
         lines.append(f"| {index} | {item['input']} | {item['dependent_sections']} | {item['owner']} |")
     existing = sum(item["existing_module"] for item in inventory["leverage"])
     lines += ["", "## 一句话结论", "",
-              f"距离 Tier A 的真实缺口是 **{inventory['independent_missing_required_inputs']} 项独立 required inputs**：其中 {existing} 项已有模块可作为接线起点，{inventory['independent_missing_required_inputs'] - existing} 项在当前产品路径仍为未建；C1 v2 目前没有任何 required input 被两个章节复用，因此按该契约计算，最高杠杆也只是 1 个章节。"]
+              f"距离 Tier A 的真实缺口是 **{inventory['independent_missing_required_inputs']} 项独立 required inputs**：其中 {existing} 项已有模块可作为接线起点，{inventory['independent_missing_required_inputs'] - existing} 项在当前产品路径仍为未建；9 章合同按章节完整性计分，任何未审阅草稿都不能获得 FULL。"]
     return "\n".join(lines) + "\n"
 
 

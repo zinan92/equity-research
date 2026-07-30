@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-07-30 · C1 adopts Round 7 as its native chapter contract
+
+- Decision: replace the 18-section C1 taxonomy with the nine accepted Round 7 reader units. Production record and Sources remain required publication appendices but receive no Tier credit. Every reader section requires one complete `chapter_draft`; old field-oriented judgments may appear only as transitional optional material and cannot complete a chapter.
+- Why: Round 7 already proved the reader-facing shape and specificity target. Mapping it back into 33 fragmented inputs recreated a lower-quality 632-character product instead of moving the production system toward the accepted 4,249-character dossier.
+- Evidence: `research-section-contract-v3`, its receipt `round7-m2-section-contract-verification.json`, 647 passing product tests, the Round 7 verifier, and byte-identical hashes for `research_degradation.py`, `evidence_gate.py`, and `decision_policy.py`.
+- Gotchas: the nine reader units are not the nine Markdown headings verbatim: “为什么它能赢 / 核心风险 / 大白话点评” are reader units nested under the accepted “风险与点评” presentation heading. Production record and Sources must be publication-gated without being counted as Tier sections. A human approval of one retired field judgment is not approval of a complete Round 7 chapter.
+
 ## 2026-07-30 · Model judgments are generated, never templated
 
 - Decision: replace the issuer-specific judgment template with one generic frozen-evidence request and the existing DeepSeek transport. Model text and claim text are retained byte-for-byte; deterministic code may only select evidence, calculate explicitly recorded derived metrics, validate output, and map evidence IDs to page citations.

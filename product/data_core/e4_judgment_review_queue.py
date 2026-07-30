@@ -4,7 +4,7 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any, Mapping
 
-from report_contract import build_research_section_contract_v2
+from report_contract import build_research_section_contract_v3
 
 from .e4_judgment_wiring import JUDGMENT_INPUTS, wire_unreviewed_judgment_receipt
 
@@ -34,14 +34,20 @@ def build_judgment_review_queue(
     receipt: Mapping[str, Any], *, ticker: str, section_assessments: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     inputs = wire_unreviewed_judgment_receipt(receipt, ticker=ticker)
-    current = build_research_section_contract_v2(inputs)
-    approved = build_research_section_contract_v2(_approved(deepcopy(inputs)))
+    current = build_research_section_contract_v3(inputs)
+    approved = build_research_section_contract_v3(_approved(deepcopy(inputs)))
     current_by_id = {item.section_id: item for item in current.sections}
     approved_by_id = {item.section_id: item for item in approved.sections}
     rows: list[dict[str, Any]] = []
     content = receipt["content"]
-    for section_id, mappings in JUDGMENT_INPUTS.items():
-        pending_keys = [source_key for source_key, _input_key, _input_type in mappings if source_key in content and content[source_key].get("status") == "ai_generated_judgment_unreviewed"]
+    for section_id, source_keys in JUDGMENT_INPUTS.items():
+        pending_keys = [
+            source_key
+            for source_key in source_keys
+            if source_key in content
+            and content[source_key].get("status")
+            == "ai_generated_judgment_unreviewed"
+        ]
         for source_key in pending_keys:
             value = content[source_key]
             priority, impact = _IMPACT[source_key]
@@ -61,14 +67,17 @@ def build_judgment_review_queue(
             current_reason = recorded.get("status_reason") if recorded else section_current.status_reason
             independently_missing = list(recorded.get("missing_required") or ()) if recorded else list(section_approved.missing_required)
             other_pending_inputs = [
-                input_key
-                for other_key, input_key, _input_type in mappings
+                other_key
+                for other_key in source_keys
                 if other_key != source_key
                 and other_key in content
                 and content[other_key].get("status") == "ai_generated_judgment_unreviewed"
             ]
             missing_after_one_approval = sorted(set(independently_missing + other_pending_inputs))
-            promotes = current_status == "partial" and not missing_after_one_approval
+            # A legacy field judgment is not a complete Round 7 chapter. Human
+            # approval may make the material reusable, but cannot by itself
+            # satisfy any required chapter input or promote the chapter FULL.
+            promotes = False
             all_pending_status = (
                 "full"
                 if current_status == "partial" and not independently_missing

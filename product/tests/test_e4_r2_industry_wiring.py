@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product"))
 
 from data_core.e4_r2_industry_wiring import wire_r2_industry_receipts  # noqa: E402
-from report_contract import build_research_section_contract_v2  # noqa: E402
+from report_contract import build_research_section_contract_v3  # noqa: E402
 
 
 def receipts():
@@ -20,14 +20,14 @@ def receipts():
 class R2IndustryWiringTest(unittest.TestCase):
     def test_only_a_page_cited_issuer_gets_profile_inputs(self) -> None:
         inputs, receipts_ = wire_r2_industry_receipts(*receipts(), ticker="300750.SZ")
-        self.assertEqual(set(inputs), {"business_model", "industry_structure"})
+        self.assertEqual(set(inputs), {"industry_coordinates", "technology_products_and_business_model"})
         self.assertIn("r2_acceptance_receipt_id", receipts_)
-        self.assertEqual(inputs["business_model"]["company_profile"]["citation"]["page"], 2)
-        contract = build_research_section_contract_v2(inputs)
+        self.assertEqual(inputs["industry_coordinates"]["company_position"]["citation"]["page"], 2)
+        contract = build_research_section_contract_v3(inputs)
         sections = {item.section_id: item for item in contract.sections}
-        self.assertEqual(sections["business_model"].status.value, "partial")
-        self.assertEqual(sections["industry_structure"].status.value, "partial")
-        self.assertEqual(sections["catalysts_and_events"].status.value, "missing")
+        self.assertEqual(sections["industry_coordinates"].status.value, "partial")
+        self.assertEqual(sections["technology_products_and_business_model"].status.value, "partial")
+        self.assertEqual(sections["development_timeline"].status.value, "missing")
 
     def test_missing_issuer_position_is_not_forced_into_c1(self) -> None:
         inputs, reason = wire_r2_industry_receipts(*receipts(), ticker="600519.SH")

@@ -578,9 +578,9 @@ def build_structure_truth_set(*, ticker: str, name: str, exchange: str, market: 
     )
 
 
-# Research Section Contract v2 is additive while the v1 renderer migrates.
-SECTION_CONTRACT_SCHEMA_VERSION = "research-section-contract-v2"
-SECTION_CONTRACT_VERSION = "2.0.0"
+# Research Section Contract v3 is the accepted Round 7 machine contract.
+SECTION_CONTRACT_SCHEMA_VERSION = "research-section-contract-v3"
+SECTION_CONTRACT_VERSION = "3.0.0"
 
 
 class SectionCompletion(str, Enum):
@@ -610,7 +610,7 @@ class ResearchSectionSpec:
     purpose: str
     required_inputs: tuple[SectionInputSpec, ...]
     optional_inputs: tuple[SectionInputSpec, ...]
-    page_budget: tuple[int, int]
+    target_characters: tuple[int, int]
     origins: tuple[str, ...]
 
     def validate(self) -> None:
@@ -626,9 +626,16 @@ class ResearchSectionSpec:
         keys = [item.key for item in inputs]
         if len(keys) != len(set(keys)):
             raise ValueError(f"{self.section_id} repeats an input key")
-        minimum, maximum = self.page_budget
-        if type(minimum) is not int or type(maximum) is not int or minimum < 1 or maximum < minimum:
-            raise ValueError(f"{self.section_id} page budget is invalid")
+        minimum, maximum = self.target_characters
+        if (
+            type(minimum) is not int
+            or type(maximum) is not int
+            or minimum < 100
+            or maximum < minimum
+        ):
+            raise ValueError(
+                f"{self.section_id} character target is invalid"
+            )
         if not self.origins or not all(value.strip() for value in self.origins):
             raise ValueError(f"{self.section_id} must identify its taxonomy origin")
 
@@ -645,7 +652,7 @@ class ResearchSectionSpec:
             "purpose": self.purpose,
             "required_inputs": [item.__dict__ for item in self.required_inputs],
             "optional_inputs": [item.__dict__ for item in self.optional_inputs],
-            "page_budget": list(self.page_budget),
+            "target_characters": list(self.target_characters),
             "origins": list(self.origins),
         }
 
@@ -693,7 +700,7 @@ class SectionAssessment:
     missing_optional: tuple[str, ...]
     status_reason: str | None
     pending_judgment_inputs: tuple[str, ...]
-    page_budget: tuple[int, int]
+    target_characters: tuple[int, int]
     section_hash: str
     profile_hash: str
     version_hash: str
@@ -713,7 +720,7 @@ class ResearchSectionContract:
     evidence_manifest_hash: str | None
     live_eligible: bool
     sections: tuple[SectionAssessment, ...]
-    total_page_budget: tuple[int, int]
+    target_body_characters: tuple[int, int]
 
 
 def _section_digest(value: Any) -> str:
@@ -725,105 +732,158 @@ def _input(key: str, value_type: str, description: str) -> SectionInputSpec:
     return SectionInputSpec(key, value_type, description)
 
 
-RESEARCH_SECTION_SPECS_V2: tuple[ResearchSectionSpec, ...] = (
+RESEARCH_SECTION_SPECS_V3: tuple[ResearchSectionSpec, ...] = (
     ResearchSectionSpec(
-        "executive_summary", 1, "一页决策摘要", "用可复算的事实、估值与风险边界给出结论先行的阅读入口。",
-        (_input("market_snapshot", "object", "带时点的价格、市值与估值快照"), _input("decision_summary", "object", "政策引擎生成的结论摘要")),
-        (_input("key_chart", "object", "最能解释当前判断的一张核心图"),), (2, 3), ("rolling:chapter-1",),
+        "one_line_positioning",
+        1,
+        "一句话定位",
+        "用公司特异事实给出唯一性定位、当前代价和最关键证伪条件。",
+        (
+            _input("issuer_identity", "object", "公司、证券和报告时点身份"),
+            _input("positioning_evidence", "array", "支持定位的官方事实"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (
+            _input("market_snapshot", "object", "带时点的市场数据卡"),
+            _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
+        ),
+        (300, 450),
+        ("annual-report:company-profile", "round7:one-line-positioning"),
     ),
     ResearchSectionSpec(
-        "investment_thesis", 2, "投资逻辑与预期差", "明确多空逻辑、市场隐含假设、独立判断与可证伪差异。",
-        (_input("investment_thesis", "object", "主论点与证据链"), _input("variant_view", "object", "相对市场共识的差异")),
-        (_input("bear_case", "object", "最强反方论点"),), (2, 3), ("rolling:chapters-1-9", "day1:variant-view"),
+        "industry_coordinates",
+        2,
+        "产业坐标",
+        "说明产业链位置、国内外同类、上下游约束和需求到利润的传导链。",
+        (
+            _input("industry_evidence", "array", "行业节点和价值链证据"),
+            _input("company_position", "object", "公司在产业链中的页级证据位置"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (_input("peer_evidence", "array", "口径明确的国内外同类证据"),),
+        (500, 700),
+        ("annual-report:business-review", "round7:industry-coordinates"),
     ),
     ResearchSectionSpec(
-        "business_model", 3, "业务模式与收入结构", "解释公司靠什么赚钱、收入确认、分部结构、客户和价值链位置。",
-        (_input("company_profile", "object", "公司与业务边界"), _input("segment_financials", "array", "分部收入和利润序列")),
-        (_input("customer_concentration", "object", "客户集中度"), _input("partner_ecosystem", "object", "合作伙伴生态")), (2, 3), ("rolling:chapter-2", "day1:partner-ecosystem"),
+        "founder_and_team",
+        3,
+        "创始人与团队",
+        "解释关键人物、控制关系、组织转折、继任与治理硬伤。",
+        (
+            _input("management_evidence", "array", "关键人物履历和任职证据"),
+            _input("governance_evidence", "array", "控制、治理和资本配置事件"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (_input("ownership_evidence", "array", "股东及内部人持股证据"),),
+        (400, 550),
+        ("annual-report:directors-supervisors-management", "annual-report:governance"),
     ),
     ResearchSectionSpec(
-        "industry_structure", 4, "行业空间与价值链", "界定 TAM、周期位置、供需结构、产业链利润池与行业分类口径。",
-        (_input("industry_profile", "object", "行业分类与生命周期"), _input("market_size", "object", "TAM、增速和口径")),
-        (_input("value_chain", "array", "产业链分层和利润池"),), (2, 3), ("rolling:chapter-3",),
+        "development_timeline",
+        4,
+        "发展时间线",
+        "按时间说明真正改变公司能力边界的产品、产能、市场和组织节点。",
+        (
+            _input("timeline_evidence", "array", "有日期和页级来源的公司事件"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (_input("governance_timeline", "array", "治理转折事件"),),
+        (450, 600),
+        ("annual-report:company-history", "annual-report:business-review"),
     ),
     ResearchSectionSpec(
-        "competition_and_moat", 5, "竞争格局与护城河", "用份额、同业差异和长期资本回报验证竞争优势。",
-        (_input("peer_comparison", "array", "口径可比的同行矩阵"), _input("moat_assessment", "object", "护城河来源、强度和证据")),
-        (_input("competitive_events", "array", "近期竞争或并购变化"),), (2, 3), ("rolling:chapter-3", "day1:competition"),
+        "technology_products_and_business_model",
+        5,
+        "技术、产品与商业模式",
+        "回答产品解决什么问题、谁付钱、收入如何形成以及关键经营依赖。",
+        (
+            _input("business_evidence", "array", "产品、客户、收入模式和分部证据"),
+            _input("operating_evidence", "array", "产能、研发、渠道和经营 KPI"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (
+            _input("segment_financials", "array", "官方分部收入与利润序列"),
+            _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
+        ),
+        (650, 800),
+        ("annual-report:principal-business", "annual-report:management-discussion"),
     ),
     ResearchSectionSpec(
-        "management_and_governance", 6, "管理层、治理与资本配置", "评估管理层记录、激励、股东结构、分红回购、并购和治理红旗。",
-        (_input("management_record", "object", "核心管理层履历与经营记录"), _input("governance_events", "array", "治理、关联交易和信披事件")),
-        (_input("ownership_structure", "object", "股东与内部人持股"), _input("capital_allocation", "object", "历史资本配置回报")), (2, 3), ("rolling:chapter-4", "day1:executives-ownership"),
+        "financials_and_valuation",
+        6,
+        "财务与估值",
+        "解释多期增长、盈利质量、现金转换和带时点的估值或估值缺口。",
+        (
+            _input("financial_evidence", "array", "统一期次、单位和口径的财务序列"),
+            _input("valuation_evidence", "array", "带时点的市场与估值证据或明确缺口"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (
+            _input("accounting_evidence", "array", "审计意见和会计质量证据"),
+            _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
+        ),
+        (650, 800),
+        ("annual-report:financial-statements", "official-market-snapshot"),
     ),
     ResearchSectionSpec(
-        "revenue_quality_and_kpis", 7, "收入质量与经营 KPI", "拆解量价组合、内生增长、客户/地区质量和行业核心 KPI。",
-        (_input("revenue_history", "array", "多期收入与增长桥"), _input("operating_kpis", "array", "行业核心 KPI 与定义")),
-        (_input("guidance_history", "array", "管理层指引与兑现记录"), _input("rd_efficiency", "object", "研发投入与转化效率")), (2, 3), ("rolling:chapters-2-5", "day1:modules-A-D-F-N"),
+        "why_it_can_win",
+        7,
+        "为什么它能赢",
+        "用可反驳的机制说明竞争优势，并为每项优势给出证伪条件。",
+        (
+            _input("moat_evidence", "array", "支持竞争机制的公司特异证据"),
+            _input("falsification_evidence", "array", "可观察的反证与失效条件"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (
+            _input("peer_evidence", "array", "独立、同口径的同行证据"),
+            _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
+        ),
+        (450, 600),
+        ("annual-report:competitive-advantages", "round7:why-it-can-win"),
     ),
     ResearchSectionSpec(
-        "profitability_and_earnings_quality", 8, "盈利能力与利润质量", "解释毛利、费用、利润率、GAAP/Non-GAAP 和利润驱动是否可持续。",
-        (_input("income_history", "array", "多期利润表和利润率"), _input("margin_bridge", "object", "利润率变化桥")),
-        (_input("adjusted_earnings_bridge", "object", "调整项和股权激励"),), (2, 3), ("rolling:chapter-5", "day1:modules-B"),
+        "core_risks",
+        8,
+        "核心风险",
+        "把与多头叙事冲突的风险写成已知事实、触发器和下一次核验。",
+        (
+            _input("risk_evidence", "array", "公司披露的具体风险和暴露"),
+            _input("trigger_evidence", "array", "观察触发器和下一核验窗口"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (
+            _input("policy_evidence", "array", "公司特定政策与宏观暴露"),
+            _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
+        ),
+        (450, 600),
+        ("annual-report:risk-factors", "round7:core-risks"),
     ),
     ResearchSectionSpec(
-        "cash_flow_and_balance_sheet", 9, "现金流与资产负债表", "验证利润含金量、营运资本、资本开支、负债和流动性韧性。",
-        (_input("cash_flow_history", "array", "经营现金流、资本开支与自由现金流"), _input("balance_sheet_history", "array", "现金、负债和营运资本")),
-        (_input("liquidity_stress", "object", "压力情景与融资需求"),), (2, 3), ("rolling:chapter-5", "day1:module-C"),
-    ),
-    ResearchSectionSpec(
-        "accounting_quality", 10, "会计质量与审计检查", "检查应计、收入确认、减值、表外项目、重述和审计意见。",
-        (_input("accounting_checks", "array", "会计质量检查结果"), _input("audit_opinions", "array", "审计意见与重大事项")),
-        (_input("restatement_history", "array", "重述和口径变更"),), (1, 2), ("day1:module-O",),
-    ),
-    ResearchSectionSpec(
-        "forecasts_and_consensus", 11, "盈利预测、共识与修订", "展示券商逐篇预测、共识区间、离散度、修订方向和 Park 模型桥。",
-        (_input("broker_estimates", "array", "逐券商逐年度预测"), _input("consensus_history", "array", "可回放共识和修订")),
-        (_input("forecast_model", "object", "Park 确定性预测模型"), _input("guidance_vs_consensus", "object", "指引相对共识")), (2, 3), ("rolling:chapter-7", "day1:modules-D"),
-    ),
-    ResearchSectionSpec(
-        "valuation", 12, "估值与市场隐含预期", "用至少三类可执行方法交叉验证价值区间、敏感性和安全边际。",
-        (_input("valuation_scenarios", "array", "bear/base/bull 估值情景"), _input("valuation_assumptions", "object", "模型假设和版本"), _input("current_market", "object", "现价和估值基准")),
-        (_input("reverse_dcf", "object", "现价隐含假设"), _input("sotp", "object", "分部估值"), _input("epv", "object", "盈利能力价值")), (3, 4), ("rolling:chapter-6", "day1:module-K"),
-    ),
-    ResearchSectionSpec(
-        "macro_policy_and_costs", 13, "宏观、政策与成本传导", "把利率、汇率、政策和原材料变化连接到收入、利润率与估值。",
-        (_input("macro_exposures", "object", "宏观敏感性和传导链"), _input("policy_events", "array", "政策原文与公司影响")),
-        (_input("commodity_sensitivity", "object", "原材料和套保敏感性"),), (1, 2), ("day1:module-J", "uzi:qualitative-3-8-9-13"),
-    ),
-    ResearchSectionSpec(
-        "catalysts_and_events", 14, "事件、催化剂与时间表", "区分已发生证据与未来催化，量化可能影响和兑现窗口。",
-        (_input("event_timeline", "array", "已去重且有原文证据的事件"), _input("catalyst_calendar", "array", "未来催化日期与机制")),
-        (_input("event_impact_inference", "array", "版本化事件影响推断"),), (1, 2), ("rolling:chapter-8", "day1:catalyst"),
-    ),
-    ResearchSectionSpec(
-        "risks_and_falsification", 15, "风险、反证与 Kill Conditions", "给出最强反方证据、具体触发阈值和论点失效条件。",
-        (_input("risk_register", "array", "带概率、影响和证据的风险"), _input("falsification_tests", "array", "可观察反证和 kill conditions")),
-        (_input("bias_check", "object", "反偏见检查"), _input("esg_screen", "object", "重大 ESG 风险筛查")), (2, 3), ("rolling:chapters-3-9", "day1:modules-M-P"),
-    ),
-    ResearchSectionSpec(
-        "decision_framework", 16, "结论、目标价与仓位框架", "消费可审计政策输出，固定动作、目标价窗口、仓位边界和否决项。",
-        (_input("recommendation_policy_output", "object", "C5 策略引擎的结论、目标价和仓位输出"),),
-        (_input("committee_synthesis", "object", "不覆盖政策输出的投委会解释"),), (1, 2), ("rolling:chapters-1-9", "day1:action-system"),
-    ),
-    ResearchSectionSpec(
-        "monitoring_and_action_triggers", 17, "跟踪指标与行动触发器", "把论点转成持续覆盖所需的 KPI、阈值、频率和下一步动作。",
-        (_input("monitoring_kpis", "array", "3–8 个关键跟踪指标"), _input("action_triggers", "array", "加仓、减仓、退出和复核条件")),
-        (_input("next_update_calendar", "array", "下次财报和数据刷新计划"),), (1, 2), ("rolling:chapter-9", "day1:modules-M"),
-    ),
-    ResearchSectionSpec(
-        "evidence_and_methodology", 18, "证据台账、方法与附录", "列出 evidence set、页级引用、覆盖缺口、模型版本和方法限制。",
-        (_input("evidence_set_receipt", "object", "B6 evidence/gate identity"), _input("citation_index", "array", "document/page/raw hash 引用索引"), _input("methodology", "object", "计算方法和版本")),
-        (_input("coverage_gaps", "array", "required/optional 缺口"), _input("industry_appendix", "object", "profile 选择的行业 KPI 附录")), (2, 3), ("rolling:source-appendix", "park:B3-B6"),
+        "plain_language_verdict",
+        9,
+        "大白话点评",
+        "综合事实、判断、估值边界与反证，给出可记忆且可被推翻的结论。",
+        (
+            _input("synthesis_evidence", "array", "支持最终综合判断的章节级证据"),
+            _input("decision_policy_output", "object", "不越过 Tier 的政策引擎输出"),
+            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
+        ),
+        (
+            _input("typed_gaps", "array", "真正阻断结论的待补证据"),
+            _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
+        ),
+        (350, 400),
+        ("round7:plain-language-verdict", "decision-policy"),
     ),
 )
 
 
-A_SHARE_GENERAL_PROFILE_V1 = ResearchReportProfile(
-    profile_id="a-share-general",
+A_SHARE_ROUND7_PROFILE_V1 = ResearchReportProfile(
+    profile_id="a-share-round7",
     profile_version="1.0.0",
     market="CN",
-    section_ids=tuple(item.section_id for item in RESEARCH_SECTION_SPECS_V2),
+    section_ids=tuple(item.section_id for item in RESEARCH_SECTION_SPECS_V3),
     optional_modules=("industry_kpi_appendix", "earnings_update_bridge", "ah_listing_comparison"),
 )
 
@@ -847,6 +907,48 @@ def _input_type_matches(value: Any, value_type: str) -> bool:
 
 
 UNREVIEWED_JUDGMENT_STATUS = "ai_generated_judgment_unreviewed"
+HUMAN_REVIEWED_JUDGMENT_STATUS = "human_reviewed_judgment"
+
+
+def _validate_chapter_draft(value: Any, *, section_id: str) -> None:
+    """Fail closed unless a chapter has explicit review and page bindings."""
+    if not isinstance(value, dict):
+        raise ReportContractError(f"{section_id}.chapter_draft must be object")
+    status = value.get("status")
+    if status not in {
+        UNREVIEWED_JUDGMENT_STATUS,
+        HUMAN_REVIEWED_JUDGMENT_STATUS,
+    }:
+        raise ReportContractError(
+            f"{section_id}.chapter_draft requires an explicit review status"
+        )
+    if (
+        status == HUMAN_REVIEWED_JUDGMENT_STATUS
+        and value.get("review_status") != "approved"
+    ):
+        raise ReportContractError(
+            f"{section_id}.chapter_draft is not approved by a human reviewer"
+        )
+    if not isinstance(value.get("text"), str) or not value["text"].strip():
+        raise ReportContractError(
+            f"{section_id}.chapter_draft requires complete chapter text"
+        )
+    bindings = value.get("evidence_bindings")
+    if not isinstance(bindings, list) or not bindings:
+        raise ReportContractError(
+            f"{section_id}.chapter_draft requires page-level evidence bindings"
+        )
+    for binding in bindings:
+        if (
+            not isinstance(binding, dict)
+            or not binding.get("document_id")
+            or type(binding.get("page_number")) is not int
+            or binding["page_number"] < 1
+            or not binding.get("quoted_anchor")
+        ):
+            raise ReportContractError(
+                f"{section_id}.chapter_draft has an incomplete evidence binding"
+            )
 
 
 def _contains_unreviewed_judgment(value: Any) -> bool:
@@ -883,12 +985,16 @@ def assess_research_section(
             raise ReportContractError(
                 f"{spec.section_id}.{key} must be {known[key].value_type}"
             )
+        if key == "chapter_draft" and _input_present(value):
+            _validate_chapter_draft(value, section_id=spec.section_id)
     present_required = tuple(item.key for item in spec.required_inputs if _input_present(values.get(item.key)))
     missing_required = tuple(item.key for item in spec.required_inputs if item.key not in present_required)
     present_optional = tuple(item.key for item in spec.optional_inputs if _input_present(values.get(item.key)))
     missing_optional = tuple(item.key for item in spec.optional_inputs if item.key not in present_optional)
     pending_judgment_inputs = tuple(
-        key for key in present_required if _contains_unreviewed_judgment(values[key])
+        key
+        for key in present_required + present_optional
+        if _contains_unreviewed_judgment(values[key])
     )
     if not missing_required:
         status = SectionCompletion.PARTIAL if pending_judgment_inputs else SectionCompletion.FULL
@@ -909,7 +1015,7 @@ def assess_research_section(
         missing_optional=missing_optional,
         status_reason=status_reason,
         pending_judgment_inputs=pending_judgment_inputs,
-        page_budget=spec.page_budget,
+        target_characters=spec.target_characters,
         section_hash=spec.section_hash,
         profile_hash=profile_hash,
         version_hash=version_hash,
@@ -917,23 +1023,23 @@ def assess_research_section(
     )
 
 
-def build_research_section_contract_v2(
+def build_research_section_contract_v3(
     section_inputs: Mapping[str, Mapping[str, Any]],
     *,
-    profile: ResearchReportProfile = A_SHARE_GENERAL_PROFILE_V1,
+    profile: ResearchReportProfile = A_SHARE_ROUND7_PROFILE_V1,
     structure_only: bool = True,
     evidence_set: Any | None = None,
 ) -> ResearchSectionContract:
-    for spec in RESEARCH_SECTION_SPECS_V2:
+    for spec in RESEARCH_SECTION_SPECS_V3:
         spec.validate()
-    orders = [item.order for item in RESEARCH_SECTION_SPECS_V2]
-    if orders != list(range(1, len(RESEARCH_SECTION_SPECS_V2) + 1)):
+    orders = [item.order for item in RESEARCH_SECTION_SPECS_V3]
+    if orders != list(range(1, len(RESEARCH_SECTION_SPECS_V3) + 1)):
         raise ReportContractError("research section orders must be contiguous")
-    profile.validate(RESEARCH_SECTION_SPECS_V2)
+    profile.validate(RESEARCH_SECTION_SPECS_V3)
     unknown_sections = sorted(set(section_inputs).difference(profile.section_ids))
     if unknown_sections:
         raise ReportContractError("unknown research sections: " + ", ".join(unknown_sections))
-    profile_hash = profile.profile_hash(RESEARCH_SECTION_SPECS_V2)
+    profile_hash = profile.profile_hash(RESEARCH_SECTION_SPECS_V3)
     version_hash = _section_digest(
         {
             "schema_version": SECTION_CONTRACT_SCHEMA_VERSION,
@@ -944,7 +1050,7 @@ def build_research_section_contract_v2(
         {
             "version_hash": version_hash,
             "profile_hash": profile_hash,
-            "section_hashes": [item.section_hash for item in RESEARCH_SECTION_SPECS_V2],
+            "section_hashes": [item.section_hash for item in RESEARCH_SECTION_SPECS_V3],
         }
     )
     assessments = tuple(
@@ -954,17 +1060,19 @@ def build_research_section_contract_v2(
             profile_hash=profile_hash,
             version_hash=version_hash,
         )
-        for spec in RESEARCH_SECTION_SPECS_V2
+        for spec in RESEARCH_SECTION_SPECS_V3
     )
     evidence_set_id = getattr(evidence_set, "evidence_set_id", None)
     evidence_manifest_hash = getattr(evidence_set, "manifest_hash", None)
     evidence_passed = bool(evidence_set is not None and getattr(evidence_set, "publishable", False))
     if not structure_only and not evidence_passed:
         raise ReportContractError("live section contract requires a B6-passed evidence set")
-    minimum_pages = sum(item.page_budget[0] for item in RESEARCH_SECTION_SPECS_V2)
-    maximum_pages = sum(item.page_budget[1] for item in RESEARCH_SECTION_SPECS_V2)
-    if not 30 <= minimum_pages <= maximum_pages <= 50:
-        raise ReportContractError("canonical report page budget must stay within 30–50 pages")
+    minimum_characters = sum(item.target_characters[0] for item in RESEARCH_SECTION_SPECS_V3)
+    maximum_characters = sum(item.target_characters[1] for item in RESEARCH_SECTION_SPECS_V3)
+    if not 4_000 <= minimum_characters <= maximum_characters <= 5_500:
+        raise ReportContractError(
+            "Round 7 report body target must stay within 4,000–5,500 Chinese characters"
+        )
     return ResearchSectionContract(
         schema_version=SECTION_CONTRACT_SCHEMA_VERSION,
         contract_version=SECTION_CONTRACT_VERSION,
@@ -977,7 +1085,7 @@ def build_research_section_contract_v2(
         evidence_manifest_hash=evidence_manifest_hash,
         live_eligible=not structure_only and evidence_passed,
         sections=assessments,
-        total_page_budget=(minimum_pages, maximum_pages),
+        target_body_characters=(minimum_characters, maximum_characters),
     )
 
 

@@ -18,11 +18,11 @@ class InventoryTest(unittest.TestCase):
     def test_counts_distinct_section_dependencies_not_three_issuer_copies(self) -> None:
         rows = []
         for ticker in ("300750.SZ", "600519.SH", "000001.SZ"):
-            sections = [section(item.section_id, "missing", missing=[entry.key for entry in item.required_inputs]) for item in inventory.RESEARCH_SECTION_SPECS_V2]
+            sections = [section(item.section_id, "missing", missing=[entry.key for entry in item.required_inputs]) for item in inventory.RESEARCH_SECTION_SPECS_V3]
             rows.append({"ticker": ticker, "status": "available", "result": {"section_contract": {"sections": sections}}})
         result = inventory.build_inventory({"rows": rows})
-        self.assertEqual(result["independent_missing_required_inputs"], 37)
-        self.assertEqual(max(item["dependent_sections"] for item in result["leverage"]), 1)
+        self.assertEqual(result["independent_missing_required_inputs"], 18)
+        self.assertEqual(max(item["dependent_sections"] for item in result["leverage"]), 9)
 
 
 if __name__ == "__main__":

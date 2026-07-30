@@ -25,16 +25,20 @@ JUDGMENT_RECEIPT_SCHEMAS = frozenset({
 _CITATION_KEYS = ("document_id", "raw_hash", "page_number", "quoted_anchor", "source_url")
 _HASH = re.compile(r"^[0-9a-f]{64}$")
 
-# C1 input types are fixed by the contract.  Array inputs retain one judgment
-# object per row; object inputs retain the complete judgment object.
-JUDGMENT_INPUTS: dict[str, tuple[tuple[str, str, str], ...]] = {
-    "investment_thesis": (("investment_thesis", "investment_thesis", "object"), ("variant_view", "variant_view", "object")),
-    "competition_and_moat": (("moat_assessment", "moat_assessment", "object"),),
-    "risks_and_falsification": (("risk_register", "risk_register", "array"), ("falsification_tests", "falsification_tests", "array")),
-    "monitoring_and_action_triggers": (("monitoring_kpis", "monitoring_kpis", "array"), ("action_triggers", "action_triggers", "array")),
-    "accounting_quality": (("accounting_checks", "accounting_checks", "array"),),
-    "revenue_quality_and_kpis": (("operating_kpis", "operating_kpis", "array"),),
-    "profitability_and_earnings_quality": (("margin_bridge", "margin_bridge", "object"),),
+# These are transitional source-material routes, not chapter completion inputs.
+# M3 generates one complete ``chapter_draft`` per model call; M4 removes this
+# field-oriented adapter from the production path.
+JUDGMENT_INPUTS: dict[str, tuple[str, ...]] = {
+    "one_line_positioning": ("investment_thesis", "variant_view"),
+    "why_it_can_win": ("moat_assessment",),
+    "core_risks": (
+        "risk_register",
+        "falsification_tests",
+        "monitoring_kpis",
+        "action_triggers",
+    ),
+    "financials_and_valuation": ("accounting_checks", "margin_bridge"),
+    "technology_products_and_business_model": ("operating_kpis",),
 }
 
 
@@ -141,13 +145,16 @@ def wire_unreviewed_judgment_receipt(receipt: Mapping[str, Any], *, ticker: str)
         "source_dossier_receipt": receipt.get("source_dossier_receipt"),
     }
     section_inputs: dict[str, dict[str, Any]] = {}
-    for section_id, mappings in JUDGMENT_INPUTS.items():
-        for source_key, input_key, input_type in mappings:
+    for section_id, source_keys in JUDGMENT_INPUTS.items():
+        for source_key in source_keys:
             source = content.get(source_key)
             if not isinstance(source, dict) or source.get("status") != UNREVIEWED_JUDGMENT_STATUS:
                 continue
             _validate_judgment(source, key=source_key)
             adapted = deepcopy(source)
+            adapted["judgment_id"] = source_key
             adapted["source_receipt"] = provenance
-            section_inputs.setdefault(section_id, {})[input_key] = [adapted] if input_type == "array" else adapted
+            section_inputs.setdefault(section_id, {}).setdefault(
+                "legacy_judgment_materials", []
+            ).append(adapted)
     return section_inputs

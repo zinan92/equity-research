@@ -12,7 +12,7 @@ if str(PRODUCT) not in sys.path:
 
 from data_core.evidence_gate import EvidenceCandidate, EvidenceGatePolicy, EvidenceRequirement, EvidenceRole, SourceCoverageGap, build_evidence_set  # noqa: E402
 from data_core.research_degradation import ResearchTier, assess_any_ticker  # noqa: E402
-from report_contract import RESEARCH_SECTION_SPECS_V2, build_research_section_contract_v2  # noqa: E402
+from report_contract import RESEARCH_SECTION_SPECS_V3, build_research_section_contract_v3  # noqa: E402
 
 
 def evidence(*, passed: bool = True, gaps=()):
@@ -26,13 +26,14 @@ def evidence(*, passed: bool = True, gaps=()):
 
 def full_inputs():
     value = {"object": {"accepted": True}, "array": [{"accepted": True}], "string": "accepted", "number": 1.0, "boolean": True}
-    return {spec.section_id: {item.key: value[item.value_type] for item in spec.required_inputs} for spec in RESEARCH_SECTION_SPECS_V2}
+    chapter = {"status": "human_reviewed_judgment", "review_status": "approved", "text": "reviewed chapter", "evidence_bindings": [{"document_id": "official:1", "page_number": 1, "quoted_anchor": "原文"}]}
+    return {spec.section_id: {item.key: chapter if item.key == "chapter_draft" else value[item.value_type] for item in spec.required_inputs} for spec in RESEARCH_SECTION_SPECS_V3}
 
 
 class ResearchDegradationTest(unittest.TestCase):
     def test_a_tier_requires_real_passed_evidence_and_all_sections_full(self) -> None:
         set_ = evidence()
-        contract = build_research_section_contract_v2(full_inputs(), structure_only=False, evidence_set=set_)
+        contract = build_research_section_contract_v3(full_inputs(), structure_only=False, evidence_set=set_)
         receipt = assess_any_ticker("300750.SZ", evidence_set=set_, section_contract=contract)
         self.assertEqual(receipt.tier, ResearchTier.A)
         self.assertEqual(receipt.blocked_fields, ())
@@ -41,8 +42,8 @@ class ResearchDegradationTest(unittest.TestCase):
     def test_b_tier_is_partial_and_cannot_emit_action_fields(self) -> None:
         set_ = evidence()
         inputs = full_inputs()
-        inputs["valuation"] = {}
-        contract = build_research_section_contract_v2(inputs, structure_only=False, evidence_set=set_)
+        inputs["financials_and_valuation"] = {}
+        contract = build_research_section_contract_v3(inputs, structure_only=False, evidence_set=set_)
         receipt = assess_any_ticker("300750.SZ", evidence_set=set_, section_contract=contract)
         self.assertEqual(receipt.tier, ResearchTier.B)
         self.assertEqual(receipt.blocked_fields, ("action", "target_price", "position_range"))
@@ -51,10 +52,10 @@ class ResearchDegradationTest(unittest.TestCase):
     def test_unreviewed_judgment_cannot_trigger_tier_a(self) -> None:
         set_ = evidence()
         inputs = full_inputs()
-        inputs["investment_thesis"]["investment_thesis"] = {"status": "ai_generated_judgment_unreviewed"}
-        contract = build_research_section_contract_v2(inputs, structure_only=False, evidence_set=set_)
+        inputs["one_line_positioning"]["chapter_draft"] = {"status": "ai_generated_judgment_unreviewed", "text": "draft chapter", "evidence_bindings": [{"document_id": "official:1", "page_number": 1, "quoted_anchor": "原文"}]}
+        contract = build_research_section_contract_v3(inputs, structure_only=False, evidence_set=set_)
         receipt = assess_any_ticker("300750.SZ", evidence_set=set_, section_contract=contract)
-        section = next(item for item in contract.sections if item.section_id == "investment_thesis")
+        section = next(item for item in contract.sections if item.section_id == "one_line_positioning")
         self.assertEqual((section.status.value, section.status_reason, receipt.tier), ("partial", "pending_judgment_review", ResearchTier.B))
 
     def test_c_and_missing_preserve_source_actions_and_reject_fixture_upgrade(self) -> None:
@@ -68,7 +69,7 @@ class ResearchDegradationTest(unittest.TestCase):
 
     def test_manifest_and_ticker_mismatch_fail_closed(self) -> None:
         set_ = evidence()
-        contract = build_research_section_contract_v2(full_inputs(), structure_only=False, evidence_set=set_)
+        contract = build_research_section_contract_v3(full_inputs(), structure_only=False, evidence_set=set_)
         with self.assertRaisesRegex(ValueError, "ticker mismatch"):
             assess_any_ticker("600519.SH", evidence_set=set_, section_contract=contract)
 
