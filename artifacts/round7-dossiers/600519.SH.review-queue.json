@@ -1,0 +1,395 @@
+{
+  "schema_version": "round7-chapter-review-queue-v1",
+  "ticker": "600519.SH",
+  "source_run_id": "round7-run:10bc8c41a6fc28e01ce771b4",
+  "sort_basis": "impact_on_final_research_conclusion",
+  "items": [
+    {
+      "impact_rank": 1,
+      "section_id": "research_conclusion_and_open_questions",
+      "title": "研究结论与待补问题",
+      "review_status": "pending_human_review",
+      "full_text": "事实：营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；\n研究判断（未审阅）：上述产品结构调整可能意味着收入增长对系列酒依赖加深，但证据未披露具体调整幅度与各产品线占比，仍需进一步数据验证。公司核心竞争力与ESG评级提升表明品牌护城河与治理水平在强化，但未提供量化指标，判断其对长期利润的支撑力度有限。\n待补问题：酱香系列酒产品结构调整的具体方向（如提价、放量或结构升级）及对毛利率的影响未披露；五大核心竞争力的量化评估指标缺失；ESG评级跃升的具体驱动因素与维持能力未说明；《市值管理办法》的具体内容与执行机制待披露。",
+      "citations": [
+        {
+          "evidence_id": "N-e918431678",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-218e7faa26",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-e18cdd6816",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-fadb1930ab",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 2,
+      "section_id": "one_line_positioning",
+      "title": "一句话定位",
+      "review_status": "pending_human_review",
+      "full_text": "事实：贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。\n研究判断（未审阅）：上述收入结构意味着盈利持续性取决于贸易业务稳定性，仍需核验贸易业务毛利率及客户集中度对现金回报的影响。",
+      "citations": [
+        {
+          "evidence_id": "N-311bfe97cc",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 12,
+          "quoted_anchor": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 4、研发投入"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 3,
+      "section_id": "moat_evidence_chain",
+      "title": "护城河的证据链",
+      "review_status": "pending_human_review",
+      "full_text": "研究判断（未审阅）：公司自述拥有“品质、品牌、工艺、环境、文化”五大核心竞争力，可能构成系统性护城河。\n事实：公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。\n研究判断（未审阅）：若茅台酒出现重大质量事故或核心工艺被竞争对手复制，则护城河可能被证伪。\n研究判断（未审阅）：当前证据表明品质与工艺护城河稳固，但品牌溢价能否持续取决于消费趋势变化，仍需验证。\n研究判断（未审阅）：公司通过“全面向C”战略和渠道变革，可能强化市场控制力与客户粘性。\n事实：稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。\n研究判断（未审阅）：若渠道改革导致经销商流失或终端动销持续放缓，则客户粘性假设可能被证伪。\n研究判断（未审阅）：现有证据表明战略转型初见成效，但市场份额能否持续提升取决于竞品反应，仍需观察。\n研究判断（未审阅）：公司ESG评级跃升可能降低融资成本并增强品牌声誉，构成差异化竞争优势。\n事实：明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。\n研究判断（未审阅）：若ESG评级被下调或行业普遍达到同等评级，则差异化优势可能被证伪。\n研究判断（未审阅）：当前证据表明ESG领先地位可能提升品牌价值，但对成本效率的直接影响尚待验证。",
+      "citations": [
+        {
+          "evidence_id": "N-218e7faa26",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-34e1d062ab",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-b33ca4f980",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-e18cdd6816",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-8dcfb08557",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 4,
+      "section_id": "risks_counter_thesis_and_triggers",
+      "title": "风险、反题材与观察触发器",
+      "review_status": "pending_human_review",
+      "full_text": "事实：公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。\n研究判断（未审阅）：如果美元或欧元兑人民币大幅贬值，可能意味着海外收入折算为人民币后下滑，进而影响整体收入增长。\n待补问题：下一次核验：待公司披露下一季度或年度财务报告，查看外币货币性项目折算金额及汇率变动对现金的影响，以评估汇率风险的实际影响。\n事实：本公司销售以预收款项方式进行，交易的信用风险小。公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。\n研究判断（未审阅）：若预收款项占比显著下降或应收账款周转天数明显延长，可能表明信用风险上升，需判断回款能力是否恶化。\n待补问题：下一次核验：待公司披露下一季度或年度财务报告，关注预收款项及应收账款附注，以核验信用风险变化。\n事实：流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。\n研究判断（未审阅）：如果现金及现金等价物余额大幅减少或短期债务显著增加，可能意味着流动性风险上升，取决于公司维持充足现金的能力。\n待补问题：下一次核验：待公司披露下一季度或年度财务报告，查看现金流量表及短期债务明细，以核验流动性状况。\n事实：利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。\n研究判断（未审阅）：若市场利率大幅上升，可能意味着公司持有的固定利率金融资产公允价值下降，仍需观察利率变动对利息收入的影响。\n待补问题：下一次核验：待公司披露下一季度或年度财务报告，查看金融资产公允价值变动及利息收入明细，以核验利率风险影响。\n事实：强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。\n研究判断（未审阅）：如果市场上假冒茅台产品事件显著增多或防伪技术被突破，可能表明品牌侵权风险上升，取决于公司防伪措施的有效性。\n待补问题：下一次核验：待公司披露下一季度或年度报告，关注品牌保护措施及侵权事件披露，以核验品牌侵权风险。\n事实：公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让。\n研究判断（未审阅）：若赤水河流域出现严重污染事件或生态环境指标恶化，可能意味着茅台酒赖以生存的生态系统受损，仍需判断公司环境竞争力是否被削弱。\n待补问题：下一次核验：待公司披露下一季度或年度环境、社会及治理报告，查看生态环境监控数据及环保投入，以核验生态环境风险。",
+      "citations": [
+        {
+          "evidence_id": "N-d45d0f326d",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 122,
+          "quoted_anchor": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+        },
+        {
+          "evidence_id": "N-664e326e4d",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 122,
+          "quoted_anchor": "本公司销售以预收款项方式进行，交易的信用风险小。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+        },
+        {
+          "evidence_id": "N-51bc5f83f3",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 122,
+          "quoted_anchor": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+        },
+        {
+          "evidence_id": "N-7ecd334068",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 122,
+          "quoted_anchor": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+        },
+        {
+          "evidence_id": "N-2324bfce56",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 122,
+          "quoted_anchor": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+        },
+        {
+          "evidence_id": "N-f1afb1210a",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 22,
+          "quoted_anchor": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (三)经营计划"
+        },
+        {
+          "evidence_id": "N-2bda7732d5",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 21,
+          "quoted_anchor": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+        },
+        {
+          "evidence_id": "N-fabf06debf",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 21,
+          "quoted_anchor": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+        },
+        {
+          "evidence_id": "N-c917e52241",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 21,
+          "quoted_anchor": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 5,
+      "section_id": "financial_and_operating_time_series",
+      "title": "财务与经营时间序列",
+      "review_status": "pending_human_review",
+      "full_text": "事实：2025年\n事实：172,054,171,890.91元\n事实：同比下滑1.2%\n事实：合并报表",
+      "citations": [
+        {
+          "evidence_id": "P-6669b8ff4b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 61,
+          "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+          "quoted_label": "营业总收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "statement_scope": "consolidated"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 6,
+      "section_id": "business_model_and_business_lines",
+      "title": "商业模式与业务线",
+      "review_status": "pending_human_review",
+      "full_text": "事实：稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。\n事实：稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。\n研究判断（未审阅）：该业务可能取决于终端消费需求与品牌影响力，若市场信心不足或品牌美誉度下降，则可能影响收入。\n待补问题：未披露系列酒的具体客户类型与交付物细节。\n事实：营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。\n研究判断（未审阅）：该业务可能取决于产品结构调整效果，若调整未能适应市场需求，则可能影响收入。\n待补问题：未披露国际化业务的具体客户与交付物。\n事实：稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。\n研究判断（未审阅）：该业务可能取决于海外市场拓展与品牌接受度，若国际化推进不及预期，则可能影响收入。",
+      "citations": [
+        {
+          "evidence_id": "N-b33ca4f980",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-e8dc4276e5",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-e918431678",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 7,
+      "section_id": "technology_origin_and_development_history",
+      "title": "技术来源与发展史",
+      "review_status": "pending_human_review",
+      "full_text": "事实：2025年\n事实：公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。\n研究判断（未审阅）：公司自述数字化质量管理体系可能意味着技术对传统工艺的赋能仍需验证其对产品一致性的实际提升效果。\n事实：2025年\n事实：建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。\n研究判断（未审阅）：公司自述绿色工厂路径可能意味着环保技术研发对产能扩张的约束与成本影响仍需量化。\n事实：2025年\n事实：营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。\n研究判断（未审阅）：产品结构调整可能意味着系列酒技术路线或品质升级对收入增长的驱动作用取决于后续产品放量及市场接受度。",
+      "citations": [
+        {
+          "evidence_id": "N-34e1d062ab",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        },
+        {
+          "evidence_id": "N-fabf06debf",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 21,
+          "quoted_anchor": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+        },
+        {
+          "evidence_id": "N-e918431678",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 9,
+          "quoted_anchor": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 8,
+      "section_id": "identity_founder_and_governance",
+      "title": "身份、创始人与治理",
+      "review_status": "pending_human_review",
+      "full_text": "待补问题：现有证据未提供证券代码、上市交易所或股票简称的页级披露，无法核验证券身份边界。\n事实：现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。\n研究判断（未审阅）：上述董事会由7名董事组成，其中3名独立董事、1名职工董事（N-565e479e96），意味着治理结构符合法规要求；但总经理职责由代行人员履行，表明继任安排仍需正式落地，取决于后续董事会决议。",
+      "citations": [
+        {
+          "evidence_id": "N-644437303f",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 26,
+          "quoted_anchor": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+        },
+        {
+          "evidence_id": "N-526b271efa",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 26,
+          "quoted_anchor": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+        },
+        {
+          "evidence_id": "N-95c7a5c47f",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 26,
+          "quoted_anchor": "现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+        },
+        {
+          "evidence_id": "N-d3f83002af",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 26,
+          "quoted_anchor": "现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+        },
+        {
+          "evidence_id": "N-bb6be4519b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 27,
+          "quoted_anchor": "现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+        },
+        {
+          "evidence_id": "N-cdc105327e",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 26,
+          "quoted_anchor": "现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+        },
+        {
+          "evidence_id": "N-565e479e96",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+          "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+          "page_number": 23,
+          "quoted_anchor": "公司董事会目前由 7名董事组成，其中 3名为独立董事，1 名为职工董事，董事会人员构成符合法律、法规的要求。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 一、公司治理相关情况说明"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    }
+  ],
+  "receipt_hash": "0a950cfe7f1022011a8bef8bd0289fd7cd383780fd59be934b68e9bb859024ce"
+}

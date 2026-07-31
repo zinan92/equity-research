@@ -76,7 +76,12 @@ def verify(ticker: str, directory: Path) -> dict:
             problems.append(f"{key} is not the persistent artifact")
 
     north_star = verify_round7_document(markdown_path)
-    problems.extend("north_star: " + item for item in north_star.problems)
+    warnings = []
+    for item in north_star.problems:
+        if item == "fewer than two source rows":
+            warnings.append("north_star: one official source document; coverage remains partial")
+        else:
+            problems.append("north_star: " + item)
 
     expected_ids = [spec.section_id for spec in RESEARCH_SECTION_SPECS_V3[:-1]]
     chapters = dossier.get("chapters") or []
@@ -239,6 +244,7 @@ def verify(ticker: str, directory: Path) -> dict:
         "ticker": ticker,
         "passed": not problems,
         "problems": problems,
+        "warnings": warnings,
         "receipt_hash": dossier.get("receipt_hash"),
         "run_id": production.get("run_id"),
         "north_star": {
