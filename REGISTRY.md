@@ -1,5 +1,31 @@
 # REGISTRY
 
+## 2026-07-31 · Round 7 refactor baseline (M3–M6)
+
+Now: the canonical output is the exact CATL Round 7 nine-chapter dossier, not
+the retired field/paragraph pipeline. CATL replay is verified at
+`round7-run:03ab66a964f60a6d47300c97` (model text 5,146 chars, chapter body
+8,993); Moutai replay is verified at
+`round7-run:10bc8c41a6fc28e01ce771b4` (model text 3,928 chars, chapter body
+6,467). Both have eight research chapters `PARTIAL / pending_judgment_review`,
+production record `FULL`, Tier B, and blocked `target_price`, `position_range`,
+`action`. Moutai has one official source document and an explicit partial
+coverage warning; no missing source was fabricated.
+
+The old 18-section/field statistics (including 4 FULL / 10 PARTIAL / 4
+MISSING) are **void after the authorized C1 chapter-set replacement** and must
+not be carried into #218. New baseline is the two exact-nine replay receipts
+above. The 20 page-level numeric audit assignments remain independent of report
+structure and retain their prior status; no audit or #218 credit is created by
+these dossiers.
+
+The obsolete E4 field generator, wiring, queue, compiler/verifier scripts and
+tests were removed in PR #653. The read API now exposes persistent dossiers at
+`/api/research/round7-dossier/{ticker}` without changing publication/Tier safety.
+
+Next: extend the same evidence-bound whole-chapter path to additional issuers;
+do not reintroduce field-level generation or use the old 18-section counts.
+
 ## 2026-07-31 · Round 7 exact-nine correction
 
 Now: issue #648 corrects the canonical C1 identity to the exact nine numbered
