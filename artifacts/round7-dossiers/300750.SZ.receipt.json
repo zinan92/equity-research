@@ -89,7 +89,8 @@
       ],
       "evidence_ids": [
         "N-24317e6536"
-      ]
+      ],
+      "content_hash": "1bc5288807b5d8206ea461f48f8b8ebcadc9a1c2ea814d6c96de5ce1776cc0c1"
     },
     {
       "section_id": "identity_founder_and_governance",
@@ -240,7 +241,8 @@
         "N-13367c65a1",
         "N-42ba166e9b",
         "N-799175726a"
-      ]
+      ],
+      "content_hash": "6fc53f4b56e0aa045cc6c19365762dd4055756e34b806c3327245cb2e8414b8a"
     },
     {
       "section_id": "technology_origin_and_development_history",
@@ -731,7 +733,8 @@
         "N-18683243fd",
         "N-abaaaa24de",
         "N-97c00d30ef"
-      ]
+      ],
+      "content_hash": "59774ec98da66f2ecac6380f8ecc9fd0cc5ecebf50bb0cd5006bf5e590432067"
     },
     {
       "section_id": "business_model_and_business_lines",
@@ -1072,7 +1075,8 @@
         "N-f4bf8b37ed",
         "N-2fd598bbed",
         "N-3b33338bda"
-      ]
+      ],
+      "content_hash": "29b93ba529afdd413a16f2114ffa09df656f310265283e74b2680c5e6b5dae59"
     },
     {
       "section_id": "financial_and_operating_time_series",
@@ -2418,7 +2422,8 @@
         "P-e7fdf48dde",
         "P-1d779ce111",
         "P-56b4d2aca5"
-      ]
+      ],
+      "content_hash": "880c634365b5650b16391d67416068f2544e540451a8ce34c02e670ea9fd975d"
     },
     {
       "section_id": "moat_evidence_chain",
@@ -3013,7 +3018,8 @@
         "N-e3d570c82e",
         "N-5c49d3810f",
         "N-5240dcd084"
-      ]
+      ],
+      "content_hash": "aa3702ddcd83a1041feafb44ef8e19e9718c6a7a5be8b2e4b4698eb4a357cd0e"
     },
     {
       "section_id": "risks_counter_thesis_and_triggers",
@@ -3563,7 +3569,8 @@
         "N-147fb320c0",
         "N-c47ec0ba41",
         "N-7b0f46edb3"
-      ]
+      ],
+      "content_hash": "edc0321fe758fc71bf4ce4e43f0e60dedb32e8021d268a03aceed6e50c7cba92"
     },
     {
       "section_id": "research_conclusion_and_open_questions",
@@ -3692,7 +3699,8 @@
         "N-ec31ce2389",
         "N-6e0cb09a4a",
         "N-626c5e0967"
-      ]
+      ],
+      "content_hash": "fe16d25a8588d13e07d53048cf3125cc38324b49cc9e82a5beb65142e5706cb7"
     }
   ],
   "production_record": {
@@ -3757,7 +3765,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "1bc5288807b5d8206ea461f48f8b8ebcadc9a1c2ea814d6c96de5ce1776cc0c1"
       }
     },
     {
@@ -3838,7 +3847,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "6fc53f4b56e0aa045cc6c19365762dd4055756e34b806c3327245cb2e8414b8a"
       }
     },
     {
@@ -3949,7 +3959,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "59774ec98da66f2ecac6380f8ecc9fd0cc5ecebf50bb0cd5006bf5e590432067"
       }
     },
     {
@@ -4000,7 +4011,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "29b93ba529afdd413a16f2114ffa09df656f310265283e74b2680c5e6b5dae59"
       }
     },
     {
@@ -4051,7 +4063,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "880c634365b5650b16391d67416068f2544e540451a8ce34c02e670ea9fd975d"
       }
     },
     {
@@ -4102,7 +4115,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "aa3702ddcd83a1041feafb44ef8e19e9718c6a7a5be8b2e4b4698eb4a357cd0e"
       }
     },
     {
@@ -4250,7 +4264,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "edc0321fe758fc71bf4ce4e43f0e60dedb32e8021d268a03aceed6e50c7cba92"
       }
     },
     {
@@ -4401,7 +4416,8 @@
         "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
         "verdict": "pass",
         "auditor_version": "round7-semantic-auditor-v2",
-        "problems": []
+        "problems": [],
+        "audited_chapter_hash": "fe16d25a8588d13e07d53048cf3125cc38324b49cc9e82a5beb65142e5706cb7"
       }
     }
   ],
@@ -5774,12 +5790,12 @@
     "source_documents": 11,
     "page_evidence_bindings": 42
   },
-  "content_hash": "de166753de20d68f8462c48356f6dde4fd86b3fa692cb2cc2dfaf3504e70bbf1",
   "artifacts": {
     "markdown_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/300750.SZ.md",
     "markdown_sha256": "c199f2052afded39db66c93ec40e3aeb72275755e0c259ddd2a34437f2af6612",
     "html_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/300750.SZ.html",
     "html_sha256": "dfeadc96383a04cd719e35c78df5ba7a4ea88e0a5b1d05b1f944bfc96ee859ed"
   },
-  "receipt_hash": "a4848db654be998a8475f30daaf4867ee9f806145986467584df087cd05df8cd"
+  "content_hash": "33cd21c0a0fd229d32317f362189fab2ee6994ae404f8936767bd93f3b04a540",
+  "receipt_hash": "e55d00b3f5877da77c5183b1929ff4072c6f584388b65d4cd31a844189de380e"
 }

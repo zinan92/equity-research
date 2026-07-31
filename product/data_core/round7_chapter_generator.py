@@ -93,6 +93,11 @@ INVESTMENT_EXECUTION_TERMS = (
     "止盈",
     "投资评级",
     "投资者",
+    "投入更多本金",
+    "多放些钱",
+    "更大本金参与",
+    "扩大敞口",
+    "增加本金",
     "推荐",
     "值得",
     "应当",
@@ -1390,6 +1395,7 @@ def audit_chapter_semantics(
         ),
         "auditor_version": SEMANTIC_AUDITOR_VERSION,
         "problems": problems,
+        "audited_chapter_hash": _hash(response),
     }
     return list(dict.fromkeys(problems)), receipt
 
@@ -1514,6 +1520,7 @@ def generate_chapter(
                         for evidence_id in block["evidence_ids"]
                     )
                 ),
+                "content_hash": _hash(response),
             }, receipts
         feedback = problems
     raise RuntimeError(
