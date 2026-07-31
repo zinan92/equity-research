@@ -1,5 +1,31 @@
 # REGISTRY
 
+## 2026-07-31 · Frozen research archive publicly readable
+
+Now: [`research.park-ai-intel.com`](https://research.park-ai-intel.com) serves
+the frozen archive as anonymous read-only from merge
+`d7cb781f67be6c0654497f537b03650bd9aa8ccb`, tag
+`public-readonly-archive-v1`, and content-addressed runtime release
+`preview_bf6198f4d8b65c96`. External acceptance verified eight current bound
+reports, 38 industry segments, 94 materials nodes and 489 company dossiers;
+13 protected GET routes and six anonymous write/auth routes remain denied, all
+eight mutable auth/billing table counts remained unchanged, and the Owner
+login/CSRF/logout regression passed.
+
+Boundary: this deployment is the separate frozen
+`release/public-readonly-archive-v1` line. It does not restore the archived
+third-party dataset to `main`, supersede canonical E1--E4 research, or make the
+2026-07-02 archive live/current evidence. Anonymous visitors receive no member
+or session identity; member, audit, feedback, billing, invite, mutation,
+export and download capabilities remain private. The prior private release
+`preview_b71f46fcd0dbc965` and a verified pre-deployment auth/runtime backup
+remain the rollback boundary.
+
+Next: keep this archive immutable unless a separately reviewed source and
+rights update is approved. New product research continues on canonical main;
+do not copy archive scores, grades, prose or dossiers back into its serving
+paths.
+
 ## 2026-07-31 · Round 7 refactor baseline (M3–M6)
 
 Now: the canonical output is the exact CATL Round 7 nine-chapter dossier, not
