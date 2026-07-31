@@ -2,6 +2,7 @@
   "ticker": "300750.SZ",
   "passed": true,
   "problems": [],
+  "warnings": [],
   "receipt_hash": "e55d00b3f5877da77c5183b1929ff4072c6f584388b65d4cd31a844189de380e",
   "run_id": "round7-run:03ab66a964f60a6d47300c97",
   "north_star": {
