@@ -253,6 +253,7 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 | `PARK_COOKIE_SECURE` | `0` | HTTPS 环境使用安全 Cookie |
 | `PARK_PRIVATE_PREVIEW` | `0` | 开启严格私有预览模式；同时要求安全 Cookie 和 loopback origin |
 | `PARK_MANUAL_PAID_PILOT` | `0` | 在私有预览中开启人工账单、派生 Paid 权益和研究包下载 |
+| `PARK_PUBLIC_READ_ONLY` | `0` | 仅在严格私有预览安全边界内开放匿名只读 allowlist；不会关闭服务端身份门 |
 | `PARK_PRIVATE_RESEARCH_PACK` | `product/runtime/private-preview-research-pack` | M7 内容寻址研究包目录；部署时必须指向 verified release |
 | `DEEPSEEK_API_KEY_FILE` | `~/.park-secrets/deepseek/api-key` | 仓库外 DeepSeek key 文件 |
 | `DEEPSEEK_MODEL` | `deepseek-v4-pro` | 写作模型 |

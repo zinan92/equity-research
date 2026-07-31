@@ -22,6 +22,7 @@ ALLOWED_ENV = {
     "PARK_COOKIE_SECURE",
     "PARK_PRIVATE_PREVIEW",
     "PARK_MANUAL_PAID_PILOT",
+    "PARK_PUBLIC_READ_ONLY",
 }
 
 
@@ -70,13 +71,17 @@ def load_env(path: Path) -> dict[str, str]:
         if key not in ALLOWED_ENV or not value:
             raise RuntimeError(f"unexpected private preview environment key: {key}")
         values[key] = value
-    missing = ALLOWED_ENV - values.keys()
+    optional = {"PARK_PUBLIC_READ_ONLY"}
+    missing = ALLOWED_ENV - optional - values.keys()
     if missing:
         raise RuntimeError("private preview environment is incomplete")
+    values.setdefault("PARK_PUBLIC_READ_ONLY", "0")
     if any(values[key] != "1" for key in (
         "PARK_AUTH_REQUIRED", "PARK_COOKIE_SECURE", "PARK_PRIVATE_PREVIEW", "PARK_MANUAL_PAID_PILOT",
     )):
         raise RuntimeError("private preview safety flags must all equal 1")
+    if values["PARK_PUBLIC_READ_ONLY"] not in {"0", "1"}:
+        raise RuntimeError("public read-only flag must equal 0 or 1")
     return values
 
 
@@ -97,6 +102,8 @@ def verify_packaged_release(runtime: Path, values: dict[str, str]) -> dict:
     identity = manifest.get("identity") if isinstance(manifest, dict) else None
     if manifest.get("schema_version") != "private-preview-release-v1" or not isinstance(identity, dict):
         raise RuntimeError("private preview release identity is invalid")
+    if values["PARK_PUBLIC_READ_ONLY"] == "1" and identity.get("public_read_only_contract") != "v1":
+        raise RuntimeError("private preview release is not public read-only capable")
     release_id = f"preview_{hashlib.sha256(canonical_json(identity).encode()).hexdigest()[:16]}"
     if manifest.get("release_id") != release_id or release.name != release_id:
         raise RuntimeError("private preview release directory does not match its identity")
@@ -116,6 +123,12 @@ def verify_packaged_release(runtime: Path, values: dict[str, str]) -> dict:
     code_hash = hashlib.sha256(canonical_json(code_files).encode()).hexdigest()
     if identity.get("product_code_hash") != code_hash:
         raise RuntimeError("private preview product code identity mismatch")
+    server_source = (product / "server.py").read_text(encoding="utf-8")
+    expected_public_contract = "v1" if (
+        "PARK_PUBLIC_READ_ONLY" in server_source and "def public_read_only_get(" in server_source
+    ) else None
+    if identity.get("public_read_only_contract") != expected_public_contract:
+        raise RuntimeError("private preview public read-only contract identity mismatch")
     reports = release / "canonical-reports"
     try:
         report_hashes = {
@@ -193,12 +206,20 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run the loopback-only Park Equity Research private preview")
     parser.add_argument("--env-file", type=Path, required=True)
     parser.add_argument("--port", type=int, default=8878)
+    parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args()
     if args.port < 1024 or args.port > 65535:
         raise SystemExit("invalid preview port")
     values = load_env(args.env_file)
     runtime = args.env_file.expanduser().resolve().parent
-    verify_packaged_release(runtime, values)
+    manifest = verify_packaged_release(runtime, values)
+    if args.verify_only:
+        print(json.dumps({
+            "status": "verified",
+            "release_id": manifest["release_id"],
+            "public_read_only": values["PARK_PUBLIC_READ_ONLY"] == "1",
+        }, ensure_ascii=False))
+        return
     release_product = runtime / "current" / "product"
     server = release_product / "server.py"
     if not server.is_file() or server.is_symlink():

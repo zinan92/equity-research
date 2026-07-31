@@ -903,3 +903,31 @@
 - 一次性访问码不是短信或邮箱 OTP：它是 Park 线下转交的单次 bearer secret；转发前必须按密码对待。
 - D3 在站内 vendored，避免第三方 CDN 泄露访问元数据或在网络受限时使图表失效。
 - 浏览器图表必须有键盘列表和来源详情；只有气泡 tooltip 会把复杂研究信息锁在鼠标交互里。
+
+## 2026-07-24 · E6-S1 私测身份、角色与审计边界
+
+- Decision：在既有 SQLite auth store 上增加向后兼容的 `access_role`（owner/editor/member）字段；只有 durable owner 可将非 owner 账户设为 editor/member，任何接口不能授予 owner。现有 tier/entitlement 继续决定具体 API 能力，不以 UI 或角色文案替代服务端授权。
+- Why：private beta 需要一个可审计的协作角色，但角色调整不能成为权限升级或重写既有认证系统的理由。
+- Evidence：`product/auth_store.py` 增加 schema migration、owner-only role mutation、bounded audit reader、SQLite append-only triggers 与敏感字段过滤；`product/tests/test_auth_audit.py` 和 `product/tests/test_private_beta_http.py` 覆盖 owner/editor/member、CSRF、登录限流、审计不可改写和 owner-only audit route。
+
+### Gotchas · E6-S1
+
+- `access_role` 是产品协作角色；现有持久 `role='owner'` 仍是唯一可管理成员的 authority，避免 editor 被错误当成管理者。
+- SQLite trigger 只能保护通过该数据库连接发生的 UPDATE/DELETE；备份恢复或宿主机文件访问是 E6-S2/E6-S3 的运行与备份边界，不能声称此处解决。
+- 审计 detail 的输入必须继续走 `_record()`；它会对 password/token/code/cookie 等键做 redaction，但不应把原始请求体、邀请码或会话值交给审计层。
+
+## 2026-07-31 · 冻结归档站公开只读发布
+
+- Decision：在冻结的 `release/public-readonly-archive-v1` 发布线上新增显式 `PARK_PUBLIC_READ_ONLY=1`。匿名访客只可读取 canonical 组合摘要、当前组合报告、产业图谱总览和单份公司档案；服务端仍保持 `PARK_AUTH_REQUIRED=1`，不创建匿名 member 或 session，也不把匿名访客投影成 Owner。
+- Why：Park 已确认将当前网站全部研究内容公开只读，但验证码移除不能顺带开放成员、审计、反馈、账单、邀请、写入、导出或批量下载能力；同时主线已经撤下归档产业数据，不能用主线部署覆盖线上 489 份档案。
+- Evidence：Issue #662 固定范围与法律合并边界；`product/server.py` 使用精确匿名 GET allowlist 与独立公开投影；部署环境和 release manifest 绑定公开能力；HTTP 验收覆盖 489/38/94、当前报告、零 auth DB 写入、Owner 登录回归及全部敏感路由拒绝。
+
+### Gotchas · 冻结归档站公开只读发布
+
+- 绝不能通过 `PARK_AUTH_REQUIRED=0` 实现公开；旧本地模式会生成拥有管理、批准和下载权限的 `local-owner`。
+- “页面隐藏按钮”不是权限控制；匿名 POST、成员/审计/账单/反馈读取和两类下载必须由服务端继续返回 401/404。
+- 公开站只保留 Owner 登录；旧 preview/member 凭据即使密码正确也不创建 session，避免“公开只读”被旧会员反馈写入能力绕开。
+- 归档产业评分、三高坐标和公司档案只是来源快照，不是实时数据，也未通过当前产品证据门；公开页保持来源、哈希、归档日期和研究边界，并发送 `noindex/noarchive`。
+- 这是独立冻结发布线，不把已被主线治理决策撤下的 archive 数据恢复到 `main`；生产事实需在发布后另行登记。
+- 首次开启公开模式必须先运行 `install_private_preview.py upgrade-runner`：候选 runner 会在旧 env/旧 release 上做只读 preflight，原子替换后重启应用并确认匿名仍停在身份门；失败会恢复旧 runner。公开 prepare 把 receipt、runtime、runner 哈希和当前私有模式作为机器闸，不能靠人工顺序绕过，避免旧 runner 遇到新字段时的重启窗口。
+- 本次涉及第三方归档内容公开，按法律层红线只能由 Park 本人合并；bot 在合并前不得部署。

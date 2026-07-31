@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
 import os
 from pathlib import Path
@@ -118,6 +119,129 @@ def ensure_running(domain: str, label: str, path: Path) -> None:
     raise RuntimeError(f"launchd service did not reach running state: {label}")
 
 
+def preflight_runner(python: Path, runner: Path, env_file: Path) -> dict:
+    result = subprocess.run(
+        [str(python), str(runner), "--env-file", str(env_file), "--verify-only"],
+        check=False, text=True, capture_output=True, timeout=30,
+    )
+    if result.returncode != 0:
+        raise RuntimeError("candidate runner cannot verify the active private release")
+    try:
+        receipt = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("candidate runner returned an invalid verification receipt") from exc
+    if receipt.get("status") != "verified" or not isinstance(receipt.get("release_id"), str):
+        raise RuntimeError("candidate runner verification receipt is incomplete")
+    return receipt
+
+
+def installed_app(runtime: Path) -> tuple[Path, Path, int]:
+    plist_path = Path.home() / "Library" / "LaunchAgents" / f"{APP_LABEL}.plist"
+    if not plist_path.is_file() or plist_path.is_symlink():
+        raise RuntimeError("private preview app launch agent is unavailable or unsafe")
+    try:
+        payload = plistlib.loads(plist_path.read_bytes())
+        arguments = payload["ProgramArguments"]
+        runner = runtime / "bin" / "run_private_preview.py"
+        env_file = runtime / "preview.env"
+        if (
+            payload.get("Label") != APP_LABEL
+            or len(arguments) < 6
+            or Path(arguments[1]).resolve() != runner
+            or arguments[2:4] != ["--env-file", str(env_file)]
+            or arguments[4] != "--port"
+        ):
+            raise ValueError
+        python = Path(arguments[0])
+        port = int(arguments[5])
+    except (KeyError, TypeError, ValueError, IndexError, plistlib.InvalidFileException) as exc:
+        raise RuntimeError("installed private preview app contract is invalid") from exc
+    if not python.is_file() or port < 1024 or port > 65535:
+        raise RuntimeError("installed private preview runtime is invalid")
+    return plist_path, python, port
+
+
+def verify_private_gate(port: int) -> dict:
+    last_error: Exception | None = None
+    for _ in range(20):
+        try:
+            connection = http.client.HTTPConnection("127.0.0.1", port, timeout=2)
+            connection.request("GET", "/api/auth/me")
+            response = connection.getresponse()
+            raw = response.read()
+            connection.close()
+            payload = json.loads(raw)
+            if (
+                response.status == 200
+                and payload.get("auth_required") is True
+                and payload.get("member") is None
+                and payload.get("public_read_only") is not True
+            ):
+                return payload
+        except (OSError, json.JSONDecodeError) as exc:
+            last_error = exc
+        time.sleep(0.5)
+    raise RuntimeError("private preview did not return to the authenticated gate") from last_error
+
+
+def upgrade_runner(args: argparse.Namespace) -> dict:
+    """Upgrade the external runner while the active site is still fail-closed."""
+    runtime = args.runtime.expanduser().resolve()
+    env_file = runtime / "preview.env"
+    current_manifest = runtime / "current" / "manifest.json"
+    runner = runtime / "bin" / "run_private_preview.py"
+    if not env_file.is_file() or not current_manifest.is_file():
+        raise RuntimeError("an active private preview release is required before runner upgrade")
+    if not runner.is_file() or runner.is_symlink():
+        raise RuntimeError("installed private preview runner is unavailable or unsafe")
+    plist_path, installed_python, port = installed_app(runtime)
+    python = Path(args.python).expanduser().resolve() if args.python else installed_python
+    if not python.is_file():
+        raise RuntimeError("python binary is unavailable")
+
+    candidate = runner.with_name(f".{runner.name}-candidate-{os.getpid()}")
+    write_private(candidate, RUNNER_SOURCE.read_bytes())
+    os.chmod(candidate, 0o700)
+    try:
+        preflight = preflight_runner(python, candidate, env_file)
+        if preflight.get("public_read_only") is not False:
+            raise RuntimeError("runner must be upgraded before public read-only activation")
+        old_runner = runner.read_bytes()
+        previous_hash = hashlib.sha256(old_runner).hexdigest()
+        new_hash = sha256(candidate)
+        os.replace(candidate, runner)
+        domain = f"gui/{os.getuid()}"
+        try:
+            launchctl("kickstart", "-k", f"{domain}/{APP_LABEL}")
+            ensure_running(domain, APP_LABEL, plist_path)
+            verify_private_gate(port)
+            receipt = {
+                "schema_version": "private-preview-runner-upgrade-v1",
+                "status": "upgraded",
+                "release_id": preflight["release_id"],
+                "public_read_only": False,
+                "previous_runner_sha256": previous_hash,
+                "runtime_runner_sha256": new_hash,
+                "label": APP_LABEL,
+                "port": port,
+                "runtime": str(runtime),
+            }
+            write_private(
+                runtime / "runner-upgrade-receipt.json",
+                json.dumps(receipt, ensure_ascii=False, indent=2).encode(),
+            )
+            return receipt
+        except (OSError, RuntimeError, subprocess.SubprocessError):
+            write_private(runner, old_runner)
+            os.chmod(runner, 0o700)
+            launchctl("kickstart", "-k", f"{domain}/{APP_LABEL}", check=False)
+            ensure_running(domain, APP_LABEL, plist_path)
+            verify_private_gate(port)
+            raise
+    finally:
+        candidate.unlink(missing_ok=True)
+
+
 def install(args: argparse.Namespace) -> dict:
     runtime = args.runtime.expanduser().resolve()
     if not (runtime / "current" / "manifest.json").is_file() or not (runtime / "preview.env").is_file():
@@ -191,10 +315,18 @@ def main() -> None:
     setup.add_argument("--port", type=int, default=8878)
     setup.add_argument("--python", type=Path)
     setup.add_argument("--cloudflared", type=Path)
+    upgrade = subcommands.add_parser("upgrade-runner")
+    upgrade.add_argument("--runtime", type=Path, default=DEFAULT_RUNTIME)
+    upgrade.add_argument("--python", type=Path)
     subcommands.add_parser("uninstall")
     args = parser.parse_args()
     try:
-        result = install(args) if args.command == "install" else uninstall()
+        if args.command == "install":
+            result = install(args)
+        elif args.command == "upgrade-runner":
+            result = upgrade_runner(args)
+        else:
+            result = uninstall()
     except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
         raise SystemExit(f"private preview launchd install failed: {exc}") from exc
     print(json.dumps(result, ensure_ascii=False, indent=2))

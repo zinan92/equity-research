@@ -39,16 +39,21 @@ async function fetchJson(url, options = {}) {
 }
 
 function showAuth(mode = "code") {
-  const code = mode === "code";
+  const publicReadOnly = Boolean(state.auth?.public_read_only);
+  const code = !publicReadOnly && mode === "code";
   $("#auth-gate").hidden = false;
   $("#access-code-form").hidden = !code;
   $("#login-form").hidden = code;
+  $("#auth-code-tab").hidden = publicReadOnly;
+  $("#auth-public-close").hidden = !publicReadOnly;
   $("#auth-code-tab").classList.toggle("is-active", code);
   $("#auth-login-tab").classList.toggle("is-active", !code);
   $("#auth-code-tab").setAttribute("aria-selected", String(code));
   $("#auth-login-tab").setAttribute("aria-selected", String(!code));
-  $("#auth-title").textContent = code ? "输入一次性访问码" : "成员登录";
-  $(".auth-intro").textContent = code
+  $("#auth-title").textContent = code ? "输入一次性访问码" : (publicReadOnly ? "Owner 登录" : "成员登录");
+  $(".auth-intro").textContent = publicReadOnly
+    ? "研究内容已公开只读。此入口只用于 Owner 管理，访客无需登录。"
+    : code
     ? "访问码仅可使用一次。进入后可查看归档产业图谱与研究面板；内容不是实时行情，也不构成投资建议。"
     : "Owner 与已有研究成员使用邮箱和密码登录。新访客请使用 Park 提供的一次性访问码。";
   $("#auth-error").textContent = "";
@@ -65,9 +70,12 @@ function applyAuth(payload) {
   document.body.style.overflow = "";
   const member = payload.member || { display_name: "Park", tier: "local" };
   $("#member-name").textContent = member.display_name;
-  $("#member-tier").textContent = ({ owner: "Owner", paid: "付费会员", member: "研究会员", preview: "预览会员", local: "本地模式" })[member.tier] || member.tier;
+  $("#member-tier").textContent = ({ owner: "Owner", paid: "付费会员", member: "研究会员", preview: "预览会员", public: "公开只读", local: "本地模式" })[member.tier] || member.tier;
   $("#member-chip").querySelector(".avatar").textContent = member.display_name.slice(0, 1).toUpperCase();
-  $("#logout-button").hidden = !payload.auth_required;
+  $("#logout-button").hidden = !payload.auth_required && !payload.public_read_only;
+  $("#logout-button").textContent = payload.public_read_only && !payload.authenticated ? "Owner 登录" : "退出";
+  $("#feedback-panel").hidden = Boolean(payload.public_read_only && !payload.authenticated);
+  $("#public-rights-link").hidden = !payload.public_read_only;
   const entitlements = member.entitlements || ["approve_publication", "manage_members"];
   $("#refresh-button").hidden = !entitlements.includes("manage_members");
   if (payload.private_preview) $("#refresh-button").hidden = true;
@@ -235,8 +243,11 @@ function renderPrivatePreview(payload) {
 function renderBillingPilot(payload, billing) {
   const enabled = Boolean(payload.paid_pilot?.enabled);
   $("#billing-pilot-panel").hidden = !enabled;
-  $("#preview-mode-label").textContent = enabled ? "PRIVATE PREVIEW · MANUAL PAID PILOT" : "PRIVATE PREVIEW";
-  $("#preview-mode-copy").textContent = enabled
+  const publicReadOnly = Boolean(payload.preview?.public_read_only);
+  $("#preview-mode-label").textContent = publicReadOnly ? "PUBLIC READ-ONLY ARCHIVE" : (enabled ? "PRIVATE PREVIEW · MANUAL PAID PILOT" : "PRIVATE PREVIEW");
+  $("#preview-mode-copy").textContent = publicReadOnly
+    ? "无需验证码即可阅读。产业图谱与 489 份公司档案来自归档快照，不是实时行情，也未通过本产品的独立证据门；页面不提供写入、反馈、账单或批量下载。"
+    : enabled
     ? "仅供受邀成员验证产品。平台自身不收款、不提供在线 checkout；外部付款由 Park 人工核验。模型仓位不是账户持仓，不连接券商。"
     : "仅供受邀成员验证产品。模型仓位不是账户持仓，不收款，不连接券商。";
   if (!enabled) return;
@@ -1329,12 +1340,21 @@ $("#billing-control-form").addEventListener("submit", async (event) => {
   }
 });
 $("#logout-button").addEventListener("click", async () => {
+  if (state.auth?.public_read_only && !state.auth.authenticated) {
+    showAuth("login");
+    return;
+  }
   if (!state.auth?.auth_required || !state.auth.member) return;
   try { await fetchJson("/api/auth/logout", { method: "POST" }); } catch (_) { /* The local session is cleared even if the response is lost. */ }
-  state.auth = { auth_required: true, member: null, csrf_token: null };
+  const auth = await fetchJson("/api/auth/me");
+  applyAuth(auth);
   state.data = null;
-  $("#app").hidden = true;
-  showAuth("code");
+  await loadDashboard();
+});
+$("#auth-public-close").addEventListener("click", () => {
+  $("#auth-gate").hidden = true;
+  document.body.style.overflow = "";
+  $("#auth-error").textContent = "";
 });
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
