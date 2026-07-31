@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import http.client
 import json
 import os
@@ -25,11 +26,13 @@ if str(PRODUCT / "deployment") not in sys.path:
 from auth_store import create_invite, create_owner, redeem_invite  # noqa: E402
 from data_store import initialize, stock_payload  # noqa: E402
 from feedback_store import initialize_feedback  # noqa: E402
-from install_private_preview import app_plist  # noqa: E402
+from install_private_preview import app_plist, preflight_runner  # noqa: E402
 from run_private_preview import load_env, verify_packaged_release  # noqa: E402
 from portfolio_allocation import digest, portfolio_diff  # noqa: E402
 from portfolio_ledger import PortfolioLedger, build_ledger_history  # noqa: E402
-from prepare_private_preview import PreviewReleaseError, point_current, prepare, sanitize_auth_store  # noqa: E402
+from prepare_private_preview import (  # noqa: E402
+    PreviewReleaseError, activate_release, point_current, prepare, sanitize_auth_store,
+)
 from research_reports import _baseline_report  # noqa: E402
 from tests import test_canonical_portfolio_v1 as canonical_fixture  # noqa: E402
 
@@ -231,6 +234,200 @@ class PrivatePreviewV1Test(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 verify_packaged_release(runtime, values)
 
+    def test_public_read_only_release_is_anonymous_readable_without_auth_mutation(self) -> None:
+        with socket.socket() as sock:
+            sock.bind(("127.0.0.1", 0))
+            public_port = sock.getsockname()[1]
+        env = dict(os.environ)
+        env.update({
+            "PARK_DASHBOARD_DB": str(self.db),
+            "PARK_AUTH_DB": str(self.auth_db),
+            "PARK_CANONICAL_PORTFOLIO_ROOT": str(self.state),
+            "PARK_CANONICAL_PORTFOLIO_SOURCE_DB": str(self.db),
+            "PARK_PRIVATE_REPORT_ROOT": str(self.reports),
+            "PARK_AUTH_REQUIRED": "1",
+            "PARK_COOKIE_SECURE": "1",
+            "PARK_PRIVATE_PREVIEW": "1",
+            "PARK_PUBLIC_READ_ONLY": "1",
+            "PARK_MANUAL_PAID_PILOT": "1",
+        })
+        server = subprocess.Popen(
+            [sys.executable, str(PRODUCT / "server.py"), "--host", "127.0.0.1", "--port", str(public_port)],
+            cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+
+        def request(method: str, path: str, payload: dict | None = None, *, cookie: str | None = None):
+            connection = http.client.HTTPConnection("127.0.0.1", public_port, timeout=8)
+            headers = {"Content-Type": "application/json"} if payload is not None else {}
+            if cookie:
+                headers["Cookie"] = cookie
+            connection.request(method, path, body=json.dumps(payload).encode() if payload is not None else None, headers=headers)
+            response = connection.getresponse()
+            raw = response.read()
+            value = json.loads(raw) if response.getheader("Content-Type", "").startswith("application/json") else raw
+            result = response.status, value, dict(response.getheaders())
+            connection.close()
+            return result
+
+        try:
+            deadline = time.monotonic() + 15
+            while time.monotonic() < deadline:
+                if server.poll() is not None:
+                    raise RuntimeError("public read-only server exited during startup")
+                try:
+                    if request("GET", "/api/health")[0] == 200:
+                        break
+                except OSError:
+                    time.sleep(0.05)
+            else:
+                raise RuntimeError("public read-only server did not start")
+
+            with sqlite3.connect(self.auth_db) as connection:
+                before = {
+                    table: connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+                    for table in (
+                        "members", "invite_codes", "member_sessions", "member_events", "member_feedback",
+                        "billing_events", "billing_settings", "billing_control_events",
+                    )
+                }
+            status, auth, headers = request("GET", "/api/auth/me")
+            self.assertEqual(status, 200)
+            self.assertTrue(auth["auth_required"])
+            self.assertTrue(auth["public_read_only"])
+            self.assertFalse(auth["authenticated"])
+            self.assertEqual(auth["member"]["role"], "public_reader")
+            self.assertNotIn("id", auth["member"])
+            self.assertNotIn("email", auth["member"])
+            self.assertIn("noindex", headers["X-Robots-Tag"])
+
+            status, preview, _ = request("GET", "/api/private-preview")
+            self.assertEqual(status, 200)
+            self.assertTrue(preview["preview"]["public_read_only"])
+            self.assertFalse(preview["preview"]["feedback_enabled"])
+            self.assertNotIn("billing", preview)
+            self.assertNotIn("research_pack", preview)
+            self.assertFalse(preview["paid_pilot"]["enabled"])
+
+            status, industry, _ = request("GET", "/api/industry-intelligence")
+            self.assertEqual(status, 200)
+            self.assertEqual(industry["summary"]["dossier_count"], 489)
+            self.assertEqual(len(industry["three_high_map"]["nodes"]), 38)
+            self.assertEqual(len(industry["materials_map"]["nodes"]), 94)
+            status, dossier, _ = request("GET", "/api/industry-intelligence/dossiers/300223")
+            self.assertEqual((status, dossier["dossier"]["code"]), (200, "300223"))
+            ticker = self.current["positions"][0]["ticker"]
+            status, report, _ = request("GET", f"/api/reports/{ticker}")
+            self.assertEqual((status, report["ticker"]), (200, ticker))
+            for path in (
+                f"/api/reports/{ticker}/extra",
+                "/api/industry-intelligence/dossiers/300223/extra",
+            ):
+                status, denied, _ = request("GET", path)
+                self.assertEqual((status, denied["error"]), (401, "authentication_required"), path)
+
+            for path in (
+                "/api/members", "/api/members/audit", "/api/feedback", "/api/feedback/export",
+                "/api/billing", "/api/billing/export", "/api/billing/settings", "/api/billing/me",
+                "/api/dashboard", "/api/canonical/portfolio", "/api/research/batches/latest",
+            ):
+                status, denied, _ = request("GET", path)
+                self.assertEqual((status, denied["error"]), (401, "authentication_required"), path)
+            for path, body in (
+                ("/api/auth/access-code", {"code": "unused"}),
+                ("/api/auth/signup", {"invite_code": "unused"}),
+            ):
+                status, denied, _ = request("POST", path, body)
+                self.assertEqual((status, denied["error"]), (404, "public_read_only_auth_route_disabled"), path)
+            for path in ("/api/feedback", "/api/invites", "/api/refresh", "/api/billing/payment"):
+                status, denied, _ = request("POST", path, {})
+                self.assertEqual((status, denied["error"]), (401, "authentication_required"), path)
+            for path in (
+                "/downloads/private-preview/research-pack.zip",
+                "/downloads/publication-packs/fake/fake.zip",
+            ):
+                status, denied, _ = request("GET", path)
+                self.assertEqual((status, denied["error"]), (401, "authentication_required"), path)
+
+            with sqlite3.connect(self.auth_db) as connection:
+                after = {
+                    table: connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+                    for table in (
+                        "members", "invite_codes", "member_sessions", "member_events", "member_feedback",
+                        "billing_events", "billing_settings", "billing_control_events",
+                    )
+                }
+            self.assertEqual(after, before)
+
+            status, denied_member, denied_headers = request(
+                "POST", "/api/auth/login", {"email": "member@example.com", "password": "member-password-2026"},
+            )
+            self.assertEqual((status, denied_member["error"]), (401, "invalid_credentials"))
+            self.assertNotIn("Set-Cookie", denied_headers)
+            status, owner, owner_headers = request(
+                "POST", "/api/auth/login", {"email": "park@example.com", "password": "owner-password-2026"},
+            )
+            self.assertEqual(status, 200)
+            self.assertTrue(owner["authenticated"])
+            owner_cookie = owner_headers["Set-Cookie"].split(";", 1)[0]
+            self.assertEqual(request("GET", "/api/members", cookie=owner_cookie)[0], 200)
+        finally:
+            server.terminate()
+            server.wait(timeout=5)
+
+    def test_packaged_runner_binds_public_read_only_flag_to_capable_release(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            runtime = Path(temporary) / "runtime"
+            runtime.mkdir()
+            deep = Path(temporary) / "deep"
+            deep.mkdir()
+            private_receipt = prepare(self.db, self.state, deep, runtime)
+            runner_source = PRODUCT / "deployment" / "run_private_preview.py"
+            runner = runtime / "bin" / "run_private_preview.py"
+            runner.parent.mkdir()
+            runner.write_bytes(runner_source.read_bytes())
+            runner_hash = hashlib.sha256(runner.read_bytes()).hexdigest()
+            with self.assertRaisesRegex(PreviewReleaseError, "runner upgrade receipt"):
+                prepare(self.db, self.state, deep, runtime, public_read_only=True)
+            with self.assertRaisesRegex(PreviewReleaseError, "runner upgrade receipt"):
+                activate_release(runtime, private_receipt["release_id"], public_read_only=True)
+            (runtime / "runner-upgrade-receipt.json").write_text(json.dumps({
+                "schema_version": "private-preview-runner-upgrade-v1",
+                "status": "upgraded",
+                "release_id": private_receipt["release_id"],
+                "public_read_only": False,
+                "runtime_runner_sha256": runner_hash,
+                "runtime": str(runtime),
+            }), encoding="utf-8")
+            receipt = prepare(self.db, self.state, deep, runtime, public_read_only=True)
+            values = load_env(runtime / "preview.env")
+            self.assertTrue(receipt["public_read_only"])
+            self.assertEqual(values["PARK_PUBLIC_READ_ONLY"], "1")
+            manifest = verify_packaged_release(runtime, values)
+            self.assertTrue(manifest["truth_boundary"]["public_read_only_capable"])
+            self.assertEqual(manifest["identity"]["public_read_only_contract"], "v1")
+            env_path = runtime / "preview.env"
+            with self.assertRaisesRegex(PreviewReleaseError, "current site to remain privately gated"):
+                prepare(self.db, self.state, deep, runtime, public_read_only=True)
+            legacy_env = "\n".join(
+                line for line in env_path.read_text(encoding="utf-8").splitlines()
+                if not line.startswith("PARK_PUBLIC_READ_ONLY=")
+            ) + "\n"
+            env_path.write_text(legacy_env, encoding="utf-8")
+            legacy_values = load_env(env_path)
+            self.assertEqual(legacy_values["PARK_PUBLIC_READ_ONLY"], "0")
+            self.assertEqual(verify_packaged_release(runtime, legacy_values)["release_id"], receipt["release_id"])
+            candidate = runtime / "candidate-runner.py"
+            candidate.write_bytes((PRODUCT / "deployment" / "run_private_preview.py").read_bytes())
+            preflight = preflight_runner(Path(sys.executable), candidate, env_path)
+            self.assertEqual(preflight, {
+                "status": "verified",
+                "release_id": receipt["release_id"],
+                "public_read_only": False,
+            })
+            runner.write_text("# tampered\n", encoding="utf-8")
+            with self.assertRaisesRegex(PreviewReleaseError, "does not match the candidate release"):
+                prepare(self.db, self.state, deep, runtime, public_read_only=True)
+
     def test_private_preview_startup_rejects_shared_auth_and_research_database(self) -> None:
         env = dict(os.environ)
         env.update({
@@ -254,6 +451,17 @@ class PrivatePreviewV1Test(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("outside packaged product code", result.stderr)
         self.assertFalse((ROOT / "unsafe-private-auth.db").exists())
+        env.update({
+            "PARK_AUTH_DB": str(self.auth_db),
+            "PARK_PRIVATE_PREVIEW": "0",
+            "PARK_PUBLIC_READ_ONLY": "1",
+        })
+        result = subprocess.run(
+            [sys.executable, str(PRODUCT / "server.py"), "--host", "127.0.0.1", "--port", "18879"],
+            cwd=ROOT, env=env, text=True, capture_output=True, timeout=15, check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("public read-only mode requires", result.stderr)
 
     def test_preview_receives_exact_canonical_first_screen_but_not_reports(self) -> None:
         auth, cookie, set_cookie = self.login("preview@example.com", "preview-password-2026")

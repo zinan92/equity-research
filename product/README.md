@@ -167,6 +167,10 @@ PARK_AUTH_REQUIRED=1 PARK_COOKIE_SECURE=0 python3 product/server.py --host 127.0
 
 `preview` 只看首页，`member` 可看公司级研报，派生 `paid` 增加当前 8 股研究包下载，`owner` 可管理成员、账单和反馈。私有预览不开放刷新、批准或发布路由，即使 owner 也不能修改封装后的研究 release。上述命令只用于本机 HTTP；公网必须使用 HTTPS，并改为 `PARK_COOKIE_SECURE=1`。
 
+冻结归档站可在保持 `PARK_AUTH_REQUIRED=1` 的前提下设置 `PARK_PUBLIC_READ_ONLY=1`。匿名访客仅能读取 `/api/private-preview`、当前 `/api/reports/{ticker}`、产业总览和单份公司档案；公开模式只接受 Owner 登录，普通成员不会获得 session。成员、审计、反馈、账单、邀请、写入、导出及研究包下载仍要求 Owner 会话和服务端权限。公开模式只允许与 `PARK_PRIVATE_PREVIEW=1` 同时启用。
+
+首次升级现有私有站时，必须先从待发布 commit 运行 `python3 product/deployment/install_private_preview.py upgrade-runner`。该命令用新 runner 验证当前旧 release 和旧 env，原子替换 runner 后只重启应用服务，并确认匿名仍停在身份门；成功生成 `runner-upgrade-receipt.json` 后，才可运行带 `--public-read-only` 的 prepare 命令。prepare 会强制核对 receipt、runtime 路径、runner 内容哈希及当前私有模式，任一不符都会在 release/env 变更前失败；不要先写入公开 env。
+
 ## API
 
 只读：

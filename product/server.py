@@ -65,6 +65,7 @@ LOGIN_IP_ATTEMPTS: dict[str, list[float]] = {}
 AUTH_REQUIRED = os.getenv("PARK_AUTH_REQUIRED", "0") == "1"
 COOKIE_SECURE = os.getenv("PARK_COOKIE_SECURE", "0") == "1"
 PRIVATE_PREVIEW = os.getenv("PARK_PRIVATE_PREVIEW", "0") == "1"
+PUBLIC_READ_ONLY = os.getenv("PARK_PUBLIC_READ_ONLY", "0") == "1"
 MANUAL_PAID_PILOT = PRIVATE_PREVIEW and os.getenv("PARK_MANUAL_PAID_PILOT", "0") == "1"
 PRIVATE_PREVIEW_SCHEMA_VERSION = "private-preview-v1"
 SESSION_COOKIE = "__Host-park_session" if COOKIE_SECURE else "park_session"
@@ -237,7 +238,20 @@ def private_preview_get_entitlement(route: str) -> str | None:
     return None
 
 
-def canonical_private_preview_payload() -> dict:
+def public_read_only_get(route: str) -> bool:
+    """Allow only the anonymous product pages approved for the public archive."""
+    if route in {"/api/private-preview", "/api/industry-intelligence"}:
+        return True
+    if route.startswith("/api/reports/"):
+        ticker = unquote(route.removeprefix("/api/reports/"))
+        return bool(ticker) and "/" not in ticker and len(ticker) <= 24
+    if route.startswith("/api/industry-intelligence/dossiers/"):
+        code = unquote(route.removeprefix("/api/industry-intelligence/dossiers/"))
+        return bool(code) and "/" not in code and len(code) <= 24
+    return False
+
+
+def canonical_private_preview_payload(*, include_research_pack: bool = True) -> dict:
     current = load_portfolio_state()
     history = load_portfolio_history()
     root = portfolio_state_root()
@@ -285,8 +299,30 @@ def canonical_private_preview_payload() -> dict:
         "ledger": ledger,
         "ledger_history": ledger_history,
     }
-    if MANUAL_PAID_PILOT:
+    if MANUAL_PAID_PILOT and include_research_pack:
         payload["research_pack"] = private_research_pack_info(current)
+    return payload
+
+
+def public_private_preview_payload() -> dict:
+    """Project the canonical preview without member, billing, feedback, or download surfaces."""
+    payload = canonical_private_preview_payload(include_research_pack=False)
+    payload.pop("billing", None)
+    payload.pop("research_pack", None)
+    payload["preview"].update({
+        "label": "PUBLIC READ-ONLY ARCHIVE",
+        "feedback_enabled": False,
+        "public_read_only": True,
+    })
+    payload["paid_pilot"] = {
+        "enabled": False,
+        "contract_version": None,
+        "fulfillment_mode": None,
+        "online_checkout": False,
+        "payment_provider_connected": False,
+        "paid_pilot_ready": False,
+        "entitlements_derived_from_billing": False,
+    }
     return payload
 
 
@@ -386,7 +422,15 @@ class DashboardHandler(BaseHTTPRequestHandler):
         return "; ".join(parts)
 
     def _auth_payload(self, member: dict | None, csrf_token: str | None = None) -> dict:
+        authenticated = member is not None
         member = effective_member(member) if AUTH_REQUIRED and MANUAL_PAID_PILOT and member else member
+        if PUBLIC_READ_ONLY and member is None:
+            member = {
+                "display_name": "公开访客",
+                "role": "public_reader",
+                "tier": "public",
+                "entitlements": ["dashboard", "deep_reports"],
+            }
         public = None if member is None else {
             key: member[key] for key in ("id", "email", "display_name", "role", "tier", "entitlements", "billing")
             if key in member
@@ -395,6 +439,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
             "auth_required": AUTH_REQUIRED,
             "private_preview": PRIVATE_PREVIEW,
             "manual_paid_pilot": MANUAL_PAID_PILOT,
+            "public_read_only": PUBLIC_READ_ONLY,
+            "authenticated": authenticated,
             "member": public,
             "csrf_token": csrf_token,
         }
@@ -404,14 +450,17 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if route == "/api/health":
             if PRIVATE_PREVIEW:
                 try:
-                    canonical_private_preview_payload()
+                    public_private_preview_payload() if PUBLIC_READ_ONLY else canonical_private_preview_payload()
                 except (CanonicalPortfolioError, CanonicalPublicationError, PortfolioLedgerError):
-                    self._json(
-                        {"status": "blocked", "product": "park-equity-research-preview", "auth_required": True},
-                        HTTPStatus.SERVICE_UNAVAILABLE,
-                    )
+                    health = {"status": "blocked", "product": "park-equity-research-preview", "auth_required": True}
+                    if PUBLIC_READ_ONLY:
+                        health["public_read_only"] = True
+                    self._json(health, HTTPStatus.SERVICE_UNAVAILABLE)
                 else:
-                    self._json({"status": "ok", "product": "park-equity-research-preview", "auth_required": True})
+                    health = {"status": "ok", "product": "park-equity-research-preview", "auth_required": True}
+                    if PUBLIC_READ_ONLY:
+                        health["public_read_only"] = True
+                    self._json(health)
                 return
             payload = dashboard_payload()
             errors = validate_invariants(payload)
@@ -454,15 +503,15 @@ class DashboardHandler(BaseHTTPRequestHandler):
                         return
                     self._json({"error": "private_preview_route_unavailable"}, HTTPStatus.NOT_FOUND)
                     return
-                if self._authorize(entitlement) is None:
+                if not (PUBLIC_READ_ONLY and public_read_only_get(route)) and self._authorize(entitlement) is None:
                     return
             elif self._authorize(route_entitlement(route)) is None:
                 return
         if route == "/api/private-preview":
             try:
-                payload = canonical_private_preview_payload()
-                if MANUAL_PAID_PILOT:
-                    member = self._member()
+                member = self._member()
+                payload = public_private_preview_payload() if PUBLIC_READ_ONLY and member is None else canonical_private_preview_payload()
+                if MANUAL_PAID_PILOT and member is not None:
                     payload["billing"] = member.get("billing") or billing_status(member["id"])
                 self._json(payload)
             except (BillingError, CanonicalPortfolioError, CanonicalPublicationError, PortfolioLedgerError) as exc:
@@ -667,6 +716,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802
         route = urlparse(self.path).path
         if route in {"/api/auth/access-code", "/api/auth/login", "/api/auth/signup"}:
+            if PUBLIC_READ_ONLY and route != "/api/auth/login":
+                self._json({"error": "public_read_only_auth_route_disabled"}, HTTPStatus.NOT_FOUND)
+                return
             self._auth_entry(route)
             return
         member = self._authorize("dashboard")
@@ -857,7 +909,10 @@ class DashboardHandler(BaseHTTPRequestHandler):
             elif route.endswith("/signup"):
                 member = redeem_invite(body.get("invite_code", ""), body.get("email", ""), body.get("password", ""), body.get("display_name", ""))
             else:
-                member = authenticate(body.get("email", ""), body.get("password", ""))
+                member = authenticate(
+                    body.get("email", ""), body.get("password", ""),
+                    required_role="owner" if PUBLIC_READ_ONLY else None,
+                )
                 if not member:
                     self._json({"error": "invalid_credentials"}, HTTPStatus.UNAUTHORIZED)
                     return
@@ -955,6 +1010,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+        if PUBLIC_READ_ONLY:
+            self.send_header("X-Robots-Tag", "noindex, nofollow, noarchive")
         if COOKIE_SECURE:
             self.send_header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         self.send_header(
@@ -975,6 +1032,8 @@ def main() -> None:
     args = parser.parse_args()
     if PRIVATE_PREVIEW and (not AUTH_REQUIRED or not COOKIE_SECURE):
         raise RuntimeError("private preview requires PARK_AUTH_REQUIRED=1 and PARK_COOKIE_SECURE=1")
+    if PUBLIC_READ_ONLY and not PRIVATE_PREVIEW:
+        raise RuntimeError("public read-only mode requires PARK_PRIVATE_PREVIEW=1")
     if PRIVATE_PREVIEW and args.host not in {"127.0.0.1", "::1", "localhost"}:
         raise RuntimeError("private preview origin must bind to loopback")
     if PRIVATE_PREVIEW:

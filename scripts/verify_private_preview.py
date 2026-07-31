@@ -23,7 +23,7 @@ if str(PRODUCT) not in sys.path:
 if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
-from prepare_private_preview import DEFAULT_RUNTIME, point_current, verify_release  # noqa: E402
+from prepare_private_preview import DEFAULT_RUNTIME, activate_release, verify_release  # noqa: E402
 
 
 PUBLIC_URL = os.environ.get("PARK_PRIVATE_PREVIEW_URL", "https://research.park-ai-intel.com")
@@ -164,7 +164,12 @@ def wait_external_health(attempts: int = 20) -> tuple[dict, list[int | str]]:
         try:
             status, payload, _ = request(PUBLIC_URL, "GET", "/api/health")
             observations.append(status)
-            if status == 200 and payload == {"status": "ok", "product": "park-equity-research-preview", "auth_required": True}:
+            if status == 200 and isinstance(payload, dict) and all((
+                payload.get("status") == "ok",
+                payload.get("product") == "park-equity-research-preview",
+                payload.get("auth_required") is True,
+                set(payload).issubset({"status", "product", "auth_required", "public_read_only"}),
+            )):
                 return payload, observations
         except (OSError, http.client.HTTPException) as exc:
             observations.append(type(exc).__name__)
@@ -199,6 +204,8 @@ def rehearse_ops(rollback_release_id: str) -> dict:
     runtime = DEFAULT_RUNTIME.resolve()
     current_manifest = json.loads((runtime / "current" / "manifest.json").read_text(encoding="utf-8"))
     current_id = current_manifest["release_id"]
+    env_lines = (runtime / "preview.env").read_text(encoding="utf-8").splitlines()
+    current_public_read_only = any(line == "PARK_PUBLIC_READ_ONLY=1" for line in env_lines)
     if rollback_release_id == current_id:
         raise VerificationError("rollback rehearsal requires a different prior release")
     verify_release(runtime / "releases" / current_id, expected_release_id=current_id, require_manifest=True)
@@ -213,11 +220,11 @@ def rehearse_ops(rollback_release_id: str) -> dict:
     rollback_health: dict | None = None
     rollback_observations: list[int | str] = []
     try:
-        point_current(runtime, rollback_release_id)
+        activate_release(runtime, rollback_release_id, public_read_only=False)
         restart_launchd_service(domain, APP_LABEL)
         rollback_health, rollback_observations = wait_external_health()
     finally:
-        point_current(runtime, current_id)
+        activate_release(runtime, current_id, public_read_only=current_public_read_only)
         restart_launchd_service(domain, APP_LABEL)
     forward_health, forward_observations = wait_external_health()
     tunnel_restart = restart_launchd_service(domain, TUNNEL_LABEL)
@@ -249,6 +256,7 @@ def rehearse_ops(rollback_release_id: str) -> dict:
         },
         "rollback": {
             "release_id": rollback_release_id,
+            "public_read_only": False,
             "release_identity_verified": True,
             "external_health_http": 200,
             "health_contract": rollback_health,
@@ -256,6 +264,7 @@ def rehearse_ops(rollback_release_id: str) -> dict:
         },
         "roll_forward": {
             "release_id": current_id,
+            "public_read_only": current_public_read_only,
             "release_identity_verified": True,
             "external_health_http": 200,
             "health_contract": forward_health,

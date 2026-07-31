@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0b1f33">
-  <title>Park Equity Research · Private Preview</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Park Equity Research · 公开只读</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -27,6 +28,7 @@
         <button class="primary-button" type="submit">进入投委会</button>
       </form>
       <p id="auth-error" class="auth-error" role="alert"></p>
+      <button id="auth-public-close" class="logout-button" type="button" hidden>返回公开阅读</button>
     </div>
   </section>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -70,6 +72,7 @@
             <div class="preview-banner">
               <span id="preview-mode-label">PRIVATE PREVIEW · MANUAL PAID PILOT</span>
               <p id="preview-mode-copy">仅供受邀成员验证产品。平台自身不收款、不提供在线 checkout；外部付款由 Park 人工核验。模型仓位不是账户持仓，不连接券商。</p>
+              <a id="public-rights-link" href="https://github.com/zinan92/equity-research/issues/new" target="_blank" rel="noopener noreferrer" hidden>权利或下架请求 ↗</a>
             </div>
             <header class="canonical-hero">
               <div>
@@ -121,7 +124,7 @@
                 <div><dt>履约模式</dt><dd>manual_external</dd></div>
               </dl>
             </section>
-            <section class="feedback-panel" aria-labelledby="feedback-title">
+            <section id="feedback-panel" class="feedback-panel" aria-labelledby="feedback-title">
               <div>
                 <p class="eyebrow">MEMBER FEEDBACK</p>
                 <h2 id="feedback-title">告诉我哪一处最需要改</h2>
@@ -357,7 +360,7 @@
                 <article id="dossier-reader" class="dossier-reader"><div class="industry-detail-empty">从左侧选择一家公司，正文会从独立档案接口读取。</div></article>
               </div>
             </section>
-            <footer class="industry-boundary"><strong>研究边界</strong><p id="industry-truth-boundary"></p><details><summary>来源与快照身份</summary><dl id="industry-source-meta"></dl></details></footer>
+            <footer class="industry-boundary"><strong>研究边界</strong><p id="industry-truth-boundary"></p><p><a href="https://github.com/zinan92/equity-research/issues/new" target="_blank" rel="noopener noreferrer">权利或下架请求 ↗</a></p><details><summary>来源与快照身份</summary><dl id="industry-source-meta"></dl></details></footer>
           </div>
         </section>
       </div>

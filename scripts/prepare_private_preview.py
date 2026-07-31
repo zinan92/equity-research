@@ -156,7 +156,9 @@ def copy_report_bundle(source_db: Path, current: dict, deep_root: Path, target: 
     snapshot_id = current["snapshot"]["snapshot_id"]
     for position in current["positions"]:
         ticker = position["ticker"]
-        candidate = deep_root / ticker / "report.json"
+        nested = deep_root / ticker / "report.json"
+        flat = deep_root / f"{ticker}.json"
+        candidate = nested if nested.is_file() and not nested.is_symlink() else flat
         report = load_json(candidate) if candidate.is_file() and not candidate.is_symlink() else None
         if report is None or (report.get("generated_from") or {}).get("snapshot_id") != snapshot_id:
             stock = stock_payload(ticker, source_db, snapshot_id=snapshot_id)
@@ -337,6 +339,10 @@ def verify_release(
         if path.is_file() and is_release_payload_file(path.relative_to(product))
     }
     code_hash = hashlib.sha256(canonical_json(code_files).encode()).hexdigest()
+    server_source = (product / "server.py").read_text(encoding="utf-8")
+    public_read_only_contract = "v1" if (
+        'PARK_PUBLIC_READ_ONLY' in server_source and "def public_read_only_get(" in server_source
+    ) else None
     identity_payload = {
         "schema_version": SCHEMA_VERSION,
         "portfolio_id": current["portfolio_id"],
@@ -350,6 +356,8 @@ def verify_release(
         "report_bundle_hash": report_bundle_hash,
         "research_pack_hash": verified_pack["pack_hash"],
     }
+    if public_read_only_contract:
+        identity_payload["public_read_only_contract"] = public_read_only_contract
     release_id = f"preview_{hashlib.sha256(canonical_json(identity_payload).encode()).hexdigest()[:16]}"
     if expected_release_id and release_id != expected_release_id:
         raise PreviewReleaseError("release directory does not match verified identity")
@@ -365,6 +373,9 @@ def verify_release(
             raise PreviewReleaseError("release manifest identity mismatch")
         if manifest.get("files") != files or manifest.get("identity") != identity_payload:
             raise PreviewReleaseError("release files differ from manifest")
+        capable = (manifest.get("truth_boundary") or {}).get("public_read_only_capable") is True
+        if capable != bool(public_read_only_contract):
+            raise PreviewReleaseError("release public read-only capability differs from product code")
     return {"release_id": release_id, "identity": identity_payload, "files": files}
 
 
@@ -380,7 +391,7 @@ def point_current(runtime: Path, release_id: str) -> None:
     os.replace(temporary, link)
 
 
-def write_runtime_env(runtime: Path) -> None:
+def write_runtime_env(runtime: Path, *, public_read_only: bool = False) -> None:
     env = runtime / "preview.env"
     content = "\n".join([
         f"PARK_DASHBOARD_DB={runtime / 'current' / 'research.db'}",
@@ -393,11 +404,63 @@ def write_runtime_env(runtime: Path) -> None:
         "PARK_COOKIE_SECURE=1",
         "PARK_PRIVATE_PREVIEW=1",
         "PARK_MANUAL_PAID_PILOT=1",
+        f"PARK_PUBLIC_READ_ONLY={int(public_read_only)}",
     ]) + "\n"
     temporary = runtime / f".preview-env-{os.getpid()}"
     temporary.write_text(content, encoding="utf-8")
     os.chmod(temporary, 0o600)
     os.replace(temporary, env)
+
+
+def activate_release(runtime: Path, release_id: str, *, public_read_only: bool) -> None:
+    """Switch content first, then mode; an interrupted transition remains fail-closed behind auth."""
+    if public_read_only:
+        verify_public_activation_gate(runtime)
+        target = runtime / "releases" / release_id
+        verified = verify_release(target, expected_release_id=release_id, require_manifest=True)
+        manifest = load_json(target / "manifest.json")
+        if (
+            verified["identity"].get("public_read_only_contract") != "v1"
+            or (manifest.get("truth_boundary") or {}).get("public_read_only_capable") is not True
+        ):
+            raise PreviewReleaseError("requested release is not public read-only capable")
+    point_current(runtime, release_id)
+    write_runtime_env(runtime, public_read_only=public_read_only)
+
+
+def verify_public_activation_gate(runtime: Path) -> dict:
+    """Require a verified compatible runner before any public-mode mutation."""
+    env_file = runtime / "preview.env"
+    runner = runtime / "bin" / "run_private_preview.py"
+    receipt_file = runtime / "runner-upgrade-receipt.json"
+    expected_runner = PRODUCT / "deployment" / "run_private_preview.py"
+    for path, label in (
+        (env_file, "private preview environment"),
+        (runner, "external runtime runner"),
+        (receipt_file, "runner upgrade receipt"),
+    ):
+        if not path.is_file() or path.is_symlink():
+            raise PreviewReleaseError(f"{label} is unavailable or unsafe")
+    public_value = "0"
+    for raw in env_file.read_text(encoding="utf-8").splitlines():
+        if raw.startswith("PARK_PUBLIC_READ_ONLY="):
+            public_value = raw.split("=", 1)[1]
+    if public_value != "0":
+        raise PreviewReleaseError("public activation requires the current site to remain privately gated")
+    expected_hash = sha256_file(expected_runner)
+    if sha256_file(runner) != expected_hash:
+        raise PreviewReleaseError("external runtime runner does not match the candidate release")
+    receipt = load_json(receipt_file)
+    if (
+        receipt.get("schema_version") != "private-preview-runner-upgrade-v1"
+        or receipt.get("status") != "upgraded"
+        or receipt.get("public_read_only") is not False
+        or receipt.get("runtime") != str(runtime)
+        or receipt.get("runtime_runner_sha256") != expected_hash
+        or not isinstance(receipt.get("release_id"), str)
+    ):
+        raise PreviewReleaseError("runner upgrade receipt does not authorize public activation")
+    return receipt
 
 
 def sanitize_auth_store(runtime: Path) -> dict:
@@ -451,7 +514,16 @@ def sanitize_auth_store(runtime: Path) -> dict:
         sanitized.unlink(missing_ok=True)
 
 
-def prepare(source_db: Path, source_state: Path, deep_reports: Path, runtime: Path) -> dict:
+def prepare(
+    source_db: Path,
+    source_state: Path,
+    deep_reports: Path,
+    runtime: Path,
+    *,
+    public_read_only: bool = False,
+) -> dict:
+    if public_read_only:
+        verify_public_activation_gate(runtime)
     staging = runtime / f".staging-{os.getpid()}"
     if staging.exists():
         shutil.rmtree(staging)
@@ -481,6 +553,7 @@ def prepare(source_db: Path, source_state: Path, deep_reports: Path, runtime: Pa
                 "paid_pilot_ready": False,
                 "broker_connected": False,
                 "auth_database_separate": True,
+                "public_read_only_capable": True,
             },
         }
         (staging / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -496,8 +569,7 @@ def prepare(source_db: Path, source_state: Path, deep_reports: Path, runtime: Pa
         auth_db = runtime / "auth.db"
         initialize_auth(auth_db)
         os.chmod(auth_db, 0o600)
-        point_current(runtime, release_id)
-        write_runtime_env(runtime)
+        activate_release(runtime, release_id, public_read_only=public_read_only)
         return {
             "status": "prepared",
             "release_id": release_id,
@@ -505,6 +577,7 @@ def prepare(source_db: Path, source_state: Path, deep_reports: Path, runtime: Pa
             "snapshot_id": verified["identity"]["snapshot_id"],
             "runtime": str(runtime),
             "auth_database": "separate_and_preserved",
+            "public_read_only": public_read_only,
         }
     finally:
         if staging.exists():
@@ -519,18 +592,25 @@ def main() -> None:
     build.add_argument("--source-db", type=Path, default=DEFAULT_SOURCE_DB)
     build.add_argument("--source-state", type=Path, default=DEFAULT_SOURCE_STATE)
     build.add_argument("--deep-reports", type=Path, default=DEFAULT_DEEP_REPORTS)
+    build.add_argument("--public-read-only", action="store_true")
     rollback = subcommands.add_parser("rollback")
     rollback.add_argument("release_id")
+    rollback.add_argument("--public-read-only", action="store_true")
     subcommands.add_parser("sanitize-auth")
     args = parser.parse_args()
     runtime = ensure_external_runtime(args.runtime)
     try:
         if args.command == "prepare":
-            result = prepare(args.source_db, args.source_state, args.deep_reports, runtime)
+            result = prepare(
+                args.source_db, args.source_state, args.deep_reports, runtime,
+                public_read_only=args.public_read_only,
+            )
         elif args.command == "rollback":
-            point_current(runtime, args.release_id)
-            write_runtime_env(runtime)
-            result = {"status": "rolled_back", "release_id": args.release_id, "runtime": str(runtime)}
+            activate_release(runtime, args.release_id, public_read_only=args.public_read_only)
+            result = {
+                "status": "rolled_back", "release_id": args.release_id, "runtime": str(runtime),
+                "public_read_only": args.public_read_only,
+            }
         else:
             result = sanitize_auth_store(runtime)
     except (CanonicalPortfolioError, PortfolioLedgerError, PreviewReleaseError, RuntimeError, sqlite3.Error) as exc:

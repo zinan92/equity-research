@@ -199,7 +199,13 @@ def create_owner(email: str, password: str, display_name: str, db_path: Path = A
     return _public_member(row)
 
 
-def authenticate(email: str, password: str, db_path: Path = AUTH_DB_PATH) -> dict[str, Any] | None:
+def authenticate(
+    email: str,
+    password: str,
+    db_path: Path = AUTH_DB_PATH,
+    *,
+    required_role: str | None = None,
+) -> dict[str, Any] | None:
     initialize_auth(db_path)
     email = _normalize_email(email)
     invalid_password = not isinstance(password, str) or len(password) > 256
@@ -210,8 +216,13 @@ def authenticate(email: str, password: str, db_path: Path = AUTH_DB_PATH) -> dic
             _password_digest(candidate, "00" * 16)
             return None
         expected = _password_digest(candidate, row["password_salt"])
-        if invalid_password or row["status"] != "active" or not hmac.compare_digest(expected, row["password_hash"]):
-            _record(conn, row["id"], "login_failed", {})
+        if (
+            invalid_password
+            or row["status"] != "active"
+            or not hmac.compare_digest(expected, row["password_hash"])
+            or (required_role is not None and row["role"] != required_role)
+        ):
+            _record(conn, row["id"], "login_failed", {"role_restricted": required_role is not None})
             conn.commit()
             return None
         _record(conn, row["id"], "login_succeeded", {})
