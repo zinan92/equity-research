@@ -63,6 +63,7 @@ from billing_store import (
 
 ROOT = Path(__file__).resolve().parent
 STATIC_DIR = ROOT / "static"
+ROUND7_DOSSIER_ROOT = ROOT.parent / "artifacts" / "round7-dossiers"
 REFRESH_LOCK = Lock()
 LOGIN_LOCK = Lock()
 LOGIN_ATTEMPTS: dict[str, list[float]] = {}
@@ -77,6 +78,28 @@ SESSION_COOKIE = "__Host-park_session" if COOKIE_SECURE else "park_session"
 
 def canonical_portfolio_source_db() -> Path:
     return Path(os.environ.get("PARK_CANONICAL_PORTFOLIO_SOURCE_DB", ROOT / "runtime" / "m4-live.db"))
+
+
+def round7_dossier_payload(ticker: str) -> dict:
+    """Read-only projection of the persistent Round 7 dossier receipt."""
+    normalized = ticker.upper()
+    receipt_path = ROUND7_DOSSIER_ROOT / f"{normalized}.receipt.json"
+    markdown_path = ROUND7_DOSSIER_ROOT / f"{normalized}.md"
+    if not receipt_path.is_file() or not markdown_path.is_file():
+        raise FileNotFoundError(normalized)
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    return {
+        "ticker": normalized,
+        "schema_version": receipt.get("schema_version"),
+        "review_status": receipt.get("review_status"),
+        "chapters": receipt.get("chapters"),
+        "section_contract": receipt.get("section_contract"),
+        "degradation": receipt.get("degradation"),
+        "decision": receipt.get("decision"),
+        "metrics": receipt.get("metrics"),
+        "receipt_hash": receipt.get("receipt_hash"),
+        "markdown_path": str(markdown_path),
+    }
 
 
 def canonical_portfolio_root() -> Path:
@@ -705,6 +728,13 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 self._json(load_partial_model(ticker, partial_model_root()))
             except PartialModelStoreError as exc:
                 self._json({"error": "partial_model_unavailable", "detail": str(exc)}, HTTPStatus.CONFLICT)
+            return
+        if route.startswith("/api/research/round7-dossier/"):
+            ticker = unquote(route.removeprefix("/api/research/round7-dossier/"))
+            try:
+                self._json(round7_dossier_payload(ticker))
+            except (FileNotFoundError, OSError, json.JSONDecodeError):
+                self._json({"error": "round7_dossier_unavailable"}, HTTPStatus.NOT_FOUND)
             return
         if route.startswith("/api/research/evidence/"):
             ticker = unquote(route.removeprefix("/api/research/evidence/"))
