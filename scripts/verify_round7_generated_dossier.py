@@ -113,6 +113,11 @@ def verify(ticker: str, directory: Path) -> dict:
         )
         if chapter.get("character_count") != observed_characters:
             problems.append(f"{spec.section_id}: character count mismatch")
+        expected_chapter_hash = canonical_hash(
+            {"section_id": chapter.get("section_id"), "rows": chapter.get("rows")}
+        )
+        if chapter.get("content_hash") != expected_chapter_hash:
+            problems.append(f"{spec.section_id}: chapter content hash mismatch")
         if (
             chapter.get("status") != "ai_generated_judgment_unreviewed"
             or chapter.get("review_status") != "pending_human_review"
@@ -155,6 +160,12 @@ def verify(ticker: str, directory: Path) -> dict:
             or semantic.get("problems")
         ):
             problems.append(f"{request_id}: semantic audit did not pass")
+        else:
+            chapter = next(
+                item for item in chapters if item.get("model_request_id") == request_id
+            )
+            if semantic.get("audited_chapter_hash") != chapter.get("content_hash"):
+                problems.append(f"{request_id}: semantic audit is not bound to final chapter bytes")
     production = dossier.get("production_record") or {}
     if (
         production.get("accepted_model_calls") != 8

@@ -216,7 +216,14 @@ def main() -> int:
             # not re-run model-sensitive validation on resume; the final
             # verifier performs the authoritative replay against the frozen
             # evidence registry.
-            if isinstance(candidate, dict) and candidate.get("section_id") == spec.section_id:
+            expected_saved_hash = canonical_hash(
+                {"section_id": candidate.get("section_id"), "rows": candidate.get("rows")}
+            ) if isinstance(candidate, dict) else None
+            if (
+                isinstance(candidate, dict)
+                and candidate.get("section_id") == spec.section_id
+                and candidate.get("content_hash") == expected_saved_hash
+            ):
                 chapter = candidate
         if chapter is None:
             chapter, new_receipts = generate_chapter(
