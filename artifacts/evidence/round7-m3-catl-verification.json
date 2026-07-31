@@ -1,0 +1,76 @@
+{
+  "ticker": "300750.SZ",
+  "passed": true,
+  "problems": [],
+  "receipt_hash": "a4848db654be998a8475f30daaf4867ee9f806145986467584df087cd05df8cd",
+  "run_id": "round7-run:03ab66a964f60a6d47300c97",
+  "north_star": {
+    "structure_signature": "1c25130d38341372cbd96308c57e48553175764178e2e38c6ac645852f975ea5",
+    "body_characters": 12269,
+    "source_rows": 11,
+    "fact_ids": 40
+  },
+  "metrics": {
+    "generated_research_text_characters": 5146,
+    "chapter_body_characters": 8993,
+    "full_file_characters": 12401,
+    "generated_chapters": 8,
+    "production_record_chapters": 1,
+    "source_documents": 11,
+    "page_evidence_bindings": 42
+  },
+  "section_statuses": {
+    "one_line_positioning": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "identity_founder_and_governance": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "technology_origin_and_development_history": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "business_model_and_business_lines": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "financial_and_operating_time_series": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "moat_evidence_chain": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "risks_counter_thesis_and_triggers": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "research_conclusion_and_open_questions": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "production_record": [
+      "full",
+      null
+    ]
+  },
+  "tier": "B",
+  "blocked_fields": [
+    "action",
+    "target_price",
+    "position_range"
+  ],
+  "accepted_model_request_ids": [
+    "25b8eaab-43ca-469d-9af6-d741c79f475e",
+    "431aeeeb-33be-457e-9c72-87bc54483525",
+    "77a56ef3-1a86-477f-a67e-e7dcd68f9546",
+    "226b046e-1ea9-4569-a73c-b37c411b8c50",
+    "97e148bf-87e7-495e-85be-a959e0d75ed2",
+    "26805b19-6aee-4c05-95fb-3c401723a145",
+    "c268b7f2-3c41-41f4-8936-f974b5704ea9",
+    "cce9dda0-80ca-4be2-94ba-0c3c210c0f95"
+  ]
+}

@@ -1,0 +1,485 @@
+{
+  "schema_version": "round7-chapter-review-queue-v1",
+  "ticker": "300750.SZ",
+  "source_run_id": "round7-run:03ab66a964f60a6d47300c97",
+  "sort_basis": "impact_on_final_research_conclusion",
+  "items": [
+    {
+      "impact_rank": 1,
+      "section_id": "research_conclusion_and_open_questions",
+      "title": "研究结论与待补问题",
+      "review_status": "pending_human_review",
+      "full_text": "事实：公司自述：公司是全球领先的零碳新能源科技公司，主要从事动力电池、储能电池的研发、生产、销售，以推动固定式化石能源替代、移动式化石能源替代，并通过电动化和智能化实现市场应用的集成创新。公司自述：报告期内，公司举办超级科技日，发布第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池、钠新电池等在服务优质方面，公司全面、先进产品矩阵取得客户广泛认可，动力电池使用量连续九年位居全球。公司自述：基于强大创新基因、深刻行业洞察、高效经营管理，公司报告期内在技术研发、极限制造、供应链管理、客户合作、可持续发展等方面的竞争优势进一步提升，综合竞争力行业领先，公司动力电池和储能电池的全球市场份额连续多年保持第一，实现业务稳健增长，为股东持续创造价值。\n研究判断（未审阅）：基于公司自述的全球市场份额领先和供应链韧性，意味着其收入增长持续性可能较强，但判断仍需第三方数据验证市场份额和供应链实际表现。\n待补问题：缺乏第三方机构出具的动力电池和储能电池全球市场份额报告，无法独立验证公司自述的市场地位；缺乏供应链中断恢复时间、供应商集中度等量化数据，无法评估供应链韧性的具体程度。",
+      "citations": [
+        {
+          "evidence_id": "N-ec31ce2389",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 10,
+          "quoted_anchor": "公司是全球领先的零碳新能源科技公司，主要从事动力电池、储能电池的研发、生产、销售，以推动固定式化石能源替代、移动式化石能源替代，并通过电动化和智能化实现市场应用的集成创新。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > 1、主要业务 > 2、主要产品及其用途"
+        },
+        {
+          "evidence_id": "N-6e0cb09a4a",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 12,
+          "quoted_anchor": "报告期内，公司举办超级科技日，发布第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池、钠新电池等在服务优质方面，公司全面、先进产品矩阵取得客户广泛认可，动力电池使用量连续九年位居全球",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析"
+        },
+        {
+          "evidence_id": "N-626c5e0967",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 14,
+          "quoted_anchor": "基于强大创新基因、深刻行业洞察、高效经营管理，公司报告期内在技术研发、极限制造、供应链管理、客户合作、可持续发展等方面的竞争优势进一步提升，综合竞争力行业领先，公司动力电池和储能电池的全球市场份额连续多年保持第一，实现业务稳健增长，为股东持续创造价值。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析 > （三）供应链体系具韧性"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 2,
+      "section_id": "one_line_positioning",
+      "title": "一句话定位",
+      "review_status": "pending_human_review",
+      "full_text": "事实：公司拥有独立的研发、采购、生产和销售体系，主要通过销售动力电池、储能电池和电池材料等产品和解决方案实现盈利。\n研究判断（未审阅）：该盈利模式意味着收入持续性取决于动力电池和储能电池的全球需求增长，仍需核验客户集中度与电池材料业务的现金回报质量。",
+      "citations": [
+        {
+          "evidence_id": "N-24317e6536",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 15,
+          "quoted_anchor": "公司拥有独立的研发、采购、生产和销售体系，主要通过销售动力电池、储能电池和电池材料等产品和解决方案实现盈利。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 一、报告期内公司从事的主要业务 > 1、主要业务 > 3、经营模式"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 3,
+      "section_id": "moat_evidence_chain",
+      "title": "护城河的证据链",
+      "review_status": "pending_human_review",
+      "full_text": "研究判断（未审阅）：公司自述的全方位研发优势可能构成持续护城河，但取决于专利质量与商业化转化效率。\n事实：公司自述：基于强大创新基因、深刻行业洞察、高效经营管理，公司在技术研发、极限制造、供应链管理、全球客户合作、可持续发展、新兴市场拓展等方面的竞争力进一步提升，推动业务稳健增长，为股东持续创造锂电池是全球绿色低碳与清洁能源转型的关键部件。公司自述：公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。公司自述：截至报告期末，公司拥有专利及专利申请合计达 43,354项，其中境内拥有基于全方位的研发优势，公司已打造出行业内最全面、最先进的产品矩阵。\n研究判断（未审阅）：公司自述基础上的研究判断：若核心专利被无效或下一代电池技术路线绕开现有专利组合，则研发护城河可能被证伪。\n研究判断（未审阅）：公司自述基础上的研究判断：现有证据表明专利数量庞大且逐年增长，但专利质量与行业技术迭代速度仍需验证，护城河持续性取决于技术领先能否转化为市场份额与定价权。\n研究判断（未审阅）：公司自述的极限制造与供应链韧性可能形成成本效率护城河，但需观察产能利用率与缺陷率优势的持续性。\n事实：公司自述：基于强大创新基因、深刻行业洞察、高效经营管理，公司报告期内在技术研发、极限制造、供应链管理、客户合作、可持续发展等方面的竞争优势进一步提升，综合竞争力行业领先，公司动力电池和储能电池的全球市场份额连续多年保持第一，实现业务稳健增长，为股东持续创造价值。公司拥有全球规模最大的现有及在建产能，并以严苛的品控标准与自主研发的超级拉线PSL，持续探索制造效率、质量及安全的一致极限，电芯缺陷率水平较同行实现数量级领先。\n研究判断（未审阅）：公司自述基础上的研究判断：若产能利用率大幅下滑或缺陷率优势被竞争对手追平，则成本效率护城河可能被证伪。\n研究判断（未审阅）：公司自述基础上的研究判断：上述自述表明制造端存在数量级领先，但缺乏量化数据支撑，仍需通过产能利用率、单位成本等指标验证其经济价值。\n研究判断（未审阅）：公司自述的全球客户合作与生态共建可能锁定市场份额，但取决于客户粘性与竞争格局。\n事实：公司自述：基于强大创新基因、深刻行业洞察、高效经营管理，公司在技术研发、极限制造、供应链管理、全球客户合作、可持续发展、新兴市场拓展等方面的竞争力进一步提升，推动业务稳健增长，为股东持续创造锂电池是全球绿色低碳与清洁能源转型的关键部件。电网公司及 EPC总包商、核心供应链企业等客户及伙伴推进生态共建及合作共赢。公司秉承“开放共赢”的合作理念，与全球系统集成商、投资商、开发商、电网公司及 EPC总包商、核心供应链企业等客户及伙伴推进生态共建及合作共赢，并探索通过投资方式开展储能电站建设。\n研究判断（未审阅）：公司自述基础上的研究判断：若主要客户流失或生态合作未能转化为长期订单，则客户锁定护城河可能被证伪。\n研究判断（未审阅）：公司自述基础上的研究判断：现有证据表明公司正构建生态合作网络，但客户集中度与合同期限未披露，护城河持续性取决于合作深度与排他性。",
+      "citations": [
+        {
+          "evidence_id": "N-8758748e6c",
+          "document_id": "1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 16,
+          "quoted_anchor": "基于强大创新基因、深刻行业洞察、高效经营管理，公司在技术研发、极限制造、供应链管理、全球客户合作、可持续发展、新兴市场拓展等方面的竞争力进一步提升，推动业务稳健增长，为股东持续创造锂电池是全球绿色低碳与清洁能源转型的关键部件。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析 > 1、全方位的研发优势 > 3、全面的客户合作"
+        },
+        {
+          "evidence_id": "N-97c00d30ef",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 12,
+          "quoted_anchor": "公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析"
+        },
+        {
+          "evidence_id": "N-7e34555b31",
+          "document_id": "1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 16,
+          "quoted_anchor": "截至报告期末，公司拥有专利及专利申请合计达 43,354项，其中境内拥有基于全方位的研发优势，公司已打造出行业内最全面、最先进的产品矩阵。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析 > 1、全方位的研发优势 > 3、全面的客户合作"
+        },
+        {
+          "evidence_id": "N-626c5e0967",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 14,
+          "quoted_anchor": "基于强大创新基因、深刻行业洞察、高效经营管理，公司报告期内在技术研发、极限制造、供应链管理、客户合作、可持续发展等方面的竞争优势进一步提升，综合竞争力行业领先，公司动力电池和储能电池的全球市场份额连续多年保持第一，实现业务稳健增长，为股东持续创造价值。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析 > （三）供应链体系具韧性"
+        },
+        {
+          "evidence_id": "N-e3d570c82e",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 20,
+          "quoted_anchor": "公司拥有全球规模最大的现有及在建产能，并以严苛的品控标准与自主研发的超级拉线PSL，持续探索制造效率、质量及安全的一致极限，电芯缺陷率水平较同行实现数量级领先。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+        },
+        {
+          "evidence_id": "N-5c49d3810f",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 14,
+          "quoted_anchor": "电网公司及 EPC总包商、核心供应链企业等客户及伙伴推进生态共建及合作共赢。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+        },
+        {
+          "evidence_id": "N-5240dcd084",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 22,
+          "quoted_anchor": "公司秉承“开放共赢”的合作理念，与全球系统集成商、投资商、开发商、电网公司及 EPC总包商、核心供应链企业等客户及伙伴推进生态共建及合作共赢，并探索通过投资方式开展储能电站建设。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 4,
+      "section_id": "risks_counter_thesis_and_triggers",
+      "title": "风险、反题材与观察触发器",
+      "review_status": "pending_human_review",
+      "full_text": "事实：近年来，随着全球新能源市场快速发展，国内外企业电池产能快速扩张，存在市场竞争加剧的风险。\n研究判断（未审阅）：如果公司营收增速连续两个季度低于行业平均增速，可能意味着竞争导致份额流失。\n待补问题：下一次核验：待公司发布下一季度报告，对比行业增速数据，观察营收增速是否低于行业均值。\n事实：公司自述：应对措施：公司积极推进材料及材料体系、系统结构、绿色极限制造、商业模式等方面的创新，不断推出行业领先、具有市场竞争力的新技术、新产品，满足客户多元化需求。\n研究判断（未审阅）：公司自述基础上的研究判断：若公司毛利率连续两个季度下滑，可能表明原材料成本压力传导不畅。\n待补问题：下一次核验：待公司发布下一季度财务报告，观察毛利率变化及原材料成本占比。\n事实：另外，公司已采取自制开采、投资合作、回收利用、签署长协订单等措施保障供应链安由于对能量密度、安全性等更高性能的追求以及对替代、可持续电池技术的需求，钠离子电池、 凝聚态电池、氢燃料电池等在近年来得到了广泛的重视，全球众多知名的车企、电池企业、材料企业、研究机构纷纷加大对新技术路线的研究开发，并逐步由基础布局向产业化、市场化、规模化方向发展。\n研究判断（未审阅）：如果竞争对手率先实现下一代电池技术量产，可能意味着公司技术领先优势被削弱。\n待补问题：下一次核验：待公司年报或重大事项公告披露新技术研发进展及竞争对手量产动态。\n事实：根据三大战略发展方向的指引，公司将持续推进构建材料及材料体系、系统结构、绿色极限制造和商业模式四大创新体系，研究开发高能量密度、高可靠性、高安全性、长寿命的电池产品和解决方案，以产品在技术上领先同侪、实现卓越制造和精益管理的核心理念应对市场竞争。\n研究判断（未审阅）：若宏观经济指标显示新能源车销量增速放缓，可能表明下游需求疲软。\n待补问题：下一次核验：待公司发布下一季度经营数据，结合行业销量报告，观察下游需求变化。\n事实：汇率风险可源于以记账本位币之外的外币进行计价的金融工具。\n研究判断（未审阅）：如果人民币对主要结算货币大幅升值，可能意味着海外收入折算减少。\n待补问题：下一次核验：待公司发布下一季度财务报告，观察汇兑损益及海外收入占比变化。\n事实：本公司没有提供任何流动性风险，是指本公司在履行以交付现金或其他金融资产结算的义务时遇到资金短缺的风险。\n研究判断（未审阅）：若公司速动比率连续下降且低于行业安全水平，可能表明短期偿债能力恶化。\n待补问题：下一次核验：待公司发布下一季度财务报告，计算速动比率并与行业对比。",
+      "citations": [
+        {
+          "evidence_id": "N-404f5849f9",
+          "document_id": "1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 39,
+          "quoted_anchor": "近年来，随着全球新能源市场快速发展，国内外企业电池产能快速扩张，存在市场竞争加剧的风险。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > 1、行业格局和趋势 > 4、可能面对的风险"
+        },
+        {
+          "evidence_id": "N-0ed16bacef",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 40,
+          "quoted_anchor": "应对措施：公司积极推进材料及材料体系、系统结构、绿色极限制造、商业模式等方面的创新，不断推出行业领先、具有市场竞争力的新技术、新产品，满足客户多元化需求。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > （四）可能面对的风险 > 4、原材料价格波动及供应风险"
+        },
+        {
+          "evidence_id": "N-b08eb6ac36",
+          "document_id": "1216084559",
+          "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+          "page_number": 38,
+          "quoted_anchor": "另外，公司已采取自制开采、投资合作、回收利用、签署长协订单等措施保障供应链安由于对能量密度、安全性等更高性能的追求以及对替代、可持续电池技术的需求，钠离子电池、 凝聚态电池、氢燃料电池等在近年来得到了广泛的重视，全球众多知名的车企、电池企业、材料企业、研究机构纷纷加大对新技术路线的研究开发，并逐步由基础布局向产业化、市场化、规模化方向发展。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > （四）可能面对的风险 > 4、新产品和新技术开发风险"
+        },
+        {
+          "evidence_id": "N-147fb320c0",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 39,
+          "quoted_anchor": "根据三大战略发展方向的指引，公司将持续推进构建材料及材料体系、系统结构、绿色极限制造和商业模式四大创新体系，研究开发高能量密度、高可靠性、高安全性、长寿命的电池产品和解决方案，以产品在技术上领先同侪、实现卓越制造和精益管理的核心理念应对市场竞争。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > （四）可能面对的风险 > 1、宏观经济与市场波动风险"
+        },
+        {
+          "evidence_id": "N-c47ec0ba41",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 213,
+          "quoted_anchor": "汇率风险可源于以记账本位币之外的外币进行计价的金融工具。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第十节 财务报告 > 十二、与金融工具相关的风险 > 1、风险管理目标和政策 > 3、套期"
+        },
+        {
+          "evidence_id": "N-7b0f46edb3",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 211,
+          "quoted_anchor": "本公司没有提供任何流动性风险，是指本公司在履行以交付现金或其他金融资产结算的义务时遇到资金短缺的风险。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第十节 财务报告 > 十二、与金融工具相关的风险 > 1、风险管理目标和政策 > 2023.12.31"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 5,
+      "section_id": "financial_and_operating_time_series",
+      "title": "财务与经营时间序列",
+      "review_status": "pending_human_review",
+      "full_text": "事实：2021年\n事实：13,035,579.64万元\n事实：同比增长159.1%\n事实：合并报表\n事实：2022年\n事实：32,859,398.75万元\n事实：同比增长152.1%\n事实：合并报表\n事实：2024年\n事实：362,012,554千元\n事实：同比下滑9.7%\n事实：合并报表\n事实：2025年\n事实：423,701,834千元\n事实：同比增长17.0%\n事实：合并报表\n事实：2026年第一季度\n事实：129,131,041千元\n事实：同比增长52.4%\n事实：合并报表\n事实：2024年\n事实：273,518,959千元\n事实：同比下滑15.6%\n事实：合并报表\n事实：2025年\n事实：312,383,297千元\n事实：同比增长14.2%\n事实：合并报表\n事实：2026年第一季度\n事实：97,086,370千元\n事实：同比增长51.6%\n事实：合并报表\n事实：2024年\n事实：303,511,993千元\n事实：较期初增长14.8%\n事实：合并报表\n事实：2025年\n事实：333,512,927千元\n事实：较期初增长9.9%\n事实：合并报表",
+      "citations": [
+        {
+          "evidence_id": "P-6b32b07970",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1213027750",
+          "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+          "page_number": 113,
+          "quoted_anchor": "一、营业总收入 13,035,579.64 5,031,948.77",
+          "quoted_label": "营业总收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-9205fa679d",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1216084559",
+          "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+          "page_number": 105,
+          "quoted_anchor": "一、营业总收入 32,859,398.75 13,035,579.64",
+          "quoted_label": "营业总收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-fc8e4affa5",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 119,
+          "quoted_anchor": "一、营业总收入 362,012,554 400,917,045",
+          "quoted_label": "营业总收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-a63ab8d96a",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 116,
+          "quoted_anchor": "一、营业总收入 423,701,834 362,012,554",
+          "quoted_label": "营业总收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-514ede0f3c",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "一、营业总收入 129,131,041 84,704,589",
+          "quoted_label": "营业总收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-1fb151c0d8",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 119,
+          "quoted_anchor": "二、营业总成本其中：营业成本 273,518,959 323,982,130 303,303,900 350,610,618",
+          "quoted_label": "营业成本",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-c13e579b89",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 116,
+          "quoted_anchor": "二、营业总成本其中：营业成本 312,383,297 273,518,959 344,824,196 303,303,900",
+          "quoted_label": "营业成本",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-e7fdf48dde",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225107946",
+          "raw_hash": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+          "page_number": 8,
+          "quoted_anchor": "二、营业总成本其中：营业成本 97,086,370 64,030,111 107,104,438 70,591,547",
+          "quoted_label": "营业成本",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-1d779ce111",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 114,
+          "quoted_anchor": "货币资金 303,511,993 264,306,515",
+          "quoted_label": "货币资金",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-56b4d2aca5",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 111,
+          "quoted_anchor": "货币资金 333,512,927 303,511,993",
+          "quoted_label": "货币资金",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "statement_scope": "consolidated"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 6,
+      "section_id": "business_model_and_business_lines",
+      "title": "商业模式与业务线",
+      "review_status": "pending_human_review",
+      "full_text": "事实：公司拥有独立的研发、采购、生产和销售体系，主要通过销售动力电池、储能电池和电池材料等产品实现盈利。此外，公司通过商业模式创新，为客户提供“EVOGO 换电服务 ”、 “骐骥换电服务”、“电动智慧无人矿山 ”、“光储充检智能充电站 ”、“智慧动力电池方面，全球新能源车市场持续增长带动动力电池行业规模 较快提升。\n事实：(2) 该重大销售合同未明确约定合同总金额，最终销售金额以客户后续发出的订单方式确定。\n研究判断（未审阅）：该业务收入取决于客户后续订单的落地，若新能源车市场增速放缓，可能影响订单规模。\n事实：公司基于储能的应用场景，有针对性地开发了应用独特技术的储能专用电芯，并结合智能液冷控温技术、高成组 CTP技术、无热扩散技术，推出了具备高充放电效率、长寿命、高集成和高安全特点的户外系统 EnerOne以及针对全气候场景的 EnerC等产品，可提供从电芯部件到公司电池材料产品包括生产动力电池、储能电池所需的 部分主要原材料。\n待补问题：储能业务的具体收入金额或占比未在证据中披露。\n研究判断（未审阅）：该业务可能依赖储能市场需求的持续增长，若全球储能装机不及预期，可能影响交付和收入。\n事实：同时，为保障上游关键资源及电池材料的供应，公司相应布局了锂、镍、钴、磷等新能源产业相关矿产资源公司拥有独立的研发、采购、生产和销售体系，主要通过销售动力电池、储能电池和电池材料等产品实现盈利。公司基于储能的应用场景，有针对性地开发了应用独特技术的储能专用电芯，并结合智能液冷控温技术、高成组 CTP技术、无热扩散技术，推出了具备高充放电效率、长寿命、高集成和高安全特点的户外系统 EnerOne以及针对全气候场景的 EnerC等产品，可提供从电芯部件到公司电池材料产品包括生产动力电池、储能电池所需的 部分主要原材料。\n待补问题：电池材料业务的具体收入规模或增长率未在证据中披露。\n研究判断（未审阅）：该业务取决于上游资源供应和下游电池需求，若原材料价格大幅波动，可能影响盈利。",
+      "citations": [
+        {
+          "evidence_id": "N-896d7ff642",
+          "document_id": "1216084559",
+          "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+          "page_number": 12,
+          "quoted_anchor": "公司拥有独立的研发、采购、生产和销售体系，主要通过销售动力电池、储能电池和电池材料等产品实现盈利。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > （四）主要的业绩驱动因素 > 1、新能源行业快速发展"
+        },
+        {
+          "evidence_id": "N-044a763d8c",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 13,
+          "quoted_anchor": "此外，公司通过商业模式创新，为客户提供“EVOGO 换电服务 ”、 “骐骥换电服务”、“电动智慧无人矿山 ”、“光储充检智能充电站 ”、“智慧动力电池方面，全球新能源车市场持续增长带动动力电池行业规模 较快提升。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > （四）主要的业绩驱动因素 > 1、行业持续快速增长"
+        },
+        {
+          "evidence_id": "N-348ef4010a",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 27,
+          "quoted_anchor": "(2) 该重大销售合同未明确约定合同总金额，最终销售金额以客户后续发出的订单方式确定。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述 > 2、收入与成本"
+        },
+        {
+          "evidence_id": "N-671cd8e5d0",
+          "document_id": "1216084559",
+          "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+          "page_number": 12,
+          "quoted_anchor": "公司基于储能的应用场景，有针对性地开发了应用独特技术的储能专用电芯，并结合智能液冷控温技术、高成组 CTP技术、无热扩散技术，推出了具备高充放电效率、长寿命、高集成和高安全特点的户外系统 EnerOne以及针对全气候场景的 EnerC等产品，可提供从电芯部件到公司电池材料产品包括生产动力电池、储能电池所需的 部分主要原材料。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > （四）主要的业绩驱动因素 > 1、新能源行业快速发展"
+        },
+        {
+          "evidence_id": "N-f4bf8b37ed",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 13,
+          "quoted_anchor": "根据 SNE Research统计，2023年全球储电池材料方面，其市场规模随动力及储能电池需求增长而迅速扩大。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > （四）主要的业绩驱动因素 > 1、行业持续快速增长"
+        },
+        {
+          "evidence_id": "N-2fd598bbed",
+          "document_id": "1213027750",
+          "raw_hash": "060a73fa73d896d0dce4ea2215dc4d616f92b60aed64a8c09028430def38a4ca",
+          "page_number": 14,
+          "quoted_anchor": "同时，为保障上游关键资源及电池材料的供应，公司相应布局了锂、镍、钴、磷等新能源产业相关矿产资源公司拥有独立的研发、采购、生产和销售体系，主要通过销售动力电池、储能电池和电池材料等产品实现盈利。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2022-04-22/1213027750.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > （四）主要的业绩驱动因素 > 2、储能电池"
+        },
+        {
+          "evidence_id": "N-3b33338bda",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 10,
+          "quoted_anchor": "随着动力电池、储能电池市场的持续增长，电池材料需求也相应增长。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > 1、主要业务 > 2、主要产品及其用途"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 7,
+      "section_id": "technology_origin_and_development_history",
+      "title": "技术来源与发展史",
+      "review_status": "pending_human_review",
+      "full_text": "事实：2022年\n事实：产品推广方面，推进钠离子电池、 M3P、凝聚态等新型化学体系产品实现产业化，推广第三代 CTP产品麒麟电池及 CTC等结构创新产品应用，推进更高安全级别的储能产品研发及应用，持续提升产品竞争力；\n研究判断（未审阅）：该披露表明公司当时正将研发储备转化为具体产品线，但产业化进度取决于后续产能落地与客户验证，仍需跟踪实际出货量。\n事实：2024年\n事实：公司自述：回收等产业链领域拥有核心技术优势及前瞻性研发布局，通过材料及材料体系创新、系统结构创新、绿色极限制造创新及商业模式创新为全球新能源应用 提供一流的解决方案和服务，已形成全面、先进的产品矩阵，可应用于乘用车、商用车、表前储能、表后储能等领域，以及工程机械、船舶、航空器等新兴公司致力于为全球新能源应用提供一流的动力电池和储能电池产品及相关创新解决方案，具体如下 ：。\n研究判断（未审阅）：公司自述产品矩阵扩展至航空器等新场景，可能意味着技术外溢能力增强，但新领域商业化仍需通过适航认证等外部验证。\n事实：2025年\n事实：国内方面，根据中国汽车动力电池产业创新联盟统计， 2025年公司国内动力电池装机量前沿技术引领全球，创新产品持续落地。\n研究判断（未审阅）：该表述表明公司维持市场地位，但装机量领先可能受行业增速影响，技术引领的判断需对比竞争对手同期产品参数。\n事实：2026年半年度\n事实：公司自述：乘用车领域，公司发布了全球领先的第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池及钠新电池，满足超快充、高比能、宽温域、高安全等性能需求。\n研究判断（未审阅）：公司自述密集发布多款新品，可能意味着研发管线进入集中商业化阶段，但产品竞争力取决于实际装车后的性能表现与客户反馈。\n事实：2026年半年度\n事实：公司自述：公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。\n研究判断（未审阅）：公司自述专利积累与AI融合可能意味着研发效率提升，但专利数量向技术壁垒的转化仍需观察专利质量及标准必要专利占比。",
+      "citations": [
+        {
+          "evidence_id": "N-06fa9df197",
+          "document_id": "1216084559",
+          "raw_hash": "ac4fa5c3b96956462054986773b0c6129189ba6dcdc257c737f1b398ca7e2a10",
+          "page_number": 37,
+          "quoted_anchor": "产品推广方面，推进钠离子电池、 M3P、凝聚态等新型化学体系产品实现产业化，推广第三代 CTP产品麒麟电池及 CTC等结构创新产品应用，推进更高安全级别的储能产品研发及应用，持续提升产品竞争力；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 十一、公司未来发展的展望 > （四）可能面对的风险"
+        },
+        {
+          "evidence_id": "N-f5688b46b3",
+          "document_id": "1222806982",
+          "raw_hash": "b4f1713d7b821eb076c102711d177fe942ccc2bc8dd171ae5d7a95799a65b0ad",
+          "page_number": 13,
+          "quoted_anchor": "回收等产业链领域拥有核心技术优势及前瞻性研发布局，通过材料及材料体系创新、系统结构创新、绿色极限制造创新及商业模式创新为全球新能源应用 提供一流的解决方案和服务，已形成全面、先进的产品矩阵，可应用于乘用车、商用车、表前储能、表后储能等领域，以及工程机械、船舶、航空器等新兴公司致力于为全球新能源应用提供一流的动力电池和储能电池产品及相关创新解决方案，具体如下 ：",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司从事的主要业务 > 1、主要业务 > 2、主要产品及其用途"
+        },
+        {
+          "evidence_id": "N-18683243fd",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 21,
+          "quoted_anchor": "国内方面，根据中国汽车动力电池产业创新联盟统计， 2025年公司国内动力电池装机量前沿技术引领全球，创新产品持续落地。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+        },
+        {
+          "evidence_id": "N-abaaaa24de",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 13,
+          "quoted_anchor": "乘用车领域，公司发布了全球领先的第三代神行超充电池、第三代麒麟电池、麒麟凝聚态电池、第二代骁遥超级增·混电池及钠新电池，满足超快充、高比能、宽温域、高安全等性能需求。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 四、主营业务分析 > 1、概述"
+        },
+        {
+          "evidence_id": "N-97c00d30ef",
+          "document_id": "1225441586",
+          "raw_hash": "d96b5d49ae75bec5913d032de781873565f5405bf99fd8b011eab152549862b9",
+          "page_number": 12,
+          "quoted_anchor": "公司坚持技术领先、服务优质、运营卓越的经营理念，致力于 为全球新能源应用提供一流的解决方在技术领先方面，公司具备覆盖材料、电芯、系统及回收的全链条自主研发能力，并将 AI融入研发与制造环节，截至报告期末拥有及申请的国内外专利合计 60,319项。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+          "section_path": "第三节 管理层讨论与分析 > 三、核心竞争力分析"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 8,
+      "section_id": "identity_founder_and_governance",
+      "title": "身份、创始人与治理",
+      "review_status": "pending_human_review",
+      "full_text": "待补问题：现有证据未提供证券代码、上市交易所或股票简称的页级披露，无法核验证券身份。\n事实：（2）控股股东、实际控制人同时担任上市公司董事长和总经理的情况本公司董事长兼总经理目前由公司实际控制人曾毓群先生担任。各董事简历如下：1、曾毓群先生，董事长、总经理，1968年出生，中国香港永久性居民，中科院物理研究所博士。各董事简历如下：1、 曾毓群先生，57 岁，公司董事长、执行董事兼总经理，主要负责公司总体战略规划与发展。\n研究判断（未审阅）：上述董事长与总经理由同一人担任，意味着治理层面决策权高度集中，可能影响独立监督与继任安排，仍需观察董事会独立董事的实际制衡效果。",
+      "citations": [
+        {
+          "evidence_id": "N-13367c65a1",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 50,
+          "quoted_anchor": "（2）控股股东、实际控制人同时担任上市公司董事长和总经理的情况本公司董事长兼总经理目前由公司实际控制人曾毓群先生担任。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 六、董事和高级管理人员情况 > 1、基本情况 > 2、任职情况"
+        },
+        {
+          "evidence_id": "N-42ba166e9b",
+          "document_id": "1219313047",
+          "raw_hash": "6081f0377617dddb82f900569d6458c278a7ab26697b34c87684188eac083471",
+          "page_number": 49,
+          "quoted_anchor": "各董事简历如下：1、曾毓群先生，董事长、总经理，1968年出生，中国香港永久性居民，中科院物理研究所博士。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+          "section_path": "第四节 公司治理 > 七、董事、监事和高级管理人员情况 > 1、基本情况 > 2、任职情况"
+        },
+        {
+          "evidence_id": "N-799175726a",
+          "document_id": "1225002214",
+          "raw_hash": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+          "page_number": 47,
+          "quoted_anchor": "各董事简历如下：1、 曾毓群先生，57 岁，公司董事长、执行董事兼总经理，主要负责公司总体战略规划与发展。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+          "section_path": "第四节 公司治理、环境和社会 > 六、董事和高级管理人员情况 > 1、基本情况 > 2、任职情况"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    }
+  ],
+  "receipt_hash": "2104f934317ec59c63c047796e48b2f528061dca010a5bb8a57db85ef4eb0e73"
+}
