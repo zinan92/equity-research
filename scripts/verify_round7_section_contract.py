@@ -36,12 +36,6 @@ MIGRATED_CONSUMERS = (
     "product/report_contract.py",
     "product/data_core/e4_vertical_degradation.py",
     "product/data_core/e4_r2_industry_wiring.py",
-    "product/data_core/e4_judgment_wiring.py",
-    "product/data_core/e4_judgment_review_queue.py",
-    "scripts/run_e4_m2_research_wiring.py",
-    "scripts/inventory_e4_section_completion.py",
-    "scripts/compile_e4_m4_report.py",
-    "scripts/verify_e4_wired_reports.py",
     "product/data_core/research_degradation.py",
 )
 

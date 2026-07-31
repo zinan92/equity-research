@@ -13,7 +13,29 @@ sys.path.insert(0, str(ROOT / "product"))
 
 from data_core.e4_catl_financial_history import OfficialReport  # noqa: E402
 from data_core.e4_narrative_evidence import capture_issuer_narrative  # noqa: E402
-from run_e4_model_judgments import _financial_facts, _verify_receipt  # noqa: E402
+
+
+def _verify_receipt(receipt: dict, *, kind: str) -> str:
+    schema = str(receipt.get("schema_version") or "")
+    if receipt.get("data_kind") != "real" or not schema:
+        raise ValueError(kind + " receipt is not a real run")
+    payload = {k: v for k, v in receipt.items() if k not in {"receipt_hash", "receipt_id"}}
+    observed = hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str).encode()).hexdigest()
+    if observed != receipt.get("receipt_hash"):
+        raise ValueError(kind + " receipt hash mismatch")
+    return schema + ":" + observed
+
+
+def _financial_facts(receipt: dict, ticker: str) -> list[dict]:
+    for row in receipt.get("rows") or receipt.get("tickers") or ():
+        if str(row.get("ticker") or "").upper() != ticker:
+            continue
+        facts = list((row.get("result") or {}).get("page_facts") or ())
+        if not facts:
+            facts = [fact for report in row.get("reports") or () if report.get("status") == "available" for fact in report.get("facts") or ()]
+        if facts:
+            return facts
+    raise ValueError("financial receipt has no facts for requested ticker")
 
 
 def main() -> int:
