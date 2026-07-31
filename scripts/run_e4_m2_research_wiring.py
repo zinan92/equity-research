@@ -34,12 +34,12 @@ def main():
   if market.get('status')=='available':
    quote=market['quote'];inputs.setdefault('one_line_positioning',{})['market_snapshot']={'quote':quote,'receipt_id':m1[ticker].get('ticker')+':m1'}
   if decision:
-   inputs.setdefault('plain_language_verdict',{})['decision_policy_output']={'receipt':decision,'receipt_id':ticker+':m1'}
+   inputs.setdefault('research_conclusion_and_open_questions',{})['decision_policy_output']={'receipt':decision,'receipt_id':ticker+':m1'}
   income=[x for report in reports for x in report.get('facts',[]) if x.get('metric') in {'revenue','operating_cost','net_profit_parent'}]
   cash=[x for report in reports for x in report.get('facts',[]) if x.get('metric') in {'operating_cash_flow','capital_expenditure'}]
   balance=[x for report in reports for x in report.get('facts',[]) if x.get('metric') in {'total_assets','total_liabilities','total_equity','cash','short_term_borrowings','long_term_borrowings'}]
   financial_evidence=income+cash+balance
-  if financial_evidence: inputs.setdefault('financials_and_valuation',{})['financial_evidence']=financial_evidence
+  if financial_evidence: inputs.setdefault('financial_and_operating_time_series',{})['financial_evidence']=financial_evidence
   if r2_acceptance:
    r2_inputs, _r2_gaps=wire_r2_industry_receipts(r2_acceptance, r2_receipt, ticker=ticker)
    for section_id, values in r2_inputs.items(): inputs.setdefault(section_id,{}).update(values)
@@ -50,8 +50,8 @@ def main():
   governance=governance_by_ticker.get(ticker)
   if governance:
    gi=governance['inputs']
-   if gi.get('management_record',{}).get('status')=='available': inputs.setdefault('founder_and_team',{})['management_evidence']=[{'records':gi['management_record']['records'],'source_receipt':governance['receipt_id']}]
-   if gi.get('governance_events',{}).get('status')=='available': inputs.setdefault('founder_and_team',{})['governance_evidence']=gi['governance_events']['records']
+   if gi.get('management_record',{}).get('status')=='available': inputs.setdefault('identity_founder_and_governance',{})['management_evidence']=[{'records':gi['management_record']['records'],'source_receipt':governance['receipt_id']}]
+   if gi.get('governance_events',{}).get('status')=='available': inputs.setdefault('identity_founder_and_governance',{})['governance_evidence']=gi['governance_events']['records']
   result=compile_vertical_degradation(ticker,fs,known_at='2026-07-29T00:00:00Z',additional_section_inputs=inputs)
   rows.append({'ticker':ticker,'status':'available','result':result,'input_receipts':{'financial_sequences_sha256':hashlib.sha256(a.financial_sequences.read_bytes()).hexdigest(),'m1_sha256':hashlib.sha256(a.m1_receipt.read_bytes()).hexdigest(),'r2_receipt_id':f"{r2_receipt.get('schema_version')}:{r2_receipt.get('receipt_hash')}" if r2_acceptance else None,'r2_acceptance_receipt_id':f"{r2_acceptance.get('schema_version')}:{r2_acceptance.get('receipt_hash')}" if r2_acceptance else None,'judgment_receipt_id':f"{judgments['schema_version']}:{judgments['receipt_hash']}" if judgments else None,'governance_receipt_id':governance.get('receipt_id') if governance else None}})
  out={'schema_version':'e4-m2-research-wiring-v1','data_kind':'real','rows':rows};out['receipt_hash']=hashlib.sha256(json.dumps(out,sort_keys=True,default=str).encode()).hexdigest();a.out.write_text(json.dumps(out,ensure_ascii=False,indent=2,default=str)+'\n'); print(a.out)

@@ -41,7 +41,7 @@ def main():
   unreliable=any((f['citation'].get('document_id'),f['citation'].get('page_number')) in bad for f in v.get('facts',[])); status='unreliable' if unreliable else v['status']; return f"<article class='judgment'><h3><em>{html.escape(status)}</em></h3><p>{html.escape(judgment_text(v))}</p><ul>{''.join(line({'metric':f['metric'],'report_period':f['citation']['report_period'],'value':f['value'],'unit':f['citation']['unit'],'source_url':f['citation']['source_url'],'page_number':f['citation']['page_number'],'quoted_anchor':f['citation']['quoted_anchor']}) for f in v.get('facts',[]))}</ul></article>"
  j=''.join(f"<h3>{html.escape(k)}</h3>"+judgment(v) for k,v in m3['content'].items())
  nav=[]
- for label,sid in [('产业链位置','industry_coordinates'),('靠什么赚钱','technology_products_and_business_model'),('财务兑现','financials_and_valuation'),('为什么能赢','why_it_can_win'),('推翻信号','core_risks')]:
+ for label,sid in [('产业链位置','business_model_and_business_lines'),('靠什么赚钱','business_model_and_business_lines'),('财务兑现','financial_and_operating_time_series'),('为什么能赢','moat_evidence_chain'),('推翻信号','risks_counter_thesis_and_triggers')]:
   sec=next(x for x in sections if x['section_id']==sid); nav.append(f"<li>{label}：{'可回答，见 '+sid if sec['status']!='missing' else '尚无证据支撑；缺 '+', '.join(sec['missing_required'])}</li>")
  resolved_periods=[str(x.get('report_period','')) for x in facts if x.get('report_period') not in {'unknown','unresolved'}]
  latest=max(resolved_periods,default='unresolved'); market_quote=next(x for x in m1['rows'] if x['ticker']==ticker)['market']['quote']; market_asof=market_quote.get('observed_at','unknown'); issuer_name=company_adapter(ticker).name; positioning='基于冻结官方披露证据的研究对象；结论仍受未完成证据约束。'

@@ -20,14 +20,13 @@ def receipts():
 class R2IndustryWiringTest(unittest.TestCase):
     def test_only_a_page_cited_issuer_gets_profile_inputs(self) -> None:
         inputs, receipts_ = wire_r2_industry_receipts(*receipts(), ticker="300750.SZ")
-        self.assertEqual(set(inputs), {"industry_coordinates", "technology_products_and_business_model"})
+        self.assertEqual(set(inputs), {"business_model_and_business_lines"})
         self.assertIn("r2_acceptance_receipt_id", receipts_)
-        self.assertEqual(inputs["industry_coordinates"]["company_position"]["citation"]["page"], 2)
+        self.assertEqual(inputs["business_model_and_business_lines"]["company_position"]["citation"]["page"], 2)
         contract = build_research_section_contract_v3(inputs)
         sections = {item.section_id: item for item in contract.sections}
-        self.assertEqual(sections["industry_coordinates"].status.value, "partial")
-        self.assertEqual(sections["technology_products_and_business_model"].status.value, "partial")
-        self.assertEqual(sections["development_timeline"].status.value, "missing")
+        self.assertEqual(sections["business_model_and_business_lines"].status.value, "partial")
+        self.assertEqual(sections["technology_origin_and_development_history"].status.value, "missing")
 
     def test_missing_issuer_position_is_not_forced_into_c1(self) -> None:
         inputs, reason = wire_r2_industry_receipts(*receipts(), ticker="600519.SH")

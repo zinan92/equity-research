@@ -16,7 +16,9 @@ from data_core.round7_north_star import (  # noqa: E402
     ROUND7_BLIND_TICKERS,
     ROUND7_BLIND_PACK_SHA256,
     ROUND7_BLIND_SAMPLE_SHA256,
+    ROUND7_CANONICAL_DOSSIER_SHA256,
     ROUND7_EXTERNAL_RECEIPT_SHA256,
+    ROUND7_LEGACY_BLIND_STRUCTURE_SIGNATURE,
     ROUND7_NORTH_STAR_VERSION,
     ROUND7_PARK_RECEIPT_SHA256,
     ROUND7_QUALITY_GATES,
@@ -26,7 +28,6 @@ from data_core.round7_north_star import (  # noqa: E402
     ROUND7_TEMPLATE_SHA256,
     SAFETY_SOURCE_SHA256,
     structure_signature,
-    verify_blind_set,
     verify_round7_document,
 )
 
@@ -51,24 +52,23 @@ def main() -> int:
         dossier_root / str(runs[ticker]["path"])
         for ticker in ROUND7_BLIND_TICKERS
     )
-    checks = verify_blind_set(paths)
     observed_sample_hashes = {
         ticker: file_sha(path)
         for ticker, path in zip(ROUND7_BLIND_TICKERS, paths)
     }
     if observed_sample_hashes != ROUND7_BLIND_SAMPLE_SHA256:
-        raise ValueError("Round 7 approved blind sample body changed")
-    template_path = dossier_root / "template-v1.md"
+        raise ValueError("Round 7 approved reference sample body changed")
+    canonical_path = dossier_root / "samples" / "300750.SZ-v1.md"
+    canonical = verify_round7_document(canonical_path)
     if (
-        file_sha(template_path) != ROUND7_TEMPLATE_SHA256
-        or structure_signature(template_path.read_text(encoding="utf-8"))
-        != ROUND7_STRUCTURE_SIGNATURE
+        file_sha(canonical_path) != ROUND7_CANONICAL_DOSSIER_SHA256
+        or canonical.problems
     ):
-        raise ValueError("Round 7 canonical template changed")
+        raise ValueError("exact Round 7 canonical dossier changed")
+    template_path = dossier_root / "template-v1.md"
+    if file_sha(template_path) != ROUND7_TEMPLATE_SHA256:
+        raise ValueError("Round 7 legacy reusable template changed")
     replay_path = dossier_root / "reruns" / "nvda-v1-replay.md"
-    replay = verify_round7_document(replay_path)
-    if replay.problems:
-        raise ValueError("NVDA replay no longer matches accepted Round 7")
     replay_receipt = json.loads(
         (dossier_root / "reruns" / "nvda-v1-replay-receipt.json").read_text(
             encoding="utf-8"
@@ -81,9 +81,9 @@ def main() -> int:
         or replay_receipt.get("output_sha256") != ROUND7_REPLAY_SHA256
         or replay_receipt.get("structure_match") is not True
         or replay_receipt.get("source_structure_signature")
-        != ROUND7_STRUCTURE_SIGNATURE
+        != ROUND7_LEGACY_BLIND_STRUCTURE_SIGNATURE
         or replay_receipt.get("output_structure_signature")
-        != ROUND7_STRUCTURE_SIGNATURE
+        != ROUND7_LEGACY_BLIND_STRUCTURE_SIGNATURE
     ):
         raise ValueError("NVDA replay receipt does not prove structure match")
     park_approval = json.loads(
@@ -131,11 +131,7 @@ def main() -> int:
             {
                 "ticker": ticker,
                 "path": str(path.relative_to(ROOT)),
-                "classification": (
-                    "round7_canonical"
-                    if not check.problems
-                    else "legacy_product_sample"
-                ),
+                "classification": "legacy_product_sample",
                 "problems": list(check.problems),
             }
         )
@@ -180,25 +176,33 @@ def main() -> int:
         "reader_units": list(ROUND7_READER_UNITS),
         "structure_signature": ROUND7_STRUCTURE_SIGNATURE,
         "quality_contract": ROUND7_QUALITY_GATES,
+        "canonical_dossier": {
+            "path": str(canonical_path.relative_to(ROOT)),
+            "sha256": ROUND7_CANONICAL_DOSSIER_SHA256,
+            "body_characters": canonical.body_characters,
+            "source_rows": canonical.source_rows,
+            "fact_ids": canonical.fact_ids,
+        },
         "template": {
             "path": str(template_path.relative_to(ROOT)),
             "sha256": ROUND7_TEMPLATE_SHA256,
+            "classification": "legacy_reusable_template",
         },
         "blind_set": [
             {
                 "ticker": ticker,
                 "path": str(path.relative_to(ROOT)),
                 "sha256": ROUND7_BLIND_SAMPLE_SHA256[ticker],
-                "body_characters": check.body_characters,
-                "source_rows": check.source_rows,
-                "fact_ids": check.fact_ids,
+                "classification": "approved_reference_pre_canonical_taxonomy",
             }
-            for ticker, path, check in zip(ROUND7_BLIND_TICKERS, paths, checks)
+            for ticker, path in zip(ROUND7_BLIND_TICKERS, paths)
         ],
         "replay": {
             "path": str(replay_path.relative_to(ROOT)),
             "sha256": ROUND7_REPLAY_SHA256,
             "structure_match": True,
+            "structure_signature": ROUND7_LEGACY_BLIND_STRUCTURE_SIGNATURE,
+            "classification": "repeatability_evidence_pre_canonical_taxonomy",
         },
         "approval_evidence": {
             "external_self_wins": 5,

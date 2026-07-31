@@ -39,7 +39,6 @@ MIGRATED_CONSUMERS = (
     "product/data_core/e4_judgment_wiring.py",
     "product/data_core/e4_judgment_review_queue.py",
     "scripts/run_e4_m2_research_wiring.py",
-    "scripts/build_e4_l1_m5_reassessment.py",
     "scripts/inventory_e4_section_completion.py",
     "scripts/compile_e4_m4_report.py",
     "scripts/verify_e4_wired_reports.py",
@@ -119,14 +118,26 @@ def verify() -> dict[str, object]:
     if section_ids != ROUND7_READER_UNITS:
         raise ValueError("C1 section order diverges from the Round 7 north star")
     empty = build_research_section_contract_v3({})
-    if empty.target_body_characters != (4_200, 5_500):
+    if empty.target_body_characters != (3_080, 4_620):
         raise ValueError("Round 7 character target changed")
-    try:
-        build_research_section_contract_v3({"investment_thesis": {}})
-    except ReportContractError:
-        old_section_rejected = True
-    else:
-        raise ValueError("retired 18-section identifier was accepted")
+    retired_ids = (
+        "investment_thesis",
+        "industry_coordinates",
+        "founder_and_team",
+        "development_timeline",
+        "technology_products_and_business_model",
+        "financials_and_valuation",
+        "why_it_can_win",
+        "core_risks",
+        "plain_language_verdict",
+    )
+    for retired_id in retired_ids:
+        try:
+            build_research_section_contract_v3({retired_id: {}})
+        except ReportContractError:
+            continue
+        raise ValueError("retired section identifier was accepted: " + retired_id)
+    old_section_rejected = True
 
     evidence_set = _evidence_set()
     reviewed = build_research_section_contract_v3(
@@ -209,7 +220,7 @@ def verify() -> dict[str, object]:
             "safety_source_hashes": observed_hashes,
         },
         "migrated_consumers": list(MIGRATED_CONSUMERS),
-        "publication_appendices": ["production_record", "sources"],
+        "publication_appendices": ["sources"],
         "publication_appendices_count_toward_tier": False,
     }
     output["receipt_hash"] = hashlib.sha256(

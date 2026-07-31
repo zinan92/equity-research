@@ -42,7 +42,7 @@ class ResearchDegradationTest(unittest.TestCase):
     def test_b_tier_is_partial_and_cannot_emit_action_fields(self) -> None:
         set_ = evidence()
         inputs = full_inputs()
-        inputs["financials_and_valuation"] = {}
+        inputs["financial_and_operating_time_series"] = {}
         contract = build_research_section_contract_v3(inputs, structure_only=False, evidence_set=set_)
         receipt = assess_any_ticker("300750.SZ", evidence_set=set_, section_contract=contract)
         self.assertEqual(receipt.tier, ResearchTier.B)

@@ -136,3 +136,24 @@ class WiredReportVerifierTest(unittest.TestCase):
             wiring.write_text(json.dumps(value))
             with self.assertRaisesRegex(ValueError, "wiring receipt identity"):
                 MODULE.summary(receipt, queue, judgment, wiring)
+
+    def test_redesigned_nine_section_taxonomy_fails_closed(self):
+        with TemporaryDirectory() as directory:
+            receipt, queue, judgment, wiring = self._files(Path(directory))
+            report_value = json.loads(receipt.read_text())
+            wiring_value = json.loads(wiring.read_text())
+            report_value["sections"][-1]["section_id"] = "plain_language_verdict"
+            wiring_value["rows"][0]["result"]["section_contract"]["sections"][-1][
+                "section_id"
+            ] = "plain_language_verdict"
+            wiring_value["receipt_hash"] = MODULE.canonical_receipt_digest(
+                wiring_value
+            )
+            wiring.write_text(json.dumps(wiring_value))
+            report_value["input_hashes"]["m2"] = digest(wiring_value)
+            report_value.pop("receipt_hash")
+            report_value["receipt_hash"] = digest(report_value)
+            receipt.write_text(json.dumps(report_value))
+
+            with self.assertRaisesRegex(ValueError, "exact Round 7"):
+                MODULE.summary(receipt, queue, judgment, wiring)

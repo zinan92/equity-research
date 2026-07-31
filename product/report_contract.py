@@ -581,6 +581,7 @@ def build_structure_truth_set(*, ticker: str, name: str, exchange: str, market: 
 # Research Section Contract v3 is the accepted Round 7 machine contract.
 SECTION_CONTRACT_SCHEMA_VERSION = "research-section-contract-v3"
 SECTION_CONTRACT_VERSION = "3.0.0"
+ROUND7_SECTION_BODY_TARGET = (3_080, 4_620)
 
 
 class SectionCompletion(str, Enum):
@@ -747,55 +748,51 @@ RESEARCH_SECTION_SPECS_V3: tuple[ResearchSectionSpec, ...] = (
             _input("market_snapshot", "object", "带时点的市场数据卡"),
             _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
         ),
-        (300, 450),
+        (140, 240),
         ("annual-report:company-profile", "round7:one-line-positioning"),
     ),
     ResearchSectionSpec(
-        "industry_coordinates",
+        "identity_founder_and_governance",
         2,
-        "产业坐标",
-        "说明产业链位置、国内外同类、上下游约束和需求到利润的传导链。",
+        "身份、创始人与治理",
+        "核验证券身份、创始人和关键管理者，并给出控制、继任与治理观察。",
         (
-            _input("industry_evidence", "array", "行业节点和价值链证据"),
-            _input("company_position", "object", "公司在产业链中的页级证据位置"),
-            _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
-        ),
-        (_input("peer_evidence", "array", "口径明确的国内外同类证据"),),
-        (500, 700),
-        ("annual-report:business-review", "round7:industry-coordinates"),
-    ),
-    ResearchSectionSpec(
-        "founder_and_team",
-        3,
-        "创始人与团队",
-        "解释关键人物、控制关系、组织转折、继任与治理硬伤。",
-        (
+            _input("issuer_identity", "object", "公司、证券和报告时点身份"),
             _input("management_evidence", "array", "关键人物履历和任职证据"),
             _input("governance_evidence", "array", "控制、治理和资本配置事件"),
             _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
         ),
         (_input("ownership_evidence", "array", "股东及内部人持股证据"),),
-        (400, 550),
-        ("annual-report:directors-supervisors-management", "annual-report:governance"),
+        (220, 360),
+        (
+            "annual-report:company-profile",
+            "annual-report:directors-supervisors-management",
+            "annual-report:governance",
+            "round7:identity-founder-governance",
+        ),
     ),
     ResearchSectionSpec(
-        "development_timeline",
-        4,
-        "发展时间线",
-        "按时间说明真正改变公司能力边界的产品、产能、市场和组织节点。",
+        "technology_origin_and_development_history",
+        3,
+        "技术来源与发展史",
+        "按时间核验技术来源及真正改变公司能力边界的产品、产能、市场和组织节点。",
         (
             _input("timeline_evidence", "array", "有日期和页级来源的公司事件"),
             _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
         ),
         (_input("governance_timeline", "array", "治理转折事件"),),
-        (450, 600),
-        ("annual-report:company-history", "annual-report:business-review"),
+        (380, 550),
+        (
+            "annual-report:company-history",
+            "annual-report:business-review",
+            "round7:technology-origin-development-history",
+        ),
     ),
     ResearchSectionSpec(
-        "technology_products_and_business_model",
-        5,
-        "技术、产品与商业模式",
-        "回答产品解决什么问题、谁付钱、收入如何形成以及关键经营依赖。",
+        "business_model_and_business_lines",
+        4,
+        "商业模式与业务线",
+        "回答各业务线解决什么问题、谁付钱、收入如何形成以及关键经营依赖。",
         (
             _input("business_evidence", "array", "产品、客户、收入模式和分部证据"),
             _input("operating_evidence", "array", "产能、研发、渠道和经营 KPI"),
@@ -803,33 +800,44 @@ RESEARCH_SECTION_SPECS_V3: tuple[ResearchSectionSpec, ...] = (
         ),
         (
             _input("segment_financials", "array", "官方分部收入与利润序列"),
+            _input("industry_evidence", "array", "行业节点和价值链证据"),
+            _input("company_position", "object", "公司在产业链中的页级证据位置"),
             _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
         ),
-        (650, 800),
-        ("annual-report:principal-business", "annual-report:management-discussion"),
+        (520, 750),
+        (
+            "annual-report:principal-business",
+            "annual-report:management-discussion",
+            "round7:business-model-business-lines",
+        ),
     ),
     ResearchSectionSpec(
-        "financials_and_valuation",
-        6,
-        "财务与估值",
-        "解释多期增长、盈利质量、现金转换和带时点的估值或估值缺口。",
+        "financial_and_operating_time_series",
+        5,
+        "财务与经营时间序列",
+        "按期次陈述收入、利润、现金流与关键经营指标，解释方向、口径和现金转换。",
         (
             _input("financial_evidence", "array", "统一期次、单位和口径的财务序列"),
-            _input("valuation_evidence", "array", "带时点的市场与估值证据或明确缺口"),
+            _input("operating_evidence", "array", "销量、产能、研发等经营时间序列"),
             _input("chapter_draft", "object", "完整章节正文及逐句证据绑定"),
         ),
         (
+            _input("valuation_evidence", "array", "带时点的市场与估值证据或明确缺口"),
             _input("accounting_evidence", "array", "审计意见和会计质量证据"),
             _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
         ),
-        (650, 800),
-        ("annual-report:financial-statements", "official-market-snapshot"),
+        (450, 650),
+        (
+            "annual-report:financial-statements",
+            "annual-report:management-discussion",
+            "round7:financial-operating-time-series",
+        ),
     ),
     ResearchSectionSpec(
-        "why_it_can_win",
-        7,
-        "为什么它能赢",
-        "用可反驳的机制说明竞争优势，并为每项优势给出证伪条件。",
+        "moat_evidence_chain",
+        6,
+        "护城河的证据链",
+        "用假设、支持证据、可证伪条件与当前判断构成竞争优势证据链。",
         (
             _input("moat_evidence", "array", "支持竞争机制的公司特异证据"),
             _input("falsification_evidence", "array", "可观察的反证与失效条件"),
@@ -839,14 +847,14 @@ RESEARCH_SECTION_SPECS_V3: tuple[ResearchSectionSpec, ...] = (
             _input("peer_evidence", "array", "独立、同口径的同行证据"),
             _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
         ),
-        (450, 600),
-        ("annual-report:competitive-advantages", "round7:why-it-can-win"),
+        (420, 620),
+        ("annual-report:competitive-advantages", "round7:moat-evidence-chain"),
     ),
     ResearchSectionSpec(
-        "core_risks",
-        8,
-        "核心风险",
-        "把与多头叙事冲突的风险写成已知事实、触发器和下一次核验。",
+        "risks_counter_thesis_and_triggers",
+        7,
+        "风险、反题材与观察触发器",
+        "把与多头叙事冲突的风险写成已知事实、观察触发器和下一次核验。",
         (
             _input("risk_evidence", "array", "公司披露的具体风险和暴露"),
             _input("trigger_evidence", "array", "观察触发器和下一核验窗口"),
@@ -856,14 +864,17 @@ RESEARCH_SECTION_SPECS_V3: tuple[ResearchSectionSpec, ...] = (
             _input("policy_evidence", "array", "公司特定政策与宏观暴露"),
             _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
         ),
-        (450, 600),
-        ("annual-report:risk-factors", "round7:core-risks"),
+        (450, 650),
+        (
+            "annual-report:risk-factors",
+            "round7:risks-counter-thesis-observation-triggers",
+        ),
     ),
     ResearchSectionSpec(
-        "plain_language_verdict",
-        9,
-        "大白话点评",
-        "综合事实、判断、估值边界与反证，给出可记忆且可被推翻的结论。",
+        "research_conclusion_and_open_questions",
+        8,
+        "研究结论与待补问题",
+        "分开陈述事实结论、研究判断与真正阻断结论的待补问题。",
         (
             _input("synthesis_evidence", "array", "支持最终综合判断的章节级证据"),
             _input("decision_policy_output", "object", "不越过 Tier 的政策引擎输出"),
@@ -873,8 +884,23 @@ RESEARCH_SECTION_SPECS_V3: tuple[ResearchSectionSpec, ...] = (
             _input("typed_gaps", "array", "真正阻断结论的待补证据"),
             _input("legacy_judgment_materials", "array", "退役前按字段生成的未审阅判断，仅作章节草稿材料"),
         ),
-        (350, 400),
-        ("round7:plain-language-verdict", "decision-policy"),
+        (200, 350),
+        ("round7:research-conclusion-open-questions", "decision-policy"),
+    ),
+    ResearchSectionSpec(
+        "production_record",
+        9,
+        "生产记录",
+        "记录运行身份、来源、模型与人工介入、耗时、复跑和审阅状态。",
+        (
+            _input("run_receipt", "object", "可核验运行 ID、模型调用和产物哈希"),
+            _input("source_manifest", "array", "本次运行实际使用的官方来源"),
+        ),
+        (
+            _input("review_record", "object", "人工审阅身份、状态和时间"),
+        ),
+        (300, 450),
+        ("round7:production-record",),
     ),
 )
 
@@ -1069,9 +1095,9 @@ def build_research_section_contract_v3(
         raise ReportContractError("live section contract requires a B6-passed evidence set")
     minimum_characters = sum(item.target_characters[0] for item in RESEARCH_SECTION_SPECS_V3)
     maximum_characters = sum(item.target_characters[1] for item in RESEARCH_SECTION_SPECS_V3)
-    if not 4_000 <= minimum_characters <= maximum_characters <= 5_500:
+    if (minimum_characters, maximum_characters) != ROUND7_SECTION_BODY_TARGET:
         raise ReportContractError(
-            "Round 7 report body target must stay within 4,000–5,500 Chinese characters"
+            "Round 7 section-body target diverges from the accepted dossier"
         )
     return ResearchSectionContract(
         schema_version=SECTION_CONTRACT_SCHEMA_VERSION,

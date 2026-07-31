@@ -143,7 +143,7 @@ def migrate(
             if events.get("status") == "available":
                 founder["governance_evidence"] = events["records"]
             if founder:
-                additional["founder_and_team"] = founder
+                additional["identity_founder_and_governance"] = founder
                 carried["governance"] = {
                     "receipt_id": governance_receipt["receipt_id"]
                 }

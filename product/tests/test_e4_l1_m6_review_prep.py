@@ -13,7 +13,7 @@ MODULE = importlib.util.module_from_spec(SPEC); sys.modules[SPEC.name] = MODULE;
 
 class L1M6ReviewPrepTest(unittest.TestCase):
     def test_stale_legacy_is_not_counted_and_current_lineage_is_required(self) -> None:
-        queue = {"data_kind": "real", "source_receipt_id": "r", "items": [{"judgment_id": "risk_register", "impact_rank": 2, "section_id": "core_risks", "review_status": "pending_human_review", "citations": [{"page_number": 8, "pdf_page_url": "https://official/a.pdf#page=8"}], "would_promote_section_to_full": False}]}
+        queue = {"data_kind": "real", "source_receipt_id": "r", "items": [{"judgment_id": "risk_register", "impact_rank": 2, "section_id": "risks_counter_thesis_and_triggers", "review_status": "pending_human_review", "citations": [{"page_number": 8, "pdf_page_url": "https://official/a.pdf#page=8"}], "would_promote_section_to_full": False}]}
         assignment = {"ticker": "300750.SZ", "page_citation_check": {"document_id": "d1", "raw_hash": "a"}}
         stale = {"ticker": "600519.SH", "page_citation_check": {"document_id": "old", "raw_hash": "b"}}
         sequence = {"receipt_hash": "sequence", "tickers": [{"ticker": "300750.SZ", "reports": [{"document": {"document_id": "d1", "raw_hash": "a"}}]}]}

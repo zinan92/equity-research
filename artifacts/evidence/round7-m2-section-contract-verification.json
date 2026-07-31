@@ -4,23 +4,23 @@
   "section_contract": {
     "schema_version": "research-section-contract-v3",
     "contract_version": "3.0.0",
-    "contract_hash": "6576a2bdf923a5e56ccd2553f01efcc96eb6a4005715da185c71be4eb9b97657",
+    "contract_hash": "cbfee50484a9adbb59d9ece9ccd1950012a14edb847b105947115104643abfe0",
     "profile_id": "a-share-round7",
-    "profile_hash": "7c972f23b970e3a5e124146e726f6be1427fd23f60f1a5d0f62f9f7cefba470a",
+    "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
     "section_ids": [
       "one_line_positioning",
-      "industry_coordinates",
-      "founder_and_team",
-      "development_timeline",
-      "technology_products_and_business_model",
-      "financials_and_valuation",
-      "why_it_can_win",
-      "core_risks",
-      "plain_language_verdict"
+      "identity_founder_and_governance",
+      "technology_origin_and_development_history",
+      "business_model_and_business_lines",
+      "financial_and_operating_time_series",
+      "moat_evidence_chain",
+      "risks_counter_thesis_and_triggers",
+      "research_conclusion_and_open_questions",
+      "production_record"
     ],
     "target_body_characters": [
-      4200,
-      5500
+      3080,
+      4620
     ],
     "required_inputs": {
       "one_line_positioning": [
@@ -28,44 +28,44 @@
         "positioning_evidence",
         "chapter_draft"
       ],
-      "industry_coordinates": [
-        "industry_evidence",
-        "company_position",
-        "chapter_draft"
-      ],
-      "founder_and_team": [
+      "identity_founder_and_governance": [
+        "issuer_identity",
         "management_evidence",
         "governance_evidence",
         "chapter_draft"
       ],
-      "development_timeline": [
+      "technology_origin_and_development_history": [
         "timeline_evidence",
         "chapter_draft"
       ],
-      "technology_products_and_business_model": [
+      "business_model_and_business_lines": [
         "business_evidence",
         "operating_evidence",
         "chapter_draft"
       ],
-      "financials_and_valuation": [
+      "financial_and_operating_time_series": [
         "financial_evidence",
-        "valuation_evidence",
+        "operating_evidence",
         "chapter_draft"
       ],
-      "why_it_can_win": [
+      "moat_evidence_chain": [
         "moat_evidence",
         "falsification_evidence",
         "chapter_draft"
       ],
-      "core_risks": [
+      "risks_counter_thesis_and_triggers": [
         "risk_evidence",
         "trigger_evidence",
         "chapter_draft"
       ],
-      "plain_language_verdict": [
+      "research_conclusion_and_open_questions": [
         "synthesis_evidence",
         "decision_policy_output",
         "chapter_draft"
+      ],
+      "production_record": [
+        "run_receipt",
+        "source_manifest"
       ]
     }
   },
@@ -103,11 +103,11 @@
         "chapter_draft"
       ],
       "target_characters": [
-        300,
-        450
+        140,
+        240
       ],
-      "section_hash": "65770404c12be4c08da17812df090d52c259b770f238bfd1b070587a0c9f0fea",
-      "profile_hash": "7c972f23b970e3a5e124146e726f6be1427fd23f60f1a5d0f62f9f7cefba470a",
+      "section_hash": "f8f0c59944c291ab41586aa72750a56a4115bf97b31aabbf661c84d509cf94c8",
+      "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
       "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
       "input_hash": "1e94dc48db64e41bd408643e9a91be06f4d25d22dc2533090acc935e5720d1e1"
     },
@@ -130,16 +130,14 @@
     "product/data_core/e4_judgment_wiring.py",
     "product/data_core/e4_judgment_review_queue.py",
     "scripts/run_e4_m2_research_wiring.py",
-    "scripts/build_e4_l1_m5_reassessment.py",
     "scripts/inventory_e4_section_completion.py",
     "scripts/compile_e4_m4_report.py",
     "scripts/verify_e4_wired_reports.py",
     "product/data_core/research_degradation.py"
   ],
   "publication_appendices": [
-    "production_record",
     "sources"
   ],
   "publication_appendices_count_toward_tier": false,
-  "receipt_hash": "3a68bbd47c65d2d9198797fba296e3b0ef7fbbf0a43635ff4c6c20dd6782bc3f"
+  "receipt_hash": "e50e3e14eb96ae568ef0114762a3e8aa245a62f89aa912328000de836dc6372f"
 }

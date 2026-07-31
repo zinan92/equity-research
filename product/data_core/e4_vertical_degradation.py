@@ -60,7 +60,7 @@ def compile_vertical_degradation(
     section_inputs = {
         # Page-cited filing rows are financial evidence. They do not prove a
         # valuation, a complete chapter draft, or any investment conclusion.
-        "financials_and_valuation": {"financial_evidence": citation_index},
+        "financial_and_operating_time_series": {"financial_evidence": citation_index},
     }
     # Callers may add only runtime-receipted objects.  This function does not
     # alter C1's required input declarations or completion rules.

@@ -84,7 +84,7 @@ class JudgmentWiringTest(unittest.TestCase):
 
     def test_unreviewed_input_cannot_upgrade_an_otherwise_complete_section(self) -> None:
         inputs = wire_unreviewed_judgment_receipt(receipt(), ticker="300750.SZ")
-        inputs["why_it_can_win"].update({
+        inputs["moat_evidence_chain"].update({
             "moat_evidence": [{"source": "official"}],
             "falsification_evidence": [{"source": "official"}],
             "chapter_draft": {
@@ -101,7 +101,7 @@ class JudgmentWiringTest(unittest.TestCase):
             },
         })
         contract = build_research_section_contract_v3(inputs)
-        section = next(item for item in contract.sections if item.section_id == "why_it_can_win")
+        section = next(item for item in contract.sections if item.section_id == "moat_evidence_chain")
         self.assertEqual(section.status.value, "partial")
         self.assertEqual(section.status_reason, "pending_judgment_review")
 

@@ -27,7 +27,7 @@ class JudgmentReviewQueueTest(unittest.TestCase):
         moat = next(item for item in queue["items"] if item["judgment_id"] == "moat_assessment")
         self.assertFalse(moat["would_promote_section_to_full"])
         self.assertIn("moat_evidence", moat["remaining_required_inputs_after_approval"])
-        risks = [item for item in queue["items"] if item["section_id"] == "core_risks"]
+        risks = [item for item in queue["items"] if item["section_id"] == "risks_counter_thesis_and_triggers"]
         self.assertEqual(len(risks), 4)
         self.assertTrue(all(not item["would_promote_section_to_full"] for item in risks))
         self.assertTrue(

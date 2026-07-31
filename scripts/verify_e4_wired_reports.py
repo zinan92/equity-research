@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT / "product"))
 
 from data_core.e4_judgment_review_queue import build_judgment_review_queue
 from data_core.e4_judgment_wiring import wire_unreviewed_judgment_receipt
+from data_core.round7_north_star import ROUND7_READER_UNITS
 
 
 def digest(value: dict, *, omit_receipt_hash: bool = False) -> str:
@@ -81,6 +82,9 @@ def summary(
     states = Counter(item["status"] for item in receipt["sections"])
     if sum(states.values()) != 9:
         raise ValueError("report does not contain the nine Round 7 sections")
+    section_ids = tuple(item.get("section_id") for item in receipt["sections"])
+    if section_ids != ROUND7_READER_UNITS:
+        raise ValueError("report section IDs/order do not match exact Round 7")
     if queue.get("ticker") != receipt.get("ticker"):
         raise ValueError("review queue ticker does not match report receipt")
     if queue.get("source_receipt_id") != receipt.get("judgment_source_receipt_id"):
