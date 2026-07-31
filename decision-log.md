@@ -920,7 +920,7 @@
 
 - Decision：在冻结的 `release/public-readonly-archive-v1` 发布线上新增显式 `PARK_PUBLIC_READ_ONLY=1`。匿名访客只可读取 canonical 组合摘要、当前组合报告、产业图谱总览和单份公司档案；服务端仍保持 `PARK_AUTH_REQUIRED=1`，不创建匿名 member 或 session，也不把匿名访客投影成 Owner。
 - Why：Park 已确认将当前网站全部研究内容公开只读，但验证码移除不能顺带开放成员、审计、反馈、账单、邀请、写入、导出或批量下载能力；同时主线已经撤下归档产业数据，不能用主线部署覆盖线上 489 份档案。
-- Evidence：Issue #660 固定范围与法律合并边界；`product/server.py` 使用精确匿名 GET allowlist 与独立公开投影；部署环境和 release manifest 绑定公开能力；HTTP 验收覆盖 489/38/94、当前报告、零 auth DB 写入、Owner 登录回归及全部敏感路由拒绝。
+- Evidence：Issue #662 固定范围与法律合并边界；`product/server.py` 使用精确匿名 GET allowlist 与独立公开投影；部署环境和 release manifest 绑定公开能力；HTTP 验收覆盖 489/38/94、当前报告、零 auth DB 写入、Owner 登录回归及全部敏感路由拒绝。
 
 ### Gotchas · 冻结归档站公开只读发布
 
