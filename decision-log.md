@@ -2469,3 +2469,26 @@
   the Round 7 blind canonical set. Body length is only a smoke check. B6,
   Tier and blocked-field safety must survive the later section-contract
   replacement even though the 18-section taxonomy itself will be retired.
+
+# 2026-07-31 — Canonical means the exact CATL Round 7 chapter set
+
+- **Decision:** Correct C1 to the nine numbered chapters in
+  `docs/dossier-production/samples/300750.SZ-v1.md`. The five-company blind
+  pack and NVDA replay remain useful quality and repeatability evidence, but
+  their later “产业坐标 / 大白话点评” taxonomy is not the canonical C1 chapter
+  identity.
+- **Why:** Park authorized adoption of the listed CATL nine chapters verbatim,
+  not another nine-part redesign. The merged M2 had silently changed chapter
+  boundaries, excluded production record from Tier counting and inflated
+  section-body targets beyond the 3,443 characters actually present in the
+  accepted sample.
+- **Evidence:** The north-star verifier binds CATL sample SHA-256
+  `5c1c8d9eb2f138925c8218ac9e0cd8ce2869bbb811a812e39bbfd339ef709d0e`;
+  the section-contract verifier reports the corrected ordered IDs, target
+  3,080–4,620, reviewed all-FULL Tier A, unreviewed Tier B and unchanged
+  blocked fields.
+- **Gotchas:** The blind pack remains approved reader-quality evidence, but
+  its structure match is within its own pre-canonical taxonomy. It cannot be
+  used to overwrite the explicitly named CATL chapter contract. `Sources` is
+  an appendix; `生产记录` is chapter 9 and receives Tier credit only from a
+  real run receipt and source manifest.

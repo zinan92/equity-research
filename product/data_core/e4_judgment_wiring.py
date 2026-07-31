@@ -30,15 +30,15 @@ _HASH = re.compile(r"^[0-9a-f]{64}$")
 # field-oriented adapter from the production path.
 JUDGMENT_INPUTS: dict[str, tuple[str, ...]] = {
     "one_line_positioning": ("investment_thesis", "variant_view"),
-    "why_it_can_win": ("moat_assessment",),
-    "core_risks": (
+    "moat_evidence_chain": ("moat_assessment",),
+    "risks_counter_thesis_and_triggers": (
         "risk_register",
         "falsification_tests",
         "monitoring_kpis",
         "action_triggers",
     ),
-    "financials_and_valuation": ("accounting_checks", "margin_bridge"),
-    "technology_products_and_business_model": ("operating_kpis",),
+    "financial_and_operating_time_series": ("accounting_checks", "margin_bridge"),
+    "business_model_and_business_lines": ("operating_kpis",),
 }
 
 

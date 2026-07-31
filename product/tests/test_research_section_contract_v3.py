@@ -112,6 +112,20 @@ class ResearchSectionContractV3Test(unittest.TestCase):
             [item.order for item in RESEARCH_SECTION_SPECS_V3],
             list(range(1, 10)),
         )
+        self.assertEqual(
+            tuple(item.title for item in RESEARCH_SECTION_SPECS_V3),
+            (
+                "一句话定位",
+                "身份、创始人与治理",
+                "技术来源与发展史",
+                "商业模式与业务线",
+                "财务与经营时间序列",
+                "护城河的证据链",
+                "风险、反题材与观察触发器",
+                "研究结论与待补问题",
+                "生产记录",
+            ),
+        )
         self.assertTrue(
             all(
                 item.required_inputs and item.optional_inputs
@@ -122,10 +136,17 @@ class ResearchSectionContractV3Test(unittest.TestCase):
             all(
                 any(item.key == "chapter_draft" for item in section.required_inputs)
                 for section in RESEARCH_SECTION_SPECS_V3
+                if section.section_id != "production_record"
             )
         )
+        production = RESEARCH_SECTION_SPECS_V3[-1]
+        self.assertEqual(production.section_id, "production_record")
+        self.assertNotIn(
+            "chapter_draft",
+            {item.key for item in production.required_inputs},
+        )
         contract = build_research_section_contract_v3({})
-        self.assertEqual(contract.target_body_characters, (4_200, 5_500))
+        self.assertEqual(contract.target_body_characters, (3_080, 4_620))
         self.assertEqual(contract.schema_version, SECTION_CONTRACT_SCHEMA_VERSION)
         self.assertEqual(contract.contract_version, SECTION_CONTRACT_VERSION)
 
@@ -159,12 +180,12 @@ class ResearchSectionContractV3Test(unittest.TestCase):
         values["one_line_positioning"]["chapter_draft"] = chapter_draft(
             status="ai_generated_judgment_unreviewed"
         )
-        values["why_it_can_win"]["legacy_judgment_materials"] = [
+        values["moat_evidence_chain"]["legacy_judgment_materials"] = [
             {"status": "ai_generated_judgment_unreviewed"}
         ]
         contract = build_research_section_contract_v3(values)
         by_id = {item.section_id: item for item in contract.sections}
-        for section_id in ("one_line_positioning", "why_it_can_win"):
+        for section_id in ("one_line_positioning", "moat_evidence_chain"):
             self.assertIs(by_id[section_id].status, SectionCompletion.PARTIAL)
             self.assertEqual(
                 by_id[section_id].status_reason,
@@ -244,8 +265,23 @@ class ResearchSectionContractV3Test(unittest.TestCase):
         )
 
     def test_unknown_old_sections_inputs_and_wrong_types_fail_closed(self) -> None:
-        with self.assertRaisesRegex(ReportContractError, "unknown research sections"):
-            build_research_section_contract_v3({"investment_thesis": {}})
+        for retired_id in (
+            "investment_thesis",
+            "industry_coordinates",
+            "founder_and_team",
+            "development_timeline",
+            "technology_products_and_business_model",
+            "financials_and_valuation",
+            "why_it_can_win",
+            "core_risks",
+            "plain_language_verdict",
+        ):
+            with self.subTest(retired_id=retired_id):
+                with self.assertRaisesRegex(
+                    ReportContractError,
+                    "unknown research sections",
+                ):
+                    build_research_section_contract_v3({retired_id: {}})
         with self.assertRaisesRegex(ReportContractError, "received unknown inputs"):
             build_research_section_contract_v3(
                 {"one_line_positioning": {"investment_thesis": {}}}

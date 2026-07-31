@@ -1,14 +1,24 @@
 # REGISTRY
 
+## 2026-07-31 · Round 7 exact-nine correction
+
+Now: issue #648 corrects the canonical C1 identity to the exact nine numbered
+chapters in `docs/dossier-production/samples/300750.SZ-v1.md`. The earlier
+“产业坐标 / 创始人与团队 / 发展时间线 / 大白话点评” nine-part redesign is retired.
+The nine chapter bodies target 3,080–4,620 characters around the accepted
+sample's actual 3,443; the complete sample remains 4,249 characters. Sources
+is the sole appendix and production record is chapter 9. B6, Tier escalation,
+decision policy and blocked-field sources are byte-unchanged.
+
+Next: rebuild CATL chapter-by-chapter against this exact contract. Narrative
+facts must use clean page-bound spans; the stale redesigned checkpoint and
+generated artifact are not valid progress.
+
 ## 2026-07-30 · Round 7 nine-section C1 contract active
 
-Now: R7-M2 replaces the 18-section C1 taxonomy with the accepted nine reader
-units and a 4,200–5,500 Chinese-character target. All direct contract
-consumers now use v3 section IDs. Every section requires a complete chapter
-draft; unreviewed chapters and transitional field judgments remain PARTIAL
-with `pending_judgment_review`. Production record and Sources remain required
-publication appendices outside Tier counting. B6, Tier escalation,
-decision-policy and blocked-field source hashes are unchanged.
+Superseded on 2026-07-31: this entry described a redesigned nine-part taxonomy,
+not the exact CATL Round 7 chapter set. Its 4,200–5,500 section-body target and
+“production record outside Tier” statement are invalid.
 
 Next: R7-M3 reuses the existing structured DeepSeek transport to generate one
 complete chapter per call for CATL, retaining the three reasoning validators
@@ -16,11 +26,11 @@ and all page-level evidence identity.
 
 ## 2026-07-30 · Round 7 north star frozen
 
-Now: R7-M1 machine-freezes the accepted nine-unit reader structure, five blind
-samples, NVDA replay, external 5/5 result, Park approval, reader quality gates
-and the existing B6/Tier/blocked-field safety baseline. CATL and Moutai's old
-Markdown samples are explicitly classified as legacy product samples rather
-than Round 7 canonical evidence.
+Corrected on 2026-07-31: the accepted CATL file
+`docs/dossier-production/samples/300750.SZ-v1.md` is the canonical chapter
+taxonomy and quality example. The five blind samples and NVDA replay remain
+approved structure/repeatability references created before that exact taxonomy
+was frozen; they do not override the CATL chapter identity.
 
 Next: R7-M2 replaces C1's 18-section taxonomy with a nine-section machine
 contract while preserving the frozen B6, Tier and blocked-field semantics.
@@ -73,7 +83,7 @@ Next: a human may review the 10 CATL queue items against their page citations; a
 - B4 now normalizes Eastmoney/THS broker estimates by forecast year, binds enriched fields to report/date/raw provenance, builds replayable point-in-time consensus snapshots, and quarantines superseded or robust-outlier values before aggregation.
 - B5 now adapts Intel RSS/Google News/Yahoo/official-monitor collectors behind canonical SourceManifest ingestion, resolves A-share entities against the security master, groups cross-source duplicate events, separates evidence from versioned model inference, and exposes per-source coverage gaps.
 - B6 now freezes canonical records into deterministic evidence-set/gate identities, machine-checks primary/independent/lead roles, recomputes PIT/freshness/conflict/coverage, and exposes only accepted evidence through a read-only Research Context Pack.
-- C1 now defines one typed 18-section report contract with fixed full/partial/missing semantics, a 32–50 page budget, section/profile/version/input hashes, and a hard B6 boundary for live acceptance.
+- C1 now defines the exact accepted Round 7 nine-chapter contract with fixed full/partial/missing semantics, chapter/profile/version/input hashes, and the unchanged hard B6 boundary for live acceptance. `production_record` is chapter 9; `Sources` is the sole non-Tier appendix.
 - C2 now reconciles historical statements and produces hashed Bear/Base/Bull DCF, reverse DCF, peer/history cross-checks and stable sensitivities while blocking currency, unit, balance and share-count anomalies.
 - C3 now compiles page-cited broker viewpoints into per-report rows, robust consensus/outlier separation, immutable rating/target/forecast revisions, visible bull/bear topic evidence and evidence-strength-bounded summary language.
 - The private research site now includes a code-first Industry Intelligence library: 38 archived segment three-high nodes, 94 materials-company nodes and 489 on-demand company dossiers. Single-use access codes collect no visitor identity; the source snapshot is explicitly separated from live/canonical research.
@@ -81,7 +91,7 @@ Next: a human may review the 10 CATL queue items against their page citations; a
 - N1-2 now adds polite, provenance-preserving Eastmoney F10 business-composition and paginated appointment-calendar adapters. Every calendar page retains its own source URL and raw hash; a broken page yields a failed run and no partial complete-calendar result. Fixtures are isolated from optional live probes, and the 30-company runtime-only audit reached 93.46% segment-name coverage with a complete 11-page calendar and no missing validation tickers.
 - N1-3 now reconstructs the 30-company A/HK/US/JP historical market snapshot with bounded source fallbacks and field-level provenance: 22 prices pass the declared window, eight exact matches are retained as outside-window residuals, and 28/30 changes pass with two explicit previous-close reference mismatches. SEC filed-before-as-of facts plus frozen historical FX reconstruct 52 valuation fields, while three outliers, 39 unavailable historical inputs and 12 undisclosed-definition PEG fields remain visible instead of being forced through tolerance. The source register reaches 24/28 high/medium-confidence market-field cells (85.7%).
 - N1-4 now independently reproduces only the benchmark's disclosed arithmetic. In the 649-company main universe, composite matches 453/453 calculable rows and opportunity matches 575/578 (99.48%); 196 and 71 missing-input rows remain explicit. PEG grades match 276/276 calculable rows in the separate 661-company levels universe. S/A/B remains labeled manual/research judgment because visible score values map to multiple grades and the claimed qualitative inputs are mostly absent.
-- N1-5 now ships a versioned reader-first dossier contract and five independently sourced samples across A-share and US markets. The accepted Round 7 order is one-line positioning, industry coordinates, company evidence, and a final plain-language verdict; all numeric claims retain source IDs, benchmark prose remains runtime-only, NVIDIA structural replay matches, and the external reader preferred the self-produced dossiers 5/5. Park explicitly approved the complete Round 7 version without submitting pairwise choices; the approval receipt records that owner-authorized gate replacement without fabricating P1–P5 results.
+- N1-5 established the reader-first dossier evidence used in Round 7. On 2026-07-31 Park selected the CATL nine-chapter file as the exact canonical taxonomy: 一句话定位；身份、创始人与治理；技术来源与发展史；商业模式与业务线；财务与经营时间序列；护城河的证据链；风险、反题材与观察触发器；研究结论与待补问题；生产记录；plus Sources. Five blind samples and the NVIDIA replay remain supporting quality/repeatability evidence, not an alternate taxonomy.
 - N1-6 now closes the M1/N1 acceptance package: a 30-company six-sector A/HK/US/JP golden set, 84/90 (93.33%) high/medium source-contract field coverage, six explicit HK/JP point-in-time financial-growth gaps, prior 30-company market reconstruction, disclosed-score validation, and five-dossier evidence. The resulting M1 report is a Go for E1/N2 canonical modeling, not a claim of all-market real-time financial coverage.
 - N5 first slice now ships a fixture-driven Atlas frontend at `product/static/atlas/`: six deep-linkable hash routes covering overview, 22 industry-chain structures with segment→company navigation, a three-high bubble map linked to segment catalysts, a 649-company virtualized table with full-column sorting and chain/layer/market/grade/tag filters, a 661-stock S/A/B table with real header sorting, and a company workbench (position, five-factor scores, three-high verdict, quarterly drill, business segments, roadmap, supply chain, dossier). Dev fixtures derive from the 2026-07-02 archive, are gitignored and load per view (~240KB first screen); `js/data.js` is the single seam for the future N2 canonical API; every quote surface shows as_of + FIXTURE and archived dossier text is labeled as development sample only.
 - GitHub audit lineage for missing references #79–#89 is truthfully reconstructed as Issues #90–#100 and bound to immutable main commits by `docs/governance/audit-lineage-v1.json`; future main changes require real Pull Request objects.

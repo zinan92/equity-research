@@ -4,16 +4,16 @@
   "status": "passed",
   "reader_units": [
     "one_line_positioning",
-    "industry_coordinates",
-    "founder_and_team",
-    "development_timeline",
-    "technology_products_and_business_model",
-    "financials_and_valuation",
-    "why_it_can_win",
-    "core_risks",
-    "plain_language_verdict"
+    "identity_founder_and_governance",
+    "technology_origin_and_development_history",
+    "business_model_and_business_lines",
+    "financial_and_operating_time_series",
+    "moat_evidence_chain",
+    "risks_counter_thesis_and_triggers",
+    "research_conclusion_and_open_questions",
+    "production_record"
   ],
-  "structure_signature": "bb6e0c1399cb75c4433eb0692168dfa90aaaff7ef1b0eb57788b1091ed7e0add",
+  "structure_signature": "1c25130d38341372cbd96308c57e48553175764178e2e38c6ac645852f975ea5",
   "quality_contract": {
     "evidence_boundary_present": true,
     "page_citation_trace_rate": 1.0,
@@ -30,56 +30,56 @@
       5500
     ]
   },
+  "canonical_dossier": {
+    "path": "docs/dossier-production/samples/300750.SZ-v1.md",
+    "sha256": "5c1c8d9eb2f138925c8218ac9e0cd8ce2869bbb811a812e39bbfd339ef709d0e",
+    "body_characters": 4037,
+    "source_rows": 2,
+    "fact_ids": 1
+  },
   "template": {
     "path": "docs/dossier-production/template-v1.md",
-    "sha256": "4b6ef701fc7cf2e68936d19ec84588e275023b0f7498f892e0a667c505053462"
+    "sha256": "4b6ef701fc7cf2e68936d19ec84588e275023b0f7498f892e0a667c505053462",
+    "classification": "legacy_reusable_template"
   },
   "blind_set": [
     {
       "ticker": "002371.SZ",
       "path": "docs/dossier-production/samples/002371.SZ-v1.md",
       "sha256": "6bbedaf6b0ffa2ad778ff26ef222d9ad3ab59ced3fa91cbdf98402e8fa7272c5",
-      "body_characters": 4752,
-      "source_rows": 4,
-      "fact_ids": 1
+      "classification": "approved_reference_pre_canonical_taxonomy"
     },
     {
       "ticker": "002594.SZ",
       "path": "docs/dossier-production/samples/002594.SZ-v1.md",
       "sha256": "09680c98837ab4d55a4dff59baf000343b726b678445caf10a0b294778c9853e",
-      "body_characters": 4834,
-      "source_rows": 4,
-      "fact_ids": 1
+      "classification": "approved_reference_pre_canonical_taxonomy"
     },
     {
       "ticker": "300308.SZ",
       "path": "docs/dossier-production/samples/300308.SZ-v1.md",
       "sha256": "00ecc86ae35e03ba7b9a82c4ce2810f0186f980d738fb75124c019a6a160b3e2",
-      "body_characters": 4869,
-      "source_rows": 4,
-      "fact_ids": 1
+      "classification": "approved_reference_pre_canonical_taxonomy"
     },
     {
       "ticker": "300502.SZ",
       "path": "docs/dossier-production/samples/300502.SZ-v1.md",
       "sha256": "54d426f40f8a543997e63efa9633c08d669224b79aa515ed50c831e97b0d0319",
-      "body_characters": 4751,
-      "source_rows": 4,
-      "fact_ids": 1
+      "classification": "approved_reference_pre_canonical_taxonomy"
     },
     {
       "ticker": "NVDA",
       "path": "docs/dossier-production/samples/nvda-v1.md",
       "sha256": "6f1b6718986332c5321b8e65f9c6a39c2d815ca101f3768953f74bb3fe49be1e",
-      "body_characters": 5692,
-      "source_rows": 6,
-      "fact_ids": 1
+      "classification": "approved_reference_pre_canonical_taxonomy"
     }
   ],
   "replay": {
     "path": "docs/dossier-production/reruns/nvda-v1-replay.md",
     "sha256": "af70a072afb670d78abc76b4b326a1714de43e196ae8ce0e2271d7cb40f57534",
-    "structure_match": true
+    "structure_match": true,
+    "structure_signature": "bb6e0c1399cb75c4433eb0692168dfa90aaaff7ef1b0eb57788b1091ed7e0add",
+    "classification": "repeatability_evidence_pre_canonical_taxonomy"
   },
   "approval_evidence": {
     "external_self_wins": 5,
@@ -93,37 +93,14 @@
       "ticker": "300750.SZ",
       "path": "docs/dossier-production/samples/300750.SZ-v1.md",
       "classification": "legacy_product_sample",
-      "problems": [
-        "missing heading: ## 一句话定位",
-        "missing heading: ## 产业坐标",
-        "missing heading: ## 创始人与团队",
-        "missing heading: ## 发展时间线",
-        "missing heading: ## 技术、产品与商业模式",
-        "missing heading: ## 财务与估值",
-        "missing heading: ## 风险与点评",
-        "missing heading: ### 为什么它能赢",
-        "missing heading: ### 核心风险",
-        "missing heading: ### 大白话点评",
-        "structure signature differs from accepted Round 7"
-      ]
+      "problems": []
     },
     {
       "ticker": "600519.SH",
       "path": "docs/dossier-production/samples/600519.SH-v1.md",
       "classification": "legacy_product_sample",
       "problems": [
-        "missing heading: ## 一句话定位",
-        "missing heading: ## 产业坐标",
-        "missing heading: ## 创始人与团队",
-        "missing heading: ## 发展时间线",
-        "missing heading: ## 技术、产品与商业模式",
-        "missing heading: ## 财务与估值",
-        "missing heading: ## 风险与点评",
-        "missing heading: ### 为什么它能赢",
-        "missing heading: ### 核心风险",
-        "missing heading: ### 大白话点评",
-        "body shorter than Round 7 minimum",
-        "structure signature differs from accepted Round 7"
+        "body shorter than Round 7 minimum"
       ]
     }
   ],
@@ -174,5 +151,5 @@
       "unreviewed AI judgment cannot make a section FULL"
     ]
   },
-  "receipt_hash": "38222aebba14738d1f66dc33b828acb4dfc02e4d17a391e7e9806401a1f43f5a"
+  "receipt_hash": "39a6b4de267470222327126720de8b34891c469964344304d5fe13deb7e61796"
 }

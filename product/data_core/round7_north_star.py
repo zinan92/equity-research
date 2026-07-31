@@ -10,6 +10,12 @@ from typing import Iterable
 
 ROUND7_NORTH_STAR_VERSION = "round7-north-star-v1"
 ROUND7_STRUCTURE_SIGNATURE = (
+    "1c25130d38341372cbd96308c57e48553175764178e2e38c6ac645852f975ea5"
+)
+ROUND7_CANONICAL_DOSSIER_SHA256 = (
+    "5c1c8d9eb2f138925c8218ac9e0cd8ce2869bbb811a812e39bbfd339ef709d0e"
+)
+ROUND7_LEGACY_BLIND_STRUCTURE_SIGNATURE = (
     "bb6e0c1399cb75c4433eb0692168dfa90aaaff7ef1b0eb57788b1091ed7e0add"
 )
 ROUND7_TEMPLATE_SHA256 = (
@@ -64,26 +70,24 @@ ROUND7_REPLAY_SHA256 = (
 )
 ROUND7_READER_UNITS = (
     "one_line_positioning",
-    "industry_coordinates",
-    "founder_and_team",
-    "development_timeline",
-    "technology_products_and_business_model",
-    "financials_and_valuation",
-    "why_it_can_win",
-    "core_risks",
-    "plain_language_verdict",
+    "identity_founder_and_governance",
+    "technology_origin_and_development_history",
+    "business_model_and_business_lines",
+    "financial_and_operating_time_series",
+    "moat_evidence_chain",
+    "risks_counter_thesis_and_triggers",
+    "research_conclusion_and_open_questions",
+    "production_record",
 )
 ROUND7_REQUIRED_HEADINGS = (
-    "## 一句话定位",
-    "## 产业坐标",
-    "## 创始人与团队",
-    "## 发展时间线",
-    "## 技术、产品与商业模式",
-    "## 财务与估值",
-    "## 风险与点评",
-    "### 为什么它能赢",
-    "### 核心风险",
-    "### 大白话点评",
+    "## 1. 一句话定位",
+    "## 2. 身份、创始人与治理",
+    "## 3. 技术来源与发展史",
+    "## 4. 商业模式与业务线",
+    "## 5. 财务与经营时间序列",
+    "## 6. 护城河的证据链",
+    "## 7. 风险、反题材与观察触发器",
+    "## 8. 研究结论与待补问题",
     "## 9. 生产记录",
     "## Sources",
 )
@@ -163,16 +167,21 @@ def verify_round7_document(path: Path) -> NorthStarCheck:
     if any("https://" not in line for line in source_lines):
         problems.append("source row without HTTPS URL")
     body = text.split("---", 2)[-1].strip()
+    reader_content = "\n".join(
+        line
+        for line in body.splitlines()
+        if not line.lstrip().startswith("#")
+    )
     minimum = int(ROUND7_QUALITY_GATES["target_body_characters"][0])
     if len(body) < minimum:
         problems.append("body shorter than Round 7 minimum")
-    if not any(marker in body for marker in _FALSIFIER_MARKERS):
+    if not any(marker in reader_content for marker in _FALSIFIER_MARKERS):
         problems.append("missing falsifier")
-    if not any(marker in body for marker in _GAP_MARKERS):
+    if not any(marker in reader_content for marker in _GAP_MARKERS):
         problems.append("missing typed evidence gap")
     in_reader = False
     for line_number, line in enumerate(text.splitlines(), start=1):
-        if line == "## 一句话定位":
+        if line == "## 1. 一句话定位":
             in_reader = True
         elif line == "## 9. 生产记录":
             in_reader = False

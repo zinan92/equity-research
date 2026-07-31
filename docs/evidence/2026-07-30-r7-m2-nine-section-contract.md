@@ -1,5 +1,8 @@
 # R7-M2 · Nine-section contract evidence
 
+> Superseded on 2026-07-31 by issue #648. This document records the retired
+> redesigned taxonomy and is not evidence of the canonical CATL nine chapters.
+
 Issue: https://github.com/zinan92/equity-research/issues/644
 
 ## Outcome

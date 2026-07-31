@@ -21,8 +21,8 @@ class InventoryTest(unittest.TestCase):
             sections = [section(item.section_id, "missing", missing=[entry.key for entry in item.required_inputs]) for item in inventory.RESEARCH_SECTION_SPECS_V3]
             rows.append({"ticker": ticker, "status": "available", "result": {"section_contract": {"sections": sections}}})
         result = inventory.build_inventory({"rows": rows})
-        self.assertEqual(result["independent_missing_required_inputs"], 18)
-        self.assertEqual(max(item["dependent_sections"] for item in result["leverage"]), 9)
+        self.assertEqual(result["independent_missing_required_inputs"], 17)
+        self.assertEqual(max(item["dependent_sections"] for item in result["leverage"]), 8)
 
 
 if __name__ == "__main__":

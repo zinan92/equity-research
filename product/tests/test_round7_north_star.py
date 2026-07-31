@@ -12,11 +12,11 @@ sys.path.insert(0, str(ROOT / "product"))
 from data_core.round7_north_star import (  # noqa: E402
     ROUND7_BLIND_TICKERS,
     ROUND7_BLIND_SAMPLE_SHA256,
+    ROUND7_CANONICAL_DOSSIER_SHA256,
     ROUND7_READER_UNITS,
     ROUND7_STRUCTURE_SIGNATURE,
     SAFETY_SOURCE_SHA256,
     structure_signature,
-    verify_blind_set,
     verify_round7_document,
 )
 
@@ -30,43 +30,43 @@ class Round7NorthStarTest(unittest.TestCase):
             else self.root / "samples" / (ticker + "-v1.md")
             for ticker in ROUND7_BLIND_TICKERS
         )
+        self.canonical = self.root / "samples" / "300750.SZ-v1.md"
 
-    def test_blind_set_is_the_canonical_round7_structure(self) -> None:
-        checks = verify_blind_set(self.paths)
-        self.assertEqual(len(checks), 5)
+    def test_catl_sample_is_the_exact_canonical_round7_structure(self) -> None:
+        check = verify_round7_document(self.canonical)
+        self.assertEqual(check.problems, ())
+        self.assertEqual(check.structure_signature, ROUND7_STRUCTURE_SIGNATURE)
         self.assertEqual(
-            {check.structure_signature for check in checks},
-            {ROUND7_STRUCTURE_SIGNATURE},
+            hashlib.sha256(self.canonical.read_bytes()).hexdigest(),
+            ROUND7_CANONICAL_DOSSIER_SHA256,
         )
 
     def test_round7_has_nine_reader_units(self) -> None:
         self.assertEqual(len(ROUND7_READER_UNITS), 9)
         self.assertEqual(len(set(ROUND7_READER_UNITS)), 9)
 
-    def test_legacy_catl_sample_is_not_misclassified_as_round7(self) -> None:
-        check = verify_round7_document(
-            self.root / "samples" / "300750.SZ-v1.md"
-        )
-        self.assertTrue(check.problems)
-        self.assertIn(
-            "structure signature differs from accepted Round 7",
-            check.problems,
+    def test_blind_pack_is_reference_evidence_not_canonical_taxonomy(self) -> None:
+        checks = tuple(verify_round7_document(path) for path in self.paths)
+        self.assertTrue(all(check.problems for check in checks))
+        self.assertNotIn(
+            ROUND7_STRUCTURE_SIGNATURE,
+            {check.structure_signature for check in checks},
         )
 
     def test_structure_signature_changes_when_reader_order_changes(self) -> None:
-        text = self.paths[0].read_text(encoding="utf-8")
+        text = self.canonical.read_text(encoding="utf-8")
         swapped = text.replace(
-            "## 一句话定位", "## TEMP", 1
+            "## 1. 一句话定位", "## TEMP", 1
         ).replace(
-            "## 产业坐标", "## 一句话定位", 1
-        ).replace("## TEMP", "## 产业坐标", 1)
+            "## 2. 身份、创始人与治理", "## 1. 一句话定位", 1
+        ).replace("## TEMP", "## 2. 身份、创始人与治理", 1)
         self.assertNotEqual(
             structure_signature(swapped),
             ROUND7_STRUCTURE_SIGNATURE,
         )
 
     def test_heading_shell_cannot_pass_as_round7_quality(self) -> None:
-        source = self.paths[0].read_text(encoding="utf-8")
+        source = self.canonical.read_text(encoding="utf-8")
         shell_lines = [
             line
             for line in source.splitlines()

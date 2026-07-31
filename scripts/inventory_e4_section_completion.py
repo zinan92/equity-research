@@ -35,6 +35,8 @@ OWNERS = {
     "synthesis_evidence": "round7_chapter_generator",
     "decision_policy_output": "data_core.decision_policy",
     "chapter_draft": "round7_chapter_generator",
+    "run_receipt": "round7_dossier_runner",
+    "source_manifest": "data_core.official_filing_ingest",
 }
 
 

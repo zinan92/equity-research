@@ -77,11 +77,9 @@ def wire_r2_industry_receipts(
         "truth_boundary": "Industry taxonomy is a research model; the issuer link is the page-cited company position.",
     }
     return {
-        "industry_coordinates": {
+        "business_model_and_business_lines": {
             "industry_evidence": [industry_profile],
             "company_position": company_profile,
-        },
-        "technology_products_and_business_model": {
             "business_evidence": [company_profile],
         },
     }, source_receipts

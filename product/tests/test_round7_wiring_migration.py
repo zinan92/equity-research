@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import sys
 import unittest
 from pathlib import Path
 
-from tests.test_e4_judgment_wiring import receipt as judgment_receipt
-
-
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "product"))
+
+from tests.test_e4_judgment_wiring import receipt as judgment_receipt  # noqa: E402
+
+
 SCRIPT = ROOT / "scripts" / "migrate_e4_wiring_to_round7.py"
 SPEC = importlib.util.spec_from_file_location("migrate_e4_wiring_to_round7", SCRIPT)
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -76,7 +79,7 @@ class Round7WiringMigrationTest(unittest.TestCase):
         self.assertEqual(len(sections), 9)
         self.assertNotIn("executive_summary", sections)
         self.assertEqual(
-            sections["financials_and_valuation"]["status"],
+            sections["financial_and_operating_time_series"]["status"],
             "partial",
         )
         self.assertEqual(
