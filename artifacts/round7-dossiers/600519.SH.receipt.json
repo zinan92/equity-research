@@ -1,0 +1,3841 @@
+{
+  "schema_version": "round7-generated-dossier-v8",
+  "data_kind": "real",
+  "ticker": "600519.SH",
+  "issuer": {
+    "ticker": "600519.SH",
+    "name": "贵州茅台酒股份有限公司",
+    "short_name": "贵州茅台"
+  },
+  "review_status": "pending_human_review",
+  "unreviewed_chapter_count": 8,
+  "chapters": [
+    {
+      "section_id": "one_line_positioning",
+      "title": "一句话定位",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "8d0b39668abaf62113acf966d40192980f03a0b82e08ccdfac360c126ee32ebf",
+      "model_request_id": "7e8c2005-536c-4058-98fb-315b6eb8d938",
+      "character_count": 167,
+      "length_status": "within_target",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "positioning",
+              "kind": "fact",
+              "text": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。",
+              "evidence_ids": [
+                "N-311bfe97cc"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-311bfe97cc",
+                  "quote": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "research_judgment",
+              "kind": "judgment",
+              "text": "上述收入结构意味着盈利持续性取决于贸易业务稳定性，仍需核验贸易业务毛利率及客户集中度对现金回报的影响。",
+              "evidence_ids": [
+                "N-311bfe97cc"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-311bfe97cc",
+                  "quote": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "positioning",
+          "kind": "fact",
+          "text": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。",
+          "evidence_ids": [
+            "N-311bfe97cc"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-311bfe97cc",
+              "quote": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "research_judgment",
+          "kind": "judgment",
+          "text": "上述收入结构意味着盈利持续性取决于贸易业务稳定性，仍需核验贸易业务毛利率及客户集中度对现金回报的影响。",
+          "evidence_ids": [
+            "N-311bfe97cc"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-311bfe97cc",
+              "quote": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-311bfe97cc"
+      ],
+      "content_hash": "4726cd618ffdbc61c8a371d633cfdbd8525d29f555ad16faa9abf69a18dc41b6"
+    },
+    {
+      "section_id": "identity_founder_and_governance",
+      "title": "身份、创始人与治理",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "e204e49aafb49886bc0245c850c4e179082c2cae8b676d0533b2c37d4c7db9c2",
+      "model_request_id": "32496603-7aeb-4002-8169-cf71a094fdcd",
+      "character_count": 521,
+      "length_status": "above_target_due_to_chapter_synthesis",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "topic",
+              "kind": "label",
+              "text": "证券身份",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "finding",
+              "kind": "gap",
+              "text": "现有证据未提供证券代码、上市交易所或股票简称的页级披露，无法核验证券身份边界。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "topic",
+              "kind": "label",
+              "text": "关键管理者",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "finding",
+              "kind": "fact",
+              "text": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。",
+              "evidence_ids": [
+                "N-644437303f",
+                "N-526b271efa",
+                "N-95c7a5c47f",
+                "N-d3f83002af",
+                "N-bb6be4519b",
+                "N-cdc105327e"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-644437303f",
+                  "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。"
+                },
+                {
+                  "evidence_id": "N-526b271efa",
+                  "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。"
+                },
+                {
+                  "evidence_id": "N-95c7a5c47f",
+                  "quote": "现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。"
+                },
+                {
+                  "evidence_id": "N-d3f83002af",
+                  "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。"
+                },
+                {
+                  "evidence_id": "N-bb6be4519b",
+                  "quote": "现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。"
+                },
+                {
+                  "evidence_id": "N-cdc105327e",
+                  "quote": "现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "topic",
+              "kind": "label",
+              "text": "治理观察",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "finding",
+              "kind": "judgment",
+              "text": "上述董事会由7名董事组成，其中3名独立董事、1名职工董事（N-565e479e96），意味着治理结构符合法规要求；但总经理职责由代行人员履行，表明继任安排仍需正式落地，取决于后续董事会决议。",
+              "evidence_ids": [
+                "N-565e479e96",
+                "N-526b271efa"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-565e479e96",
+                  "quote": "公司董事会目前由 7名董事组成，其中 3名为独立董事，1 名为职工董事，董事会人员构成符合法律、法规的要求。"
+                },
+                {
+                  "evidence_id": "N-526b271efa",
+                  "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "finding",
+          "kind": "gap",
+          "text": "现有证据未提供证券代码、上市交易所或股票简称的页级披露，无法核验证券身份边界。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "finding",
+          "kind": "fact",
+          "text": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。",
+          "evidence_ids": [
+            "N-644437303f",
+            "N-526b271efa",
+            "N-95c7a5c47f",
+            "N-d3f83002af",
+            "N-bb6be4519b",
+            "N-cdc105327e"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-644437303f",
+              "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。"
+            },
+            {
+              "evidence_id": "N-526b271efa",
+              "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。"
+            },
+            {
+              "evidence_id": "N-95c7a5c47f",
+              "quote": "现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。"
+            },
+            {
+              "evidence_id": "N-d3f83002af",
+              "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。"
+            },
+            {
+              "evidence_id": "N-bb6be4519b",
+              "quote": "现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。"
+            },
+            {
+              "evidence_id": "N-cdc105327e",
+              "quote": "现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "finding",
+          "kind": "judgment",
+          "text": "上述董事会由7名董事组成，其中3名独立董事、1名职工董事（N-565e479e96），意味着治理结构符合法规要求；但总经理职责由代行人员履行，表明继任安排仍需正式落地，取决于后续董事会决议。",
+          "evidence_ids": [
+            "N-565e479e96",
+            "N-526b271efa"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-565e479e96",
+              "quote": "公司董事会目前由 7名董事组成，其中 3名为独立董事，1 名为职工董事，董事会人员构成符合法律、法规的要求。"
+            },
+            {
+              "evidence_id": "N-526b271efa",
+              "quote": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-644437303f",
+        "N-526b271efa",
+        "N-95c7a5c47f",
+        "N-d3f83002af",
+        "N-bb6be4519b",
+        "N-cdc105327e",
+        "N-565e479e96"
+      ],
+      "content_hash": "2f102e91aaa2543adfc122a2ab7869efe379974977aff2ed151631afaa9d5464"
+    },
+    {
+      "section_id": "technology_origin_and_development_history",
+      "title": "技术来源与发展史",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "6e581c07189cf2cbce91da099e272be6b06756c8509e7cdfc36f280f7f197d7e",
+      "model_request_id": "d7fd1c4a-a2f8-489b-a591-04459b75ff58",
+      "character_count": 388,
+      "length_status": "within_target",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "date",
+              "kind": "fact",
+              "text": "2025年",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-34e1d062ab",
+                  "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "event",
+              "kind": "fact",
+              "text": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-34e1d062ab",
+                  "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "research_implication",
+              "kind": "judgment",
+              "text": "公司自述数字化质量管理体系可能意味着技术对传统工艺的赋能仍需验证其对产品一致性的实际提升效果。",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-34e1d062ab",
+                  "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "date",
+              "kind": "fact",
+              "text": "2025年",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-fabf06debf",
+                  "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "event",
+              "kind": "fact",
+              "text": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-fabf06debf",
+                  "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "research_implication",
+              "kind": "judgment",
+              "text": "公司自述绿色工厂路径可能意味着环保技术研发对产能扩张的约束与成本影响仍需量化。",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-fabf06debf",
+                  "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "date",
+              "kind": "fact",
+              "text": "2025年",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "event",
+              "kind": "fact",
+              "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "research_implication",
+              "kind": "judgment",
+              "text": "产品结构调整可能意味着系列酒技术路线或品质升级对收入增长的驱动作用取决于后续产品放量及市场接受度。",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "date",
+          "kind": "fact",
+          "text": "2025年",
+          "evidence_ids": [
+            "N-34e1d062ab"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "event",
+          "kind": "fact",
+          "text": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+          "evidence_ids": [
+            "N-34e1d062ab"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "research_implication",
+          "kind": "judgment",
+          "text": "公司自述数字化质量管理体系可能意味着技术对传统工艺的赋能仍需验证其对产品一致性的实际提升效果。",
+          "evidence_ids": [
+            "N-34e1d062ab"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "date",
+          "kind": "fact",
+          "text": "2025年",
+          "evidence_ids": [
+            "N-fabf06debf"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-fabf06debf",
+              "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "event",
+          "kind": "fact",
+          "text": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。",
+          "evidence_ids": [
+            "N-fabf06debf"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-fabf06debf",
+              "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "research_implication",
+          "kind": "judgment",
+          "text": "公司自述绿色工厂路径可能意味着环保技术研发对产能扩张的约束与成本影响仍需量化。",
+          "evidence_ids": [
+            "N-fabf06debf"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-fabf06debf",
+              "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "date",
+          "kind": "fact",
+          "text": "2025年",
+          "evidence_ids": [
+            "N-e918431678"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "event",
+          "kind": "fact",
+          "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+          "evidence_ids": [
+            "N-e918431678"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "research_implication",
+          "kind": "judgment",
+          "text": "产品结构调整可能意味着系列酒技术路线或品质升级对收入增长的驱动作用取决于后续产品放量及市场接受度。",
+          "evidence_ids": [
+            "N-e918431678"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-34e1d062ab",
+        "N-fabf06debf",
+        "N-e918431678"
+      ],
+      "content_hash": "89d589f771c88da8225f2114319290ca1ed9e2633e1352021da11c7cd1c7e4f4"
+    },
+    {
+      "section_id": "business_model_and_business_lines",
+      "title": "商业模式与业务线",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "9da0126b711c36aefa2dd7048c3f15d4a992eaac4faaf60eb5b619da65b48169",
+      "model_request_id": "5cfca829-0d13-4a8d-9083-4e3a418d0288",
+      "character_count": 544,
+      "length_status": "within_target",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "business_line",
+              "kind": "label",
+              "text": "茅台酒",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "customer_and_delivery",
+              "kind": "fact",
+              "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "revenue_or_operating_evidence",
+              "kind": "fact",
+              "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "key_dependency",
+              "kind": "judgment",
+              "text": "该业务可能取决于终端消费需求与品牌影响力，若市场信心不足或品牌美誉度下降，则可能影响收入。",
+              "evidence_ids": [
+                "N-b33ca4f980",
+                "N-e8dc4276e5"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                },
+                {
+                  "evidence_id": "N-e8dc4276e5",
+                  "quote": "发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "business_line",
+              "kind": "label",
+              "text": "系列酒",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "customer_and_delivery",
+              "kind": "gap",
+              "text": "未披露系列酒的具体客户类型与交付物细节。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "revenue_or_operating_evidence",
+              "kind": "fact",
+              "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "key_dependency",
+              "kind": "judgment",
+              "text": "该业务可能取决于产品结构调整效果，若调整未能适应市场需求，则可能影响收入。",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "business_line",
+              "kind": "label",
+              "text": "国际化业务",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "customer_and_delivery",
+              "kind": "gap",
+              "text": "未披露国际化业务的具体客户与交付物。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "revenue_or_operating_evidence",
+              "kind": "fact",
+              "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "key_dependency",
+              "kind": "judgment",
+              "text": "该业务可能取决于海外市场拓展与品牌接受度，若国际化推进不及预期，则可能影响收入。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "customer_and_delivery",
+          "kind": "fact",
+          "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "revenue_or_operating_evidence",
+          "kind": "fact",
+          "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "key_dependency",
+          "kind": "judgment",
+          "text": "该业务可能取决于终端消费需求与品牌影响力，若市场信心不足或品牌美誉度下降，则可能影响收入。",
+          "evidence_ids": [
+            "N-b33ca4f980",
+            "N-e8dc4276e5"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            },
+            {
+              "evidence_id": "N-e8dc4276e5",
+              "quote": "发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "customer_and_delivery",
+          "kind": "gap",
+          "text": "未披露系列酒的具体客户类型与交付物细节。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "revenue_or_operating_evidence",
+          "kind": "fact",
+          "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+          "evidence_ids": [
+            "N-e918431678"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "key_dependency",
+          "kind": "judgment",
+          "text": "该业务可能取决于产品结构调整效果，若调整未能适应市场需求，则可能影响收入。",
+          "evidence_ids": [
+            "N-e918431678"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "customer_and_delivery",
+          "kind": "gap",
+          "text": "未披露国际化业务的具体客户与交付物。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "revenue_or_operating_evidence",
+          "kind": "fact",
+          "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "key_dependency",
+          "kind": "judgment",
+          "text": "该业务可能取决于海外市场拓展与品牌接受度，若国际化推进不及预期，则可能影响收入。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-b33ca4f980",
+        "N-e8dc4276e5",
+        "N-e918431678"
+      ],
+      "content_hash": "5f0f446794904142437bec71c9630ba81600616d630adf1e4d12482551394f7d"
+    },
+    {
+      "section_id": "financial_and_operating_time_series",
+      "title": "财务与经营时间序列",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "a290780db070ca1123fea722666fc17e5780d62b53c6108864c5de24342ba697",
+      "model_request_id": "05cf6312-268c-4a3c-af89-95723c3aab0a",
+      "character_count": 41,
+      "length_status": "below_target_due_to_evidence_and_validation_constraints",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "period",
+              "kind": "fact",
+              "text": "2025年",
+              "evidence_ids": [
+                "P-6669b8ff4b"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "P-6669b8ff4b",
+                  "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "metric",
+              "kind": "label",
+              "text": "营业总收入",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "value_and_unit",
+              "kind": "fact",
+              "text": "172,054,171,890.91元",
+              "evidence_ids": [
+                "P-6669b8ff4b"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "P-6669b8ff4b",
+                  "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "comparison",
+              "kind": "fact",
+              "text": "同比下滑1.2%",
+              "evidence_ids": [
+                "P-6669b8ff4b"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "P-6669b8ff4b",
+                  "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "scope",
+              "kind": "fact",
+              "text": "合并报表",
+              "evidence_ids": [
+                "P-6669b8ff4b"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "P-6669b8ff4b",
+                  "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "period",
+          "kind": "fact",
+          "text": "2025年",
+          "evidence_ids": [
+            "P-6669b8ff4b"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "P-6669b8ff4b",
+              "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "value_and_unit",
+          "kind": "fact",
+          "text": "172,054,171,890.91元",
+          "evidence_ids": [
+            "P-6669b8ff4b"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "P-6669b8ff4b",
+              "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "comparison",
+          "kind": "fact",
+          "text": "同比下滑1.2%",
+          "evidence_ids": [
+            "P-6669b8ff4b"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "P-6669b8ff4b",
+              "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "scope",
+          "kind": "fact",
+          "text": "合并报表",
+          "evidence_ids": [
+            "P-6669b8ff4b"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "P-6669b8ff4b",
+              "quote": "一、营业总收入 172,054,171,890.91 174,144,069,958.25"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "P-6669b8ff4b"
+      ],
+      "content_hash": "b8c35d0ea5d039fdf96a3d5d56f863b306fd56a0d6a57553100c77372878849e"
+    },
+    {
+      "section_id": "moat_evidence_chain",
+      "title": "护城河的证据链",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "b4b65c0dbfe3315fe79b87b69657729f21c68d819f2adf01acd83c672cb2c773",
+      "model_request_id": "6c49bb97-4d22-4270-8ad5-c5e1e9c0cc01",
+      "character_count": 661,
+      "length_status": "above_target_due_to_chapter_synthesis",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "hypothesis",
+              "kind": "judgment",
+              "text": "公司自述拥有“品质、品牌、工艺、环境、文化”五大核心竞争力，可能构成系统性护城河。",
+              "evidence_ids": [
+                "N-218e7faa26"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-218e7faa26",
+                  "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "supporting_evidence",
+              "kind": "fact",
+              "text": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-34e1d062ab",
+                  "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "falsifier",
+              "kind": "judgment",
+              "text": "若茅台酒出现重大质量事故或核心工艺被竞争对手复制，则护城河可能被证伪。",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-34e1d062ab",
+                  "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "current_view",
+              "kind": "judgment",
+              "text": "当前证据表明品质与工艺护城河稳固，但品牌溢价能否持续取决于消费趋势变化，仍需验证。",
+              "evidence_ids": [
+                "N-34e1d062ab",
+                "N-218e7faa26"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-34e1d062ab",
+                  "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+                },
+                {
+                  "evidence_id": "N-218e7faa26",
+                  "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "hypothesis",
+              "kind": "judgment",
+              "text": "公司通过“全面向C”战略和渠道变革，可能强化市场控制力与客户粘性。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "supporting_evidence",
+              "kind": "fact",
+              "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "falsifier",
+              "kind": "judgment",
+              "text": "若渠道改革导致经销商流失或终端动销持续放缓，则客户粘性假设可能被证伪。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "current_view",
+              "kind": "judgment",
+              "text": "现有证据表明战略转型初见成效，但市场份额能否持续提升取决于竞品反应，仍需观察。",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-b33ca4f980",
+                  "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "hypothesis",
+              "kind": "judgment",
+              "text": "公司ESG评级跃升可能降低融资成本并增强品牌声誉，构成差异化竞争优势。",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e18cdd6816",
+                  "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+                },
+                {
+                  "evidence_id": "N-8dcfb08557",
+                  "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "supporting_evidence",
+              "kind": "fact",
+              "text": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e18cdd6816",
+                  "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+                },
+                {
+                  "evidence_id": "N-8dcfb08557",
+                  "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "falsifier",
+              "kind": "judgment",
+              "text": "若ESG评级被下调或行业普遍达到同等评级，则差异化优势可能被证伪。",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e18cdd6816",
+                  "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+                },
+                {
+                  "evidence_id": "N-8dcfb08557",
+                  "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "current_view",
+              "kind": "judgment",
+              "text": "当前证据表明ESG领先地位可能提升品牌价值，但对成本效率的直接影响尚待验证。",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e18cdd6816",
+                  "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+                },
+                {
+                  "evidence_id": "N-8dcfb08557",
+                  "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "hypothesis",
+          "kind": "judgment",
+          "text": "公司自述拥有“品质、品牌、工艺、环境、文化”五大核心竞争力，可能构成系统性护城河。",
+          "evidence_ids": [
+            "N-218e7faa26"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-218e7faa26",
+              "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "supporting_evidence",
+          "kind": "fact",
+          "text": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+          "evidence_ids": [
+            "N-34e1d062ab"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "falsifier",
+          "kind": "judgment",
+          "text": "若茅台酒出现重大质量事故或核心工艺被竞争对手复制，则护城河可能被证伪。",
+          "evidence_ids": [
+            "N-34e1d062ab"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "current_view",
+          "kind": "judgment",
+          "text": "当前证据表明品质与工艺护城河稳固，但品牌溢价能否持续取决于消费趋势变化，仍需验证。",
+          "evidence_ids": [
+            "N-34e1d062ab",
+            "N-218e7faa26"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "quote": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。"
+            },
+            {
+              "evidence_id": "N-218e7faa26",
+              "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "hypothesis",
+          "kind": "judgment",
+          "text": "公司通过“全面向C”战略和渠道变革，可能强化市场控制力与客户粘性。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "supporting_evidence",
+          "kind": "fact",
+          "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "falsifier",
+          "kind": "judgment",
+          "text": "若渠道改革导致经销商流失或终端动销持续放缓，则客户粘性假设可能被证伪。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "current_view",
+          "kind": "judgment",
+          "text": "现有证据表明战略转型初见成效，但市场份额能否持续提升取决于竞品反应，仍需观察。",
+          "evidence_ids": [
+            "N-b33ca4f980"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-b33ca4f980",
+              "quote": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "hypothesis",
+          "kind": "judgment",
+          "text": "公司ESG评级跃升可能降低融资成本并增强品牌声誉，构成差异化竞争优势。",
+          "evidence_ids": [
+            "N-e18cdd6816",
+            "N-8dcfb08557"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e18cdd6816",
+              "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+            },
+            {
+              "evidence_id": "N-8dcfb08557",
+              "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "supporting_evidence",
+          "kind": "fact",
+          "text": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。",
+          "evidence_ids": [
+            "N-e18cdd6816",
+            "N-8dcfb08557"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e18cdd6816",
+              "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+            },
+            {
+              "evidence_id": "N-8dcfb08557",
+              "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "falsifier",
+          "kind": "judgment",
+          "text": "若ESG评级被下调或行业普遍达到同等评级，则差异化优势可能被证伪。",
+          "evidence_ids": [
+            "N-e18cdd6816",
+            "N-8dcfb08557"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e18cdd6816",
+              "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+            },
+            {
+              "evidence_id": "N-8dcfb08557",
+              "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "current_view",
+          "kind": "judgment",
+          "text": "当前证据表明ESG领先地位可能提升品牌价值，但对成本效率的直接影响尚待验证。",
+          "evidence_ids": [
+            "N-e18cdd6816",
+            "N-8dcfb08557"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e18cdd6816",
+              "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+            },
+            {
+              "evidence_id": "N-8dcfb08557",
+              "quote": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-218e7faa26",
+        "N-34e1d062ab",
+        "N-b33ca4f980",
+        "N-e18cdd6816",
+        "N-8dcfb08557"
+      ],
+      "content_hash": "2e09695801394f97cb44ac2d978ebff92ce68d77d3a1a1758b13210b4899aca8"
+    },
+    {
+      "section_id": "risks_counter_thesis_and_triggers",
+      "title": "风险、反题材与观察触发器",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "5474817ac22e1945bd519e390b137565b9f7980358b1e3f3035eefc7044dbbde",
+      "model_request_id": "1a923a64-2a20-4833-8055-487b162f6b7b",
+      "character_count": 1212,
+      "length_status": "above_target_due_to_chapter_synthesis",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "risk_or_counter_thesis",
+              "kind": "label",
+              "text": "汇率风险",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "known_fact",
+              "kind": "fact",
+              "text": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。",
+              "evidence_ids": [
+                "N-d45d0f326d"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-d45d0f326d",
+                  "quote": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "trigger",
+              "kind": "judgment",
+              "text": "如果美元或欧元兑人民币大幅贬值，可能意味着海外收入折算为人民币后下滑，进而影响整体收入增长。",
+              "evidence_ids": [
+                "N-d45d0f326d"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-d45d0f326d",
+                  "quote": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "next_verification",
+              "kind": "gap",
+              "text": "下一次核验：待公司披露下一季度或年度财务报告，查看外币货币性项目折算金额及汇率变动对现金的影响，以评估汇率风险的实际影响。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "risk_or_counter_thesis",
+              "kind": "label",
+              "text": "信用风险",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "known_fact",
+              "kind": "fact",
+              "text": "本公司销售以预收款项方式进行，交易的信用风险小。公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。",
+              "evidence_ids": [
+                "N-664e326e4d",
+                "N-51bc5f83f3"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-664e326e4d",
+                  "quote": "本公司销售以预收款项方式进行，交易的信用风险小。"
+                },
+                {
+                  "evidence_id": "N-51bc5f83f3",
+                  "quote": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "trigger",
+              "kind": "judgment",
+              "text": "若预收款项占比显著下降或应收账款周转天数明显延长，可能表明信用风险上升，需判断回款能力是否恶化。",
+              "evidence_ids": [
+                "N-664e326e4d",
+                "N-51bc5f83f3"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-664e326e4d",
+                  "quote": "本公司销售以预收款项方式进行，交易的信用风险小。"
+                },
+                {
+                  "evidence_id": "N-51bc5f83f3",
+                  "quote": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "next_verification",
+              "kind": "gap",
+              "text": "下一次核验：待公司披露下一季度或年度财务报告，关注预收款项及应收账款附注，以核验信用风险变化。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "risk_or_counter_thesis",
+              "kind": "label",
+              "text": "流动性风险",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "known_fact",
+              "kind": "fact",
+              "text": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。",
+              "evidence_ids": [
+                "N-7ecd334068"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-7ecd334068",
+                  "quote": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "trigger",
+              "kind": "judgment",
+              "text": "如果现金及现金等价物余额大幅减少或短期债务显著增加，可能意味着流动性风险上升，取决于公司维持充足现金的能力。",
+              "evidence_ids": [
+                "N-7ecd334068"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-7ecd334068",
+                  "quote": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "next_verification",
+              "kind": "gap",
+              "text": "下一次核验：待公司披露下一季度或年度财务报告，查看现金流量表及短期债务明细，以核验流动性状况。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "risk_or_counter_thesis",
+              "kind": "label",
+              "text": "利率风险",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "known_fact",
+              "kind": "fact",
+              "text": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。",
+              "evidence_ids": [
+                "N-2324bfce56"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-2324bfce56",
+                  "quote": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "trigger",
+              "kind": "judgment",
+              "text": "若市场利率大幅上升，可能意味着公司持有的固定利率金融资产公允价值下降，仍需观察利率变动对利息收入的影响。",
+              "evidence_ids": [
+                "N-2324bfce56"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-2324bfce56",
+                  "quote": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "next_verification",
+              "kind": "gap",
+              "text": "下一次核验：待公司披露下一季度或年度财务报告，查看金融资产公允价值变动及利息收入明细，以核验利率风险影响。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "risk_or_counter_thesis",
+              "kind": "label",
+              "text": "品牌侵权风险",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "known_fact",
+              "kind": "fact",
+              "text": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。",
+              "evidence_ids": [
+                "N-f1afb1210a"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-f1afb1210a",
+                  "quote": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "trigger",
+              "kind": "judgment",
+              "text": "如果市场上假冒茅台产品事件显著增多或防伪技术被突破，可能表明品牌侵权风险上升，取决于公司防伪措施的有效性。",
+              "evidence_ids": [
+                "N-f1afb1210a"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-f1afb1210a",
+                  "quote": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "next_verification",
+              "kind": "gap",
+              "text": "下一次核验：待公司披露下一季度或年度报告，关注品牌保护措施及侵权事件披露，以核验品牌侵权风险。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "column_id": "risk_or_counter_thesis",
+              "kind": "label",
+              "text": "生态环境风险",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "known_fact",
+              "kind": "fact",
+              "text": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让。",
+              "evidence_ids": [
+                "N-2bda7732d5",
+                "N-fabf06debf",
+                "N-c917e52241"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-2bda7732d5",
+                  "quote": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。"
+                },
+                {
+                  "evidence_id": "N-fabf06debf",
+                  "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+                },
+                {
+                  "evidence_id": "N-c917e52241",
+                  "quote": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "trigger",
+              "kind": "judgment",
+              "text": "若赤水河流域出现严重污染事件或生态环境指标恶化，可能意味着茅台酒赖以生存的生态系统受损，仍需判断公司环境竞争力是否被削弱。",
+              "evidence_ids": [
+                "N-2bda7732d5",
+                "N-fabf06debf",
+                "N-c917e52241"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-2bda7732d5",
+                  "quote": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。"
+                },
+                {
+                  "evidence_id": "N-fabf06debf",
+                  "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+                },
+                {
+                  "evidence_id": "N-c917e52241",
+                  "quote": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "next_verification",
+              "kind": "gap",
+              "text": "下一次核验：待公司披露下一季度或年度环境、社会及治理报告，查看生态环境监控数据及环保投入，以核验生态环境风险。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "known_fact",
+          "kind": "fact",
+          "text": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。",
+          "evidence_ids": [
+            "N-d45d0f326d"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-d45d0f326d",
+              "quote": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "trigger",
+          "kind": "judgment",
+          "text": "如果美元或欧元兑人民币大幅贬值，可能意味着海外收入折算为人民币后下滑，进而影响整体收入增长。",
+          "evidence_ids": [
+            "N-d45d0f326d"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-d45d0f326d",
+              "quote": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "next_verification",
+          "kind": "gap",
+          "text": "下一次核验：待公司披露下一季度或年度财务报告，查看外币货币性项目折算金额及汇率变动对现金的影响，以评估汇率风险的实际影响。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "known_fact",
+          "kind": "fact",
+          "text": "本公司销售以预收款项方式进行，交易的信用风险小。公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。",
+          "evidence_ids": [
+            "N-664e326e4d",
+            "N-51bc5f83f3"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-664e326e4d",
+              "quote": "本公司销售以预收款项方式进行，交易的信用风险小。"
+            },
+            {
+              "evidence_id": "N-51bc5f83f3",
+              "quote": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "trigger",
+          "kind": "judgment",
+          "text": "若预收款项占比显著下降或应收账款周转天数明显延长，可能表明信用风险上升，需判断回款能力是否恶化。",
+          "evidence_ids": [
+            "N-664e326e4d",
+            "N-51bc5f83f3"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-664e326e4d",
+              "quote": "本公司销售以预收款项方式进行，交易的信用风险小。"
+            },
+            {
+              "evidence_id": "N-51bc5f83f3",
+              "quote": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "next_verification",
+          "kind": "gap",
+          "text": "下一次核验：待公司披露下一季度或年度财务报告，关注预收款项及应收账款附注，以核验信用风险变化。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "known_fact",
+          "kind": "fact",
+          "text": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。",
+          "evidence_ids": [
+            "N-7ecd334068"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-7ecd334068",
+              "quote": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "trigger",
+          "kind": "judgment",
+          "text": "如果现金及现金等价物余额大幅减少或短期债务显著增加，可能意味着流动性风险上升，取决于公司维持充足现金的能力。",
+          "evidence_ids": [
+            "N-7ecd334068"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-7ecd334068",
+              "quote": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "next_verification",
+          "kind": "gap",
+          "text": "下一次核验：待公司披露下一季度或年度财务报告，查看现金流量表及短期债务明细，以核验流动性状况。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "known_fact",
+          "kind": "fact",
+          "text": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。",
+          "evidence_ids": [
+            "N-2324bfce56"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-2324bfce56",
+              "quote": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "trigger",
+          "kind": "judgment",
+          "text": "若市场利率大幅上升，可能意味着公司持有的固定利率金融资产公允价值下降，仍需观察利率变动对利息收入的影响。",
+          "evidence_ids": [
+            "N-2324bfce56"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-2324bfce56",
+              "quote": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "next_verification",
+          "kind": "gap",
+          "text": "下一次核验：待公司披露下一季度或年度财务报告，查看金融资产公允价值变动及利息收入明细，以核验利率风险影响。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "known_fact",
+          "kind": "fact",
+          "text": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。",
+          "evidence_ids": [
+            "N-f1afb1210a"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-f1afb1210a",
+              "quote": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "trigger",
+          "kind": "judgment",
+          "text": "如果市场上假冒茅台产品事件显著增多或防伪技术被突破，可能表明品牌侵权风险上升，取决于公司防伪措施的有效性。",
+          "evidence_ids": [
+            "N-f1afb1210a"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-f1afb1210a",
+              "quote": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "next_verification",
+          "kind": "gap",
+          "text": "下一次核验：待公司披露下一季度或年度报告，关注品牌保护措施及侵权事件披露，以核验品牌侵权风险。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "known_fact",
+          "kind": "fact",
+          "text": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让。",
+          "evidence_ids": [
+            "N-2bda7732d5",
+            "N-fabf06debf",
+            "N-c917e52241"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-2bda7732d5",
+              "quote": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。"
+            },
+            {
+              "evidence_id": "N-fabf06debf",
+              "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+            },
+            {
+              "evidence_id": "N-c917e52241",
+              "quote": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "trigger",
+          "kind": "judgment",
+          "text": "若赤水河流域出现严重污染事件或生态环境指标恶化，可能意味着茅台酒赖以生存的生态系统受损，仍需判断公司环境竞争力是否被削弱。",
+          "evidence_ids": [
+            "N-2bda7732d5",
+            "N-fabf06debf",
+            "N-c917e52241"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-2bda7732d5",
+              "quote": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。"
+            },
+            {
+              "evidence_id": "N-fabf06debf",
+              "quote": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。"
+            },
+            {
+              "evidence_id": "N-c917e52241",
+              "quote": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "next_verification",
+          "kind": "gap",
+          "text": "下一次核验：待公司披露下一季度或年度环境、社会及治理报告，查看生态环境监控数据及环保投入，以核验生态环境风险。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-d45d0f326d",
+        "N-664e326e4d",
+        "N-51bc5f83f3",
+        "N-7ecd334068",
+        "N-2324bfce56",
+        "N-f1afb1210a",
+        "N-2bda7732d5",
+        "N-fabf06debf",
+        "N-c917e52241"
+      ],
+      "content_hash": "1a3470e0d2703873be5ad1d2cfe2cbb656afbd505c5db7c7e0376a8a2d254826"
+    },
+    {
+      "section_id": "research_conclusion_and_open_questions",
+      "title": "研究结论与待补问题",
+      "status": "ai_generated_judgment_unreviewed",
+      "review_status": "pending_human_review",
+      "input_hash": "09fd800e1806be7513859c9925e9d904b51e1511e79dfe0643b4dc88d803d90d",
+      "model_request_id": "d9f43ca6-6c98-4497-95e4-f5a3f76a6cff",
+      "character_count": 394,
+      "length_status": "above_target_due_to_chapter_synthesis",
+      "rows": [
+        {
+          "cells": [
+            {
+              "column_id": "fact_conclusion",
+              "kind": "fact",
+              "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；",
+              "evidence_ids": [
+                "N-e918431678",
+                "N-218e7faa26",
+                "N-e18cdd6816",
+                "N-fadb1930ab"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                },
+                {
+                  "evidence_id": "N-218e7faa26",
+                  "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+                },
+                {
+                  "evidence_id": "N-e18cdd6816",
+                  "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+                },
+                {
+                  "evidence_id": "N-fadb1930ab",
+                  "quote": "持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "research_judgment",
+              "kind": "judgment",
+              "text": "上述产品结构调整可能意味着收入增长对系列酒依赖加深，但证据未披露具体调整幅度与各产品线占比，仍需进一步数据验证。公司核心竞争力与ESG评级提升表明品牌护城河与治理水平在强化，但未提供量化指标，判断其对长期利润的支撑力度有限。",
+              "evidence_ids": [
+                "N-e918431678",
+                "N-218e7faa26",
+                "N-e18cdd6816"
+              ],
+              "supporting_quotes": [
+                {
+                  "evidence_id": "N-e918431678",
+                  "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+                },
+                {
+                  "evidence_id": "N-218e7faa26",
+                  "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+                },
+                {
+                  "evidence_id": "N-e18cdd6816",
+                  "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+                }
+              ],
+              "source_character": "page_bound_official_evidence"
+            },
+            {
+              "column_id": "open_questions",
+              "kind": "gap",
+              "text": "酱香系列酒产品结构调整的具体方向（如提价、放量或结构升级）及对毛利率的影响未披露；五大核心竞争力的量化评估指标缺失；ESG评级跃升的具体驱动因素与维持能力未说明；《市值管理办法》的具体内容与执行机制待披露。",
+              "evidence_ids": [],
+              "supporting_quotes": [],
+              "source_character": "page_bound_official_evidence"
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "column_id": "fact_conclusion",
+          "kind": "fact",
+          "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；",
+          "evidence_ids": [
+            "N-e918431678",
+            "N-218e7faa26",
+            "N-e18cdd6816",
+            "N-fadb1930ab"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            },
+            {
+              "evidence_id": "N-218e7faa26",
+              "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+            },
+            {
+              "evidence_id": "N-e18cdd6816",
+              "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+            },
+            {
+              "evidence_id": "N-fadb1930ab",
+              "quote": "持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "research_judgment",
+          "kind": "judgment",
+          "text": "上述产品结构调整可能意味着收入增长对系列酒依赖加深，但证据未披露具体调整幅度与各产品线占比，仍需进一步数据验证。公司核心竞争力与ESG评级提升表明品牌护城河与治理水平在强化，但未提供量化指标，判断其对长期利润的支撑力度有限。",
+          "evidence_ids": [
+            "N-e918431678",
+            "N-218e7faa26",
+            "N-e18cdd6816"
+          ],
+          "supporting_quotes": [
+            {
+              "evidence_id": "N-e918431678",
+              "quote": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。"
+            },
+            {
+              "evidence_id": "N-218e7faa26",
+              "quote": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。"
+            },
+            {
+              "evidence_id": "N-e18cdd6816",
+              "quote": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；"
+            }
+          ],
+          "source_character": "page_bound_official_evidence"
+        },
+        {
+          "column_id": "open_questions",
+          "kind": "gap",
+          "text": "酱香系列酒产品结构调整的具体方向（如提价、放量或结构升级）及对毛利率的影响未披露；五大核心竞争力的量化评估指标缺失；ESG评级跃升的具体驱动因素与维持能力未说明；《市值管理办法》的具体内容与执行机制待披露。",
+          "evidence_ids": [],
+          "supporting_quotes": [],
+          "source_character": "page_bound_official_evidence"
+        }
+      ],
+      "evidence_ids": [
+        "N-e918431678",
+        "N-218e7faa26",
+        "N-e18cdd6816",
+        "N-fadb1930ab"
+      ],
+      "content_hash": "303cb93bff7662c691e522549b8caf8b23acc5d818cb129ca62d3eb3bbacdaac"
+    }
+  ],
+  "production_record": {
+    "run_id": "round7-run:10bc8c41a6fc28e01ce771b4",
+    "generator_version": "round7-whole-chapter-generator-v8",
+    "prompt_version": "round7-whole-chapter-prompt-v3",
+    "validator_version": "round7-whole-chapter-validator-v8",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "accepted_model_calls": 8,
+    "all_model_calls": 15,
+    "accepted_semantic_audits": 8,
+    "all_semantic_audits": 9,
+    "human_review_status": "pending_human_review"
+  },
+  "provider_receipts": [
+    {
+      "request_id": "10be8c46-e50f-4490-b523-ee590b584706",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2460,
+        "completion_tokens": 225,
+        "total_tokens": 2685,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 1692
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "one_line_positioning",
+      "attempt": 1,
+      "input_hash": "df5e6436842ce5dbdd9ab75adc93d67999d9b0f0264c638a040bc7dfddd85f84",
+      "provider_response_hash": "5fd384191d5e622375387fa0d9f16550e8a327f6d8ce09a597c6cea1f7666770",
+      "normalized_response_hash": "e5eab9bd6b073279e5f04fade2812c1b7c9487d0eda65fb8861f922445af324a",
+      "accepted": false,
+      "validation_problems": [
+        "semantic audit row[0].cell[1] unsupported_claim: 判断中声称'盈利持续性取决于高端白酒需求与贸易业务稳定性'，但证据仅包含贸易业务开展情况的标题和注释，未提及高端白酒需求或盈利持续性，属于无依据的因果推断。"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "1c9fc6a1-32ab-40ec-a249-12df24591da4",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 1102,
+          "completion_tokens": 97,
+          "total_tokens": 1199,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 718
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "one_line_positioning",
+        "input_hash": "e1a51df7c767f31ce8f0d0e97a8c41b0b5e857c7257492f2243eeb1be7aa630e",
+        "response_hash": "f9aa32113b63baee28183d352da8dc47c17aefa117e7b2e11ded28622844f157",
+        "verdict": "fail",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [
+          "semantic audit row[0].cell[1] unsupported_claim: 判断中声称'盈利持续性取决于高端白酒需求与贸易业务稳定性'，但证据仅包含贸易业务开展情况的标题和注释，未提及高端白酒需求或盈利持续性，属于无依据的因果推断。"
+        ],
+        "audited_chapter_hash": "e5eab9bd6b073279e5f04fade2812c1b7c9487d0eda65fb8861f922445af324a"
+      }
+    },
+    {
+      "request_id": "7e8c2005-536c-4058-98fb-315b6eb8d938",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2520,
+        "completion_tokens": 189,
+        "total_tokens": 2709,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 1752
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "one_line_positioning",
+      "attempt": 2,
+      "input_hash": "8d0b39668abaf62113acf966d40192980f03a0b82e08ccdfac360c126ee32ebf",
+      "provider_response_hash": "a290ce725f11d084ec4921ed5e45e030bb377214f4eb4ae16d99388120c9b3a3",
+      "normalized_response_hash": "4726cd618ffdbc61c8a371d633cfdbd8525d29f555ad16faa9abf69a18dc41b6",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "f39829e5-851e-49a0-83cb-cf169ec46e11",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 1064,
+          "completion_tokens": 16,
+          "total_tokens": 1080,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 680
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "one_line_positioning",
+        "input_hash": "a5a89c9985bb95173c7c808399bdd2dd38c540b7f1064040f1e79613b1dd3768",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "4726cd618ffdbc61c8a371d633cfdbd8525d29f555ad16faa9abf69a18dc41b6"
+      }
+    },
+    {
+      "request_id": "a1935dbc-a6ce-4d8b-9f54-26ce25335a3a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3643,
+        "completion_tokens": 867,
+        "total_tokens": 4510,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 2875
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "identity_founder_and_governance",
+      "attempt": 1,
+      "input_hash": "71febf12f5af2b418d6601718e4c255d073f1357e7e505229057fc4a7b24ca86",
+      "provider_response_hash": "993e65a6e75f14c354a921496544176dd411f44332348211ca87cecf9a23a319",
+      "normalized_response_hash": "36dc13335133b629b344e4e5d54cb229e04b0964387529f214d829ec942106bc",
+      "accepted": false,
+      "validation_problems": [
+        "row[0].cell[1] contains unprovided number 600519",
+        "chapter character count 699 outside safety range 132-576 (target 220-360)"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": null
+    },
+    {
+      "request_id": "32496603-7aeb-4002-8169-cf71a094fdcd",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3683,
+        "completion_tokens": 555,
+        "total_tokens": 4238,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 2915
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "identity_founder_and_governance",
+      "attempt": 2,
+      "input_hash": "e204e49aafb49886bc0245c850c4e179082c2cae8b676d0533b2c37d4c7db9c2",
+      "provider_response_hash": "3c5bb25fff4299584c4bf14b7e8e958a709d486e6e93e01881e208a5ecea69d4",
+      "normalized_response_hash": "2f102e91aaa2543adfc122a2ab7869efe379974977aff2ed151631afaa9d5464",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "99250677-f2e4-4cda-98c6-0dcc1493e20e",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2081,
+          "completion_tokens": 16,
+          "total_tokens": 2097,
+          "prompt_tokens_details": {
+            "cached_tokens": 512
+          },
+          "prompt_cache_hit_tokens": 512,
+          "prompt_cache_miss_tokens": 1569
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "identity_founder_and_governance",
+        "input_hash": "7d22c630288bcdb6d54b5d385ef585dd4df08a12bf279186fdbf85624c8995b4",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "2f102e91aaa2543adfc122a2ab7869efe379974977aff2ed151631afaa9d5464"
+      }
+    },
+    {
+      "request_id": "6e5271d8-9d54-4efb-a11d-3a572301620c",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3904,
+        "completion_tokens": 699,
+        "total_tokens": 4603,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 3136
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "technology_origin_and_development_history",
+      "attempt": 1,
+      "input_hash": "83ca9043d9b4df8e21073eed1653d7dcf66fe3e6a306cafba30e582239a34bfd",
+      "provider_response_hash": "bc0c836366a8bbfc51f8ce332d7ef891ac01494c8b26c095f7014f2c303b4143",
+      "normalized_response_hash": "30027f9cf435641f4bf9bd87c56a7e553514271341dc57029ebef45efe60ecc1",
+      "accepted": false,
+      "validation_problems": [
+        "row[0].cell[2] judgment relation does not resolve to an allowed research outcome"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": null
+    },
+    {
+      "request_id": "d7fd1c4a-a2f8-489b-a591-04459b75ff58",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3923,
+        "completion_tokens": 682,
+        "total_tokens": 4605,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 3155
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "technology_origin_and_development_history",
+      "attempt": 2,
+      "input_hash": "6e581c07189cf2cbce91da099e272be6b06756c8509e7cdfc36f280f7f197d7e",
+      "provider_response_hash": "1b1f12f90a1ed6b80f8e17808b6bbb0ac951f8fb94f31a3e3c4f3b7aeb6a11b3",
+      "normalized_response_hash": "89d589f771c88da8225f2114319290ca1ed9e2633e1352021da11c7cd1c7e4f4",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "07c6b131-3002-49ad-95ea-bc9aeba29799",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2151,
+          "completion_tokens": 16,
+          "total_tokens": 2167,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 1767
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "technology_origin_and_development_history",
+        "input_hash": "e8ad04eaf132960f15235594dafc5dad70ca99a4d4a76b10b95543b3e482cda5",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "89d589f771c88da8225f2114319290ca1ed9e2633e1352021da11c7cd1c7e4f4"
+      }
+    },
+    {
+      "request_id": "17e18a77-3a97-41d7-ab7e-8e0ba46eed86",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3972,
+        "completion_tokens": 1798,
+        "total_tokens": 5770,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 3204
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "business_model_and_business_lines",
+      "attempt": 1,
+      "input_hash": "53a259aa4fe437c7d7d76eabe891d730bfcdbc081fe675361046ea71391fcdc9",
+      "provider_response_hash": "3fdf5317790d0ceb4d2569cbdb357d5f1fb84cb0e39e221e4793fc6c48a5e207",
+      "normalized_response_hash": "df569a96696bd62754fd7a5b2a877f07ad0508ddde6381decaad3504fdae27c7",
+      "accepted": false,
+      "validation_problems": [
+        "row[1].cell[3] judgment contains a forbidden investment-execution term",
+        "row[4].cell[3] judgment contains a forbidden investment-execution term",
+        "chapter character count 1600 outside safety range 312-1200 (target 520-750)"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": null
+    },
+    {
+      "request_id": "0bf317e9-4b57-4538-bc83-ad4805c1b692",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4032,
+        "completion_tokens": 787,
+        "total_tokens": 4819,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 3136
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "business_model_and_business_lines",
+      "attempt": 2,
+      "input_hash": "4806e20398194dc023d5de1452475c1e76880e01c8f3e35474f70926964ccb04",
+      "provider_response_hash": "97bd4457a2cba5a4e68715fe7bd4e5e9a883b9678e9b6669e39769d5a87c2faf",
+      "normalized_response_hash": "d71c24f24bb0252ef8e98580e38e8908875708d177dfb2982dba053ea74fcba5",
+      "accepted": false,
+      "validation_problems": [
+        "row[0].cell[3] judgment contains a forbidden investment-execution term"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": null
+    },
+    {
+      "request_id": "b33bbe24-1de3-41ac-b828-dc7539b6beb8",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4001,
+        "completion_tokens": 813,
+        "total_tokens": 4814,
+        "prompt_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 801
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "business_model_and_business_lines",
+      "attempt": 3,
+      "input_hash": "9d8f8048a1875ae27a4349ff3f1e7c421890f6f42c5f4cb2f1fe64c7d8e357b0",
+      "provider_response_hash": "875147c5b50763a5f93d5a2f02b8e32967fa99a9469979b0c773a3923e31f9f1",
+      "normalized_response_hash": "040fc4b9dbc02ae59bb02970bde22f9e9483c4dd4be603e6706444a545906246",
+      "accepted": false,
+      "validation_problems": [
+        "row[0].cell[3] judgment contains a forbidden investment-execution term",
+        "row[2].cell[3] judgment relation does not resolve to an allowed research outcome"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": null
+    },
+    {
+      "request_id": "5cfca829-0d13-4a8d-9083-4e3a418d0288",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4013,
+        "completion_tokens": 823,
+        "total_tokens": 4836,
+        "prompt_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "prompt_cache_hit_tokens": 3200,
+        "prompt_cache_miss_tokens": 813
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "business_model_and_business_lines",
+      "attempt": 4,
+      "input_hash": "9da0126b711c36aefa2dd7048c3f15d4a992eaac4faaf60eb5b619da65b48169",
+      "provider_response_hash": "13ee476aeed0c7594cd4e1d85cc0fa098e673f78efc4fe811be3c305512571fe",
+      "normalized_response_hash": "5f0f446794904142437bec71c9630ba81600616d630adf1e4d12482551394f7d",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "908ea080-a73b-4211-b997-d4f51686e286",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 2400,
+          "completion_tokens": 16,
+          "total_tokens": 2416,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 2016
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "business_model_and_business_lines",
+        "input_hash": "0008fa923a04a65ac26820e952ab4dfa4e936d38809d34480eddd40cf6ed1678",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "5f0f446794904142437bec71c9630ba81600616d630adf1e4d12482551394f7d"
+      }
+    },
+    {
+      "request_id": "05cf6312-268c-4a3c-af89-95723c3aab0a",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3038,
+        "completion_tokens": 301,
+        "total_tokens": 3339,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 2270
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "financial_and_operating_time_series",
+      "attempt": 1,
+      "input_hash": "a290780db070ca1123fea722666fc17e5780d62b53c6108864c5de24342ba697",
+      "provider_response_hash": "519f36ca230374e365b1f094d40a4cfa44f7d21f1300077e415a314a03b876b3",
+      "normalized_response_hash": "b8c35d0ea5d039fdf96a3d5d56f863b306fd56a0d6a57553100c77372878849e",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "c21657d5-8abc-44e2-8d50-41e4c82dcb08",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 1224,
+          "completion_tokens": 16,
+          "total_tokens": 1240,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 840
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "financial_and_operating_time_series",
+        "input_hash": "8305d2b7ee26b482c6f31ad0277bf4777dcb3a4eff5dddd9d45f41f13c8ecbd1",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "b8c35d0ea5d039fdf96a3d5d56f863b306fd56a0d6a57553100c77372878849e"
+      }
+    },
+    {
+      "request_id": "e1249203-f669-464d-83ae-c277848b81c3",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4228,
+        "completion_tokens": 1032,
+        "total_tokens": 5260,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 3332
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "moat_evidence_chain",
+      "attempt": 1,
+      "input_hash": "386a69b47bb812c7d761c6a3240d90fb00f53f91b1162944c870048adbb35d34",
+      "provider_response_hash": "265d6a771cabda5ae3a262ec92db37afbbad49188f9eb6a85bc034b7052e97ea",
+      "normalized_response_hash": "ea8b1f8448b43626679d72f9580d081351be7ea5f8a526bd8e742c448a373024",
+      "accepted": false,
+      "validation_problems": [
+        "row[0].cell[2] judgment relation does not resolve to an allowed research outcome",
+        "row[1].cell[2] judgment relation does not resolve to an allowed research outcome",
+        "row[2].cell[2] judgment relation does not resolve to an allowed research outcome",
+        "row[2].cell[3] judgment relation does not resolve to an allowed research outcome"
+      ],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": null
+    },
+    {
+      "request_id": "6c49bb97-4d22-4270-8ad5-c5e1e9c0cc01",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 4310,
+        "completion_tokens": 977,
+        "total_tokens": 5287,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 3414
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "moat_evidence_chain",
+      "attempt": 2,
+      "input_hash": "b4b65c0dbfe3315fe79b87b69657729f21c68d819f2adf01acd83c672cb2c773",
+      "provider_response_hash": "eff1f89062ac470c9aa331cad9566eb439675d5ffba2f22e76a566cd680d781d",
+      "normalized_response_hash": "2e09695801394f97cb44ac2d978ebff92ce68d77d3a1a1758b13210b4899aca8",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "40e8cf97-1126-4f7e-a22f-9a842ed79a28",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 3237,
+          "completion_tokens": 16,
+          "total_tokens": 3253,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 2853
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "moat_evidence_chain",
+        "input_hash": "4887d25e9906443fc76cce833f7d3fac9359484d4017019a93fb55e59b94541a",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "2e09695801394f97cb44ac2d978ebff92ce68d77d3a1a1758b13210b4899aca8"
+      }
+    },
+    {
+      "request_id": "1a923a64-2a20-4833-8055-487b162f6b7b",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 3973,
+        "completion_tokens": 1793,
+        "total_tokens": 5766,
+        "prompt_tokens_details": {
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 3205
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "risks_counter_thesis_and_triggers",
+      "attempt": 1,
+      "input_hash": "5474817ac22e1945bd519e390b137565b9f7980358b1e3f3035eefc7044dbbde",
+      "provider_response_hash": "6dae44621cd038cb993ba47155cd2aebc19e1aaad79d414bd850123bf0bc7fea",
+      "normalized_response_hash": "1a3470e0d2703873be5ad1d2cfe2cbb656afbd505c5db7c7e0376a8a2d254826",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "04737979-c254-4d49-b9c6-fa5aa191051c",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 4189,
+          "completion_tokens": 16,
+          "total_tokens": 4205,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 3805
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "risks_counter_thesis_and_triggers",
+        "input_hash": "8b8db8a1bb537d45d446849007273ed79304032ec0bbf1d63c6eb439e3fd4b3e",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "1a3470e0d2703873be5ad1d2cfe2cbb656afbd505c5db7c7e0376a8a2d254826"
+      }
+    },
+    {
+      "request_id": "d9f43ca6-6c98-4497-95e4-f5a3f76a6cff",
+      "model": "deepseek-v4-pro",
+      "finish_reason": "stop",
+      "usage": {
+        "prompt_tokens": 2523,
+        "completion_tokens": 443,
+        "total_tokens": 2966,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 1627
+      },
+      "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+      "thinking_type": "disabled",
+      "role": "chapter_generator",
+      "section_id": "research_conclusion_and_open_questions",
+      "attempt": 1,
+      "input_hash": "09fd800e1806be7513859c9925e9d904b51e1511e79dfe0643b4dc88d803d90d",
+      "provider_response_hash": "554cfad707b504aa5494b34a4201b5c6c9e6985e11cdbfe248ee524e3b482a79",
+      "normalized_response_hash": "303cb93bff7662c691e522549b8caf8b23acc5d818cb129ca62d3eb3bbacdaac",
+      "accepted": true,
+      "validation_problems": [],
+      "prompt_version": "round7-whole-chapter-prompt-v3",
+      "validator_version": "round7-whole-chapter-validator-v8",
+      "semantic_audit": {
+        "request_id": "37f3b1bd-c8a3-4f68-842e-3a600d155b34",
+        "model": "deepseek-v4-pro",
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 1570,
+          "completion_tokens": 16,
+          "total_tokens": 1586,
+          "prompt_tokens_details": {
+            "cached_tokens": 384
+          },
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 1186
+        },
+        "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+        "thinking_type": "disabled",
+        "role": "semantic_auditor",
+        "section_id": "research_conclusion_and_open_questions",
+        "input_hash": "a6076fde0829bc6582f7804994911a1d772c64bcefb114de174f5e667e3357e5",
+        "response_hash": "1687ba385160b0a52b3874d95dcb347ceee9c8d7bf87739d2c7043eb03b330bc",
+        "verdict": "pass",
+        "auditor_version": "round7-semantic-auditor-v2",
+        "problems": [],
+        "audited_chapter_hash": "303cb93bff7662c691e522549b8caf8b23acc5d818cb129ca62d3eb3bbacdaac"
+      }
+    }
+  ],
+  "source_receipts": {
+    "official_narrative_receipt_id": "e4-official-narrative-evidence-v1:a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da",
+    "official_narrative_receipt_hash": "a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da",
+    "official_narrative_file_sha256": "db3aa52d994229388bad9de9f393ded26758ca49f27f6f7dbebac6a815a61918",
+    "financial_page_evidence_receipt_hash": "3faaea3e8ed89d9dd3ddecbe6501355096721abd03070b86219dd1a54aca07e2",
+    "financial_page_evidence_file_sha256": "6dd8a5f8b05dd6636c19c32f96a52161386345d23cdb7c59fcdd7f17c14e6208"
+  },
+  "source_manifest": [
+    {
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+      "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+      "pages_used": [
+        9,
+        12,
+        21,
+        22,
+        23,
+        26,
+        27,
+        61,
+        122
+      ]
+    }
+  ],
+  "evidence_registry": {
+    "N-311bfe97cc": {
+      "evidence_id": "N-311bfe97cc",
+      "kind": "narrative",
+      "text": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 4、研发投入",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "10%",
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 12,
+        "quoted_anchor": "贸易业务开展情况 本期营业收入 上期营业收入 本期营业收入比上年贸易业务占营业收入比例超过 10%前五名销售客户贸易业务收入占营业收入比例超过 10%前五名供应商注：本期费用化研发支出包括列入生产成本的研发支出及科研人员工资等支出。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 4、研发投入"
+      }
+    },
+    "N-644437303f": {
+      "evidence_id": "N-644437303f",
+      "kind": "narrative",
+      "text": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。",
+      "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 26,
+        "quoted_anchor": "现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+      }
+    },
+    "N-526b271efa": {
+      "evidence_id": "N-526b271efa",
+      "kind": "narrative",
+      "text": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。",
+      "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 26,
+        "quoted_anchor": "现任中国贵州茅台酒厂（集团）有限责任公司党委副书记、副董事长、董事、总经理，贵州茅台酒股份有限公司党委副书记、董事、代行总经理职责。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+      }
+    },
+    "N-95c7a5c47f": {
+      "evidence_id": "N-95c7a5c47f",
+      "kind": "narrative",
+      "text": "现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。",
+      "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 26,
+        "quoted_anchor": "现任贵州茅台酒股份有限公司党委委员、副总经理，贵州茅台酒销售有限公司党委书记、董事长、董事。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+      }
+    },
+    "N-d3f83002af": {
+      "evidence_id": "N-d3f83002af",
+      "kind": "narrative",
+      "text": "现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。",
+      "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 26,
+        "quoted_anchor": "现任中国贵州茅台酒厂（集团）有限责任公司党委委员、副总经理，贵州茅台钟正强 曾任贵州茅台酒股份有限公司制酒十三车间主任兼支部副书记、总经理助理兼生产管理部主任。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+      }
+    },
+    "N-bb6be4519b": {
+      "evidence_id": "N-bb6be4519b",
+      "kind": "narrative",
+      "text": "现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。",
+      "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 27,
+        "quoted_anchor": "现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+      }
+    },
+    "N-cdc105327e": {
+      "evidence_id": "N-cdc105327e",
+      "kind": "narrative",
+      "text": "现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。",
+      "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 26,
+        "quoted_anchor": "现任北京观韬（上海）律师事务所律师，中华全国律师协会副会长，青岛啤酒股份有限公司、上海联影医疗科技股份有限公司、贵州茅台酒股份有限公司独立董事。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况"
+      }
+    },
+    "N-565e479e96": {
+      "evidence_id": "N-565e479e96",
+      "kind": "narrative",
+      "text": "公司董事会目前由 7名董事组成，其中 3名为独立董事，1 名为职工董事，董事会人员构成符合法律、法规的要求。",
+      "section_path": "第四节 公司治理、环境和社会 > 一、公司治理相关情况说明",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "7",
+        "3",
+        "1",
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 23,
+        "quoted_anchor": "公司董事会目前由 7名董事组成，其中 3名为独立董事，1 名为职工董事，董事会人员构成符合法律、法规的要求。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第四节 公司治理、环境和社会 > 一、公司治理相关情况说明"
+      }
+    },
+    "N-34e1d062ab": {
+      "evidence_id": "N-34e1d062ab",
+      "kind": "narrative",
+      "text": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "公司始终恪守“质量是生命之魂”信仰，坚持“崇本守道、坚守工艺、贮足陈酿、不卖新酒”质量观，持续构建先进的质量标准，执行严格的过程管控，通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平，系统筑牢了高质量发展品质生命线。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "N-fabf06debf": {
+      "evidence_id": "N-fabf06debf",
+      "kind": "narrative",
+      "text": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。",
+      "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 21,
+        "quoted_anchor": "建立生态环保制度地图，加大新技术新工艺引进研发，完善生态环境一体化监控网络，走出了国家级“绿色工厂”科技创新驱动的“双碳”路径。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+      }
+    },
+    "N-e918431678": {
+      "evidence_id": "N-e918431678",
+      "kind": "narrative",
+      "text": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "营业收入变动原因说明：主要是酱香系列酒产品结构调整影响。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "N-b33ca4f980": {
+      "evidence_id": "N-b33ca4f980",
+      "kind": "narrative",
+      "text": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，不断提振市场信心，有效稳住了市场基本盘，展现了发展韧性，实现了市场三是品牌影响力再跃新阶。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "N-e8dc4276e5": {
+      "evidence_id": "N-e8dc4276e5",
+      "kind": "narrative",
+      "text": "发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "发起首届赤水河论坛，参加达沃斯论坛、中国消费名品全国行（贵州站）、品牌强国工程、2025 中国企业家博鳌论坛等活动，助力提升品牌影响力和美誉度。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "P-6669b8ff4b": {
+      "evidence_id": "P-6669b8ff4b",
+      "kind": "financial",
+      "metric": "revenue",
+      "period": "2025FY",
+      "display": "172,054,171,890.91",
+      "unit": "元",
+      "currency": "CNY",
+      "comparison": {
+        "prior_display": "174,144,069,958.25",
+        "direction": "下滑",
+        "magnitude": "1.2%",
+        "required_phrase": "同比下滑1.2%"
+      },
+      "allowed_numeric_displays": [
+        "172,054,171,890.91",
+        "2025",
+        "174,144,069,958.25",
+        "1.2%",
+        "2024"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 61,
+        "quoted_anchor": "一、营业总收入 172,054,171,890.91 174,144,069,958.25",
+        "quoted_label": "营业总收入",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "statement_scope": "consolidated"
+      }
+    },
+    "N-218e7faa26": {
+      "evidence_id": "N-218e7faa26",
+      "kind": "narrative",
+      "text": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "公司坚持“顺天敬人、明理厚德”的企业价值观，拥有“品质、品牌、工艺、环境、文化”组成的“五大核心竞争力”。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "N-e18cdd6816": {
+      "evidence_id": "N-e18cdd6816",
+      "kind": "narrative",
+      "text": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "明晟 ESG评级从 BBB级跃升至 A级，成为中国白酒行业首家获此评级的企业；",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "N-8dcfb08557": {
+      "evidence_id": "N-8dcfb08557",
+      "kind": "narrative",
+      "text": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "标普全球 ESG评级得分大幅提升，可持续发展能力获得国际认可。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    },
+    "N-d45d0f326d": {
+      "evidence_id": "N-d45d0f326d",
+      "kind": "narrative",
+      "text": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。",
+      "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 122,
+        "quoted_anchor": "公司承受的汇率风险主要与美元、欧元有关，除公司以美元和欧元进行产品销售结算外，公司的其他主要业务活动以人民币计价结算。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+      }
+    },
+    "N-664e326e4d": {
+      "evidence_id": "N-664e326e4d",
+      "kind": "narrative",
+      "text": "本公司销售以预收款项方式进行，交易的信用风险小。",
+      "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 122,
+        "quoted_anchor": "本公司销售以预收款项方式进行，交易的信用风险小。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+      }
+    },
+    "N-51bc5f83f3": {
+      "evidence_id": "N-51bc5f83f3",
+      "kind": "narrative",
+      "text": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。",
+      "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 122,
+        "quoted_anchor": "公司金融资产包括货币资金、应收账款、其他应收款等，这些金融资产的信用风险源自交易由于公司仅与经认可的且信誉良好的第三方进行交易，所以无需担保物。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+      }
+    },
+    "N-7ecd334068": {
+      "evidence_id": "N-7ecd334068",
+      "kind": "narrative",
+      "text": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。",
+      "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 122,
+        "quoted_anchor": "流动风险，是指企业在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的公司的政策是确保拥有充足的现金以偿还到期债务。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+      }
+    },
+    "N-2324bfce56": {
+      "evidence_id": "N-2324bfce56",
+      "kind": "narrative",
+      "text": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。",
+      "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 122,
+        "quoted_anchor": "利率风险，是指金融工具的公允价值或未来现金流量因市场利率变动而发生波动的风险。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > 1、金融工具的风险 > 2、套期"
+      }
+    },
+    "N-f1afb1210a": {
+      "evidence_id": "N-f1afb1210a",
+      "kind": "narrative",
+      "text": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。",
+      "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (三)经营计划",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 22,
+        "quoted_anchor": "强化产品防伪和溯源的前端布局，从源头遏制侵权风险，筑牢品牌安全屏障。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (三)经营计划"
+      }
+    },
+    "N-2bda7732d5": {
+      "evidence_id": "N-2bda7732d5",
+      "kind": "narrative",
+      "text": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。",
+      "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 21,
+        "quoted_anchor": "公司坚持“生态优先、绿色发展”，坚持走好科技创新驱动发展的绿色发展道路，引领打造赤水河生态名片，用更先进方法和技术永葆环境竞争力。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+      }
+    },
+    "N-c917e52241": {
+      "evidence_id": "N-c917e52241",
+      "kind": "narrative",
+      "text": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让",
+      "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 21,
+        "quoted_anchor": "持续开展流域微生物、水生物、植物植被的科学研究，全力守护流域生物多样性和稳定性，全力维护茅台酒赖以生存的生态系统“十五五”期间，公司将围绕“世界级白酒领军企业、全球最具竞争力的酒业上市公司、世界一流价值型企业典范”的战略定位，以“酿造高品质生活”为使命，以“让世界爱上茅台、让",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 六、公司关于公司未来发展的讨论与分析 > (二)公司发展战略"
+      }
+    },
+    "N-fadb1930ab": {
+      "evidence_id": "N-fadb1930ab",
+      "kind": "narrative",
+      "text": "持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；",
+      "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+      "report_period": "2025FY",
+      "self_report": false,
+      "allowed_numeric_displays": [
+        "2025"
+      ],
+      "citation": {
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225114741",
+        "raw_hash": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+        "page_number": 9,
+        "quoted_anchor": "持续深化市值管理体系建设，发布并实施《市值管理办法》，管理亿元（含 2025年年度分红预案金额），分红总额创历史新高；",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "section_path": "第三节 管理层讨论与分析 > 五、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表"
+      }
+    }
+  },
+  "section_contract": {
+    "schema_version": "research-section-contract-v3",
+    "contract_version": "3.0.0",
+    "contract_hash": "cbfee50484a9adbb59d9ece9ccd1950012a14edb847b105947115104643abfe0",
+    "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+    "profile_id": "a-share-round7",
+    "profile_version": "1.0.0",
+    "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+    "evidence_set_id": "evidence_set_88d8efa0366d1f6dff05115b9de80430860b892c",
+    "evidence_manifest_hash": "88d8efa0366d1f6dff05115b9de80430860b892cfcad34ea3203fb832d884432",
+    "live_eligible": true,
+    "sections": [
+      {
+        "section_id": "one_line_positioning",
+        "order": 1,
+        "title": "一句话定位",
+        "status": "partial",
+        "present_required": [
+          "issuer_identity",
+          "positioning_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "market_snapshot",
+          "legacy_judgment_materials"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          140,
+          240
+        ],
+        "section_hash": "f8f0c59944c291ab41586aa72750a56a4115bf97b31aabbf661c84d509cf94c8",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "a2723d464a9d6eff859266e34009a1e8becbdf6857ab191648f5ef24c409984c"
+      },
+      {
+        "section_id": "identity_founder_and_governance",
+        "order": 2,
+        "title": "身份、创始人与治理",
+        "status": "partial",
+        "present_required": [
+          "issuer_identity",
+          "management_evidence",
+          "governance_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "ownership_evidence"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          220,
+          360
+        ],
+        "section_hash": "8ac3028b7b38471b62ee325f633e9da2d9d594be4ea5e468dfbb5d02bafda8f0",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "0a7fb58e77e49b357e4ae1393f80d1625481090e82fe780347ec72710869d825"
+      },
+      {
+        "section_id": "technology_origin_and_development_history",
+        "order": 3,
+        "title": "技术来源与发展史",
+        "status": "partial",
+        "present_required": [
+          "timeline_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "governance_timeline"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          380,
+          550
+        ],
+        "section_hash": "c67360c0fc770745e789aa15d14bfeb055cabe8a9875fd938a74f83f82a6573c",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "323b88b6f43123d9594faf887578a207382e73c5c57efe41ef027ddfb8493980"
+      },
+      {
+        "section_id": "business_model_and_business_lines",
+        "order": 4,
+        "title": "商业模式与业务线",
+        "status": "partial",
+        "present_required": [
+          "business_evidence",
+          "operating_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "segment_financials",
+          "industry_evidence",
+          "company_position",
+          "legacy_judgment_materials"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          520,
+          750
+        ],
+        "section_hash": "58f55afaa6bf10f603e1acd2cd7fa169a5266280c95a9135dee303342afc98f3",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "b1edf2c37593b6335625f47a2177bdb45570892e398eeaeb2a08374fc7940de7"
+      },
+      {
+        "section_id": "financial_and_operating_time_series",
+        "order": 5,
+        "title": "财务与经营时间序列",
+        "status": "partial",
+        "present_required": [
+          "financial_evidence",
+          "operating_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "valuation_evidence",
+          "accounting_evidence",
+          "legacy_judgment_materials"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          450,
+          650
+        ],
+        "section_hash": "4a65cbefbc66dce7b9f33a442232d021cbf069cdb5a4b4e02c8e8793c0404481",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "4e5c9bd2599f74bbf3587b520bc3ab0b63d65428913ed7fb70dad419c2cc9ca8"
+      },
+      {
+        "section_id": "moat_evidence_chain",
+        "order": 6,
+        "title": "护城河的证据链",
+        "status": "partial",
+        "present_required": [
+          "moat_evidence",
+          "falsification_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "peer_evidence",
+          "legacy_judgment_materials"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          420,
+          620
+        ],
+        "section_hash": "07b885f8aa31fe1924ed482b5592f389a81b327716c1b4e1946763d97dfb7f81",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "03c98fe7a58ddf2451367f5aee17582733e86063f0b769de470f209baa1047b9"
+      },
+      {
+        "section_id": "risks_counter_thesis_and_triggers",
+        "order": 7,
+        "title": "风险、反题材与观察触发器",
+        "status": "partial",
+        "present_required": [
+          "risk_evidence",
+          "trigger_evidence",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "policy_evidence",
+          "legacy_judgment_materials"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          450,
+          650
+        ],
+        "section_hash": "cdb9d29569c8ffe02e9ec1b018f8a8cba2915a9e4b12302a8c78c4ca0159b209",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "7bb2ec926ebf60a6995f1cd087d530a7a83a0290bd9bdd9b4c2ca33d98cdb1c6"
+      },
+      {
+        "section_id": "research_conclusion_and_open_questions",
+        "order": 8,
+        "title": "研究结论与待补问题",
+        "status": "partial",
+        "present_required": [
+          "synthesis_evidence",
+          "decision_policy_output",
+          "chapter_draft"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "typed_gaps",
+          "legacy_judgment_materials"
+        ],
+        "status_reason": "pending_judgment_review",
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ],
+        "target_characters": [
+          200,
+          350
+        ],
+        "section_hash": "57d39735ae4c7f93cea94f3b44ffe6cf2673e1484ff64bb88274d518ab4971a8",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "4f5bd12ac394e2c08ecc34cb456048d5c1ee3b18e65c19094153f15171f08682"
+      },
+      {
+        "section_id": "production_record",
+        "order": 9,
+        "title": "生产记录",
+        "status": "full",
+        "present_required": [
+          "run_receipt",
+          "source_manifest"
+        ],
+        "missing_required": [],
+        "present_optional": [],
+        "missing_optional": [
+          "review_record"
+        ],
+        "status_reason": null,
+        "pending_judgment_inputs": [],
+        "target_characters": [
+          300,
+          450
+        ],
+        "section_hash": "2a5ae83bbdd8a707189b8feb7569d26b48eade74a2dff11cbd0538a516f099c5",
+        "profile_hash": "15f9bbccfd52cb5e484ee0e232321020d2227e1a481de6a307dfe0e05e81f23d",
+        "version_hash": "4495d2685fbc43c990e7777b326542518d0fe557b446b8385c82fdcc43dafd5f",
+        "input_hash": "e36cc3615b413ad8987adf341a815a73cbf8e64cc9ddcd02dd4424a4b481f6b3"
+      }
+    ],
+    "target_body_characters": [
+      3080,
+      4620
+    ]
+  },
+  "degradation": {
+    "ticker": "600519.SH",
+    "tier": "B",
+    "evidence_set_id": "evidence_set_88d8efa0366d1f6dff05115b9de80430860b892c",
+    "evidence_manifest_hash": "88d8efa0366d1f6dff05115b9de80430860b892cfcad34ea3203fb832d884432",
+    "section_statuses": [
+      [
+        "one_line_positioning",
+        "partial"
+      ],
+      [
+        "identity_founder_and_governance",
+        "partial"
+      ],
+      [
+        "technology_origin_and_development_history",
+        "partial"
+      ],
+      [
+        "business_model_and_business_lines",
+        "partial"
+      ],
+      [
+        "financial_and_operating_time_series",
+        "partial"
+      ],
+      [
+        "moat_evidence_chain",
+        "partial"
+      ],
+      [
+        "risks_counter_thesis_and_triggers",
+        "partial"
+      ],
+      [
+        "research_conclusion_and_open_questions",
+        "partial"
+      ],
+      [
+        "production_record",
+        "full"
+      ]
+    ],
+    "allowed_fields": [
+      "status",
+      "summary",
+      "partial_report",
+      "evidence",
+      "next_steps"
+    ],
+    "blocked_fields": [
+      "action",
+      "target_price",
+      "position_range"
+    ],
+    "source_gap_actions": [],
+    "reasons": [
+      "partial_or_missing_sections",
+      "investment_action_fields_blocked"
+    ],
+    "policy_version": "park-any-ticker-degradation-v1",
+    "receipt_hash": "ab8f35f4c41e89d92a06966384da894f360e4c5589bfe484a3c513a7c3cc88fe"
+  },
+  "decision": {
+    "ticker": "600519.SH",
+    "action": "no_action",
+    "target_range": null,
+    "position_range": null,
+    "reasons": [
+      "insufficient_evidence_coverage",
+      "missing_market_price",
+      "missing_quality_risk_or_liquidity"
+    ],
+    "input_hash": "b941091728abb3481a0ebf07c6213284ec433aa04361e39cbe58b39242b93a9c",
+    "receipt_hash": "e38fd0915497e60358f59bd71a395df552d2bace2a91f1ca9f06a16d1ca15716"
+  },
+  "metrics": {
+    "generated_research_text_characters": 3928,
+    "chapter_body_characters": 6467,
+    "full_file_characters": 7482,
+    "generated_chapters": 8,
+    "production_record_chapters": 1,
+    "source_documents": 1,
+    "page_evidence_bindings": 33
+  },
+  "content_hash": "90357f51c13c9df4574f2ceeeb053cc509457e804c39ed3c045369c2549dfdb2",
+  "artifacts": {
+    "markdown_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/600519.SH.md",
+    "markdown_sha256": "d3daf6a152a79f087a761dca8bd306547991cdc9be79710031dda3e314f0de33",
+    "html_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/600519.SH.html",
+    "html_sha256": "7ce47c934fd298a063e23bee15b0003f9222b6d1e945014b6169417e063868bb"
+  },
+  "receipt_hash": "9afce88b4acc2e8c8e8d38824b32f58f6ab57a7a434718b3a41e78a52faf3e0f"
+}

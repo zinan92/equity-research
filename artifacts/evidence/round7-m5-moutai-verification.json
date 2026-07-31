@@ -1,0 +1,79 @@
+{
+  "ticker": "600519.SH",
+  "passed": true,
+  "problems": [],
+  "warnings": [
+    "north_star: one official source document; coverage remains partial"
+  ],
+  "receipt_hash": "9afce88b4acc2e8c8e8d38824b32f58f6ab57a7a434718b3a41e78a52faf3e0f",
+  "run_id": "round7-run:10bc8c41a6fc28e01ce771b4",
+  "north_star": {
+    "structure_signature": "1c25130d38341372cbd96308c57e48553175764178e2e38c6ac645852f975ea5",
+    "body_characters": 7350,
+    "source_rows": 1,
+    "fact_ids": 26
+  },
+  "metrics": {
+    "generated_research_text_characters": 3928,
+    "chapter_body_characters": 6467,
+    "full_file_characters": 7482,
+    "generated_chapters": 8,
+    "production_record_chapters": 1,
+    "source_documents": 1,
+    "page_evidence_bindings": 33
+  },
+  "section_statuses": {
+    "one_line_positioning": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "identity_founder_and_governance": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "technology_origin_and_development_history": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "business_model_and_business_lines": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "financial_and_operating_time_series": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "moat_evidence_chain": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "risks_counter_thesis_and_triggers": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "research_conclusion_and_open_questions": [
+      "partial",
+      "pending_judgment_review"
+    ],
+    "production_record": [
+      "full",
+      null
+    ]
+  },
+  "tier": "B",
+  "blocked_fields": [
+    "action",
+    "target_price",
+    "position_range"
+  ],
+  "accepted_model_request_ids": [
+    "7e8c2005-536c-4058-98fb-315b6eb8d938",
+    "32496603-7aeb-4002-8169-cf71a094fdcd",
+    "d7fd1c4a-a2f8-489b-a591-04459b75ff58",
+    "5cfca829-0d13-4a8d-9083-4e3a418d0288",
+    "05cf6312-268c-4a3c-af89-95723c3aab0a",
+    "6c49bb97-4d22-4270-8ad5-c5e1e9c0cc01",
+    "1a923a64-2a20-4833-8055-487b162f6b7b",
+    "d9f43ca6-6c98-4497-95e4-f5a3f76a6cff"
+  ]
+}

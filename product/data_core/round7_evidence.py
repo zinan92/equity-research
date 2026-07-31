@@ -515,6 +515,24 @@ def select_section_evidence(
     # The synthesis chapter is deliberately fed a compact, high-signal slice;
     # sending every narrative paragraph makes the structured response exceed
     # the provider's completion envelope without improving traceability.
+    if section_id == "financial_and_operating_time_series":
+        financial = []
+        for item in registry.values():
+            if item.get("kind") != "financial":
+                continue
+            # Keep page facts only when the extracted display is numerically
+            # coherent with its same-row comparison.  A malformed unit/value
+            # row stays an explicit coverage gap instead of entering prose.
+            try:
+                current = float(str(item.get("display") or "").replace(",", ""))
+                prior = float(str((item.get("comparison") or {}).get("prior_display") or "").replace(",", ""))
+                if prior and (current == 0 or abs(prior / current) > 100):
+                    continue
+            except (TypeError, ValueError):
+                pass
+            financial.append(item)
+        narrative = [item for item in selected if item.get("kind") != "financial"]
+        selected = financial + narrative[: max(0, 12 - len(financial))]
     if section_id == "research_conclusion_and_open_questions":
         selected = selected[:8]
     return selected
