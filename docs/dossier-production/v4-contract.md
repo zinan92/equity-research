@@ -38,6 +38,6 @@ V4 不是另一套字段清单，而是已被读者验证过的档案单位：�
 
 ## 旧链路边界
 
-M1 只固化 V4 合同和验证器，不修改旧 `C1`、Tier 阶梯、B6 evidence gate 或 decision policy。M2/M3 会用真实多公司档案验证合同，M4 才盘点并退役旧按字段生成路径；在此之前两条链路并存，任何旧统计都不能被解释为 V4 通过。
+M1 只固化 V4 合同和验证器，不修改旧 `C1`、Tier 阶梯、B6 evidence gate 或 decision policy。M2/M3 用真实多公司档案验证合同；M4 已将 V4 写入统一整档入口并把旧按字段生成路径隔离为历史兼容层，任何旧统计都不能被解释为 V4 通过。
 
 机器实现：[`product/v4_dossier_contract.py`](../../product/v4_dossier_contract.py)；focused tests：[`product/tests/test_v4_dossier_contract.py`](../../product/tests/test_v4_dossier_contract.py)。

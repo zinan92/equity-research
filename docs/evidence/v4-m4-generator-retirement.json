@@ -1,0 +1,33 @@
+{
+  "schema_version": "park-v4-generator-retirement-receipt-v1",
+  "status": "passed",
+  "v4_entrypoint": "scripts/generate_v4_dossier.py",
+  "library_entrypoint": "product/v4_dossier_generator.py:generate_v4_dossier",
+  "generator_version": "park-v4-whole-dossier-generator-v1",
+  "active_v4_path": [
+    "product/v4_dossier_contract.py",
+    "product/v4_dossier_generator.py",
+    "product/v4_official_adapter.py"
+  ],
+  "retired_field_path": {
+    "status": "quarantined_legacy",
+    "no_current_v4_import": true,
+    "historical_artifacts_preserved": true,
+    "forbidden_symbols": [
+      "e4_model_judgments",
+      "legacy_judgment_materials",
+      "investment_thesis",
+      "variant_view",
+      "margin_bridge"
+    ]
+  },
+  "safety_boundary": {
+    "tier_logic_changed": false,
+    "blocked_fields_changed": false,
+    "b6_evidence_gate_changed": false,
+    "decision_policy_changed": false,
+    "fresh_model_calls": 0,
+    "is_live_research": false
+  },
+  "why_rebuilt": "Existing Round 7 and official-bound files are useful evidence artifacts, but they were not a single callable V4 production contract. The new entrypoint accepts one complete dossier or one official evidence adaptation and validates the whole document before writing it."
+}

@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-08-02 · V4 uses one whole-dossier entry point (Issue #674)
+
+- Decision: make `scripts/generate_v4_dossier.py` / `generate_v4_dossier()` the only V4 production-facing writer. It accepts one complete dossier plus its evidence manifest, or the deterministic official-evidence adapter inputs; it validates the document as a whole before writing the receipt.
+- Why: Round 7's quality unit is a chapter/document, not the retired collection of field judgments. Existing Round 7 and official-bound files remain useful evidence artifacts, but they were not a callable, company-agnostic V4 production contract.
+- Evidence: `docs/evidence/v4-m4-generator-retirement.json`, `product/tests/test_v4_dossier_generator.py`, and `scripts/verify_v4_generator_retirement.py`.
+- Gotchas: historical e4 receipts and old C1 definitions are preserved for audit compatibility, but V4 cannot import them and no unreviewed prose receives Tier/action credit. Tier ladder, blocked fields, B6 gate, and decision policy hashes are outside this milestone.
+
 ## 2026-08-02 · Project-owned operating records (Issue #666)
 
 - Decision: keep stable intent in `NORTH_STAR.md`, current state in
