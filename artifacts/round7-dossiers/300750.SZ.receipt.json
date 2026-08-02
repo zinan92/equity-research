@@ -5791,11 +5791,11 @@
     "page_evidence_bindings": 42
   },
   "artifacts": {
-    "markdown_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/300750.SZ.md",
+    "markdown_path": "/Users/wendy/Documents/投研面板/artifacts/round7-dossiers/300750.SZ.md",
     "markdown_sha256": "c199f2052afded39db66c93ec40e3aeb72275755e0c259ddd2a34437f2af6612",
-    "html_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/300750.SZ.html",
+    "html_path": "/Users/wendy/Documents/投研面板/artifacts/round7-dossiers/300750.SZ.html",
     "html_sha256": "dfeadc96383a04cd719e35c78df5ba7a4ea88e0a5b1d05b1f944bfc96ee859ed"
   },
   "content_hash": "33cd21c0a0fd229d32317f362189fab2ee6994ae404f8936767bd93f3b04a540",
-  "receipt_hash": "e55d00b3f5877da77c5183b1929ff4072c6f584388b65d4cd31a844189de380e"
+  "receipt_hash": "f42bf6179f4bf1b96ecc1b8841826282ec61eea4a8bf94ded92053a2ff8d278b"
 }

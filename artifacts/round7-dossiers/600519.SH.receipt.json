@@ -3832,10 +3832,10 @@
   },
   "content_hash": "90357f51c13c9df4574f2ceeeb053cc509457e804c39ed3c045369c2549dfdb2",
   "artifacts": {
-    "markdown_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/600519.SH.md",
+    "markdown_path": "/Users/wendy/Documents/投研面板/artifacts/round7-dossiers/600519.SH.md",
     "markdown_sha256": "d3daf6a152a79f087a761dca8bd306547991cdc9be79710031dda3e314f0de33",
-    "html_path": "/Users/wendy/Documents/equity-research-report-artifacts/artifacts/round7-dossiers/600519.SH.html",
+    "html_path": "/Users/wendy/Documents/投研面板/artifacts/round7-dossiers/600519.SH.html",
     "html_sha256": "7ce47c934fd298a063e23bee15b0003f9222b6d1e945014b6169417e063868bb"
   },
-  "receipt_hash": "9afce88b4acc2e8c8e8d38824b32f58f6ab57a7a434718b3a41e78a52faf3e0f"
+  "receipt_hash": "1a80d183205dc10ba58de75ee4f97167b9331e5153a4cce0cb081184e276d82e"
 }

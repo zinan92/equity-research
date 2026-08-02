@@ -2528,3 +2528,15 @@
 
 - Receipt 明确 `generation_mode=replay_existing_round7`、`fresh_model_calls=0`、`new_official_documents=0`、`is_live_research=false`；这些档案的可读性通过不等于本次生成完成。
 - M3 必须重新绑定官方页级 evidence；不能把回放正文当作模型输入，也不能把本地 fixture 变成事实来源。
+
+## 2026-08-02 · V4-M3 official evidence binding
+
+- Decision：复用已有 CNINFO narrative/financial receipts 和两份官方来源 Round 7 样本，将其确定性重组为 V4 reader 章节；产出 CATL 与 Moutai 两份 `pending_human_review` 档案。
+- Why：先把 V4 的 reader shape 接到真实页级证据身份，再进入新模型生成；适配阶段不应把未经新生成或人工复核的文本伪装成 fresh research。
+- Evidence：`docs/evidence/v4-m3-official/receipt.json`、`docs/evidence/v4-m3-official/300750.SZ.md`、`docs/evidence/v4-m3-official/600519.SH.md`、`product/v4_official_adapter.py`。
+
+### Gotchas · V4-M3
+
+- `fresh_model_calls=0`、`new_official_documents=0`、`tier_credit=none` 是硬边界；输出通过 V4 validator 只证明来源与结构绑定，不代表人工审阅完成。
+- 适配器只接受 CNINFO URL 与 receipt ticker identity；没有官方页级 receipt 的第三家公司保持缺失，不能借用 M2 回放或聚合器数据。
+- 同步修正两份既有 Round 7 receipt 的 `markdown_path/html_path` 为仓库内持久路径并重算 receipt hash；正文与 HTML 字节未变，避免 verifier 把外部临时工作目录当作生产产物。
