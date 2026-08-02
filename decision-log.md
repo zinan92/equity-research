@@ -2517,3 +2517,14 @@
 
 - 长盈 V4 与 Ainiu 对照稿使用本地 fixture，只能作为 preview/写作回归；生产验证器默认拒绝 `fixture`、归档和东财 F10 词样。
 - M1 只建立合同，不宣称生成器已接线；旧 18 章统计仍只属于旧链路，不能拿来证明 V4 完成度。
+
+## 2026-08-02 · V4-M2 cross-company reader replay
+
+- Decision：用同一个 V4 replay/packager 入口验收 002594.SZ、300308.SZ、NVDA 三个不同行业的 Round 7 档案；输入正文与来源行原样复用，不在本 milestone 重写或新增事实。
+- Why：先证明 Ainiu reader contract 是公司无关的文档合同，再进入 M3 的官方页级新生成；把回放和新研究混在一起会夸大泛化程度。
+- Evidence：`docs/evidence/v4-m2-generalization-receipt.json`、`docs/evidence/v4-m2-reader-index.html`、`product/v4_dossier_replay.py` 与 `scripts/verify_v4_generalization.py`。
+
+### Gotchas · V4-M2
+
+- Receipt 明确 `generation_mode=replay_existing_round7`、`fresh_model_calls=0`、`new_official_documents=0`、`is_live_research=false`；这些档案的可读性通过不等于本次生成完成。
+- M3 必须重新绑定官方页级 evidence；不能把回放正文当作模型输入，也不能把本地 fixture 变成事实来源。
