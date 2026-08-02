@@ -1,0 +1,81 @@
+{
+  "schema_version": "park-v4-replay-receipt-v1",
+  "contract_schema_version": "park-v4-dossier-v1",
+  "generation_mode": "replay_existing_round7",
+  "is_live_research": false,
+  "fresh_model_calls": 0,
+  "new_official_documents": 0,
+  "sample_count": 3,
+  "shared_reader_contract": [
+    "一句话定位",
+    "产业坐标",
+    "创始人与团队",
+    "发展时间线",
+    "技术、产品与商业模式",
+    "财务与估值",
+    "风险与点评",
+    "生产记录"
+  ],
+  "samples": [
+    {
+      "ticker": "002594.SZ",
+      "industry": "汽车制造",
+      "path": "docs/dossier-production/samples/002594.SZ-v1.md",
+      "sha256": "09680c98837ab4d55a4dff59baf000343b726b678445caf10a0b294778c9853e",
+      "characters": 5039,
+      "reader_characters": 3463,
+      "source_rows": 4,
+      "source_ids": [
+        "[S-02]",
+        "[S-03]",
+        "[S-04]",
+        "[S-01]"
+      ],
+      "validation": "passed",
+      "validation_errors": [],
+      "generation_mode": "replay_existing_round7",
+      "is_live_research": false
+    },
+    {
+      "ticker": "300308.SZ",
+      "industry": "光模块",
+      "path": "docs/dossier-production/samples/300308.SZ-v1.md",
+      "sha256": "00ecc86ae35e03ba7b9a82c4ce2810f0186f980d738fb75124c019a6a160b3e2",
+      "characters": 5076,
+      "reader_characters": 3499,
+      "source_rows": 4,
+      "source_ids": [
+        "[S-02]",
+        "[S-03]",
+        "[S-04]",
+        "[S-01]"
+      ],
+      "validation": "passed",
+      "validation_errors": [],
+      "generation_mode": "replay_existing_round7",
+      "is_live_research": false
+    },
+    {
+      "ticker": "NVDA",
+      "industry": "AI芯片",
+      "path": "docs/dossier-production/samples/nvda-v1.md",
+      "sha256": "6f1b6718986332c5321b8e65f9c6a39c2d815ca101f3768953f74bb3fe49be1e",
+      "characters": 5905,
+      "reader_characters": 3870,
+      "source_rows": 6,
+      "source_ids": [
+        "[S-05]",
+        "[S-06]",
+        "[S-01]",
+        "[S-02]",
+        "[S-04]",
+        "[S-03]"
+      ],
+      "validation": "passed",
+      "validation_errors": [],
+      "generation_mode": "replay_existing_round7",
+      "is_live_research": false
+    }
+  ],
+  "boundary": "Replay proves cross-company reader compatibility only; it creates no new facts, recommendation, target, position or action."
+}
