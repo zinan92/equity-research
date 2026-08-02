@@ -55,6 +55,8 @@ def publish_completed_dossier(
         "completed_markdown_path is retired; production requires the canonical "
         "Round 7 receipt/markdown/html and v4_quality_gate"
     )
+
+
 def generate_v4_dossier(
     *,
     ticker: str,
@@ -79,8 +81,6 @@ def generate_v4_dossier(
             output_dir=output_dir,
         )
     if round7_dossier_path is not None:
-        if round7_profile_path is None:
-            raise ValueError("round7_profile_path is required with round7_dossier_path")
         if round7_markdown_path is None:
             raise ValueError("round7_markdown_path is required with round7_dossier_path")
         text, record = adapt_round7_dossier(

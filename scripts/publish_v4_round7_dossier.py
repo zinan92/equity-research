@@ -22,7 +22,11 @@ def main() -> int:
     parser.add_argument("ticker")
     parser.add_argument("--round7-dossier", type=Path, required=True)
     parser.add_argument("--round7-markdown", type=Path, required=True)
-    parser.add_argument("--profile", type=Path, required=True)
+    parser.add_argument(
+        "--profile",
+        type=Path,
+        help="optional issuer profile; when omitted, the canonical receipt remains the source of truth",
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
