@@ -1,0 +1,25 @@
+{
+  "schema_version": "park-v4-whole-dossier-receipt-v1",
+  "contract_schema_version": "park-v4-dossier-v1",
+  "generator_version": "park-v4-whole-dossier-generator-v1",
+  "generation_mode": "whole_dossier_publish",
+  "ticker": "300750.SZ",
+  "status": "pending_human_review",
+  "is_live_research": false,
+  "fresh_model_calls": 0,
+  "new_official_documents": 0,
+  "source_urls": [
+    "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+    "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+  ],
+  "input_markdown_path": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/300750.SZ.md",
+  "input_markdown_sha256": "d78039fe33c3bacac9eac7ac97d1459a5419e9c9b6d5044226d70ec7e6bd21e5",
+  "evidence_manifest_path": "artifacts/v4-reports/300750.SZ/evidence-manifest.json",
+  "evidence_manifest_sha256": "aea4647bdaa56906bb811b6f52c0ad09721de190320f60a6152aa424355ba493",
+  "output_path": "artifacts/v4-reports/300750.SZ/300750.SZ.md",
+  "output_sha256": "d78039fe33c3bacac9eac7ac97d1459a5419e9c9b6d5044226d70ec7e6bd21e5",
+  "characters": 5560,
+  "reader_characters": 4184,
+  "tier_credit": "none",
+  "boundary": "V4 accepts one complete dossier; unreviewed prose remains pending human review and grants no Tier/action credit."
+}
