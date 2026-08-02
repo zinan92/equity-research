@@ -1,0 +1,40 @@
+{
+  "schema_version": "park-v4-publication-receipt-v1",
+  "status": "passed",
+  "contract_schema_version": "park-v4-dossier-v1",
+  "source_receipt": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/receipt.json",
+  "source_receipt_sha256": "59e4388641573dbd2f3bfe92023f6d51a18bdba6a447c1de6b5153635f8b8780",
+  "index_path": "artifacts/v4-reports/index.html",
+  "index_sha256": "65ded8c5b1ed376ea48019d9c8dd2c46289d4e20775c7dd45c96911b2e09f232",
+  "companies": [
+    {
+      "ticker": "300750.SZ",
+      "markdown_path": "artifacts/v4-reports/300750.SZ/300750.SZ.md",
+      "html_path": "artifacts/v4-reports/300750.SZ/report.html",
+      "relative_html": "300750.SZ/report.html",
+      "markdown_sha256": "d78039fe33c3bacac9eac7ac97d1459a5419e9c9b6d5044226d70ec7e6bd21e5",
+      "html_sha256": "b1ab9c13d49c5751fe3e8df634c2028834a5f5dcb62e8a98dc23c668ed545fc6",
+      "reader_characters": 4184,
+      "source_count": 2,
+      "status": "pending_human_review",
+      "tier_credit": "none"
+    },
+    {
+      "ticker": "600519.SH",
+      "markdown_path": "artifacts/v4-reports/600519.SH/600519.SH.md",
+      "html_path": "artifacts/v4-reports/600519.SH/report.html",
+      "relative_html": "600519.SH/report.html",
+      "markdown_sha256": "6c76f3164af4efcfab3f1614ac9d7caa5dbde8441f9197cc24e685fdff1e39e0",
+      "html_sha256": "3fbe73a0fd21a40ffbfbd62df832d43ac4a49ad73da9786912f1a4bdbf0e9e28",
+      "reader_characters": 4046,
+      "source_count": 2,
+      "status": "pending_human_review",
+      "tier_credit": "none"
+    }
+  ],
+  "fresh_model_calls": 0,
+  "new_official_documents": 0,
+  "is_live_research": false,
+  "tier_credit": "none",
+  "boundary": "Reader publication only; pending human review and no investment action fields."
+}
