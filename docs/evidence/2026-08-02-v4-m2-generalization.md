@@ -1,5 +1,9 @@
 # V4-M2 · 三家公司 Ainiu reader contract 泛化
 
+> 历史回放收据：本文件记录的是 canonical Round 7 九章替换前的旧 reader
+> replay（当时使用“产业坐标/财务与估值/风险与点评”映射）。它不再是当前
+> V4 发布合同，也不提供公共/mobile 链接；当前合同见 `v4-contract.md`。
+
 状态：**通过（reader replay）**<br>
 合同：[#670](https://github.com/zinan92/equity-research/issues/670)<br>
 机器收据：[`v4-m2-generalization-receipt.json`](v4-m2-generalization-receipt.json)<br>

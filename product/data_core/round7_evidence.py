@@ -264,6 +264,48 @@ def _display_and_comparison(fact: Mapping[str, Any]) -> tuple[str | None, dict |
     return display, comparison
 
 
+NARRATIVE_CLASSIFICATION_VERSION = "issuer-provenance-v2"
+_ISSUER_PATH_MARKERS = (
+    "发展战略",
+    "战略规划",
+    "公司愿景",
+    "核心竞争力",
+    "公司简介",
+    "未来发展的展望",
+)
+_ISSUER_SUBJECTS = ("本行", "公司", "本公司", "集团", "我们")
+_ISSUER_AGENTIC_MARKERS = (
+    "坚持", "打造", "构建", "持续深化", "持续优化", "持续强化", "提升",
+    "赋能", "深耕", "专注", "定位", "经营理念", "领先", "优势", "引擎",
+    "一站式", "战略", "布局", "协同", "转型",
+)
+_EXPLICIT_CLAIM_MARKERS = (
+    "全球领先", "行业领先", "核心技术优势", "竞争优势", "市场地位",
+    "卓越", "龙头", "第一梯队", "最强",
+)
+
+
+def classify_narrative_provenance(text: str, section_path: str) -> tuple[bool, str | None]:
+    """Conservatively identify issuer self-description.
+
+    An issuer filing is an official source, but its strategic/marketing
+    assertions are not independently verified facts.  The classifier is
+    intentionally conservative: it only changes the provenance class and
+    never claims that an issuer source is unavailable or false.
+    """
+    text = " ".join(str(text or "").split())
+    path = str(section_path or "")
+    if any(marker in path for marker in _ISSUER_PATH_MARKERS):
+        return True, "issuer_strategy_or_competitiveness_path"
+    if any(marker in text for marker in _EXPLICIT_CLAIM_MARKERS):
+        return True, "issuer_competitiveness_claim"
+    if any(subject in text for subject in _ISSUER_SUBJECTS) and any(
+        marker in text for marker in _ISSUER_AGENTIC_MARKERS
+    ):
+        return True, "issuer_agentic_strategy_statement"
+    return False, None
+
+
 def _sentence_rows(narratives: Mapping[str, Any]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -301,19 +343,9 @@ def _sentence_rows(narratives: Mapping[str, Any]) -> list[dict[str, Any]]:
                 continue
             seen.add(sentence)
             path = str(block["section_path"])
-            self_report = (
-                "核心竞争力" in path
-                or any(
-                    marker in sentence
-                    for marker in (
-                        "全球领先",
-                        "行业领先",
-                        "核心技术优势",
-                        "竞争优势",
-                        "市场地位",
-                        "第一",
-                    )
-                )
+            self_report, self_report_reason = classify_narrative_provenance(
+                sentence,
+                path,
             )
             identity = {
                 "document_id": block["document_id"],
@@ -328,6 +360,11 @@ def _sentence_rows(narratives: Mapping[str, Any]) -> list[dict[str, Any]]:
                     "section_path": path,
                     "report_period": block.get("report_period"),
                     "self_report": self_report,
+                    "independence_class": (
+                        "issuer_self_report" if self_report else "issuer_disclosed_narrative"
+                    ),
+                    "self_report_reason": self_report_reason,
+                    "classification_version": NARRATIVE_CLASSIFICATION_VERSION,
                     "allowed_numeric_displays": list(
                         dict.fromkeys(
                             NUMBER.findall(sentence)

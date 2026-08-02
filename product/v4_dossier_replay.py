@@ -1,9 +1,8 @@
-"""Package already-produced Round 7 dossiers through the V4 reader contract.
+"""Package already-produced canonical Round 7 dossiers through V4.
 
-M2 intentionally does not regenerate prose. It proves that the same reader
-contract can accept several industries without ticker-specific generation
-branches. The receipt is explicitly a replay/preview artifact; M3 owns fresh
-official-evidence generation.
+Replay intentionally does not regenerate prose.  It accepts only the exact
+nine-chapter canonical reader contract; the retired seven-section mapped
+artifact fails validation and remains a historical failure sample.
 """
 from __future__ import annotations
 
@@ -17,7 +16,7 @@ from typing import Iterable
 from v4_dossier_contract import V4_HEADINGS, validate_v4_dossier
 
 
-REPLAY_SCHEMA_VERSION = "park-v4-replay-receipt-v1"
+REPLAY_SCHEMA_VERSION = "park-v4-replay-receipt-v2"
 _SOURCE_ROW_RE = re.compile(r"^\|\s*S-\d+\s+\|", re.MULTILINE)
 
 
@@ -33,7 +32,7 @@ class V4ReplaySample:
     source_ids: tuple[str, ...]
     validation: str
     validation_errors: tuple[str, ...]
-    generation_mode: str = "replay_existing_round7"
+    generation_mode: str = "replay_canonical_round7"
     is_live_research: bool = False
 
 
@@ -56,7 +55,13 @@ def _source_ids(text: str) -> tuple[str, ...]:
 
 def replay_sample(*, ticker: str, industry: str, path: Path, preview_only: bool = False) -> V4ReplaySample:
     text = path.read_text(encoding="utf-8")
-    errors = tuple(validate_v4_dossier(text, preview_only=preview_only))
+    errors = list(validate_v4_dossier(text, preview_only=preview_only))
+    frontmatter = re.search(r"\A---\n.*?^ticker:\s*([^\s]+)\s*$.*?\n---", text, re.MULTILINE | re.DOTALL)
+    declared_ticker = str(frontmatter.group(1)).strip().strip('"\'').upper() if frontmatter else ""
+    if not declared_ticker:
+        errors.append("replay frontmatter ticker missing")
+    elif declared_ticker != ticker.upper():
+        errors.append(f"replay ticker mismatch: expected {ticker.upper()}, got {declared_ticker}")
     return V4ReplaySample(
         ticker=ticker.upper(),
         industry=industry,
@@ -67,7 +72,7 @@ def replay_sample(*, ticker: str, industry: str, path: Path, preview_only: bool 
         source_rows=len(_SOURCE_ROW_RE.findall(text)),
         source_ids=_source_ids(text),
         validation="passed" if not errors else "failed",
-        validation_errors=errors,
+        validation_errors=tuple(errors),
     )
 
 
@@ -82,7 +87,7 @@ def build_replay_receipt(samples: Iterable[V4ReplaySample]) -> dict[str, object]
     return {
         "schema_version": REPLAY_SCHEMA_VERSION,
         "contract_schema_version": "park-v4-dossier-v1",
-        "generation_mode": "replay_existing_round7",
+        "generation_mode": "replay_canonical_round7",
         "is_live_research": False,
         "fresh_model_calls": 0,
         "new_official_documents": 0,

@@ -14,6 +14,8 @@ class Round7DossierApiTests(unittest.TestCase):
             self.assertEqual(payload["degradation"]["tier"], "B")
             self.assertEqual(len(payload["chapters"]), 8)
             self.assertTrue(payload["receipt_hash"])
+            self.assertFalse(payload["publication_eligible"])
+            self.assertEqual(payload["public_link"], None)
 
     def test_missing_dossier_is_not_synthesized(self):
         with self.assertRaises(FileNotFoundError):

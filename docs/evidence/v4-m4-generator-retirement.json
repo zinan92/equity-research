@@ -21,6 +21,18 @@
       "margin_bridge"
     ]
   },
+  "legacy_adapter_boundary": {
+    "status": "review_only_unpublished",
+    "retired_entrypoints": [
+      "scripts/build_v4_official_outputs.py"
+    ],
+    "legacy_artifact_root": "artifacts/v4-reports-legacy",
+    "sole_canonical_packager": "scripts/publish_v4_round7_dossier.py",
+    "canonical_source_root": "artifacts/round7-dossiers",
+    "publication_gate": "product/v4_quality_gate.py:evaluate_round7_quality",
+    "index_requires_publication_eligible": true,
+    "legacy_mapped_headings_rejected": true
+  },
   "safety_boundary": {
     "tier_logic_changed": false,
     "blocked_fields_changed": false,
@@ -29,5 +41,5 @@
     "fresh_model_calls": 0,
     "is_live_research": false
   },
-  "why_rebuilt": "Existing Round 7 and official-bound files are useful evidence artifacts, but they were not a single callable V4 production contract. The new entrypoint accepts one complete dossier or one official evidence adaptation and validates the whole document before writing it."
+  "why_rebuilt": "Existing Round 7 files are the canonical evidence artifacts. The old seven-section adapter is retained only as a review/failure sample; publication accepts exact-nine canonical files and a separate self-report/independent-evidence quality receipt."
 }

@@ -45,7 +45,7 @@ class V4ContractTests(unittest.TestCase):
         assert_valid_v4_dossier(_sample())
 
     def test_missing_section_and_http_are_rejected(self) -> None:
-        text = _sample().replace("## 6. 财务与估值", "## 6. 错误章节")
+        text = _sample().replace("## 6. 护城河的证据链", "## 6. 错误章节")
         text = text.replace("https://example.com/a.pdf", "http://example.com/a.pdf")
         errors = validate_v4_dossier(text)
         self.assertTrue(any("section order" in error for error in errors))
@@ -62,11 +62,11 @@ class V4ContractTests(unittest.TestCase):
         self.assertEqual(manifest["section_order"], list(V4_HEADINGS))
         self.assertIn("legacy_boundary", manifest)
 
-    def test_round7_blind_set_uses_the_same_reader_contract(self) -> None:
+    def test_legacy_blind_set_is_not_a_publishable_reader_contract(self) -> None:
         for ticker in ("002371.SZ", "002594.SZ", "300308.SZ", "300502.SZ", "nvda"):
             path = ROOT / "docs" / "dossier-production" / "samples" / f"{ticker}-v1.md"
             self.assertTrue(path.exists(), ticker)
-            self.assertEqual(validate_v4_dossier(path.read_text(encoding="utf-8")), [], ticker)
+            self.assertTrue(validate_v4_dossier(path.read_text(encoding="utf-8")), ticker)
 
 
 if __name__ == "__main__":

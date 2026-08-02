@@ -13,9 +13,9 @@ from v4_dossier_replay import build_reader_index, build_replay_receipt, replay_s
 class V4ReplayTests(unittest.TestCase):
     def test_three_industries_share_one_replay_contract(self) -> None:
         rows = [
-            replay_sample(ticker="002594.SZ", industry="汽车制造", path=ROOT / "docs/dossier-production/samples/002594.SZ-v1.md"),
-            replay_sample(ticker="300308.SZ", industry="光模块", path=ROOT / "docs/dossier-production/samples/300308.SZ-v1.md"),
-            replay_sample(ticker="NVDA", industry="AI芯片", path=ROOT / "docs/dossier-production/samples/nvda-v1.md"),
+            replay_sample(ticker="000001.SZ", industry="银行", path=ROOT / "artifacts/round7-dossiers/000001.SZ.md"),
+            replay_sample(ticker="300750.SZ", industry="电池", path=ROOT / "artifacts/round7-dossiers/300750.SZ.md"),
+            replay_sample(ticker="600519.SH", industry="白酒", path=ROOT / "artifacts/round7-dossiers/600519.SH.md"),
         ]
         receipt = build_replay_receipt(rows)
         self.assertEqual(receipt["sample_count"], 3)
@@ -27,7 +27,7 @@ class V4ReplayTests(unittest.TestCase):
         self.assertIn("replay only", html)
 
     def test_duplicate_ticker_is_rejected(self) -> None:
-        row = replay_sample(ticker="NVDA", industry="AI芯片", path=ROOT / "docs/dossier-production/samples/nvda-v1.md")
+        row = replay_sample(ticker="600519.SH", industry="白酒", path=ROOT / "artifacts/round7-dossiers/600519.SH.md")
         with self.assertRaisesRegex(ValueError, "unique"):
             build_replay_receipt([row, row])
 

@@ -21,6 +21,9 @@ def main() -> int:
     parser.add_argument("--official-sample", type=Path)
     parser.add_argument("--narrative-receipt", type=Path)
     parser.add_argument("--financial-receipt", type=Path)
+    parser.add_argument("--round7-dossier", type=Path, help="canonical Round 7 receipt JSON")
+    parser.add_argument("--round7-markdown", type=Path, help="canonical Round 7 Markdown")
+    parser.add_argument("--round7-profile", type=Path, help="canonical issuer profile")
     args = parser.parse_args()
     receipt = generate_v4_dossier(
         ticker=args.ticker,
@@ -30,6 +33,9 @@ def main() -> int:
         official_sample_path=args.official_sample,
         narrative_receipt_path=args.narrative_receipt,
         financial_receipt_path=args.financial_receipt,
+        round7_dossier_path=args.round7_dossier,
+        round7_markdown_path=args.round7_markdown,
+        round7_profile_path=args.round7_profile,
     )
     print(receipt["output_path"])
     print(receipt["generation_mode"])
