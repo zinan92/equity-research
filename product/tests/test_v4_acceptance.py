@@ -15,12 +15,13 @@ class V4AcceptanceTests(unittest.TestCase):
     def test_receipt_is_honest_and_20_slice_is_explicit(self) -> None:
         result = build(
             acceptance_path=ROOT / "artifacts/evidence/e4-l2-m7-acceptance.json",
-            official_root=ROOT / "docs/evidence/v4-m3-official",
+            official_root=ROOT / "artifacts/round7-dossiers",
             replay_receipt_path=ROOT / "docs/evidence/v4-m2-generalization-receipt.json",
             audit_path=ROOT / "artifacts/e4-reports/e4-l1-m6-spot-audit-assignments.json",
         )
         self.assertEqual(result["status"], "honest_baseline_not_ready")
-        self.assertEqual(result["v4_baseline"]["official_bound_count"], 2)
+        self.assertEqual(result["v4_baseline"]["official_bound_count"], 0)
+        self.assertEqual(result["v4_baseline"]["canonical_structure_count"], 2)
         self.assertEqual(result["v4_baseline"]["replay_only_count"], 3)
         self.assertEqual(result["twenty_ticker_slice"]["count"], 20)
         self.assertTrue(result["twenty_ticker_slice"]["all_have_explicit_blocker"])

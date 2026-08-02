@@ -6,6 +6,7 @@ import ipaddress
 import json
 import mimetypes
 import os
+import re
 import sqlite3
 import time
 import zipfile
@@ -54,6 +55,7 @@ from feedback_store import FeedbackError, feedback_export, initialize_feedback, 
 from claim_review_store import ClaimReviewError, append_claim_review, export_claim_review_decisions, initialize_claim_reviews
 from spot_audit_store import SpotAuditReviewError, append_spot_audit_review, export_spot_audit_reviews, initialize_spot_audit_reviews
 from spot_audit_assignment_reader import SpotAuditAssignmentReadError, load_assignment
+from v4_quality_gate import evaluate_round7_quality
 from partial_model_store import PartialModelStoreError, load_partial_model
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
@@ -74,6 +76,7 @@ PRIVATE_PREVIEW = os.getenv("PARK_PRIVATE_PREVIEW", "0") == "1"
 MANUAL_PAID_PILOT = PRIVATE_PREVIEW and os.getenv("PARK_MANUAL_PAID_PILOT", "0") == "1"
 PRIVATE_PREVIEW_SCHEMA_VERSION = "private-preview-v1"
 SESSION_COOKIE = "__Host-park_session" if COOKIE_SECURE else "park_session"
+_ROUND7_TICKER_RE = re.compile(r"^[A-Z0-9]{6}\.[A-Z]{2}$")
 
 
 def canonical_portfolio_source_db() -> Path:
@@ -83,11 +86,25 @@ def canonical_portfolio_source_db() -> Path:
 def round7_dossier_payload(ticker: str) -> dict:
     """Read-only projection of the persistent Round 7 dossier receipt."""
     normalized = ticker.upper()
-    receipt_path = ROUND7_DOSSIER_ROOT / f"{normalized}.receipt.json"
-    markdown_path = ROUND7_DOSSIER_ROOT / f"{normalized}.md"
+    if not _ROUND7_TICKER_RE.fullmatch(normalized):
+        raise FileNotFoundError(normalized)
+    canonical_root = ROUND7_DOSSIER_ROOT.resolve()
+    receipt_path = (canonical_root / f"{normalized}.receipt.json").resolve()
+    markdown_path = (canonical_root / f"{normalized}.md").resolve()
+    try:
+        receipt_path.relative_to(canonical_root)
+        markdown_path.relative_to(canonical_root)
+    except ValueError as exc:
+        raise FileNotFoundError(normalized) from exc
     if not receipt_path.is_file() or not markdown_path.is_file():
         raise FileNotFoundError(normalized)
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    quality_gate = evaluate_round7_quality(
+        dossier_path=receipt_path,
+        markdown_path=markdown_path,
+        html_path=canonical_root / f"{normalized}.html",
+        require_canonical_root=True,
+    )
     return {
         "ticker": normalized,
         "schema_version": receipt.get("schema_version"),
@@ -99,6 +116,9 @@ def round7_dossier_payload(ticker: str) -> dict:
         "metrics": receipt.get("metrics"),
         "receipt_hash": receipt.get("receipt_hash"),
         "markdown_path": str(markdown_path),
+        "quality_gate": quality_gate,
+        "publication_eligible": bool(quality_gate.get("publication_eligible")),
+        "public_link": None,
     }
 
 
@@ -732,9 +752,19 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if route.startswith("/api/research/round7-dossier/"):
             ticker = unquote(route.removeprefix("/api/research/round7-dossier/"))
             try:
-                self._json(round7_dossier_payload(ticker))
+                payload = round7_dossier_payload(ticker)
             except (FileNotFoundError, OSError, json.JSONDecodeError):
                 self._json({"error": "round7_dossier_unavailable"}, HTTPStatus.NOT_FOUND)
+            else:
+                if payload.get("publication_eligible") is not True:
+                    self._json({
+                        "error": "round7_dossier_not_public",
+                        "ticker": payload.get("ticker"),
+                        "review_status": payload.get("review_status"),
+                        "quality_gate": payload.get("quality_gate"),
+                    }, HTTPStatus.CONFLICT)
+                else:
+                    self._json(payload)
             return
         if route.startswith("/api/research/evidence/"):
             ticker = unquote(route.removeprefix("/api/research/evidence/"))

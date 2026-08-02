@@ -80,23 +80,17 @@ class V4N2ProfileTests(unittest.TestCase):
         self.assertNotIn("东财", raw)
         self.assertEqual(json.loads(raw)["schema_version"], "round7-issuer-profile-v1")
 
-    def test_generated_round7_maps_through_v4_and_keeps_upstream_identity(self) -> None:
+    def test_blocked_round7_cannot_be_packaged_through_v4(self) -> None:
         source = ROOT / "artifacts/round7-dossiers"
         with __import__("tempfile").TemporaryDirectory() as tmp:
-            receipt = generate_v4_dossier(
-                ticker="000001.SZ",
-                output_dir=Path(tmp),
-                round7_dossier_path=source / "000001.SZ.receipt.json",
-                round7_markdown_path=source / "000001.SZ.md",
-                round7_profile_path=self.profile_path,
-            )
-        self.assertEqual(receipt["generation_mode"], "round7_generated_whole_dossier_adaptation")
-        self.assertEqual(receipt["upstream"]["profile_hash"], self.profile["profile_hash"])
-        self.assertEqual(receipt["fresh_model_calls"], 8)
-        self.assertEqual(receipt["tier_credit"], "none")
-        self.assertEqual(len(receipt["upstream"]["accepted_model_request_ids"]), 8)
-        self.assertEqual(receipt["upstream"]["accepted_semantic_audit_count"], 8)
-        self.assertTrue(receipt["upstream"]["typed_gaps"])
+            with self.assertRaisesRegex(ValueError, "quality gate blocked packaging"):
+                generate_v4_dossier(
+                    ticker="000001.SZ",
+                    output_dir=Path(tmp),
+                    round7_dossier_path=source / "000001.SZ.receipt.json",
+                    round7_markdown_path=source / "000001.SZ.md",
+                    round7_profile_path=self.profile_path,
+                )
 
     def test_as_of_before_source_generation_is_rejected(self) -> None:
         narratives = {"generated_at": "2026-08-02T11:15:03+00:00", "reports": []}

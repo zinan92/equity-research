@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "product"))
 
 from v4_dossier_contract import validate_v4_dossier  # noqa: E402
+from v4_quality_gate import CANONICAL_SOURCE_DIR, evaluate_round7_quality  # noqa: E402
 
 
 def _sha(path: Path) -> str:
@@ -28,9 +29,23 @@ def build(*, acceptance_path: Path, official_root: Path, replay_receipt_path: Pa
     official_rows = []
     for ticker in ("300750.SZ", "600519.SH"):
         path = official_root / f"{ticker}.md"
+        if official_root.resolve() != CANONICAL_SOURCE_DIR.resolve():
+            official_rows.append({
+                "ticker": ticker,
+                "path": str(path),
+                "validation": "legacy_review_only",
+                "errors": ["non-canonical source root; legacy mapped output is not official-bound"],
+            })
+            continue
         text = path.read_text(encoding="utf-8")
         errors = validate_v4_dossier(text)
-        official_rows.append({"ticker": ticker, "path": str(path), "sha256": _sha(path), "validation": "passed" if not errors else "failed", "errors": errors})
+        quality = evaluate_round7_quality(
+            dossier_path=official_root / f"{ticker}.receipt.json",
+            markdown_path=path,
+            html_path=official_root / f"{ticker}.html",
+            require_canonical_root=True,
+        )
+        official_rows.append({"ticker": ticker, "path": str(path), "sha256": _sha(path), "validation": "passed" if not errors else "failed", "publication_status": quality.get("status"), "publication_eligible": bool(quality.get("publication_eligible")), "quality_gate": quality, "errors": errors})
     replay = json.loads(replay_receipt_path.read_text(encoding="utf-8"))
     audit = json.loads(audit_path.read_text(encoding="utf-8"))
     actual = {
@@ -46,7 +61,8 @@ def build(*, acceptance_path: Path, official_root: Path, replay_receipt_path: Pa
         "old_18_section_statistics": {"status": "void_after_contract_replacement", "values_must_not_be_reused": True},
         "v4_baseline": {
             "official_bound_dossiers": official_rows,
-            "official_bound_count": len(official_rows),
+            "official_bound_count": sum(1 for row in official_rows if row.get("publication_eligible") is True),
+            "canonical_structure_count": sum(1 for row in official_rows if row.get("validation") == "passed"),
             "replay_only_count": int(replay.get("sample_count", 0)),
             "publication_index": "artifacts/v4-reports/index.html",
             "human_review": "pending_human_review",
@@ -86,7 +102,7 @@ def build(*, acceptance_path: Path, official_root: Path, replay_receipt_path: Pa
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--acceptance", type=Path, default=ROOT / "artifacts/evidence/e4-l2-m7-acceptance.json")
-    parser.add_argument("--official-root", type=Path, default=ROOT / "docs/evidence/v4-m3-official")
+    parser.add_argument("--official-root", type=Path, default=ROOT / "artifacts/round7-dossiers")
     parser.add_argument("--replay-receipt", type=Path, default=ROOT / "docs/evidence/v4-m2-generalization-receipt.json")
     parser.add_argument("--audits", type=Path, default=ROOT / "artifacts/e4-reports/e4-l1-m6-spot-audit-assignments.json")
     parser.add_argument("--out", type=Path, required=True)

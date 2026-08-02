@@ -1,23 +1,20 @@
 """Single entry point for producing a V4 reader dossier.
 
 V4 is a document contract, not a bag of fields.  This module deliberately
-accepts a complete Markdown dossier (or an official-source Round 7 sample
-that can be deterministically adapted) and validates it once before writing
-the publication artifact.  No field-level judgment writer is reachable from
-this entry point.
+accepts a canonical Round 7 receipt/Markdown/profile and validates it once
+before writing a package artifact.  No field-level
+judgment writer or legacy heading mapper is reachable from this entry point.
 """
 from __future__ import annotations
 
-from dataclasses import asdict
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
-from v4_dossier_contract import V4_SCHEMA_VERSION, assert_valid_v4_dossier, validate_v4_dossier
+from v4_dossier_contract import V4_SCHEMA_VERSION, validate_v4_dossier
+from v4_quality_gate import CANONICAL_SOURCE_DIR, evaluate_round7_quality
 from v4_official_adapter import (
-    OfficialV4Output,
-    adapt_official_sample,
     adapt_round7_dossier,
 )
 
@@ -35,23 +32,14 @@ def _sha_path(path: Path) -> str:
 
 
 def _reader_characters(markdown: str) -> int:
-    starts = [markdown.find(f"## {heading}") for heading in ("一句话定位", "产业坐标", "创始人与团队", "发展时间线", "技术、产品与商业模式", "财务与估值", "风险与点评")]
+    starts = [markdown.find(f"## {heading}") for heading in (
+        "一句话定位", "身份、创始人与治理", "技术来源与发展史",
+        "商业模式与业务线", "财务与经营时间序列", "护城河的证据链",
+        "风险、反题材与观察触发器", "研究结论与待补问题",
+    )]
     starts = [value for value in starts if value >= 0]
     end = markdown.find("## 9. 生产记录")
     return max(0, (end if end >= 0 else len(markdown)) - min(starts, default=0))
-
-
-def _official_urls(value: Mapping[str, Any]) -> tuple[str, ...]:
-    urls: list[str] = []
-    for item in value.get("source_urls") or value.get("sources") or ():
-        if isinstance(item, str):
-            urls.append(item)
-        elif isinstance(item, Mapping) and isinstance(item.get("url"), str):
-            urls.append(str(item["url"]))
-    result = tuple(dict.fromkeys(urls))
-    if not result or any(not url.startswith("https://") for url in result):
-        raise ValueError("V4 production output requires HTTPS source URLs")
-    return result
 
 
 def publish_completed_dossier(
@@ -62,47 +50,11 @@ def publish_completed_dossier(
     output_dir: Path,
     status: str = "pending_human_review",
 ) -> dict[str, Any]:
-    """Validate and persist a complete dossier produced by any company run.
-
-    The caller supplies a whole document and its immutable evidence manifest;
-    no prose is assembled from individual judgment fields here.
-    """
-    markdown = markdown_path.read_text(encoding="utf-8")
-    assert_valid_v4_dossier(markdown)
-    manifest = json.loads(evidence_manifest_path.read_text(encoding="utf-8"))
-    manifest_ticker = str(manifest.get("ticker") or ticker).upper()
-    if manifest_ticker != ticker.upper():
-        raise ValueError("evidence manifest ticker mismatch")
-    source_urls = _official_urls(manifest)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"{ticker.upper()}.md"
-    output_path.write_text(markdown, encoding="utf-8")
-    receipt = {
-        "schema_version": RECEIPT_SCHEMA_VERSION,
-        "contract_schema_version": V4_SCHEMA_VERSION,
-        "generator_version": GENERATOR_VERSION,
-        "generation_mode": "whole_dossier_publish",
-        "ticker": ticker.upper(),
-        "status": status,
-        "is_live_research": False,
-        "fresh_model_calls": int(manifest.get("fresh_model_calls", 0)),
-        "new_official_documents": int(manifest.get("new_official_documents", 0)),
-        "source_urls": list(source_urls),
-        "input_markdown_path": str(markdown_path),
-        "input_markdown_sha256": _sha_path(markdown_path),
-        "evidence_manifest_path": str(evidence_manifest_path),
-        "evidence_manifest_sha256": _sha_path(evidence_manifest_path),
-        "output_path": str(output_path),
-        "output_sha256": _sha_path(output_path),
-        "characters": len(markdown),
-        "reader_characters": _reader_characters(markdown),
-        "tier_credit": "none",
-        "upstream": manifest.get("upstream"),
-        "boundary": "V4 accepts one complete dossier; unreviewed prose remains pending human review and grants no Tier/action credit.",
-    }
-    (output_dir / "receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return receipt
-
+    """Retired escape hatch kept only to return a typed migration error."""
+    raise ValueError(
+        "completed_markdown_path is retired; production requires the canonical "
+        "Round 7 receipt/markdown/html and v4_quality_gate"
+    )
 def generate_v4_dossier(
     *,
     ticker: str,
@@ -140,16 +92,39 @@ def generate_v4_dossier(
         errors = tuple(validate_v4_dossier(text))
         if errors:
             raise ValueError("generated Round 7 V4 output failed validation: " + "; ".join(errors))
+        upstream_quality_gate = evaluate_round7_quality(
+            dossier_path=round7_dossier_path,
+            markdown_path=round7_markdown_path,
+            html_path=round7_markdown_path.with_suffix(".html"),
+            require_canonical_root=True,
+            expected_ticker=ticker,
+        )
+        if upstream_quality_gate.get("publication_eligible") is not True:
+            raise ValueError(
+                "canonical Round 7 quality gate blocked packaging: "
+                + "; ".join(str(item.get("code")) for item in upstream_quality_gate.get("blockers", [])[:8])
+            )
+        output_dir = output_dir.resolve()
+        try:
+            output_dir.relative_to(CANONICAL_SOURCE_DIR.resolve())
+        except ValueError:
+            pass
+        else:
+            raise ValueError("generated V4 package must not be written inside canonical Round 7 source root")
         output_dir.mkdir(parents=True, exist_ok=True)
         output_path = output_dir / f"{ticker.upper()}.md"
         output_path.write_text(text, encoding="utf-8")
         record["output_path"] = str(output_path)
-        record["output_sha256"] = _sha_path(output_path)
+        record["quality_gate_status"] = upstream_quality_gate["status"]
+        record["quality_gate_receipt_hash"] = upstream_quality_gate["receipt_hash"]
+        output_sha256 = _sha_path(output_path)
+        record["output_sha256"] = output_sha256
+        source_html_path = round7_markdown_path.with_suffix(".html")
         receipt = {
             "schema_version": RECEIPT_SCHEMA_VERSION,
             "contract_schema_version": V4_SCHEMA_VERSION,
             "generator_version": GENERATOR_VERSION,
-            "generation_mode": "round7_generated_whole_dossier_adaptation",
+            "generation_mode": "round7_canonical_pass_through",
             "ticker": ticker.upper(),
             "status": record["status"],
             "is_live_research": False,
@@ -174,44 +149,29 @@ def generate_v4_dossier(
                 "typed_gaps": record["typed_gaps"],
             },
             "output_path": str(output_path),
-            "output_sha256": _sha_path(output_path),
+            "output_sha256": output_sha256,
+            "output_content_hash": _sha_bytes(text.encode("utf-8")),
+            "artifacts": {
+                "markdown_path": str(output_path),
+                "markdown_sha256": output_sha256,
+                "source_html_path": str(source_html_path),
+                "source_html_sha256": _sha_path(source_html_path),
+            },
             "tier_credit": "none",
-            "boundary": "Round 7 is the sole whole-chapter generator; V4 only maps headings and preserves its official evidence/request provenance.",
+            "quality_gate": upstream_quality_gate,
+            "boundary": "Round 7 is the sole whole-chapter generator; V4 passes the exact nine-chapter artifact through unchanged and preserves official evidence/request provenance.",
         }
+        receipt["receipt_hash"] = hashlib.sha256(
+            json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
         (output_dir / "receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return receipt
-    required = (official_sample_path, narrative_receipt_path, financial_receipt_path)
-    if any(value is None for value in required):
-        raise ValueError("provide either a complete dossier or all official adapter inputs")
-    text, record = adapt_official_sample(
-        ticker=ticker,
-        sample_path=official_sample_path,
-        narrative_receipt_path=narrative_receipt_path,
-        financial_receipt_path=financial_receipt_path,
+    if any(value is not None for value in (official_sample_path, narrative_receipt_path, financial_receipt_path)):
+        raise ValueError(
+            "legacy official adapter inputs are retired; provide canonical Round 7 "
+            "receipt/markdown/profile instead"
+        )
+    raise ValueError(
+        "provide canonical Round 7 receipt/markdown/profile; field-level and legacy "
+        "adapter generation is retired"
     )
-    errors = tuple(validate_v4_dossier(text))
-    if errors:
-        raise ValueError("official V4 output failed validation: " + "; ".join(errors))
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"{ticker.upper()}.md"
-    output_path.write_text(text, encoding="utf-8")
-    updated = OfficialV4Output(**{**asdict(record), "output_path": str(output_path)})
-    receipt = {
-        "schema_version": RECEIPT_SCHEMA_VERSION,
-        "contract_schema_version": V4_SCHEMA_VERSION,
-        "generator_version": GENERATOR_VERSION,
-        "generation_mode": "official_evidence_adaptation",
-        "ticker": ticker.upper(),
-        "status": updated.status,
-        "is_live_research": False,
-        "fresh_model_calls": 0,
-        "new_official_documents": 0,
-        "source_urls": list(updated.source_urls),
-        "output": asdict(updated),
-        "output_path": str(output_path),
-        "output_sha256": _sha_path(output_path),
-        "tier_credit": "none",
-        "boundary": "Deterministic official-evidence adaptation through the unified whole-dossier entry point; no field writer or fresh model call.",
-    }
-    (output_dir / "receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return receipt

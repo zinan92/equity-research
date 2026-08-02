@@ -1,27 +1,36 @@
-"""Reader-facing V4 dossier contract.
+"""Reader-facing V4 contract.
 
-The V4 contract is the production-facing name for the Round 7 dossier that
-Park approved. It deliberately describes a document (chapters and evidence
-markers), rather than the legacy field-by-field report model. Generation is
-not implemented here; this module only validates a completed Markdown
-dossier before a later compiler is allowed to consume it.
+V4 is now an exact Round 7 document contract.  The former seven-section
+adapter shape is retained below only as a historical compatibility constant;
+it is never accepted by the production validator or publication entrypoint.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
 import re
 
+from data_core.round7_north_star import ROUND7_REQUIRED_HEADINGS, ROUND7_READER_UNITS
+
 
 V4_SCHEMA_VERSION = "park-v4-dossier-v1"
 V4_HEADINGS: tuple[str, ...] = (
     "一句话定位",
-    "产业坐标",
-    "创始人与团队",
-    "发展时间线",
-    "技术、产品与商业模式",
-    "财务与估值",
-    "风险与点评",
+    "身份、创始人与治理",
+    "技术来源与发展史",
+    "商业模式与业务线",
+    "财务与经营时间序列",
+    "护城河的证据链",
+    "风险、反题材与观察触发器",
+    "研究结论与待补问题",
     "生产记录",
+)
+
+# Historical output emitted by the retired field-shaped adapter.  Keeping the
+# names makes old receipts/replay diagnostics readable, but this tuple is not
+# part of the live contract.
+LEGACY_V4_HEADINGS: tuple[str, ...] = (
+    "一句话定位", "产业坐标", "创始人与团队", "发展时间线",
+    "技术、产品与商业模式", "财务与估值", "风险与点评", "生产记录",
 )
 
 
@@ -36,14 +45,15 @@ class V4SectionSpec:
 
 
 V4_SECTION_SPECS: tuple[V4SectionSpec, ...] = (
-    V4SectionSpec(1, "一句话定位", 360, 80, ("研究判断",), "issuer facts + industry evidence"),
-    V4SectionSpec(2, "产业坐标", 520, 120, ("产业链位置", "大白话逻辑链"), "issuer + industry evidence"),
-    V4SectionSpec(3, "创始人与团队", 360, 100, ("治理",), "issuer governance disclosure"),
-    V4SectionSpec(4, "发展时间线", 620, 160, ("年",), "issuer history/technology disclosure"),
-    V4SectionSpec(5, "技术、产品与商业模式", 760, 220, ("收入", "客户"), "issuer business disclosure"),
-    V4SectionSpec(6, "财务与估值", 760, 240, ("收入", "利润"), "page-level financial facts"),
-    V4SectionSpec(7, "风险与点评", 820, 260, ("核心风险", "大白话点评"), "facts + falsifiers"),
-    V4SectionSpec(9, "生产记录", 300, 100, ("运行 ID", "复跑策略"), "immutable production receipt"),
+    V4SectionSpec(1, V4_HEADINGS[0], 360, 40, (), "issuer facts + bounded analysis"),
+    V4SectionSpec(2, V4_HEADINGS[1], 420, 40, (), "issuer governance disclosure"),
+    V4SectionSpec(3, V4_HEADINGS[2], 620, 40, (), "issuer history/technology disclosure"),
+    V4SectionSpec(4, V4_HEADINGS[3], 760, 40, (), "issuer business disclosure"),
+    V4SectionSpec(5, V4_HEADINGS[4], 700, 40, (), "page-level financial facts"),
+    V4SectionSpec(6, V4_HEADINGS[5], 620, 40, (), "facts + falsifiers"),
+    V4SectionSpec(7, V4_HEADINGS[6], 700, 40, (), "facts + typed gaps"),
+    V4SectionSpec(8, V4_HEADINGS[7], 300, 40, (), "facts + open questions"),
+    V4SectionSpec(9, V4_HEADINGS[8], 300, 40, (), "immutable production receipt"),
 )
 
 _HEADING_RE = re.compile(r"^##\s+(?:(\d+)\.\s*)?(.+?)\s*$", re.MULTILINE)
@@ -77,6 +87,12 @@ def validate_v4_dossier(markdown: str, *, preview_only: bool = False) -> list[st
     spans = _section_spans(markdown)
     expected = list(V4_HEADINGS)
     actual = [heading for heading, _, _, _ in spans if heading in expected]
+    expected_headings = list(ROUND7_REQUIRED_HEADINGS)
+    found_heading_lines = [line.strip() for line in markdown.splitlines() if line.startswith("## ")]
+    if any(heading in found_heading_lines for heading in ("## 产业坐标", "## 财务与估值", "## 风险与点评")):
+        errors.append("legacy V4 section headings are not publishable")
+    if found_heading_lines != expected_headings:
+        errors.append(f"section headings must exactly match Round 7; got {found_heading_lines}")
     if actual != expected:
         errors.append(f"section order must be {expected}; got {actual}")
     if len(actual) != len(expected):
@@ -149,5 +165,19 @@ def v4_contract_manifest() -> dict[str, object]:
             "url_scheme": "https",
             "page_locator": "required for page-level facts in production receipts",
         },
-        "legacy_boundary": "This contract replaces field-shaped reader output only after a later migration milestone; legacy C1/Tier semantics remain unchanged for now.",
+        "reader_units": list(ROUND7_READER_UNITS),
+        "legacy_boundary": "Round 7 exact nine chapters replace the retired seven-section V4 adapter on 2026-08-02. Legacy C1/Tier/B6/decision semantics remain unchanged.",
+        "legacy_headings": list(LEGACY_V4_HEADINGS),
     }
+
+
+def validate_legacy_v4_dossier(markdown: str) -> list[str]:
+    """Diagnostic-only validator for historical mapped artifacts.
+
+    This function deliberately is not imported by the publication path.  It
+    exists so migration/replay tooling can say *why* an old artifact is being
+    retired instead of silently treating it as canonical.
+    """
+    spans = _section_spans(markdown)
+    actual = [heading for heading, _, _, _ in spans if heading in LEGACY_V4_HEADINGS]
+    return [] if actual == list(LEGACY_V4_HEADINGS) else ["not a legacy V4 mapped dossier"]

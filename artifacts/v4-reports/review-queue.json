@@ -1,38 +1,6 @@
 {
-  "schema_version": "park-v4-publication-receipt-v1",
-  "status": "blocked",
-  "contract_schema_version": "park-v4-dossier-v1",
-  "canonical_source_root": "artifacts/round7-dossiers",
-  "source_receipts": [
-    {
-      "ticker": "000001.SZ",
-      "path": "artifacts/round7-dossiers/000001.SZ.receipt.json",
-      "sha256": "a1ca55bd4913c8e760f5c0a305601671604de280411e2db30c5ab49f219a0881",
-      "run_id": "round7-run:fcbb79dc8cbd9f843d069279",
-      "quality_gate": "artifacts/v4-reports/000001.SZ.quality-gate.json",
-      "quality_gate_sha256": "968d71d23346996db365838631b4638f2f06545d13e2591b3f07413443bda798"
-    },
-    {
-      "ticker": "300750.SZ",
-      "path": "artifacts/round7-dossiers/300750.SZ.receipt.json",
-      "sha256": "655b65f7daf4b29e005a37eca1102cd3932fcd7c69d936f5f471241837661e85",
-      "run_id": "round7-run:03ab66a964f60a6d47300c97",
-      "quality_gate": "artifacts/v4-reports/300750.SZ.quality-gate.json",
-      "quality_gate_sha256": "6493f92bc743ed1f5dba540b16cc1ae59eaeba302e8cfac1890a6a0d7fc21948"
-    },
-    {
-      "ticker": "600519.SH",
-      "path": "artifacts/round7-dossiers/600519.SH.receipt.json",
-      "sha256": "755264437efba6abc5e4c83b1bb380cce0f616036c6741b10751dcd8ebf92047",
-      "run_id": "round7-run:10bc8c41a6fc28e01ce771b4",
-      "quality_gate": "artifacts/v4-reports/600519.SH.quality-gate.json",
-      "quality_gate_sha256": "81e553163b37c932abf6ea7d23d88c47be48d3c9983cd5aca65131dfef398d8b"
-    }
-  ],
-  "index_path": "artifacts/v4-reports/index.html",
-  "index_sha256": "d5e77a07dfe82944bbd64095dc0b597a56eb972c32b4b24aa257fd44a5c104dc",
-  "companies": [],
-  "review_queue": [
+  "schema_version": "park-v4-publication-review-queue-v1",
+  "items": [
     {
       "ticker": "000001.SZ",
       "status": "blocked",
@@ -2218,10 +2186,5 @@
       "stale_publication_quarantined": null
     }
   ],
-  "fresh_model_calls": 0,
-  "new_official_documents": 0,
-  "is_live_research": false,
-  "tier_credit": "none",
-  "boundary": "Reader publication only; blocked/pending canonical dossiers are review-only and never receive a public index/mobile link.",
-  "receipt_hash": "77bab01e289c6edcfbdd233c1c163598875dc0e3c7864c757a2f45bb4a81b4dd"
+  "receipt_hash": "bd3b344da27a23a1d88b0ada128870c388fcc6692f34a7cab0fc60fe5354b0f4"
 }

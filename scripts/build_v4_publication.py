@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build persistent V4 reader HTML for the official-bound CATL/Moutai outputs."""
+"""Build persistent V4 reader HTML from canonical Round 7 artifacts."""
 from __future__ import annotations
 
 import argparse
@@ -14,7 +14,7 @@ from v4_publication import build_v4_publication  # noqa: E402
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source-root", type=Path, default=ROOT / "docs/evidence/v4-m3-official")
+    parser.add_argument("--source-root", type=Path, default=ROOT / "artifacts/round7-dossiers")
     parser.add_argument("--output-root", type=Path, default=ROOT / "artifacts/v4-reports")
     args = parser.parse_args()
     result = build_v4_publication(source_root=args.source_root, output_root=args.output_root)

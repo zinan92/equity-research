@@ -15,7 +15,9 @@
 - Evidence: `docs/evidence/v4-n2/000001.SZ-profile.json`, the upstream
   `round7-run:fcbb79dc8cbd9f843d069279` receipt (hash
   `688109481f1b018b2bf57fb7be884d0a37f1acb433414922939c90948b445b01`), the
-  Round 7 verifier output, and `artifacts/v4-reports/000001.SZ/receipt.json`.
+  Round 7 verifier output, and the canonical
+  `artifacts/round7-dossiers/000001.SZ.receipt.json` (the old mapped copy is
+  quarantined under `artifacts/v4-reports-legacy/`).
 - Gotchas: N1's extractor exposed a repeatable bank table/header concatenation;
   profile/global noise filters exclude that malformed span before generation,
   without rewriting official text into a replacement fact. The conclusion
@@ -2599,3 +2601,40 @@
   and merge path is the canonical receipt lineage.  Reused Round 7/V4 source
   paths must not be treated as fresh model output, and this packet cannot grant
   Tier/ACTION credit.
+
+## 2026-08-02 — V4-P1 closed the reader-quality regression (Issue #686)
+
+- Decision: make the exact Round 7 nine-chapter artifact the only publishable
+  V4 input.  The publication builder now reads only
+  `artifacts/round7-dossiers`, runs an independent fail-closed quality gate,
+  writes a content-addressed gate/review queue, and lets `_index` render only
+  rows whose current HTML and gate receipt still verify.  The old mapped
+  seven-section adapter and official-output command are retained only as
+  explicitly retired/review-only failure samples.
+- Why: the bad mobile report was not a model-quality mystery; it was a process
+  leak.  A legacy mapper transformed a canonical/official sample into a weaker
+  shape, the publication surface trusted the transformed row, and no gate
+  checked issuer self-report leakage, independent evidence, exact artifact
+  identity, or review state.  Tests that passed only the old structure hid the
+  regression.
+- Evidence: `product/v4_quality_gate.py`,
+  `product/tests/test_v4_quality_gate.py`,
+  `artifacts/v4-reports/publication-receipt.json`,
+  `artifacts/v4-reports/review-queue.json`, and the three per-ticker
+  `*.quality-gate.json` receipts.  The current index has zero public links;
+  all three drafts are blocked with run IDs and bound official source hashes.
+- Gotchas: a canonical structure pass is not a publication pass.  Moutai's
+  one-source Round 7 artifact remains blocked by the North Star verifier's
+  `fewer than two source rows`; current self-report classifier v2 also finds
+  ten previously unclassified issuer-strategy rows in the bank dossier.  The
+  000001/300750/600519 drafts therefore remain review queue items, not mobile
+  deliverables.  The old `/api/reports` surface and historical mapped files are
+  not claimed as V4 canonical publication; only the gated Round 7 route/index
+  is in this issue's scope.
+- Follow-up hardening: if a refresh becomes blocked, any existing
+  `ticker/report.html` directory is moved to `artifacts/v4-reports-legacy/`
+  (or a hidden `.blocked-history/` in temporary outputs) before the queue is
+  written.  The canonical package API also refuses output paths inside the
+  canonical source root, validates requested-vs-receipt ticker identity, and
+  supports the explicit human-reviewed path without relabelling an unreviewed
+  draft.

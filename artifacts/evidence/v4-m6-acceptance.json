@@ -10,20 +10,1631 @@
     "official_bound_dossiers": [
       {
         "ticker": "300750.SZ",
-        "path": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/300750.SZ.md",
-        "sha256": "d78039fe33c3bacac9eac7ac97d1459a5419e9c9b6d5044226d70ec7e6bd21e5",
+        "path": "/Users/wendy/Documents/投研面板/artifacts/round7-dossiers/300750.SZ.md",
+        "sha256": "c199f2052afded39db66c93ec40e3aeb72275755e0c259ddd2a34437f2af6612",
         "validation": "passed",
+        "publication_status": "blocked",
+        "publication_eligible": false,
+        "quality_gate": {
+          "schema_version": "round7-quality-gate-v1",
+          "quality_gate_version": "round7-publication-quality-v1",
+          "ticker": "300750.SZ",
+          "status": "blocked",
+          "publication_eligible": false,
+          "canonical_source_root": true,
+          "dossier_path": "artifacts/round7-dossiers/300750.SZ.receipt.json",
+          "markdown_path": "artifacts/round7-dossiers/300750.SZ.md",
+          "html_path": "artifacts/round7-dossiers/300750.SZ.html",
+          "dossier_sha256": "655b65f7daf4b29e005a37eca1102cd3932fcd7c69d936f5f471241837661e85",
+          "markdown_sha256": "c199f2052afded39db66c93ec40e3aeb72275755e0c259ddd2a34437f2af6612",
+          "html_sha256": "dfeadc96383a04cd719e35c78df5ba7a4ea88e0a5b1d05b1f944bfc96ee859ed",
+          "dossier_content_hash": "33cd21c0a0fd229d32317f362189fab2ee6994ae404f8936767bd93f3b04a540",
+          "structure_signature": "1c25130d38341372cbd96308c57e48553175764178e2e38c6ac645852f975ea5",
+          "required_headings": [
+            "## 1. 一句话定位",
+            "## 2. 身份、创始人与治理",
+            "## 3. 技术来源与发展史",
+            "## 4. 商业模式与业务线",
+            "## 5. 财务与经营时间序列",
+            "## 6. 护城河的证据链",
+            "## 7. 风险、反题材与观察触发器",
+            "## 8. 研究结论与待补问题",
+            "## 9. 生产记录",
+            "## Sources"
+          ],
+          "source_manifest_hash": "ca8e1a3769cfa0af498706268dd8a6253dd86ab044acbcf3299958f21be56e63",
+          "source_receipt_hashes": {
+            "official_narrative_receipt_hash": "ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
+            "financial_page_evidence_receipt_hash": "870c85d0e6325c94044b81c2af7ed1f29b5aa404dc5f2bfbec3a4965c466c757"
+          },
+          "classification_version": "issuer-provenance-v2",
+          "self_report_leak_count": 8,
+          "self_report_leaks": [
+            {
+              "evidence_id": "N-799175726a",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "evidence_id": "N-06fa9df197",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "evidence_id": "N-044a763d8c",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "evidence_id": "N-2fd598bbed",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "evidence_id": "N-e3d570c82e",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "evidence_id": "N-404f5849f9",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "evidence_id": "N-b08eb6ac36",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "evidence_id": "N-147fb320c0",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            }
+          ],
+          "citation_error_count": 0,
+          "independent_evidence_by_section": {
+            "one_line_positioning": 0,
+            "identity_founder_and_governance": 2,
+            "technology_origin_and_development_history": 0,
+            "business_model_and_business_lines": 0,
+            "financial_and_operating_time_series": 40,
+            "moat_evidence_chain": 0,
+            "risks_counter_thesis_and_triggers": 4,
+            "research_conclusion_and_open_questions": 0
+          },
+          "issuer_self_report_by_section": {
+            "one_line_positioning": 0,
+            "identity_founder_and_governance": 1,
+            "technology_origin_and_development_history": 12,
+            "business_model_and_business_lines": 4,
+            "financial_and_operating_time_series": 0,
+            "moat_evidence_chain": 24,
+            "risks_counter_thesis_and_triggers": 8,
+            "research_conclusion_and_open_questions": 5
+          },
+          "blockers": [
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-24317e6536"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-13367c65a1"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-42ba166e9b"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-799175726a"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-06fa9df197"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-f5688b46b3"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-18683243fd"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-abaaaa24de"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-97c00d30ef"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-896d7ff642"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-044a763d8c"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-348ef4010a"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-671cd8e5d0"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-f4bf8b37ed"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-2fd598bbed"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-3b33338bda"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-8758748e6c"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-7e34555b31"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-626c5e0967"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-e3d570c82e"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-5c49d3810f"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-5240dcd084"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-404f5849f9"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-0ed16bacef"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-b08eb6ac36"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-147fb320c0"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-c47ec0ba41"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-7b0f46edb3"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-ec31ce2389"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-6e0cb09a4a"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-799175726a",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-06fa9df197",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-044a763d8c",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-2fd598bbed",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-e3d570c82e",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-404f5849f9",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-b08eb6ac36",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-147fb320c0",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "one_line_positioning",
+              "column_id": "positioning",
+              "evidence_ids": [
+                "N-24317e6536"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "one_line_positioning",
+              "column_id": "research_judgment",
+              "evidence_ids": [
+                "N-24317e6536"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "identity_founder_and_governance",
+              "column_id": "finding",
+              "evidence_ids": [
+                "N-799175726a"
+              ]
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-06fa9df197"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-06fa9df197"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-06fa9df197"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-06fa9df197"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-06fa9df197"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-06fa9df197"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-f5688b46b3"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-f5688b46b3"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-f5688b46b3"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-f5688b46b3"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-18683243fd"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-18683243fd"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-18683243fd"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-abaaaa24de"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-abaaaa24de"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-abaaaa24de"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-abaaaa24de"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-97c00d30ef"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-97c00d30ef"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-97c00d30ef"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-97c00d30ef"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "customer_and_delivery",
+              "evidence_ids": [
+                "N-044a763d8c"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "customer_and_delivery",
+              "evidence_ids": [
+                "N-896d7ff642",
+                "N-044a763d8c"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "revenue_or_operating_evidence",
+              "evidence_ids": [
+                "N-348ef4010a"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-044a763d8c"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-348ef4010a",
+                "N-044a763d8c"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "customer_and_delivery",
+              "evidence_ids": [
+                "N-671cd8e5d0"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-f4bf8b37ed"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "customer_and_delivery",
+              "evidence_ids": [
+                "N-2fd598bbed"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "customer_and_delivery",
+              "evidence_ids": [
+                "N-2fd598bbed",
+                "N-671cd8e5d0"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-2fd598bbed"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-2fd598bbed",
+                "N-3b33338bda"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "hypothesis",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-97c00d30ef",
+                "N-7e34555b31"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-97c00d30ef",
+                "N-7e34555b31"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-97c00d30ef",
+                "N-7e34555b31"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-97c00d30ef",
+                "N-7e34555b31"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "hypothesis",
+              "evidence_ids": [
+                "N-626c5e0967",
+                "N-e3d570c82e"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-626c5e0967",
+                "N-e3d570c82e"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-626c5e0967",
+                "N-e3d570c82e"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-626c5e0967",
+                "N-e3d570c82e"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "hypothesis",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-5c49d3810f",
+                "N-5240dcd084"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-5c49d3810f",
+                "N-5240dcd084"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-5c49d3810f",
+                "N-5240dcd084"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-8758748e6c",
+                "N-5c49d3810f",
+                "N-5240dcd084"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-404f5849f9"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-404f5849f9"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-404f5849f9"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-404f5849f9"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-0ed16bacef"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-0ed16bacef"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-b08eb6ac36"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-b08eb6ac36"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-b08eb6ac36"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-b08eb6ac36"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-147fb320c0"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-147fb320c0"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-147fb320c0"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-147fb320c0"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "research_conclusion_and_open_questions",
+              "column_id": "fact_conclusion",
+              "evidence_ids": [
+                "N-ec31ce2389",
+                "N-6e0cb09a4a",
+                "N-626c5e0967"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "research_conclusion_and_open_questions",
+              "column_id": "research_judgment",
+              "evidence_ids": [
+                "N-626c5e0967",
+                "N-6e0cb09a4a"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            }
+          ],
+          "review_status": "pending_human_review",
+          "run_id": "round7-run:03ab66a964f60a6d47300c97",
+          "tier": "B",
+          "boundary": "Publication quality only; this receipt does not alter C1, B6, Tier, decision policy, or human review state.",
+          "receipt_hash": "f160944e0435a55a1c438699c7102ccc025070b431f49b4f535765397ef05ece"
+        },
         "errors": []
       },
       {
         "ticker": "600519.SH",
-        "path": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/600519.SH.md",
-        "sha256": "6c76f3164af4efcfab3f1614ac9d7caa5dbde8441f9197cc24e685fdff1e39e0",
+        "path": "/Users/wendy/Documents/投研面板/artifacts/round7-dossiers/600519.SH.md",
+        "sha256": "d3daf6a152a79f087a761dca8bd306547991cdc9be79710031dda3e314f0de33",
         "validation": "passed",
+        "publication_status": "blocked",
+        "publication_eligible": false,
+        "quality_gate": {
+          "schema_version": "round7-quality-gate-v1",
+          "quality_gate_version": "round7-publication-quality-v1",
+          "ticker": "600519.SH",
+          "status": "blocked",
+          "publication_eligible": false,
+          "canonical_source_root": true,
+          "dossier_path": "artifacts/round7-dossiers/600519.SH.receipt.json",
+          "markdown_path": "artifacts/round7-dossiers/600519.SH.md",
+          "html_path": "artifacts/round7-dossiers/600519.SH.html",
+          "dossier_sha256": "755264437efba6abc5e4c83b1bb380cce0f616036c6741b10751dcd8ebf92047",
+          "markdown_sha256": "d3daf6a152a79f087a761dca8bd306547991cdc9be79710031dda3e314f0de33",
+          "html_sha256": "7ce47c934fd298a063e23bee15b0003f9222b6d1e945014b6169417e063868bb",
+          "dossier_content_hash": "90357f51c13c9df4574f2ceeeb053cc509457e804c39ed3c045369c2549dfdb2",
+          "structure_signature": "1c25130d38341372cbd96308c57e48553175764178e2e38c6ac645852f975ea5",
+          "required_headings": [
+            "## 1. 一句话定位",
+            "## 2. 身份、创始人与治理",
+            "## 3. 技术来源与发展史",
+            "## 4. 商业模式与业务线",
+            "## 5. 财务与经营时间序列",
+            "## 6. 护城河的证据链",
+            "## 7. 风险、反题材与观察触发器",
+            "## 8. 研究结论与待补问题",
+            "## 9. 生产记录",
+            "## Sources"
+          ],
+          "source_manifest_hash": "a0628a9ba71a23e2ac16694a5b7d6683eaa5109881bb6d7713b441a9bcd2e2f7",
+          "source_receipt_hashes": {
+            "official_narrative_receipt_hash": "a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da",
+            "financial_page_evidence_receipt_hash": "3faaea3e8ed89d9dd3ddecbe6501355096721abd03070b86219dd1a54aca07e2"
+          },
+          "classification_version": "issuer-provenance-v2",
+          "self_report_leak_count": 5,
+          "self_report_leaks": [
+            {
+              "evidence_id": "N-34e1d062ab",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_competitiveness_claim"
+            },
+            {
+              "evidence_id": "N-fabf06debf",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "evidence_id": "N-218e7faa26",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "evidence_id": "N-2bda7732d5",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "evidence_id": "N-c917e52241",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            }
+          ],
+          "citation_error_count": 0,
+          "independent_evidence_by_section": {
+            "one_line_positioning": 0,
+            "identity_founder_and_governance": 2,
+            "technology_origin_and_development_history": 0,
+            "business_model_and_business_lines": 0,
+            "financial_and_operating_time_series": 4,
+            "moat_evidence_chain": 0,
+            "risks_counter_thesis_and_triggers": 0,
+            "research_conclusion_and_open_questions": 0
+          },
+          "issuer_self_report_by_section": {
+            "one_line_positioning": 0,
+            "identity_founder_and_governance": 0,
+            "technology_origin_and_development_history": 6,
+            "business_model_and_business_lines": 0,
+            "financial_and_operating_time_series": 0,
+            "moat_evidence_chain": 5,
+            "risks_counter_thesis_and_triggers": 6,
+            "research_conclusion_and_open_questions": 2
+          },
+          "blockers": [
+            {
+              "code": "canonical_structure_invalid",
+              "detail": "fewer than two source rows"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-311bfe97cc"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-644437303f"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-526b271efa"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-95c7a5c47f"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-d3f83002af"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-bb6be4519b"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-cdc105327e"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-565e479e96"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-34e1d062ab"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-fabf06debf"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-e918431678"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-b33ca4f980"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-e8dc4276e5"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-218e7faa26"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-e18cdd6816"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-8dcfb08557"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-d45d0f326d"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-664e326e4d"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-51bc5f83f3"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-7ecd334068"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-2324bfce56"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-f1afb1210a"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-2bda7732d5"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-c917e52241"
+            },
+            {
+              "code": "narrative_classification_version_mismatch",
+              "evidence_id": "N-fadb1930ab"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-34e1d062ab",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_competitiveness_claim"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-fabf06debf",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-218e7faa26",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_agentic_strategy_statement"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-2bda7732d5",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "issuer_self_report_leak",
+              "evidence_id": "N-c917e52241",
+              "stored_self_report": false,
+              "recomputed_self_report": true,
+              "reason": "issuer_strategy_or_competitiveness_path"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "one_line_positioning",
+              "column_id": "positioning",
+              "evidence_ids": [
+                "N-311bfe97cc"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "one_line_positioning",
+              "column_id": "research_judgment",
+              "evidence_ids": [
+                "N-311bfe97cc"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-fabf06debf"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "date",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "event",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "technology_origin_and_development_history",
+              "column_id": "research_implication",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "customer_and_delivery",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "revenue_or_operating_evidence",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-b33ca4f980",
+                "N-e8dc4276e5"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "revenue_or_operating_evidence",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-e918431678"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "revenue_or_operating_evidence",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "business_model_and_business_lines",
+              "column_id": "key_dependency",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "hypothesis",
+              "evidence_ids": [
+                "N-218e7faa26"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-34e1d062ab"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-34e1d062ab",
+                "N-218e7faa26"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-34e1d062ab",
+                "N-218e7faa26"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "hypothesis",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-b33ca4f980"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "hypothesis",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "supporting_evidence",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "falsifier",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "moat_evidence_chain",
+              "column_id": "current_view",
+              "evidence_ids": [
+                "N-e18cdd6816",
+                "N-8dcfb08557"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-d45d0f326d"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-d45d0f326d"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-664e326e4d",
+                "N-51bc5f83f3"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-664e326e4d",
+                "N-51bc5f83f3"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-7ecd334068"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-7ecd334068"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-2324bfce56"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-2324bfce56"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-f1afb1210a"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-f1afb1210a"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-2bda7732d5",
+                "N-fabf06debf",
+                "N-c917e52241"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "known_fact",
+              "evidence_ids": [
+                "N-2bda7732d5",
+                "N-fabf06debf",
+                "N-c917e52241"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-2bda7732d5",
+                "N-fabf06debf",
+                "N-c917e52241"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "risks_counter_thesis_and_triggers",
+              "column_id": "trigger",
+              "evidence_ids": [
+                "N-2bda7732d5",
+                "N-fabf06debf",
+                "N-c917e52241"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "research_conclusion_and_open_questions",
+              "column_id": "fact_conclusion",
+              "evidence_ids": [
+                "N-218e7faa26"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "research_conclusion_and_open_questions",
+              "column_id": "fact_conclusion",
+              "evidence_ids": [
+                "N-e918431678",
+                "N-218e7faa26",
+                "N-e18cdd6816",
+                "N-fadb1930ab"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            },
+            {
+              "code": "issuer_self_report_unmarked",
+              "section_id": "research_conclusion_and_open_questions",
+              "column_id": "research_judgment",
+              "evidence_ids": [
+                "N-218e7faa26"
+              ]
+            },
+            {
+              "code": "insufficient_independent_evidence",
+              "section_id": "research_conclusion_and_open_questions",
+              "column_id": "research_judgment",
+              "evidence_ids": [
+                "N-e918431678",
+                "N-218e7faa26",
+                "N-e18cdd6816"
+              ],
+              "detail": "critical fact/judgment cell has no financial/objective page evidence or typed gap"
+            }
+          ],
+          "review_status": "pending_human_review",
+          "run_id": "round7-run:10bc8c41a6fc28e01ce771b4",
+          "tier": "B",
+          "boundary": "Publication quality only; this receipt does not alter C1, B6, Tier, decision policy, or human review state.",
+          "receipt_hash": "600f67baae0c2e00f5c49ed9c175d0f9421148804c8ddf0490b8e20d76f72abc"
+        },
         "errors": []
       }
     ],
-    "official_bound_count": 2,
+    "official_bound_count": 0,
+    "canonical_structure_count": 2,
     "replay_only_count": 3,
     "publication_index": "artifacts/v4-reports/index.html",
     "human_review": "pending_human_review",
@@ -554,5 +2165,5 @@
     "no_tier_a_credit": true,
     "is_live_research": false
   },
-  "receipt_hash": "5c71e5fb26daf7004ffa6879e0d482cde9bf26635929f61fc8a05cf8385c93e8"
+  "receipt_hash": "a605c5933675d2bb82c73ff46e763248e2851b24b694d94012a27b9e70f298f6"
 }

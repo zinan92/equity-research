@@ -9,6 +9,39 @@
   [`daily/YYYY-MM-DD.md`](daily/YYYY-MM-DD.md) as the format template.
 - Durable rationale and traps: [`decision-log.md`](decision-log.md).
 
+## 2026-08-02 · V4-P1 canonical publication quality gate (Issue #686)
+
+Now: the process regression that produced the bad mobile report is closed. The
+old seven-section mapper/official-sample builder is retired or
+`review_only_unpublished`; `artifacts/v4-reports/index.html` is generated only
+from `artifacts/round7-dossiers` and only after the independent
+`v4_quality_gate` checks exact Round 7 headings, source/profile/file hashes,
+Markdown/HTML identity, issuer-self-report classification, independent page
+evidence, chapter/review state and safe publication paths. The persistent
+publication status is `blocked`; the index contains zero company links and the
+three dossiers are in the review queue with run IDs and content-addressed gate
+receipts.
+
+The old mobile/raw-githack link is a historical mapped artifact and is not a
+valid publication surface. The canonical evidence paths are
+[`artifacts/round7-dossiers/300750.SZ.md`](artifacts/round7-dossiers/300750.SZ.md),
+[`artifacts/round7-dossiers/300750.SZ.html`](artifacts/round7-dossiers/300750.SZ.html),
+[`artifacts/round7-dossiers/600519.SH.md`](artifacts/round7-dossiers/600519.SH.md),
+and the machine gate/review queue under
+[`artifacts/v4-reports/`](artifacts/v4-reports/). No report is offered as
+public/mobile until the gate is `passed` and human review is recorded.
+
+If a previously passed company becomes blocked on refresh, its old
+`ticker/report.html` directory is quarantined under
+[`artifacts/v4-reports-legacy/`](artifacts/v4-reports-legacy/) so a guessed URL
+cannot serve stale prose. The package entry point also accepts the explicit
+`human_reviewed` path without treating an unreviewed draft as complete.
+
+Next: review the queued Round 7 judgments against the bound PDF pages. Only a
+review receipt with the required artifact-content hash can move a draft onto a
+public index; no Tier ladder, blocked-field, B6 or decision-policy semantics
+were changed.
+
 ## 2026-08-02 · V4-N2 issuer-profiled whole dossier (Issue #684)
 
 Now: `000001.SZ` (平安银行) has a persistent Round 7 whole-dossier run and a
@@ -28,11 +61,13 @@ and page-evidence receipt
 Persistent outputs are
 [`artifacts/round7-dossiers/000001.SZ.md`](artifacts/round7-dossiers/000001.SZ.md),
 [`artifacts/round7-dossiers/000001.SZ.receipt.json`](artifacts/round7-dossiers/000001.SZ.receipt.json),
-[`artifacts/v4-reports/000001.SZ/000001.SZ.md`](artifacts/v4-reports/000001.SZ/000001.SZ.md),
-and [`artifacts/v4-reports/000001.SZ/report.html`](artifacts/v4-reports/000001.SZ/report.html).
-The V4 index now lists this dossier alongside CATL and Moutai.  The output is
-real official-source material but remains pending human review; no Tier/action
-credit is created.  Profile noise rules removed the extracted bank table-header
+and the gate/queue receipts under [`artifacts/v4-reports/`](artifacts/v4-reports/).
+The pre-gate mapped copy is preserved outside the publication root at
+[`artifacts/v4-reports-legacy/000001.SZ/`](artifacts/v4-reports-legacy/000001.SZ/)
+as a failure sample only.
+The dossier is now held in the canonical quality-gate review queue rather than
+listed publicly.  The output is real official-source material but remains
+pending human review; no Tier/action credit is created.  Profile noise rules removed the extracted bank table-header
 concatenation from the generated input, and the conclusion request carries a
 bounded two-block-per-prior-chapter context rather than an unbounded evidence
 dump.  The receipt preserves all accepted model request IDs, semantic-audit
@@ -71,11 +106,12 @@ receipts, M4 quarantined the old field-shaped writer path, and M5 published
 the persistent reader index at
 [`artifacts/v4-reports/index.html`](artifacts/v4-reports/index.html).
 
-The current visible V4 dossiers are 300750.SZ and 600519.SH. Both are
-`pending_human_review`, with no Tier/action credit; the three additional
-samples remain replay-only and are not live research. The old 18-section
-completion numbers are void after the authorized contract replacement and
-must not be copied into #218.
+The current V4 publication index has zero visible dossier links because the
+canonical quality gate blocks the drafts pending evidence/self-report review.
+300750.SZ, 600519.SH and 000001.SZ remain canonical review-queue artifacts with
+no Tier/action credit; historical mapped company directories are not public
+reports. The old 18-section completion numbers are void after the authorized
+contract replacement and must not be copied into #218.
 
 M6's honest expansion receipt is
 [`artifacts/evidence/v4-m6-acceptance.json`](artifacts/evidence/v4-m6-acceptance.json):
