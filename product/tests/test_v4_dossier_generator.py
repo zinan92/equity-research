@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "product"))
@@ -42,6 +43,43 @@ class V4GeneratorTests(unittest.TestCase):
     def test_requires_one_complete_input_shape(self) -> None:
         with self.assertRaisesRegex(ValueError, "provide canonical Round 7"):
             generate_v4_dossier(ticker="300750.SZ", output_dir=Path(tempfile.mkdtemp()))
+
+    def test_canonical_packaging_accepts_missing_optional_profile(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            dossier = root / "300750.SZ.receipt.json"
+            markdown = root / "300750.SZ.md"
+            html = root / "300750.SZ.html"
+            markdown.write_text("canonical", encoding="utf-8")
+            html.write_text("<html>canonical</html>", encoding="utf-8")
+            dossier.write_text("{}", encoding="utf-8")
+            record = {
+                "status": "human_reviewed",
+                "fresh_model_calls": 0,
+                "source_urls": ("https://static.cninfo.com.cn/finalpage/example.PDF",),
+                "round7_run_id": "round7-run:test",
+                "round7_dossier_content_hash": "a" * 64,
+                "profile_hash": None,
+                "source_receipts": {},
+                "accepted_model_request_ids": [],
+                "accepted_semantic_audit_request_ids": [],
+                "accepted_semantic_audit_count": 0,
+                "all_semantic_audit_count": 0,
+                "section_contract_statuses": [],
+                "typed_gaps": [],
+            }
+            gate = {"status": "passed", "publication_eligible": True, "receipt_hash": "b" * 64}
+            with patch("v4_dossier_generator.adapt_round7_dossier", return_value=(markdown.read_text(), record)), \
+                patch("v4_dossier_generator.validate_v4_dossier", return_value=()), \
+                patch("v4_dossier_generator.evaluate_round7_quality", return_value=gate):
+                receipt = generate_v4_dossier(
+                    ticker="300750.SZ",
+                    output_dir=root / "out",
+                    round7_dossier_path=dossier,
+                    round7_markdown_path=markdown,
+                )
+            self.assertEqual(receipt["generation_mode"], "round7_canonical_pass_through")
+            self.assertIsNone(receipt["upstream"]["profile_hash"])
 
     def test_no_field_generator_is_imported(self) -> None:
         source = (ROOT / "product" / "v4_dossier_generator.py").read_text(encoding="utf-8")

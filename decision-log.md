@@ -2638,3 +2638,17 @@
   canonical source root, validates requested-vs-receipt ticker identity, and
   supports the explicit human-reviewed path without relabelling an unreviewed
   draft.
+
+## 2026-08-02 — V4-P1 follow-up profile-less packaging (Issue #688)
+
+- Decision: treat an issuer profile as optional enrichment at the package
+  boundary. Canonical Round 7 receipts without a profile (currently CATL and
+  Moutai) remain packageable once the same quality gate and human-review
+  requirements pass.
+- Why: requiring a profile in the CLI would create a second, accidental
+  completeness gate and strand valid canonical dossiers; the receipt already
+  carries the official evidence and chapter contract.
+- Evidence: `product/v4_dossier_generator.py`,
+  `scripts/publish_v4_round7_dossier.py`, and the profile-less packaging test.
+- Gotchas: when a profile is supplied it is still hash/ticker-bound; omitting
+  it does not grant Tier/ACTION credit or bypass the publication quality gate.
