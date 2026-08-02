@@ -37,6 +37,11 @@ If a previously passed company becomes blocked on refresh, its old
 cannot serve stale prose. The package entry point also accepts the explicit
 `human_reviewed` path without treating an unreviewed draft as complete.
 
+Issuer profiles are optional enrichment: CATL and Moutai canonical receipts
+remain packageable without one once the same quality gate and human-review
+receipt pass. When a profile is supplied, its ticker and hash remain bound;
+omitting it grants no Tier or ACTION credit.
+
 Next: review the queued Round 7 judgments against the bound PDF pages. Only a
 review receipt with the required artifact-content hash can move a draft onto a
 public index; no Tier ladder, blocked-field, B6 or decision-policy semantics
