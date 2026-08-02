@@ -2554,3 +2554,24 @@
 - `fresh_model_calls=0`、`new_official_documents=0`、`tier_credit=none` 是硬边界；输出通过 V4 validator 只证明来源与结构绑定，不代表人工审阅完成。
 - 适配器只接受 CNINFO URL 与 receipt ticker identity；没有官方页级 receipt 的第三家公司保持缺失，不能借用 M2 回放或聚合器数据。
 - 同步修正两份既有 Round 7 receipt 的 `markdown_path/html_path` 为仓库内持久路径并重算 receipt hash；正文与 HTML 字节未变，避免 verifier 把外部临时工作目录当作生产产物。
+## 2026-08-02 · V4-N1 binds the first non-CATL official evidence packet (Issue #682)
+
+- Decision: reuse the existing CNINFO official-filing adapter and page parser to
+  capture a six-period sequence for 000001.SZ, 000002.SZ and 600000.SH, then
+  materialize only the Round 7 page-fact shape plus the existing narrative
+  receipt shape.  The whole-dossier writer and model layer remain untouched in
+  this milestone.
+- Why: V4 must expand from the accepted reader shape through the same evidence
+  boundary.  A runtime-only 100-ticker summary cannot be fed into Round 7: it
+  lacks issuer-scoped nested receipts, page facts, and replay identity.
+- Evidence: `docs/evidence/v4-n1-official/receipt.json`, the three tracked
+  `*-financial-sequence.json` receipts, three `*-financial-page-evidence.json`
+  artifacts, three official narrative receipts, and
+  `scripts/verify_v4_n1_evidence.py` (replay status `passed`).  Source receipt
+  hashes, document IDs, official CNINFO URLs, pages and raw hashes remain bound.
+- Gotchas: 600000.SH has two official PDFs with no qualifying consolidated page
+  fact (`page_facts_empty`); that is a coverage gap, not a zero.  The initial
+  three-ticker batch timed out for two issuers, so the bounded per-period retry
+  and merge path is the canonical receipt lineage.  Reused Round 7/V4 source
+  paths must not be treated as fresh model output, and this packet cannot grant
+  Tier/ACTION credit.

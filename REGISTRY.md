@@ -9,6 +9,25 @@
   [`daily/YYYY-MM-DD.md`](daily/YYYY-MM-DD.md) as the format template.
 - Durable rationale and traps: [`decision-log.md`](decision-log.md).
 
+## 2026-08-02 · V4-N1 official evidence packet (Issue #682)
+
+Now: the first expansion evidence packet is replayable for 000001.SZ, 000002.SZ
+and 600000.SH at [`docs/evidence/v4-n1-official/README.md`](docs/evidence/v4-n1-official/README.md).
+All three have six official CNINFO report identities (2021FY–2025FY + 2026Q1),
+respectively 118 / 113 / 24 qualifying page facts and 612 / 653 / 976 narrative
+blocks.  The packet receipt is
+`638186bf104b3f291fb8ee066c869d9e097822800dae1f9b9a5ec756f20ca845`, and
+`scripts/verify_v4_n1_evidence.py` passes against the tracked source receipts.
+
+The 600000.SH 2022FY and 2026Q1 PDFs are bound by document/page/raw identity but
+have `page_facts_empty`; no zero or proxy values were introduced.  The packet is
+evidence-only: no model call, dossier prose, Tier credit, B6/decision-policy
+change, or #218 audit credit.
+
+Next: use this packet as the sole input to one issuer-profiled Round 7 whole-
+dossier generation milestone, then adapt through the existing V4 single entry
+point.  Keep missing facts and `pending_human_review` visible.
+
 ## 2026-08-02 · V4/Ainiu reader contract is the active product path
 
 Now: the approved Ainiu/Round 7 reader shape is implemented as the V4
