@@ -1,0 +1,445 @@
+{
+  "schema_version": "park-v4-whole-dossier-receipt-v1",
+  "contract_schema_version": "park-v4-dossier-v1",
+  "generator_version": "park-v4-whole-dossier-generator-v1",
+  "generation_mode": "round7_generated_whole_dossier_adaptation",
+  "ticker": "000001.SZ",
+  "status": "pending_human_review",
+  "is_live_research": false,
+  "fresh_model_calls": 8,
+  "new_official_documents": 0,
+  "source_urls": [
+    "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+    "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF"
+  ],
+  "output": {
+    "ticker": "000001.SZ",
+    "input_dossier_path": "artifacts/round7-dossiers/000001.SZ.receipt.json",
+    "input_dossier_sha256": "a1ca55bd4913c8e760f5c0a305601671604de280411e2db30c5ab49f219a0881",
+    "input_markdown_path": "artifacts/round7-dossiers/000001.SZ.md",
+    "input_markdown_sha256": "2b2701aab0e7f488b166bd2faaae813d054ea65b8f2e8cfda86820191eaa4dcf",
+    "round7_run_id": "round7-run:fcbb79dc8cbd9f843d069279",
+    "round7_dossier_content_hash": "2aa7c57d7aedb9da27fbb428625333e63323818aecb5d650630944f2b26facec",
+    "profile_hash": "5349ee53713f33e2155e8109d03a6c376a5b007914000cd5f0d1dfa2593764cd",
+    "source_receipts": {
+      "official_narrative_receipt_id": "e4-official-narrative-evidence-v1:5d605a0c080ea5e65e7ad8cf2931b151bb9654c955fe269d0f307787f037e6e0",
+      "official_narrative_receipt_hash": "5d605a0c080ea5e65e7ad8cf2931b151bb9654c955fe269d0f307787f037e6e0",
+      "official_narrative_file_sha256": "4a2237d7192720ae703ce3a866761df2c0d91cd96446ca8743df414a1f8ee971",
+      "financial_page_evidence_receipt_hash": "28ad57795209932e035c62d43e30c51bf9db2d2605a55073be1ce61dedd6d7be",
+      "financial_page_evidence_file_sha256": "628b31960737dc546ed055cf1ca1acf3a01ade429ff6a6c8d812bfde32d9854c",
+      "as_of": "2026-08-02T12:00:00Z",
+      "issuer_profile_hash": "5349ee53713f33e2155e8109d03a6c376a5b007914000cd5f0d1dfa2593764cd",
+      "issuer_profile_path": "docs/evidence/v4-n2/000001.SZ-profile.json"
+    },
+    "accepted_model_request_ids": [
+      "3c5fcd73-185c-4979-918a-418e793be689",
+      "fd1548d5-62b8-465c-83e3-0ccf64ed1d69",
+      "1551aa48-1780-48e8-a0d9-2c7fa38a4c47",
+      "2fd7c385-a2d5-4b12-a9cf-9112821fbd8d",
+      "2d66f1d9-2c38-471a-8398-ef9daaa19518",
+      "a94e56f9-206c-46b1-afff-a60c11b2670b",
+      "f8ff57df-1e9f-4f57-bd9e-b1118142f417",
+      "91177a25-85fd-4829-a5e2-432ed469bb98"
+    ],
+    "accepted_semantic_audit_request_ids": [
+      "de1183cb-72f0-4e41-8e71-2a5bf495157b",
+      "4878c8df-0bc8-4456-9a34-6be6b710f7bb",
+      "a0fc4e89-e993-4256-b41b-add5512f61d4",
+      "e6a66c3a-0895-4715-bd2b-99720aeab6f0",
+      "976bd483-9de9-4a43-b1c1-23635d31f9c0",
+      "0f8a4452-db3f-4a74-a375-b744a906b840",
+      "64625b88-1ee0-421a-8174-769e77a80f75",
+      "0882f6e4-258b-4eca-8f10-9251abb70fff"
+    ],
+    "accepted_semantic_audit_count": 8,
+    "all_semantic_audit_count": 9,
+    "section_contract_statuses": [
+      {
+        "section_id": "one_line_positioning",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "identity_founder_and_governance",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "technology_origin_and_development_history",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "business_model_and_business_lines",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "financial_and_operating_time_series",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "moat_evidence_chain",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "risks_counter_thesis_and_triggers",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "research_conclusion_and_open_questions",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "production_record",
+        "status": "full",
+        "status_reason": null
+      }
+    ],
+    "typed_gaps": [
+      {
+        "section_id": "one_line_positioning",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "market_snapshot",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "identity_founder_and_governance",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "ownership_evidence"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "technology_origin_and_development_history",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "governance_timeline"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "business_model_and_business_lines",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "segment_financials",
+          "industry_evidence",
+          "company_position",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "financial_and_operating_time_series",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "valuation_evidence",
+          "accounting_evidence",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "moat_evidence_chain",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "peer_evidence",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "risks_counter_thesis_and_triggers",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "policy_evidence",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "research_conclusion_and_open_questions",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "typed_gaps",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "production_record",
+        "status": "full",
+        "status_reason": null,
+        "missing_required": [],
+        "missing_optional": [
+          "review_record"
+        ],
+        "pending_judgment_inputs": []
+      }
+    ],
+    "source_urls": [
+      "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+      "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF"
+    ],
+    "output_sha256": "b5ef67265197516f7db1738330ce7c8503b1ec92c3078318f924776e62dffa3c",
+    "characters": 13945,
+    "reader_characters": 12164,
+    "validation": "passed",
+    "validation_errors": [],
+    "status": "pending_human_review",
+    "generation_mode": "round7_generated_whole_dossier_adaptation",
+    "fresh_model_calls": 8,
+    "new_official_documents": 0,
+    "tier_credit": "none",
+    "output_path": "artifacts/v4-reports/000001.SZ/000001.SZ.md",
+    "html_path": "artifacts/v4-reports/000001.SZ/report.html",
+    "html_sha256": "ade21a7f5c64a03edbecaa216ce51d4c4d1802d82d68a11c917603f90456237c"
+  },
+  "upstream": {
+    "round7_run_id": "round7-run:fcbb79dc8cbd9f843d069279",
+    "round7_dossier_content_hash": "2aa7c57d7aedb9da27fbb428625333e63323818aecb5d650630944f2b26facec",
+    "profile_hash": "5349ee53713f33e2155e8109d03a6c376a5b007914000cd5f0d1dfa2593764cd",
+    "source_receipts": {
+      "official_narrative_receipt_id": "e4-official-narrative-evidence-v1:5d605a0c080ea5e65e7ad8cf2931b151bb9654c955fe269d0f307787f037e6e0",
+      "official_narrative_receipt_hash": "5d605a0c080ea5e65e7ad8cf2931b151bb9654c955fe269d0f307787f037e6e0",
+      "official_narrative_file_sha256": "4a2237d7192720ae703ce3a866761df2c0d91cd96446ca8743df414a1f8ee971",
+      "financial_page_evidence_receipt_hash": "28ad57795209932e035c62d43e30c51bf9db2d2605a55073be1ce61dedd6d7be",
+      "financial_page_evidence_file_sha256": "628b31960737dc546ed055cf1ca1acf3a01ade429ff6a6c8d812bfde32d9854c",
+      "as_of": "2026-08-02T12:00:00Z",
+      "issuer_profile_hash": "5349ee53713f33e2155e8109d03a6c376a5b007914000cd5f0d1dfa2593764cd",
+      "issuer_profile_path": "docs/evidence/v4-n2/000001.SZ-profile.json"
+    },
+    "accepted_model_request_ids": [
+      "3c5fcd73-185c-4979-918a-418e793be689",
+      "fd1548d5-62b8-465c-83e3-0ccf64ed1d69",
+      "1551aa48-1780-48e8-a0d9-2c7fa38a4c47",
+      "2fd7c385-a2d5-4b12-a9cf-9112821fbd8d",
+      "2d66f1d9-2c38-471a-8398-ef9daaa19518",
+      "a94e56f9-206c-46b1-afff-a60c11b2670b",
+      "f8ff57df-1e9f-4f57-bd9e-b1118142f417",
+      "91177a25-85fd-4829-a5e2-432ed469bb98"
+    ],
+    "accepted_semantic_audit_request_ids": [
+      "de1183cb-72f0-4e41-8e71-2a5bf495157b",
+      "4878c8df-0bc8-4456-9a34-6be6b710f7bb",
+      "a0fc4e89-e993-4256-b41b-add5512f61d4",
+      "e6a66c3a-0895-4715-bd2b-99720aeab6f0",
+      "976bd483-9de9-4a43-b1c1-23635d31f9c0",
+      "0f8a4452-db3f-4a74-a375-b744a906b840",
+      "64625b88-1ee0-421a-8174-769e77a80f75",
+      "0882f6e4-258b-4eca-8f10-9251abb70fff"
+    ],
+    "accepted_semantic_audit_count": 8,
+    "all_semantic_audit_count": 9,
+    "section_contract_statuses": [
+      {
+        "section_id": "one_line_positioning",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "identity_founder_and_governance",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "technology_origin_and_development_history",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "business_model_and_business_lines",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "financial_and_operating_time_series",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "moat_evidence_chain",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "risks_counter_thesis_and_triggers",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "research_conclusion_and_open_questions",
+        "status": "partial",
+        "status_reason": "pending_judgment_review"
+      },
+      {
+        "section_id": "production_record",
+        "status": "full",
+        "status_reason": null
+      }
+    ],
+    "typed_gaps": [
+      {
+        "section_id": "one_line_positioning",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "market_snapshot",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "identity_founder_and_governance",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "ownership_evidence"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "technology_origin_and_development_history",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "governance_timeline"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "business_model_and_business_lines",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "segment_financials",
+          "industry_evidence",
+          "company_position",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "financial_and_operating_time_series",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "valuation_evidence",
+          "accounting_evidence",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "moat_evidence_chain",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "peer_evidence",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "risks_counter_thesis_and_triggers",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "policy_evidence",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "research_conclusion_and_open_questions",
+        "status": "partial",
+        "status_reason": "pending_judgment_review",
+        "missing_required": [],
+        "missing_optional": [
+          "typed_gaps",
+          "legacy_judgment_materials"
+        ],
+        "pending_judgment_inputs": [
+          "chapter_draft"
+        ]
+      },
+      {
+        "section_id": "production_record",
+        "status": "full",
+        "status_reason": null,
+        "missing_required": [],
+        "missing_optional": [
+          "review_record"
+        ],
+        "pending_judgment_inputs": []
+      }
+    ]
+  },
+  "output_path": "artifacts/v4-reports/000001.SZ/000001.SZ.md",
+  "output_sha256": "b5ef67265197516f7db1738330ce7c8503b1ec92c3078318f924776e62dffa3c",
+  "tier_credit": "none",
+  "boundary": "Round 7 is the sole whole-chapter generator; V4 only maps headings and preserves its official evidence/request provenance.",
+  "html_path": "artifacts/v4-reports/000001.SZ/report.html",
+  "html_sha256": "ade21a7f5c64a03edbecaa216ce51d4c4d1802d82d68a11c917603f90456237c"
+}

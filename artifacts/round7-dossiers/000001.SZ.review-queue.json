@@ -1,0 +1,540 @@
+{
+  "schema_version": "round7-chapter-review-queue-v1",
+  "ticker": "000001.SZ",
+  "source_run_id": "round7-run:fcbb79dc8cbd9f843d069279",
+  "sort_basis": "impact_on_final_research_conclusion",
+  "items": [
+    {
+      "impact_rank": 1,
+      "section_id": "research_conclusion_and_open_questions",
+      "title": "研究结论与待补问题",
+      "review_status": "pending_human_review",
+      "full_text": "事实：公司自述：2025年，本行坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续升级零售、对公、资金同业业务经营策略，持续强化风险管理，持续深化数字化转型，整体业务经营保持稳健。公司自述：科技赋能零售业务，全面深化零售数字化工程，通过拓展数字营销渠道、加强数字化经营、优化数字化服务，将数字化平台打造为客户经营的线上阵地，为客户提供“省心、省时、又省钱”的服务体验；公司自述：本行坚持从客户需求出发，全面完善综合金融的管理模式、协作机制和服务平台，持续强化关联交易管理，强化客户信息保护，坚持公允定价，有效做好风险隔离，依法合规开展综合金融业务。本行坚持零售战略定位不动摇，深化推进零售战略转型，以客户为中心，打造特色零售银行，围绕“效益优先、兼顾规模”的经营目标，持续强化核心业务能力，推动零售业务高质量、可持续贷款业务：促进“量、价、险”平衡。个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。本行积极应对宏观经济环境变化，加强风险管控，持践行资本精细化管理，资本充足率提升。另外，本行制定了有关授信工作尽职规定，明确授信业务各环节的工作职责，有效控制信贷风险，并加强信贷承诺产生的风险在实质上与贷款和垫款的风险相似，并参照《商业银行资本管理办法》规定的信用转换系数对其信用风险敞口进行转换。2026年第一季度，公司total_profit为17,399人民币百万元，同比增长3.1%。\n研究判断（未审阅）：零售贷款余额下降2.3%意味着贷款业务增长可能承压，仍需验证抵押类贷款占比提升能否改善资产质量并支撑收入持续性；若后续零售贷款需求进一步走弱，则零售战略的盈利贡献可能证伪。公司自述数字化平台可能构成客户粘性护城河，但取决于客户活跃度与价值贡献能否持续提升。若宏观经济下行导致借款人还款能力恶化，可能意味着信用风险上升，不良贷款率可能攀升。\n待补问题：现有证据未披露零售贷款需求变化的具体驱动因素，无法判断下降是主动结构调整还是需求端疲弱。抵押类贷款占比提升对不良贷款率的影响缺乏量化数据，无法评估资产质量改善程度。数字化平台客户活跃度与价值贡献指标未披露，无法验证客户粘性护城河。宏观经济下行对借款人还款能力的具体传导路径和影响幅度缺乏情景分析，无法量化信用风险上升程度。",
+      "citations": [
+        {
+          "evidence_id": "N-11930e39c9",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 25,
+          "quoted_anchor": "2025年，本行坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续升级零售、对公、资金同业业务经营策略，持续强化风险管理，持续深化数字化转型，整体业务经营保持稳健。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况"
+        },
+        {
+          "evidence_id": "N-77de2e03b4",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 14,
+          "quoted_anchor": "科技赋能零售业务，全面深化零售数字化工程，通过拓展数字营销渠道、加强数字化经营、优化数字化服务，将数字化平台打造为客户经营的线上阵地，为客户提供“省心、省时、又省钱”的服务体验；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力"
+        },
+        {
+          "evidence_id": "N-185e578a12",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 14,
+          "quoted_anchor": "本行坚持从客户需求出发，全面完善综合金融的管理模式、协作机制和服务平台，持续强化关联交易管理，强化客户信息保护，坚持公允定价，有效做好风险隔离，依法合规开展综合金融业务。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力"
+        },
+        {
+          "evidence_id": "N-b3daef1acb",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "本行坚持零售战略定位不动摇，深化推进零售战略转型，以客户为中心，打造特色零售银行，围绕“效益优先、兼顾规模”的经营目标，持续强化核心业务能力，推动零售业务高质量、可持续贷款业务：促进“量、价、险”平衡。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-29aa5cafa6",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 25,
+          "quoted_anchor": "个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况"
+        },
+        {
+          "evidence_id": "N-91d7f850a1",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 25,
+          "quoted_anchor": "本行积极应对宏观经济环境变化，加强风险管控，持践行资本精细化管理，资本充足率提升。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况"
+        },
+        {
+          "evidence_id": "N-06e5bda4bc",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "另外，本行制定了有关授信工作尽职规定，明确授信业务各环节的工作职责，有效控制信贷风险，并加强信贷承诺产生的风险在实质上与贷款和垫款的风险相似，并参照《商业银行资本管理办法》规定的信用转换系数对其信用风险敞口进行转换。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        },
+        {
+          "evidence_id": "P-681b454dce",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 29,
+          "quoted_anchor": "五、利润总额 17,399 16,883",
+          "quoted_label": "利润总额",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "N-2a58f36bc8",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "信用风险，是指金融工具的一方不能履行义务，造成另一方发生财务损失的风险。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 2,
+      "section_id": "one_line_positioning",
+      "title": "一句话定位",
+      "review_status": "pending_human_review",
+      "full_text": "事实：个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。\n研究判断（未审阅）：零售贷款余额下降2.3%意味着贷款业务增长可能承压，仍需验证抵押类贷款占比提升能否改善资产质量并支撑收入持续性；若后续零售贷款需求进一步走弱，则零售战略的盈利贡献可能证伪。",
+      "citations": [
+        {
+          "evidence_id": "N-29aa5cafa6",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 25,
+          "quoted_anchor": "个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 3,
+      "section_id": "moat_evidence_chain",
+      "title": "护城河的证据链",
+      "review_status": "pending_human_review",
+      "full_text": "研究判断（未审阅）：公司自述基础上的研究判断：该行零售数字化平台可能构成客户粘性护城河，但取决于客户活跃度与价值贡献能否持续提升。\n事实：公司自述：科技赋能零售业务，全面深化零售数字化工程，通过拓展数字营销渠道、加强数字化经营、优化数字化服务，将数字化平台打造为客户经营的线上阵地，为客户提供“省心、省时、又省钱”的服务体验；二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；\n研究判断（未审阅）：公司自述基础上的研究判断：若零售客户数或零售AUM增速连续两个季度低于股份行均值，则数字化平台护城河可能被证伪。\n研究判断（未审阅）：公司自述基础上的研究判断：当前证据表明数字化平台已形成客户经营基础设施，但相对同业的差异化优势仍需零售AUM份额变化验证。\n研究判断（未审阅）：公司自述基础上的研究判断：该行综合金融协同可能意味着客户钱包份额护城河，但取决于集团生态导流效率与交叉销售密度。\n事实：公司自述：本行紧跟国家政策导向和监管要求，坚持党建引领，坚持金融工作的政治性、人民性，坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续深化战略转型，不断升级零售、对公、资金同业业务经营策略，做好金融“五篇大文章”，服务新质生产力，持续深化数字化转型，强化风险管理，助推高质量发展。同时，强化APP等线上平台建综合金融平台：依托平安集团“综合金融+医疗养老”生态优势，围绕客户需求推出多样化产品组合方案，不断深化“一个客户、多个账户、多种产品、一站式服务”的综合经营模式，持续提升组织推动：强化总分行对一线队伍的策略指引及赋能推动，构建一体化、标准化的销售赋能推动体系，升级横向一体协同、纵向贯穿赋能的组织管理，形成高效管理闭环与敏捷协同机制，提升。\n研究判断（未审阅）：公司自述基础上的研究判断：若集团内客户迁徙率或持有多产品客户占比连续两年未提升，则综合金融护城河可能被证伪。\n研究判断（未审阅）：公司自述基础上的研究判断：当前证据表明综合金融模式具有潜在协同效应，但客户实际贡献的持续性仍需迁徙率与产品渗透率数据验证。\n研究判断（未审阅）：公司自述基础上的研究判断：该行对公业务分层经营体系可能构成客户基础护城河，但取决于行业化产品能力与风险定价效率。\n事实：公司自述：科技赋能对公业务，建立以客户需求为导向、数据驱动的客户分层经营体系，通过生态经营、综合金融服务和数字化赋能，持续夯实客户基础，提升经营贡献；做精客户：顺应对公客户综合化、生态化、一体化经营趋势，适应市场环境及客户需求的变化，强化以客户为中心的经营理念，建立战略客户、中型客户、小型客户的客户分层经营体系，锻造“长做精产品：围绕核心客群，深入行业场景，运用“金融+科技”能力，做强行业化、差异化、综合化的产品组合，优化金融服务体验，提升客户综合服务能力。\n研究判断（未审阅）：公司自述基础上的研究判断：若对公存款成本率持续高于股份行均值或对公中间业务收入占比未提升，则分层经营护城河可能被证伪。\n研究判断（未审阅）：公司自述基础上的研究判断：当前证据表明分层经营体系已搭建，但相对同业的成本效率优势仍需对公存款成本率与中收占比验证。",
+      "citations": [
+        {
+          "evidence_id": "N-77de2e03b4",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 14,
+          "quoted_anchor": "科技赋能零售业务，全面深化零售数字化工程，通过拓展数字营销渠道、加强数字化经营、优化数字化服务，将数字化平台打造为客户经营的线上阵地，为客户提供“省心、省时、又省钱”的服务体验；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力"
+        },
+        {
+          "evidence_id": "N-e8febfc64c",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-bc91383b91",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "同时，强化APP等线上平台建综合金融平台：依托平安集团“综合金融+医疗养老”生态优势，围绕客户需求推出多样化产品组合方案，不断深化“一个客户、多个账户、多种产品、一站式服务”的综合经营模式，持续提升组织推动：强化总分行对一线队伍的策略指引及赋能推动，构建一体化、标准化的销售赋能推动体系，升级横向一体协同、纵向贯穿赋能的组织管理，形成高效管理闭环与敏捷协同机制，提升",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-ff95537c8b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "本行紧跟国家政策导向和监管要求，坚持党建引领，坚持金融工作的政治性、人民性，坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续深化战略转型，不断升级零售、对公、资金同业业务经营策略，做好金融“五篇大文章”，服务新质生产力，持续深化数字化转型，强化风险管理，助推高质量发展。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-4175d9ec7b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 13,
+          "quoted_anchor": "做精客户：顺应对公客户综合化、生态化、一体化经营趋势，适应市场环境及客户需求的变化，强化以客户为中心的经营理念，建立战略客户、中型客户、小型客户的客户分层经营体系，锻造“长做精产品：围绕核心客群，深入行业场景，运用“金融+科技”能力，做强行业化、差异化、综合化的产品组合，优化金融服务体验，提升客户综合服务能力。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-99aa578e72",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 14,
+          "quoted_anchor": "科技赋能对公业务，建立以客户需求为导向、数据驱动的客户分层经营体系，通过生态经营、综合金融服务和数字化赋能，持续夯实客户基础，提升经营贡献；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 4,
+      "section_id": "risks_counter_thesis_and_triggers",
+      "title": "风险、反题材与观察触发器",
+      "review_status": "pending_human_review",
+      "full_text": "事实：信用风险，是指金融工具的一方不能履行义务，造成另一方发生财务损失的风险。本集团已建立相关机制，进行统一授信管理，并定期监控上述信用风险额度及对上述信用风险进行本行建立集中、垂直、独立的全面风险管理架构，总行风险管理委员会统筹各层级风险管理工作，由总行风险管理部、总行授信审批部、总行零售信贷风险管理部等专业部门负责全行信用风险管理本行制定了一整套规范的信贷管理流程和内部控制机制，对信贷业务实行全流程管理。另外，本行制定了有关授信工作尽职规定，明确授信业务各环节的工作职责，有效控制信贷风险，并加强信贷承诺产生的风险在实质上与贷款和垫款的风险相似，并参照《商业银行资本管理办法》规定的信用转换系数对其信用风险敞口进行转换。\n研究判断（未审阅）：若宏观经济下行导致借款人还款能力恶化，可能意味着信用风险上升，不良贷款率可能攀升。\n待补问题：下一次核验：关注下一季度报告中的不良贷款率及拨备覆盖率变化，以判断信用风险是否实质上升。\n事实：资产负债管理部在资产负债管理委员会指导下，负责流动性风险的具体管理工作。定期开展流动性风险压力测试，审慎评估潜在的流动性风险；本集团及本行将继续提高流动性风险管理的针对性和灵活性，推动全行资产负债结构优化，加强稳定存款管理，保持资金来源和资金运用均衡发展，持续确保流动性安全。\n研究判断（未审阅）：如果市场利率大幅波动或存款流失加速，可能意味着流动性风险上升，银行可能需要依赖更高成本的资金来源。\n待补问题：下一次核验：关注下一季度报告中的流动性覆盖率或净稳定资金比例，以判断流动性风险是否恶化。\n事实：(a)核心一级资本充足率等于核心一级资本净额除以风险加权资产；(d)风险加权资产包括信用风险加权资产、市场风险加权资产和操作风险加权资产。\n研究判断（未审阅）：若风险加权资产增速持续高于资本净额增速，可能意味着资本充足率承压，限制业务扩张能力。\n待补问题：下一次核验：关注下一季度报告中的核心一级资本充足率及风险加权资产构成，以判断资本压力是否加大。",
+      "citations": [
+        {
+          "evidence_id": "N-2a58f36bc8",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "信用风险，是指金融工具的一方不能履行义务，造成另一方发生财务损失的风险。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        },
+        {
+          "evidence_id": "N-9e1220c075",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "本集团已建立相关机制，进行统一授信管理，并定期监控上述信用风险额度及对上述信用风险进行本行建立集中、垂直、独立的全面风险管理架构，总行风险管理委员会统筹各层级风险管理工作，由总行风险管理部、总行授信审批部、总行零售信贷风险管理部等专业部门负责全行信用风险管理本行制定了一整套规范的信贷管理流程和内部控制机制，对信贷业务实行全流程管理。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        },
+        {
+          "evidence_id": "N-06e5bda4bc",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "另外，本行制定了有关授信工作尽职规定，明确授信业务各环节的工作职责，有效控制信贷风险，并加强信贷承诺产生的风险在实质上与贷款和垫款的风险相似，并参照《商业银行资本管理办法》规定的信用转换系数对其信用风险敞口进行转换。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        },
+        {
+          "evidence_id": "N-d448bc5ac1",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 260,
+          "quoted_anchor": "资产负债管理部在资产负债管理委员会指导下，负责流动性风险的具体管理工作。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露(续) > 1. 信用风险(续) > 2. 流动性风险"
+        },
+        {
+          "evidence_id": "N-edf5de4f91",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 260,
+          "quoted_anchor": "定期开展流动性风险压力测试，审慎评估潜在的流动性风险；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露(续) > 1. 信用风险(续) > 2. 流动性风险"
+        },
+        {
+          "evidence_id": "N-f712b2f162",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 260,
+          "quoted_anchor": "本集团及本行将继续提高流动性风险管理的针对性和灵活性，推动全行资产负债结构优化，加强稳定存款管理，保持资金来源和资金运用均衡发展，持续确保流动性安全。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露(续) > 1. 信用风险(续) > 2. 流动性风险"
+        },
+        {
+          "evidence_id": "N-7ae84f3fdb",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "(a)核心一级资本充足率等于核心一级资本净额除以风险加权资产；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        },
+        {
+          "evidence_id": "N-dda4e55583",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 239,
+          "quoted_anchor": "(d)风险加权资产包括信用风险加权资产、市场风险加权资产和操作风险加权资产。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 八、 风险披露 > 1. 信用风险 > 1.1信用风险管理"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 5,
+      "section_id": "financial_and_operating_time_series",
+      "title": "财务与经营时间序列",
+      "review_status": "pending_human_review",
+      "full_text": "事实：2026年第一季度\n事实：17,399人民币百万元\n事实：同比增长3.1%\n事实：合并报表\n事实：2026年第一季度\n事实：5,489,879人民币百万元\n事实：较期初增长2.1%\n事实：合并报表\n事实：2026年第一季度\n事实：6,033,962人民币百万元\n事实：较期初增长1.8%\n事实：合并报表\n事实：2026年第一季度\n事实：19,406人民币百万元\n事实：同比持平\n事实：合并报表\n事实：2026年第一季度\n事实：35,277人民币百万元\n事实：同比增长4.7%\n事实：合并报表\n事实：2026年第一季度\n事实：25,368人民币百万元\n事实：同比增长4.2%\n事实：合并报表\n事实：2026年第一季度\n事实：37,802人民币百万元\n事实：同比下滑76.8%\n事实：合并报表\n事实：2026年第一季度\n事实：2,876人民币百万元\n事实：同比增长3.2%\n事实：合并报表\n事实：2026年第一季度\n事实：172人民币百万元\n事实：同比下滑49.1%\n事实：合并报表\n事实：2025年\n事实：51,159人民币百万元\n事实：同比下滑6.5%\n事实：合并报表",
+      "citations": [
+        {
+          "evidence_id": "P-681b454dce",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 29,
+          "quoted_anchor": "五、利润总额 17,399 16,883",
+          "quoted_label": "利润总额",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-c3957ece19",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 27,
+          "quoted_anchor": "负债合计 5,489,879 5,374,593",
+          "quoted_label": "负债合计",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-d219bf21fd",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 27,
+          "quoted_anchor": "资产总计 6,033,962 5,925,777",
+          "quoted_label": "资产总计",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-52dddd2a0b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 27,
+          "quoted_anchor": "股本 19,406 19,406",
+          "quoted_label": "股本",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-3fbfbe94b0",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 29,
+          "quoted_anchor": "一、营业收入 35,277 33,709",
+          "quoted_label": "营业收入",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-cd3d86f192",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 29,
+          "quoted_anchor": "三、减值损失前营业利润 25,368 24,340",
+          "quoted_label": "营业利润",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-193d1904fc",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 31,
+          "quoted_anchor": "经营活动产生的现金流量净额 37,802 162,946",
+          "quoted_label": "经营活动产生的现金流量净额",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-75f5816701",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 29,
+          "quoted_anchor": "五、利润总额减：所得税费用 (2,876) (2,787) 17,399 16,883",
+          "quoted_label": "所得税费用",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-9e4ffaff6c",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225188741",
+          "raw_hash": "261a735593c7cb3b1a366f0e085c2453e3fe39a0113f6e89e91a5454d92f6188",
+          "page_number": 31,
+          "quoted_anchor": "购建固定资产、无形资产和其他长期资产支付的现金 (172) (338)",
+          "quoted_label": "购建固定资产、无形资产和其他长期资产支付的现金",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-25/1225188741.PDF",
+          "statement_scope": "consolidated"
+        },
+        {
+          "evidence_id": "P-f75d78feac",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 120,
+          "quoted_anchor": "五、利润总额 51,159 54,738",
+          "quoted_label": "利润总额",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "statement_scope": "consolidated"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 6,
+      "section_id": "business_model_and_business_lines",
+      "title": "商业模式与业务线",
+      "review_status": "pending_human_review",
+      "full_text": "事实：本行坚持零售战略定位不动摇，深化推进零售战略转型，以客户为中心，打造特色零售银行，围绕“效益优先、兼顾规模”的经营目标，持续强化核心业务能力，推动零售业务高质量、可持续贷款业务：促进“量、价、险”平衡。二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；\n事实：个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。\n研究判断（未审阅）：该业务可能取决于零售资产组合优化与“量、价、险”平衡，若抵押类贷款占比提升未能对冲个人贷款余额下降，则贷款利息收入可能承压。\n事实：坚持以客户为中心，聚焦“做精行业、做精客户、做精产品”，紧跟国家产业发展政策，持续加大对先进制造业、绿色金融、科技金融、普惠金融、基础设施、乡村振兴等重点领域的融资支持力度。\n待补问题：未披露批发金融分部收入或贷款规模的具体数据。\n研究判断（未审阅）：该业务可能取决于对先进制造业、绿色金融等重点领域的融资投放力度，若行业集中度过高或政策转向，则对公贷款质量可能恶化。\n事实：本行资金同业业务遵循国家金融市场发展战略，坚定执行“服务金融市场、服务同业客户、服务实体经济”经营理念，通过“投资交易+客户业务”双轮驱动，持续提升投资、交易和销售三大能投资交易：持续升级投资交易能力，提升包括研究、定价、策略、科技等在内的专业能力，把握市场中长期战略性机会，合理配置资产，敏捷捕捉交易机会。客户业务：深耕金融机构及企业客户金融市场服务需求，持续丰富交易服务、机构销售、资产托管、企业避险等客户服务，在服务实体直接融资、提升金融市场流动性及助力企业管理市场风险等方面持续发力，形成围绕客户深度经营的多产品服务模式。\n待补问题：未披露资金同业业务分部收入或交易收益的具体数据。\n研究判断（未审阅）：该业务可能取决于市场机会把握与客户服务深度，若投资交易能力不足或市场波动加剧，则非利息收入可能波动。\n事实：二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；同时，强化APP等线上平台建综合金融平台：依托平安集团“综合金融+医疗养老”生态优势，围绕客户需求推出多样化产品组合方案，不断深化“一个客户、多个账户、多种产品、一站式服务”的综合经营模式，持续提升组织推动：强化总分行对一线队伍的策略指引及赋能推动，构建一体化、标准化的销售赋能推动体系，升级横向一体协同、纵向贯穿赋能的组织管理，形成高效管理闭环与敏捷协同机制，提升。\n待补问题：未披露金融科技板块对外收入或降本增效的量化数据。\n研究判断（未审阅）：该业务可能取决于数字化工具对客户获取与留存的提升效果，若线上渠道转化率不及预期，则零售存款沉淀可能受限。",
+      "citations": [
+        {
+          "evidence_id": "N-b3daef1acb",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "本行坚持零售战略定位不动摇，深化推进零售战略转型，以客户为中心，打造特色零售银行，围绕“效益优先、兼顾规模”的经营目标，持续强化核心业务能力，推动零售业务高质量、可持续贷款业务：促进“量、价、险”平衡。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-e8febfc64c",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-29aa5cafa6",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 25,
+          "quoted_anchor": "个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况"
+        },
+        {
+          "evidence_id": "N-f42231ec7a",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 13,
+          "quoted_anchor": "坚持以客户为中心，聚焦“做精行业、做精客户、做精产品”，紧跟国家产业发展政策，持续加大对先进制造业、绿色金融、科技金融、普惠金融、基础设施、乡村振兴等重点领域的融资支持力度。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-c65d5c16a2",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 13,
+          "quoted_anchor": "本行资金同业业务遵循国家金融市场发展战略，坚定执行“服务金融市场、服务同业客户、服务实体经济”经营理念，通过“投资交易+客户业务”双轮驱动，持续提升投资、交易和销售三大能投资交易：持续升级投资交易能力，提升包括研究、定价、策略、科技等在内的专业能力，把握市场中长期战略性机会，合理配置资产，敏捷捕捉交易机会。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-223d09467a",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 13,
+          "quoted_anchor": "客户业务：深耕金融机构及企业客户金融市场服务需求，持续丰富交易服务、机构销售、资产托管、企业避险等客户服务，在服务实体直接融资、提升金融市场流动性及助力企业管理市场风险等方面持续发力，形成围绕客户深度经营的多产品服务模式。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-bc91383b91",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "同时，强化APP等线上平台建综合金融平台：依托平安集团“综合金融+医疗养老”生态优势，围绕客户需求推出多样化产品组合方案，不断深化“一个客户、多个账户、多种产品、一站式服务”的综合经营模式，持续提升组织推动：强化总分行对一线队伍的策略指引及赋能推动，构建一体化、标准化的销售赋能推动体系，升级横向一体协同、纵向贯穿赋能的组织管理，形成高效管理闭环与敏捷协同机制，提升",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 7,
+      "section_id": "technology_origin_and_development_history",
+      "title": "技术来源与发展史",
+      "review_status": "pending_human_review",
+      "full_text": "事实：2025年\n事实：公司自述：本行紧跟国家政策导向和监管要求，坚持党建引领，坚持金融工作的政治性、人民性，坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续深化战略转型，不断升级零售、对公、资金同业业务经营策略，做好金融“五篇大文章”，服务新质生产力，持续深化数字化转型，强化风险管理，助推高质量发展。\n研究判断（未审阅）：公司自述表明其数字化转型可能持续深化，但技术对业务的实际赋能效果仍需通过后续披露的科技投入产出比、客户获取成本等指标核验。\n事实：2025年\n事实：公司自述：科技赋能不断深入 本行利用领先数字技术为战略转型注入活力，不断提升科技对金融服务的赋能水平。\n研究判断（未审阅）：公司自述意味着其金融科技能力可能增强，但技术领先性需通过第三方评测或专利数量等独立证据验证。\n事实：2025年\n事实：公司自述：科技赋能对公业务，建立以客户需求为导向、数据驱动的客户分层经营体系，通过生态经营、综合金融服务和数字化赋能，持续夯实客户基础，提升经营贡献；\n研究判断（未审阅）：公司自述表明其金融科技可能提升对公客户经营效率，但实际效果取决于后续披露的对公客户数、客均收入等量化指标。\n事实：2025年\n事实：通过数字化转型驱动增长 3.5%，其中一般企业贷款余额较上年末增长 9.2%，本行持续加大实体经济支持力度，科技企业、绿色金融等领域贷款实现较好增长；\n研究判断（未审阅）：该增长可能表明金融科技对贷款业务有正向驱动，但需核验科技投入与贷款增长的因果关系，以及增长是否可持续。\n事实：2025年\n事实：做精客户：顺应对公客户综合化、生态化、一体化经营趋势，适应市场环境及客户需求的变化，强化以客户为中心的经营理念，建立战略客户、中型客户、小型客户的客户分层经营体系，锻造“长做精产品：围绕核心客群，深入行业场景，运用“金融+科技”能力，做强行业化、差异化、综合化的产品组合，优化金融服务体验，提升客户综合服务能力。\n研究判断（未审阅）：上述战略意味着金融科技可能推动产品差异化，但技术对产品竞争力的实际提升仍需通过客户满意度或市场份额变化验证。\n事实：2025年\n事实：二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；\n研究判断（未审阅）：该数字化运营体系可能提升客户获取与留存效率，但技术对财富管理收入的贡献仍需通过后续披露的财富管理手续费收入等指标判断。",
+      "citations": [
+        {
+          "evidence_id": "N-ff95537c8b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "本行紧跟国家政策导向和监管要求，坚持党建引领，坚持金融工作的政治性、人民性，坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续深化战略转型，不断升级零售、对公、资金同业业务经营策略，做好金融“五篇大文章”，服务新质生产力，持续深化数字化转型，强化风险管理，助推高质量发展。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-b8e31aef50",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 14,
+          "quoted_anchor": "科技赋能不断深入 本行利用领先数字技术为战略转型注入活力，不断提升科技对金融服务的赋能水平。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力"
+        },
+        {
+          "evidence_id": "N-99aa578e72",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 14,
+          "quoted_anchor": "科技赋能对公业务，建立以客户需求为导向、数据驱动的客户分层经营体系，通过生态经营、综合金融服务和数字化赋能，持续夯实客户基础，提升经营贡献；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力"
+        },
+        {
+          "evidence_id": "N-c52c631214",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 25,
+          "quoted_anchor": "通过数字化转型驱动增长 3.5%，其中一般企业贷款余额较上年末增长 9.2%，本行持续加大实体经济支持力度，科技企业、绿色金融等领域贷款实现较好增长；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况"
+        },
+        {
+          "evidence_id": "N-4175d9ec7b",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 13,
+          "quoted_anchor": "做精客户：顺应对公客户综合化、生态化、一体化经营趋势，适应市场环境及客户需求的变化，强化以客户为中心的经营理念，建立战略客户、中型客户、小型客户的客户分层经营体系，锻造“长做精产品：围绕核心客群，深入行业场景，运用“金融+科技”能力，做强行业化、差异化、综合化的产品组合，优化金融服务体验，提升客户综合服务能力。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        },
+        {
+          "evidence_id": "N-e8febfc64c",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 12,
+          "quoted_anchor": "二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    },
+    {
+      "impact_rank": 8,
+      "section_id": "identity_founder_and_governance",
+      "title": "身份、创始人与治理",
+      "review_status": "pending_human_review",
+      "full_text": "待补问题：现有证据未提供证券代码、上市交易所或股票简称的页级披露，无法核验证券身份。\n事实：本行董事、监事的报酬方案分别由董事会和监事姓名 性别 年龄 职务 任职状态 从公司获得的 是否在公司关联方项有志 董事、副行长、首 现任 264.96 否叶望春 男 70 监事长、职工监事 离任 80.37 否注：（1）董事谢永林、郭晓涛、付欣和蔡方方在本行的控股股东中国平安任职并领取报酬，其报酬情况见《中国平安保险（集团）股份有限公司 2025年年度报告》。\n研究判断（未审阅）：上述报酬披露表明项有志在2025年度同时担任董事与高管，可能形成执行层与监督层交叉，仍需核验董事会独立性及关联交易授权机制。",
+      "citations": [
+        {
+          "evidence_id": "N-1285693535",
+          "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+          "raw_hash": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+          "page_number": 72,
+          "quoted_anchor": "本行董事、监事的报酬方案分别由董事会和监事姓名 性别 年龄 职务 任职状态 从公司获得的 是否在公司关联方项有志 董事、副行长、首 现任 264.96 否叶望春 男 70 监事长、职工监事 离任 80.37 否注：（1）董事谢永林、郭晓涛、付欣和蔡方方在本行的控股股东中国平安任职并领取报酬，其报酬情况见《中国平安保险（集团）股份有限公司 2025年年度报告》。",
+          "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+          "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 4.5董事、监事、高级管理人员报酬情况"
+        }
+      ],
+      "current_section_status": "partial",
+      "if_approved": "FULL"
+    }
+  ],
+  "receipt_hash": "6a585635a98ee19a3bf2ab14d914cd52e1966c388504526c55c0b4c96710b46f"
+}
