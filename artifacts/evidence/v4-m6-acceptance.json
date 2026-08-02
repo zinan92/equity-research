@@ -40,12 +40,13 @@
       "identity": 100,
       "report_models": 0,
       "tier_a_or_b": 0,
-      "numeric_page_audits": 0
+      "spot_audits": 0
     },
     "gap": {
       "identity": 0,
       "report_models": 95,
-      "tier_a_or_b": 80
+      "tier_a_or_b": 80,
+      "spot_audits": 20
     },
     "source_receipt": "/Users/wendy/Documents/投研面板/artifacts/evidence/e4-l2-m7-acceptance.json",
     "source_receipt_sha256": "58e3ebcf23ae7a03f7b029a4bb235c484c8d3a9383803ab5c431cb5cd4ccb48d",
@@ -553,5 +554,5 @@
     "no_tier_a_credit": true,
     "is_live_research": false
   },
-  "receipt_hash": "abcf895cf3d9c96ea763a3918c39fd10bb79671c3fdf2e329a9844869f0b1c42"
+  "receipt_hash": "5c71e5fb26daf7004ffa6879e0d482cde9bf26635929f61fc8a05cf8385c93e8"
 }
