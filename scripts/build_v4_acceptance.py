@@ -37,7 +37,7 @@ def build(*, acceptance_path: Path, official_root: Path, replay_receipt_path: Pa
         "identity": len(rows),
         "report_models": sum(1 for row in rows if row.get("report_model_hash")),
         "tier_a_or_b": sum(1 for row in rows if row.get("tier") in {"A", "B"}),
-        "numeric_page_audits": sum(1 for row in rows if row.get("numeric_spot_audit") and row.get("page_citation_spot_audit")),
+        "spot_audits": sum(1 for row in rows if row.get("numeric_spot_audit") and row.get("page_citation_spot_audit")),
     }
     return {
         "schema_version": "park-v4-expansion-acceptance-v1",

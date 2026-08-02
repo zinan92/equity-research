@@ -26,6 +26,8 @@ class V4AcceptanceTests(unittest.TestCase):
         self.assertTrue(result["twenty_ticker_slice"]["all_have_explicit_blocker"])
         self.assertFalse(result["truth_boundary"]["no_fabricated_v4_dossiers"] is False)
         self.assertEqual(result["independent_page_audit_state"]["completed_human_audits"], 0)
+        self.assertEqual(result["real_100_ticker_gate"]["actual"]["spot_audits"], 0)
+        self.assertEqual(result["real_100_ticker_gate"]["gap"]["spot_audits"], 20)
 
     def test_acceptance_receipt_can_be_serialized(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
