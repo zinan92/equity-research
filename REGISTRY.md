@@ -1,5 +1,14 @@
 # REGISTRY
 
+## Operating documents (2026-08-02)
+
+- Stable intent and completion evidence: [`NORTH_STAR.md`](NORTH_STAR.md).
+- Current handoff snapshot: this file (`REGISTRY.md`); do not duplicate its
+  history in the North Star.
+- Material daily deltas: [`daily/`](daily/), using
+  [`daily/YYYY-MM-DD.md`](daily/YYYY-MM-DD.md) as the format template.
+- Durable rationale and traps: [`decision-log.md`](decision-log.md).
+
 ## 2026-07-31 · Frozen research archive publicly readable
 
 Now: [`research.park-ai-intel.com`](https://research.park-ai-intel.com) serves

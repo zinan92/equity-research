@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "project": {
+    "project_id": "equity-research",
+    "codex_project": "equity-research",
+    "repository": "zinan92/equity-research",
+    "local_path": "/Users/wendy/Documents/投研面板",
+    "tokenrouter_group": "equity-research",
+    "project_registry": "REGISTRY.md",
+    "state_authority": "project_registry",
+    "lifecycle": "active"
+  },
+  "created_by": "park-os onboard"
+}

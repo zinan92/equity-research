@@ -1,5 +1,20 @@
 # Decision Log
 
+## 2026-08-02 · Project-owned operating records (Issue #666)
+
+- Decision: keep stable intent in `NORTH_STAR.md`, current state in
+  `REGISTRY.md`, and material dated deltas in `daily/`. Keep `AGENTS.md` as the
+  execution contract and this decision log as the durable record of rationale
+  and gotchas.
+- Why: a replacement agent needs a project-local entry point that preserves
+  approved evidence and UX foundations instead of re-creating them from chat
+  context or mistaking a historical daily note for present state.
+- Evidence: `NORTH_STAR.md`, `.park-os/onboard.json`, and the dated-record
+  template were added in the scoped onboarding change for Issue #666.
+- Gotchas: this change does not refresh data, publish research, change payment
+  or membership state, deploy product code, or alter a scheduler. Documentation
+  completion is not evidence of research coverage or release readiness.
+
 ## 2026-07-30 · C1 adopts Round 7 as its native chapter contract
 
 - Decision: replace the 18-section C1 taxonomy with the nine accepted Round 7 reader units. Production record and Sources remain required publication appendices but receive no Tier credit. Every reader section requires one complete `chapter_draft`; old field-oriented judgments may appear only as transitional optional material and cannot complete a chapter.
