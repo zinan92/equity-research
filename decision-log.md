@@ -1,5 +1,12 @@
 # Decision Log
 
+## 2026-08-02 · V4 expansion remains an honest baseline (Issue #678)
+
+- Decision: evaluate the first 20 tickers from the real 100-ticker acceptance receipt without manufacturing V4 dossiers. Keep two official-bound dossiers and three replay-only samples as the V4 baseline; leave every blocked ticker explicit.
+- Why: a contract migration invalidates the old 18-section completion counts, but it does not create official evidence for other companies. A truthful expansion gate is more useful than a fabricated 20-company pass.
+- Evidence: `artifacts/evidence/v4-m6-acceptance.json`, `docs/evidence/2026-08-02-v4-m6-acceptance.md`, and the unchanged seven-assignment/thirteen-gap page-audit receipt.
+- Gotchas: the acceptance receipt reports 100 identities, zero Report Models, zero Tier A/B, and zero completed page audits for the real corpus. This is a blocked baseline, not a failed V4 generator; the next step is official evidence acquisition for additional issuers.
+
 ## 2026-08-02 · V4 uses one whole-dossier entry point (Issue #674)
 
 - Decision: make `scripts/generate_v4_dossier.py` / `generate_v4_dossier()` the only V4 production-facing writer. It accepts one complete dossier plus its evidence manifest, or the deterministic official-evidence adapter inputs; it validates the document as a whole before writing the receipt.

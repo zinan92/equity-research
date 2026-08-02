@@ -9,6 +9,33 @@
   [`daily/YYYY-MM-DD.md`](daily/YYYY-MM-DD.md) as the format template.
 - Durable rationale and traps: [`decision-log.md`](decision-log.md).
 
+## 2026-08-02 · V4/Ainiu reader contract is the active product path
+
+Now: the approved Ainiu/Round 7 reader shape is implemented as the V4
+whole-dossier contract and single writer. M1 froze the reader contract, M2
+proved the same shape across three replay samples (汽车制造、光模块、AI 芯片),
+M3 bound CATL and Moutai outputs to official CNINFO narrative/financial
+receipts, M4 quarantined the old field-shaped writer path, and M5 published
+the persistent reader index at
+[`artifacts/v4-reports/index.html`](artifacts/v4-reports/index.html).
+
+The current visible V4 dossiers are 300750.SZ and 600519.SH. Both are
+`pending_human_review`, with no Tier/action credit; the three additional
+samples remain replay-only and are not live research. The old 18-section
+completion numbers are void after the authorized contract replacement and
+must not be copied into #218.
+
+M6's honest expansion receipt is
+[`artifacts/evidence/v4-m6-acceptance.json`](artifacts/evidence/v4-m6-acceptance.json):
+the real 100-ticker corpus has 100 identities, 0 Report Models, 0 Tier A/B,
+and 0 completed page audits. The first 20 sorted tickers are retained with
+explicit blockers; no V4 dossier is fabricated. The independent audit state
+remains 7 pending assignments + 13 coverage gaps.
+
+Next: acquire and bind official evidence for additional issuers through the
+same whole-dossier entry point. Do not reintroduce field-level generation,
+reuse the old 18-section counts, or treat replay samples as live evidence.
+
 ## 2026-07-31 · Frozen research archive publicly readable
 
 Now: [`research.park-ai-intel.com`](https://research.park-ai-intel.com) serves
