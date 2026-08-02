@@ -2507,3 +2507,13 @@
   used to overwrite the explicitly named CATL chapter contract. `Sources` is
   an appendix; `生产记录` is chapter 9 and receives Tier credit only from a
   real run receipt and source manifest.
+## 2026-08-02 · V4-M1 Round 7 dossier contract
+
+- Decision：将 Park 在 Round 7 批准的 Ainiu reader-facing 七章档案（加生产记录与 Sources）固化为 `park-v4-dossier-v1`；V4 以章节为生产单位，保留事实/判断/公司自述/待补的显式边界，并暂不改动旧 C1、Tier、B6 或 decision policy。
+- Why：旧按字段路径把研究拆碎，输出更短且失去 Ainiu 式定位、因果链和白话结论；Round 7 已有可复用结构与批准收据，应先把它变成可机器验收的合同，再扩展公司。
+- Evidence：`docs/dossier-production/round7-park-approval-receipt.json`；`docs/dossier-production/samples/300308.SZ-v1.md`；`product/v4_dossier_contract.py` 与 `product/tests/test_v4_dossier_contract.py`。
+
+### Gotchas · V4-M1
+
+- 长盈 V4 与 Ainiu 对照稿使用本地 fixture，只能作为 preview/写作回归；生产验证器默认拒绝 `fixture`、归档和东财 F10 词样。
+- M1 只建立合同，不宣称生成器已接线；旧 18 章统计仍只属于旧链路，不能拿来证明 V4 完成度。
