@@ -1,0 +1,59 @@
+{
+  "schema_version": "park-v4-official-binding-receipt-v1",
+  "adapter_version": "v4-official-evidence-adapter-v1",
+  "generation_mode": "official_evidence_adaptation",
+  "status": "passed",
+  "is_live_research": false,
+  "fresh_model_calls": 0,
+  "new_official_documents": 0,
+  "tier_credit": "none",
+  "companies": [
+    {
+      "ticker": "300750.SZ",
+      "output_path": "docs/evidence/v4-m3-official/300750.SZ.md",
+      "input_sample_path": "/Users/wendy/Documents/投研面板/docs/dossier-production/samples/300750.SZ-v1.md",
+      "input_sample_sha256": "5c1c8d9eb2f138925c8218ac9e0cd8ce2869bbb811a812e39bbfd339ef709d0e",
+      "narrative_receipt_id": "e4-official-narrative-evidence-v1:ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
+      "narrative_receipt_hash": "ad4aecf4459d0e2f7b5aebe19f4d8f28a2d7f4d63995de1934daf4be47c9501e",
+      "financial_receipt_hash": "870c85d0e6325c94044b81c2af7ed1f29b5aa404dc5f2bfbec3a4965c466c757",
+      "source_urls": [
+        "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+        "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+      ],
+      "output_sha256": "d78039fe33c3bacac9eac7ac97d1459a5419e9c9b6d5044226d70ec7e6bd21e5",
+      "characters": 5560,
+      "reader_characters": 4184,
+      "validation": "passed",
+      "validation_errors": [],
+      "status": "pending_human_review",
+      "generation_mode": "official_evidence_adaptation",
+      "fresh_model_calls": 0,
+      "new_official_documents": 0,
+      "tier_credit": "none"
+    },
+    {
+      "ticker": "600519.SH",
+      "output_path": "docs/evidence/v4-m3-official/600519.SH.md",
+      "input_sample_path": "/Users/wendy/Documents/投研面板/docs/dossier-production/samples/600519.SH-v1.md",
+      "input_sample_sha256": "29d39434e0b452f8ab826cbd02cc34489e41bdc5960c5e4cfd0eceb00d5c7fcf",
+      "narrative_receipt_id": "e4-official-narrative-evidence-v1:a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da",
+      "narrative_receipt_hash": "a520cc7cd01ddbbdbd721ee689fa31f95936e19c54c210872807f5cc74d8d0da",
+      "financial_receipt_hash": "3faaea3e8ed89d9dd3ddecbe6501355096721abd03070b86219dd1a54aca07e2",
+      "source_urls": [
+        "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+        "https://static.cninfo.com.cn/finalpage/2026-04-25/1225187851.PDF"
+      ],
+      "output_sha256": "6c76f3164af4efcfab3f1614ac9d7caa5dbde8441f9197cc24e685fdff1e39e0",
+      "characters": 5415,
+      "reader_characters": 4046,
+      "validation": "passed",
+      "validation_errors": [],
+      "status": "pending_human_review",
+      "generation_mode": "official_evidence_adaptation",
+      "fresh_model_calls": 0,
+      "new_official_documents": 0,
+      "tier_credit": "none"
+    }
+  ],
+  "boundary": "Output re-groups existing official-source sample prose; M4 is required for fresh whole-chapter generation and human review."
+}
