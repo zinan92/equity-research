@@ -1,0 +1,120 @@
+{
+  "schema_version": "round7-issuer-profile-v1",
+  "profile_id": "round7-profile:000001.SZ:commercial-bank:v1",
+  "ticker": "000001.SZ",
+  "sector": "commercial_bank",
+  "issuer": {
+    "ticker": "000001.SZ",
+    "name": "平安银行股份有限公司",
+    "short_name": "平安银行"
+  },
+  "business_lines": [
+    "零售金融",
+    "批发金融",
+    "资金同业与金融市场",
+    "金融科技与数字化"
+  ],
+  "source_receipts": {
+    "narrative_receipt_hash": "5d605a0c080ea5e65e7ad8cf2931b151bb9654c955fe269d0f307787f037e6e0",
+    "financial_receipt_hash": "28ad57795209932e035c62d43e30c51bf9db2d2605a55073be1ce61dedd6d7be",
+    "financial_sequence_receipt_hash": "3a6574cceb6534eccc23921730a63c474ec1d870da565648a97d1e6046217eee"
+  },
+  "allowed_judgment_prefixes": [
+    "这一", "该", "上述", "公司", "公司自述", "年报自述", "若", "如果",
+    "现有证据", "当前证据", "基于", "收入", "成本", "业务", "治理", "技术",
+    "研发", "现金", "海外", "重大", "市场", "风险", "贷款", "存款", "利差",
+    "息差", "信用", "资本", "零售", "对公", "同业", "金融", "客户", "不良",
+    "拨备", "资产", "负债", "网点", "产品"
+  ],
+  "judgment_relations": [
+    "意味着", "表明", "取决于", "可能", "仍需", "判断", "证伪", "失效",
+    "有助于", "支持", "推动", "形成", "提升", "依赖", "要求"
+  ],
+  "research_outcomes": {
+    "one_line_positioning": ["收入", "盈利", "现金", "回报", "业务边界", "增长", "持续性", "贷款", "存款"],
+    "identity_founder_and_governance": ["治理", "控制", "授权", "继任", "决策", "关联", "风险", "资本"],
+    "technology_origin_and_development_history": ["研发", "技术", "产品", "效率", "商业化", "迭代", "竞争", "金融科技"],
+    "business_model_and_business_lines": ["客户", "贷款", "存款", "收入", "盈利", "回款", "成本", "业务", "利差", "风险"],
+    "financial_and_operating_time_series": [],
+    "moat_evidence_chain": ["护城河", "竞争", "研发", "技术", "客户", "成本", "效率", "份额", "风险", "持续性", "资本"],
+    "risks_counter_thesis_and_triggers": ["风险", "收入", "成本", "利润", "现金", "需求", "价格", "信用", "流动性", "资本", "拨备", "不良", "竞争"],
+    "research_conclusion_and_open_questions": ["结论", "收入", "成本", "利润", "现金", "增长", "持续性", "风险", "回报", "证据", "信用"]
+  },
+  "section_rules": {
+    "one_line_positioning": {
+      "target_characters": [140, 600],
+      "paths": ["总体经营情况", "公司基本情况", "公司信息", "发展战略", "主要业务"],
+      "keywords": ["零售", "批发", "贷款", "存款", "同业", "金融服务", "客户"],
+      "metrics": ["revenue"],
+      "narratives": 7,
+      "financials": 0,
+      "noise_terms": ["序号", "项目名称", "单位：人民币", "重要内容提示"]
+    },
+    "identity_founder_and_governance": {
+      "target_characters": [220, 1200],
+      "paths": ["公司信息", "公司治理", "董事", "监事", "高级管理人员", "股东单位"],
+      "keywords": ["董事长", "行长", "副行长", "控股股东", "股东大会", "独立董事", "监事会", "任职"],
+      "metrics": ["shares_outstanding", "share_capital_amount"],
+      "narratives": 8,
+      "financials": 2,
+      "noise_terms": ["序号", "项目名称", "单位：人民币", "报告期内上市公司"]
+    },
+    "technology_origin_and_development_history": {
+      "target_characters": [380, 1800],
+      "writing_instruction": "按披露期次排列科技或产品事件；每一行日期必须是有证据绑定的完整期次（至少四个字符），研究含义必须明确写成待验证机制，不得把公司自述的领先地位当作独立事实。",
+      "paths": ["发展战略", "核心竞争力", "信息科技风险", "总体经营情况", "公司治理"],
+      "keywords": ["科技", "数字", "研发", "系统", "产品", "创新", "转型", "金融服务"],
+      "metrics": ["capital_expenditure"],
+      "narratives": 8,
+      "financials": 2,
+      "noise_terms": ["序号", "项目名称", "单位：人民币"]
+    },
+    "business_model_and_business_lines": {
+      "target_characters": [520, 2400],
+      "writing_instruction": "按零售金融、批发金融、资金同业与金融市场、金融科技与数字化四条银行业务线组织。优先写贷款、存款、利差、手续费、客户与风险机制；不得引入不属于银行业务的行业术语。客户、分部收入或经营指标取不到时写 gap，不得把公司战略自述直接当作独立事实。",
+      "paths": ["总体经营情况", "发展战略", "公司信息", "业务分部", "主要业务"],
+      "keywords": ["零售", "批发", "贷款", "存款", "同业", "金融市场", "手续费", "客户", "业务分部"],
+      "metrics": ["revenue", "operating_profit"],
+      "narratives": 10,
+      "financials": 0,
+      "noise_terms": ["序号", "项目名称", "单位：人民币", "报告期内上市公司", "第二章 会计数据和财务指标", "零售金融业务分部涵盖", "批发金融业务分部涵盖"]
+    },
+    "financial_and_operating_time_series": {
+      "target_characters": [450, 2600],
+      "paths": ["总体经营情况", "业务分部", "风险披露", "财务报表主要项目附注"],
+      "keywords": ["收入", "利润", "现金流", "贷款", "存款", "资本充足", "不良", "拨备"],
+      "metrics": ["revenue", "operating_profit", "total_profit", "net_profit_parent", "operating_cash_flow", "total_assets", "total_liabilities", "capital_expenditure"],
+      "narratives": 10,
+      "financials": 18,
+      "noise_terms": ["序号", "项目名称", "单位：人民币"]
+    },
+    "moat_evidence_chain": {
+      "target_characters": [420, 2600],
+      "paths": ["核心竞争力", "发展战略", "总体经营情况", "公司信息", "风险管理"],
+      "keywords": ["科技", "数字", "客户", "零售", "风险管理", "资本", "产品", "服务", "渠道"],
+      "metrics": ["revenue", "operating_profit", "total_assets"],
+      "narratives": 10,
+      "financials": 5,
+      "noise_terms": ["序号", "项目名称", "单位：人民币"]
+    },
+    "risks_counter_thesis_and_triggers": {
+      "target_characters": [450, 2600],
+      "paths": ["风险管理", "风险披露", "信用风险", "流动性风险", "市场风险", "信息科技风险", "未来发展的展望"],
+      "keywords": ["风险", "信用", "流动性", "利率", "汇率", "资本", "不良", "拨备", "合规", "科技"],
+      "metrics": ["total_assets", "total_liabilities", "operating_cash_flow", "revenue", "operating_profit"],
+      "narratives": 10,
+      "financials": 8,
+      "noise_terms": ["序号", "项目名称", "单位：人民币"]
+    },
+    "research_conclusion_and_open_questions": {
+      "target_characters": [200, 1200],
+      "paths": ["总体经营情况", "核心竞争力", "风险管理", "风险披露", "业务分部", "公司信息"],
+      "keywords": ["零售", "贷款", "存款", "收入", "利润", "现金流", "资本", "风险", "客户"],
+      "metrics": ["revenue", "operating_profit", "total_profit", "operating_cash_flow", "total_assets", "total_liabilities"],
+      "narratives": 8,
+      "financials": 8,
+      "noise_terms": ["序号", "项目名称", "单位：人民币"]
+    }
+  },
+  "profile_hash": "5349ee53713f33e2155e8109d03a6c376a5b007914000cd5f0d1dfa2593764cd"
+}

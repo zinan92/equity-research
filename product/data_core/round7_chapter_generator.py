@@ -28,6 +28,7 @@ from .evidence_gate import (
 )
 from .research_degradation import assess_any_ticker
 from .round7_evidence import NUMBER, canonical_hash
+from .round7_profiles import profile_payload, section_rule
 
 
 GENERATOR_VERSION = "round7-whole-chapter-generator-v8"
@@ -533,8 +534,34 @@ def build_chapter_request(
     evidence: Sequence[Mapping[str, Any]],
     prior_chapter_context: Sequence[Mapping[str, Any]] = (),
     validation_feedback: Sequence[str] = (),
+    profile: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     layout = ROUND7_LAYOUTS[spec.section_id]
+    profile_rule = section_rule(
+        profile,
+        spec.section_id,
+        {
+            "writing_instruction": SECTION_WRITING_INSTRUCTIONS[spec.section_id],
+        },
+    )
+    writing_instruction = str(
+        profile_rule.get("writing_instruction")
+        or SECTION_WRITING_INSTRUCTIONS[spec.section_id]
+    )
+    target_characters = tuple(
+        profile_rule.get("target_characters") or spec.target_characters
+    )
+    profile_prefixes = tuple(
+        profile.get("allowed_judgment_prefixes") or JUDGMENT_ALLOWED_PREFIXES
+        if profile
+        else JUDGMENT_ALLOWED_PREFIXES
+    )
+    profile_outcomes = tuple(
+        profile.get("research_outcomes", {}).get(spec.section_id)
+        or SECTION_RESEARCH_OUTCOMES[spec.section_id]
+        if profile
+        else SECTION_RESEARCH_OUTCOMES[spec.section_id]
+    )
     model_evidence = []
     for item in evidence:
         projected = {
@@ -576,7 +603,7 @@ def build_chapter_request(
             )
         model_evidence.append(projected)
     minimum_rows = layout["minimum_rows"]
-    minimum_characters = spec.target_characters[0]
+    minimum_characters = target_characters[0]
     if spec.section_id == "financial_and_operating_time_series":
         available_financial_rows = sum(1 for item in evidence if item.get("kind") == "financial")
         # A sparse official filing must remain visibly partial rather than
@@ -590,11 +617,10 @@ def build_chapter_request(
         "section_id": spec.section_id,
         "section_title": spec.title,
         "section_purpose": spec.purpose,
-        "section_writing_instruction": SECTION_WRITING_INSTRUCTIONS[
-            spec.section_id
-        ],
+        "section_writing_instruction": writing_instruction,
         "issuer": dict(issuer),
-        "target_characters": list(spec.target_characters),
+        "issuer_profile": profile_payload(profile),
+        "target_characters": list(target_characters),
         "layout": {
             "mode": layout["mode"],
             "minimum_rows": minimum_rows,
@@ -614,7 +640,7 @@ def build_chapter_request(
             "minimum_rows": minimum_rows,
             "maximum_rows": layout["maximum_rows"],
             "minimum_characters": minimum_characters,
-            "maximum_characters": spec.target_characters[1],
+            "maximum_characters": target_characters[1],
             "self_report_evidence_ids": [
                 item["evidence_id"] for item in evidence if item.get("self_report")
             ],
@@ -625,12 +651,10 @@ def build_chapter_request(
                 == "research_conclusion_and_open_questions"
                 else 1
             ),
-            "allowed_judgment_prefixes": list(JUDGMENT_ALLOWED_PREFIXES),
+            "allowed_judgment_prefixes": list(profile_prefixes),
             "investment_execution_terms": list(INVESTMENT_EXECUTION_TERMS),
             "judgment_relations": list(JUDGMENT_RELATIONS),
-            "research_outcomes": list(
-                SECTION_RESEARCH_OUTCOMES[spec.section_id]
-            ),
+            "research_outcomes": list(profile_outcomes),
         },
         "validation_feedback": list(validation_feedback),
         "generator_version": GENERATOR_VERSION,
@@ -1429,6 +1453,7 @@ def generate_chapter(
     max_attempts: int = 20,
     transport: Any = None,
     semantic_transport: Any = None,
+    profile: Mapping[str, Any] | None = None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     feedback: list[str] = []
     receipts: list[dict[str, Any]] = []
@@ -1439,6 +1464,7 @@ def generate_chapter(
             evidence=evidence,
             prior_chapter_context=prior_chapter_context,
             validation_feedback=feedback,
+            profile=profile,
         )
         # The conclusion chapter is intentionally compact: its prompt carries
         # prior chapter context, so a smaller completion budget avoids provider
@@ -1700,6 +1726,8 @@ def compile_dossier(
     page_facts: Sequence[Mapping[str, Any]],
     provider_receipts: Sequence[Mapping[str, Any]],
     source_receipts: Mapping[str, Any],
+    profile: Mapping[str, Any] | None = None,
+    known_at: str = KNOWN_AT,
 ) -> dict[str, Any]:
     if [item["section_id"] for item in chapters] != [
         item.section_id for item in RESEARCH_SECTION_SPECS_V3[:-1]
@@ -1710,9 +1738,9 @@ def compile_dossier(
         item.validate()
     evidence_set = build_evidence_set(
         ticker=ticker,
-        candidates=(_candidate(ticker, materialized, known_at=KNOWN_AT),),
+        candidates=(_candidate(ticker, materialized, known_at=known_at),),
         policy=EvidenceGatePolicy(
-            as_of=KNOWN_AT,
+            as_of=known_at,
             requirements=(EvidenceRequirement("filings", min_primary=1),),
         ),
     )
@@ -1791,6 +1819,7 @@ def compile_dossier(
         "accepted_model_calls": sum(
             bool(item.get("accepted")) for item in active_provider_receipts
         ),
+        "accepted_model_request_ids": list(accepted_ids),
         "all_model_calls": len(active_provider_receipts),
         "accepted_semantic_audits": sum(
             (item.get("semantic_audit") or {}).get("verdict") == "pass"
@@ -1801,7 +1830,15 @@ def compile_dossier(
             item.get("semantic_audit") is not None
             for item in active_provider_receipts
         ),
+        "accepted_semantic_audit_request_ids": [
+            (item.get("semantic_audit") or {}).get("request_id")
+            for item in active_provider_receipts
+            if item.get("accepted")
+            and (item.get("semantic_audit") or {}).get("request_id")
+        ],
         "human_review_status": "pending_human_review",
+        "known_at": known_at,
+        "issuer_profile_hash": (profile or {}).get("profile_hash"),
     }
     inputs = _section_inputs(
         issuer=issuer,
@@ -1817,6 +1854,32 @@ def compile_dossier(
         structure_only=False,
         evidence_set=evidence_set,
     )
+    contract_plain = _plain(asdict(contract))
+    contract_sections = list(contract_plain.get("sections") or [])
+    run_receipt["section_contract_statuses"] = [
+        {
+            "section_id": item.get("section_id"),
+            "status": item.get("status"),
+            "status_reason": item.get("status_reason"),
+        }
+        for item in contract_sections
+    ]
+    run_receipt["typed_gaps"] = [
+        {
+            "section_id": item.get("section_id"),
+            "status": item.get("status"),
+            "status_reason": item.get("status_reason"),
+            "missing_required": list(item.get("missing_required") or []),
+            "missing_optional": list(item.get("missing_optional") or []),
+            "pending_judgment_inputs": list(
+                item.get("pending_judgment_inputs") or []
+            ),
+        }
+        for item in contract_sections
+        if item.get("status") != "full"
+        or item.get("missing_required")
+        or item.get("missing_optional")
+    ]
     degradation = assess_any_ticker(
         ticker,
         evidence_set=evidence_set,
@@ -1828,6 +1891,7 @@ def compile_dossier(
         "data_kind": "real",
         "ticker": ticker,
         "issuer": dict(issuer),
+        "issuer_profile": dict(profile) if profile else None,
         "review_status": "pending_human_review",
         "unreviewed_chapter_count": len(chapters),
         "chapters": [dict(item) for item in chapters],
@@ -1843,7 +1907,7 @@ def compile_dossier(
                 for evidence_id in chapter["evidence_ids"]
             )
         },
-        "section_contract": _plain(asdict(contract)),
+        "section_contract": contract_plain,
         "degradation": _plain(asdict(degradation)),
         "decision": _plain(asdict(decision)),
         "metrics": {

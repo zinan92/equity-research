@@ -15,7 +15,11 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from v4_dossier_contract import V4_SCHEMA_VERSION, assert_valid_v4_dossier, validate_v4_dossier
-from v4_official_adapter import OfficialV4Output, adapt_official_sample
+from v4_official_adapter import (
+    OfficialV4Output,
+    adapt_official_sample,
+    adapt_round7_dossier,
+)
 
 
 GENERATOR_VERSION = "park-v4-whole-dossier-generator-v1"
@@ -93,6 +97,7 @@ def publish_completed_dossier(
         "characters": len(markdown),
         "reader_characters": _reader_characters(markdown),
         "tier_credit": "none",
+        "upstream": manifest.get("upstream"),
         "boundary": "V4 accepts one complete dossier; unreviewed prose remains pending human review and grants no Tier/action credit.",
     }
     (output_dir / "receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -107,6 +112,9 @@ def generate_v4_dossier(
     official_sample_path: Path | None = None,
     narrative_receipt_path: Path | None = None,
     financial_receipt_path: Path | None = None,
+    round7_dossier_path: Path | None = None,
+    round7_markdown_path: Path | None = None,
+    round7_profile_path: Path | None = None,
 ) -> dict[str, Any]:
     """Generate/package one V4 dossier through the sole public entry point."""
     if completed_markdown_path is not None:
@@ -118,6 +126,60 @@ def generate_v4_dossier(
             evidence_manifest_path=evidence_manifest_path,
             output_dir=output_dir,
         )
+    if round7_dossier_path is not None:
+        if round7_profile_path is None:
+            raise ValueError("round7_profile_path is required with round7_dossier_path")
+        if round7_markdown_path is None:
+            raise ValueError("round7_markdown_path is required with round7_dossier_path")
+        text, record = adapt_round7_dossier(
+            ticker=ticker,
+            dossier_path=round7_dossier_path,
+            markdown_path=round7_markdown_path,
+            profile_path=round7_profile_path,
+        )
+        errors = tuple(validate_v4_dossier(text))
+        if errors:
+            raise ValueError("generated Round 7 V4 output failed validation: " + "; ".join(errors))
+        output_dir.mkdir(parents=True, exist_ok=True)
+        output_path = output_dir / f"{ticker.upper()}.md"
+        output_path.write_text(text, encoding="utf-8")
+        record["output_path"] = str(output_path)
+        record["output_sha256"] = _sha_path(output_path)
+        receipt = {
+            "schema_version": RECEIPT_SCHEMA_VERSION,
+            "contract_schema_version": V4_SCHEMA_VERSION,
+            "generator_version": GENERATOR_VERSION,
+            "generation_mode": "round7_generated_whole_dossier_adaptation",
+            "ticker": ticker.upper(),
+            "status": record["status"],
+            "is_live_research": False,
+            "fresh_model_calls": record["fresh_model_calls"],
+            "new_official_documents": 0,
+            "source_urls": record["source_urls"],
+            "output": record,
+            "upstream": {
+                "round7_run_id": record["round7_run_id"],
+                "round7_dossier_content_hash": record["round7_dossier_content_hash"],
+                "profile_hash": record["profile_hash"],
+                "source_receipts": record["source_receipts"],
+                "accepted_model_request_ids": record["accepted_model_request_ids"],
+                "accepted_semantic_audit_request_ids": record[
+                    "accepted_semantic_audit_request_ids"
+                ],
+                "accepted_semantic_audit_count": record[
+                    "accepted_semantic_audit_count"
+                ],
+                "all_semantic_audit_count": record["all_semantic_audit_count"],
+                "section_contract_statuses": record["section_contract_statuses"],
+                "typed_gaps": record["typed_gaps"],
+            },
+            "output_path": str(output_path),
+            "output_sha256": _sha_path(output_path),
+            "tier_credit": "none",
+            "boundary": "Round 7 is the sole whole-chapter generator; V4 only maps headings and preserves its official evidence/request provenance.",
+        }
+        (output_dir / "receipt.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        return receipt
     required = (official_sample_path, narrative_receipt_path, financial_receipt_path)
     if any(value is None for value in required):
         raise ValueError("provide either a complete dossier or all official adapter inputs")

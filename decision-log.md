@@ -1,5 +1,29 @@
 # Decision Log
 
+## 2026-08-02 · V4-N2 generic issuer-profiled Round 7 run (Issue #684)
+
+- Decision: reuse the existing Round 7 whole-chapter DeepSeek transport for one
+  issuer profile (`000001.SZ` / 平安银行), then map the completed document
+  through `generate_v4_dossier()`. The runner accepts a profile, official
+  narrative/financial receipt paths and an explicit `known_at`; profile hash,
+  source receipt hashes, accepted request IDs, semantic audit IDs/counts,
+  section statuses and typed gaps survive the V4 receipt.
+- Why: the approved quality unit is one complete Round 7 chapter/document. A
+  bank needs different evidence paths and business vocabulary, but it must not
+  trigger a new field writer, a hard-coded ticker branch, or a relaxed Tier/B6
+  gate.
+- Evidence: `docs/evidence/v4-n2/000001.SZ-profile.json`, the upstream
+  `round7-run:fcbb79dc8cbd9f843d069279` receipt (hash
+  `688109481f1b018b2bf57fb7be884d0a37f1acb433414922939c90948b445b01`), the
+  Round 7 verifier output, and `artifacts/v4-reports/000001.SZ/receipt.json`.
+- Gotchas: N1's extractor exposed a repeatable bank table/header concatenation;
+  profile/global noise filters exclude that malformed span before generation,
+  without rewriting official text into a replacement fact. The conclusion
+  receives only a bounded prior-chapter context because sending every prior
+  financial evidence row makes deterministic direction/row-count validation
+  fail. Eight chapters remain `pending_human_review`, so the run is Tier B /
+  `no_action` and cannot unlock target price, position range or action.
+
 ## 2026-08-02 · V4 expansion remains an honest baseline (Issue #678)
 
 - Decision: evaluate the first 20 tickers from the real 100-ticker acceptance receipt without manufacturing V4 dossiers. Keep two official-bound dossiers and three replay-only samples as the V4 baseline; leave every blocked ticker explicit.

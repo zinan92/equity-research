@@ -9,6 +9,39 @@
   [`daily/YYYY-MM-DD.md`](daily/YYYY-MM-DD.md) as the format template.
 - Durable rationale and traps: [`decision-log.md`](decision-log.md).
 
+## 2026-08-02 · V4-N2 issuer-profiled whole dossier (Issue #684)
+
+Now: `000001.SZ` (平安银行) has a persistent Round 7 whole-dossier run and a
+V4 publication produced through the single entry point.  The run accepted 8
+whole-chapter DeepSeek calls plus 8 semantic audits, with 6,566 generated
+research characters and 10,182 Round 7 chapter-body characters.  All eight
+research chapters are `PARTIAL / pending_judgment_review`; production record
+is `FULL`; Tier remains B / `no_action`, with `action`, `target_price` and
+`position_range` blocked.  The upstream run is
+`round7-run:fcbb79dc8cbd9f843d069279`, bound to profile hash
+`5349ee53713f33e2155e8109d03a6c376a5b007914000cd5f0d1dfa2593764cd`, the N1
+official narrative receipt
+`e4-official-narrative-evidence-v1:5d605a0c080ea5e65e7ad8cf2931b151bb9654c955fe269d0f307787f037e6e0`,
+and page-evidence receipt
+`28ad57795209932e035c62d43e30c51bf9db2d2605a55073be1ce61dedd6d7be`.
+
+Persistent outputs are
+[`artifacts/round7-dossiers/000001.SZ.md`](artifacts/round7-dossiers/000001.SZ.md),
+[`artifacts/round7-dossiers/000001.SZ.receipt.json`](artifacts/round7-dossiers/000001.SZ.receipt.json),
+[`artifacts/v4-reports/000001.SZ/000001.SZ.md`](artifacts/v4-reports/000001.SZ/000001.SZ.md),
+and [`artifacts/v4-reports/000001.SZ/report.html`](artifacts/v4-reports/000001.SZ/report.html).
+The V4 index now lists this dossier alongside CATL and Moutai.  The output is
+real official-source material but remains pending human review; no Tier/action
+credit is created.  Profile noise rules removed the extracted bank table-header
+concatenation from the generated input, and the conclusion request carries a
+bounded two-block-per-prior-chapter context rather than an unbounded evidence
+dump.  The receipt preserves all accepted model request IDs, semantic-audit
+IDs/counts, section statuses and typed gaps for replay.
+
+Next: keep the generic profile/receipt path ready for the next owner-selected
+issuer.  Do not claim 20/100 expansion coverage from this single-company run;
+do not reintroduce field-level generation or the retired 18-section counts.
+
 ## 2026-08-02 · V4-N1 official evidence packet (Issue #682)
 
 Now: the first expansion evidence packet is replayable for 000001.SZ, 000002.SZ

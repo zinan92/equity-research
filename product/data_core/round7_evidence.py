@@ -285,6 +285,9 @@ def _sentence_rows(narratives: Mapping[str, Any]) -> list[dict[str, Any]]:
                     "公司需遵守",
                     "营业收入 营业成本",
                     "任职人员姓名",
+                    "第二章 会计数据和财务指标",
+                    "零售金融业务分部涵盖",
+                    "批发金融业务分部涵盖",
                 )
             )
             if (
@@ -413,6 +416,7 @@ def _score_narrative(
     *,
     paths: Iterable[str],
     keywords: Iterable[str],
+    noise_terms: Iterable[str] = (),
 ) -> int:
     path = str(row.get("section_path") or "")
     text = str(row.get("text") or "")
@@ -423,6 +427,7 @@ def _score_narrative(
         + 4 * (text.count("公司") > 4)
         + 4 * ("序号" in text or "报告期内上市公司" in text)
     )
+    profile_noise = sum(6 for term in noise_terms if term and term in text)
     return (
         sum(4 for term in paths if term in path)
         + sum(2 for term in keywords if term in text)
@@ -431,6 +436,7 @@ def _score_narrative(
         - (4 if len(text) > 300 else 0)
         - min(len(NUMBER.findall(text)) // 4, 4)
         - extraction_noise
+        - profile_noise
     )
 
 
@@ -446,12 +452,24 @@ def select_section_evidence(
     registry: Mapping[str, Mapping[str, Any]],
     *,
     section_id: str,
+    profile: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
-    rules = SECTION_EVIDENCE_RULES[section_id]
+    try:
+        from .round7_profiles import section_rule
+    except ImportError:  # pragma: no cover - direct script compatibility
+        from round7_profiles import section_rule
+    rules = section_rule(profile, section_id, SECTION_EVIDENCE_RULES[section_id])
+    noise_terms = tuple(str(item) for item in rules.get("noise_terms", ()) if item)
     narratives = [
-        (item, _score_narrative(item, paths=rules["paths"], keywords=rules["keywords"]))
+        (item, _score_narrative(
+            item,
+            paths=rules["paths"],
+            keywords=rules["keywords"],
+            noise_terms=noise_terms,
+        ))
         for item in registry.values()
         if item.get("kind") == "narrative"
+        and not any(term in str(item.get("text") or "") for term in noise_terms)
         and not (
             section_id
             in {

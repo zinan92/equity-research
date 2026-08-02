@@ -20,6 +20,7 @@ from data_core.round7_chapter_generator import (  # noqa: E402
     validate_chapter,
 )
 from data_core.round7_evidence import OFFICIAL_HOSTS, canonical_hash  # noqa: E402
+from data_core.round7_profiles import profile_hash  # noqa: E402
 from data_core.round7_north_star import verify_round7_document  # noqa: E402
 from report_contract import RESEARCH_SECTION_SPECS_V3  # noqa: E402
 
@@ -46,6 +47,34 @@ def verify(ticker: str, directory: Path) -> dict:
         problems.append("dossier schema mismatch")
     if dossier.get("ticker") != ticker or dossier.get("data_kind") != "real":
         problems.append("dossier identity is not real and ticker-bound")
+    issuer_profile = dossier.get("issuer_profile")
+    if issuer_profile is not None:
+        if issuer_profile.get("profile_hash") != profile_hash(issuer_profile):
+            problems.append("issuer profile hash mismatch")
+        if dossier.get("production_record", {}).get("issuer_profile_hash") != issuer_profile.get("profile_hash"):
+            problems.append("production record profile hash mismatch")
+        if dossier.get("source_receipts", {}).get("issuer_profile_hash") != issuer_profile.get("profile_hash"):
+            problems.append("source receipt profile hash mismatch")
+    production = dossier.get("production_record", {})
+    source_receipts = dossier.get("source_receipts", {})
+    if issuer_profile is not None:
+        known_at = production.get("known_at")
+        if not known_at:
+            problems.append("profiled dossier is missing explicit known_at")
+        if source_receipts.get("as_of") != known_at:
+            problems.append("source receipt cutoff does not match production known_at")
+        expected_sources = issuer_profile.get("source_receipts") or {}
+        actual_sources = {
+            "narrative_receipt_hash": source_receipts.get(
+                "official_narrative_receipt_hash"
+            ),
+            "financial_receipt_hash": source_receipts.get(
+                "financial_page_evidence_receipt_hash"
+            ),
+        }
+        for key, expected in expected_sources.items():
+            if key in actual_sources and actual_sources[key] != expected:
+                problems.append(f"profile source receipt binding mismatch: {key}")
     expected_receipt_hash = canonical_hash(
         {key: value for key, value in dossier.items() if key != "receipt_hash"}
     )
@@ -99,6 +128,7 @@ def verify(ticker: str, directory: Path) -> dict:
                 if spec.section_id == "research_conclusion_and_open_questions"
                 else ()
             ),
+            profile=issuer_profile,
         )
         chapter_problems = validate_chapter(
             {

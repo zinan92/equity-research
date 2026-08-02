@@ -5,8 +5,20 @@
   "source_receipt": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/receipt.json",
   "source_receipt_sha256": "59e4388641573dbd2f3bfe92023f6d51a18bdba6a447c1de6b5153635f8b8780",
   "index_path": "artifacts/v4-reports/index.html",
-  "index_sha256": "65ded8c5b1ed376ea48019d9c8dd2c46289d4e20775c7dd45c96911b2e09f232",
+  "index_sha256": "2f51f46683d25d93a7a96264c3f78b417b14936b4a2eddc3f10a1f933dee55ea",
   "companies": [
+    {
+      "ticker": "000001.SZ",
+      "markdown_path": "artifacts/v4-reports/000001.SZ/000001.SZ.md",
+      "html_path": "artifacts/v4-reports/000001.SZ/report.html",
+      "relative_html": "000001.SZ/report.html",
+      "markdown_sha256": "b5ef67265197516f7db1738330ce7c8503b1ec92c3078318f924776e62dffa3c",
+      "html_sha256": "ade21a7f5c64a03edbecaa216ce51d4c4d1802d82d68a11c917603f90456237c",
+      "reader_characters": 12164,
+      "source_count": 2,
+      "status": "pending_human_review",
+      "tier_credit": "none"
+    },
     {
       "ticker": "300750.SZ",
       "markdown_path": "artifacts/v4-reports/300750.SZ/300750.SZ.md",
@@ -36,5 +48,8 @@
   "new_official_documents": 0,
   "is_live_research": false,
   "tier_credit": "none",
-  "boundary": "Reader publication only; pending human review and no investment action fields."
+  "boundary": "Reader publication only; pending human review and no investment action fields.",
+  "additional_whole_dossier_receipts": [
+    "artifacts/v4-reports/000001.SZ/receipt.json"
+  ]
 }
