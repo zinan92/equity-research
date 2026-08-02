@@ -1,0 +1,557 @@
+{
+  "schema_version": "park-v4-expansion-acceptance-v1",
+  "status": "honest_baseline_not_ready",
+  "contract": "park-v4-dossier-v1",
+  "old_18_section_statistics": {
+    "status": "void_after_contract_replacement",
+    "values_must_not_be_reused": true
+  },
+  "v4_baseline": {
+    "official_bound_dossiers": [
+      {
+        "ticker": "300750.SZ",
+        "path": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/300750.SZ.md",
+        "sha256": "d78039fe33c3bacac9eac7ac97d1459a5419e9c9b6d5044226d70ec7e6bd21e5",
+        "validation": "passed",
+        "errors": []
+      },
+      {
+        "ticker": "600519.SH",
+        "path": "/Users/wendy/Documents/投研面板/docs/evidence/v4-m3-official/600519.SH.md",
+        "sha256": "6c76f3164af4efcfab3f1614ac9d7caa5dbde8441f9197cc24e685fdff1e39e0",
+        "validation": "passed",
+        "errors": []
+      }
+    ],
+    "official_bound_count": 2,
+    "replay_only_count": 3,
+    "publication_index": "artifacts/v4-reports/index.html",
+    "human_review": "pending_human_review",
+    "tier_credit": "none"
+  },
+  "real_100_ticker_gate": {
+    "thresholds": {
+      "identity": 100,
+      "report_models": 95,
+      "spot_audits": 20,
+      "tier_a_or_b": 80
+    },
+    "actual": {
+      "identity": 100,
+      "report_models": 0,
+      "tier_a_or_b": 0,
+      "numeric_page_audits": 0
+    },
+    "gap": {
+      "identity": 0,
+      "report_models": 95,
+      "tier_a_or_b": 80
+    },
+    "source_receipt": "/Users/wendy/Documents/投研面板/artifacts/evidence/e4-l2-m7-acceptance.json",
+    "source_receipt_sha256": "58e3ebcf23ae7a03f7b029a4bb235c484c8d3a9383803ab5c431cb5cd4ccb48d",
+    "failure_taxonomy": {
+      "000001.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000002.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000006.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000007.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000008.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000009.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000010.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000011.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000012.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000014.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000016.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000017.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000019.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000020.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000021.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000025.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000026.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000027.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000028.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000029.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000030.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000031.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000032.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000034.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000035.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000036.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000037.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000039.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000042.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000045.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000048.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000049.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000050.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "000055.SZ": [
+        "missing_canonical_evidence"
+      ],
+      "600000.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600004.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600006.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600007.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600008.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600009.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600010.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600011.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600012.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600015.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600016.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600017.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600018.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600019.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600020.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600021.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600022.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600023.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600025.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600026.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600027.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600028.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600029.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600030.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600031.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600032.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600033.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600035.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600036.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600037.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600038.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600039.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600048.SH": [
+        "missing_canonical_evidence"
+      ],
+      "600050.SH": [
+        "missing_canonical_evidence"
+      ],
+      "920000.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920001.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920002.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920003.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920005.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920006.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920007.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920008.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920009.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920010.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920011.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920012.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920014.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920015.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920016.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920017.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920018.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920019.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920020.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920021.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920022.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920023.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920026.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920027.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920028.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920029.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920030.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920033.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920035.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920036.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920037.BJ": [
+        "missing_canonical_evidence"
+      ],
+      "920039.BJ": [
+        "missing_canonical_evidence"
+      ]
+    }
+  },
+  "twenty_ticker_slice": {
+    "selection": "first 20 sorted tickers from the real 100-ticker acceptance receipt",
+    "count": 20,
+    "rows": [
+      {
+        "ticker": "000001.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000002.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000006.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000007.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000008.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000009.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000010.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000011.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000012.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000014.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000016.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000017.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000019.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000020.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000021.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000025.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000026.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000027.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000028.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      },
+      {
+        "ticker": "000029.SZ",
+        "data_kind": "missing",
+        "tier": null,
+        "blockers": [
+          "missing_canonical_evidence"
+        ],
+        "report_model_hash": null
+      }
+    ],
+    "all_have_explicit_blocker": true
+  },
+  "independent_page_audit_state": {
+    "assigned": 7,
+    "coverage_gaps": 13,
+    "completed_human_audits": 0,
+    "counts_as_issue_218_credit": false,
+    "receipt": "/Users/wendy/Documents/投研面板/artifacts/e4-reports/e4-l1-m6-spot-audit-assignments.json"
+  },
+  "truth_boundary": {
+    "no_fabricated_v4_dossiers": true,
+    "no_threshold_relaxation": true,
+    "no_unreviewed_approval": true,
+    "no_tier_a_credit": true,
+    "is_live_research": false
+  },
+  "receipt_hash": "abcf895cf3d9c96ea763a3918c39fd10bb79671c3fdf2e329a9844869f0b1c42"
+}
