@@ -60,7 +60,9 @@ def build(root: Path, tickers: tuple[str, ...]) -> dict[str, Any]:
         iteration_dir = out / "iterations" / str(iteration)
         dossier = _read(out / "report.json")
         machine = validate_dossier(dossier, packet)
-        qa_path = iteration_dir / "independent-qa-recheck.json"
+        qa_path = iteration_dir / "independent-qa-filtered.json"
+        if not qa_path.exists():
+            qa_path = iteration_dir / "independent-qa-recheck.json"
         if not qa_path.exists():
             qa_path = iteration_dir / "independent-qa.json"
         qa = _read(qa_path)

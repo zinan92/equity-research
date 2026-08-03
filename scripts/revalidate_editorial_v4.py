@@ -57,6 +57,20 @@ def main() -> None:
     machine = validate_dossier(dossier, packet)
     filtered = _filter_false_positive_blockers(raw_qa, dossier, packet)
     status = "passed" if machine.get("status") == "passed" and not filtered else "needs_review"
+    filtered_qa = dict(raw_qa)
+    filtered_qa.update({
+        "raw_status": raw_status,
+        "raw_blockers": raw_blockers,
+        "status": "passed" if not filtered else "failed",
+        "blockers": filtered,
+        "filtered_blockers": filtered,
+        "filter_version": QA_FILTER_VERSION,
+        "filtered_from": qa_path.name,
+        "filtered_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+    })
+    (iteration_dir / "independent-qa-filtered.json").write_text(
+        json.dumps(filtered_qa, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     shutil.copyfile(iteration_dir / "report.json", out / "report.json")
     render_dossier(dossier, packet, out)
     receipt.update({
@@ -77,7 +91,7 @@ def main() -> None:
         "revalidated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
     })
     receipt_path.write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"ticker": ticker, "iteration": iteration, "final_status": status, "machine_status": machine.get("status"), "raw_qa_status": raw_qa.get("status"), "filtered_blockers": len(filtered), "filter_version": QA_FILTER_VERSION}, ensure_ascii=False))
+    print(json.dumps({"ticker": ticker, "iteration": iteration, "final_status": status, "machine_status": machine.get("status"), "raw_qa_status": raw_status, "filtered_blockers": len(filtered), "filter_version": QA_FILTER_VERSION}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

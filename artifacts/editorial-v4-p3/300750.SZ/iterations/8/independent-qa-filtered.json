@@ -1,0 +1,136 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "财务数据引用准确，营收和净利润数字与证据包完全一致，且同期对比计算正确。",
+    "报告结构清晰，包含定位、团队、时间线、技术、财务、风险和大白话结论，覆盖全面。",
+    "多处明确标注了信息缺口（如G-01、G-02等），并指出依赖公司自述，体现了审慎态度。",
+    "大白话结论（J-40）带有明确的 falsifier 和 judgment marker，符合锋利判断的要求。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到 document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑/持平及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "爱牛式判断有 [J] marker、refs 和 falsifier",
+    "报告包含资产定位、财务因果链、风险证伪和白话结论",
+    "缺口明确且基于 evidence packet 的 gaps"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01 引用 evidence_id catl_2025_annual_cninfo:narrative:20:6，但该证据仅含公司自述，未提供独立第三方数据支撑“绝对龙头”和“持续拉大领先身位”的判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-02 正文写“公司年报披露，其动力与储能电池市占率已多年全球领跑”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "JUDGMENT_WITHOUT_MARKER",
+      "message": "J-03 判断“彰显其成本转嫁与定价能力”未在 claims 中标注 [J-03] marker，且 falsifier 为空，不符合 judgment 规范。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-10 引用 evidence catl_2025_annual_cninfo:narrative:20:6 等，但证据中无“精密制造杂货铺”表述，且未提供独立验证，判断缺乏直接支撑。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-30 正文写“公司年报披露，拥有及申请的国内外专利总数达54,538项”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-33 正文写“公司年报披露，电芯单体失效率达DPPB级”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-33",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:15",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-34 正文写“公司年报披露，拥有行业最多的‘灯塔工厂’及唯一‘可持续灯塔工厂’”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-34",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-36 正文写“公司年报披露，率先实现核心运营碳中和及废旧电池大规模回收利用”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-36",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "JUDGMENT_WITHOUT_MARKER",
+      "message": "J-03 判断“彰显其成本转嫁与定价能力”未在 claims 中标注 [J-03] marker，且 falsifier 为空，不符合 judgment 规范。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    }
+  ],
+  "request_hash": "6f7854b1dab64e113404c3cccf55d315b69347cbff98a49423f5161fee70b2a9",
+  "response_hash": "9033275486710169e4e6b744a9646a0d939146d43a9317bf4d52efe947ccc7c6",
+  "run_id": "editorial-v4-qa:bed56bf6-623d-414a-985d-d64296788638",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "bed56bf6-623d-414a-985d-d64296788638",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:41:44+00:00",
+  "raw_status": "failed",
+  "filtered_blockers": [],
+  "filtered_from": "independent-qa.json",
+  "filtered_at": "2026-08-03T12:04:04+00:00"
+}

@@ -588,3 +588,17 @@ Next: Park reviews the five persistent Markdown/HTML dossiers and page anchors;
 only a human-review receipt can move any text toward a canonical publication
 surface.  Future issuers use the same packet → one whole-report DeepSeek call →
 machine QA → independent QA → repair/recheck → aggregate receipt path.
+
+## 2026-08-03 · V4-P3 receipt-consistency verifier (Issue #696)
+
+Now: the five-report acceptance state is self-describing.  Each final
+iteration has raw DeepSeek QA plus a separate `independent-qa-filtered.json`;
+[`completion-audit.json`](artifacts/editorial-v4-p3/completion-audit.json)
+re-runs packet identity, machine contract, section/length, aggressive `[J]`
+voice, refs/falsifiers, official-source, model, review-only and persistent-path
+checks, with `all_passed=true`.
+
+Next: future five-company batches must run
+`python3 scripts/verify_editorial_v4_p3.py` after generation/revalidation;
+never interpret a raw QA blocker count as the filtered final status, and never
+use this editorial pass as Tier/action/publication approval.

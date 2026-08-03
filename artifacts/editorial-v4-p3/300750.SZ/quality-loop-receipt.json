@@ -210,7 +210,7 @@
   "action_state": "blocked",
   "no_tier_credit": true,
   "no_publication_credit": true,
-  "revalidated_at": "2026-08-03T11:50:35+00:00",
+  "revalidated_at": "2026-08-03T12:04:04+00:00",
   "independent_qa_run_id": "editorial-v4-qa:bed56bf6-623d-414a-985d-d64296788638",
   "independent_qa_blockers": [
     {
