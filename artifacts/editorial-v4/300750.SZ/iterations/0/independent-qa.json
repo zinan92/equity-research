@@ -1,0 +1,129 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 未在正文中显式标注“公司披露/年报自述”，将公司应对策略当作事实陈述。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-07 未在正文中显式标注“公司披露/年报自述”，将政策引用当作独立事实。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 未在正文中显式标注“公司披露/年报自述”，将产品发布当作独立事实。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "风险与点评结尾句“综合而言…最大考验”为判断，但未标注 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 为判断，但未标注任何 [J-xx] 或 [F-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "正文中“17%”“42%”“52%”“49%”等百分比未绑定到具体 claim_id。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "action_language",
+      "message": "正文出现“目标价”一词，违反 no_valuation_or_action 规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据与证据包完全一致，增长幅度计算准确。",
+    "公司自述类事实（如专利数、售后服务网络）均标注了来源。",
+    "判断类声明（J-01 至 J-05）均带有 falsifier 和证据引用。",
+    "缺口声明（G-01 至 G-07）合理反映了证据包缺失内容。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至证据包",
+    "同期对比数据明确标注增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/估值等写成事实",
+    "爱牛式判断允许但需标记 [J-xx] 并带 falsifier",
+    "报告包含资产定位、因果链、白话结论",
+    "缺口基于证据包 gaps 合理声明"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 未在正文中显式标注“公司披露/年报自述”，将公司应对策略当作事实陈述。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-07 未在正文中显式标注“公司披露/年报自述”，将政策引用当作独立事实。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 未在正文中显式标注“公司披露/年报自述”，将产品发布当作独立事实。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "风险与点评结尾句“综合而言…最大考验”为判断，但未标注 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 为判断，但未标注任何 [J-xx] 或 [F-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "正文中“17%”“42%”“52%”“49%”等百分比未绑定到具体 claim_id。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "action_language",
+      "message": "正文出现“目标价”一词，违反 no_valuation_or_action 规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "de2b8856bfc099ac904dd14fdf8c0026219bd3787ba8c0c8db1bc97028436881",
+  "response_hash": "ea4004e0a8224319155ed53e9e1a2e0a0a8179dcef8e05818b9ce4a1e37a9353",
+  "run_id": "editorial-v4-qa:aeab3e54-c978-4322-843d-19d1ee57b694",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "aeab3e54-c978-4322-843d-19d1ee57b694",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:32:29+00:00"
+}

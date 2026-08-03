@@ -1,0 +1,101 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:5"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:3"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:17:18"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:9"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:37:39"
+      ]
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ]
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:8"
+      ]
+    }
+  ],
+  "strengths": [
+    "All numeric facts (F-05, F-06) are correctly traced to evidence_ids with deterministic derived metrics.",
+    "Judgment claims (J-01, J-02) include falsifiers and are clearly labeled as judgments.",
+    "Gap claims (G-01 to G-06) correctly identify missing inputs and do not assert facts without evidence.",
+    "No valuation, price target, or action recommendation is present.",
+    "No conditional conclusions are presented as historical actuals."
+  ],
+  "checked_rules": [
+    "Every number/fact traceable to document_id, page, quoted_anchor",
+    "YoY comparisons explicitly state direction and magnitude",
+    "Issuer self-reports explicitly marked as '年报自述/披露' in prose",
+    "No historical actuals framed as conditional conclusions",
+    "No unverified customer, order, ranking, share, moat, valuation, price target, or action advice",
+    "Presence of asset positioning, financial causality, risk falsification, and plain-language conclusion",
+    "Gaps clearly stated with next-step verification, not filler sentences"
+  ],
+  "request_hash": "f498ac25ca464b9f26063c09ec9b005ef5c7b7ab21b8b2a973c25fec06955b99",
+  "response_hash": "3dbeff7c128963cb8b9d864d0c3011fbac97a5962dbb8bf4abe71d454d58372d",
+  "run_id": "editorial-v4-qa:99a514df-3e56-4b07-9ac9-003ce1a32a73",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "99a514df-3e56-4b07-9ac9-003ce1a32a73",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T05:16:53+00:00"
+}

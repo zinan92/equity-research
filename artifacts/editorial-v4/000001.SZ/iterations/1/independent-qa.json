@@ -1,0 +1,156 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "claim_refs",
+      "message": "C-04引用的evidence_id 56:150不在evidence packet中，无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "J-02为非gap判断但无任何evidence_ids，无法追溯事实基础。",
+      "claim_id": "J-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "claim_refs",
+      "message": "C-17引用的evidence_id 56:150不在evidence packet中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "strengths": [
+    "整体结论锋利，带有明确证伪条件，符合爱牛式判断要求。",
+    "gap声明清晰，未将缺失数据伪装成事实。",
+    "财务数据引用均标注为“公司披露”，多数自述已显式标记。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至evidence packet",
+    "同期对比数据明确增长/下滑/持平及幅度",
+    "公司自述显式标记“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/排名等写成事实",
+    "判断类claim有J标记、refs和falsifier",
+    "报告有爱牛式定位、因果链和证伪条件",
+    "缺口基于evidence packet gaps，未掩盖已有数字"
+  ],
+  "raw_blockers": [
+    {
+      "code": "claim_refs",
+      "message": "C-04引用的evidence_id 56:150不在evidence packet中，无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "J-02为非gap判断但无任何evidence_ids，无法追溯事实基础。",
+      "claim_id": "J-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "claim_refs",
+      "message": "C-17引用的evidence_id 56:150不在evidence packet中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "request_hash": "87a82e222519fc4ff2d842019665e254fdcf70dcae2b9b64e87609cb8823de39",
+  "response_hash": "5adaf224a8c5cccb87d511a338f415b8ee923503adf07f57ad496a9678fc8a43",
+  "run_id": "editorial-v4-qa:51da296c-202b-4576-ad69-4fc296453e49",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "51da296c-202b-4576-ad69-4fc296453e49",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:45:43+00:00"
+}

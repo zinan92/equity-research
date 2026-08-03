@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "财务数据事实（F-01至F-06）均能精确回溯到年报页码和行项，计算正确。",
+    "公司自述类声明（C-01至C-10）均明确标注“公司披露”，未冒充独立验证。",
+    "判断类声明（J-01至J-05）均带有[J-xx]标记、引用相关证据并给出falsifier，符合AI judgment规范。",
+    "缺口声明（G-01至G-06）均基于输入未提供的信息，未借gap掩盖已有数字。",
+    "整体结论锋利且带有judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-04 引用 evidence moutai_2025_annual:narrative:9:4，但该证据文本中未出现“全面向 C”战略原文，仅见“稳步推进‘全面向 C’战略”，且文本截断，无法完整验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-05 引用 evidence moutai_2025_annual:narrative:17:18，但该证据文本中未出现“五大渠道”原文，仅见“公司将构建批发、线下零售、线上零售、餐饮、私域‘五大渠道’并行的渠道布局”，且文本截断。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:17:18"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-07 引用 evidence moutai_2025_annual:narrative:22:23，但该证据文本中未出现“随行就市、相对平稳”原文，仅见“构建‘随行就市、相对平稳’的自营体系零售价格动态调整机制”，且文本截断。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-08 引用 evidence moutai_2025_annual:narrative:21:20，但该证据文本中未出现“一年一个生产周期”原文，仅见“遵循一年一个生产周期、端午踩曲、重阳下沙、纯粮酿造、开放式固态化发酵、陶坛长期贮存、以酒勾酒传统工法”，且文本截断。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-10 引用 evidence moutai_2025_annual:narrative:23:24，但该证据文本中仅列出风险类别，未包含“公司披露可能面对的风险包括”等完整表述，且文本截断。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-04 引用 evidence moutai_2025_annual:narrative:21:21，但该证据文本中未出现“世界蒸馏酒第一品牌”原文，仅见“茅台酒已跃升为‘世界蒸馏酒第一品牌’”，且文本截断。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-09 引用 evidence moutai_2025_annual:narrative:23:25，但该证据文本中未出现“茅台酒‘十四五’产能扩建”原文，仅见“有序推进茅台酒‘十四五’产能扩建、中华 6万吨勾调中心、茅台酒用原料储备库、坛厂包装物流园项目一期工程”，且文本截断。",
+      "claim_id": "F-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:25"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "G-04 引用 evidence moutai_2025_annual:narrative:35:38，但该证据文本中仅提及“控股股东尚未履行实施股权激励计划的承诺”，未提供“上级部门未出台意见”的详细情况，且文本截断。",
+      "claim_id": "G-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:35:38"
+      ]
+    }
+  ],
+  "request_hash": "fff766b587a9a5e91937efb48b2196519b1b1055427b5c0afd624df69a575a37",
+  "response_hash": "417d1a80a63706cd65f752f816ab4fee153de0619e8b791d592f85d390666495",
+  "run_id": "editorial-v4-qa:90793176-9acd-4d82-9555-5a8375c242df",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "90793176-9acd-4d82-9555-5a8375c242df",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:12:25+00:00"
+}

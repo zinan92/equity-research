@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "ticker": "000333.SZ",
+  "chars": 2508,
+  "claims": 33,
+  "errors": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-20"
+    }
+  ]
+}

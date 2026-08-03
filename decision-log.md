@@ -2652,3 +2652,25 @@
   `scripts/publish_v4_round7_dossier.py`, and the profile-less packaging test.
 - Gotchas: when a profile is supplied it is still hash/ticker-bound; omitting
   it does not grant Tier/ACTION credit or bypass the publication quality gate.
+
+## 2026-08-03 — V4-P2 five-company editorial expansion (Issue #692)
+
+- Decision: use one whole-report DeepSeek call plus deterministic machine QA and
+  independent DeepSeek QA for each new issuer, bound only to an official-PDF
+  evidence packet. Preserve aggressive positioning as `[J-xx]` synthesis with
+  refs/falsifiers instead of deleting it for lack of a verbatim “leader” line.
+- Why: the product differentiator is an issuer-specific, memorable position;
+  deleting every inferential phrase recreates the company-brochure failure in a
+  different direction. Facts/numbers and issuer self-report still need strict
+  page/attribution closure, while judgments must remain visibly judgments.
+- Evidence: `docs/dossier-production/editorial-v4-contract.md`,
+  `product/editorial_v4_contract.py`, `product/editorial_v4_generator.py`,
+  `product/editorial_v4_qa.py`, `product/tests/test_editorial_v4.py`, and
+  `artifacts/editorial-v4/batch-receipt.json` (five machine/QA passes).
+- Gotchas: official table units may live in a header rather than the quoted
+  anchor; closure now permits only deterministic value+unit matching against
+  the cited evidence. “未提供目标价” is an allowed gap, but a target number or
+  action language remains blocked. Paragraph-level issuer attribution is
+  accepted when one explicit company-disclosure lead-in governs a cited run;
+  it does not turn a judgment into a fact. All outputs remain review-only and
+  grant no Tier/B6/decision/publication credit.

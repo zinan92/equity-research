@@ -1,0 +1,140 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim F-09 引用 evidence_id 'moutai_2025_annual:narrative:23:25'，但该证据的 quoted_anchor 中未提及“茅台酒‘十四五’产能扩建、中华 6 万吨勾调中心、茅台酒用原料储备库、坛厂包装物流园项目一期工程”等具体项目名称。实际证据文本仅包含“有序推进茅台酒‘十四五’产能扩建、中华 6万吨勾调中心、茅台酒用原料储备库、坛厂包装物流园项目一期工程、制酒车间（二期）排水管网维修改造等项目建设”，但 quoted_anchor 字段截断为“品牌推广与市场营销协同赋能...”，未包含项目列表。需确认证据是否完整匹配。",
+      "claim_id": "F-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:25"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim J-02 引用 evidence_ids ['moutai_2025_annual:narrative:26:28', 'moutai_2025_annual:narrative:27:29', 'moutai_2025_annual:narrative:35:38']，但 narrative:35:38 的 quoted_anchor 仅提及股权激励承诺未履行，未直接支持“管理团队背景偏行政而非市场化，可能影响向消费者中心转型的效率”的判断。该判断需要更多证据支撑。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29",
+        "moutai_2025_annual:narrative:35:38"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-06 引用 evidence_id 'moutai_2025_annual:narrative:10:9'，但该证据的 quoted_anchor 文本为“经营活动产生的现金流量净额变动原因说明：主要是本期公司控股子公司贵州茅台集团财务有限公司吸收集团公司成员单位存款减少及不可随时支取的同业存款增加”，与 claim 文本一致，但需确认是否完整。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:9"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据（F-01 至 F-06）均能由 evidence packet 中的事实证据精确回溯，且同期对比计算正确。",
+    "所有 issuer_self_report 类型的 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "报告未出现未提供证据的客户、订单、排名、份额、护城河、估值、股价、目标价或行动建议。",
+    "报告明确列出了缺口（G-01 至 G-06），且缺口内容均为输入未提供或证据不足，未借 gap 掩盖已有数字。",
+    "整体结论和风险点评包含证伪条件和白话结论，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否出现未提供证据的客户、订单、排名、份额、护城河、估值、股价、目标价或行动建议",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim F-09 引用 evidence_id 'moutai_2025_annual:narrative:23:25'，但该证据的 quoted_anchor 中未提及“茅台酒‘十四五’产能扩建、中华 6 万吨勾调中心、茅台酒用原料储备库、坛厂包装物流园项目一期工程”等具体项目名称。实际证据文本仅包含“有序推进茅台酒‘十四五’产能扩建、中华 6万吨勾调中心、茅台酒用原料储备库、坛厂包装物流园项目一期工程、制酒车间（二期）排水管网维修改造等项目建设”，但 quoted_anchor 字段截断为“品牌推广与市场营销协同赋能...”，未包含项目列表。需确认证据是否完整匹配。",
+      "claim_id": "F-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:25"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-08 引用 evidence_ids ['moutai_2025_annual:narrative:9:3', 'moutai_2025_annual:narrative:21:20']，但 narrative:9:3 的 quoted_anchor 仅涉及质量管理，未提及“一年一个生产周期、端午踩曲、重阳下沙、纯粮酿造、开放式固态化发酵、陶坛长期贮存、以酒勾酒传统工法，并坚持 30 道工序 165 个环节精雕细琢”。该内容仅出现在 narrative:21:20 中。需确保每个 evidence_id 均能独立支撑 claim 的全部文本。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:3",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-04 引用 evidence_id 'moutai_2025_annual:narrative:9:4'，但该证据的 quoted_anchor 文本不完整，结尾为“实现了市场三是品牌影响力再跃新阶...”，未包含 claim 中“稳步推进‘全面向 C’战略...有效稳住了市场基本盘”的完整表述。实际证据文本可能包含该内容，但 quoted_anchor 截断导致无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-05 引用 evidence_id 'moutai_2025_annual:narrative:17:18'，但该证据的 quoted_anchor 文本包含大量表格占位符（如“渠道类型 本期销售收入 上期销售收入...”），未直接显示 claim 中“公司将构建批发、线下零售、线上零售、餐饮、私域‘五大渠道’并行的渠道布局...未来将按照市场化原则逐步丰富 i 茅台上架产品矩阵”的完整句子。实际证据文本可能包含，但 quoted_anchor 未提供。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:17:18"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-07 引用 evidence_id 'moutai_2025_annual:narrative:22:23'，但该证据的 quoted_anchor 文本冗长且包含大量无关内容，未明确突出 claim 中“2026 年将全面推进市场化转型，价格端以市场为导向，构建‘随行就市、相对平稳’的自营体系零售价格动态调整机制”的精确表述。需确认证据是否完整包含该句。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-10 引用 evidence_id 'moutai_2025_annual:narrative:23:24'，但该证据的 quoted_anchor 仅列出“一是宏观经济风险；二是安全风险；三是舆情风险；四是环境保护风险”，未包含 claim 中“公司披露可能面对的风险包括”的完整表述。实际证据文本可能包含，但 quoted_anchor 未提供。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim J-02 引用 evidence_ids ['moutai_2025_annual:narrative:26:28', 'moutai_2025_annual:narrative:27:29', 'moutai_2025_annual:narrative:35:38']，但 narrative:35:38 的 quoted_anchor 仅提及股权激励承诺未履行，未直接支持“管理团队背景偏行政而非市场化，可能影响向消费者中心转型的效率”的判断。该判断需要更多证据支撑。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29",
+        "moutai_2025_annual:narrative:35:38"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim G-04 引用 evidence_id 'moutai_2025_annual:narrative:35:38'，但该证据的 quoted_anchor 仅提及“控股股东尚未履行实施股权激励计划的承诺”，未提供“上级部门未出台意见的详细情况”。claim 中“仅提及控股股东承诺未履行”与证据一致，但“上级部门未出台意见的详细情况”在证据中未出现，可能属于 gap 内容，不应作为事实 claim。",
+      "claim_id": "G-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:35:38"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-09 引用 evidence_id 'moutai_2025_annual:narrative:10:8'，但该证据的 quoted_anchor 文本包含大量表格占位符，未直接显示“直销营业成本增长主要是直销销量增加及生产成本上涨”的完整句子。实际证据文本可能包含，但 quoted_anchor 未提供。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:8"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim C-06 引用 evidence_id 'moutai_2025_annual:narrative:10:9'，但该证据的 quoted_anchor 文本为“经营活动产生的现金流量净额变动原因说明：主要是本期公司控股子公司贵州茅台集团财务有限公司吸收集团公司成员单位存款减少及不可随时支取的同业存款增加”，与 claim 文本一致，但需确认是否完整。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:9"
+      ]
+    }
+  ],
+  "request_hash": "181bbd0207952a222802145135f9c021674f63647ecca2a997d6a4b5ad22103e",
+  "response_hash": "3e3e1a1dd68423aca3ff6832580db720139de061465a5602a4705d9f40fe96f2",
+  "run_id": "editorial-v4-qa:f67ab83e-4218-430d-8b40-79278094de28",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "f67ab83e-4218-430d-8b40-79278094de28",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:00:51+00:00"
+}

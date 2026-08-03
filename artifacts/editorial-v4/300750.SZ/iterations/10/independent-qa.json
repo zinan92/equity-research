@@ -1,0 +1,97 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "财务数据 F-01 至 F-04 均正确引用官方 PDF 中的数字，且同期对比增长幅度与 derived_metrics 一致。",
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "判断类 claim J-01 至 J-06 均带有 [J-xx] 标记、引用相关底层证据并给出 falsifier，符合 AI judgment 规则。",
+    "缺口类 claim G-01 至 G-07 基于 evidence packet 的 gaps 写出，未借 gap 掩盖已有数字或升级公司自述。",
+    "整体结论锋利且带对应 judgment marker，符合爱牛式风格要求。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的“绝对龙头/强定价权/品牌护城河/精密制造杂货铺”等独特定位属于允许的 AI judgment，不要因为没有一句逐字证据就要求删除",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-05 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:20:6，但该证据文本未出现“54,538项”数字，无法验证。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-06 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:21:7，但该证据文本未出现“75个国家或地区、约1,200家服务站”数字，无法验证。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-07 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:47:26 和 47:25，但 47:26 未出现“57岁”和“曾任ATL总裁及CEO”，47:25 未出现“57岁”，无法验证。",
+      "claim_id": "F-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:47:26",
+        "catl_2025_annual_cninfo:narrative:47:25"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-08 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:42:20，但该证据文本未出现“9名董事”和“职工代表董事”，无法验证。",
+      "claim_id": "F-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:20"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-09 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:29:10，但该证据文本未出现“骁遥双核电池、钠新电池、超混电池、凝聚态电池、神行二代/Pro、天行电池”完整列表，无法验证。",
+      "claim_id": "F-09",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "F-10 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:55:34，但该证据文本未出现“2025年5月审议通过H股全球发售及上市相关议案”的明确表述，无法验证。",
+      "claim_id": "F-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:55:34"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-01 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:20:6，但该证据文本未出现“行业唯一入选‘全球百强创新机构’”和“宁德市跻身全球创新强度第四名”，无法验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-02 引用 evidence_ids 为 catl_2025_annual_cninfo:narrative:20:6 和 38:15，但 20:6 未出现“DPPB级”和“灯塔工厂”，38:15 未出现“行业最多的‘灯塔工厂’及唯一‘可持续灯塔工厂’”，无法验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    }
+  ],
+  "request_hash": "a5802082452ec66652bffadb4d7bfeaf5c4dbf8ab7b328d78a0e73ef6f9a18fa",
+  "response_hash": "6e79e3db8de749f8370b3952479ee8bf999a19acc8a816a2157cd2019555fb1a",
+  "run_id": "editorial-v4-qa:0f61b795-c5c0-4c48-ae63-dbedc81ffbc5",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "0f61b795-c5c0-4c48-ae63-dbedc81ffbc5",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:42:07+00:00"
+}

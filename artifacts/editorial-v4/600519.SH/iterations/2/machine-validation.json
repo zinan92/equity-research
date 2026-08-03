@@ -1,0 +1,118 @@
+{
+  "status": "failed",
+  "ticker": "600519.SH",
+  "chars": 2201,
+  "claims": 22,
+  "errors": [
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "one_line_position",
+      "chars": 175,
+      "minimum": 180
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "founder_team",
+      "chars": 263,
+      "minimum": 350
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "timeline",
+      "chars": 321,
+      "minimum": 500
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "technology_products",
+      "chars": 331,
+      "minimum": 650
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "financial_valuation",
+      "chars": 410,
+      "minimum": 750
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "risks_commentary",
+      "chars": 349,
+      "minimum": 700
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "plain_language",
+      "chars": 352,
+      "minimum": 450
+    },
+    {
+      "code": "dossier_short",
+      "message": "editorial body is materially shorter than V4 target",
+      "chars": 2201,
+      "target": 4249
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-02"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-03"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "C-04"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-05"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-06"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-07"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "C-09"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-10"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-11"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "05"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "06"
+    }
+  ]
+}

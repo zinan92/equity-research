@@ -1,0 +1,94 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "所有claims均标注为issuer_self_report或judgment，未将公司自述冒充独立验证。",
+    "judgment claims均带有[J-xx]标记、refs和falsifier，符合AI judgment规范。",
+    "报告明确指出了大量数据缺口（G-01至G-10），未用空泛句子凑篇幅。",
+    "整体结论锋利且带有judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-14引用evidence_id 23:58，但该证据未明确提及“零售业务净利润同比增长”，仅提及“零售业务净利润同比增长”在原文中未出现。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-28引用evidence_id 25:63，但该证据仅提及“资本充足率提升”，未提供具体数值，且未明确说明提升幅度或对比基准。",
+      "claim_id": "C-28",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:63"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-29引用evidence_id 55:147，但该证据仅提及资本管理规划，未明确说明“持续强化资本管理”的具体措施或成果。",
+      "claim_id": "C-29",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:147"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-26引用evidence_id 55:148，但该证据未明确提及“银保业务逐步成为本行大财富业务的重要增长引擎”，仅提及“价值贡献进一步释放”。",
+      "claim_id": "C-26",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-27引用evidence_id 11:26，但该证据仅提及银行业整体情况，未明确说明“2025年银行业积极响应中央政策”的具体行动。",
+      "claim_id": "C-27",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:26"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-13引用evidence_id 14:36，但该证据未明确提及“深化‘一个客户、多个账户、多种产品、一站式服务’模式”，仅提及综合金融优势。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-12引用evidence_id 55:149，但该证据未明确提及“2025年引入多款分红险产品”，仅提及“积极引入多款分红险产品”。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-11引用evidence_id 14:37，但该证据未明确提及“运用iDeal平台、‘行e通’平台构建全能型机构销售服务”，仅提及“运用领先的iDeal平台”。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    }
+  ],
+  "request_hash": "b82d0ea8c21b49b33a8f1d2fb29804bbaaec08717020b46ccf60b1df771fe4f3",
+  "response_hash": "08e23db08fe5f1275ca4b6a7577bfc6c0f12a2ba85a893bfd00eb31286229462",
+  "run_id": "editorial-v4-qa:364bb715-95e4-4294-90e6-74a3588f1b9c",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "364bb715-95e4-4294-90e6-74a3588f1b9c",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T08:02:16+00:00"
+}

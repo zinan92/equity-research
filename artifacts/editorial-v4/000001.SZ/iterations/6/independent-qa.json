@@ -1,0 +1,166 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式写“公司披露/年报自述”，仅以“平安银行在2025年年报中披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05 正文未显式写“公司披露/年报自述”，仅以“平安银行在年报中披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-17 正文未显式写“公司披露/年报自述”，仅以“公司年报对风险管理有详细描述”开头，但后续句子未持续标注。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-18 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-19 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-21 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有数字和事实均可由 evidence_ids 回溯到 document_id、页码、quoted_anchor。",
+    "引用有同期对比的数据时，正文明确写增长/下滑及幅度。",
+    "爱牛式判断均标有 [J-xx]，有 refs 和 falsifier，未冒充事实。",
+    "缺口明确基于 evidence packet 的 gaps，未借 gap 掩盖已有数字或升级公司自述。",
+    "整体结论锋利，带对应 judgment marker，符合要求。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式写“公司披露/年报自述”，仅以“平安银行在2025年年报中披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05 正文未显式写“公司披露/年报自述”，仅以“平安银行在年报中披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-17 正文未显式写“公司披露/年报自述”，仅以“公司年报对风险管理有详细描述”开头，但后续句子未持续标注。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-18 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-19 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-21 正文未显式写“公司披露/年报自述”，仅以“公司披露”开头，但后续句子未持续标注。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ]
+    }
+  ],
+  "request_hash": "ff12d002660387a03eea41c08bffc6c3908b260246de0921157dfedefcf70c8c",
+  "response_hash": "17b0a67253899c094bf191757b90b1cdb98404ec189ffd7e0f5c607492ce724c",
+  "run_id": "editorial-v4-qa:62d7da59-a2d3-422c-b3dd-3426e3420c87",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "62d7da59-a2d3-422c-b3dd-3426e3420c87",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:50:00+00:00"
+}

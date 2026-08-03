@@ -1,0 +1,156 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“平安银行在2025年年报中披露”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“平安银行在年报中披露”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“年报披露”。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“公司披露”。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“公司披露”。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-21为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“公司披露”。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "C-17引用的evidence_id 'narrative:56:150' 不在evidence packet中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card中数字“03”“08”“14”“15”无对应claim text closure，无法验证。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有judgment均标有[J-xx]并附falsifier，符合规则6。",
+    "gap claims明确基于输入缺失，未借gap掩盖事实。",
+    "整体结论锋利且带judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到evidence_ids",
+    "同期对比数据明确增长/下滑/持平及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "爱牛式判断允许，但需标[J-xx]并有refs/falsifier",
+    "报告有资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口基于evidence packet gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“平安银行在2025年年报中披露”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“平安银行在年报中披露”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“年报披露”。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“公司披露”。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“公司披露”。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-21为issuer_self_report，正文未显式写“公司披露/年报自述/公告披露”，仅写“公司披露”。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "C-17引用的evidence_id 'narrative:56:150' 不在evidence packet中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card中数字“03”“08”“14”“15”无对应claim text closure，无法验证。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "f225f27f986a99b81dae538ca7693b9a84ea47a5eaf5dd875e074861186ec05b",
+  "response_hash": "da6e764185be9beb7134bc11d43913a4543fc61af50a62c5b57baaab289383a4",
+  "run_id": "editorial-v4-qa:d682fbd0-f366-4738-8862-5990cf162d97",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "d682fbd0-f366-4738-8862-5990cf162d97",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:48:43+00:00"
+}

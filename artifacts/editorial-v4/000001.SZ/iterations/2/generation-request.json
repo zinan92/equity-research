@@ -1,0 +1,1370 @@
+{
+  "request_schema": "editorial-v4-generation-request-v1",
+  "prompt_version": "editorial-v4-whole-report-prompt-v1",
+  "generator_version": "editorial-v4-whole-report-generator-v1",
+  "iteration": 2,
+  "input_packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+  "model_packet_hash": "a8b00bd8c911720a1ce82d576a86ff89ba91fb7b63ca3f43a907b36951a7b6d2",
+  "model_packet": {
+    "schema_version": "editorial-v4-evidence-packet-v1",
+    "ticker": "000001.SZ",
+    "issuer_name": "平安银行",
+    "evidence_cutoff": "2026-08-03",
+    "sources": [
+      {
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "page_count": 281
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 11,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.2.2所处行业基本情况",
+        "quoted_anchor": "本行是中国内地首家公开上市的全国性股份制商业银行。经过多年发展，本行已逐渐成长为一家公司治理规范、网点覆盖广泛、产品服务齐全、风险管控有效的全国性股份制商业银行。同时，本行着力打造独特竞争力，在科技赋能、零售业务、综合金融等领域形成了较为鲜明的经营特色。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行是中国内地首家公开上市的全国性股份制商业银行。经过多年发展，本行已逐渐成长为一家公司治理规范、网点覆盖广泛、产品服务齐全、风险管控有效的全国性股份制商业银行。同时，本行着力打造独特竞争力，在科技赋能、零售业务、综合金融等领域形成了较为鲜明的经营特色。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:24",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 11,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.2.2所处行业基本情况",
+        "quoted_anchor": "本行经有关监管机构批准，经营下列各项商业银行业务：（一）吸收公众存款；（二）发放短期、中期和长期贷款；（三）办理国内外结算；（四）办理票据承兑与贴现；（五）发行金融债券；",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行经有关监管机构批准，经营下列各项商业银行业务：（一）吸收公众存款；（二）发放短期、中期和长期贷款；（三）办理国内外结算；（四）办理票据承兑与贴现；（五）发行金融债券；"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:25",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 11,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.2.2所处行业基本情况",
+        "quoted_anchor": "（六）代理发行、代理兑付、承销政府债券；（七）买卖政府债券、金融债券；（八）从事同业拆借；（九）买卖、代理买卖外汇；（十）从事银行卡业务；（十一）提供信用证服务及担保；（十二）代理收付款项及代理保险业务；（十三）提供保管箱服务；（十四）结汇、售汇业务；（十五）离岸银行业务；（十六）资产托管业务；（十七）办理黄金业务；（十八）财务顾问、资信调查、咨询、见证业务；（十九）经有关监管机构批准的其他业务。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "（六）代理发行、代理兑付、承销政府债券；（七）买卖政府债券、金融债券；（八）从事同业拆借；（九）买卖、代理买卖外汇；（十）从事银行卡业务；（十一）提供信用证服务及担保；（十二）代理收付款项及代理保险业务；（十三）提供保管箱服务；（十四）结汇、售汇业务；（十五）离岸银行业务；（十六）资产托管业务；（十七）办理黄金业务；（十八）财务顾问、资信调查、咨询、见证业务；（十九）经有关监管机构批准的其他业务。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:26",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 11,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.2.2所处行业基本情况",
+        "quoted_anchor": "2025年是“十四五”规划收官之年。面对复杂严峻的外部形势，以习近平同志为核心的党中央团结带领全党全国各族人民迎难而上、奋力拼搏，坚定不移贯彻新发展理念、推动高质量发展，统筹国内国际两个大局，实施更加积极有为的宏观政策，顺利完成经济社会发展主要目标。我国经济顶压前行、向新向优发展，展现强大韧性和活力，改革开放迈出新步伐，民生保障更加有力，高质2025年，银行业积极贯彻落实党的二十大和二十届历次全会、中央金融工作会议、中央经济工作会议精神，坚持稳中求进，坚定不移走中国特色金融发展之路，全力做好科技金融、绿色金融、普惠金融、养老金融、数字金融“五篇大文章”，积极服务新质生产力，持续加大对居民消费、民营企业、制造业等领域的金融支持力度，持续提升金融服务实体经济的能力，持续强化金融风险防",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "2025年是“十四五”规划收官之年。面对复杂严峻的外部形势，以习近平同志为核心的党中央团结带领全党全国各族人民迎难而上、奋力拼搏，坚定不移贯彻新发展理念、推动高质量发展，统筹国内国际两个大局，实施更加积极有为的宏观政策，顺利完成经济社会发展主要目标。我国经济顶压前行、向新向优发展，展现强大韧性和活力，改革开放迈出新步伐，民生保障更加有力，高质2025年，银行业积极贯彻落实党的二十大和二十届历次全会、中央金融工作会议、中央经济工作会议精神，坚持稳中求进，坚定不移走中国特色金融发展之路，全力做好科技金融、绿色金融、普惠金融、养老金融、数字金融“五篇大文章”，积极服务新质生产力，持续加大对居民消费、民营企业、制造业等领域的金融支持力度，持续提升金融服务实体经济的能力，持续强化金融风险防"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 12,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略",
+        "quoted_anchor": "本行紧跟国家政策导向和监管要求，坚持党建引领，坚持金融工作的政治性、人民性，坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续深化战略转型，不断升级零售、对公、资金同业业务经营策略，做好金融“五篇大文章”，服务新质生产力，持续深化数字化转型，强化风险管理，助推高质量发展。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行紧跟国家政策导向和监管要求，坚持党建引领，坚持金融工作的政治性、人民性，坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续深化战略转型，不断升级零售、对公、资金同业业务经营策略，做好金融“五篇大文章”，服务新质生产力，持续深化数字化转型，强化风险管理，助推高质量发展。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:28",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 12,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略",
+        "quoted_anchor": "本行坚持零售战略定位不动摇，深化推进零售战略转型，以客户为中心，打造特色零售银行，围绕“效益优先、兼顾规模”的经营目标，持续强化核心业务能力，推动零售业务高质量、可持续贷款业务：促进“量、价、险”平衡。一是优化贷款业务结构，持续提升优质客群占比，并加大重点产品投放力度，带动客群结构和资产结构持续优化；二是完善产品体系，围绕客户需求匹配产品策略，提升精细化风险定价能力，提供差异化服务体验，全面提升产品的市场竞争力和品牌影大财富管理业务：推进结构持续优化、业务高质量发展。一是提升场景化经营能力，重点拓宽公私联动、平台引流、交易结算等场景，并加强账户数字化能力建设，促进客户交易活跃、带动活期存款沉淀；二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；同时，强化APP等线上平台建综合金融平台：依托平安集团“综合金融+医疗养老”生态优势，围绕客户需求推出多样化产品组合方案，不断深化“一个客户、多个账户、多种产品、一站式服务”的综合经营模式，持续提升组织推动：强化总分行对一线队伍的策略指引及赋能推动，构建一体化、标准化的销售赋能推动体系，升级横向一体协同、纵向贯穿赋能的组织管理，形成高效管理闭环与敏捷协同机制，提升",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行坚持零售战略定位不动摇，深化推进零售战略转型，以客户为中心，打造特色零售银行，围绕“效益优先、兼顾规模”的经营目标，持续强化核心业务能力，推动零售业务高质量、可持续贷款业务：促进“量、价、险”平衡。一是优化贷款业务结构，持续提升优质客群占比，并加大重点产品投放力度，带动客群结构和资产结构持续优化；二是完善产品体系，围绕客户需求匹配产品策略，提升精细化风险定价能力，提供差异化服务体验，全面提升产品的市场竞争力和品牌影大财富管理业务：推进结构持续优化、业务高质量发展。一是提升场景化经营能力，重点拓宽公私联动、平台引流、交易结算等场景，并加强账户数字化能力建设，促进客户交易活跃、带动活期存款沉淀；二是升级财富管理服务，将银保业务打造为大财富业务增长的重要引擎，提升财富队伍的综合资产配置能力，打造针对不同客户的优势产品，并聚集重点客群升级权益服务，优化服务数字化平台：全面加强数字化赋能，构建数据驱动的全渠道协同运营体系，依托平安集团生态场景和外部公域引流扩量，加强高质量客户获取，并借助数字化工具实现客群的分层、分队伍、分渠道经营，通过线上线下服务的紧密衔接，促进客户留存及价值提升；同时，强化APP等线上平台建综合金融平台：依托平安集团“综合金融+医疗养老”生态优势，围绕客户需求推出多样化产品组合方案，不断深化“一个客户、多个账户、多种产品、一站式服务”的综合经营模式，持续提升组织推动：强化总分行对一线队伍的策略指引及赋能推动，构建一体化、标准化的销售赋能推动体系，升级横向一体协同、纵向贯穿赋能的组织管理，形成高效管理闭环与敏捷协同机制，提升"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:13:29",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 13,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略",
+        "quoted_anchor": "集中风控：升级数字化风控体系，推进业务流程简单化、后台审批集中化，提升风险经营和管经营服务：树立以客户为中心的经营服务意识，精细化客户分层分群经营，敏捷洞察客户需求，匹配差异化产品、场景化服务与生态化赋能，优化客户体验；搭建以客户经理为中心的队伍成长路合规保障：完善制度流程、构建长效机制，持续强化队伍合规意识与销售行为管理，加强消费本行紧跟国家发展战略及政策导向，持续深化对公做精战略。围绕金融“五篇大文章”，结合本行的特色优势，在产业金融、科技金融、供应链金融、跨境金融、普惠金融方面重点发力。坚持以客户为中心，聚焦“做精行业、做精客户、做精产品”，紧跟国家产业发展政策，持续加大对先进制造业、绿色金融、科技金融、普惠金融、基础设施、乡村振兴等重点领域的融资支持力度。充分发挥平安集团综合金融优势，通过“商行+投行+投资”的综合性解决方案，为客户提供一站式金融服务，助力企业产业转型升级。通过深度经营，做大客户钱包份额，夯实对公业务基础。升级公私融合经营机制，释放一体化经营动能，支持全行业务均衡发展。严守资产质量“生命线”，推进做精行业：持续深耕行业化经营，围绕传统产业优化升级、新兴产业培育壮大，精选重点细分行业，优化市场、产品、风险等策略，配套定制化的行业服务方案，形成差异化竞争优势。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "集中风控：升级数字化风控体系，推进业务流程简单化、后台审批集中化，提升风险经营和管经营服务：树立以客户为中心的经营服务意识，精细化客户分层分群经营，敏捷洞察客户需求，匹配差异化产品、场景化服务与生态化赋能，优化客户体验；搭建以客户经理为中心的队伍成长路合规保障：完善制度流程、构建长效机制，持续强化队伍合规意识与销售行为管理，加强消费本行紧跟国家发展战略及政策导向，持续深化对公做精战略。围绕金融“五篇大文章”，结合本行的特色优势，在产业金融、科技金融、供应链金融、跨境金融、普惠金融方面重点发力。坚持以客户为中心，聚焦“做精行业、做精客户、做精产品”，紧跟国家产业发展政策，持续加大对先进制造业、绿色金融、科技金融、普惠金融、基础设施、乡村振兴等重点领域的融资支持力度。充分发挥平安集团综合金融优势，通过“商行+投行+投资”的综合性解决方案，为客户提供一站式金融服务，助力企业产业转型升级。通过深度经营，做大客户钱包份额，夯实对公业务基础。升级公私融合经营机制，释放一体化经营动能，支持全行业务均衡发展。严守资产质量“生命线”，推进做精行业：持续深耕行业化经营，围绕传统产业优化升级、新兴产业培育壮大，精选重点细分行业，优化市场、产品、风险等策略，配套定制化的行业服务方案，形成差异化竞争优势。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:13:30",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 13,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略",
+        "quoted_anchor": "做精客户：顺应对公客户综合化、生态化、一体化经营趋势，适应市场环境及客户需求的变化，强化以客户为中心的经营理念，建立战略客户、中型客户、小型客户的客户分层经营体系，锻造“长做精产品：围绕核心客群，深入行业场景，运用“金融+科技”能力，做强行业化、差异化、综合化的产品组合，优化金融服务体验，提升客户综合服务能力。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "做精客户：顺应对公客户综合化、生态化、一体化经营趋势，适应市场环境及客户需求的变化，强化以客户为中心的经营理念，建立战略客户、中型客户、小型客户的客户分层经营体系，锻造“长做精产品：围绕核心客群，深入行业场景，运用“金融+科技”能力，做强行业化、差异化、综合化的产品组合，优化金融服务体验，提升客户综合服务能力。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:13:31",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 13,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略",
+        "quoted_anchor": "本行资金同业业务遵循国家金融市场发展战略，坚定执行“服务金融市场、服务同业客户、服务实体经济”经营理念，通过“投资交易+客户业务”双轮驱动，持续提升投资、交易和销售三大能投资交易：持续升级投资交易能力，提升包括研究、定价、策略、科技等在内的专业能力，把握市场中长期战略性机会，合理配置资产，敏捷捕捉交易机会。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行资金同业业务遵循国家金融市场发展战略，坚定执行“服务金融市场、服务同业客户、服务实体经济”经营理念，通过“投资交易+客户业务”双轮驱动，持续提升投资、交易和销售三大能投资交易：持续升级投资交易能力，提升包括研究、定价、策略、科技等在内的专业能力，把握市场中长期战略性机会，合理配置资产，敏捷捕捉交易机会。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:13:32",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 13,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.1本行发展战略",
+        "quoted_anchor": "客户业务：深耕金融机构及企业客户金融市场服务需求，持续丰富交易服务、机构销售、资产托管、企业避险等客户服务，在服务实体直接融资、提升金融市场流动性及助力企业管理市场风险等方面持续发力，形成围绕客户深度经营的多产品服务模式。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "客户业务：深耕金融机构及企业客户金融市场服务需求，持续丰富交易服务、机构销售、资产托管、企业避险等客户服务，在服务实体直接融资、提升金融市场流动性及助力企业管理市场风险等方面持续发力，形成围绕客户深度经营的多产品服务模式。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:33",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "投资能力：建立全球化、跨品种、跨市场的交易体系，灵敏捕捉不同市场、不同期限结构的交易机会，合理进行细分品种选择和趋势性配置，通过多元化的投资方案，获取可持续的投资回报。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "投资能力：建立全球化、跨品种、跨市场的交易体系，灵敏捕捉不同市场、不同期限结构的交易机会，合理进行细分品种选择和趋势性配置，通过多元化的投资方案，获取可持续的投资回报。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:34",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "交易能力：持续完善宏观趋势研究与量化分析模型结合的投资决策框架体系，运用本行在相对价值交易、电子化交易及做市交易上积累的专业优势，丰富交易策略，更精准地把握市场微观变化及交易契机，在多变的市场环境中保持稳健的投资回报。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "交易能力：持续完善宏观趋势研究与量化分析模型结合的投资决策框架体系，运用本行在相对价值交易、电子化交易及做市交易上积累的专业优势，丰富交易策略，更精准地把握市场微观变化及交易契机，在多变的市场环境中保持稳健的投资回报。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:35",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "销售能力：扩展金融市场产品服务范围，建立全能型销售团队，全面推进金融市场客户服务发展，打造一体化金融服务模式，满足机构及企业在做市、发债、投资、托管、避险等方面的服务需党建引领全面深化 本行积极贯彻党的二十大和二十届历次全会、中央金融工作会议、中央经济工作会议精神，坚持党建引领，坚持金融工作的政治性、人民性，持续加强党的领导和党的建设，充分发挥党委政治引领作用，有效推动党的领导融入公司治理、党的建设融入经营管理、党的理念融入文化行为，深化党业融合，持续提升金融服务实体经济的能力，全力做好金融“五篇大文章”，全面强化风险合规管理，以高质量党建全面引领高质量发展。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "销售能力：扩展金融市场产品服务范围，建立全能型销售团队，全面推进金融市场客户服务发展，打造一体化金融服务模式，满足机构及企业在做市、发债、投资、托管、避险等方面的服务需党建引领全面深化 本行积极贯彻党的二十大和二十届历次全会、中央金融工作会议、中央经济工作会议精神，坚持党建引领，坚持金融工作的政治性、人民性，持续加强党的领导和党的建设，充分发挥党委政治引领作用，有效推动党的领导融入公司治理、党的建设融入经营管理、党的理念融入文化行为，深化党业融合，持续提升金融服务实体经济的能力，全力做好金融“五篇大文章”，全面强化风险合规管理，以高质量党建全面引领高质量发展。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "综合金融优势突出 本行积极加强与平安集团的协同协作，借助平安集团的客户、产品、品牌等优势，通过资源整合、相互协同，打造鲜明的综合金融优势。本行坚持从客户需求出发，全面完善综合金融的管理模式、协作机制和服务平台，持续强化关联交易管理，强化客户信息保护，坚持公允定价，有效做好风险隔离，依法合规开展综合金融业务。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "综合金融优势突出 本行积极加强与平安集团的协同协作，借助平安集团的客户、产品、品牌等优势，通过资源整合、相互协同，打造鲜明的综合金融优势。本行坚持从客户需求出发，全面完善综合金融的管理模式、协作机制和服务平台，持续强化关联交易管理，强化客户信息保护，坚持公允定价，有效做好风险隔离，依法合规开展综合金融业务。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "科技赋能不断深入 本行利用领先数字技术为战略转型注入活力，不断提升科技对金融服务的赋能水平。科技赋能零售业务，全面深化零售数字化工程，通过拓展数字营销渠道、加强数字化经营、优化数字化服务，将数字化平台打造为客户经营的线上阵地，为客户提供“省心、省时、又省钱”的服务体验；科技赋能对公业务，建立以客户需求为导向、数据驱动的客户分层经营体系，通过生态经营、综合金融服务和数字化赋能，持续夯实客户基础，提升经营贡献；科技赋能资金同业业务，投资交易将科技创新与细分场景深度结合，提升交易效率、风控和投研能力，客户业务运用领先的iDeal平台、“行e通”平台等提供综合服务，构建全能型机构销售服务。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "科技赋能不断深入 本行利用领先数字技术为战略转型注入活力，不断提升科技对金融服务的赋能水平。科技赋能零售业务，全面深化零售数字化工程，通过拓展数字营销渠道、加强数字化经营、优化数字化服务，将数字化平台打造为客户经营的线上阵地，为客户提供“省心、省时、又省钱”的服务体验；科技赋能对公业务，建立以客户需求为导向、数据驱动的客户分层经营体系，通过生态经营、综合金融服务和数字化赋能，持续夯实客户基础，提升经营贡献；科技赋能资金同业业务，投资交易将科技创新与细分场景深度结合，提升交易效率、风控和投研能力，客户业务运用领先的iDeal平台、“行e通”平台等提供综合服务，构建全能型机构销售服务。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:38",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "风险控制有力有效 本行搭建并持续完善全面风险管理体系，建立垂直集中的风险治理架构，建成覆盖全流程的风险管控机制。事前前瞻引领，持续优化风险政策，动态研判、敏捷调整，引导优质资产投放，从源头降低风险；事中精准预控，通过系统模型自动预警、地面队伍合作管控组成“天眼+地网”，对风险资产早发现、早管控、早化解，有效防范风险生成；事后高效处置，以专业化、生态化、投行化思路创新特殊资产经营模式，通过多元化的清收处置手段，提升不良资产回收价值。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "风险控制有力有效 本行搭建并持续完善全面风险管理体系，建立垂直集中的风险治理架构，建成覆盖全流程的风险管控机制。事前前瞻引领，持续优化风险政策，动态研判、敏捷调整，引导优质资产投放，从源头降低风险；事中精准预控，通过系统模型自动预警、地面队伍合作管控组成“天眼+地网”，对风险资产早发现、早管控、早化解，有效防范风险生成；事后高效处置，以专业化、生态化、投行化思路创新特殊资产经营模式，通过多元化的清收处置手段，提升不良资产回收价值。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:39",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 1.3.2本行核心竞争力",
+        "quoted_anchor": "同时，本行不断提升智慧风控水平，夯实风险数据底座，建设全流程风控平台，以数智化手段进一",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "同时，本行不断提升智慧风控水平，夯实风险数据底座，建设全流程风控平台，以数智化手段进一"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 23,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 2.6报告期核心技术团队或关键技术人员变动情况（非董事、监事、高级管理人员）",
+        "quoted_anchor": "平安银行股份有限公司 第二章 会计数据和财务指标注：（1）零售金融业务分部涵盖向个人客户及部分小企业客户提供金融产品和服务，这些产品和服务主要包括：个批发金融业务分部涵盖向公司客户、政府机构、同业机构及部分小企业提供金融产品和服务，这些产品和服务主要包括：公司贷款、公司存款、贸易融资、各类公司中间业务、各类资金同业业务及平安理财相关其他业务分部是指出于流动性管理的需要进行的债券投资和部分货币市场业务，集中管理的权益投资及不（2）受贷款利率下行和业务结构调整等因素影响，零售业务营业收入同比下降。随着资产和客群结构持续优化，零售资产质量逐步改善，零售业务减值损失同比下降，零售业务净利润同比增长。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "平安银行股份有限公司 第二章 会计数据和财务指标注：（1）零售金融业务分部涵盖向个人客户及部分小企业客户提供金融产品和服务，这些产品和服务主要包括：个批发金融业务分部涵盖向公司客户、政府机构、同业机构及部分小企业提供金融产品和服务，这些产品和服务主要包括：公司贷款、公司存款、贸易融资、各类公司中间业务、各类资金同业业务及平安理财相关其他业务分部是指出于流动性管理的需要进行的债券投资和部分货币市场业务，集中管理的权益投资及不（2）受贷款利率下行和业务结构调整等因素影响，零售业务营业收入同比下降。随着资产和客群结构持续优化，零售资产质量逐步改善，零售业务减值损失同比下降，零售业务净利润同比增长。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:59",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 23,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 2.6报告期核心技术团队或关键技术人员变动情况（非董事、监事、高级管理人员）",
+        "quoted_anchor": "注：上表按客户性质划分，其中小企业法人业务归属于企业存款及企业贷款业务，小企业个人业务归属于个人存款",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "注：上表按客户性质划分，其中小企业法人业务归属于企业存款及企业贷款业务，小企业个人业务归属于个人存款"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:61",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 25,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况",
+        "quoted_anchor": "2025年，本行坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续升级零售、对公、资金同业业务经营策略，持续强化风险管理，持续深化数字化转型，整体业务经营保持稳健。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "2025年，本行坚持以“中国最卓越、全球领先的智能化零售银行”为战略目标，坚持“零售做强、对公做精、同业做专”战略方针，持续升级零售、对公、资金同业业务经营策略，持续强化风险管理，持续深化数字化转型，整体业务经营保持稳健。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 25,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况",
+        "quoted_anchor": "个基点；另一方面主要受市场波动影响，债券投资等业务非利息净收入下降。通过数字化转型驱动增长 3.5%，其中一般企业贷款余额较上年末增长 9.2%，本行持续加大实体经济支持力度，科技企业、绿色金融等领域贷款实现较好增长；个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "个基点；另一方面主要受市场波动影响，债券投资等业务非利息净收入下降。通过数字化转型驱动增长 3.5%，其中一般企业贷款余额较上年末增长 9.2%，本行持续加大实体经济支持力度，科技企业、绿色金融等领域贷款实现较好增长；个人贷款余额较上年末下降 2.3%，抵押类贷款占个人贷款的比例为 62.9%，本行持续优化零售资产组合策略，提升优质客户占比，促进“量、价、险”平衡。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:63",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 25,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.1总体经营情况",
+        "quoted_anchor": "强化全面风险管理，资产质量整体平稳。本行积极应对宏观经济环境变化，加强风险管控，持践行资本精细化管理，资本充足率提升。持续强化资本内生积累，提升资本精细化管理水平，",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "强化全面风险管理，资产质量整体平稳。本行积极应对宏观经济环境变化，加强风险管控，持践行资本精细化管理，资本充足率提升。持续强化资本内生积累，提升资本精细化管理水平，"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:147",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 55,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5风险管理",
+        "quoted_anchor": "本行将持续强化资本管理，提升风险应对能力，动态前瞻地开展资本规划，做好资本积累、业务发展和股东回报之间的平衡。同时巩固多渠道资本补充机制，持续丰富和完善资本补充渠道，优化资本结构、控制资本成本，不断完善资本补充长效机制。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行将持续强化资本管理，提升风险应对能力，动态前瞻地开展资本规划，做好资本积累、业务发展和股东回报之间的平衡。同时巩固多渠道资本补充机制，持续丰富和完善资本补充渠道，优化资本结构、控制资本成本，不断完善资本补充长效机制。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 55,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5风险管理",
+        "quoted_anchor": "在居民财富增长、银行息差收窄背景下，财富管理业务进入高速发展期，行业竞合加剧，也促使商业银行以财富管理的视角升级、重构银保业务，全面开启银保业务价值转型之路。本行顺势先行，2021年已启动新银保业务改革，发挥平安集团综合金融优势，与平安寿险等深度合作、价值共创，将代理保险业务内嵌到财富管理体系中，全面提升客户服务的综合化、专业化水平，为本行私行财富业务的发展开拓新赛道。随着改革持续深入推进，本行银保业务在队伍建设、产品及服务等方面持续升级，价值贡献进一步释放，逐步成为本行大财富业务的重要增长引擎；2025 年，本行代队伍建设方面，本行顺应市场及客户需求变化，2025 年上半年将新财富队伍与原有财富队伍整合为一支队伍，持续提升含保障配置在内的综合资产配置能力，通过整合资源、提升服务，进一步夯实银保在财富管理中的战略地位，为客户创造长期价值。同时，本行升级分层资产配置培养体系，强化银保专业顾问团队建设，并通过投资顾问、法税专家、康养专家等在内的专家顾问团队支持，将保险作为资产配置的重要组成部分，满足客户多元化资产配置需求。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "在居民财富增长、银行息差收窄背景下，财富管理业务进入高速发展期，行业竞合加剧，也促使商业银行以财富管理的视角升级、重构银保业务，全面开启银保业务价值转型之路。本行顺势先行，2021年已启动新银保业务改革，发挥平安集团综合金融优势，与平安寿险等深度合作、价值共创，将代理保险业务内嵌到财富管理体系中，全面提升客户服务的综合化、专业化水平，为本行私行财富业务的发展开拓新赛道。随着改革持续深入推进，本行银保业务在队伍建设、产品及服务等方面持续升级，价值贡献进一步释放，逐步成为本行大财富业务的重要增长引擎；2025 年，本行代队伍建设方面，本行顺应市场及客户需求变化，2025 年上半年将新财富队伍与原有财富队伍整合为一支队伍，持续提升含保障配置在内的综合资产配置能力，通过整合资源、提升服务，进一步夯实银保在财富管理中的战略地位，为客户创造长期价值。同时，本行升级分层资产配置培养体系，强化银保专业顾问团队建设，并通过投资顾问、法税专家、康养专家等在内的专家顾问团队支持，将保险作为资产配置的重要组成部分，满足客户多元化资产配置需求。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 55,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5风险管理",
+        "quoted_anchor": "产品及服务体系方面，本行深化与平安寿险协作，基于客户的养老、传承等方面需求，敏捷定制符合银行客户需求的保险产品，并依托平安集团“综合金融+医疗养老”资源禀赋，为客户提供“保险+医疗健康”“保险+居家养老”“保险+高端养老”及保险金信托等服务，提升产品价值。同时，本行持续强化科技赋能，升级银保运营流程，提升银保服务线上化水平，关注客户权益保护，切实保障客户利益。2025年，本行顺应市场趋势，积极引入多款分红险产品，探索与平安健康险的业务合作，进一步丰富产品线，提升市场竞争力，致力于为客户提供更加定制化、智能化、一站式的财未来，顺应客户日益增长的养老、财富传承等需求，本行将持续深耕银保价值，聚焦队伍、产品、服务等驱动因子升级，推动银保业务高质量、可持续发展。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "产品及服务体系方面，本行深化与平安寿险协作，基于客户的养老、传承等方面需求，敏捷定制符合银行客户需求的保险产品，并依托平安集团“综合金融+医疗养老”资源禀赋，为客户提供“保险+医疗健康”“保险+居家养老”“保险+高端养老”及保险金信托等服务，提升产品价值。同时，本行持续强化科技赋能，升级银保运营流程，提升银保服务线上化水平，关注客户权益保护，切实保障客户利益。2025年，本行顺应市场趋势，积极引入多款分红险产品，探索与平安健康险的业务合作，进一步丰富产品线，提升市场竞争力，致力于为客户提供更加定制化、智能化、一站式的财未来，顺应客户日益增长的养老、财富传承等需求，本行将持续深耕银保价值，聚焦队伍、产品、服务等驱动因子升级，推动银保业务高质量、可持续发展。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:150",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 55,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5风险管理",
+        "quoted_anchor": "本行建立组织架构健全、职责边界清晰的风险治理架构，建立多层次、相互衔接、有效制衡的运行机制。本行全面风险管理体系以提高本行全面风险管理水平，有效保障业务健康、可持续发展为目标，遵循匹配性、全覆盖、独立性、有效性四大基本原则，一是本行制定风险与收益相均衡的",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行建立组织架构健全、职责边界清晰的风险治理架构，建立多层次、相互衔接、有效制衡的运行机制。本行全面风险管理体系以提高本行全面风险管理水平，有效保障业务健康、可持续发展为目标，遵循匹配性、全覆盖、独立性、有效性四大基本原则，一是本行制定风险与收益相均衡的"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 56,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.2大额风险暴露",
+        "quoted_anchor": "风险管理目标，使风险管理体系与业务发展战略、风险状况相匹配；二是本行确保全面风险管理覆盖全业务、全风险、全流程、全机构、全人员；三是本行风险管理架构保持独立性，风险条线人员、职责、报告路线及考核均保持相对独立，与业务条线形成制衡；四是本行根据风险管理结果，有效评估内部资本充足性，定期开展压力测试，确保资本水平与风险偏好、风险管理状况相适应，并能报告期内，本行持续完善全面风险管理体系，一是加强防线建设，结合本行风险防控重点，优化风险管理综合评价指标及规则，压实一道防线风险防控职责；二是确保风险偏好的全面引领，持续完善各类风险偏好的监测、偏离处置与调整机制；三是不断升级各类风险管理政策与程序，使风险管理能力匹配业务发展水平与风险状况，继续优化表外业务风险管理，表外业务风险情况保持良好；四是持续深化全面风险管理的数字化转型，加强数据治理，夯实信息底座，同时加快推进 AI大模型风险中台工具的建设及应用，进一步提升风险识别、管控与分析效率。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "风险管理目标，使风险管理体系与业务发展战略、风险状况相匹配；二是本行确保全面风险管理覆盖全业务、全风险、全流程、全机构、全人员；三是本行风险管理架构保持独立性，风险条线人员、职责、报告路线及考核均保持相对独立，与业务条线形成制衡；四是本行根据风险管理结果，有效评估内部资本充足性，定期开展压力测试，确保资本水平与风险偏好、风险管理状况相适应，并能报告期内，本行持续完善全面风险管理体系，一是加强防线建设，结合本行风险防控重点，优化风险管理综合评价指标及规则，压实一道防线风险防控职责；二是确保风险偏好的全面引领，持续完善各类风险偏好的监测、偏离处置与调整机制；三是不断升级各类风险管理政策与程序，使风险管理能力匹配业务发展水平与风险状况，继续优化表外业务风险管理，表外业务风险情况保持良好；四是持续深化全面风险管理的数字化转型，加强数据治理，夯实信息底座，同时加快推进 AI大模型风险中台工具的建设及应用，进一步提升风险识别、管控与分析效率。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 56,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.2大额风险暴露",
+        "quoted_anchor": "信用风险是指银行的借款人或交易对手不能按事先达成的协议履行其义务而形成的风险。本行总行风险管理委员会统筹各层级风险管理工作，总行风险管理部、总行授信审批部、总行零售信贷风险管理部等专业部门负责信用风险管理工作。本行坚持“风险与发展相互协调，风险与收益相互均衡，风险与资本相互适应”的风险管理原则，持续完善信用风险全流程管理，有效提升本行信用报告期内，本行研判风险形势，积极采取各种措施提升风险防控能力，确保资产质量保持稳定：一是把好增量，推进资产结构优化，实时跟踪行业、客户、区域、产品风险变化，做好政策及制度检视，强化前瞻研判及敏捷调整，动态调整客户准入及行业预警标准，优化制度风险管理要求，从源头上控制资产质量；二是管好存量，从行业、客户、产品等管理维度实施分类分层差异化管理，落实贷后管理规定动作，重点把控关键问题，加大对贷款本息的回收预控；强化预警监测管理，进一步提升预警前瞻性，提升早期预警管理成效；三是加强重点领域风险管理，聚焦重点机构、重点客群、重点大户早期风险摸排和管控，深化客户和机构的分层管理，同时，严格落实一揽子化债政策要求，稳妥化解存量债务风险，严控平台债务增量，并把握化债新阶段机遇，分区域施策，积极助力地方一体化推进债务风险化解和高质量发展；四是加大问题资产清收处置力度，聚焦重点领域和重点项目，夯实基础管理与清收动作，并创新探索清收处置手段，提升不良资产清收处置质效。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "信用风险是指银行的借款人或交易对手不能按事先达成的协议履行其义务而形成的风险。本行总行风险管理委员会统筹各层级风险管理工作，总行风险管理部、总行授信审批部、总行零售信贷风险管理部等专业部门负责信用风险管理工作。本行坚持“风险与发展相互协调，风险与收益相互均衡，风险与资本相互适应”的风险管理原则，持续完善信用风险全流程管理，有效提升本行信用报告期内，本行研判风险形势，积极采取各种措施提升风险防控能力，确保资产质量保持稳定：一是把好增量，推进资产结构优化，实时跟踪行业、客户、区域、产品风险变化，做好政策及制度检视，强化前瞻研判及敏捷调整，动态调整客户准入及行业预警标准，优化制度风险管理要求，从源头上控制资产质量；二是管好存量，从行业、客户、产品等管理维度实施分类分层差异化管理，落实贷后管理规定动作，重点把控关键问题，加大对贷款本息的回收预控；强化预警监测管理，进一步提升预警前瞻性，提升早期预警管理成效；三是加强重点领域风险管理，聚焦重点机构、重点客群、重点大户早期风险摸排和管控，深化客户和机构的分层管理，同时，严格落实一揽子化债政策要求，稳妥化解存量债务风险，严控平台债务增量，并把握化债新阶段机遇，分区域施策，积极助力地方一体化推进债务风险化解和高质量发展；四是加大问题资产清收处置力度，聚焦重点领域和重点项目，夯实基础管理与清收动作，并创新探索清收处置手段，提升不良资产清收处置质效。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:153",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 56,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.2大额风险暴露",
+        "quoted_anchor": "根据《商业银行大额风险暴露管理办法》，大额风险暴露是指商业银行对单一客户或一组关联客户超过其一级资本净额 2.5%的信用暴露（包括银行账簿和交易账簿内各类信用风险暴露）。本行将大额风险暴露纳入全面风险管理体系，明确大额风险暴露管理职责和流程管理方案，不断完善客",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "根据《商业银行大额风险暴露管理办法》，大额风险暴露是指商业银行对单一客户或一组关联客户超过其一级资本净额 2.5%的信用暴露（包括银行账簿和交易账簿内各类信用风险暴露）。本行将大额风险暴露纳入全面风险管理体系，明确大额风险暴露管理职责和流程管理方案，不断完善客"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:154",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 57,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.4流动性风险",
+        "quoted_anchor": "户授信管理要求、系统建设与数据治理，实现客户大额风险暴露的自动化统计、监测、预警和控制，报告期内，除监管豁免客户外，本行同业单一客户、同业集团客户、非同业单一客户、非同业集团客户风险暴露占一级资本净额的比例，均满足监管达标要求。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "户授信管理要求、系统建设与数据治理，实现客户大额风险暴露的自动化统计、监测、预警和控制，报告期内，除监管豁免客户外，本行同业单一客户、同业集团客户、非同业单一客户、非同业集团客户风险暴露占一级资本净额的比例，均满足监管达标要求。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 57,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.4流动性风险",
+        "quoted_anchor": "市场风险是指因市场价格（利率、汇率、股票价格和商品价格）的不利变动而使商业银行表内和表外业务发生损失的风险。本行面临的市场风险主要为利率风险和汇率风险。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "市场风险是指因市场价格（利率、汇率、股票价格和商品价格）的不利变动而使商业银行表内和表外业务发生损失的风险。本行面临的市场风险主要为利率风险和汇率风险。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 57,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.4流动性风险",
+        "quoted_anchor": "本行建立了有效的市场风险治理架构和管理职责分工。董事会是市场风险管理最高决策机构，承担市场风险管理的最终责任；高级管理层及其下设委员会负责在董事会授权范围内，审批市场风险管理的重大事项，定期听取市场风险管理执行的汇报；风险管理部是市场风险的牵头管理和具体执行部门，与前台业务部门保持独立。本行已搭建完善的市场风险管理制度体系，覆盖了市场风险识别、计量、监测、控制和报告的全流程，定期审视评估市场风险的各项制度和管理办法，并根据业务和发展现状不断完善、改进、优化流程。本行已建立较为完善的市场风险管理流程，从事前的可交易产品授权管理和账簿划分，事中风险识别、计量监测和管控，到事后返回检验、压力测试，报告期内，本行持续加强市场风险管理，一是持续完善市场风险管理政策制度体系，落实《商业银行市场风险管理办法》要求，促进业务平稳健康发展；二是加强主动风险管理，敏捷分析外部热点事件的影响，及时提示相关风险；三是结合 AI技术运用，进一步完善市场风险智能化风控平台，流动性风险是指商业银行无法以合理成本及时获得充足资金，用于偿付到期债务、履行其他支付义务和满足正常业务开展的其他资金需求的风险。根据《商业银行流动性风险管理办法》，本行坚持审慎的流动性风险管理原则和稳健的管理策略，通过建立适时、合理、有效的流动性风险管理机制，实现对流动性风险的充分识别、准确计量、持续监测和有效控制，确保本行无论在正常经营环境中还是在压力状态下，都有充足资金应对资产的增长、到期债务的偿付和其他支付义务。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行建立了有效的市场风险治理架构和管理职责分工。董事会是市场风险管理最高决策机构，承担市场风险管理的最终责任；高级管理层及其下设委员会负责在董事会授权范围内，审批市场风险管理的重大事项，定期听取市场风险管理执行的汇报；风险管理部是市场风险的牵头管理和具体执行部门，与前台业务部门保持独立。本行已搭建完善的市场风险管理制度体系，覆盖了市场风险识别、计量、监测、控制和报告的全流程，定期审视评估市场风险的各项制度和管理办法，并根据业务和发展现状不断完善、改进、优化流程。本行已建立较为完善的市场风险管理流程，从事前的可交易产品授权管理和账簿划分，事中风险识别、计量监测和管控，到事后返回检验、压力测试，报告期内，本行持续加强市场风险管理，一是持续完善市场风险管理政策制度体系，落实《商业银行市场风险管理办法》要求，促进业务平稳健康发展；二是加强主动风险管理，敏捷分析外部热点事件的影响，及时提示相关风险；三是结合 AI技术运用，进一步完善市场风险智能化风控平台，流动性风险是指商业银行无法以合理成本及时获得充足资金，用于偿付到期债务、履行其他支付义务和满足正常业务开展的其他资金需求的风险。根据《商业银行流动性风险管理办法》，本行坚持审慎的流动性风险管理原则和稳健的管理策略，通过建立适时、合理、有效的流动性风险管理机制，实现对流动性风险的充分识别、准确计量、持续监测和有效控制，确保本行无论在正常经营环境中还是在压力状态下，都有充足资金应对资产的增长、到期债务的偿付和其他支付义务。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 57,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.4流动性风险",
+        "quoted_anchor": "本行建立了完善的流动性风险管理治理架构，董事会承担流动性风险管理的最终责任，监事会负责对董事会及高级管理层在流动性风险管理中的履职情况进行监督评价，高级管理层承担流动性风险管理职责，资产负债管理委员会是流动性风险管理的最高管理机构。资产负债管理部在资产负债管理委员会指导下，负责流动性风险的具体管理工作，与各业务管理部门和分支机构共同组成执行体系。稽核监察部负责流动性风险管理的内部审计。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行建立了完善的流动性风险管理治理架构，董事会承担流动性风险管理的最终责任，监事会负责对董事会及高级管理层在流动性风险管理中的履职情况进行监督评价，高级管理层承担流动性风险管理职责，资产负债管理委员会是流动性风险管理的最高管理机构。资产负债管理部在资产负债管理委员会指导下，负责流动性风险的具体管理工作，与各业务管理部门和分支机构共同组成执行体系。稽核监察部负责流动性风险管理的内部审计。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:158",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 57,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.4流动性风险",
+        "quoted_anchor": "本行高度重视流动性风险管理，持续优化流动性风险管理框架和管理策略，建立了完善的流动性风险管理体系，一是强化流动性风险指标管理，加强现金流监测和资金来源管理，促进核心负债",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行高度重视流动性风险管理，持续优化流动性风险管理框架和管理策略，建立了完善的流动性风险管理体系，一是强化流动性风险指标管理，加强现金流监测和资金来源管理，促进核心负债"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 58,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.6国别风险",
+        "quoted_anchor": "稳步增长，持续优化资产负债结构，合理控制错配流动性风险；二是优化流动性应急管理体系，审慎评估未来流动性需求，维持充足的优质流动性资产，持续完善流动性风险预警机制，开展流动性风险应急演练，有效防范应急流动性风险；三是加强对宏观经济形势和市场流动性的分析，提高流动性管理的前瞻性和主动性，及时应对市场流动性风险。同时，本行依据监管指标监管标准、流动性风险偏好、流动性风险管理策略、资产负债结构状况及融资能力等因素制定流动性风险指标限额；",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "稳步增长，持续优化资产负债结构，合理控制错配流动性风险；二是优化流动性应急管理体系，审慎评估未来流动性需求，维持充足的优质流动性资产，持续完善流动性风险预警机制，开展流动性风险应急演练，有效防范应急流动性风险；三是加强对宏观经济形势和市场流动性的分析，提高流动性管理的前瞻性和主动性，及时应对市场流动性风险。同时，本行依据监管指标监管标准、流动性风险偏好、流动性风险管理策略、资产负债结构状况及融资能力等因素制定流动性风险指标限额；"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 58,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.6国别风险",
+        "quoted_anchor": "根据本行资产负债结构和产品种类，合理审慎设定压力情景，定期开展流动性风险压力测试，评估报告期内，本行各项业务稳步发展，优质流动性资产储备充裕，流动性状况保持安全稳健，流操作风险是指由于内部程序、员工、信息科技系统存在问题以及外部事件造成损失的风险，包括法律风险，但不包括战略风险和声誉风险。本行建立了完整、独立的操作风险管理架构，董事会承担操作风险管理的最终责任，监事会承担监督责任，高级管理层承担实施责任，法律合规部负责报告期内，本行以落实操作风险相关监管规定为目标，完善操作风险管理体系，提升操作风险管理的精细化和智能化水平：一是持续优化操作风险自评估、关键风险指标、操作风险损失数据库三大管理工具，加强风险预警和跟踪改善，提升风险防控的有效性；二是强化数据驱动的操作风险管理体系，整合风险监测数据，升级完善风险热图，不断提升操作风险管理的智能化水平；三是全面升级操作风险资本计量体系，以持续满足操作风险标准法相关监管合规达标要求；四是加强业务连续性管理工作，完善业务连续性管理体系，提升运营中断事件的综合处置能力；五是加强操作风险培训宣导，持续开展对各级机构的业务支持和评价，培育良好操作风险管理文化。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "根据本行资产负债结构和产品种类，合理审慎设定压力情景，定期开展流动性风险压力测试，评估报告期内，本行各项业务稳步发展，优质流动性资产储备充裕，流动性状况保持安全稳健，流操作风险是指由于内部程序、员工、信息科技系统存在问题以及外部事件造成损失的风险，包括法律风险，但不包括战略风险和声誉风险。本行建立了完整、独立的操作风险管理架构，董事会承担操作风险管理的最终责任，监事会承担监督责任，高级管理层承担实施责任，法律合规部负责报告期内，本行以落实操作风险相关监管规定为目标，完善操作风险管理体系，提升操作风险管理的精细化和智能化水平：一是持续优化操作风险自评估、关键风险指标、操作风险损失数据库三大管理工具，加强风险预警和跟踪改善，提升风险防控的有效性；二是强化数据驱动的操作风险管理体系，整合风险监测数据，升级完善风险热图，不断提升操作风险管理的智能化水平；三是全面升级操作风险资本计量体系，以持续满足操作风险标准法相关监管合规达标要求；四是加强业务连续性管理工作，完善业务连续性管理体系，提升运营中断事件的综合处置能力；五是加强操作风险培训宣导，持续开展对各级机构的业务支持和评价，培育良好操作风险管理文化。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:161",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 58,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.6国别风险",
+        "quoted_anchor": "国别风险是指由于境外国家或地区政治、经济、社会变化及事件，导致该国家或地区债务人没有能力或者拒绝偿付银行业金融机构债务，或使银行业金融机构在该国家或地区的商业遭受损失，或使银行业金融机构遭受其他损失的风险。本行将国别风险纳入全面风险管理体系，按照监管要求制定国别风险管理政策和程序，明确管理职责、管理手段和审批流程，规范国别风险管理。本行根据风险评估结果，将国别风险分为低、较低、中等、较高、高五个等级，并对每个等级实施相应的分类管理。本行将承担境外主体国别风险的各类经营活动均纳入国别风险限额统一管理，根据国别风险评级结果、国别经济发展情况以及业务需求，按年度核定国别风险限额，并根据风险变化动态调整国别风险评级与限额。本行已严格落实《银行业金融机构国别风险管理办法》要求，持续完善报告期内，本行密切关注国际形势变化，动态更新和调整国别风险评级与限额，持续加强国别",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "国别风险是指由于境外国家或地区政治、经济、社会变化及事件，导致该国家或地区债务人没有能力或者拒绝偿付银行业金融机构债务，或使银行业金融机构在该国家或地区的商业遭受损失，或使银行业金融机构遭受其他损失的风险。本行将国别风险纳入全面风险管理体系，按照监管要求制定国别风险管理政策和程序，明确管理职责、管理手段和审批流程，规范国别风险管理。本行根据风险评估结果，将国别风险分为低、较低、中等、较高、高五个等级，并对每个等级实施相应的分类管理。本行将承担境外主体国别风险的各类经营活动均纳入国别风险限额统一管理，根据国别风险评级结果、国别经济发展情况以及业务需求，按年度核定国别风险限额，并根据风险变化动态调整国别风险评级与限额。本行已严格落实《银行业金融机构国别风险管理办法》要求，持续完善报告期内，本行密切关注国际形势变化，动态更新和调整国别风险评级与限额，持续加强国别"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:59:162",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 59,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.8声誉风险",
+        "quoted_anchor": "风险监测。本行国别风险暴露主要集中在风险较低的国家或地区，限额执行情况良好，风险整体可银行账簿利率风险是指利率水平、期限结构等要素发生不利变动时，导致银行账簿整体收益及经济价值遭受损失的风险。根据《商业银行银行账簿利率风险管理指引（修订）》等法律法规要求，本行持续完善利率风险治理架构，优化利率风险相关制度和系统，丰富利率风险计量框架，提升精细化管理水平，确保本行有效地识别、计量、监测与管控各项业务所承担的利率风险。本行主要采用缺口分析、久期分析、情景模拟及压力测试等方法，遵循合理性、审慎性原则，对银行账簿利率风险进行有效计量。根据上述计量方法，建立并实施银行账簿利率风险限额管理体系，持续监测利率风险暴露及限额使用情况，并定期向董事会（或其授权的专业委员会）及高级管理层进行汇报。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "风险监测。本行国别风险暴露主要集中在风险较低的国家或地区，限额执行情况良好，风险整体可银行账簿利率风险是指利率水平、期限结构等要素发生不利变动时，导致银行账簿整体收益及经济价值遭受损失的风险。根据《商业银行银行账簿利率风险管理指引（修订）》等法律法规要求，本行持续完善利率风险治理架构，优化利率风险相关制度和系统，丰富利率风险计量框架，提升精细化管理水平，确保本行有效地识别、计量、监测与管控各项业务所承担的利率风险。本行主要采用缺口分析、久期分析、情景模拟及压力测试等方法，遵循合理性、审慎性原则，对银行账簿利率风险进行有效计量。根据上述计量方法，建立并实施银行账簿利率风险限额管理体系，持续监测利率风险暴露及限额使用情况，并定期向董事会（或其授权的专业委员会）及高级管理层进行汇报。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:59:163",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 59,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.8声誉风险",
+        "quoted_anchor": "综合考虑利率风险特征和实际业务发展状况，本行加强分析研判利率市场趋势，合理调节资产负债报告期内，国内市场方面，贷款市场报价利率（LPR）及存款利率继续下调，国际市场方面，降息周期主要外币利率逐步下行，外币负债成本得到有效控制，外币银行账簿利率风险管理难度有一定缓解。本行持续关注国内外经济形势变化，加大对于宏观经济及利率走势的研判力度，结合风险敞口变化趋势，采取积极主动的利率风险管理策略，通过适时调整资产和负债结构等方式有效控制银行账簿利率风险。报告期内，本行各项监控指标均在限额内运转，银行账簿利率风险水平整体平声誉风险主要是指由本行行为、从业人员行为或外部事件等导致利益相关方、社会公众、媒体等对本行形成负面评价，从而损害本行品牌价值，不利于本行正常经营，甚至影响到市场稳定和社会稳定的风险。在监管部门的指导下，本行上下积极联动，根据《银行保险机构声誉风险管理办法（试行）》等监管要求，以“前瞻性、匹配性、全覆盖、有效性”基本原则和“分级管理、分工负责，实时监测、预防为主，快速响应、分类处置，守土有责、协同应对”执行原则为指导，将声誉风险管理纳入公司治理及全面风险管理体系，持续落实各项声誉风险管理工作，不断提升声誉风险报告期内，本行从治理架构、经营活动、常态化建设、监督管理等方面进一步完善声誉风险管理体系，主要落实以下七个方面的工作内容：一是强化声誉风险排查及舆情预警，升级大数据舆情监测系统，在“两会”“3·15 消费者权益保护日”“双十一”等重要节点制定应急预案及专项监测；",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "综合考虑利率风险特征和实际业务发展状况，本行加强分析研判利率市场趋势，合理调节资产负债报告期内，国内市场方面，贷款市场报价利率（LPR）及存款利率继续下调，国际市场方面，降息周期主要外币利率逐步下行，外币负债成本得到有效控制，外币银行账簿利率风险管理难度有一定缓解。本行持续关注国内外经济形势变化，加大对于宏观经济及利率走势的研判力度，结合风险敞口变化趋势，采取积极主动的利率风险管理策略，通过适时调整资产和负债结构等方式有效控制银行账簿利率风险。报告期内，本行各项监控指标均在限额内运转，银行账簿利率风险水平整体平声誉风险主要是指由本行行为、从业人员行为或外部事件等导致利益相关方、社会公众、媒体等对本行形成负面评价，从而损害本行品牌价值，不利于本行正常经营，甚至影响到市场稳定和社会稳定的风险。在监管部门的指导下，本行上下积极联动，根据《银行保险机构声誉风险管理办法（试行）》等监管要求，以“前瞻性、匹配性、全覆盖、有效性”基本原则和“分级管理、分工负责，实时监测、预防为主，快速响应、分类处置，守土有责、协同应对”执行原则为指导，将声誉风险管理纳入公司治理及全面风险管理体系，持续落实各项声誉风险管理工作，不断提升声誉风险报告期内，本行从治理架构、经营活动、常态化建设、监督管理等方面进一步完善声誉风险管理体系，主要落实以下七个方面的工作内容：一是强化声誉风险排查及舆情预警，升级大数据舆情监测系统，在“两会”“3·15 消费者权益保护日”“双十一”等重要节点制定应急预案及专项监测；"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:59:164",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 59,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.8声誉风险",
+        "quoted_anchor": "二是建立健全重大信访或群诉风险事件、舆情事件的事前评估机制，根据评估结果制定预案，有效防范风险；三是妥善处置声誉风险事件，针对不实信息，采取立体化、多层次的策略，通过适当形式，澄清事实情况，回应社会关切；四是全面落实正面舆论引导工作，以“传统媒体+新媒体”矩阵",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "二是建立健全重大信访或群诉风险事件、舆情事件的事前评估机制，根据评估结果制定预案，有效防范风险；三是妥善处置声誉风险事件，针对不实信息，采取立体化、多层次的策略，通过适当形式，澄清事实情况，回应社会关切；四是全面落实正面舆论引导工作，以“传统媒体+新媒体”矩阵"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:165",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 60,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.11洗钱风险",
+        "quoted_anchor": "相辅相成的媒介形式，全方位提升本行良好的品牌形象；五是不定期开展危机响应处置的模拟演练，强化各职能部门、分支机构声誉风险管控及舆情处置能力建设；六是强化考核问责，通过完善风险考核机制，将声誉风险事件的防范处置纳入各单位考核范围，加强源头治理；七是围绕本行支持实体经济、做好金融“五篇大文章”、消费者权益保护、履行企业社会责任等主题开展多层次、立体本行坚持党建引领，积极贯彻落实党的二十大和二十届历次全会、中央经济工作会议精神，高质量参与实施好国家“十五五”规划。本行紧跟政策导向和监管要求，坚持“零售做强、对公做精、同业做专”战略不动摇，坚持降本增效、从严治行要求不放松。面对新形势，本行一方面紧跟国家战略部署，发掘银行发展新动能；另一方面把握科技革命时代机遇，将科技战略作为银行发展核心驱动力。本行持续完善战略制定和执行检视机制，在坚持既定战略方针的前提下，将年度经营计划与战略目标有机衔接，以敏锐的市场洞察力，紧密结合内外部形势发展变化，不断丰富和深化战略内涵，确保经营管理和业务发展始终聚焦于战略目标，积极推动本行战略规划全面落地并高效执行。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "相辅相成的媒介形式，全方位提升本行良好的品牌形象；五是不定期开展危机响应处置的模拟演练，强化各职能部门、分支机构声誉风险管控及舆情处置能力建设；六是强化考核问责，通过完善风险考核机制，将声誉风险事件的防范处置纳入各单位考核范围，加强源头治理；七是围绕本行支持实体经济、做好金融“五篇大文章”、消费者权益保护、履行企业社会责任等主题开展多层次、立体本行坚持党建引领，积极贯彻落实党的二十大和二十届历次全会、中央经济工作会议精神，高质量参与实施好国家“十五五”规划。本行紧跟政策导向和监管要求，坚持“零售做强、对公做精、同业做专”战略不动摇，坚持降本增效、从严治行要求不放松。面对新形势，本行一方面紧跟国家战略部署，发掘银行发展新动能；另一方面把握科技革命时代机遇，将科技战略作为银行发展核心驱动力。本行持续完善战略制定和执行检视机制，在坚持既定战略方针的前提下，将年度经营计划与战略目标有机衔接，以敏锐的市场洞察力，紧密结合内外部形势发展变化，不断丰富和深化战略内涵，确保经营管理和业务发展始终聚焦于战略目标，积极推动本行战略规划全面落地并高效执行。"
+      },
+      {
+        "evidence_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:166",
+        "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+        "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 60,
+        "section_path": "4、安永华明会计师事务所（特殊普通合伙）根据国内审计准则对本行编制的 2025年度财务报 > 1.1公司基本情况 > 1.1.1公司信息 > 3.5.11洗钱风险",
+        "quoted_anchor": "本行战略符合党和国家的要求、符合宏观形势发展变化、符合客户需求日益变化的要求，整体的战略执行力持续提升，战略风险管控能力持续增强，战略风险总体平稳可控。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+        "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+        "source_title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+        "text": "本行战略符合党和国家的要求、符合宏观形势发展变化、符合客户需求日益变化的要求，整体的战略执行力持续提升，战略风险管控能力持续增强，战略风险总体平稳可控。"
+      }
+    ],
+    "financial_facts": [],
+    "derived_metrics": [],
+    "gaps": [
+      {
+        "scope": "000001.SZ",
+        "reason": "historical_receipt_has_no_2026Q1_page_packet",
+        "raw_text_excerpt": "The selected official receipt covers the verified FY packet only."
+      },
+      {
+        "scope": "000001.SZ",
+        "reason": "financial_column_identity_unresolved",
+        "raw_text_excerpt": "Existing page facts are retained by their source receipt but are not admitted as numeric model input until the statement columns are independently resolved."
+      }
+    ],
+    "truth_boundary": {
+      "official_pdf_only": true,
+      "issuer_disclosure_is_not_independent_proof": true,
+      "derived_direction_is_deterministic": true,
+      "no_valuation_or_action": true,
+      "no_old_report_prose": true
+    }
+  },
+  "repair_feedback": [
+    {
+      "source": "machine",
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "timeline",
+      "chars": 269,
+      "minimum": 300
+    },
+    {
+      "source": "machine",
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "technology_products",
+      "chars": 344,
+      "minimum": 400
+    },
+    {
+      "source": "machine",
+      "code": "dossier_short",
+      "message": "editorial body is materially shorter than the Round 7 V4 reference",
+      "chars": 1911,
+      "target": 2429
+    },
+    {
+      "source": "machine",
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-04",
+      "missing": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "source": "machine",
+      "code": "claim_refs",
+      "message": "non-gap claim has no evidence refs",
+      "claim_id": "J-02"
+    },
+    {
+      "source": "machine",
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-17",
+      "missing": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "source": "machine",
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-01"
+    },
+    {
+      "source": "machine",
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-05"
+    },
+    {
+      "source": "machine",
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-11"
+    },
+    {
+      "source": "machine",
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-12"
+    },
+    {
+      "source": "machine",
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-20"
+    },
+    {
+      "source": "machine",
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-21"
+    },
+    {
+      "source": "machine",
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "03"
+    },
+    {
+      "source": "machine",
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "08"
+    },
+    {
+      "source": "machine",
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "14"
+    },
+    {
+      "source": "machine",
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "15"
+    },
+    {
+      "source": "independent_qa",
+      "code": "claim_refs",
+      "message": "C-04引用的evidence_id 56:150不在evidence packet中，无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "source": "independent_qa",
+      "code": "claim_refs",
+      "message": "J-02为非gap判断但无任何evidence_ids，无法追溯事实基础。",
+      "claim_id": "J-02",
+      "evidence_ids": []
+    },
+    {
+      "source": "independent_qa",
+      "code": "claim_refs",
+      "message": "C-17引用的evidence_id 56:150不在evidence packet中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "source": "independent_qa",
+      "code": "self_report_body_unmarked",
+      "message": "C-01为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "source": "independent_qa",
+      "code": "self_report_body_unmarked",
+      "message": "C-05为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "source": "independent_qa",
+      "code": "self_report_body_unmarked",
+      "message": "C-11为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "source": "independent_qa",
+      "code": "self_report_body_unmarked",
+      "message": "C-12为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "source": "independent_qa",
+      "code": "self_report_body_unmarked",
+      "message": "C-20为issuer_self_report，但正文未显式写“公司披露/年报自述”。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "length_contract": {
+    "total_body_chars_min": 2200,
+    "total_body_chars_target": 2429,
+    "per_section_min": {
+      "one_line_position": 100,
+      "founder_team": 100,
+      "timeline": 300,
+      "technology_products": 400,
+      "financial_valuation": 350,
+      "risks_commentary": 350,
+      "plain_language": 150
+    },
+    "paragraphs_per_section_min": 2
+  },
+  "prior_dossier": {
+    "latest_card": "2025年年报披露：对公贷款+9.2%[C-03]，零售贷款-2.3%[C-02]，抵押贷占比62.9%[C-15]；零售营收降、净利润增[C-14]；资本充足率升但具体数值未披露[G-08]。",
+    "sections": [
+      {
+        "id": "one_line_position",
+        "title": "一句话定位",
+        "body": "平安银行在2025年年报中自述战略目标为“中国最卓越、全球领先的智能化零售银行”，坚持“零售做强、对公做精、同业做专”[C-01]。年报披露，一般企业贷款余额较上年末增长9.2%，而个人贷款余额下降2.3%[C-02][C-03]，揭示出零售业务正主动压降风险敞口，对公板块发力承接增长。这标志着该行从过往的规模扩张转向“量、价、险”再平衡，但其能否在息差收窄和零售营收下滑的背景下实现高质量转型，仍需持续验证[J-01]。",
+        "claim_ids": [
+          "C-01",
+          "C-02",
+          "C-03",
+          "J-01"
+        ]
+      },
+      {
+        "id": "founder_team",
+        "title": "创始人与团队",
+        "body": "输入未提供创始人及核心团队详细背景[G-01]。年报仅述及坚持党建引领，完善公司治理，强调战略执行力，但未披露具体高管履历和变动[G-02]。公司披露建立垂直集中的风险治理架构与分层经营体系[C-04]，然而管理层的实际能力和过往业绩无从评估，团队稳定性、激励机制与战略执行之间的匹配度仍是未知[J-02]。",
+        "claim_ids": [
+          "G-01",
+          "G-02",
+          "C-04",
+          "J-02"
+        ]
+      },
+      {
+        "id": "timeline",
+        "title": "发展时间线",
+        "body": "平安银行在年报中自述为中国内地首家公开上市的全国性股份制商业银行[C-05]，但具体上市年份未在输入材料中提供[G-03]。公司披露，2021年启动新银保业务改革，率先将代理保险内嵌至财富管理体系，利用平安集团综合金融优势与平安寿险深度合作[C-06]。2025年上半年，公司披露进一步将新财富队伍与原有财富队伍整合为一支队伍，强化综合资产配置能力[C-07]。展望未来，公司表示将坚持数字化转型和综合金融方向，紧跟国家战略发掘新动能[C-08]。这些动作显示其战略持续迭代，但整体进展和落地效果仍局限于公司自述，缺乏可量化的里程碑验证。",
+        "claim_ids": [
+          "C-05",
+          "G-03",
+          "C-06",
+          "C-07",
+          "C-08"
+        ]
+      },
+      {
+        "id": "technology_products",
+        "title": "技术与产品",
+        "body": "公司强调科技赋能，利用数字技术提升服务体验。年报自述科技赋能零售业务，打造数字化线上阵地，为客户提供“省心、省时、又省钱”的服务[C-09]；对公业务建立数据驱动的客户分层经营体系[C-10]；资金同业业务运用iDeal平台、“行e通”平台构建全能型机构销售服务[C-11]。产品端，银保业务在2025年引入多款分红险，并探索与平安健康险合作，丰富产品线[C-12]。综合金融方面，公司披露依托平安集团“综合金融+医疗养老”生态，推出多样化产品组合，深化“一个客户、多个账户、多种产品、一站式服务”模式[C-13]。但这些描述均属公司自述，缺乏第三方验证或量化指标佐证其科技转化的实际效益[J-03]。例如，数字化获客成本、客户活跃度提升率、交叉销售转化率等关键数据均未披露[G-04]。",
+        "claim_ids": [
+          "C-09",
+          "C-10",
+          "C-11",
+          "C-12",
+          "C-13",
+          "J-03",
+          "G-04"
+        ]
+      },
+      {
+        "id": "financial_valuation",
+        "title": "财务与估值",
+        "body": "输入包未提供完整的财务报表，缺乏总资产、营业收入、净利润、净息差、不良贷款率、资本充足率等关键指标的具体数值[G-05][G-06][G-07][G-08]。仅能从年报叙述中提取零星信息：公司披露，受贷款利率下行等因素影响，零售业务营业收入同比下降，但减值损失减少使得零售业务净利润同比增长[C-14]；一般企业贷款余额较上年末增长9.2%，个人贷款余额下降2.3%[C-02][C-03]；抵押类贷款占个人贷款比例为62.9%[C-15]。公司声称资本充足率提升，但未披露具体数值[G-08]。估值方面，无任何市盈率、市净率或可比分析信息，无法进行价值判断[G-09]。由于关键财务数据缺失，无法独立分析盈利能力、资产质量和成长性，目前只能依赖公司自述的局部趋势，这构成实质性研究障碍[G-10]。",
+        "claim_ids": [
+          "G-05",
+          "G-06",
+          "G-07",
+          "G-08",
+          "C-14",
+          "C-02",
+          "C-03",
+          "C-15",
+          "G-09",
+          "G-10"
+        ]
+      },
+      {
+        "id": "risks_commentary",
+        "title": "风险与点评",
+        "body": "公司年报对风险管理有详细描述。其全面风险管理体系覆盖信用、市场、流动性、操作、声誉、国别、银行账簿利率风险等类别[C-17][C-18][C-19][C-20][C-21]。针对信用风险，公司披露采取优化资产结构、加强预警、重点领域管控和加大清收等措施[C-22]。市场风险方面，公司披露结合AI技术运用，进一步完善市场风险智能化风控平台[C-23]；流动性风险管理方面，公司披露各项业务稳步发展，优质流动性资产储备充裕，流动性状况保持安全稳健[C-24]。战略风险方面，公司披露总体平稳可控[C-25]。这些均为公司自述，缺乏不良率、拨备覆盖率等硬指标验证[J-04]。值得注意的是，零售贷款主动压降可能暗示底层资产质量承压；银保业务对平安寿险的依赖，可能产生集中度和利益冲突风险[J-05]。若经济下行超预期，零售和中小企业资产质量恶化将直接冲击利润，这需要更透明的数据来评估。",
+        "claim_ids": [
+          "C-17",
+          "C-18",
+          "C-19",
+          "C-20",
+          "C-21",
+          "C-22",
+          "C-23",
+          "C-24",
+          "C-25",
+          "J-04",
+          "J-05"
+        ]
+      },
+      {
+        "id": "plain_language",
+        "title": "大白话结论",
+        "body": "平安银行就是一家老牌股份制银行，背靠平安集团，主要靠放贷和代销保险挣钱。现在它的策略是把零售贷款踩刹车，转而做大对公业务，再用集团的综合金融多赚点中间收入。代价是零售营收往下掉，利润增长靠少提坏账撑住。它的标签是“科技赋能”和“综合金融”，但现阶段看更像是在经济下行期求稳，而不是进攻。如果未来零售贷款重新增长且息差稳住，或者对公业务坏账爆发拖累利润，这个判断就要推翻[J-06]。",
+        "claim_ids": [
+          "J-06"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "C-01",
+        "kind": "issuer_self_report",
+        "text": "公司披露：战略目标为“中国最卓越、全球领先的智能化零售银行”，坚持“零售做强、对公做精、同业做专”。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+        ],
+        "derived_ids": [],
+        "falsifier": "若官方文件或监管意见否定此战略表述，则证伪。"
+      },
+      {
+        "claim_id": "C-02",
+        "kind": "issuer_self_report",
+        "text": "公司披露：个人贷款余额较上年末下降2.3%。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+        ],
+        "derived_ids": [],
+        "falsifier": "若经审计的定期报告显示个人贷款余额变动方向或幅度与2.3%显著不符，则证伪。"
+      },
+      {
+        "claim_id": "C-03",
+        "kind": "issuer_self_report",
+        "text": "公司披露：一般企业贷款余额较上年末增长9.2%。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+        ],
+        "derived_ids": [],
+        "falsifier": "若经审计的定期报告显示企业贷款余额变动方向或幅度与9.2%显著不符，则证伪。"
+      },
+      {
+        "claim_id": "J-01",
+        "kind": "judgment",
+        "text": "平安银行正从过度依赖零售规模扩张转向追求收益与风险的平衡，零售贷款主动收缩折射战略取舍，但转型能否在息差收窄下稳住营收并控制不良，仍需更长观察期。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+        ],
+        "derived_ids": [],
+        "falsifier": "若未来连续两个财报周期内，零售贷款恢复正增长且净息差同比企稳，同时零售营收增速回升，则判断被证伪。"
+      },
+      {
+        "claim_id": "G-01",
+        "kind": "gap",
+        "text": "输入未提供创始人姓名、背景及创业历程。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-02",
+        "kind": "gap",
+        "text": "输入未提供现任核心高管详细履历、任期及持股情况。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-04",
+        "kind": "issuer_self_report",
+        "text": "公司披露：建立组织架构健全、职责边界清晰的风险治理架构，实施垂直集中管理。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+        ],
+        "derived_ids": [],
+        "falsifier": "若监管检查或独立审计发现风险治理存在重大缺陷，则证伪。"
+      },
+      {
+        "claim_id": "J-02",
+        "kind": "judgment",
+        "text": "创始人信息缺失，高管团队不详，无法评估管理层能力与战略执行的匹配度。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": "若后续获得详细管理层背景及业绩记录，可重新评估。"
+      },
+      {
+        "claim_id": "C-05",
+        "kind": "issuer_self_report",
+        "text": "公司披露：本行是中国内地首家公开上市的全国性股份制商业银行。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+        ],
+        "derived_ids": [],
+        "falsifier": "若交易所历史记录或证监会公告显示并非首家上市，则证伪。"
+      },
+      {
+        "claim_id": "G-03",
+        "kind": "gap",
+        "text": "输入未提供具体上市年份及早期发展里程碑。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-06",
+        "kind": "issuer_self_report",
+        "text": "公司披露：2021年启动新银保业务改革，将代理保险内嵌到财富管理体系中，与平安寿险深度合作。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148"
+        ],
+        "derived_ids": [],
+        "falsifier": "若公司内部文件或合作方披露信息显示改革启动时间非2021年，则证伪。"
+      },
+      {
+        "claim_id": "C-07",
+        "kind": "issuer_self_report",
+        "text": "公司披露：2025年上半年将新财富队伍与原有财富队伍整合为一支队伍，提升综合资产配置能力。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148"
+        ],
+        "derived_ids": [],
+        "falsifier": "若组织架构公告或员工反馈显示整合未在2025年上半年完成，则证伪。"
+      },
+      {
+        "claim_id": "C-08",
+        "kind": "issuer_self_report",
+        "text": "公司披露：未来将紧跟国家战略，坚持既定战略方针，丰富战略内涵，推动转型升级。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:165"
+        ],
+        "derived_ids": [],
+        "falsifier": "若后续战略规划文件或公开讲话中出现重大转向，则证伪。"
+      },
+      {
+        "claim_id": "C-09",
+        "kind": "issuer_self_report",
+        "text": "公司披露：科技赋能零售业务，打造数字化线上阵地，提供“省心、省时、又省钱”的服务体验。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+        ],
+        "derived_ids": [],
+        "falsifier": "若客户满意度调查或实际业务数据显示服务未达宣称水平，则证伪。"
+      },
+      {
+        "claim_id": "C-10",
+        "kind": "issuer_self_report",
+        "text": "公司披露：对公业务建立数据驱动的客户分层经营体系，通过生态经营和综合金融服务提升贡献。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+        ],
+        "derived_ids": [],
+        "falsifier": "若对公客户数或渗透率无明显提升，则证伪。"
+      },
+      {
+        "claim_id": "C-11",
+        "kind": "issuer_self_report",
+        "text": "公司披露：资金同业业务运用iDeal平台、“行e通”平台构建全能型机构销售服务。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+        ],
+        "derived_ids": [],
+        "falsifier": "若平台交易量或客户数下降，或出现重大技术故障，则证伪。"
+      },
+      {
+        "claim_id": "C-12",
+        "kind": "issuer_self_report",
+        "text": "公司披露：2025年引入多款分红险产品，探索与平安健康险合作，丰富产品线。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+        ],
+        "derived_ids": [],
+        "falsifier": "若产品备案信息或监管批复显示未引入或合作未达成，则证伪。"
+      },
+      {
+        "claim_id": "C-13",
+        "kind": "issuer_self_report",
+        "text": "公司披露：依托平安集团“综合金融+医疗养老”生态，深化“一个客户、多个账户、多种产品、一站式服务”模式。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36"
+        ],
+        "derived_ids": [],
+        "falsifier": "若客户渗透率或交叉销售率未改善，则证伪。"
+      },
+      {
+        "claim_id": "J-03",
+        "kind": "judgment",
+        "text": "科技赋能和综合金融故事均属公司自述，缺乏第三方验证和量化转化指标，技术优势的真实性存疑。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36"
+        ],
+        "derived_ids": [],
+        "falsifier": "若后续披露中，数字化渠道贡献收入占比、新增客户中集团引流比例等指标持续提升，则判断被削弱。"
+      },
+      {
+        "claim_id": "G-04",
+        "kind": "gap",
+        "text": "科技赋能的实际效益数据缺失，如数字化获客成本、客户活跃度、交叉销售率等。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-05",
+        "kind": "gap",
+        "text": "输入未提供总资产规模数据。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-06",
+        "kind": "gap",
+        "text": "输入未提供营业收入、净利润等盈利指标。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-07",
+        "kind": "gap",
+        "text": "输入未提供净息差（NIM）数据。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-08",
+        "kind": "gap",
+        "text": "资本充足率、不良贷款率、拨备覆盖率等关键监管指标具体数值未提供。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-14",
+        "kind": "issuer_self_report",
+        "text": "公司披露：受贷款利率下行等因素影响零售业务营业收入同比下降，但减值损失减少使得零售业务净利润同比增长。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+        ],
+        "derived_ids": [],
+        "falsifier": "若经审计的分部报告显示零售业务净利润实际同比下降，则证伪。"
+      },
+      {
+        "claim_id": "C-15",
+        "kind": "issuer_self_report",
+        "text": "公司披露：抵押类贷款占个人贷款的比例为62.9%。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+        ],
+        "derived_ids": [],
+        "falsifier": "若贷款明细表显示抵押类贷款占比与此数据严重偏离，则证伪。"
+      },
+      {
+        "claim_id": "G-09",
+        "kind": "gap",
+        "text": "输入未提供任何估值相关信息，如市盈率、市净率或可比公司分析。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-10",
+        "kind": "gap",
+        "text": "由于缺乏核心财务数据，无法独立验证资产质量和盈利能力，仅依赖公司自述趋势存在信息风险。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-17",
+        "kind": "issuer_self_report",
+        "text": "公司披露：建立了覆盖全风险、全流程的全面风险管理体系，遵循匹配性、全覆盖、独立性、有效性原则。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+        ],
+        "derived_ids": [],
+        "falsifier": "若监管评级或检查结果显示风险管理存在系统性缺陷，则证伪。"
+      },
+      {
+        "claim_id": "C-18",
+        "kind": "issuer_self_report",
+        "text": "公司披露：针对信用风险，采取优化资产结构、强化预警、重点领域管控和加大清收等措施。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+        ],
+        "derived_ids": [],
+        "falsifier": "若不良生成率连续上升，则说明信用风险管理措施未达宣称效果。"
+      },
+      {
+        "claim_id": "C-19",
+        "kind": "issuer_self_report",
+        "text": "公司披露：市场风险主要面临利率和汇率风险，已建立完善的治理架构和计量体系。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+        ],
+        "derived_ids": [],
+        "falsifier": "若利率或汇率大幅波动导致重大交易损失，则证伪。"
+      },
+      {
+        "claim_id": "C-20",
+        "kind": "issuer_self_report",
+        "text": "公司披露：流动性风险管理坚持审慎原则，建立完善的治理架构，维持充足优质流动性资产。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+        ],
+        "derived_ids": [],
+        "falsifier": "若流动性覆盖率（LCR）或净稳定资金比例（NSFR）跌破监管红线，则证伪。"
+      },
+      {
+        "claim_id": "C-21",
+        "kind": "issuer_self_report",
+        "text": "公司披露：操作风险管理持续优化三大工具，升级资本计量体系，加强业务连续性管理。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+        ],
+        "derived_ids": [],
+        "falsifier": "若发生重大操作风险事件造成巨额损失，则证伪。"
+      },
+      {
+        "claim_id": "C-22",
+        "kind": "issuer_self_report",
+        "text": "公司披露：在信用风险方面，把握好增量、管好存量、加强重点领域管理和加大清收处置。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+        ],
+        "derived_ids": [],
+        "falsifier": "若不良贷款率上升且拨备覆盖率下降，则说明措施失效。"
+      },
+      {
+        "claim_id": "C-23",
+        "kind": "issuer_self_report",
+        "text": "公司披露：结合AI技术运用，进一步完善市场风险智能化风控平台。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+        ],
+        "derived_ids": [],
+        "falsifier": "若市场风险暴露大幅增加或出现模型失效，则证伪。"
+      },
+      {
+        "claim_id": "C-24",
+        "kind": "issuer_self_report",
+        "text": "公司披露：各项业务稳步发展，优质流动性资产储备充裕，流动性状况保持安全稳健。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+        ],
+        "derived_ids": [],
+        "falsifier": "若出现流动性压力事件或指标突破内部限额，则证伪。"
+      },
+      {
+        "claim_id": "C-25",
+        "kind": "issuer_self_report",
+        "text": "公司披露：战略风险总体平稳可控。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:166"
+        ],
+        "derived_ids": [],
+        "falsifier": "若战略执行出现重大偏差导致业绩大幅滑坡，则证伪。"
+      },
+      {
+        "claim_id": "J-04",
+        "kind": "judgment",
+        "text": "风险管理描述完备，但关键指标缺失，无法独立验证资产质量真实性；零售贷款主动压降可能暗示底层风险。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+        ],
+        "derived_ids": [],
+        "falsifier": "若后续详细不良率、逾期率、拨备覆盖率等数据公布且保持稳定，则担忧减轻。"
+      },
+      {
+        "claim_id": "J-05",
+        "kind": "judgment",
+        "text": "银保业务高度依赖平安寿险协同，存在关联交易集中度和利益冲突风险，若集团战略调整或关联方出现问题，业务将受冲击。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+        ],
+        "derived_ids": [],
+        "falsifier": "若银保收入贡献占比下降且非关联代销渠道占比提升，则风险降低。"
+      },
+      {
+        "claim_id": "J-06",
+        "kind": "judgment",
+        "text": "平安银行当前更像是一家在经济放缓期求稳、依靠结构调整和信用成本压降来保护利润的银行，而非真正的增长故事；如果零售贷款重回增长且息差企稳，或者对公业务资产质量大幅恶化，这一判断将被推翻。",
+        "evidence_ids": [
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58",
+          "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+        ],
+        "derived_ids": [],
+        "falsifier": "若未来四个季度零售贷款余额重回增长、净息差环比改善且零售营收增速转正，则证伪；或对公贷款不良率大幅上升，则强化负面判断。"
+      }
+    ],
+    "missing_inputs": [
+      "创始人及核心高管详细简历",
+      "完整资产负债表和利润表（总资产、营收、净利润、净息差等）",
+      "不良贷款率、拨备覆盖率、资本充足率具体数值",
+      "估值指标（市盈率、市净率等）",
+      "市场份额和竞争排名数据",
+      "科技投入产出量化指标"
+    ],
+    "overall_conclusion": "平安银行仍是一家具有系统重要性的股份制银行，但当前研究受限于大量缺失的财务硬数据；据现有公司自述，其正从零售扩张转向均衡发展，科技和综合金融是差异化标签，然而零售贷款收缩和营收下滑揭示转型并非坦途，实际盈利质量与风险轮廓需待核心指标披露后方可判断[J-06]。"
+  }
+}

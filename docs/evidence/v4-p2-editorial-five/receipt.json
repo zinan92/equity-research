@@ -1,0 +1,29 @@
+{
+  "schema_version": "editorial-v4-p2-evidence-note-v1",
+  "issue": 692,
+  "status": "passed_review_only",
+  "contract": "docs/dossier-production/editorial-v4-contract.md",
+  "batch_receipt": "artifacts/editorial-v4/batch-receipt.json",
+  "tickers": [
+    "600519.SH",
+    "000333.SZ",
+    "600900.SH",
+    "300750.SZ",
+    "000001.SZ"
+  ],
+  "boundary": {
+    "review_only": true,
+    "human_review_required": true,
+    "action_state": "blocked",
+    "no_tier_credit": true,
+    "no_publication_credit": true
+  },
+  "quality_rules": [
+    "aggressive positioning is judgment-only with refs and falsifier",
+    "facts and numbers close to official PDF page evidence",
+    "issuer self-report is explicitly attributed",
+    "historical actuals cannot be conditional conclusions",
+    "comparison direction comes from deterministic derived metrics",
+    "gap statements remain visible rather than being filled by guesses"
+  ]
+}

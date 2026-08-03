@@ -1,0 +1,26 @@
+{
+  "status": "failed",
+  "ticker": "600519.SH",
+  "chars": 2500,
+  "claims": 27,
+  "errors": [
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "technology_products",
+      "chars": 430,
+      "minimum": 500
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "F-10",
+      "number": "178,999,246,453.61"
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body contains a numeric literal without claim-text/evidence closure",
+      "token": "15%"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "product/data_core/research_degradation.py": "98fc7820019a9f10b91d4533c17de38f4db9b178e3d33c1e5ed57ce98890fed1",
+  "product/data_core/evidence_gate.py": "bddf93d9268633532efce4ba3ae9b5069217f08ba5d8353e846bf452ef28e805",
+  "product/data_core/decision_policy.py": "34ace569be831712af1bd1c3cf7bdd42ba2c63a6e3b19935c29058a02e28f4b9",
+  "product/v4_quality_gate.py": "5cd8d5a0a0e629629a8def96d7b3b89bdb46c17ef348876af51c54806f44b3a1",
+  "product/v4_publication.py": "e69502151576aa359ff3fe13f23aebfa1a54532abba7346f9c32f8e804676157",
+  "product/report_contract.py": "335f8a840dcf06bdd9ac7533726397d45e5aeb4d45e624dcee627b56c0aff2d1",
+  "comparison": "HEAD blob sha256 equals working-tree sha256 for every path"
+}

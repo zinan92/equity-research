@@ -1,0 +1,154 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称 131,580,870千元，但引用的 evidence 页面锚点中未找到该数字。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-03 声称 12,674,556千元，但引用的 evidence 页面锚点中未找到该数字。",
+      "claim_id": "F-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-05 声称 458,502,407千元，但引用的 evidence 页面锚点中未找到该数字。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13 引用产业在线数据，但未在正文中显式标注“年报引产业在线数据”等自述标签。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-15 引用 MIR 睿工业统计，但未在正文中显式标注“年报引 MIR 睿工业统计”等自述标签。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-18 引用奥维云网数据，但未在正文中显式标注“年报引奥维云网推总数据”等自述标签。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-19 提及海外经营挑战，但未在正文中显式标注“年报提及”等自述标签。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中数字 131,580,870千元 等未附带对应的 claim_id 文本闭合。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有判断均标注 [J-xx] 并附有 falsifier 和底层证据引用，符合 AI judgment 规则。",
+    "gap 声明基于 evidence packet 的缺失输入，未将公司自述升级为事实。",
+    "整体结论锋利且带有白话总结，符合爱牛式风格要求。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至 document_id、页码、quoted_anchor",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注“年报披露/引”等",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、估值等写成事实",
+    "AI judgment 均标 [J-xx] 且有 refs/falsifier",
+    "报告包含爱牛式定位、因果链、白话结论",
+    "缺口基于 evidence packet gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称 131,580,870千元，但引用的 evidence 页面锚点中未找到该数字。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-03 声称 12,674,556千元，但引用的 evidence 页面锚点中未找到该数字。",
+      "claim_id": "F-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-05 声称 458,502,407千元，但引用的 evidence 页面锚点中未找到该数字。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13 引用产业在线数据，但未在正文中显式标注“年报引产业在线数据”等自述标签。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-15 引用 MIR 睿工业统计，但未在正文中显式标注“年报引 MIR 睿工业统计”等自述标签。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-18 引用奥维云网数据，但未在正文中显式标注“年报引奥维云网推总数据”等自述标签。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-19 提及海外经营挑战，但未在正文中显式标注“年报提及”等自述标签。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中数字 131,580,870千元 等未附带对应的 claim_id 文本闭合。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "5773f86bf797e1f57ddf06ffca715bab69f55d3132c1ac59b5f31b9d257f9b0a",
+  "response_hash": "a8bd5a93881d3a29a4949f1868fe3da47edbed175573ab569c299c3e7b97f380",
+  "run_id": "editorial-v4-qa:92482aa9-3c2f-404c-a7b6-780b3643db0d",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "92482aa9-3c2f-404c-a7b6-780b3643db0d",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:27:37+00:00"
+}

@@ -1,0 +1,17 @@
+{
+  "request_id": "a686aa44-5b89-4dee-aa60-6ecb9f5689d9",
+  "model": "deepseek-v4-pro",
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 24655,
+    "completion_tokens": 804,
+    "total_tokens": 25459,
+    "prompt_tokens_details": {
+      "cached_tokens": 2944
+    },
+    "prompt_cache_hit_tokens": 2944,
+    "prompt_cache_miss_tokens": 21711
+  },
+  "system_fingerprint": "fp_9954b31ca7_prod0820_fp8_kvcache_20260402",
+  "thinking_type": "disabled"
+}

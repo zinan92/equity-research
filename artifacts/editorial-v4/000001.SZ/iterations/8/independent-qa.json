@@ -1,0 +1,135 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-01、C-05、C-12、C-17、C-18、C-19、C-20、C-21 等 issuer_self_report 在正文中未显式标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "evidence_missing",
+      "message": "C-17 引用的 evidence_id 56:150 不在 evidence packet 中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "gap_as_fact",
+      "message": "G-10 称“无法独立验证资产质量和盈利能力”，但未提供任何证据，gap 不应作为事实陈述。",
+      "claim_id": "G-10",
+      "evidence_ids": []
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-14 在正文中未显式标注“公司披露”，仅以“公司披露”开头，但后续未保持，违反规则3。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-02、C-03 在正文中未显式标注“公司披露”，仅以“年报披露”开头，但未明确为自述，违反规则3。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有数字和事实均可回溯到 evidence packet 中的具体页码和 quoted_anchor。",
+    "同期对比数据（如贷款余额变动）均明确给出了增长/下滑及幅度。",
+    "报告明确指出了大量数据缺口（如财务指标、估值），未用空泛句子凑篇幅。",
+    "整体结论锋利，带有明确的 falsifier，符合爱牛式判断要求。"
+  ],
+  "checked_rules": [
+    "规则1：数字和事实可回溯性",
+    "规则2：同期对比数据明确性",
+    "规则3：公司自述显式标注",
+    "规则4：无历史实际值写成条件句",
+    "规则5：无未提供证据的事实陈述",
+    "规则6：AI judgment 需标 [J-xx] 并有 refs/falsifier",
+    "规则7：爱牛式定位、因果链、白话结论",
+    "规则8：缺口明确，不空泛"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-01、C-05、C-12、C-17、C-18、C-19、C-20、C-21 等 issuer_self_report 在正文中未显式标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "evidence_missing",
+      "message": "C-17 引用的 evidence_id 56:150 不在 evidence packet 中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "gap_as_fact",
+      "message": "G-10 称“无法独立验证资产质量和盈利能力”，但未提供任何证据，gap 不应作为事实陈述。",
+      "claim_id": "G-10",
+      "evidence_ids": []
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04 在正文中未标 [J-04]，且其 falsifier 未在正文中体现，违反规则6。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-05 在正文中未标 [J-05]，且其 falsifier 未在正文中体现，违反规则6。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-06 在正文中未标 [J-06]，且其 falsifier 未在正文中体现，违反规则6。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-14 在正文中未显式标注“公司披露”，仅以“公司披露”开头，但后续未保持，违反规则3。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-02、C-03 在正文中未显式标注“公司披露”，仅以“年报披露”开头，但未明确为自述，违反规则3。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    }
+  ],
+  "request_hash": "1d4afba696cddcf7e0d83bf85676bc043e83a0e0f1a4d65f3b7efd5a7dfd0047",
+  "response_hash": "a9097507eef93d7fad663787e0d1ae1a674cd0aa5f6aad1c31fccb4f104f55e7",
+  "run_id": "editorial-v4-qa:a660244b-137e-4ca0-8f86-761a1fb0d320",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a660244b-137e-4ca0-8f86-761a1fb0d320",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:54:57+00:00"
+}

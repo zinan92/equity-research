@@ -1,0 +1,154 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 的数值 131,580,870 千元未在引用的页面锚点中出现，无法验证。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-03 的数值 12,674,556 千元未在引用的页面锚点中出现，无法验证。",
+      "claim_id": "F-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-05 的数值 458,502,407 千元未在引用的页面锚点中出现，无法验证。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13 为年报引产业在线数据，但未在正文中显式标注“年报披露/引述”，可能被误认为独立验证。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-15 为年报引 MIR 睿工业统计，但未在正文中显式标注“年报披露/引述”，可能被误认为独立验证。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-18 为年报引奥维云网数据，但未在正文中显式标注“年报披露/引述”，可能被误认为独立验证。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-19 为年报自述海外经营挑战，但未在正文中显式标注“年报披露/自述”，可能被误认为独立验证。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中的数字 131,580,870 千元等未在正文中形成闭合的 claim 文本，无法追溯。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有判断类 claim 均标注了 [J-xx] 并提供了 falsifier，符合 editorial-v4 要求。",
+    "报告明确指出了多个信息缺口（G-01, G-02, G-03），未用空泛句子凑篇幅。",
+    "整体结论锋利，带有明确的证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯性",
+    "同期对比表述完整性",
+    "公司自述显式标注",
+    "条件句结论检查",
+    "未提供证据的客户/订单/排名等检查",
+    "AI judgment 标记与 falsifier 检查",
+    "爱牛式定位与白话结论检查",
+    "缺口与下一步验证检查"
+  ],
+  "raw_blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 的数值 131,580,870 千元未在引用的页面锚点中出现，无法验证。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-03 的数值 12,674,556 千元未在引用的页面锚点中出现，无法验证。",
+      "claim_id": "F-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-05 的数值 458,502,407 千元未在引用的页面锚点中出现，无法验证。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13 为年报引产业在线数据，但未在正文中显式标注“年报披露/引述”，可能被误认为独立验证。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-15 为年报引 MIR 睿工业统计，但未在正文中显式标注“年报披露/引述”，可能被误认为独立验证。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-18 为年报引奥维云网数据，但未在正文中显式标注“年报披露/引述”，可能被误认为独立验证。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-19 为年报自述海外经营挑战，但未在正文中显式标注“年报披露/自述”，可能被误认为独立验证。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中的数字 131,580,870 千元等未在正文中形成闭合的 claim 文本，无法追溯。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "5e0d247714a5fa72def7187cf20231ea14fa64e3030dfad50d00f9fb0690f126",
+  "response_hash": "131cb498690d7833dfab7f493809918a58b908239cef78e797e5b88dc955ca7e",
+  "run_id": "editorial-v4-qa:c1628390-0140-494b-b80f-e2fe96e5c6ad",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "c1628390-0140-494b-b80f-e2fe96e5c6ad",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:28:49+00:00"
+}

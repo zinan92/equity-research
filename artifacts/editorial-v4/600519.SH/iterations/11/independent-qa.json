@@ -1,0 +1,183 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "comparison_direction_missing",
+      "message": "comparison-backed claim does not state direction",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:9:6",
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "comparison_direction_missing",
+      "message": "comparison-backed claim does not state direction",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:9:6",
+        "moutai_2025_annual:narrative:17:18"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:25"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:15:15"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:27:29"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:15:15"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:3"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-16",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:17:18"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:9"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-01",
+      "evidence_ids": []
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-03",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "01",
+      "claim_id": null,
+      "evidence_ids": []
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body contains a numeric literal without claim-text/evidence closure",
+      "token": "10",
+      "claim_id": null,
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "Fact claims F-01 and F-02 are correctly derived from evidence packet and state direction and magnitude.",
+    "Issuer self-report claims C-01, C-02, C-03, C-05, C-06, C-07, C-08, C-12, C-17, C-20, C-21 are explicitly labeled as company disclosures.",
+    "Gap claims G-01 through G-10 correctly identify missing inputs and do not assert facts without evidence.",
+    "No valuation, price target, or action recommendation is present.",
+    "No conditional conclusions are drawn from historical actuals."
+  ],
+  "checked_rules": [
+    "Every number and fact is traceable to document_id, page, and quoted_anchor via evidence_ids.",
+    "Comparison-backed claims explicitly state direction and magnitude.",
+    "Issuer self-reports are explicitly labeled as company disclosures.",
+    "No historical actuals are presented as conditional conclusions.",
+    "No unsubstantiated claims about customers, orders, rankings, market share, moats, valuation, stock price, target price, or action recommendations.",
+    "Report includes plain-language conclusion and risk falsification conditions.",
+    "Gaps are clearly identified and do not mask existing data or upgrade self-reports to facts."
+  ],
+  "request_hash": "b94deeef838a37f8d279a31b239b96abf52dcb924b072515c19be3a613a59a51",
+  "response_hash": "69a15011119c653a33fc9b9748296a698da3ba95f0800d6bc34d6acc924d92f0",
+  "run_id": "editorial-v4-qa:59798292-4873-40d2-9792-9f12b1298ffc",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "59798292-4873-40d2-9792-9f12b1298ffc",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T05:55:34+00:00"
+}

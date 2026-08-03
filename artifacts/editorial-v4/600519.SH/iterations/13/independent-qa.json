@@ -1,0 +1,126 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "J-02 声称管理团队背景偏行政可能影响转型效率，但未提供证据支持该判断，且未引用任何 evidence_ids。",
+      "claim_id": "J-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "overall_conclusion 中“品牌护城河极深”“短期增长乏力”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "overall_conclusion",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "plain_language 节中“茅台依然是 A 股最安全的资产之一”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "plain_language",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "risks_commentary 节中“若批价失控将直接动摇品牌价值基座”等因果链未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "risks_commentary",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "founder_team 节中“核心团队激励不足可能影响转型动力”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "founder_team",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "one_line_position 节中“行业调整期需求放缓”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "one_line_position",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "timeline 节中“品牌价值报告提升”未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "timeline",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "technology_products 节中“时间壁垒构成了难以复制的品质基石”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "technology_products",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据 F-01 至 F-06 均正确引用自年报第 61-62 页，且同期对比幅度计算准确。",
+    "公司自述类 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "gap 类 claim 均基于输入未提供的事实，未借 gap 掩盖已有数字。",
+    "未出现估值、股价、目标价或行动建议。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否出现未提供证据的客户、订单、排名、份额、护城河、估值、股价、目标价或行动建议",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "J-02 声称管理团队背景偏行政可能影响转型效率，但未提供证据支持该判断，且未引用任何 evidence_ids。",
+      "claim_id": "J-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "overall_conclusion 中“品牌护城河极深”“短期增长乏力”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "overall_conclusion",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "plain_language 节中“茅台依然是 A 股最安全的资产之一”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "plain_language",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "risks_commentary 节中“若批价失控将直接动摇品牌价值基座”等因果链未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "risks_commentary",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "founder_team 节中“核心团队激励不足可能影响转型动力”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "founder_team",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "one_line_position 节中“行业调整期需求放缓”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "one_line_position",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "timeline 节中“品牌价值报告提升”未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "timeline",
+      "evidence_ids": []
+    },
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "technology_products 节中“时间壁垒构成了难以复制的品质基石”等判断未提供证据，且未引用任何 evidence_ids。",
+      "claim_id": "technology_products",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "96f8fbcfeaf6639c9e84c420201271c06165e8e5c0706590af6f88788646afff",
+  "response_hash": "e053d5d148a487af143b45a5da2f65fcb5fd2f794f2c204c3922b9d1e114e636",
+  "run_id": "editorial-v4-qa:918c85de-46de-4cfd-b13d-d4875f836d84",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "918c85de-46de-4cfd-b13d-d4875f836d84",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:06:29+00:00"
+}

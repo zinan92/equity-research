@@ -1,0 +1,157 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-02正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-06正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-08正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:24:15"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-10正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:29:20"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:29:21"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-13正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ]
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "“整体看，公司技术壁垒集中在运营而不是原创研发，其护城河更多源于规模、位置和精益管理”未标[J-xx]。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据与evidence packet完全一致，增长幅度引用准确。",
+    "所有判断均附有falsifier，且引用了相关底层证据。",
+    "缺口声明基于输入材料缺失，未将公司自述升级为事实。",
+    "整体结论锋利，带有明确的风险条件和判断标记。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至evidence_ids",
+    "同期对比明确增长/下滑及幅度",
+    "公司自述显式标注“公司披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/估值等写成事实",
+    "爱牛式判断允许，但需标[J-xx]并有refs/falsifier",
+    "报告包含资产定位、因果链、风险证伪和白话结论",
+    "缺口基于evidence packet gaps，未掩盖已有数字"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-02正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-06正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-08正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:24:15"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-10正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:29:20"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:29:21"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-13正文未显式标注“公司披露”，仅写“公司披露”在claim中，但正文未体现。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ]
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "“整体看，公司技术壁垒集中在运营而不是原创研发，其护城河更多源于规模、位置和精益管理”未标[J-xx]。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "86f8fe022b71da3aa9c6e6b4e822c5926f3fcfa8a8c529ca366816af867bf2bd",
+  "response_hash": "9cf04024cd764769d5a414a93b2646d4e3f8826bff2103f42258d1183c162f03",
+  "run_id": "editorial-v4-qa:0fa5ad1d-e225-4c4d-9401-c7286298c4fd",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "0fa5ad1d-e225-4c4d-9401-c7286298c4fd",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:21:08+00:00"
+}

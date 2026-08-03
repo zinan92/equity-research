@@ -1,0 +1,166 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-08 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:165"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-17 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-18 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-19 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有数字和事实均可回溯到证据包中的具体页码和引用锚点。",
+    "同期对比数据（如贷款余额变动）均明确给出了增长/下滑及幅度。",
+    "判断类声明（J-01至J-06）均标注了[J-xx]标记，并附有falsifier和引用证据。",
+    "缺口声明（G-01至G-10）均基于证据包中的gaps字段，未将缺口伪装成事实。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯性",
+    "同期对比数据明确性",
+    "公司自述显式标记",
+    "条件句结论检查",
+    "未提供证据的声明检查",
+    "判断标记和falsifier检查",
+    "爱牛式定位和结论检查",
+    "缺口声明合理性"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-08 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:165"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-17 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-18 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-19 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 正文未显式写“公司披露/年报自述”，仅写“公司披露：”，但正文中未重复该标记。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "request_hash": "cd395e9558d972e84deee0951c26435a52784397977f5ecc2e630a5f424b0840",
+  "response_hash": "0a4b2419d26183e72dc51cc89233a500b4e7e295064a5a667bf70e6b24c08d43",
+  "run_id": "editorial-v4-qa:d46d869b-c06d-426a-b72f-3bd024ec172c",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "d46d869b-c06d-426a-b72f-3bd024ec172c",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:43:59+00:00"
+}

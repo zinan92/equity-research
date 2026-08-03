@@ -1,0 +1,103 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "numeric_unbound",
+      "message": "正文出现“100%”未绑定任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "numeric_unbound",
+      "message": "正文出现“100”未绑定任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card中“04”未闭合到任何claim文本，无法验证。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "section_short",
+      "message": "timeline节仅262字符，低于300字符最低要求，内容不充分。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "section_short",
+      "message": "technology_products节仅337字符，低于400字符最低要求，内容不充分。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "dossier_short",
+      "message": "报告正文总字符数1905，低于参考值2429，内容可能不完整。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有事实类claim均正确引用evidence_ids，数字与证据一致。",
+    "公司自述均明确标注“公司披露”，未冒充独立验证。",
+    "判断类claim均标注[J-xx]并附falsifier，符合AI judgment规范。",
+    "缺口声明基于输入缺失，未借gap掩盖事实或升级公司自述。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯至证据",
+    "同期对比明确增长/下滑及幅度",
+    "公司自述显式标注",
+    "未将历史值写成条件句结论",
+    "未将无证据的客户/订单/估值等写成事实",
+    "判断类claim有marker、refs和falsifier",
+    "报告有资产定位、因果链、白话结论",
+    "缺口明确且基于输入缺失"
+  ],
+  "raw_blockers": [
+    {
+      "code": "numeric_unbound",
+      "message": "正文出现“100%”未绑定任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "numeric_unbound",
+      "message": "正文出现“100”未绑定任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card中“04”未闭合到任何claim文本，无法验证。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "section_short",
+      "message": "timeline节仅262字符，低于300字符最低要求，内容不充分。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "section_short",
+      "message": "technology_products节仅337字符，低于400字符最低要求，内容不充分。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "dossier_short",
+      "message": "报告正文总字符数1905，低于参考值2429，内容可能不完整。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "fd9716d3ef9a2c85d51e223cce0626a9c5fa1bbd6b00397b369b057d02b41e18",
+  "response_hash": "f7e36f04093a390f2ee657e0c788f852d919911ba82feff67286b624ab9147e5",
+  "run_id": "editorial-v4-qa:83500645-21c2-4855-b8e6-162df9113305",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "83500645-21c2-4855-b8e6-162df9113305",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:19:09+00:00"
+}

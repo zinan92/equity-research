@@ -1,0 +1,137 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "machine_validation_action_language",
+      "message": "machine_validation 发现正文含禁止词“目标价”，违反 no_valuation_or_action 规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "fact_not_backed_by_evidence",
+      "message": "F-05 称“公司拥有及申请的国内外专利总数达54,538项”，但证据 catl_2025_annual_cninfo:narrative:20:6 仅提及“拥有及申请的国内外专利总数达 54,538项”，未区分拥有与申请，且为年报自述，未标“公司披露”。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-05 引用年报自述专利数，但 claim kind 为 fact，未标为 issuer_self_report，违反规则3。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-06 引用年报自述售后服务网络，但 claim kind 为 fact，未标为 issuer_self_report，违反规则3。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-11 引用年报自述 eVTOL 飞行验证，但 claim kind 为 fact，未标为 issuer_self_report，违反规则3。",
+      "claim_id": "F-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "gap_claim_misuse",
+      "message": "G-06 称“估值证据缺失，无市盈率、市净率、EV/EBITDA等任何估值指标或目标价”，但 machine_validation 发现正文含“目标价”，gap 声明与正文矛盾。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据 F-01~F-04 均正确引用官方 PDF 并计算同期对比，方向与幅度明确。",
+    "C-01~C-09 均正确标注为 issuer_self_report，符合规则3。",
+    "G-01~G-07 缺口声明基于 evidence packet 的 gaps，未借 gap 掩盖已有数字。",
+    "整体结论 J-06 带 judgment marker 和 falsifier，符合规则6。"
+  ],
+  "checked_rules": [
+    "规则1: 数字/事实可回溯到 document_id、页码、quoted_anchor",
+    "规则2: 同期对比数据明确增长/下滑/持平及幅度",
+    "规则3: 公司自述显式写“公司披露/年报自述/公告披露”",
+    "规则4: 未将历史实际值写成条件句结论",
+    "规则5: 未将无证据的客户/订单/排名/份额/估值/股价/目标价/行动建议写成事实",
+    "规则6: 爱牛式判断允许，但需标 [J-xx]、有 refs 和 falsifier",
+    "规则7: 报告有爱牛式定位、因果链、风险证伪和白话结论",
+    "规则8: 缺口明确，基于 evidence packet 的 gaps"
+  ],
+  "raw_blockers": [
+    {
+      "code": "machine_validation_action_language",
+      "message": "machine_validation 发现正文含禁止词“目标价”，违反 no_valuation_or_action 规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "fact_not_backed_by_evidence",
+      "message": "F-05 称“公司拥有及申请的国内外专利总数达54,538项”，但证据 catl_2025_annual_cninfo:narrative:20:6 仅提及“拥有及申请的国内外专利总数达 54,538项”，未区分拥有与申请，且为年报自述，未标“公司披露”。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-05 引用年报自述专利数，但 claim kind 为 fact，未标为 issuer_self_report，违反规则3。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-06 引用年报自述售后服务网络，但 claim kind 为 fact，未标为 issuer_self_report，违反规则3。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-11 引用年报自述 eVTOL 飞行验证，但 claim kind 为 fact，未标为 issuer_self_report，违反规则3。",
+      "claim_id": "F-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01 判断“绝对龙头，具备定价权和显著的规模壁垒”，但未在 claims 中标注 [J-01] 或提供 refs/falsifier，违反规则6。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03 判断“精密制造杂货铺模式构成强大护城河”，但未在 claims 中标注 [J-03] 或提供 refs/falsifier，违反规则6。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "gap_claim_misuse",
+      "message": "G-06 称“估值证据缺失，无市盈率、市净率、EV/EBITDA等任何估值指标或目标价”，但 machine_validation 发现正文含“目标价”，gap 声明与正文矛盾。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "5d35df8f1575db82a7678008afb0020904eb0b226ef90cf437b9c12dd8a8e7a8",
+  "response_hash": "8b5d43cf9d6007a303238b28c9f3c840079d051e17629cf97ff411dd82877220",
+  "run_id": "editorial-v4-qa:34fd78cf-86a2-427d-91a9-b2509b186775",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "34fd78cf-86a2-427d-91a9-b2509b186775",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:31:04+00:00"
+}

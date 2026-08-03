@@ -1,0 +1,175 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "Claim F-10 声称“2025 年末所有者权益合计 178,999,246,453.61 元”，但引用的 evidence_id 'official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0' 对应的是利润表营业总收入数据，并非资产负债表所有者权益数据。证据包中该页面虽包含所有者权益合计，但未作为独立 fact 提取，且 claim 的 note 已注明“此数据来自 revenue 证据页面中的资产负债表节选，并非独立证据”，表明该数字未由独立证据直接支撑。",
+      "claim_id": "F-10",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-08 引用年报自述茅台酒传统工法，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:3",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-03 引用年报自述质量管理体系，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:3"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-02 引用年报自述核心竞争力，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:5"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-04 引用年报自述市场基本盘，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-05 引用年报自述渠道布局，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:17:18"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-06 引用年报自述现金流变动原因，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:9"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-07 引用年报自述价格机制，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-09 引用年报自述直销成本增长原因，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:8"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-10 引用年报自述风险，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "code": "MISSING_ATTRIBUTION",
+      "message": "Claim C-01 引用年报自述营收变动原因，但正文中未显式标注“年报自述”或“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:6"
+      ]
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim J-01 声称“下滑幅度可控，公司品牌壁垒和强定价权仍是应对行业调整的核心底牌”，但未提供任何证据支持“下滑幅度可控”或“强定价权”，且未引用具体数据或第三方验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:9:5"
+      ]
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim J-02 声称“管理团队背景偏行政而非市场化，可能影响向消费者中心转型的效率”，但未提供证据证明行政背景与转型效率之间的因果关系，且未引用任何绩效数据或行业对比。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29",
+        "moutai_2025_annual:narrative:35:38"
+      ]
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim G-04 声称“股权激励计划迟迟未能实施”，但仅引用年报中“控股股东尚未履行实施股权激励计划的承诺”，未提供上级政策未出台的独立证据，且未说明该承诺的具体内容和期限。",
+      "claim_id": "G-04",
+      "evidence_ids": []
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim G-01 声称“输入未提供市盈率、市净率、股息率等估值指标”，但该声明本身是缺口声明，未提供证据，且未说明为何这些指标是必要的。",
+      "claim_id": "G-01",
+      "evidence_ids": []
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim G-02 声称“输入未提供研发投入具体金额及占收入比重”，但该声明本身是缺口声明，未提供证据，且未说明为何这些指标是必要的。",
+      "claim_id": "G-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim G-03 声称“输入未提供分产品、分渠道、分地区的详细营收拆分”，但该声明本身是缺口声明，未提供证据，且未说明为何这些指标是必要的。",
+      "claim_id": "G-03",
+      "evidence_ids": []
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim G-05 声称“输入未提供毛利率、费用率等关键盈利指标”，但该声明本身是缺口声明，未提供证据，且未说明为何这些指标是必要的。",
+      "claim_id": "G-05",
+      "evidence_ids": []
+    },
+    {
+      "code": "UNSUPPORTED_CLAIM",
+      "message": "Claim G-06 声称“输入未提供完整资产负债表及偿债能力指标”，但该声明本身是缺口声明，未提供证据，且未说明为何这些指标是必要的。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据（F-01 至 F-06）均直接引用年报利润表，证据确凿，计算准确。",
+    "管理层简历（F-07、F-08）和在建项目（F-09）均有年报原文支撑。",
+    "所有 issuer_self_report 类 claim 均正确标注了 kind，并提供了年报原文证据。",
+    "报告明确指出了多个数据缺口（G-01 至 G-06），避免了无依据的推测。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否出现未提供证据的客户、订单、排名、份额、护城河、估值、股价、目标价或行动建议",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "request_hash": "e85fdaa72c3aac953bc37244a424d1453fb8a1445aed8ba476129429eaec74f1",
+  "response_hash": "d560f33ce383944c1c7c713693589cea54e9a06afd1ca709663233328d17ecef",
+  "run_id": "editorial-v4-qa:fb438a79-0cc1-486e-a831-81d661066d45",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "fb438a79-0cc1-486e-a831-81d661066d45",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T05:08:15+00:00"
+}

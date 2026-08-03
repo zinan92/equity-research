@@ -1,0 +1,557 @@
+{
+  "latest_card": "2025年年报披露：对公贷款+9.2%[C-03]，零售贷款-2.3%[C-02]，抵押贷占比62.9%[C-15]；零售营收降、净利润增[C-14]；资本充足率具体数值未提供[G-08]。",
+  "sections": [
+    {
+      "id": "one_line_position",
+      "title": "一句话定位",
+      "body": "平安银行在2025年年报中披露，其战略目标为“中国最卓越、全球领先的智能化零售银行”，坚持“零售做强、对公做精、同业做专”[C-01]。年报披露，一般企业贷款余额较上年末增长9.2%，而个人贷款余额下降2.3%[C-02][C-03]，揭示出零售业务正主动压降风险敞口，对公板块发力承接增长。这标志着该行从过往的规模扩张转向“量、价、险”再平衡，但其能否在息差收窄和零售营收下滑的背景下实现高质量转型，仍需持续验证[J-01]。",
+      "claim_ids": [
+        "C-01",
+        "C-02",
+        "C-03",
+        "J-01"
+      ]
+    },
+    {
+      "id": "founder_team",
+      "title": "创始人与团队",
+      "body": "输入未提供创始人及核心团队详细背景[G-01]。年报仅述及坚持党建引领，完善公司治理，强调战略执行力，但未披露具体高管履历和变动[G-02]。公司披露建立垂直集中的风险治理架构与分层经营体系[C-04]，然而管理层的实际能力和过往业绩无从评估，团队稳定性、激励机制与战略执行之间的匹配度仍是未知[J-02]。",
+      "claim_ids": [
+        "G-01",
+        "G-02",
+        "C-04",
+        "J-02"
+      ]
+    },
+    {
+      "id": "timeline",
+      "title": "发展时间线",
+      "body": "平安银行在年报中披露，其为中国内地首家公开上市的全国性股份制商业银行[C-05]，但具体上市年份未在输入材料中提供[G-03]。公司披露，2021年启动新银保业务改革，率先将代理保险内嵌至财富管理体系，利用平安集团综合金融优势与平安寿险深度合作[C-06]。2025年上半年，公司披露进一步将新财富队伍与原有财富队伍整合为一支队伍，强化综合资产配置能力[C-07]。展望未来，公司表示将坚持数字化转型和综合金融方向，紧跟国家战略发掘新动能[C-08]。这些动作显示其战略持续迭代，但整体进展和落地效果仍局限于公司自述，缺乏可量化的里程碑验证。",
+      "claim_ids": [
+        "C-05",
+        "G-03",
+        "C-06",
+        "C-07",
+        "C-08"
+      ]
+    },
+    {
+      "id": "technology_products",
+      "title": "技术与产品",
+      "body": "公司强调科技赋能，利用数字技术提升服务体验。年报披露，科技赋能零售业务，打造数字化线上阵地，为客户提供“省心、省时、又省钱”的服务[C-09]；对公业务建立数据驱动的客户分层经营体系[C-10]；资金同业业务运用iDeal平台、“行e通”平台构建全能型机构销售服务[C-11]。产品端，银保业务在2025年引入多款分红险，并探索与平安健康险合作，丰富产品线[C-12]。综合金融方面，公司披露依托平安集团“综合金融+医疗养老”生态，推出多样化产品组合，深化“一个客户、多个账户、多种产品、一站式服务”模式[C-13]。但这些描述均属公司自述，缺乏第三方验证或量化指标佐证其科技转化的实际效益[J-03]。例如，数字化获客成本、客户活跃度提升率、交叉销售转化率等关键数据均未披露[G-04]。",
+      "claim_ids": [
+        "C-09",
+        "C-10",
+        "C-11",
+        "C-12",
+        "C-13",
+        "J-03",
+        "G-04"
+      ]
+    },
+    {
+      "id": "financial_valuation",
+      "title": "财务与估值",
+      "body": "输入包未提供完整的财务报表，缺乏总资产、营业收入、净利润、净息差、不良贷款率、资本充足率等关键指标的具体数值[G-05][G-06][G-07][G-08]。仅能从年报叙述中提取零星信息：公司披露，受贷款利率下行等因素影响，零售业务营业收入同比下降，但减值损失减少使得零售业务净利润同比增长[C-14]；一般企业贷款余额较上年末增长9.2%，个人贷款余额下降2.3%[C-02][C-03]；抵押类贷款占个人贷款比例为62.9%[C-15]。公司声称资本充足率提升，但未披露具体数值[G-08]。估值方面，无任何市盈率、市净率或可比分析信息，无法进行价值判断[G-09]。由于关键财务数据缺失，无法独立分析盈利能力、资产质量和成长性，目前只能依赖公司自述的局部趋势，这构成实质性研究障碍[G-10]。",
+      "claim_ids": [
+        "G-05",
+        "G-06",
+        "G-07",
+        "G-08",
+        "C-14",
+        "C-02",
+        "C-03",
+        "C-15",
+        "G-09",
+        "G-10"
+      ]
+    },
+    {
+      "id": "risks_commentary",
+      "title": "风险与点评",
+      "body": "公司年报对风险管理有详细描述。其全面风险管理体系覆盖信用、市场、流动性、操作、声誉、国别、银行账簿利率风险等类别[C-17][C-18][C-19][C-20][C-21]。针对信用风险，公司披露采取优化资产结构、加强预警、重点领域管控和加大清收等措施[C-22]。市场风险方面，公司披露结合AI技术运用，进一步完善市场风险智能化风控平台[C-23]；流动性风险管理方面，公司披露各项业务稳步发展，优质流动性资产储备充裕，流动性状况保持安全稳健[C-24]。战略风险方面，公司披露总体平稳可控[C-25]。这些均为公司自述，缺乏不良率、拨备覆盖率等硬指标验证[J-04]。值得注意的是，零售贷款主动压降可能暗示底层资产质量承压；银保业务对平安寿险的依赖，可能产生集中度和利益冲突风险[J-05]。若经济下行超预期，零售和中小企业资产质量恶化将直接冲击利润，这需要更透明的数据来评估。",
+      "claim_ids": [
+        "C-17",
+        "C-18",
+        "C-19",
+        "C-20",
+        "C-21",
+        "C-22",
+        "C-23",
+        "C-24",
+        "C-25",
+        "J-04",
+        "J-05"
+      ]
+    },
+    {
+      "id": "plain_language",
+      "title": "大白话结论",
+      "body": "平安银行就是一家老牌股份制银行，背靠平安集团，主要靠放贷和代销保险挣钱。现在它的策略是把零售贷款踩刹车，转而做大对公业务，再用集团的综合金融多赚点中间收入。代价是零售营收往下掉，利润增长靠少提坏账撑住。它的标签是“科技赋能”和“综合金融”，但现阶段看更像是在经济下行期求稳，而不是进攻。如果未来零售贷款重新增长且息差稳住，或者对公业务坏账爆发拖累利润，这个判断就要推翻[J-06]。",
+      "claim_ids": [
+        "J-06"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C-01",
+      "kind": "issuer_self_report",
+      "text": "公司披露：战略目标为“中国最卓越、全球领先的智能化零售银行”，坚持“零售做强、对公做精、同业做专”。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ],
+      "derived_ids": [],
+      "falsifier": "若官方文件或监管意见否定此战略表述，则证伪。"
+    },
+    {
+      "claim_id": "C-02",
+      "kind": "issuer_self_report",
+      "text": "公司披露：个人贷款余额较上年末下降2.3%。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ],
+      "derived_ids": [],
+      "falsifier": "若经审计的定期报告显示个人贷款余额变动方向或幅度与2.3%显著不符，则证伪。"
+    },
+    {
+      "claim_id": "C-03",
+      "kind": "issuer_self_report",
+      "text": "公司披露：一般企业贷款余额较上年末增长9.2%。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ],
+      "derived_ids": [],
+      "falsifier": "若经审计的定期报告显示企业贷款余额变动方向或幅度与9.2%显著不符，则证伪。"
+    },
+    {
+      "claim_id": "J-01",
+      "kind": "judgment",
+      "text": "平安银行正从过度依赖零售规模扩张转向追求收益与风险的平衡，零售贷款主动收缩折射战略取舍，但转型能否在息差收窄下稳住营收并控制不良，仍需更长观察期。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ],
+      "derived_ids": [],
+      "falsifier": "若未来连续两个财报周期内，零售贷款恢复正增长且净息差同比企稳，同时零售营收增速回升，则判断被证伪。"
+    },
+    {
+      "claim_id": "G-01",
+      "kind": "gap",
+      "text": "输入未提供创始人姓名、背景及创业历程。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-02",
+      "kind": "gap",
+      "text": "输入未提供现任核心高管详细履历、任期及持股情况。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-04",
+      "kind": "issuer_self_report",
+      "text": "公司披露：建立组织架构健全、职责边界清晰的风险治理架构，实施垂直集中管理。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:38"
+      ],
+      "derived_ids": [],
+      "falsifier": "若监管检查或独立审计发现风险治理存在重大缺陷，则证伪。"
+    },
+    {
+      "claim_id": "J-02",
+      "kind": "judgment",
+      "text": "创始人信息缺失，高管团队不详，无法评估管理层能力与战略执行的匹配度。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:38"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续获得详细管理层背景及业绩记录，可重新评估。"
+    },
+    {
+      "claim_id": "C-05",
+      "kind": "issuer_self_report",
+      "text": "公司披露：本行是中国内地首家公开上市的全国性股份制商业银行。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ],
+      "derived_ids": [],
+      "falsifier": "若交易所历史记录或证监会公告显示并非首家上市，则证伪。"
+    },
+    {
+      "claim_id": "G-03",
+      "kind": "gap",
+      "text": "输入未提供具体上市年份及早期发展里程碑。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-06",
+      "kind": "issuer_self_report",
+      "text": "公司披露：2021年启动新银保业务改革，将代理保险内嵌到财富管理体系中，与平安寿险深度合作。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司内部文件或合作方披露信息显示改革启动时间非2021年，则证伪。"
+    },
+    {
+      "claim_id": "C-07",
+      "kind": "issuer_self_report",
+      "text": "公司披露：2025年上半年将新财富队伍与原有财富队伍整合为一支队伍，提升综合资产配置能力。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148"
+      ],
+      "derived_ids": [],
+      "falsifier": "若组织架构公告或员工反馈显示整合未在2025年上半年完成，则证伪。"
+    },
+    {
+      "claim_id": "C-08",
+      "kind": "issuer_self_report",
+      "text": "公司披露：未来将紧跟国家战略，坚持既定战略方针，丰富战略内涵，推动转型升级。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:165"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续战略规划文件或公开讲话中出现重大转向，则证伪。"
+    },
+    {
+      "claim_id": "C-09",
+      "kind": "issuer_self_report",
+      "text": "公司披露：科技赋能零售业务，打造数字化线上阵地，提供“省心、省时、又省钱”的服务体验。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ],
+      "derived_ids": [],
+      "falsifier": "若客户满意度调查或实际业务数据显示服务未达宣称水平，则证伪。"
+    },
+    {
+      "claim_id": "C-10",
+      "kind": "issuer_self_report",
+      "text": "公司披露：对公业务建立数据驱动的客户分层经营体系，通过生态经营和综合金融服务提升贡献。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ],
+      "derived_ids": [],
+      "falsifier": "若对公客户数或渗透率无明显提升，则证伪。"
+    },
+    {
+      "claim_id": "C-11",
+      "kind": "issuer_self_report",
+      "text": "公司披露：资金同业业务运用iDeal平台、“行e通”平台构建全能型机构销售服务。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ],
+      "derived_ids": [],
+      "falsifier": "若平台交易量或客户数下降，或出现重大技术故障，则证伪。"
+    },
+    {
+      "claim_id": "C-12",
+      "kind": "issuer_self_report",
+      "text": "公司披露：2025年引入多款分红险产品，探索与平安健康险合作，丰富产品线。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ],
+      "derived_ids": [],
+      "falsifier": "若产品备案信息或监管批复显示未引入或合作未达成，则证伪。"
+    },
+    {
+      "claim_id": "C-13",
+      "kind": "issuer_self_report",
+      "text": "公司披露：依托平安集团“综合金融+医疗养老”生态，深化“一个客户、多个账户、多种产品、一站式服务”模式。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36"
+      ],
+      "derived_ids": [],
+      "falsifier": "若客户渗透率或交叉销售率未改善，则证伪。"
+    },
+    {
+      "claim_id": "J-03",
+      "kind": "judgment",
+      "text": "科技赋能和综合金融故事均属公司自述，缺乏第三方验证和量化转化指标，技术优势的真实性存疑。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续披露中，数字化渠道贡献收入占比、新增客户中集团引流比例等指标持续提升，则判断被削弱。"
+    },
+    {
+      "claim_id": "G-04",
+      "kind": "gap",
+      "text": "科技赋能的实际效益数据缺失，如数字化获客成本、客户活跃度、交叉销售率等。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-05",
+      "kind": "gap",
+      "text": "输入未提供总资产规模数据。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-06",
+      "kind": "gap",
+      "text": "输入未提供营业收入、净利润等盈利指标。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-07",
+      "kind": "gap",
+      "text": "输入未提供净息差（NIM）数据。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-08",
+      "kind": "gap",
+      "text": "资本充足率具体数值未提供。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-14",
+      "kind": "issuer_self_report",
+      "text": "公司披露：受贷款利率下行等因素影响零售业务营业收入同比下降，但减值损失减少使得零售业务净利润同比增长。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ],
+      "derived_ids": [],
+      "falsifier": "若经审计的分部报告显示零售业务净利润实际同比下降，则证伪。"
+    },
+    {
+      "claim_id": "C-15",
+      "kind": "issuer_self_report",
+      "text": "公司披露：抵押类贷款占个人贷款的比例为62.9%。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ],
+      "derived_ids": [],
+      "falsifier": "若贷款明细表显示抵押类贷款占比与此数据严重偏离，则证伪。"
+    },
+    {
+      "claim_id": "G-09",
+      "kind": "gap",
+      "text": "输入未提供任何估值相关信息，如市盈率、市净率或可比公司分析。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-10",
+      "kind": "gap",
+      "text": "由于缺乏核心财务数据，无法独立验证资产质量和盈利能力，仅依赖公司自述趋势存在信息风险。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-17",
+      "kind": "issuer_self_report",
+      "text": "公司披露：建立了覆盖全风险、全流程的全面风险管理体系，遵循匹配性、全覆盖、独立性、有效性原则。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ],
+      "derived_ids": [],
+      "falsifier": "若监管评级或检查结果显示风险管理存在系统性缺陷，则证伪。"
+    },
+    {
+      "claim_id": "C-18",
+      "kind": "issuer_self_report",
+      "text": "公司披露：针对信用风险，采取优化资产结构、强化预警、重点领域管控和加大清收等措施。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ],
+      "derived_ids": [],
+      "falsifier": "若不良生成率连续上升，则说明信用风险管理措施未达宣称效果。"
+    },
+    {
+      "claim_id": "C-19",
+      "kind": "issuer_self_report",
+      "text": "公司披露：市场风险主要面临利率和汇率风险，已建立完善的治理架构和计量体系。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ],
+      "derived_ids": [],
+      "falsifier": "若利率或汇率大幅波动导致重大交易损失，则证伪。"
+    },
+    {
+      "claim_id": "C-20",
+      "kind": "issuer_self_report",
+      "text": "公司披露：流动性风险管理坚持审慎原则，建立完善的治理架构，维持充足优质流动性资产。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ],
+      "derived_ids": [],
+      "falsifier": "若流动性覆盖率（LCR）或净稳定资金比例（NSFR）跌破监管红线，则证伪。"
+    },
+    {
+      "claim_id": "C-21",
+      "kind": "issuer_self_report",
+      "text": "公司披露：操作风险管理持续优化三大工具，升级资本计量体系，加强业务连续性管理。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ],
+      "derived_ids": [],
+      "falsifier": "若发生重大操作风险事件造成巨额损失，则证伪。"
+    },
+    {
+      "claim_id": "C-22",
+      "kind": "issuer_self_report",
+      "text": "公司披露：在信用风险方面，把握好增量、管好存量、加强重点领域管理和加大清收处置。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ],
+      "derived_ids": [],
+      "falsifier": "若不良贷款率上升且拨备覆盖率下降，则说明措施失效。"
+    },
+    {
+      "claim_id": "C-23",
+      "kind": "issuer_self_report",
+      "text": "公司披露：结合AI技术运用，进一步完善市场风险智能化风控平台。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ],
+      "derived_ids": [],
+      "falsifier": "若市场风险暴露大幅增加或出现模型失效，则证伪。"
+    },
+    {
+      "claim_id": "C-24",
+      "kind": "issuer_self_report",
+      "text": "公司披露：各项业务稳步发展，优质流动性资产储备充裕，流动性状况保持安全稳健。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ],
+      "derived_ids": [],
+      "falsifier": "若出现流动性压力事件或指标突破内部限额，则证伪。"
+    },
+    {
+      "claim_id": "C-25",
+      "kind": "issuer_self_report",
+      "text": "公司披露：战略风险总体平稳可控。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:166"
+      ],
+      "derived_ids": [],
+      "falsifier": "若战略执行出现重大偏差导致业绩大幅滑坡，则证伪。"
+    },
+    {
+      "claim_id": "J-04",
+      "kind": "judgment",
+      "text": "风险管理描述完备，但关键指标缺失，无法独立验证资产质量真实性；零售贷款主动压降可能暗示底层风险。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续详细不良率、逾期率、拨备覆盖率等数据公布且保持稳定，则担忧减轻。"
+    },
+    {
+      "claim_id": "J-05",
+      "kind": "judgment",
+      "text": "银保业务高度依赖平安寿险协同，存在关联交易集中度和利益冲突风险，若集团战略调整或关联方出现问题，业务将受冲击。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ],
+      "derived_ids": [],
+      "falsifier": "若银保收入贡献占比下降且非关联代销渠道占比提升，则风险降低。"
+    },
+    {
+      "claim_id": "J-06",
+      "kind": "judgment",
+      "text": "平安银行当前更像是一家在经济放缓期求稳、依靠结构调整和信用成本压降来保护利润的银行，而非真正的增长故事；如果零售贷款重回增长且息差企稳，或者对公业务资产质量大幅恶化，这一判断将被推翻。",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ],
+      "derived_ids": [],
+      "falsifier": "若未来四个季度零售贷款余额重回增长、净息差环比改善且零售营收增速转正，则证伪；或对公贷款不良率大幅上升，则强化负面判断。"
+    }
+  ],
+  "missing_inputs": [
+    "创始人及核心高管详细简历",
+    "完整资产负债表和利润表（总资产、营收、净利润、净息差等）",
+    "不良贷款率、拨备覆盖率、资本充足率具体数值",
+    "估值指标（市盈率、市净率等）",
+    "市场份额和竞争排名数据",
+    "科技投入产出量化指标"
+  ],
+  "overall_conclusion": "平安银行仍是一家具有系统重要性的股份制银行，但当前研究受限于大量缺失的财务硬数据；据现有公司自述，其正从零售扩张转向均衡发展，科技和综合金融是差异化标签，然而零售贷款收缩和营收下滑揭示转型并非坦途，实际盈利质量与风险轮廓需待核心指标披露后方可判断[J-06]。",
+  "schema_version": "editorial-v4-dossier-v1",
+  "ticker": "000001.SZ",
+  "issuer_name": "平安银行",
+  "input_packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+  "prompt_version": "editorial-v4-whole-report-prompt-v1",
+  "generation_receipt": {
+    "run_id": "editorial-v4-run:eb9ee373-2657-4aff-b3fc-8dd2c10b743b",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "eb9ee373-2657-4aff-b3fc-8dd2c10b743b",
+    "usage": {
+      "prompt_tokens": 33320,
+      "completion_tokens": 6621,
+      "total_tokens": 39941,
+      "prompt_tokens_details": {
+        "cached_tokens": 1408
+      },
+      "prompt_cache_hit_tokens": 1408,
+      "prompt_cache_miss_tokens": 31912
+    },
+    "finish_reason": "stop",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "request_hash": "03a51c6d80c8f13fa43ecac42f825cb72ac8da50c1c4e6720d34fbb28fb2a070",
+    "response_hash": "8761b98cabe9944deb77041326280e2a889284f7f0fe76cf480d415142a3a74e",
+    "generated_at": "2026-08-03T06:48:29+00:00"
+  },
+  "production_record": {
+    "run_id": "editorial-v4-run:eb9ee373-2657-4aff-b3fc-8dd2c10b743b",
+    "generator_version": "editorial-v4-whole-report-generator-v1",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "model_provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "eb9ee373-2657-4aff-b3fc-8dd2c10b743b",
+    "input_packet_sha256": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+    "model_packet_sha256": "a8b00bd8c911720a1ce82d576a86ff89ba91fb7b63ca3f43a907b36951a7b6d2",
+    "review_status": "pending",
+    "editorial_status": "draft",
+    "action_state": "blocked",
+    "tier_credit": false
+  },
+  "sources": [
+    {
+      "source_id": "official:official-filing:cninfo_official_filing_document_v1:1225022887",
+      "document_id": "official-filing:cninfo_official_filing_document_v1:1225022887",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "平安银行 2025 年年度报告（已验收官方页级 receipt）",
+      "report_period": "2025FY",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-21/1225022887.PDF",
+      "raw_sha256": "2273565ecbe1b32536631fd4a019a4f4a990f4c793cfd5b70eae90d44d3ff16c",
+      "page_count": 281
+    }
+  ],
+  "boundary": {
+    "review_only": true,
+    "no_tier_credit": true,
+    "no_b6_credit": true,
+    "no_decision_policy_credit": true,
+    "no_publication_credit": true
+  }
+}

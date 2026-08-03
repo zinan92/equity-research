@@ -1,0 +1,163 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 在正文中未显式标注“年报披露/公司自述”，可能被误读为独立验证。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01 在正文中未标注 [J-01]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:14:0",
+        "midea_2025_annual:narrative:41:22",
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-02 在正文中未标注 [J-02]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:26:9",
+        "midea_2025_annual:narrative:27:10",
+        "midea_2025_annual:narrative:27:11"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03 在正文中未标注 [J-03]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:24:7",
+        "midea_2025_annual:narrative:43:24"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04 在正文中未标注 [J-04]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:14:0",
+        "midea_2025_annual:narrative:41:22",
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0",
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:1"
+      ]
+    },
+    {
+      "code": "gap_claim_missing_evidence",
+      "message": "G-01 声称“创始人信息未在本次研究包中提供”，但 evidence packet 的 gaps 为空，无法验证。",
+      "claim_id": "G-01",
+      "evidence_ids": []
+    },
+    {
+      "code": "gap_claim_missing_evidence",
+      "message": "G-02 声称“股权激励计划的具体业绩考核条件…未披露”，但 evidence packet 的 gaps 为空，无法验证。",
+      "claim_id": "G-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "gap_claim_missing_evidence",
+      "message": "G-03 声称“估值数据缺失”，但 evidence packet 的 gaps 为空，无法验证。",
+      "claim_id": "G-03",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务事实（F-01 至 F-06）均正确引用 evidence packet 中的数字，并明确标注同比增长幅度。",
+    "所有 issuer self-report 类 claim 在 dossier 中均标记为 kind: issuer_self_report，并附有 falsifier。",
+    "judgment 类 claim 均提供了 falsifier 和底层 evidence_ids，逻辑链清晰。",
+    "报告整体结构完整，包含定位、团队、时间线、产品、财务、风险、白话结论等模块。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至 evidence packet 的 document_id、页码、quoted_anchor",
+    "同期对比数据明确写出增长/下滑/持平及幅度",
+    "公司自述显式标注“年报披露/公司自述”",
+    "未将历史实际值写成条件句结论",
+    "未将未提供证据的客户、订单、排名等写成事实",
+    "爱牛式判断允许，但需标记 [J-xx] 并附 refs/falsifier",
+    "报告包含资产定位、财务因果链、风险证伪条件、白话结论",
+    "缺口基于 evidence packet 的 gaps 字段，不空泛"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 在正文中未显式标注“年报披露/公司自述”，可能被误读为独立验证。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01 在正文中未标注 [J-01]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:14:0",
+        "midea_2025_annual:narrative:41:22",
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-02 在正文中未标注 [J-02]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:26:9",
+        "midea_2025_annual:narrative:27:10",
+        "midea_2025_annual:narrative:27:11"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03 在正文中未标注 [J-03]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:24:7",
+        "midea_2025_annual:narrative:43:24"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04 在正文中未标注 [J-04]，不符合 judgment 必须显式标记的要求。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:14:0",
+        "midea_2025_annual:narrative:41:22",
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0",
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:1"
+      ]
+    },
+    {
+      "code": "gap_claim_missing_evidence",
+      "message": "G-01 声称“创始人信息未在本次研究包中提供”，但 evidence packet 的 gaps 为空，无法验证。",
+      "claim_id": "G-01",
+      "evidence_ids": []
+    },
+    {
+      "code": "gap_claim_missing_evidence",
+      "message": "G-02 声称“股权激励计划的具体业绩考核条件…未披露”，但 evidence packet 的 gaps 为空，无法验证。",
+      "claim_id": "G-02",
+      "evidence_ids": []
+    },
+    {
+      "code": "gap_claim_missing_evidence",
+      "message": "G-03 声称“估值数据缺失”，但 evidence packet 的 gaps 为空，无法验证。",
+      "claim_id": "G-03",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "0ee7175103e1d1e4b9dc159b4c648259048a99d42989793603b5d5a26e026886",
+  "response_hash": "d69c4559fc1f21a93ce424b4502cbcc0a486a4c0e724acfae9d6457266177a68",
+  "run_id": "editorial-v4-qa:ff9dfc96-1633-4b81-8d50-7626b9f84f5b",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "ff9dfc96-1633-4b81-8d50-7626b9f84f5b",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:05:13+00:00"
+}

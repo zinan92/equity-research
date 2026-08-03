@@ -1,0 +1,163 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "action_language",
+      "message": "大白话结论含“没法直接下注”，属禁止的行动建议语言。",
+      "claim_id": "plain_language",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中“同比增长52.45%”等数字未在正文中显式写出增长方向与幅度。",
+      "claim_id": "latest_card",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:0",
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:1"
+      ]
+    },
+    {
+      "code": "missing_issuer_self_report_label",
+      "message": "F-05 专利数未标“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "missing_issuer_self_report_label",
+      "message": "F-06 售后服务网络未标“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "missing_issuer_self_report_label",
+      "message": "F-11 eVTOL飞行验证未标“公司披露”，可能被误认为独立验证。",
+      "claim_id": "F-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01 定位判断未在正文中标注 [J-01]，可能被误认为事实。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03 护城河判断未在正文中标注 [J-03]，可能被误认为事实。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04 地缘政治风险判断未在正文中标注 [J-04]，可能被误认为事实。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据与证据包完全一致，增长幅度计算准确。",
+    "公司自述类事实（C-01至C-09）均明确标注“公司披露”，未冒充独立验证。",
+    "缺口（G-01至G-07）基于证据包缺失内容，未借缺口掩盖已有数字。",
+    "整体结论锋利且带判断标记，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至证据包",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/估值等写成事实",
+    "爱牛式判断允许但需标[J-xx]并有refs/falsifier",
+    "报告含资产定位、因果链、风险证伪和白话结论",
+    "缺口基于证据包gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "action_language",
+      "message": "大白话结论含“没法直接下注”，属禁止的行动建议语言。",
+      "claim_id": "plain_language",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中“同比增长52.45%”等数字未在正文中显式写出增长方向与幅度。",
+      "claim_id": "latest_card",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:0",
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:1"
+      ]
+    },
+    {
+      "code": "missing_issuer_self_report_label",
+      "message": "F-05 专利数未标“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "missing_issuer_self_report_label",
+      "message": "F-06 售后服务网络未标“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "missing_issuer_self_report_label",
+      "message": "F-11 eVTOL飞行验证未标“公司披露”，可能被误认为独立验证。",
+      "claim_id": "F-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01 定位判断未在正文中标注 [J-01]，可能被误认为事实。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03 护城河判断未在正文中标注 [J-03]，可能被误认为事实。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04 地缘政治风险判断未在正文中标注 [J-04]，可能被误认为事实。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    }
+  ],
+  "request_hash": "cf88c617d25e827b158d8d9a1c0c49c7678d1e330c9422456ccfefa6a49d1aeb",
+  "response_hash": "c3defe961220019ccbdd3a0c037b9478abdf1ec67f04dc7b0e76fb25d98d4a34",
+  "run_id": "editorial-v4-qa:e1f9ba52-9db5-4def-9dff-bbe640bb9068",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "e1f9ba52-9db5-4def-9dff-bbe640bb9068",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:41:35+00:00"
+}

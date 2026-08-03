@@ -1,0 +1,96 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "财务事实（F-01至F-04）均正确引用利润表数据，且增长幅度与derived metrics一致。",
+    "公司自述类声明（C-02至C-08, C-11至C-13）均明确标注“公司披露”，并附有falsifier。",
+    "缺口声明（G-01至G-06）合理基于输入材料缺失，未将缺口伪装为事实。",
+    "整体结论（J-07）带有judgment marker和falsifier，符合锋利判断的要求。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到证据",
+    "同期对比数据明确增长/下滑/持平及幅度",
+    "公司自述明确标注“公司披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、估值等写成事实",
+    "判断类声明标注[J-xx]并有refs和falsifier",
+    "报告包含资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口基于evidence packet的gaps，未借gap掩盖已有数字"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-01引用cypc_2025_annual:narrative:10:2，但该证据未提及“综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优”，仅提及发电量。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-09引用cypc_2025_annual:narrative:10:2，但该证据未提及“全流域推广状态检修”或“安全生产保持‘双零’”。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-10引用cypc_2025_annual:narrative:10:2，但该证据未提及“设备设施大修检修精品率连续三年保持100%”或“关键运行指标保持国际领先”。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-06引用cypc_2025_annual:narrative:10:2，但该证据仅提及发电量，未直接支持“盈利高度依赖长江来水”的判断。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-05引用cypc_2025_annual:narrative:12:4和27:17，但12:4未提及电力市场化改革压低电价，27:17仅提及市场建设目标，未直接支持判断。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4",
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-07引用cypc_2025_annual:narrative:12:5和215:39，但12:5仅说明电站地位，215:39仅提及利率风险，未直接支持“现金牛资产”或“成长有限”的判断。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-08引用cypc_2025_annual:narrative:12:5，但该证据仅说明电站地位，未直接支持“护城河来自地理位置和规模的绝对垄断”的判断。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-14引用cypc_2025_annual:narrative:214:38，但该证据未明确提及“港币、美元、索尔等外币计价的资产和负债”，仅提及汇率风险。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:214:38"
+      ]
+    }
+  ],
+  "request_hash": "d917400cc2aa2da61c32f95406d94d91bfe42cc365cdeaaaf405887ba7522002",
+  "response_hash": "9a393d455e4f72d360765c0d616b11331644a4a8660585a83b38a6156fa91971",
+  "run_id": "editorial-v4-qa:78a42bc4-e5b6-495e-bd40-caf39e2db0cb",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "78a42bc4-e5b6-495e-bd40-caf39e2db0cb",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:23:51+00:00"
+}

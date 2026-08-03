@@ -1,0 +1,115 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "machine_validation_action_language",
+      "message": "机器校验发现正文含禁止词汇'目标价'，违反no_valuation_or_action规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "gap_claim_as_fact",
+      "message": "G-06声明'估值证据缺失'，但正文'财务与估值'段称'不提供目标价或操作建议'，将gap表述为事实性结论，应仅声明缺失。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-05专利数、F-06服务网络、F-11 eVTOL验证等事实均来自年报自述，但正文未显式标注'公司披露/年报自述'。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据F-01至F-04均正确引用evidence packet中的精确数值和同比增幅，且增幅由derived_metrics验证。",
+    "所有事实性claim均附有falsifier，符合规则。",
+    "报告明确区分了issuer_self_report类claim（C-01等），并在正文中标注'公司披露'。",
+    "整体结论锋利，包含爱牛式定位和风险证伪条件，符合editorial-v4风格。"
+  ],
+  "checked_rules": [
+    "数字和事实可追溯至evidence_ids",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注'公司披露/年报自述'",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/排名/估值等写成事实",
+    "爱牛式判断允许，但需标[J-xx]并有refs/falsifier",
+    "报告含爱牛式定位、因果链、白话结论",
+    "缺口明确，基于evidence packet gaps"
+  ],
+  "raw_blockers": [
+    {
+      "code": "machine_validation_action_language",
+      "message": "机器校验发现正文含禁止词汇'目标价'，违反no_valuation_or_action规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "gap_claim_as_fact",
+      "message": "G-06声明'估值证据缺失'，但正文'财务与估值'段称'不提供目标价或操作建议'，将gap表述为事实性结论，应仅声明缺失。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "issuer_self_report_not_labeled",
+      "message": "F-05专利数、F-06服务网络、F-11 eVTOL验证等事实均来自年报自述，但正文未显式标注'公司披露/年报自述'。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01'绝对龙头，具备定价权和规模壁垒'在正文中未标[J-01]，且未显式说明是研究判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03'精密制造杂货铺模式构成强大护城河'在正文中未标[J-03]，且未显式说明是研究判断。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04'地缘政治是海外扩张最大不确定性'在正文中未标[J-04]，且未显式说明是研究判断。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-05'固态电池若由对手量产，现有产能面临减值风险'在正文中未标[J-05]，且未显式说明是研究判断。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-06'护城河深厚，但全球化与新技术落地是最大考验'在正文中未标[J-06]，且未显式说明是研究判断。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:39:17"
+      ]
+    }
+  ],
+  "request_hash": "98bd67b16f73f5e3de836b30f2618907d7d296f47b32c108e087bc7df01efdd5",
+  "response_hash": "135dc18947bc1c725829eef908c52f05cfc29be3ad6699a68424c561d11c40e4",
+  "run_id": "editorial-v4-qa:d0375eec-5684-4931-8de7-42e78d622dbb",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "d0375eec-5684-4931-8de7-42e78d622dbb",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:26:16+00:00"
+}

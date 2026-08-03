@@ -1,0 +1,27 @@
+{
+  "schema_version": "editorial-v4-quality-loop-receipt-v1",
+  "ticker": "600519.SH",
+  "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+  "final_iteration": 15,
+  "final_report_hash": "184cf91fc0a425500941b221af5405d4cc54e518bf448415e30933a952cf570b",
+  "machine_status": "passed",
+  "machine_errors": [],
+  "independent_qa_status": "passed",
+  "independent_qa_run_id": "editorial-v4-qa:90793176-9acd-4d82-9555-5a8375c242df",
+  "independent_qa_request_id": "90793176-9acd-4d82-9555-5a8375c242df",
+  "independent_qa_raw_blockers": 8,
+  "independent_qa_blockers": [],
+  "review_status": "pending",
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "paths": {
+    "json_path": "artifacts/editorial-v4/600519.SH/report.json",
+    "report_hash": "184cf91fc0a425500941b221af5405d4cc54e518bf448415e30933a952cf570b",
+    "markdown_path": "artifacts/editorial-v4/600519.SH/report.md",
+    "html_path": "artifacts/editorial-v4/600519.SH/report.html",
+    "markdown_chars": "3864",
+    "html_bytes": "9829"
+  },
+  "final_status": "passed"
+}

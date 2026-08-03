@@ -1,0 +1,155 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100%”未绑定任何 claim 或 evidence，无法追溯来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100”未绑定任何 claim 或 evidence，无法追溯来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-01 引用公司自述发电量等指标，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-02 引用公司自述售电量等，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-03 引用公司自述分红政策，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-04 引用公司自述信用评级，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-05 引用公司自述高管信息，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-06 引用公司自述项目投资，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实（F-01~F-04）均正确引用 evidence packet 中的数字和 derived 方向，并明确增长幅度。",
+    "所有 judgment 均标注 [J-xx]，并附有 refs 和 falsifier，符合 AI judgment 规则。",
+    "gap 声明均基于 evidence packet 的缺失，未将缺口伪装为事实。",
+    "整体结论锋利，带有 judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至 evidence_ids",
+    "同期对比明确增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/排名等写成事实",
+    "AI judgment 有 marker、refs、falsifier",
+    "报告有资产定位、因果链、白话结论",
+    "缺口基于 evidence packet 缺失"
+  ],
+  "raw_blockers": [
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100%”未绑定任何 claim 或 evidence，无法追溯来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100”未绑定任何 claim 或 evidence，无法追溯来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-01 引用公司自述发电量等指标，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-02 引用公司自述售电量等，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-03 引用公司自述分红政策，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-04 引用公司自述信用评级，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-05 引用公司自述高管信息，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-06 引用公司自述项目投资，但正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    }
+  ],
+  "request_hash": "97f647df3324dfa67b8d1585ea2b3012df5f8cf6c9ddc5ef92a93a7ce6fd7573",
+  "response_hash": "f9ca6c3cd37c51e9d2fffaaa5f99cbcdc24502b8a42cc1c6d5e828aa36043003",
+  "run_id": "editorial-v4-qa:a31ea0eb-299c-428e-892b-10180fd37c6d",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a31ea0eb-299c-428e-892b-10180fd37c6d",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:13:46+00:00"
+}

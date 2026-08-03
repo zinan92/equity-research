@@ -1,0 +1,155 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-01在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-05在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-12在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-17在正文中未显式标注“公司披露/年报自述”，仅以“描述”开头，未满足规则3。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-18在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-19在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-20在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有数字和事实均能回溯到证据包中的具体页码和引用锚点，无凭空捏造。",
+    "同期对比数据（如贷款余额变动）均明确给出了增长/下滑方向和具体幅度。",
+    "判断性结论均标注了[J-xx]并附有falsifier，符合AI judgment规范。",
+    "缺口声明均基于证据包实际缺失，未借缺口掩盖已有数据或升级公司自述。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯性",
+    "同期对比表述完整性",
+    "公司自述显式标注",
+    "条件句结论误用",
+    "未提供证据的事实陈述",
+    "AI judgment标记与falsifier",
+    "爱牛式定位与因果链",
+    "缺口与下一步验证"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISSING",
+      "message": "C-17引用的evidence_id 'narrative:56:150' 在evidence packet中不存在，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-01在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-05在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-12在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-17在正文中未显式标注“公司披露/年报自述”，仅以“描述”开头，未满足规则3。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-18在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:152"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-19在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:155",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:156"
+      ]
+    },
+    {
+      "code": "SELF_REPORT_UNMARKED",
+      "message": "C-20在正文中未显式标注“公司披露/年报自述”，仅以“披露”开头，未满足规则3。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    }
+  ],
+  "request_hash": "004b3bc0fc5491fad92fcb276459824113fae0f381cd7df8a2dd0f7b333d3375",
+  "response_hash": "6a7faad788442d745728eb5196d22f47daf323f8eb5c55760e1b9639ce897819",
+  "run_id": "editorial-v4-qa:7990ef3b-bdf3-4936-be2f-7f4bf95c2f55",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "7990ef3b-bdf3-4936-be2f-7f4bf95c2f55",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:53:04+00:00"
+}

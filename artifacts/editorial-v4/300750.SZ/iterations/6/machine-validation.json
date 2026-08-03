@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "ticker": "300750.SZ",
+  "chars": 2512,
+  "claims": 32,
+  "errors": [
+    {
+      "code": "action_language",
+      "message": "editorial body contains blocked action/valuation language",
+      "matches": [
+        "目标价"
+      ]
+    }
+  ]
+}
