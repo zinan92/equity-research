@@ -1,0 +1,194 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01 引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接呈现为独立事实。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-01 引用欧睿数据，但正文未显式写“公司披露年报引用”，将公司自述的第三方排名当作独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-02 称美的系产品线上线下销售额均居行业第一，但正文未标注“公司披露”，将公司自述当作事实。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-14 引用产业在线数据，但正文未写“公司披露年报引用”，将公司自述的份额数据当作独立事实。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-15 引用MIR睿工业统计，但正文未写“公司披露年报引用”，将公司自述的机器人份额当作独立事实。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-18 引用奥维云网数据，但正文未写“公司披露年报引”，将公司自述的行业下滑数据当作独立事实。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-19 称海外销售额占比40%以上，但正文未标注“公司披露”，将公司自述当作事实。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-21 称年报指出风险，但正文未显式写“公司披露”，将公司自述的风险描述当作独立事实。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据F-01/F-02/F-03均正确引用evidence packet中的数值和同比变化，且明确标注增长幅度。",
+    "所有判断类claim（J-01至J-06）均带有[J]标记、引用相关底层证据、并给出falsifier，符合judgment synthesis规则。",
+    "缺口类claim（G-01至G-04）明确基于输入未提供的信息，未借缺口掩盖已有数字或升级公司自述。",
+    "整体结论锋利且带有白话总结，符合爱牛式风格，未出现空泛句子。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01 引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接呈现为独立事实。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-01 引用欧睿数据，但正文未显式写“公司披露年报引用”，将公司自述的第三方排名当作独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-02 称美的系产品线上线下销售额均居行业第一，但正文未标注“公司披露”，将公司自述当作事实。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-14 引用产业在线数据，但正文未写“公司披露年报引用”，将公司自述的份额数据当作独立事实。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-15 引用MIR睿工业统计，但正文未写“公司披露年报引用”，将公司自述的机器人份额当作独立事实。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-18 引用奥维云网数据，但正文未写“公司披露年报引”，将公司自述的行业下滑数据当作独立事实。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-19 称海外销售额占比40%以上，但正文未标注“公司披露”，将公司自述当作事实。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-21 称年报指出风险，但正文未显式写“公司披露”，将公司自述的风险描述当作独立事实。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "93e5c754d3af0a38acb66984ef4977e70afb0f6fd4843a69d888938311e2d670",
+  "response_hash": "68d0d6802693f02ce68d72033335bc0f02dced471c4587a2e3b413b7323eac34",
+  "run_id": "editorial-v4-qa:8c52d289-38e5-45f1-84db-f18bef725a2b",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "8c52d289-38e5-45f1-84db-f18bef725a2b",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:38:38+00:00"
+}

@@ -1,0 +1,161 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "MISSING_COMPARISON_DIRECTION",
+      "message": "C-14 引用 25:62 披露贷款余额变动，但正文未明确写出增长/下滑幅度，仅复述数字，违反同期对比规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_SELF_REPORT_LABEL",
+      "message": "C-12 正文写“年报披露”，但 claim 未标 issuer_self_report，且未显式写“年报自述”，可能误导为独立验证。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "CONDITIONAL_FOR_HISTORICAL",
+      "message": "J-12 正文写“如果未来年报披露…那就说明…”，但引用的 12:28 和 25:62 是已披露历史事实，不应写成条件句。",
+      "claim_id": "J-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:28",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "UNSUPPORTED_SPECIFIC_FACT",
+      "message": "J-09 正文称“一旦寿险销售动能衰减，大财富增长引擎将熄火”，但未提供寿险销售数据或证据，属于无依据事实陈述。",
+      "claim_id": "J-09",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    }
+  ],
+  "strengths": [
+    "报告明确区分 issuer_self_report 与 judgment，多数自述标注了“年报自述/公司披露”。",
+    "整体结论锋利，带有白话总结和证伪条件，符合爱牛式风格。",
+    "缺口识别全面，覆盖财务、团队、技术、风险等关键维度。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要标 [J-xx]、有 refs 和 falsifier 就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01 引用 evidence_ids 12:27,14:36,14:37，但 14:37 仅描述科技赋能，未提及集团生态护城河，证据链不完整。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "MISSING_COMPARISON_DIRECTION",
+      "message": "C-14 引用 25:62 披露贷款余额变动，但正文未明确写出增长/下滑幅度，仅复述数字，违反同期对比规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_SELF_REPORT_LABEL",
+      "message": "C-12 正文写“年报披露”，但 claim 未标 issuer_self_report，且未显式写“年报自述”，可能误导为独立验证。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "CONDITIONAL_FOR_HISTORICAL",
+      "message": "J-12 正文写“如果未来年报披露…那就说明…”，但引用的 12:28 和 25:62 是已披露历史事实，不应写成条件句。",
+      "claim_id": "J-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:28",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "UNSUPPORTED_SPECIFIC_FACT",
+      "message": "J-09 正文称“一旦寿险销售动能衰减，大财富增长引擎将熄火”，但未提供寿险销售数据或证据，属于无依据事实陈述。",
+      "claim_id": "J-09",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "JUDGMENT_MISSING_MARKER",
+      "message": "J-10 正文写“平安银行是一艘挂靠在平安集团这艘航母旁的精品班轮”，但 claim 未标 [J-10] 且无 falsifier，违反 judgment 标记规则。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:24",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:25",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "style",
+      "code": "GAP_AS_FACT",
+      "message": "G-01 正文写“最新财务数据未提供”，但 gap 本身不应作为事实陈述，应仅标注缺口，避免误导为已确认事实。",
+      "claim_id": "G-01",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "JUDGMENT_MISSING_MARKER",
+      "message": "J-10 正文写“平安银行是一艘挂靠在平安集团这艘航母旁的精品班轮”，但 claim 未标 [J-10] 且无 falsifier，违反 judgment 标记规则。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:24",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:25",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    }
+  ],
+  "request_hash": "94ca3101803e16913ffaad1a9f49be8db26bcceab47780ba5c8fc3a8b0e38d70",
+  "response_hash": "c0e9f7295b44a402c1fc14406d91e9ba6bf4827f6f72298ed9b3b53e722f7dc8",
+  "run_id": "editorial-v4-qa:fc2af2c7-b8d2-40d2-85c1-1c7fff09ecfe",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "fc2af2c7-b8d2-40d2-85c1-1c7fff09ecfe",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:04:10+00:00"
+}

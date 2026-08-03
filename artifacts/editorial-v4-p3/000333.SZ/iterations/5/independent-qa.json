@@ -1,0 +1,197 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-01 引用 midea_2025_annual:narrative:31:16 和 :42:23，但 :31:16 仅含中央空调份额，未提压缩机/电机全球第一，该部分在 :41:22。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-01 引用 midea_2025_annual:narrative:41:22，但该页未出现“欧睿”或“Euromonitor”，实际在 :41:22 的 quoted_anchor 中。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-14 引用 midea_2025_annual:narrative:31:16，但该页未提“菱王电梯发货量同比增超40%”，该信息在 :31:16 的 quoted_anchor 中。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-15 引用 midea_2025_annual:narrative:42:23，但该页未提“300kg以上负载重载机器人领域拥有显著优势”，该信息在 :42:23 的 quoted_anchor 中。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-18 引用 midea_2025_annual:narrative:15:1，但该页未提“奥维云网数据，2025年国内家电零售额同比下滑4.3%”，该信息在 :15:1 的 quoted_anchor 中。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-19 引用 midea_2025_annual:narrative:42:23，但该页未提“海外销售额占公司总销售额40%以上”，该信息在 :42:23 的 quoted_anchor 中。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-21 引用 midea_2025_annual:narrative:15:1，但该页未提“全球地缘政治冲突、贸易保护主义和汇率波动构成持续海外经营风险”，该信息在 :15:1 的 quoted_anchor 中。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-05 引用 midea_2025_annual:narrative:15:1 和 :49:33，但 :15:1 未提“8座灯塔工厂”，该信息在 :15:1 的 quoted_anchor 中。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:49:33"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01/F-02/F-03 均正确引用 evidence packet 中的数值和 derived metrics，增长幅度准确。",
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "判断类 claim J-01 至 J-06 均带有 [J] marker 和 falsifier，符合 judgment synthesis 规则。",
+    "缺口 G-01 至 G-04 基于 evidence packet 的 gaps 写出，未借 gap 掩盖已有数字。",
+    "整体结论锋利，带有白话总结和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-01 引用 midea_2025_annual:narrative:31:16 和 :42:23，但 :31:16 仅含中央空调份额，未提压缩机/电机全球第一，该部分在 :41:22。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-01 引用 midea_2025_annual:narrative:41:22，但该页未出现“欧睿”或“Euromonitor”，实际在 :41:22 的 quoted_anchor 中。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-14 引用 midea_2025_annual:narrative:31:16，但该页未提“菱王电梯发货量同比增超40%”，该信息在 :31:16 的 quoted_anchor 中。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-15 引用 midea_2025_annual:narrative:42:23，但该页未提“300kg以上负载重载机器人领域拥有显著优势”，该信息在 :42:23 的 quoted_anchor 中。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-18 引用 midea_2025_annual:narrative:15:1，但该页未提“奥维云网数据，2025年国内家电零售额同比下滑4.3%”，该信息在 :15:1 的 quoted_anchor 中。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-19 引用 midea_2025_annual:narrative:42:23，但该页未提“海外销售额占公司总销售额40%以上”，该信息在 :42:23 的 quoted_anchor 中。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-21 引用 midea_2025_annual:narrative:15:1，但该页未提“全球地缘政治冲突、贸易保护主义和汇率波动构成持续海外经营风险”，该信息在 :15:1 的 quoted_anchor 中。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-05 引用 midea_2025_annual:narrative:15:1 和 :49:33，但 :15:1 未提“8座灯塔工厂”，该信息在 :15:1 的 quoted_anchor 中。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:49:33"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "b695dc7cb30a327580550ba79a394fb2042c26ff8a8b97c8a255a511175ec274",
+  "response_hash": "693f669ee4dd33dd953df09088029b2c32f9a5935660307c0ade0cd368a2d49a",
+  "run_id": "editorial-v4-qa:761e8cbf-4808-43a5-bc7f-e3bb077c5454",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "761e8cbf-4808-43a5-bc7f-e3bb077c5454",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:43:21+00:00"
+}

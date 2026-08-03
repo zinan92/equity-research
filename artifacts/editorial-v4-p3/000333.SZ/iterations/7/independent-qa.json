@@ -1,0 +1,192 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-01 引用 evidence_id 'midea_2025_annual:narrative:41:22'，但该证据中未出现“欧睿”或“Euromonitor”字样，无法验证数据来源。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E002",
+      "message": "C-14 引用 evidence_id 'midea_2025_annual:narrative:31:16'，但该证据中未出现“产业在线”字样，无法验证第三方数据来源。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E003",
+      "message": "C-15 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“MIR睿工业”字样，无法验证第三方数据来源。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E004",
+      "message": "C-18 引用 evidence_id 'midea_2025_annual:narrative:15:1'，但该证据中未出现“奥维云网”字样，无法验证第三方数据来源。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E005",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:31:16'，但该证据中未出现“产业在线”字样，无法验证第三方数据来源。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E006",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“产业在线”字样，无法验证第三方数据来源。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E007",
+      "message": "C-19 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“海外销售额占公司总销售额40%以上”的表述。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E008",
+      "message": "C-21 引用 evidence_id 'midea_2025_annual:narrative:20:5'，但该证据中未出现“贸易保护主义、汇率波动和地缘政治冲突”的完整表述。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据（F-01, F-02, F-03）均正确引用自官方报表，且同期对比计算准确。",
+    "所有公司自述类声明（C-02至C-20）均明确标注“公司披露”，未冒充独立验证。",
+    "判断类声明（J-01至J-06）均带有[J]标记和falsifier，符合AI judgment规范。",
+    "缺口声明（G-01至G-04）合理指出输入材料未提供的信息，未借gap掩盖事实。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑/持平及幅度",
+    "公司自述显式写“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将未提供证据的客户、订单、排名等写成事实",
+    "AI judgment有[J]标记、相关底层证据和falsifier",
+    "报告有爱牛式定位、因果链、风险证伪和白话结论",
+    "缺口基于evidence packet的gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-01 引用 evidence_id 'midea_2025_annual:narrative:41:22'，但该证据中未出现“欧睿”或“Euromonitor”字样，无法验证数据来源。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E002",
+      "message": "C-14 引用 evidence_id 'midea_2025_annual:narrative:31:16'，但该证据中未出现“产业在线”字样，无法验证第三方数据来源。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E003",
+      "message": "C-15 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“MIR睿工业”字样，无法验证第三方数据来源。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E004",
+      "message": "C-18 引用 evidence_id 'midea_2025_annual:narrative:15:1'，但该证据中未出现“奥维云网”字样，无法验证第三方数据来源。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E005",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:31:16'，但该证据中未出现“产业在线”字样，无法验证第三方数据来源。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E006",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“产业在线”字样，无法验证第三方数据来源。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E007",
+      "message": "C-19 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“海外销售额占公司总销售额40%以上”的表述。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E008",
+      "message": "C-21 引用 evidence_id 'midea_2025_annual:narrative:20:5'，但该证据中未出现“贸易保护主义、汇率波动和地缘政治冲突”的完整表述。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "402543964ff7fb054b27b1e01ced8abc26b6d5a2d6d95f3e1876a2a3b7f32501",
+  "response_hash": "9e4e573e4b60b262ebfd54d6a0209ea6b1988d60d26e70010229d3eadec54356",
+  "run_id": "editorial-v4-qa:acec1585-e0ed-4837-b7c1-cd8fe4b3a53d",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "acec1585-e0ed-4837-b7c1-cd8fe4b3a53d",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:54:38+00:00"
+}

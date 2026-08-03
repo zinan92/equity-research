@@ -2674,3 +2674,28 @@
   accepted when one explicit company-disclosure lead-in governs a cited run;
   it does not turn a judgment into a fact. All outputs remain review-only and
   grant no Tier/B6/decision/publication credit.
+
+## 2026-08-03 — V4-P3 makes aggressive judgment quality repeatable (Issue #694)
+
+- Decision: preserve memorable, issuer-specific Ainiu-style positioning as
+  `[J-xx]` research judgments instead of deleting it when no filing line says
+  “absolute leader” or “pricing power”. Require each judgment to retain cited
+  underlying evidence and a falsifier, while keeping facts `[F]`, issuer
+  self-report `[C]`, and gaps `[G]` visibly separate.
+- Why: the product differentiator is an independent, aggressive description of
+  what a company is. A gate that demanded verbatim proof would collapse the
+  report back into a company brochure; a gate that allowed unbound premises
+  would invent evidence. The correct boundary is sharp synthesis with
+  provenance, not bland prose.
+- Evidence: `product/editorial_v4_contract.py` (claim-local numeric closure,
+  deterministic derived values, historical-condition and attribution gates),
+  `product/editorial_v4_generator.py` (whole-report DeepSeek prompt and repair
+  directives), `product/editorial_v4_qa.py` (independent QA plus explicit
+  false-positive filter), `scripts/aggregate_editorial_v4_p3.py`, focused
+  tests (20 passed), and
+  `artifacts/editorial-v4-p3/aggregate-receipt.json` (five final passes).
+- Gotchas: raw DeepSeek QA may still flag a valid judgment for not being
+  verbatim in the filing; the receipt must preserve raw blockers and the
+  deterministic filtered result side by side. A fresh QA recheck is a new
+  evidence event, not an implicit pass. This path remains review-only and
+  cannot grant Tier, target price, position, action, or publication credit.

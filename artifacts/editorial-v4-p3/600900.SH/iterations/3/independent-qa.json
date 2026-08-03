@@ -1,0 +1,124 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-09 整体结论未在 claims 中定义，无法验证其证据链。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据与 evidence packet 完全一致，且同期对比方向与幅度均正确标注。",
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "报告明确指出了输入缺口，如创始人信息、项目财务预测、估值数据等，未用空泛句子凑篇幅。",
+    "整体结论锋利，带有明确的证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要它在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-09 整体结论未在 claims 中定义，无法验证其证据链。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-07 引用的 evidence_ids 未包含分红承诺证据，但 claim 明确提及“承诺将七成利润分给股东”。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:215:39",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-01 引用的 evidence_ids 未包含分红承诺证据，但 claim 明确提及“承诺利润的70%以上用于分红”。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-02 引用的 evidence_ids 未包含利率风险证据，但 claim 明确提及“浮动利率负债使其对利率变动敏感”。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:28:19",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-04 引用的 evidence_ids 未包含来水风险证据，但 claim 明确提及“长江来水的丰枯是决定发电量和收入的最核心变量”。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-05 引用的 evidence_ids 未包含电价下行风险证据，但 claim 明确提及“电力市场化交易比重上升可能导致上网电价下行”。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:28:19"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-06 引用的 evidence_ids 未包含利率风险证据，但 claim 明确提及“以浮动利率计息的巨额负债使公司对利率高度敏感”。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-08 引用的 evidence_ids 未包含董事缺席证据，但 claim 明确提及“年报显示部分董事因公务长期缺席董事会”。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:35:26"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "9f620ac90306a89042526a069e59dbd5c4898c2bac2442458e6b7eae5ba14a9b",
+  "response_hash": "3d0a311327116b512b4def5b7b7026479b81d529ff24c066ad75c0bf8ad0992c",
+  "run_id": "editorial-v4-qa:81fd57cf-a6e9-42f7-83b6-1b04cf027d85",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "81fd57cf-a6e9-42f7-83b6-1b04cf027d85",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:33:38+00:00"
+}

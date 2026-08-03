@@ -1,0 +1,363 @@
+{
+  "schema_version": "editorial-v4-p3-aggregate-receipt-v1",
+  "generated_at": "2026-08-03T11:50:36+00:00",
+  "root": "/Users/wendy/Documents/投研面板/artifacts/editorial-v4-p3",
+  "source": "real DeepSeek whole-report runs over frozen official-PDF evidence packets",
+  "review_only": true,
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "all_final_status_passed": true,
+  "tickers": [
+    {
+      "ticker": "000333.SZ",
+      "issuer_name": "美的集团",
+      "final_iteration": 11,
+      "final_status": "passed",
+      "receipt_status": "passed",
+      "report_hash": "4c24b33b3138d516be590e1860a7208a547a96a6e1cb21a406fd73a1b71c8b89",
+      "packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_file": "000333.SZ/iterations/11/independent-qa.json",
+      "independent_qa_raw_status": "failed",
+      "independent_qa_raw_blockers": 8,
+      "independent_qa_filtered_blockers": [],
+      "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+      "body_chars": 2960,
+      "section_lengths": [
+        {
+          "id": "one_line_position",
+          "title": "一句话定位",
+          "chars": 462
+        },
+        {
+          "id": "founder_team",
+          "title": "创始人与团队",
+          "chars": 267
+        },
+        {
+          "id": "timeline",
+          "title": "发展时间线",
+          "chars": 417
+        },
+        {
+          "id": "technology_products",
+          "title": "技术与产品",
+          "chars": 614
+        },
+        {
+          "id": "financial_valuation",
+          "title": "财务与估值",
+          "chars": 507
+        },
+        {
+          "id": "risks_commentary",
+          "title": "风险与点评",
+          "chars": 402
+        },
+        {
+          "id": "plain_language",
+          "title": "大白话结论",
+          "chars": 291
+        }
+      ],
+      "claim_count": 38,
+      "aggressive_judgment_count": 4,
+      "aggressive_judgment_samples": [
+        "J-01: 公司披露年报引用产业在线数据显示，其家用空调压缩机、电机全球销量份额稳居第一，中央空调国内销售额占比超20%保持第一，旗下库卡机器人国内销量份额9.6%稳居前三，已形成精密制造平台地位。",
+        "J-05: 美的凭借全球制造网络、8座灯塔工厂及大规模回购，构筑了较深的护城河。",
+        "J-06: 这是一个确定性较强但弹性有限的现金牛，外加两个高风险高回报的期权。",
+        "J-08: ‘家电+工业机器人+人形机器人’的三角布局提供想象空间，但人形机器人商业化前景不明。"
+      ],
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "report_paths": {
+        "markdown": "artifacts/editorial-v4-p3/000333.SZ/report.md",
+        "html": "artifacts/editorial-v4-p3/000333.SZ/report.html",
+        "receipt": "artifacts/editorial-v4-p3/000333.SZ/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "600519.SH",
+      "issuer_name": "贵州茅台",
+      "final_iteration": 13,
+      "final_status": "passed",
+      "receipt_status": "passed",
+      "report_hash": "79d6e25c78e13487b43ec3ed1d1f785420c1d3660c01a5b66d7a3b88362544dc",
+      "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_file": "600519.SH/iterations/13/independent-qa.json",
+      "independent_qa_raw_status": "failed",
+      "independent_qa_raw_blockers": 7,
+      "independent_qa_filtered_blockers": [],
+      "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+      "body_chars": 2503,
+      "section_lengths": [
+        {
+          "id": "one_line_position",
+          "title": "一句话定位",
+          "chars": 111
+        },
+        {
+          "id": "founder_team",
+          "title": "创始人与团队",
+          "chars": 180
+        },
+        {
+          "id": "timeline",
+          "title": "发展时间线",
+          "chars": 409
+        },
+        {
+          "id": "technology_products",
+          "title": "技术与产品",
+          "chars": 634
+        },
+        {
+          "id": "financial_valuation",
+          "title": "财务与估值",
+          "chars": 528
+        },
+        {
+          "id": "risks_commentary",
+          "title": "风险与点评",
+          "chars": 407
+        },
+        {
+          "id": "plain_language",
+          "title": "大白话结论",
+          "chars": 234
+        }
+      ],
+      "claim_count": 39,
+      "aggressive_judgment_count": 3,
+      "aggressive_judgment_samples": [
+        "J-01: 贵州茅台仍是中国高端白酒绝对龙头，但营收净利双降揭示品牌溢价从供给稀缺红利向需求驱动切换，高增长暂停",
+        "J-02: 五年的生产前置期构成茅台最核心的护城河，但需求疲软时可能转化为存货负担",
+        "J-05: 茅台的生产周期长达五年，过去是护城河因为需求扩张，现在送礼请客场景减少，慢成了负担"
+      ],
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "report_paths": {
+        "markdown": "artifacts/editorial-v4-p3/600519.SH/report.md",
+        "html": "artifacts/editorial-v4-p3/600519.SH/report.html",
+        "receipt": "artifacts/editorial-v4-p3/600519.SH/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "600900.SH",
+      "issuer_name": "长江电力",
+      "final_iteration": 7,
+      "final_status": "passed",
+      "receipt_status": "passed",
+      "report_hash": "91bb3bab0eeb8e301747f13099fa07e849e9a8966695d5de4c0b85820fc31075",
+      "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_file": "600900.SH/iterations/7/independent-qa.json",
+      "independent_qa_raw_status": "failed",
+      "independent_qa_raw_blockers": 8,
+      "independent_qa_filtered_blockers": [],
+      "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+      "body_chars": 2518,
+      "section_lengths": [
+        {
+          "id": "one_line_position",
+          "title": "一句话定位",
+          "chars": 279
+        },
+        {
+          "id": "founder_team",
+          "title": "创始人与团队",
+          "chars": 218
+        },
+        {
+          "id": "timeline",
+          "title": "发展时间线",
+          "chars": 465
+        },
+        {
+          "id": "technology_products",
+          "title": "技术与产品",
+          "chars": 447
+        },
+        {
+          "id": "financial_valuation",
+          "title": "财务与估值",
+          "chars": 433
+        },
+        {
+          "id": "risks_commentary",
+          "title": "风险与点评",
+          "chars": 468
+        },
+        {
+          "id": "plain_language",
+          "title": "大白话结论",
+          "chars": 208
+        }
+      ],
+      "claim_count": 48,
+      "aggressive_judgment_count": 2,
+      "aggressive_judgment_samples": [
+        "J-01: 长江电力独家运营长江干流六座梯级电站这一最优质的水电资产群，其经营模式本质上是利用不可复制的自然禀赋产生稳定的售电收入，并承诺将大多数利润以现金形式返还股东，资产角色类似于一只收益与来水和利率挂钩的高等级信用债。",
+        "J-10: 公司的流域梯级调度能力是核心护城河，能够从相同来水中最大化发电效率，竞争对手难以复制。"
+      ],
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "report_paths": {
+        "markdown": "artifacts/editorial-v4-p3/600900.SH/report.md",
+        "html": "artifacts/editorial-v4-p3/600900.SH/report.html",
+        "receipt": "artifacts/editorial-v4-p3/600900.SH/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "300750.SZ",
+      "issuer_name": "宁德时代",
+      "final_iteration": 8,
+      "final_status": "passed",
+      "receipt_status": "passed",
+      "report_hash": "e2384ad8b7bb556fbd452ff92a6f103c7cee9782f79b2e5b67bceca67c64ef3c",
+      "packet_hash": "e057471e09095e20abe87a5c29fcf08f8a0e2b155cd4b67ddc11d5ec3304e561",
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_file": "300750.SZ/iterations/8/independent-qa.json",
+      "independent_qa_raw_status": "failed",
+      "independent_qa_raw_blockers": 8,
+      "independent_qa_filtered_blockers": [],
+      "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+      "body_chars": 2538,
+      "section_lengths": [
+        {
+          "id": "one_line_position",
+          "title": "一句话定位",
+          "chars": 184
+        },
+        {
+          "id": "founder_team",
+          "title": "创始人与团队",
+          "chars": 250
+        },
+        {
+          "id": "timeline",
+          "title": "发展时间线",
+          "chars": 436
+        },
+        {
+          "id": "technology_products",
+          "title": "技术与产品",
+          "chars": 597
+        },
+        {
+          "id": "financial_valuation",
+          "title": "财务与估值",
+          "chars": 475
+        },
+        {
+          "id": "risks_commentary",
+          "title": "风险与点评",
+          "chars": 405
+        },
+        {
+          "id": "plain_language",
+          "title": "大白话结论",
+          "chars": 191
+        }
+      ],
+      "claim_count": 40,
+      "aggressive_judgment_count": 3,
+      "aggressive_judgment_samples": [
+        "J-01: 宁德时代是全球动力和储能电池的绝对龙头，凭借极限制造和持续迭代的产品矩阵，在两大主航道上持续拉大领先身位。",
+        "J-10: 公司形成了典型的“精密制造杂货铺”优势，通过海量品类和极致品控构筑难以复制的体系化壁垒。",
+        "J-11: 但这一模式依赖持续高强度的研发投入，如果新材料体系（如全固态电池）出现颠覆性路线且公司跟进不及，护城河可能被绕过。"
+      ],
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "report_paths": {
+        "markdown": "artifacts/editorial-v4-p3/300750.SZ/report.md",
+        "html": "artifacts/editorial-v4-p3/300750.SZ/report.html",
+        "receipt": "artifacts/editorial-v4-p3/300750.SZ/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "000001.SZ",
+      "issuer_name": "平安银行",
+      "final_iteration": 7,
+      "final_status": "passed",
+      "receipt_status": "passed",
+      "report_hash": "ac699929a402c01a3e0b794d1d788af3cb381b02fcfbba303f30f8661ad364cb",
+      "packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_file": "000001.SZ/iterations/7/independent-qa-recheck.json",
+      "independent_qa_raw_status": "failed",
+      "independent_qa_raw_blockers": 8,
+      "independent_qa_filtered_blockers": [],
+      "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+      "body_chars": 2865,
+      "section_lengths": [
+        {
+          "id": "one_line_position",
+          "title": "一句话定位",
+          "chars": 237
+        },
+        {
+          "id": "founder_team",
+          "title": "创始人与团队",
+          "chars": 204
+        },
+        {
+          "id": "timeline",
+          "title": "发展时间线",
+          "chars": 472
+        },
+        {
+          "id": "technology_products",
+          "title": "技术与产品",
+          "chars": 434
+        },
+        {
+          "id": "financial_valuation",
+          "title": "财务与估值",
+          "chars": 567
+        },
+        {
+          "id": "risks_commentary",
+          "title": "风险与点评",
+          "chars": 551
+        },
+        {
+          "id": "plain_language",
+          "title": "大白话结论",
+          "chars": 400
+        }
+      ],
+      "claim_count": 48,
+      "aggressive_judgment_count": 2,
+      "aggressive_judgment_samples": [
+        "J-01: 平安银行试图借助平安集团综合金融与科技生态构建差异于同业的护城河。",
+        "J-03: 核心矛盾在于高调的战略叙事与低迷的宏观利率环境之间的拉锯，兑现节点取决于零售AUM结构和活期存款沉淀能否持久。"
+      ],
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "report_paths": {
+        "markdown": "artifacts/editorial-v4-p3/000001.SZ/report.md",
+        "html": "artifacts/editorial-v4-p3/000001.SZ/report.html",
+        "receipt": "artifacts/editorial-v4-p3/000001.SZ/quality-loop-receipt.json"
+      }
+    }
+  ]
+}

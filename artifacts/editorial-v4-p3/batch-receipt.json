@@ -1,0 +1,308 @@
+{
+  "schema_version": "editorial-v4-batch-receipt-v1",
+  "generated_at": "2026-08-03T10:01:39+00:00",
+  "model": "deepseek-v4-pro",
+  "tickers": [
+    "600519.SH",
+    "600900.SH",
+    "300750.SZ",
+    "000001.SZ"
+  ],
+  "rows": [
+    {
+      "ticker": "600519.SH",
+      "status": "needs_review",
+      "receipt": {
+        "schema_version": "editorial-v4-quality-loop-receipt-v1",
+        "ticker": "600519.SH",
+        "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+        "iterations": [
+          {
+            "iteration": 0,
+            "run_id": "editorial-v4-run:d9390c1a-bd48-415d-8d83-d7463b1b728d",
+            "request_id": "d9390c1a-bd48-415d-8d83-d7463b1b728d",
+            "report_hash": "1c6ac9d973d34d762bec09fde2d76932a7faa77055956329f9203b31ccc3abc0",
+            "machine_status": "failed",
+            "machine_errors": 11,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:989c9db9-7471-403f-a508-4c19a5857e33",
+            "qa_request_id": "989c9db9-7471-403f-a508-4c19a5857e33",
+            "qa_blockers": 6,
+            "qa_advisories": 3
+          },
+          {
+            "iteration": 1,
+            "run_id": "editorial-v4-run:e358b6a3-dc8e-4199-a527-e06f4186cc60",
+            "request_id": "e358b6a3-dc8e-4199-a527-e06f4186cc60",
+            "report_hash": "d01e32af9151360ada0a67271486bf56cb3c3da6cd60d1af5f9ab5745342731d",
+            "machine_status": "failed",
+            "machine_errors": 6,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:f7afd42f-8717-4651-a3c5-f7fcc107db0b",
+            "qa_request_id": "f7afd42f-8717-4651-a3c5-f7fcc107db0b",
+            "qa_blockers": 6,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 2,
+            "run_id": "editorial-v4-run:976efad7-f5e6-4ce2-9037-bf053ed0ed34",
+            "request_id": "976efad7-f5e6-4ce2-9037-bf053ed0ed34",
+            "report_hash": "7e6758e66318518976e34594ac8bd1cb8b7c93bbd0b5ea19b5c0b4927bebac07",
+            "machine_status": "failed",
+            "machine_errors": 6,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:a08ba5f6-f276-4320-8a00-335d0cbb7641",
+            "qa_request_id": "a08ba5f6-f276-4320-8a00-335d0cbb7641",
+            "qa_blockers": 6,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 3,
+            "run_id": "editorial-v4-run:f6967ff4-288a-4666-ba8c-b7a899595784",
+            "request_id": "f6967ff4-288a-4666-ba8c-b7a899595784",
+            "report_hash": "7fa3905a6a83a6b1c0da291ccabfcb6f88fabe83751bdb446dac97626ef5c20b",
+            "machine_status": "failed",
+            "machine_errors": 6,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:07716924-935d-4e67-b97d-c8dfdd73aff9",
+            "qa_request_id": "07716924-935d-4e67-b97d-c8dfdd73aff9",
+            "qa_blockers": 5,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 4,
+            "run_id": "editorial-v4-run:4ebf0188-ad5d-4661-bbcd-37df2d63389a",
+            "request_id": "4ebf0188-ad5d-4661-bbcd-37df2d63389a",
+            "report_hash": "4aa96993a39c8da7cc53c3e536f78a00e6c8b04ed650381e4e512963a8713877",
+            "machine_status": "failed",
+            "machine_errors": 5,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:b10c0b1a-ea55-47c3-ae6b-9dbeb0f5a650",
+            "qa_request_id": "b10c0b1a-ea55-47c3-ae6b-9dbeb0f5a650",
+            "qa_blockers": 1,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 5,
+            "run_id": "editorial-v4-run:d09fec8b-352d-434a-a8d0-22362dbd8eae",
+            "request_id": "d09fec8b-352d-434a-a8d0-22362dbd8eae",
+            "report_hash": "3914775fc60bc32e0983d56eb660743e39e81ec76590a0c25cbbda6b63d85f39",
+            "machine_status": "failed",
+            "machine_errors": 5,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:9d7897c3-5e67-4065-8d76-26fda9b12f9b",
+            "qa_request_id": "9d7897c3-5e67-4065-8d76-26fda9b12f9b",
+            "qa_blockers": 6,
+            "qa_advisories": 0
+          }
+        ],
+        "final_status": "needs_review",
+        "review_status": "pending",
+        "action_state": "blocked",
+        "no_tier_credit": true,
+        "no_publication_credit": true,
+        "advisory_count": 0
+      },
+      "started_at": "2026-08-03T09:09:28+00:00"
+    },
+    {
+      "ticker": "600900.SH",
+      "status": "needs_review",
+      "receipt": {
+        "schema_version": "editorial-v4-quality-loop-receipt-v1",
+        "ticker": "600900.SH",
+        "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+        "iterations": [
+          {
+            "iteration": 0,
+            "run_id": "editorial-v4-run:cc38a3a6-480a-4006-b2cc-262a111e7c97",
+            "request_id": "cc38a3a6-480a-4006-b2cc-262a111e7c97",
+            "report_hash": "a9dcfda77c8f66659ff8b4600684c02f692b255adfdb9d74e70954963c73caf3",
+            "machine_status": "failed",
+            "machine_errors": 26,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:05807257-4aa6-44fa-b6a6-db31e5ad51b7",
+            "qa_request_id": "05807257-4aa6-44fa-b6a6-db31e5ad51b7",
+            "qa_blockers": 2,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 1,
+            "run_id": "editorial-v4-run:5f4a73b0-8630-478e-9836-fc140da25d19",
+            "request_id": "5f4a73b0-8630-478e-9836-fc140da25d19",
+            "report_hash": "d8b1c585ea847ec7d3e544737e821f48cb97b410ff81ca4a50cc42f8d7a838dd",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:559ab557-d017-4857-bfa3-6ef0d8c3c9d7",
+            "qa_request_id": "559ab557-d017-4857-bfa3-6ef0d8c3c9d7",
+            "qa_blockers": 2,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 2,
+            "run_id": "editorial-v4-run:939bc885-5804-4fb7-9401-0dea288d1afe",
+            "request_id": "939bc885-5804-4fb7-9401-0dea288d1afe",
+            "report_hash": "f4a4ce7bdf4e92d4d74f219c3bdd1d9acc15f8892cebcc252684de3cbb807820",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:75b63436-e5aa-4a4b-bdc6-f1e42d18e01a",
+            "qa_request_id": "75b63436-e5aa-4a4b-bdc6-f1e42d18e01a",
+            "qa_blockers": 1,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 3,
+            "run_id": "editorial-v4-run:720033d0-36ff-4b4a-b7e5-1d28ade81b2b",
+            "request_id": "720033d0-36ff-4b4a-b7e5-1d28ade81b2b",
+            "report_hash": "63531ec745a5803158ec45709d0c8e68c9f738553881e3c09336771203d32f69",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:81fd57cf-a6e9-42f7-83b6-1b04cf027d85",
+            "qa_request_id": "81fd57cf-a6e9-42f7-83b6-1b04cf027d85",
+            "qa_blockers": 1,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 4,
+            "run_id": "editorial-v4-run:33f996b8-787d-4d0d-b161-a630e85725b8",
+            "request_id": "33f996b8-787d-4d0d-b161-a630e85725b8",
+            "report_hash": "7a637f2dccb5e43aeacd3b86613341f7149c28928dae17f970240bf3455b03e4",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:40ce563e-6b6f-4849-a958-2f510e1b9eeb",
+            "qa_request_id": "40ce563e-6b6f-4849-a958-2f510e1b9eeb",
+            "qa_blockers": 3,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 5,
+            "run_id": "editorial-v4-run:055ce981-3d50-4605-a654-1fde3a018170",
+            "request_id": "055ce981-3d50-4605-a654-1fde3a018170",
+            "report_hash": "eb2e9948603e80c2fd00f98720f941ec51268beedf6d1d8e77a839c40cb5b016",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:3661ae61-b6ad-4e5b-a878-ec2cee502fb2",
+            "qa_request_id": "3661ae61-b6ad-4e5b-a878-ec2cee502fb2",
+            "qa_blockers": 1,
+            "qa_advisories": 1
+          }
+        ],
+        "final_status": "needs_review",
+        "review_status": "pending",
+        "action_state": "blocked",
+        "no_tier_credit": true,
+        "no_publication_credit": true,
+        "advisory_count": 1
+      },
+      "started_at": "2026-08-03T09:20:40+00:00"
+    },
+    {
+      "ticker": "300750.SZ",
+      "status": "error",
+      "error_type": "RemoteDisconnected",
+      "error": "Remote end closed connection without response",
+      "started_at": "2026-08-03T09:37:49+00:00"
+    },
+    {
+      "ticker": "000001.SZ",
+      "status": "needs_review",
+      "receipt": {
+        "schema_version": "editorial-v4-quality-loop-receipt-v1",
+        "ticker": "000001.SZ",
+        "packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+        "iterations": [
+          {
+            "iteration": 0,
+            "run_id": "editorial-v4-run:91016658-2c90-44df-a80a-2e3a085d1e34",
+            "request_id": "91016658-2c90-44df-a80a-2e3a085d1e34",
+            "report_hash": "d323916d748322f4b60c11b53b3d71fb4b5522de56392a53e306edd1c2573acf",
+            "machine_status": "failed",
+            "machine_errors": 18,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:9578705c-750b-423b-b0b5-accbe21f10e4",
+            "qa_request_id": "9578705c-750b-423b-b0b5-accbe21f10e4",
+            "qa_blockers": 8,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 1,
+            "run_id": "editorial-v4-run:790e98db-dcfa-4e19-9848-0d3e7bc8565d",
+            "request_id": "790e98db-dcfa-4e19-9848-0d3e7bc8565d",
+            "report_hash": "5fdc97289b1ecbd85a07301f4e08f92c70f338cb73bb0a87a9266472d3ac7e16",
+            "machine_status": "failed",
+            "machine_errors": 5,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:c61cf4d5-9cc0-4150-a5a1-07a85a3c04e8",
+            "qa_request_id": "c61cf4d5-9cc0-4150-a5a1-07a85a3c04e8",
+            "qa_blockers": 2,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 2,
+            "run_id": "editorial-v4-run:5131b3f1-a7a5-4d32-90ff-c0fb9e06e0af",
+            "request_id": "5131b3f1-a7a5-4d32-90ff-c0fb9e06e0af",
+            "report_hash": "00274899b203d7029d0b5772988949344428e5beff5cf1d0599e23915063a83a",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:8e09453a-07b8-4a2f-aceb-4153d31736b7",
+            "qa_request_id": "8e09453a-07b8-4a2f-aceb-4153d31736b7",
+            "qa_blockers": 4,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 3,
+            "run_id": "editorial-v4-run:17196a89-f510-475e-a9c9-bddb3ebcfdaf",
+            "request_id": "17196a89-f510-475e-a9c9-bddb3ebcfdaf",
+            "report_hash": "ae9a3c267fc31bd421ce4ec4320ecb97a894cdd588e8aa3bdd800428ea9da0c1",
+            "machine_status": "failed",
+            "machine_errors": 5,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:b45c31f2-0c47-49b2-96db-33781e229110",
+            "qa_request_id": "b45c31f2-0c47-49b2-96db-33781e229110",
+            "qa_blockers": 1,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 4,
+            "run_id": "editorial-v4-run:141baf03-3309-4228-9252-287ff90a7b6e",
+            "request_id": "141baf03-3309-4228-9252-287ff90a7b6e",
+            "report_hash": "d2370df20a23b039b7b6f6cf67e5d4ba08b10b34bb1135872607c93d6188ff00",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:b02e6eee-6c87-49bd-a4fd-46c28141c7f9",
+            "qa_request_id": "b02e6eee-6c87-49bd-a4fd-46c28141c7f9",
+            "qa_blockers": 2,
+            "qa_advisories": 0
+          },
+          {
+            "iteration": 5,
+            "run_id": "editorial-v4-run:4a8f11f5-8289-4d29-ada6-9bb9ff86a7c0",
+            "request_id": "4a8f11f5-8289-4d29-ada6-9bb9ff86a7c0",
+            "report_hash": "111a45c465d778ef7894121f06585ff5c6deeadf9c4863fb233cf59e7fb69756",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:8ec51c42-4fbd-45e3-9714-6f62e8bcfc6a",
+            "qa_request_id": "8ec51c42-4fbd-45e3-9714-6f62e8bcfc6a",
+            "qa_blockers": 1,
+            "qa_advisories": 0
+          }
+        ],
+        "final_status": "needs_review",
+        "review_status": "pending",
+        "action_state": "blocked",
+        "no_tier_credit": true,
+        "no_publication_credit": true,
+        "advisory_count": 0
+      },
+      "started_at": "2026-08-03T09:51:01+00:00"
+    }
+  ]
+}

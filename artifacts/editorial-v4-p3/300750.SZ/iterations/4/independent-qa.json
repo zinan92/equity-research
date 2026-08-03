@@ -1,0 +1,140 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-20 声称“归母净利率由2024年的14.0%提升至2025年的17.0%”，但14.0%未出现在其引用的任何证据中，且证据包未提供2024年净利率。",
+      "claim_id": "J-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:17:3'，但证据包中不存在该 ID。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实（F-01至F-08）均正确引用官方PDF中的数字，且同期对比方向与幅度与证据包一致。",
+    "公司自述类声明（C-10至C-51）均明确标注“公司年报披露”，未将自述冒充独立验证。",
+    "判断类声明（J-01、J-03、J-10等）均带有[J]标记和falsifier，符合AI judgment规范。",
+    "报告明确列出了输入缺口（G-01至G-06），未用空泛句子凑篇幅。",
+    "整体结论锋利且带有白话总结，符合爱牛式风格，未给出估值或行动建议。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-20 声称“归母净利率由2024年的14.0%提升至2025年的17.0%”，但14.0%未出现在其引用的任何证据中，且证据包未提供2024年净利率。",
+      "claim_id": "J-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-01 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:17:3' 和 'catl_2025_annual_cninfo:narrative:20:6'，但证据包中不存在 'catl_2025_annual_cninfo:narrative:17:3'。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:17:3'，但证据包中不存在该 ID。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-10 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:38:15'，但证据包中不存在该 ID。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-40 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:38:15'，但证据包中不存在该 ID。",
+      "claim_id": "J-40",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-33 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:38:15'，但证据包中不存在该 ID。",
+      "claim_id": "C-33",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-30 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:39:16'，但证据包中不存在该 ID。",
+      "claim_id": "J-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-32 引用了 evidence_id 'catl_2025_annual_cninfo:narrative:38:14'，但证据包中不存在该 ID。",
+      "claim_id": "J-32",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:14"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "4c813df28f697a647d9d721cc65c1831365def6daa9c8a0cfe3bf5b7c5fcc0f1",
+  "response_hash": "c17a7450c21b68f26a9c8736165ccab019544da1548eb3ff3c1ebee7fed31487",
+  "run_id": "editorial-v4-qa:4bf84714-2925-46bf-a7d7-acabba9f1c33",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "4bf84714-2925-46bf-a7d7-acabba9f1c33",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:21:38+00:00"
+}

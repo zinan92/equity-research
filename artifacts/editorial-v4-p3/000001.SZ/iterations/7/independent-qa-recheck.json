@@ -1,0 +1,115 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "报告结构清晰，按定位、团队、时间线、技术、财务、风险、白话结论组织，符合 editorial-v4 要求。",
+    "大量使用 issuer_self_report 和 gap claim，明确区分公司自述与缺失信息，避免将自述冒充独立验证。",
+    "判断类 claim 均附有 falsifier，提供了可证伪条件，符合 judgment synthesis 规范。",
+    "白话结论部分锋利且带有具体证伪条件，体现了爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-01 引用 evidence_id 11:23，但该证据仅提及“首家公开上市的全国性股份制商业银行”，未出现“公司披露”字样，且 claim 未标注 issuer_self_report 的显式归属。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-03 与 C-01 内容重复，且引用同一证据 11:23，但 claim 未标注 issuer_self_report 的显式归属。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-12 引用证据 23:58，但该证据仅提及零售净利润同比增长，未提供具体数值或幅度，claim 未明确标注“年报披露”且未说明增长幅度。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-14 引用证据 25:62，但该证据仅提及一般企业贷款余额增长 9.2% 和个人贷款余额下降 2.3%，未出现“抵押类贷款占个人贷款的比例为 62.9%”的完整表述。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-15 引用证据 25:63，但该证据仅提及“资本充足率提升”，未提供具体数值或幅度，claim 未明确标注“年报披露”且未说明提升幅度。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:63"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-21 引用证据 60:165，但该证据仅提及“持续完善战略制定和执行检视机制”，未出现“整体战略执行力持续提升”的表述，claim 可能过度推断。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:60:165"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-10 引用证据 11:24、11:25、12:27，但这些证据仅描述业务范围和战略目标，未直接支持“精品班轮”或“战略口号响亮”的判断，且未标注 [J-10] marker。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:24",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:25",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-11 引用证据 14:36 和 55:148，但 14:36 仅提及综合金融优势，55:148 提及银保业务改革，未直接支持“可能的胜出路径”的判断，且未标注 [J-11] marker。",
+      "claim_id": "J-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:36",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:148"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "089837e4b98223964ca598978fd8c712dd77bfbc06ffe6468e6e7b967a5c95d3",
+  "response_hash": "5dd82f52b6cfbe8b97bab9cc2be7cb92a2d534d14c6562b8685c1b5b2473ec29",
+  "run_id": "editorial-v4-qa:f621b5b2-fa9d-4d58-9f2d-38ac90a907f4",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "f621b5b2-fa9d-4d58-9f2d-38ac90a907f4",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:07:26+00:00"
+}

@@ -1,0 +1,108 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“茅台的慢在于一瓶酒从粮食到出厂至少五年，过去这是护城河，因为需求永远涨、供给跟不上”等判断性语句未标注 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_attribution",
+      "message": "C-10 引用 narrative:21:21，但正文未显式标注“公司披露”，仅以“公司披露已成长为...”开头，但 claim 本身 kind 为 issuer_self_report，正文表述应更明确。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01 至 F-04 均正确引用年报页码和 quoted_anchor，同比变化方向与幅度与 derived metrics 一致。",
+    "公司自述类 claim（C-01 至 C-09）均明确标注“公司披露”，且引用对应 narrative 证据。",
+    "缺口 G-01 至 G-03 基于 evidence packet 的 gaps 和 missing_inputs 合理提出，未借缺口掩盖已有数字。",
+    "整体结论带有锋利判断，并尝试给出 falsifier，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯至 document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名、份额、估值等写成事实",
+    "判断句标注 [J-xx] 并引用相关底层证据和 falsifier",
+    "缺口基于 evidence packet 的 gaps 提出",
+    "未将公司自述升级为独立验证"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-02 引用 moutai_2025_annual:narrative:16:16 和 21:20，但 21:20 内容为工艺描述，未直接支撑“护城河”或“存货负担”判断，且 evidence packet 中无 21:20 条目。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03 引用 moutai_2025_annual:narrative:23:24 和 122:41，但 23:24 仅列风险类别，未提及定价权或批价倒挂；122:41 为信用风险描述，与定价权无关。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24",
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“茅台的慢在于一瓶酒从粮食到出厂至少五年，过去这是护城河，因为需求永远涨、供给跟不上”等判断性语句未标注 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-04 称“黄牛价比零售价还低”作为风险情景，但证据包未提供任何黄牛价或零售价数据，且该判断未引用任何 evidence_id。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_attribution",
+      "message": "C-10 引用 narrative:21:21，但正文未显式标注“公司披露”，仅以“公司披露已成长为...”开头，但 claim 本身 kind 为 issuer_self_report，正文表述应更明确。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“茅台的慢在于一瓶酒从粮食到出厂至少五年，过去这是护城河，因为需求永远涨、供给跟不上”等判断性语句未标注 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "923a96d294d0695108f227c6b1ffbdc4c95976b51e54b193a269e2c92669bfc5",
+  "response_hash": "a53892cf109171ecf7194c9a4bb79e968d8399f3aa1de3f04099f826fa0f2f40",
+  "run_id": "editorial-v4-qa:06124f1d-7ed0-466c-af73-e6a824b26fc0",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "06124f1d-7ed0-466c-af73-e6a824b26fc0",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:03:53+00:00"
+}

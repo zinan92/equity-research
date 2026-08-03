@@ -1,0 +1,623 @@
+{
+  "latest_card": "2025年公司营收4237.02亿元（同比+17.0%），归母净利润722.01亿元（同比+42.3%）；2026Q1营收1291.31亿元（同比+52.4%），归母净利润207.38亿元（同比+48.5%）。[F-01][F-02][F-03][F-04][F-05][F-06][F-07][F-08]",
+  "sections": [
+    {
+      "id": "one_line_position",
+      "title": "一句话定位",
+      "body": "宁德时代是全球动力和储能电池的绝对龙头，凭借极限制造和持续迭代的产品矩阵，在两大主航道上持续拉大领先身位[J-01]。公司年报披露，其动力与储能电池市占率已多年全球领跑[C-02]。2025年归母净利润同比增长42.3%，远超营收17.0%的增速，彰显其成本转嫁与定价能力[J-03]。但需注意，其龙头地位主要由公司披露引用的第三方数据支撑，缺乏独立验证[G-01]。",
+      "claim_ids": [
+        "J-01",
+        "C-02",
+        "J-03",
+        "G-01"
+      ]
+    },
+    {
+      "id": "founder_team",
+      "title": "创始人与团队",
+      "body": "公司年报披露，创始人曾毓群同时担任董事长和总经理，现年57岁，拥有深厚的锂电行业背景。他曾任新能源科技有限公司（ATL）总裁、TDK副总裁等职，于2022年8月起兼任总经理[C-10]。公司年报披露，曾毓群通过厦门瑞庭投资有限公司间接持有公司股权，实际控制人地位清晰[C-11]。公司年报披露，董事会由9人组成，含3名独立董事，管理层包括4名高管，并已推出六期股权激励计划以绑定核心人才[C-12]。不过，输入未提供早期创始团队构成和关键研发人员背景的具体信息，无法评估人才梯队的稳定性[G-02]。",
+      "claim_ids": [
+        "C-10",
+        "C-11",
+        "C-12",
+        "G-02"
+      ]
+    },
+    {
+      "id": "timeline",
+      "title": "发展时间线",
+      "body": "基于现有披露，我们梳理了公司近期关键节点：公司年报披露，2025年密集发布了二代神行超充、骁遥双核、钠新电池、天行电池等一系列新品，技术矩阵大幅拓宽[C-20]。公司年报披露，同年5月确定H股全球发售及上市方案，推动国际化融资平台建设[C-21]。2025财年，公司实现营收4237亿元，归母净利润722亿元，同比分别增长17.0%和42.3%[F-01][F-02][F-03][F-04]。进入2026年，增长势头进一步加速，一季度营收达到1291亿元、净利润207亿元，同比增速双双升至52.4%和48.5%[F-05][F-06][F-07][F-08]。公司年报披露，年内公司与一汽解放、北汽福田等深化战略合作，售后服务网络已覆盖75个国家或地区，约1200家服务站，全球化服务能力延伸[C-22]。然而，输入未提供公司创立、早期融资及更长时间维度的具体里程碑，我们无法判断其在行业早期阶段的卡位优势是如何建立的，也难以评估其应对历史产业波动的韧性[G-03]。",
+      "claim_ids": [
+        "C-20",
+        "C-21",
+        "F-01",
+        "F-02",
+        "F-03",
+        "F-04",
+        "F-05",
+        "F-06",
+        "F-07",
+        "F-08",
+        "C-22",
+        "G-03"
+      ]
+    },
+    {
+      "id": "technology_products",
+      "title": "技术与产品",
+      "body": "公司年报以‘研发为核、市场领跑、极限制造、全域增量、零碳引领’五大竞争力支柱来概括自身优势。在技术层面，公司年报披露，构建了覆盖材料、电芯、系统及回收的全链条研发能力，截至2025年末拥有及申请专利总数达54,538项，是行业唯一入选‘全球百强创新机构’的企业[C-30]。产品矩阵方面，公司年报披露，覆盖了锂电、钠电、凝聚态、超混等多个化学体系，推出了‘二代神行超充’‘骁遥双核’‘钠新电池’‘天行III’等细分场景产品，以及全球首款可量产的9MWh超大容量储能系统TENER Stack[C-32]。制造端，公司年报披露，电芯单体失效率达DPPB级，拥有全球规模最大的现有及在建产能，以及行业最多的‘灯塔工厂’，包括唯一的‘可持续灯塔工厂’[C-33][C-34]。此外，公司年报披露，已将电动化延伸至低空（吨级eVTOL完成关键飞行验证）、船舶、换电（巧克力换电、骐骥换电）等新领域[C-35]。公司年报披露，率先实现核心运营碳中和及废旧电池大规模回收，进一步强化全生命周期成本优势[C-36]。综合来看，我们认为公司已经形成了典型的‘精密制造杂货铺’优势——通过海量品类和极致品控，将竞争对手拖入其擅长的体系化长跑，用规模壁垒和迭代速度绞杀后来者[J-10]。但这一模式依赖持续高强度的研发投入，如果新材料体系（如全固态电池）出现颠覆性路线且公司跟进不及，护城河可能被绕过[J-11]。",
+      "claim_ids": [
+        "C-30",
+        "C-32",
+        "C-33",
+        "C-34",
+        "C-35",
+        "C-36",
+        "J-10",
+        "J-11"
+      ]
+    },
+    {
+      "id": "financial_valuation",
+      "title": "财务与估值",
+      "body": "财务数据显示，公司2025年营收4237.02亿元，同比增长17.0%，归母净利润722.01亿元，同比增速高达42.3%，利润增长明显快于营收[F-01][F-02][F-03][F-04]。据此计算归母净利率由2024年的14.0%提升至2025年的17.0%，显示公司成本管控和产品结构优化成效显著[J-20]。进入2026年一季度，淡季不淡，营收和净利润分别同比飙升52.4%和48.5%，延续超高景气度[F-05][F-06][F-07][F-08]。然而，由于输入仅提供利润表顶部数据，我们无法深入分析毛利率、费用率、经营现金流和资本开支等关键指标[G-04]。公司年报披露进行了套期保值以管理汇率及商品价格风险，但对利率风险尚未采取对冲政策[C-40]，这可能在加息周期中增加财务成本[J-21]。另外，公司H股上市成功但未披露具体融资额[G-05]，我们难以评估其资本结构变化及后续扩产的资金压力。总的来看，公司正处于利润释放的黄金期，但高增长能否持续取决于下游需求增速和产能消化的节奏，在缺乏更多财务细节的情况下，任何估值判断都为时过早。",
+      "claim_ids": [
+        "F-01",
+        "F-02",
+        "F-03",
+        "F-04",
+        "F-05",
+        "F-06",
+        "F-07",
+        "F-08",
+        "J-20",
+        "G-04",
+        "C-40",
+        "J-21",
+        "G-05"
+      ]
+    },
+    {
+      "id": "risks_commentary",
+      "title": "风险与点评",
+      "body": "公司年报明确提示，随着全球电池产能快速扩张，市场竞争加剧风险正在上升[C-50]。我们认为，行业已进入‘剩者为王’阶段，但公司凭借成本和产品力领先有望在淘汰赛中进一步拉大份额[J-30]。政策层面，国内取消新能源强制配储短期内或抑制部分储能需求，但长期取消强制反而有利于优质产品脱颖而出；同时，公司年报引述政策，国家提出了2027年新型储能装机1.8亿千瓦以上的目标，为行业托底[C-51]。海外业务方面，公司在欧洲等地的基地建设和售后网络拓展在持续，但未披露海外收入占比及地缘政治应对细节[G-06]，中美欧贸易摩擦可能带来潜在的供应链阻断风险。金融风险上，公司持有外币资产负债，开展套期保值，但未对利率风险进行对冲，若全球利率中枢上移，利息支出可能侵蚀利润[J-31]。此外，技术路线风险始终存在，固态电池或钠电商业化若快于预期，可能颠覆现有锂电格局，公司多技术路线布局是对冲但尚未大规模验证[J-32]。",
+      "claim_ids": [
+        "C-50",
+        "J-30",
+        "C-51",
+        "G-06",
+        "J-31",
+        "J-32"
+      ]
+    },
+    {
+      "id": "plain_language",
+      "title": "大白话结论",
+      "body": "宁德时代是一台靠砸研发、卷工艺、扩品类来杀敌的电池战争机器，利润增速远超营收说明已进入收割期；但代价是沉重的资本开支和持续捕获新需求来消化产能，一旦技术换代或需求失速，高固定资产可能反噬利润。它靠的是先发制人的产能布局和持续迭代的产品组合，让后来者难以在成本和技术宽度上同时追赶，但这套打法需要全球电动化保持高景气来支撑，如果放缓，公司可能从‘成长股’滑向‘价值陷阱’。[J-40]",
+      "claim_ids": [
+        "J-40"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "F-01",
+      "kind": "fact",
+      "text": "2025年营收4237.02亿元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-02",
+      "kind": "fact",
+      "text": "2025年归母净利润722.01亿元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-03",
+      "kind": "fact",
+      "text": "2025年营收同比增长17.0%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:revenue"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-04",
+      "kind": "fact",
+      "text": "2025年归母净利润同比增长42.3%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:net_profit_parent"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-05",
+      "kind": "fact",
+      "text": "2026Q1营收1291.31亿元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-06",
+      "kind": "fact",
+      "text": "2026Q1归母净利润207.38亿元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:net_profit_parent:9:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-07",
+      "kind": "fact",
+      "text": "2026Q1营收同比增长52.4%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:0",
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:revenue"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-08",
+      "kind": "fact",
+      "text": "2026Q1归母净利润同比增长48.5%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:net_profit_parent:9:0",
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:net_profit_parent:9:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:net_profit_parent"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-01",
+      "kind": "judgment",
+      "text": "宁德时代是全球动力和储能电池的绝对龙头，凭借极限制造和持续迭代的产品矩阵，在两大主航道上持续拉大领先身位。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ],
+      "derived_ids": [],
+      "falsifier": "若独立第三方数据证实其市场份额大幅下滑或财务增速显著落后于行业，则龙头地位不实。"
+    },
+    {
+      "claim_id": "C-02",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，其动力与储能电池市占率已多年全球领跑。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-03",
+      "kind": "judgment",
+      "text": "2025年归母净利润同比增长42.3%，远超营收17.0%的增速，彰显其成本转嫁与定价能力。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:revenue",
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:net_profit_parent"
+      ],
+      "falsifier": "若毛利率连续下滑或竞争对手发动全面价格战导致净利率急剧收窄，则定价权并不牢固。"
+    },
+    {
+      "claim_id": "G-01",
+      "kind": "gap",
+      "text": "输入未提供独立第三方出具的市场份额数据，当前龙头地位仅来自公司自行披露。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-10",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，创始人曾毓群同时担任董事长和总经理，曾任ATL总裁、TDK副总裁等职，于2022年8月起兼任总经理。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:25",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:26"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-11",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，曾毓群通过厦门瑞庭投资有限公司间接持有公司股权，实际控制人地位清晰。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:50:29"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-12",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，董事会由9人组成，含3名独立董事；高管4名；已推出六期股权激励计划。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:42:20",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:43:21"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-02",
+      "kind": "gap",
+      "text": "输入未提供早期创始团队构成及关键研发人员背景的详细信息。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-20",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，2025年密集发布二代神行超充、骁遥双核、钠新电池、天行电池等一系列新品。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-21",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，2025年5月确定H股全球发售及上市方案。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:55:34"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-22",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，报告期内与一汽解放、北汽福田等深化战略合作，售后服务网络覆盖75个国家或地区、约1200家服务站。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:21:7"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-03",
+      "kind": "gap",
+      "text": "输入未提供公司创立、早期融资及历史里程碑的具体时间节点。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-30",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，拥有及申请的国内外专利总数达54,538项，是行业唯一入选“全球百强创新机构”的企业。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-32",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，推出了二代神行超充、骁遥双核、钠新电池等产品，及全球首款可量产的9MWh超大容量储能系统TENER Stack。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:22:8"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-33",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，电芯单体失效率达DPPB级，拥有全球规模最大的现有及在建产能。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:15",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-34",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，拥有行业最多的“灯塔工厂”及唯一“可持续灯塔工厂”。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-35",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，吨级eVTOL已完成关键性飞行验证，并推出巧克力换电、骐骥换电等创新方案。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:22:8"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-36",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，率先实现核心运营碳中和及废旧电池大规模回收利用。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-10",
+      "kind": "judgment",
+      "text": "公司形成了典型的“精密制造杂货铺”优势，通过海量品类和极致品控构筑难以复制的体系化壁垒。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:15"
+      ],
+      "derived_ids": [],
+      "falsifier": "若全固态电池等颠覆性技术大规模商用且公司未能及时跟进，其现有产品体系优势将大幅弱化。"
+    },
+    {
+      "claim_id": "J-11",
+      "kind": "judgment",
+      "text": "但这一模式依赖持续高强度的研发投入，如果新材料体系（如全固态电池）出现颠覆性路线且公司跟进不及，护城河可能被绕过。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司研发投入强度下降或竞争对手率先实现固态电池低成本量产，则护城河可能被削弱。"
+    },
+    {
+      "claim_id": "J-20",
+      "kind": "judgment",
+      "text": "归母净利率由2024年的14.0%提升至2025年的17.0%，反映出成本管控和产品结构优化的显著成效。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:revenue",
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:net_profit_parent"
+      ],
+      "falsifier": "若原材料价格大幅反弹或竞争激化导致售价承压，净利率可能出现明显回落。"
+    },
+    {
+      "claim_id": "G-04",
+      "kind": "gap",
+      "text": "输入未提供毛利率、费用率、经营现金流及资本开支等详细财务数据，无法深入评估盈利质量和投资回报。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-40",
+      "kind": "issuer_self_report",
+      "text": "公司年报披露，已对汇率及商品价格风险进行套期保值，但对利率风险未采取对冲政策。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:36:11",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:40"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-21",
+      "kind": "judgment",
+      "text": "公司未对利率风险进行对冲，若全球利率中枢上移，利息支出可能侵蚀利润。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:40"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司持续扩产而浮动利率债务占比上升，在加息周期中财务费用将显著增加。"
+    },
+    {
+      "claim_id": "G-05",
+      "kind": "gap",
+      "text": "输入未提供H股上市的具体融资规模，无法评估对资本结构和后续扩产的支撑程度。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-50",
+      "kind": "issuer_self_report",
+      "text": "公司年报提示，随着全球电池产能快速扩张，市场竞争加剧风险正在上升。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:39:17"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-30",
+      "kind": "judgment",
+      "text": "行业已进入“剩者为王”阶段，公司凭借成本与产品力领先，有望在淘汰赛中进一步扩大份额。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:39:16"
+      ],
+      "derived_ids": [],
+      "falsifier": "若二线厂商通过资本输血发动非理性价格战，全行业盈利短期可能遭到严重破坏。"
+    },
+    {
+      "claim_id": "C-51",
+      "kind": "issuer_self_report",
+      "text": "公司年报引述政策，国家提出2027年新型储能装机规模达1.8亿千瓦以上的目标。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:18:5"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-06",
+      "kind": "gap",
+      "text": "输入未提供海外收入占比、海外产能利用情况及地缘政治风险的详细应对策略。",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-31",
+      "kind": "judgment",
+      "text": "公司持有外币资产负债并开展套期保值，但利率风险敞口仍存，在升息环境下可能增加财务负担。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:36:11",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:39",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:40"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司带息债务规模继续扩大而利率对冲缺失，利息费用将显著上升。"
+    },
+    {
+      "claim_id": "J-32",
+      "kind": "judgment",
+      "text": "固态电池等颠覆性技术可能重塑行业格局，公司虽有布局但尚未大规模验证，存在技术代际风险。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:14"
+      ],
+      "derived_ids": [],
+      "falsifier": "若竞争对手率先实现固态电池低成本量产并抢占核心客户，公司现有锂电资产价值可能被重估。"
+    },
+    {
+      "claim_id": "J-40",
+      "kind": "judgment",
+      "text": "宁德时代是凭借极致研发和制造构筑的电池战争机器，利润增速已超收入增长，但沉重的资本开支和潜在的技术换代是未来主要威胁。",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:15"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:revenue",
+        "derived:official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:net_profit_parent"
+      ],
+      "falsifier": "若全球电动化需求大幅放缓或固态电池实现颠覆，公司高固定资产可能成为沉重包袱，成长逻辑将逆转。"
+    }
+  ],
+  "missing_inputs": [
+    "独立第三方市场份额数据",
+    "公司创立及早期融资时间线",
+    "毛利率、费用率、现金流及资本开支等详细财务数据",
+    "H股融资规模",
+    "海外收入占比及地缘风险应对策略",
+    "创始团队及核心研发人员详细背景"
+  ],
+  "overall_conclusion": "宁德时代正处于利润高增的收获期，凭借规模化与产品力筑起高壁垒，但其重资产模式与潜在的颠覆性技术构成长期威胁。[J-40]",
+  "schema_version": "editorial-v4-dossier-v1",
+  "ticker": "300750.SZ",
+  "issuer_name": "宁德时代",
+  "input_packet_hash": "e057471e09095e20abe87a5c29fcf08f8a0e2b155cd4b67ddc11d5ec3304e561",
+  "prompt_version": "editorial-v4-whole-report-prompt-v2",
+  "generation_receipt": {
+    "run_id": "editorial-v4-run:28f7da02-9013-4b5f-a832-5df94a6cef3b",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "28f7da02-9013-4b5f-a832-5df94a6cef3b",
+    "usage": {
+      "prompt_tokens": 43185,
+      "completion_tokens": 8323,
+      "total_tokens": 51508,
+      "prompt_tokens_details": {
+        "cached_tokens": 1792
+      },
+      "prompt_cache_hit_tokens": 1792,
+      "prompt_cache_miss_tokens": 41393
+    },
+    "finish_reason": "stop",
+    "prompt_version": "editorial-v4-whole-report-prompt-v2",
+    "request_hash": "db7e5e41d466a15701cfae7be898a9d14a44c515f73b2ab222481acaa853c06c",
+    "response_hash": "d3c89d0762cd95b2c1f2ff3547d43d692917875761288067ecf1b7d65f87fb4d",
+    "generated_at": "2026-08-03T11:19:10+00:00"
+  },
+  "production_record": {
+    "run_id": "editorial-v4-run:28f7da02-9013-4b5f-a832-5df94a6cef3b",
+    "generator_version": "editorial-v4-whole-report-generator-v2",
+    "prompt_version": "editorial-v4-whole-report-prompt-v2",
+    "model_provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "28f7da02-9013-4b5f-a832-5df94a6cef3b",
+    "input_packet_sha256": "e057471e09095e20abe87a5c29fcf08f8a0e2b155cd4b67ddc11d5ec3304e561",
+    "model_packet_sha256": "a69b00b0adbcb9327e6d463aa97ca6699bc76930a7f7d696bebaacfc673b424e",
+    "review_status": "pending",
+    "editorial_status": "draft",
+    "action_state": "blocked",
+    "tier_credit": false
+  },
+  "sources": [
+    {
+      "source_id": "catl_2025_annual_cninfo",
+      "document_id": "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "宁德时代 2025 年年度报告（CNINFO）",
+      "report_period": "2025FY",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+      "raw_sha256": "c15272977147dee7e6935a38ea0e4fd6855370aabb106f54cfe20f7cf6048ec9",
+      "page_count": 232,
+      "parser_version": "park-document-intelligence-v1"
+    },
+    {
+      "source_id": "catl_2026_q1",
+      "document_id": "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "宁德时代 2026 年第一季度报告",
+      "report_period": "2026Q1",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+      "raw_sha256": "32e4936e6dd68a89741a8167b4c4ae3f8b4bc7ef61d70f35b294e1cb0e46fbe8",
+      "page_count": 12,
+      "parser_version": "park-document-intelligence-v1"
+    }
+  ],
+  "boundary": {
+    "review_only": true,
+    "no_tier_credit": true,
+    "no_b6_credit": true,
+    "no_decision_policy_credit": true,
+    "no_publication_credit": true
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-09 整体结论未在 claims 中定义，无法验证其证据链。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据均来自官方文件，且与 evidence packet 一致。",
+    "公司自述均明确标注“公司披露”，未冒充独立验证。",
+    "缺口声明合理，未借 gap 掩盖已有数字。",
+    "整体结论带有判断标记和证伪条件，符合要求。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到证据",
+    "同期对比明确增长/下滑及幅度",
+    "公司自述标注“公司披露”",
+    "未将历史实际值写成条件句结论",
+    "未将未提供证据的客户、订单等写成事实",
+    "判断有标记、引用和证伪条件",
+    "有具体资产定位、财务因果链和风险证伪",
+    "明确缺口和下一步验证"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-09 整体结论未在 claims 中定义，无法验证其证据链。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01 中“垄断性水电资产”未在引用证据中直接体现，且未标注为判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-07 整体结论未在 claims 中定义，无法验证其证据链。",
+      "claim_id": "J-07",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-02 中“收益质量高度依赖于长江来水的丰枯”未在引用证据中直接体现。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:28:19",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-08 中“部分董事因公务长期缺席董事会”未在引用证据中直接体现。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:35:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-03 中“大水电的灵活调节价值和绿色价值具有获得溢价的潜力”未在引用证据中直接体现。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-04 中“长江来水的丰枯是决定发电量和收入的最核心变量”未在引用证据中直接体现。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-05 中“电力市场化交易比重上升可能导致上网电价下行”未在引用证据中直接体现。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:28:19"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "c96e2582a410c88caa46aa7b621e930e77a9a50e7d6a43a34d238f662be32bcd",
+  "response_hash": "66ee1c6496a6bbd418e4be26f8fbe1cdab79fbfa11b9ec37bb0c76794f8a105f",
+  "run_id": "editorial-v4-qa:75b63436-e5aa-4a4b-bdc6-f1e42d18e01a",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "75b63436-e5aa-4a4b-bdc6-f1e42d18e01a",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:31:52+00:00"
+}

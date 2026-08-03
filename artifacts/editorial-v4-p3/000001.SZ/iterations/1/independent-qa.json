@@ -1,0 +1,88 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_refs",
+      "message": "J-04 为判断但未引用任何证据，且 falsifier 依赖未提供的高管履历，判断基础缺失。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_specific_fact",
+      "message": "J-13 作为整体结论未在 dossier claims 中注册，无法验证其证据和 falsifier。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”或“年报自述”，未将自述冒充独立验证。",
+    "判断类 claim 普遍带有 [J] 标记和可操作的 falsifier，符合 editorial-v4 对 AI judgment 的要求。",
+    "报告明确指出了大量证据缺口，并据此给出审慎结论，未用空泛句子凑篇幅。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_refs",
+      "message": "J-04 为判断但未引用任何证据，且 falsifier 依赖未提供的高管履历，判断基础缺失。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-10 在 dossier 中注册但未出现在任何 section body 中，无法验证其证据引用。",
+      "claim_id": "J-10",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-11 在 dossier 中注册但未出现在任何 section body 中，无法验证其证据引用。",
+      "claim_id": "J-11",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-12 在 dossier 中注册但未出现在任何 section body 中，无法验证其证据引用。",
+      "claim_id": "J-12",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_specific_fact",
+      "message": "J-13 作为整体结论未在 dossier claims 中注册，无法验证其证据和 falsifier。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [],
+  "request_hash": "bc6e07e66f7e1736401ec07fa1e0277858621549b26adfedc0a0de59207731c7",
+  "response_hash": "1eaa2d51949cdbd52c2e42a697e95bd2c16127897245c12a400759447910fa6f",
+  "run_id": "editorial-v4-qa:c61cf4d5-9cc0-4150-a5a1-07a85a3c04e8",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "c61cf4d5-9cc0-4150-a5a1-07a85a3c04e8",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:55:01+00:00"
+}

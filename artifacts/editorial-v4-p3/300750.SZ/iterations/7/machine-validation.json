@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "ticker": "300750.SZ",
+  "chars": 2538,
+  "claims": 40,
+  "errors": [
+    {
+      "code": "comparison_direction_missing",
+      "message": "comparison-backed claim does not state direction",
+      "claim_id": "J-20"
+    }
+  ]
+}

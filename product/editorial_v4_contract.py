@@ -39,9 +39,20 @@ ABSENCE_WORDS = re.compile(r"未提供|没有|缺失|无法|不提供|不含|禁
 CONDITIONAL_RE = re.compile(r"如果.{0,80}(?:那么|则)|若.{0,80}(?:那么|则)|假如.{0,80}(?:那么|则)")
 COMPARISON_WORDS = re.compile(r"同比|环比|较上期|较去年|增长|下滑|下降|增加|减少|持平|提升|回落")
 SELF_REPORT_WORDS = re.compile(r"公司披露|年报披露|年报自述|公告披露|公司自述|公司宣称|公司声称|年报宣称|管理层表示|公司称|公司认为|据年报|年报引|年报提及|年报坦承|年报称|年报说明|公司年报")
+THIRD_PARTY_CUES = re.compile(
+    r"欧睿|Euromonitor|产业在线|奥维|MIR|睿工业|IDC|Gartner|弗若斯特|Frost|SNE|NBD|新华|CPNN|"
+    r"东财|东方财富|Wind|彭博|Bloomberg"
+)
+UNBOUND_GAP_SOURCE_CUES = re.compile(r"公开资料|公开信息|市场资料|业内消息|据了解|有消息称|据传")
+UNBOUND_JUDGMENT_FACT_CUES = re.compile(
+    r"黄牛价|批价|零售价|市场价|成交价|订单|市值|股价|目标价"
+)
 AGGRESSIVE_JUDGMENT_CUES = re.compile(
     r"绝对龙头|强定价权|品牌护城河|核心矛盾|存量博弈|时间壁垒|难以复制|超级品牌|硬通货|现金牛|"
-    r"最安全|第一品牌|官员型|行政化特征|躺赢|增收不增利|增长曲线|资产角色|护城河"
+    r"最安全|第一品牌|官员型|行政化特征|躺赢|增收不增利|增长曲线|资产角色|护城河|"
+    r"全球科技巨头|全球最大|全球领先|家电航母|大国重器|第二曲线|强大规模|规模优势明显|"
+    r"精密制造平台|精密制造杂货铺|超级现金流引擎|高风险高回报|高风险高回报期权|"
+    r"低毛利的身子|现金流引擎|资产重估|三角布局"
 )
 
 
@@ -237,6 +248,137 @@ def _numeric_token_matches_evidence(token: str, refs: list[str], evidence_by_id:
     return False
 
 
+def _numeric_tokens(value: str) -> list[str]:
+    """Return numeric literals while leaving years available for period checks."""
+    return [token for token in NUMBER_RE.findall(value) if any(char.isdigit() for char in token)]
+
+
+def _is_year_token(token: str) -> bool:
+    bare = re.sub(r"[^0-9]", "", token)
+    return len(bare) == 4 and bare.startswith(("19", "20"))
+
+
+def _numeric_token_in_refs(token: str, refs: list[str], evidence_by_id: Mapping[str, Mapping[str, Any]]) -> bool:
+    """Check one displayed numeric literal against only its claim's refs.
+
+    This is deliberately claim-local.  A ``20%`` in a different claim must not
+    make an unrelated ``20%`` threshold appear evidenced.
+    """
+    normalized = re.sub(r"[\s,]", "", token)
+    for ref in refs:
+        item = evidence_by_id.get(ref) or {}
+        text = " ".join(
+            str(item.get(field) or "")
+            for field in ("quoted_anchor", "text", "quoted_label", "column_header_excerpt")
+        )
+        if normalized and normalized in re.sub(r"[\s,]", "", text):
+            return True
+        if _numeric_token_matches_evidence(token, [ref], evidence_by_id):
+            return True
+    return False
+
+
+def _numeric_token_in_derived(
+    token: str,
+    derived_ids: list[str],
+    derived_by_id: Mapping[str, Mapping[str, Any]],
+) -> bool:
+    """Allow only deterministic derived values, with displayed precision."""
+    raw = re.sub(r"[\s,]", "", token)
+    unit = ""
+    for suffix in ("亿元", "万元", "千元", "百万元", "万股", "亿股", "%", "元"):
+        if raw.endswith(suffix):
+            unit = suffix
+            raw = raw[: -len(suffix)]
+            break
+    try:
+        displayed = float(raw)
+    except ValueError:
+        return False
+    for derived_id in derived_ids:
+        item = derived_by_id.get(derived_id) or {}
+        candidates: list[float] = []
+        if unit == "%":
+            value = item.get("percent_change")
+            if isinstance(value, (int, float)):
+                candidates.append(float(value))
+        else:
+            for key in ("absolute_change", "current_value", "previous_value"):
+                value = item.get(key)
+                if isinstance(value, (int, float)):
+                    candidates.append(float(value))
+        for expected in candidates:
+            # The displayed decimal precision controls the deterministic
+            # rounding tolerance (42.3% may represent 42.283446%).
+            decimals = len(raw.split(".", 1)[1]) if "." in raw else 0
+            tolerance = max(0.5 * (10 ** (-decimals)), abs(expected) * 1e-9)
+            if abs(displayed - expected) <= tolerance:
+                return True
+    return False
+
+
+def _numeric_claim_errors(
+    claim_id: str,
+    value: str,
+    refs: list[str],
+    evidence_by_id: Mapping[str, Mapping[str, Any]],
+    *,
+    field: str = "text",
+    derived_ids: list[str] | None = None,
+    derived_by_id: Mapping[str, Mapping[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+    errors: list[dict[str, Any]] = []
+    derived_ids = derived_ids or []
+    derived_by_id = derived_by_id or {}
+    for token in _numeric_tokens(value):
+        if _is_year_token(token):
+            continue
+        if not _numeric_token_in_refs(token, refs, evidence_by_id) and not _numeric_token_in_derived(token, derived_ids, derived_by_id):
+            errors.append(
+                _error(
+                    "judgment_numeric_unbound" if field == "falsifier" else "numeric_claim_unbound",
+                    f"{field} contains numeric literal not present in this claim's cited evidence",
+                    claim_id=claim_id,
+                    number=token,
+                )
+            )
+    return errors
+
+
+def _specific_judgment_errors(
+    claim_id: str,
+    value: str,
+    refs: list[str],
+    evidence_by_id: Mapping[str, Mapping[str, Any]],
+    *,
+    field: str,
+) -> list[dict[str, Any]]:
+    """Reject concrete market/business premises smuggled into a judgment.
+
+    Sharp synthesis ("老洋房", "精密制造杂货铺") is intentionally allowed.
+    Concrete market facts in a falsifier (批价、客户、订单、份额、估值等)
+    must, however, appear in the claim's own cited pages; otherwise the model
+    must express the trigger qualitatively or leave it as a gap.
+    """
+    cited = " ".join(
+        str(evidence_by_id.get(ref, {}).get(field_name) or "")
+        for ref in refs
+        for field_name in ("quoted_anchor", "text", "quoted_label")
+    )
+    errors: list[dict[str, Any]] = []
+    for cue in UNBOUND_JUDGMENT_FACT_CUES.findall(value):
+        if cue not in cited:
+            errors.append(
+                _error(
+                    "judgment_specific_unbound",
+                    f"{field} contains a concrete market/business premise not present in this claim's cited evidence",
+                    claim_id=claim_id,
+                    cue=cue,
+                )
+            )
+    return errors
+
+
 def validate_dossier(dossier: Mapping[str, Any], packet: Mapping[str, Any]) -> dict[str, Any]:
     errors: list[dict[str, Any]] = []
     packet_result = validate_evidence_packet(packet)
@@ -333,6 +475,17 @@ def validate_dossier(dossier: Mapping[str, Any], packet: Mapping[str, Any]) -> d
             for number in long_numbers:
                 if re.sub(r"[\s,]", "", number) not in normalized_quote and not _numeric_token_matches_evidence(number, refs, evidence_by_id):
                     errors.append(_error("numeric_quote_mismatch", "numeric claim value is not present in cited page anchor", claim_id=claim_id, number=number))
+        # Judgments may be sharp and synthetic, but they cannot smuggle in a
+        # made-up threshold, percentage, or other numeric premise.  A future
+        # falsifier is subject to the same rule: if its number is not in the
+        # cited packet, the writer must state the trigger qualitatively.
+        if kind == "judgment":
+            errors.extend(_numeric_claim_errors(claim_id, text, refs, evidence_by_id, derived_ids=derived_refs, derived_by_id=derived_by_id))
+            errors.extend(_numeric_claim_errors(claim_id, str(claim.get("falsifier") or ""), refs, evidence_by_id, field="falsifier", derived_ids=derived_refs, derived_by_id=derived_by_id))
+            errors.extend(_specific_judgment_errors(claim_id, text, refs, evidence_by_id, field="text"))
+            errors.extend(_specific_judgment_errors(claim_id, str(claim.get("falsifier") or ""), refs, evidence_by_id, field="falsifier"))
+        if kind == "gap" and not refs and UNBOUND_GAP_SOURCE_CUES.search(text):
+            errors.append(_error("gap_unbound_source", "gap claim contains an external/public-source fact without evidence refs", claim_id=claim_id))
         missing_derived = sorted(set(derived_refs) - set(derived_by_id))
         if missing_derived:
             errors.append(_error("derived_refs", "claim references unknown deterministic derivation", claim_id=claim_id, missing=missing_derived))
@@ -375,22 +528,55 @@ def validate_dossier(dossier: Mapping[str, Any], packet: Mapping[str, Any]) -> d
     overall = str(dossier.get("overall_conclusion") or "")
     if overall and not MARKER_RE.search(overall):
         errors.append(_error("overall_judgment_marker_missing", "overall_conclusion must carry at least one fact/judgment/gap marker"))
-    card_numbers = {
-        token for token in NUMBER_RE.findall(MARKER_RE.sub("", latest_card))
-        if any(char.isdigit() for char in token)
-    }
-    claim_text = " ".join(str(claim.get("text") or "") for claim in claims_by_id.values())
-    for token in sorted(card_numbers):
-        if not _number_token_is_closed(token, claim_text):
-            errors.append(_error("latest_card_numeric_closure", "latest data card number has no claim text closure", token=token))
-    body_without_markers = MARKER_RE.sub("", body_text)
-    body_numbers = {
-        token for token in NUMBER_RE.findall(body_without_markers)
-        if any(char.isdigit() for char in token) and not (len(token) == 4 and token.startswith(("19", "20")))
-    }
-    for token in sorted(body_numbers):
-        if not _number_token_is_closed(token, claim_text):
-            errors.append(_error("body_numeric_unbound", "body contains a numeric literal without claim-text/evidence closure", token=token))
+    # Numeric closure is sentence/marker-local.  The old global check allowed
+    # an unrelated claim containing ``20%`` to bless a new, unsupported 20%
+    # threshold elsewhere in the report.
+    ticker_digits = re.sub(r"[^0-9]", "", ticker)
+    for segment in re.split(r"[。！？\n]", body_text):
+        if not segment.strip():
+            continue
+        marker_ids = [marker[1:-1] for marker in MARKER_RE.findall(segment)]
+        if not marker_ids:
+            continue
+        refs: list[str] = []
+        claim_texts: list[str] = []
+        for marker_id in marker_ids:
+            claim = claims_by_id.get(marker_id)
+            if not claim:
+                continue
+            refs.extend(str(ref) for ref in claim.get("evidence_ids") or [])
+            claim_texts.append(str(claim.get("text") or ""))
+            claim_texts.append(str(claim.get("falsifier") or ""))
+        for token in _numeric_tokens(MARKER_RE.sub("", segment)):
+            if _is_year_token(token):
+                continue
+            # The ticker in the report header/latest card is an identity
+            # label, not a financial premise that needs an evidence ref.
+            # Keep every other numeric literal subject to claim-local
+            # closure.
+            if ticker_digits and re.sub(r"[^0-9]", "", token) == ticker_digits:
+                continue
+            if not any(_number_token_is_closed(token, text) for text in claim_texts) and not _numeric_token_in_refs(token, refs, evidence_by_id):
+                errors.append(_error("body_numeric_unbound", "body numeric literal is not closed by the same sentence's claim/evidence", token=token, claim_ids=marker_ids))
+        # Third-party rankings or market statistics inside an issuer filing
+        # remain company-reported material.  Attribution must precede the
+        # third-party cue so ``根据欧睿数据……年报披露`` cannot read as an
+        # independently verified Euromonitor fact.
+        if THIRD_PARTY_CUES.search(segment):
+            attribution_before_cue = bool(re.search(r"(?:公司披露|年报披露|年报自述|公告披露|年报引|据年报)[^。！？\n]{0,80}(?:" + THIRD_PARTY_CUES.pattern + r")", segment, re.IGNORECASE))
+            # A judgment sentence may quote a company-reported third-party
+            # statistic as its substrate, provided the issuer attribution is
+            # explicit and precedes the provider name.  The claim remains a
+            # judgment because its synthesis (for example, “精密制造平台”)
+            # is not a filing fact; the attribution rule is about preventing
+            # the provider from reading as an independently supplied source.
+            if not marker_ids or not attribution_before_cue:
+                errors.append(_error("third_party_attribution_missing", "third-party statistic must be attributed to the issuer filing before the provider name", claim_ids=marker_ids))
+    # Gap text is rendered too; reject a public-source assertion there as well
+    # even when a model hid it behind a gap marker.
+    for claim_id, claim in claims_by_id.items():
+        if claim.get("kind") == "gap" and not claim.get("evidence_ids") and UNBOUND_GAP_SOURCE_CUES.search(str(claim.get("text") or "")):
+            errors.append(_error("gap_unbound_source", "gap text contains an external/public-source assertion without evidence refs", claim_id=claim_id))
     return {"status": "passed" if not errors else "failed", "ticker": ticker, "chars": total_chars, "claims": len(claims_by_id), "errors": errors}
 
 

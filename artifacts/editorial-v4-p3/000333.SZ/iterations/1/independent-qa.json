@@ -1,0 +1,187 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接呈现为事实。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-01、C-02、C-14、C-15等引用第三方数据的claim，正文未显式写“公司披露/年报自述”，可能误导为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "C-01称“全球智能用户接入超1.5亿”，但证据页41:22显示“超过1.5亿智能用户接入”，数字一致，但未标注为公司披露。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-18引用“年报引奥维云网数据”，但evidence_ids指向midea_2025_annual:narrative:15:1，该页未直接出现奥维云网数据。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_mismatch",
+      "message": "F-01营收131,580,870千元，同比增长2.45%，与derived metric 2.454635%一致，但正文未明确写出增长幅度来源。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0",
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "C-19称“海外销售额占公司总销售额40%以上”，证据页42:23显示“40%以上”，但未标注为公司披露。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据F-01、F-02、F-03均能回溯到官方PDF页码和quoted_anchor，数字准确。",
+    "判断J-02、J-03、J-04、J-05、J-06均带有falsifier和evidence_ids，符合judgment规范。",
+    "报告明确标注了多个gap，如G-01、G-02、G-03、G-04，指出输入缺失。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接呈现为事实。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_not_attributed",
+      "message": "C-01、C-02、C-14、C-15等引用第三方数据的claim，正文未显式写“公司披露/年报自述”，可能误导为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "C-01称“全球智能用户接入超1.5亿”，但证据页41:22显示“超过1.5亿智能用户接入”，数字一致，但未标注为公司披露。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_missing_marker",
+      "message": "J-01定位为judgment，但正文中未标[J-01] marker，且未明确区分事实与判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-18引用“年报引奥维云网数据”，但evidence_ids指向midea_2025_annual:narrative:15:1，该页未直接出现奥维云网数据。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_mismatch",
+      "message": "F-01营收131,580,870千元，同比增长2.45%，与derived metric 2.454635%一致，但正文未明确写出增长幅度来源。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0",
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "style",
+      "code": "gap_claim_misuse",
+      "message": "G-01、G-02等gap claim在正文中作为事实陈述，但应仅用于缺口说明，不应在正文中展开。",
+      "claim_id": "G-01",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "C-19称“海外销售额占公司总销售额40%以上”，证据页42:23显示“40%以上”，但未标注为公司披露。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_missing_marker",
+      "message": "J-01定位为judgment，但正文中未标[J-01] marker，且未明确区分事实与判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    }
+  ],
+  "request_hash": "90bd6fa19086d3060204b3c98a0b3448e7357e61a91f32d54237996b3dd992bf",
+  "response_hash": "9ef18df223144313bfd7d3a388514a4ab905f5053177ee609beec71ff0d21818",
+  "run_id": "editorial-v4-qa:34027bda-f9d6-4959-9cd2-396de5a13e85",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "34027bda-f9d6-4959-9cd2-396de5a13e85",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:37:19+00:00"
+}

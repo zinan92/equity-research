@@ -1,0 +1,292 @@
+{
+  "schema_version": "editorial-v4-quality-loop-receipt-v1",
+  "ticker": "000333.SZ",
+  "packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+  "iterations": [
+    {
+      "iteration": 0,
+      "run_id": "editorial-v4-run:7dd61f6b-7640-43bd-a590-17f1aaf0f92a",
+      "request_id": "7dd61f6b-7640-43bd-a590-17f1aaf0f92a",
+      "report_hash": "95de9baf8b0ce042eef65cbf7b0c3e7ab29cf12c88dae296ca8a48007cff36c5",
+      "machine_status": "failed",
+      "machine_errors": 22,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:f54e7572-03b7-44a0-9532-fbe7229b3717",
+      "qa_request_id": "f54e7572-03b7-44a0-9532-fbe7229b3717",
+      "qa_blockers": 8,
+      "qa_advisories": 2
+    },
+    {
+      "iteration": 1,
+      "run_id": "editorial-v4-run:d98573c4-6028-4fb7-a8f0-adb9d59613be",
+      "request_id": "d98573c4-6028-4fb7-a8f0-adb9d59613be",
+      "report_hash": "6ef49df48a7e1a1ec0446215deb6480e0a15e3c15faf0209cf4c7d5abc0a7e55",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:34027bda-f9d6-4959-9cd2-396de5a13e85",
+      "qa_request_id": "34027bda-f9d6-4959-9cd2-396de5a13e85",
+      "qa_blockers": 6,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 2,
+      "run_id": "editorial-v4-run:4c9b2c7f-ca5a-4be8-aa01-eac171b7c912",
+      "request_id": "4c9b2c7f-ca5a-4be8-aa01-eac171b7c912",
+      "report_hash": "de0613eafdff8d5e349da914be90c9de883aa0ce4c11bdad66b746ae0667a238",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:8c52d289-38e5-45f1-84db-f18bef725a2b",
+      "qa_request_id": "8c52d289-38e5-45f1-84db-f18bef725a2b",
+      "qa_blockers": 8,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 3,
+      "run_id": "editorial-v4-run:aabfa4fa-954b-401f-b830-9c49df25811a",
+      "request_id": "aabfa4fa-954b-401f-b830-9c49df25811a",
+      "report_hash": "dbc092d0c24aa40a1bcf2fdd364b1c373c95f9613b11d89dde38b48bde0d8975",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:1e0f3f90-3169-4bc1-9e68-6459787baf54",
+      "qa_request_id": "1e0f3f90-3169-4bc1-9e68-6459787baf54",
+      "qa_blockers": 5,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 4,
+      "run_id": "editorial-v4-run:70e514e2-c37b-419a-879b-461a1febfb5c",
+      "request_id": "70e514e2-c37b-419a-879b-461a1febfb5c",
+      "report_hash": "6e750492caa16bf53e50e8d57ce905c1f0d535ccd72d7cb989bacfec8ed7290e",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:385af642-e135-41cd-a9f2-a31c6fe017ca",
+      "qa_request_id": "385af642-e135-41cd-a9f2-a31c6fe017ca",
+      "qa_blockers": 8,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 5,
+      "run_id": "editorial-v4-run:4b7a9375-800b-4dd6-897b-d0b7ad1f2a18",
+      "request_id": "4b7a9375-800b-4dd6-897b-d0b7ad1f2a18",
+      "report_hash": "6ccf5bafa52846cc7e37cfc616181abd6c3f43a38ea2a969b746cf4815ac1a38",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:761e8cbf-4808-43a5-bc7f-e3bb077c5454",
+      "qa_request_id": "761e8cbf-4808-43a5-bc7f-e3bb077c5454",
+      "qa_blockers": 8,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 6,
+      "run_id": "editorial-v4-run:38c401de-101b-48d9-9678-5a92beb7393f",
+      "request_id": "38c401de-101b-48d9-9678-5a92beb7393f",
+      "report_hash": "9d06fe7c0d6474bcd0a948dc3e04177f56e9671cf393d21587d43f39c15efd6f",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:047eddc5-98cc-4c5b-b313-b7f8fdffebe3",
+      "qa_request_id": "047eddc5-98cc-4c5b-b313-b7f8fdffebe3",
+      "qa_blockers": 8
+    },
+    {
+      "iteration": 7,
+      "run_id": "editorial-v4-run:abb06b61-7244-4762-a8dc-279f192928d7",
+      "request_id": "abb06b61-7244-4762-a8dc-279f192928d7",
+      "report_hash": "769342e96a3a17227c73c7eaea8142af81016e41ba00c3781dcddb8a0f871c48",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:acec1585-e0ed-4837-b7c1-cd8fe4b3a53d",
+      "qa_request_id": "acec1585-e0ed-4837-b7c1-cd8fe4b3a53d",
+      "qa_blockers": 8
+    },
+    {
+      "iteration": 8,
+      "run_id": "editorial-v4-run:0e81f886-2d3c-487a-8f48-9217559b5827",
+      "request_id": "0e81f886-2d3c-487a-8f48-9217559b5827",
+      "report_hash": "25e05efb1a4fe320de453580548cf3c54ac16a114cc264775dbb984f0adaa490",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:2fed9e5e-bb29-411c-b11c-dd059ba04764",
+      "qa_request_id": "2fed9e5e-bb29-411c-b11c-dd059ba04764",
+      "qa_blockers": 8
+    },
+    {
+      "iteration": 9,
+      "run_id": "editorial-v4-run:d1be37f5-1678-4085-be61-6e1f9e247522",
+      "request_id": "d1be37f5-1678-4085-be61-6e1f9e247522",
+      "report_hash": "faf5b0f91582e04bca16520fc62a03a7d6c6a53b3b272a449441b34ed5734002",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:9aaec6af-57e7-4dff-af14-2e295792d2da",
+      "qa_request_id": "9aaec6af-57e7-4dff-af14-2e295792d2da",
+      "qa_blockers": 1
+    },
+    {
+      "iteration": 10,
+      "run_id": "editorial-v4-run:3713e0ee-c84c-4ac6-9b2f-fc1c1d3fa509",
+      "request_id": "3713e0ee-c84c-4ac6-9b2f-fc1c1d3fa509",
+      "report_hash": "fd9d209690146194c5184174a44b4e13d024258ed1415f4e764d443c879dd854",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:a80497bb-38a4-427e-a853-b358f20733da",
+      "qa_request_id": "a80497bb-38a4-427e-a853-b358f20733da",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 11,
+      "run_id": "editorial-v4-run:895650e0-5d55-4921-a2a4-7a449672ccdf",
+      "request_id": "895650e0-5d55-4921-a2a4-7a449672ccdf",
+      "report_hash": "4c24b33b3138d516be590e1860a7208a547a96a6e1cb21a406fd73a1b71c8b89",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:33314c7b-2dee-48e7-b3c4-eb20f83b9a02",
+      "qa_request_id": "33314c7b-2dee-48e7-b3c4-eb20f83b9a02",
+      "qa_blockers": 0
+    }
+  ],
+  "final_status": "passed",
+  "review_status": "pending",
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "advisory_count": 0,
+  "final_iteration": 11,
+  "final_report_hash": "4c24b33b3138d516be590e1860a7208a547a96a6e1cb21a406fd73a1b71c8b89",
+  "machine_status": "passed",
+  "machine_errors": [],
+  "independent_qa_status": "passed",
+  "independent_qa_run_id": "editorial-v4-qa:a80497bb-38a4-427e-a853-b358f20733da",
+  "independent_qa_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-03 引用 evidence_id 'midea_2025_annual:narrative:69:39' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:69:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-04 引用 evidence_id 'midea_2025_annual:narrative:65:38' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:65:38"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-05 引用 evidence_id 'midea_2025_annual:narrative:23:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6"
+      ]
+    }
+  ],
+  "independent_qa_raw_status": "failed",
+  "independent_qa_raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "J-01 引用 evidence_ids 包含 midea_2025_annual:narrative:31:16 和 :42:23，但 claim 中“精密制造平台地位”未在引用页出现，且未标 [J-01] 为 judgment。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E002",
+      "message": "J-02 引用 evidence_ids 仅 midea_2025_annual:narrative:42:23，但 claim 中“ToC现金流支撑ToB梦想”等判断未在引用页出现，且未标 [J-02] 为 judgment。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E003",
+      "message": "J-03 引用 evidence_ids 包含 midea_2025_annual:narrative:23:6 和 :39:18，但 claim 中“ToB业务仍处投入期，造血能力有待验证”等判断未在引用页出现，且未标 [J-03] 为 judgment。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6",
+        "midea_2025_annual:narrative:39:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E004",
+      "message": "J-04 引用 evidence_ids 仅 midea_2025_annual:narrative:15:1，但 claim 中“公司部分家电需求依赖以旧换新补贴”等判断未在引用页出现，且未标 [J-04] 为 judgment。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E005",
+      "message": "J-05 引用 evidence_ids 包含 midea_2025_annual:narrative:15:1 和 :49:33，但 claim 中“构筑了较深的护城河”等判断未在引用页出现，且未标 [J-05] 为 judgment。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:49:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E006",
+      "message": "J-06 引用 evidence_ids 仅 midea_2025_annual:narrative:42:23，但 claim 中“确定性较强但弹性有限的现金牛”等判断未在引用页出现，且未标 [J-06] 为 judgment。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E007",
+      "message": "J-07 引用 evidence_ids 包含 midea_2025_annual:narrative:49:33 和 official-filing:...:fact:revenue:135:0，但 claim 中“家电业务是强劲的现金流来源”等判断未在引用页出现，且未标 [J-07] 为 judgment。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:49:33",
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E008",
+      "message": "J-08 引用 evidence_ids 包含 midea_2025_annual:narrative:42:23 和 :43:24，但 claim 中“三角布局提供想象空间”等判断未在引用页出现，且未标 [J-08] 为 judgment。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23",
+        "midea_2025_annual:narrative:43:24"
+      ]
+    }
+  ],
+  "independent_qa_filtered_blockers": [],
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "revalidated_at": "2026-08-03T11:50:35+00:00"
+}

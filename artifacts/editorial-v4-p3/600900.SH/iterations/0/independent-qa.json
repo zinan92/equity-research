@@ -1,0 +1,89 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_body_unmarked",
+      "message": "C-06至C-21等发行人自述在正文中未显式标注“公司披露/年报自述”，可能误导为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论“长江电力是水电行业的绝对龙头…”未标注[J-xx]标记，不符合判断合成规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据F-01至F-08均能回溯到官方PDF的精确页码和锚点，且同期对比方向与幅度与derived_metrics一致。",
+    "判断J-01至J-06均带有[J]标记、引用相关底层证据并给出可证伪条件，符合AI judgment规范。",
+    "缺口G-01至G-05明确基于输入未提供的内容，未借缺口掩盖事实或升级自述。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯性",
+    "同期对比方向与幅度明确性",
+    "发行人自述显式标注",
+    "历史实际值未写成条件句",
+    "未提供证据的客户/订单/排名/份额/估值/股价/目标价/行动建议未写成事实",
+    "AI judgment标记与falsifier",
+    "爱牛式定位与白话结论",
+    "缺口与下一步验证明确性"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_body_unmarked",
+      "message": "C-06至C-21等发行人自述在正文中未显式标注“公司披露/年报自述”，可能误导为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_refs",
+      "message": "J-07引用了J-01、J-02、C-20作为证据，但J-01和J-02是判断而非证据，C-20是自述，未提供底层证据。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "J-01",
+        "J-02",
+        "C-20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论“长江电力是水电行业的绝对龙头…”未标注[J-xx]标记，不符合判断合成规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论“长江电力是水电行业的绝对龙头…”未标注[J-xx]标记，不符合判断合成规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "935824ac6da31b48ebe0191b129a96acf3ae2a23633788a7dfec418a4ac0594c",
+  "response_hash": "0b38b33ae7f44660d648bda8d70725924c4b630a75e5673695cee80a46aebc85",
+  "run_id": "editorial-v4-qa:05807257-4aa6-44fa-b6a6-db31e5ad51b7",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "05807257-4aa6-44fa-b6a6-db31e5ad51b7",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:28:26+00:00"
+}

@@ -1,0 +1,252 @@
+{
+  "status": "failed",
+  "ticker": "300750.SZ",
+  "chars": 2541,
+  "claims": 40,
+  "errors": [
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-01",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-02",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-10",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:25",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:26"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-11",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:50:29"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-12",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:42:20",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:43:21"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-20",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-21",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:55:34"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-22",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:21:7"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-22",
+      "number": "75"
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-22",
+      "number": "1200"
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-30",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-30",
+      "number": "54,538"
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-32",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:22:8",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-33",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:15"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-34",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-35",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:22:8"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-36",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-10",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:15"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-11",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ]
+    },
+    {
+      "code": "numeric_claim_unbound",
+      "message": "text contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-20",
+      "number": "14.0%"
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-40",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:40",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:36:11"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-21",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:40"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-50",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:39:17"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-30",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:39:16"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-51",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:18:5"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-51",
+      "number": "1.8"
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-31",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:39",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:211:40",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:36:11"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-32",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:14"
+      ]
+    },
+    {
+      "code": "judgment_specific_unbound",
+      "message": "falsifier contains a concrete market/business premise not present in this claim's cited evidence",
+      "claim_id": "J-32",
+      "cue": "客户"
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "J-40",
+      "missing": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:38:15"
+      ]
+    }
+  ]
+}

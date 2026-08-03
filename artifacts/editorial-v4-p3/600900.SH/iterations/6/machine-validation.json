@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "ticker": "600900.SH",
+  "chars": 2414,
+  "claims": 48,
+  "errors": [
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-09"
+    }
+  ]
+}

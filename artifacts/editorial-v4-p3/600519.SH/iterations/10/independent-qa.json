@@ -1,0 +1,97 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-04 将已披露的历史营收下滑写成“若消费圈层缩窄则信仰消退风险需警惕”的条件句结论，应直接陈述事实。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_specific_fact",
+      "message": "J-03 提及“市场价格能否持续反映消费意愿”，但证据中无市场价格数据，该前提无引用支撑。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24",
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "provenance",
+      "message": "C-14 在 dossier 中注册但未在报告正文中出现，违反 claim 必须渲染的规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:8:1"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01 至 F-04 均精确引用年报页码和行项，数字与 evidence packet 一致。",
+    "公司自述类 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "判断类 claim 均带有 [J] 标记和可证伪条件，符合 judgment synthesis 规范。",
+    "缺口 G-01 至 G-03 基于输入缺失，未借缺口掩盖已有数字或升级自述。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至 document_id、页码、quoted_anchor",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "判断类 claim 有 [J] 标记、相关底层证据和 falsifier",
+    "报告有爱牛式定位、因果链、白话结论，非年报摘要",
+    "缺口基于 evidence packet 的 gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-04 将已披露的历史营收下滑写成“若消费圈层缩窄则信仰消退风险需警惕”的条件句结论，应直接陈述事实。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_specific_fact",
+      "message": "J-03 提及“市场价格能否持续反映消费意愿”，但证据中无市场价格数据，该前提无引用支撑。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24",
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "provenance",
+      "message": "C-14 在 dossier 中注册但未在报告正文中出现，违反 claim 必须渲染的规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:8:1"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "abab719fc5ad70069b1565db744b20bbc376fd617d0a64d1232fa861e3b15198",
+  "response_hash": "f7855887aa4796dc2d7ad517e80645fddd9a8a32820f22c61fd2426f7d6c1f3b",
+  "run_id": "editorial-v4-qa:66bdd906-fcb5-4c41-bd55-50dc851cacb1",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "66bdd906-fcb5-4c41-bd55-50dc851cacb1",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:20:18+00:00"
+}

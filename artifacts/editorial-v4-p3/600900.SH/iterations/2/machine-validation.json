@@ -1,0 +1,35 @@
+{
+  "status": "failed",
+  "ticker": "600900.SH",
+  "chars": 1862,
+  "claims": 40,
+  "errors": [
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "technology_products",
+      "chars": 362,
+      "minimum": 400
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "risks_commentary",
+      "chars": 280,
+      "minimum": 350
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "plain_language",
+      "chars": 109,
+      "minimum": 150
+    },
+    {
+      "code": "dossier_short",
+      "message": "editorial body is materially shorter than the Round 7 V4 reference",
+      "chars": 1862,
+      "target": 2429
+    }
+  ]
+}

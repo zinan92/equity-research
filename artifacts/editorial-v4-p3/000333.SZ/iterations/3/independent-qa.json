@@ -1,0 +1,166 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-14引用产业在线数据，但正文未标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-15引用MIR睿工业统计，但正文未标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-18引用奥维云网数据，但正文未标注“公司披露年报引”，违反规则3。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-01引用欧睿数据，但正文未标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据F-01/F-02/F-03均正确引用evidence packet中的数值和同比变化，且明确标注增长幅度。",
+    "所有公司自述的claim均以“公司披露”开头，符合规则3。",
+    "缺口G-01/G-02/G-03/G-04明确基于输入未提供的信息，未借缺口掩盖事实。",
+    "整体结论J-06带有falsifier，且引用了相关底层证据。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-14引用产业在线数据，但正文未标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-15引用MIR睿工业统计，但正文未标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-18引用奥维云网数据，但正文未标注“公司披露年报引”，违反规则3。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-01引用欧睿数据，但正文未标注“公司披露年报引用”，违反规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01中“精密制造平台地位”为判断，但未标[J-xx] marker，违反规则6。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-05中“构筑了较深的护城河”为判断，但未标[J-xx] marker，违反规则6。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:49:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-06中“确定性较强但弹性有限的现金牛”为判断，但未标[J-xx] marker，违反规则6。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "bd6d7f75bc59930bb0d65a568d0f49eb3fff1c942dacefbc517ab4203116cf1d",
+  "response_hash": "f6563ab439fb36af3cdc37d3a21492923e137c128be13478d364f45910ed59ff",
+  "run_id": "editorial-v4-qa:1e0f3f90-3169-4bc1-9e68-6459787baf54",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "1e0f3f90-3169-4bc1-9e68-6459787baf54",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:40:08+00:00"
+}

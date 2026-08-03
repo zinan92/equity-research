@@ -1,0 +1,89 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "judgment_specific_unbound",
+      "message": "J-06 正文和 falsifier 均提及“批价体系”，但引用的证据中未出现批价数据或相关描述，属于未提供证据的具体事实。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-06 整体结论将已披露的2025年营收净利下滑表述为“若批价体系能维持，则长期逻辑无损”，属于把历史实际值写成条件句结论。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有财务事实均精确引用年报页码和行项，同比变化由确定性派生指标计算，无捏造。",
+    "公司自述内容均明确标注“公司披露”，未将自述冒充独立验证。",
+    "判断句均带有 [J] 标记和 falsifier，且引用了相关底层证据，符合 judgment 规范。",
+    "缺口声明诚实，未用空泛句子凑篇幅，且未借缺口掩盖已有数字。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到 document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式定位允许作为 AI judgment，但需有 [J] 标记、相关底层证据和 falsifier",
+    "报告包含资产定位、财务因果链、风险证伪条件和白话结论，非年报摘要",
+    "缺口基于 evidence packet 的 gaps 写出，未要求额外证据"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "judgment_specific_unbound",
+      "message": "J-06 正文和 falsifier 均提及“批价体系”，但引用的证据中未出现批价数据或相关描述，属于未提供证据的具体事实。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-06 整体结论将已披露的2025年营收净利下滑表述为“若批价体系能维持，则长期逻辑无损”，属于把历史实际值写成条件句结论。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "6862ef1abbeea79863300f5e6690fe16f3f0d21028ea185134217d67d8bf1bbf",
+  "response_hash": "4314ea88b286a76cc1843b286d6776bf29f251198bf07ceff6331eceba2542df",
+  "run_id": "editorial-v4-qa:ceaa61a9-0e7f-42a8-8843-4a9a4a3bcf83",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "ceaa61a9-0e7f-42a8-8843-4a9a4a3bcf83",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:28:50+00:00"
+}

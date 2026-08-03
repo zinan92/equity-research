@@ -1,0 +1,99 @@
+{
+  "status": "failed",
+  "ticker": "000001.SZ",
+  "chars": 2516,
+  "claims": 43,
+  "errors": [
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "timeline",
+      "chars": 270,
+      "minimum": 300
+    },
+    {
+      "code": "claim_refs",
+      "message": "non-gap claim has no evidence refs",
+      "claim_id": "J-04"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-19"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-01"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-02"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-03"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-04"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-05"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-06"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-16"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-17"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-18"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-19"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-20"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-10"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-11"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-12"
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion must carry at least one fact/judgment/gap marker"
+    }
+  ]
+}

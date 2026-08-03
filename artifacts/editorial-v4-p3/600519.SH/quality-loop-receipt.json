@@ -1,0 +1,304 @@
+{
+  "schema_version": "editorial-v4-quality-loop-receipt-v1",
+  "ticker": "600519.SH",
+  "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+  "iterations": [
+    {
+      "iteration": 0,
+      "run_id": "editorial-v4-run:d9390c1a-bd48-415d-8d83-d7463b1b728d",
+      "request_id": "d9390c1a-bd48-415d-8d83-d7463b1b728d",
+      "report_hash": "1c6ac9d973d34d762bec09fde2d76932a7faa77055956329f9203b31ccc3abc0",
+      "machine_status": "failed",
+      "machine_errors": 11,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:989c9db9-7471-403f-a508-4c19a5857e33",
+      "qa_request_id": "989c9db9-7471-403f-a508-4c19a5857e33",
+      "qa_blockers": 6,
+      "qa_advisories": 3
+    },
+    {
+      "iteration": 1,
+      "run_id": "editorial-v4-run:e358b6a3-dc8e-4199-a527-e06f4186cc60",
+      "request_id": "e358b6a3-dc8e-4199-a527-e06f4186cc60",
+      "report_hash": "d01e32af9151360ada0a67271486bf56cb3c3da6cd60d1af5f9ab5745342731d",
+      "machine_status": "failed",
+      "machine_errors": 6,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:f7afd42f-8717-4651-a3c5-f7fcc107db0b",
+      "qa_request_id": "f7afd42f-8717-4651-a3c5-f7fcc107db0b",
+      "qa_blockers": 6,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 2,
+      "run_id": "editorial-v4-run:976efad7-f5e6-4ce2-9037-bf053ed0ed34",
+      "request_id": "976efad7-f5e6-4ce2-9037-bf053ed0ed34",
+      "report_hash": "7e6758e66318518976e34594ac8bd1cb8b7c93bbd0b5ea19b5c0b4927bebac07",
+      "machine_status": "failed",
+      "machine_errors": 6,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:a08ba5f6-f276-4320-8a00-335d0cbb7641",
+      "qa_request_id": "a08ba5f6-f276-4320-8a00-335d0cbb7641",
+      "qa_blockers": 6,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 3,
+      "run_id": "editorial-v4-run:f6967ff4-288a-4666-ba8c-b7a899595784",
+      "request_id": "f6967ff4-288a-4666-ba8c-b7a899595784",
+      "report_hash": "7fa3905a6a83a6b1c0da291ccabfcb6f88fabe83751bdb446dac97626ef5c20b",
+      "machine_status": "failed",
+      "machine_errors": 6,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:07716924-935d-4e67-b97d-c8dfdd73aff9",
+      "qa_request_id": "07716924-935d-4e67-b97d-c8dfdd73aff9",
+      "qa_blockers": 5,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 4,
+      "run_id": "editorial-v4-run:4ebf0188-ad5d-4661-bbcd-37df2d63389a",
+      "request_id": "4ebf0188-ad5d-4661-bbcd-37df2d63389a",
+      "report_hash": "4aa96993a39c8da7cc53c3e536f78a00e6c8b04ed650381e4e512963a8713877",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:b10c0b1a-ea55-47c3-ae6b-9dbeb0f5a650",
+      "qa_request_id": "b10c0b1a-ea55-47c3-ae6b-9dbeb0f5a650",
+      "qa_blockers": 1,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 5,
+      "run_id": "editorial-v4-run:d09fec8b-352d-434a-a8d0-22362dbd8eae",
+      "request_id": "d09fec8b-352d-434a-a8d0-22362dbd8eae",
+      "report_hash": "3914775fc60bc32e0983d56eb660743e39e81ec76590a0c25cbbda6b63d85f39",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:9d7897c3-5e67-4065-8d76-26fda9b12f9b",
+      "qa_request_id": "9d7897c3-5e67-4065-8d76-26fda9b12f9b",
+      "qa_blockers": 6,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 6,
+      "run_id": "editorial-v4-run:e9393974-21df-4885-9242-b54b98e2e8f8",
+      "request_id": "e9393974-21df-4885-9242-b54b98e2e8f8",
+      "report_hash": "9997463264c7e87dcd8b54ed91afe08cd063a1def8fee88170ab97fc1fdf8053",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:06124f1d-7ed0-466c-af73-e6a824b26fc0",
+      "qa_request_id": "06124f1d-7ed0-466c-af73-e6a824b26fc0",
+      "qa_blockers": 2
+    },
+    {
+      "iteration": 7,
+      "run_id": "editorial-v4-run:2e0772c9-5f63-41b6-8225-61eeb655afc9",
+      "request_id": "2e0772c9-5f63-41b6-8225-61eeb655afc9",
+      "report_hash": "2d56c4f173768128e33ac1eddae12cbc33822fc0f471f3828f89e429e14bd61a",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:4dae5fcb-e641-4ce3-abf0-db50389c87a9",
+      "qa_request_id": "4dae5fcb-e641-4ce3-abf0-db50389c87a9",
+      "qa_blockers": 4
+    },
+    {
+      "iteration": 8,
+      "run_id": "editorial-v4-run:b224e1f0-409f-43dd-b918-84ba08eff423",
+      "request_id": "b224e1f0-409f-43dd-b918-84ba08eff423",
+      "report_hash": "6c6b60953f46e0095c7f0a57ad8f3f91fb3a7c0d1f41663094a88c9396b4d1be",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:2fdea72b-2897-469c-babe-301749cc4874",
+      "qa_request_id": "2fdea72b-2897-469c-babe-301749cc4874",
+      "qa_blockers": 4
+    },
+    {
+      "iteration": 9,
+      "run_id": "editorial-v4-run:9980a444-bf45-4f4d-b195-2f90f3aa9cd4",
+      "request_id": "9980a444-bf45-4f4d-b195-2f90f3aa9cd4",
+      "report_hash": "1a9057aae23c511815de3273372e294c1b5efef6bc1a3d65045263f1d75a03e5",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:a1134bc1-73e8-4cbe-b044-a7f828ab6d20",
+      "qa_request_id": "a1134bc1-73e8-4cbe-b044-a7f828ab6d20",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 10,
+      "run_id": "editorial-v4-run:d6a6371f-3d5f-4890-a244-065a1e1f324f",
+      "request_id": "d6a6371f-3d5f-4890-a244-065a1e1f324f",
+      "report_hash": "5421cad26ce58fcf7ea1f74e633697e1d3339edc6a3e75387b70b42b024c6763",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:66bdd906-fcb5-4c41-bd55-50dc851cacb1",
+      "qa_request_id": "66bdd906-fcb5-4c41-bd55-50dc851cacb1",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 11,
+      "run_id": "editorial-v4-run:c7b9dfcc-3d12-4e28-a6dd-9edf3d4981ec",
+      "request_id": "c7b9dfcc-3d12-4e28-a6dd-9edf3d4981ec",
+      "report_hash": "0d337c85dcea7687077bf975e99eb793c05a96f98f55aac023f0ed8ad0f8349b",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:83c296ac-8532-4de5-ba50-f47f3c25f426",
+      "qa_request_id": "83c296ac-8532-4de5-ba50-f47f3c25f426",
+      "qa_blockers": 2
+    },
+    {
+      "iteration": 12,
+      "run_id": "editorial-v4-run:28203138-1861-4bee-8fa6-1a2f86b66baa",
+      "request_id": "28203138-1861-4bee-8fa6-1a2f86b66baa",
+      "report_hash": "3694777c513a0727ac80ad1dce88af6e85f6183d491a38a051add71e80908f15",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:ceaa61a9-0e7f-42a8-8843-4a9a4a3bcf83",
+      "qa_request_id": "ceaa61a9-0e7f-42a8-8843-4a9a4a3bcf83",
+      "qa_blockers": 2
+    },
+    {
+      "iteration": 13,
+      "run_id": "editorial-v4-run:f7190f19-9294-4995-975f-fe33c358e05d",
+      "request_id": "f7190f19-9294-4995-975f-fe33c358e05d",
+      "report_hash": "79d6e25c78e13487b43ec3ed1d1f785420c1d3660c01a5b66d7a3b88362544dc",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:17185173-bc6e-4ae3-b36f-400aede54f31",
+      "qa_request_id": "17185173-bc6e-4ae3-b36f-400aede54f31",
+      "qa_blockers": 0,
+      "qa_advisories": 0
+    }
+  ],
+  "final_status": "passed",
+  "review_status": "pending",
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "advisory_count": 0,
+  "final_iteration": 13,
+  "final_report_hash": "79d6e25c78e13487b43ec3ed1d1f785420c1d3660c01a5b66d7a3b88362544dc",
+  "machine_status": "passed",
+  "machine_errors": [],
+  "independent_qa_status": "passed",
+  "independent_qa_run_id": "editorial-v4-qa:ceaa61a9-0e7f-42a8-8843-4a9a4a3bcf83",
+  "independent_qa_blockers": [
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "judgment_specific_unbound",
+      "message": "J-06 正文和 falsifier 均提及“批价体系”，但引用的证据中未出现批价数据或相关描述，属于未提供证据的具体事实。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-06 整体结论将已披露的2025年营收净利下滑表述为“若批价体系能维持，则长期逻辑无损”，属于把历史实际值写成条件句结论。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1",
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    }
+  ],
+  "independent_qa_raw_status": "failed",
+  "independent_qa_raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-02引用evidence_id 'moutai_2025_annual:narrative:16:16'，但该证据未提及“五年生产前置期”或“护城河”，仅说明工艺周期。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-02引用evidence_id 'moutai_2025_annual:narrative:21:20'，但该证据仅描述传统工法，未提及“五年生产前置期”或“护城河”。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03引用evidence_id 'moutai_2025_annual:narrative:23:24'，但该证据仅列出四类风险，未提及“品牌定价权”或“终端消费需求”。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03引用evidence_id 'moutai_2025_annual:narrative:122:41'，但该证据仅说明信用风险低，未提及“品牌定价权”或“终端消费需求”。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-05引用evidence_id 'moutai_2025_annual:narrative:16:16'，但该证据未提及“送礼请客场景减少”或“慢成了负担”。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-04引用evidence_id 'official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0'和'61:1'，但证据仅为营收数字，未提及“租金下降”或“品牌信仰”。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01引用evidence_id 'official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0'等，但证据仅为营收和净利数字，未提及“绝对龙头”或“品牌溢价切换”。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1"
+      ]
+    }
+  ],
+  "independent_qa_filtered_blockers": [],
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "revalidated_at": "2026-08-03T11:50:35+00:00"
+}

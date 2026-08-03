@@ -1,0 +1,202 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "style",
+      "code": "missing_judgment_marker",
+      "message": "J-10 正文“公司形成了典型的‘精密制造杂货铺’优势...”未标 [J-10] 或任何 judgment marker。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实（F-01 至 F-08）均正确引用年报和季报的页码、行号，数值与 evidence packet 一致。",
+    "公司自述类 claim（C-10 至 C-51）均明确标注“公司年报披露”，符合 self_report_attribution 要求。",
+    "缺口（G-01 至 G-06）均基于 evidence packet 的 gaps 或缺失输入，未将缺口伪装成事实。",
+    "整体结论锋利，带有白话结论和 falsifier，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-01 引用 evidence_id 'catl_2025_annual_cninfo:narrative:20:6'，但该证据未直接提及“绝对龙头”或“拉大领先身位”，且未提供独立第三方数据支撑。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_self_report_label",
+      "message": "C-02 正文写“公司年报披露，其动力与储能电池市占率已多年全球领跑”，但 claim kind 为 issuer_self_report，正文未显式标注“公司披露/年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-20 正文“利润增速大幅跑赢收入...定价能力在行业竞争中进一步凸显”未标 [J-20] 或任何 judgment marker。",
+      "claim_id": "J-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-30 正文“行业已进入‘剩者为王’阶段...有望在淘汰赛中进一步扩大份额”未标 [J-30] 或任何 judgment marker。",
+      "claim_id": "J-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-31 正文“公司持有外币资产负债并开展套期保值，但利率风险敞口仍存...”未标 [J-31] 或任何 judgment marker。",
+      "claim_id": "J-31",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:36:11",
+        "catl_2025_annual_cninfo:narrative:211:39",
+        "catl_2025_annual_cninfo:narrative:211:40"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-32 正文“固态电池等颠覆性技术可能重塑行业格局...存在技术代际风险”未标 [J-32] 或任何 judgment marker。",
+      "claim_id": "J-32",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:38:14"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-40 正文“宁德时代是一台靠砸研发、卷工艺、扩品类来杀敌的电池战争机器...”未标 [J-40] 或任何 judgment marker。",
+      "claim_id": "J-40",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1",
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "style",
+      "code": "missing_judgment_marker",
+      "message": "J-10 正文“公司形成了典型的‘精密制造杂货铺’优势...”未标 [J-10] 或任何 judgment marker。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-20 正文“利润增速大幅跑赢收入...定价能力在行业竞争中进一步凸显”未标 [J-20] 或任何 judgment marker。",
+      "claim_id": "J-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-30 正文“行业已进入‘剩者为王’阶段...有望在淘汰赛中进一步扩大份额”未标 [J-30] 或任何 judgment marker。",
+      "claim_id": "J-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-31 正文“公司持有外币资产负债并开展套期保值，但利率风险敞口仍存...”未标 [J-31] 或任何 judgment marker。",
+      "claim_id": "J-31",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:36:11",
+        "catl_2025_annual_cninfo:narrative:211:39",
+        "catl_2025_annual_cninfo:narrative:211:40"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-32 正文“固态电池等颠覆性技术可能重塑行业格局...存在技术代际风险”未标 [J-32] 或任何 judgment marker。",
+      "claim_id": "J-32",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:38:14"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "J-40 正文“宁德时代是一台靠砸研发、卷工艺、扩品类来杀敌的电池战争机器...”未标 [J-40] 或任何 judgment marker。",
+      "claim_id": "J-40",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1",
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    }
+  ],
+  "request_hash": "0a401bafd589391c3bc30f57f35eee023e6d463e029bb14cee60a5d252cc2016",
+  "response_hash": "d0eb3341e118817d205325cd7fd49d24317bdfc53b60f8491cdfac6360f0aa2a",
+  "run_id": "editorial-v4-qa:f1dec101-bd29-4b2e-bbd6-dee471cdf3ab",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "f1dec101-bd29-4b2e-bbd6-dee471cdf3ab",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:39:49+00:00"
+}

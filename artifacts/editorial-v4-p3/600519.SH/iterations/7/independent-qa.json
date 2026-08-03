@@ -1,0 +1,152 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-04将“黄牛价跌破零售价”作为风险场景，但输入未提供任何黄牛价或零售价数据，该条件句结论缺乏事实基础。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "大白话结论中“茅台的慢在于一瓶酒从粮食到出厂至少五年...慢就成了拖累”等判断句未标[J-xx] marker，违反规则6。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "derived_value_mismatch",
+      "message": "财务与估值节称“净利率由49.5%降至47.8%”，但输入未提供净利率计算依据，且47.8%与823.20/1720.54≈47.84%一致，但49.5%无法从证据包直接得出。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-01引用narrative:26:28和27:29，但26:28仅含陈华简历，27:29仅含余思明简历，未提及“无白酒行业直接经验”或“内部晋升”等判断。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29"
+      ]
+    }
+  ],
+  "strengths": [
+    "事实类claims（F-01至F-04）均正确引用年报页码和锚点，数值与证据包一致。",
+    "公司自述类claims（C-02至C-09）均标注“公司披露”，且引用对应年报段落。",
+    "缺口claims（G-01至G-03）诚实反映输入限制，未借缺口掩盖事实。",
+    "整体结论带[J-01] marker和falsifier，符合锋利判断要求。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "判断句带[J-xx] marker、refs和falsifier",
+    "爱牛式定位允许，但需有底层证据和falsifier",
+    "缺口基于evidence packet gaps，不空泛"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-02引用moutai_2025_annual:narrative:21:20，但该证据描述传统工法，未提及五年生产前置期；五年生产前置期证据在narrative:16:16。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03引用moutai_2025_annual:narrative:23:24，但该证据仅列四类风险，未提及批价倒挂或定价权；批价观测点无直接证据。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03引用moutai_2025_annual:narrative:122:41，但该证据仅说明信用风险小，未涉及批价或定价权。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-04将“黄牛价跌破零售价”作为风险场景，但输入未提供任何黄牛价或零售价数据，该条件句结论缺乏事实基础。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "大白话结论中“茅台的慢在于一瓶酒从粮食到出厂至少五年...慢就成了拖累”等判断句未标[J-xx] marker，违反规则6。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_self_report_label",
+      "message": "C-10引用公司自述“单品营收过千亿、市值上万亿”，但正文未显式标注“公司披露”，违反规则3。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "derived_value_mismatch",
+      "message": "财务与估值节称“净利率由49.5%降至47.8%”，但输入未提供净利率计算依据，且47.8%与823.20/1720.54≈47.84%一致，但49.5%无法从证据包直接得出。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-01引用narrative:26:28和27:29，但26:28仅含陈华简历，27:29仅含余思明简历，未提及“无白酒行业直接经验”或“内部晋升”等判断。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_judgment_marker",
+      "message": "大白话结论中“茅台的慢在于一瓶酒从粮食到出厂至少五年...慢就成了拖累”等判断句未标[J-xx] marker，违反规则6。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "89dfc8097d7acc6ccc50a3e6cbc0d5b6be0b38d2e58e45e14ef5e009c32c6c0b",
+  "response_hash": "54d83057e68453e3d865ba574354a4e2b4e5282fc4f11fefdd4cf2ece9e56d89",
+  "run_id": "editorial-v4-qa:4dae5fcb-e641-4ce3-abf0-db50389c87a9",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "4dae5fcb-e641-4ce3-abf0-db50389c87a9",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:06:04+00:00"
+}

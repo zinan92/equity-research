@@ -1,0 +1,129 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01 称“垄断了中国最优质的水电资源”，证据仅显示运营六座梯级电站，未提供市场份额或排他性证明。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据引用准确，所有数字均可追溯至年报和季报的指定页码。",
+    "公司自述内容均明确标注“公司披露”，未将自述冒充独立验证。",
+    "报告结构完整，包含定位、团队、时间线、技术、财务、风险和大白话结论。",
+    "明确列出了输入缺失项（如创始人信息、估值数据），未用空泛句子凑篇幅。",
+    "判断类声明均附有 falsifier，体现了可证伪性。"
+  ],
+  "checked_rules": [
+    "数字和事实可追溯至 evidence_ids",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注“公司披露”",
+    "未将历史实际值写成条件句结论",
+    "未将未提供证据的客户、订单、排名等写成事实",
+    "爱牛式定位允许为 judgment，但需有相关底层证据和 falsifier",
+    "报告包含资产定位、财务因果链、风险证伪条件和大白话结论",
+    "缺口基于 evidence packet 的 gaps 写出，未借 gap 掩盖已有数字"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-09 在正文中未渲染，但出现在 claims 列表中，导致无法验证其证据引用和表述。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01 称“垄断了中国最优质的水电资源”，证据仅显示运营六座梯级电站，未提供市场份额或排他性证明。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-07 称“一度电的边际成本极低”，但证据未提供边际成本数据，无法验证。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:215:39",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-07 称“就像一台绑在长江上的印钞机”，属于比喻，但未提供现金流或盈利能力的量化证据支撑。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:215:39",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01 称“承诺将大多数利润以现金形式返还股东”，证据仅显示分红比例不低于70%，未说明“大多数”是否准确。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-10 称“流域梯级调度能力是核心护城河”，证据仅描述运行指标创历史最优，未提供与竞争对手的比较。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-03 称“大水电的灵活调节价值和绿色价值在电力现货市场和绿电交易中具有获得溢价的潜力”，证据仅提及市场建设，未提供溢价实例或测算。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-08 称“部分董事因公务长期缺席董事会，可能削弱有效监督”，证据仅显示缺席次数，未提供监督效果评估。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:35:26"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "7dd216b70c2eebe56859907d9fed8304e5101ce8cedd7bc83459083d92b6e41c",
+  "response_hash": "02de07c061289887d3304abfe6c53555ca9c6acbc78cd745a425c9068cb27f66",
+  "run_id": "editorial-v4-qa:1ec07370-4b3c-4ffd-9258-0b3081f10ac4",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "1ec07370-4b3c-4ffd-9258-0b3081f10ac4",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:45:00+00:00"
+}

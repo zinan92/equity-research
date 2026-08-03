@@ -1,0 +1,91 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_j_marker",
+      "message": "整体结论J-09未在claims中定义，且未标注[J-09] marker，无法验证其证据链和falsifier。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-09在overall_conclusion中出现，但未在claims中列出，也未提供evidence_ids，无法追溯。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unverified_claim",
+      "message": "J-09声称“绝对龙头”，但未引用任何市场份额或排名证据，且未标记为judgment。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据F-01至F-08均能精确回溯到年报/季报页码和quoted_anchor，且同期对比方向与幅度与derived_metrics一致。",
+    "所有公司自述（C-03至C-21）均明确标注“公司披露”，未冒充独立验证。",
+    "判断J-01至J-08均带有[J] marker、falsifier和底层evidence，符合judgment_synthesis规则。",
+    "缺口G-01至G-05基于输入未提供，未借gap掩盖事实或升级公司自述。",
+    "报告包含爱牛式定位、因果链、风险证伪和白话结论，非年报摘要。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯到document_id、页码、quoted_anchor",
+    "同期对比明确增长/下滑/持平及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式判断允许，但需有[J] marker、refs和falsifier",
+    "报告包含资产定位、财务因果链、风险证伪和白话结论",
+    "缺口基于evidence packet的gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_j_marker",
+      "message": "整体结论J-09未在claims中定义，且未标注[J-09] marker，无法验证其证据链和falsifier。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-09在overall_conclusion中出现，但未在claims中列出，也未提供evidence_ids，无法追溯。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unverified_claim",
+      "message": "J-09声称“绝对龙头”，但未引用任何市场份额或排名证据，且未标记为judgment。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_j_marker",
+      "message": "整体结论J-09未在claims中定义，且未标注[J-09] marker，无法验证其证据链和falsifier。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "82653e14cfeef15244861ecbf326428816ff4f2b6fcd751a2ed9d5b471d91139",
+  "response_hash": "f961017817a21d32b0297f94d5225ab4d7308c9371e3add6b3f5b879c82e6cbf",
+  "run_id": "editorial-v4-qa:40ce563e-6b6f-4849-a958-2f510e1b9eeb",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "40ce563e-6b6f-4849-a958-2f510e1b9eeb",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:35:54+00:00"
+}

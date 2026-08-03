@@ -1,0 +1,174 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:20:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-10 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:47:25' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:47:25"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-11 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:50:29' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:50:29"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-12 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:42:20' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-20 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:29:10' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-21 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:55:34' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:55:34"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实（F-01 至 F-08）均正确引用了官方 PDF 中的数字，且同期对比方向与幅度与 derived metrics 一致。",
+    "所有 issuer_self_report 类型的 claim 均明确标注了“公司年报披露”，未将自述冒充独立验证。",
+    "判断类 claim（J-01, J-03, J-10, J-11, J-20, J-21, J-30, J-31, J-32, J-40）均带有 [J] 标记和 falsifier，符合 judgment synthesis 规则。",
+    "报告明确列出了缺失输入（如独立第三方市场份额数据、毛利率等），并在正文中以 G-xx 标记了缺口，未用空泛句子凑篇幅。",
+    "整体结论锋利且带有白话风格，符合爱牛式定位，且未给出估值、目标价或行动建议。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位是否标为 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-01 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:20:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:20:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-03 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:20:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-10 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:47:25' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:47:25"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-11 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:50:29' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:50:29"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-12 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:42:20' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-20 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:29:10' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-21 引用的 evidence_id 'catl_2025_annual_cninfo:narrative:55:34' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:55:34"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "4a6c51c5291a0f07b3858d0f5734942ee831ebbe590dc24e849884cdf62fe86b",
+  "response_hash": "155f8fb75e79be189584960f4a5d8633e72032b3711201a9c1a70feb1f55408a",
+  "run_id": "editorial-v4-qa:14175b6e-e348-4f4a-a221-739ca034cc3e",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "14175b6e-e348-4f4a-a221-739ca034cc3e",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:30:18+00:00"
+}

@@ -1,0 +1,197 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "numeric_quote_mismatch",
+      "message": "C-10 中“850mm”未在引用证据页锚文本中出现，数字无法验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:26:9"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "numeric_quote_mismatch",
+      "message": "C-11 中“205”未在引用证据页锚文本中出现，数字无法验证。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:26:9"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "numeric_quote_mismatch",
+      "message": "C-17 中“400”未在引用证据页锚文本中出现，数字无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:44:25",
+        "midea_2025_annual:narrative:46:27"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_body_unmarked",
+      "message": "C-07 至 C-16、C-20 等 issuer_self_report 声明在正文中未显式标注“公司披露/年报自述”。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“确定性较强但弹性有限的现金牛”等判断句缺少 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何 fact/judgment/gap 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01 中引用产业在线数据，但正文未先声明“公司披露/年报引述”再给出数据来源。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "body_numeric_unbound",
+      "message": "J-05 正文中“43”个海外基地未绑定任何 claim 或 evidence，数字来源不明。",
+      "claim_id": "J-05",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01/F-02/F-03 均正确引用证据页，数字与同比幅度一致。",
+    "大部分 issuer_self_report 声明正确标记为 C-xx，并附有证据 ID。",
+    "判断 J-01/J-02/J-03 等均提供了 falsifier 和底层证据，符合 judgment 规范。",
+    "缺口 G-01/G-02/G-03/G-04 明确指出了输入未提供的信息，不掩盖已有数据。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "numeric_quote_mismatch",
+      "message": "C-10 中“850mm”未在引用证据页锚文本中出现，数字无法验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:26:9"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "numeric_quote_mismatch",
+      "message": "C-11 中“205”未在引用证据页锚文本中出现，数字无法验证。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:26:9"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "numeric_quote_mismatch",
+      "message": "C-17 中“400”未在引用证据页锚文本中出现，数字无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:44:25",
+        "midea_2025_annual:narrative:46:27"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_body_unmarked",
+      "message": "C-07 至 C-16、C-20 等 issuer_self_report 声明在正文中未显式标注“公司披露/年报自述”。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“确定性较强但弹性有限的现金牛”等判断句缺少 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何 fact/judgment/gap 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01 中引用产业在线数据，但正文未先声明“公司披露/年报引述”再给出数据来源。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "body_numeric_unbound",
+      "message": "J-05 正文中“43”个海外基地未绑定任何 claim 或 evidence，数字来源不明。",
+      "claim_id": "J-05",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“确定性较强但弹性有限的现金牛”等判断句缺少 [J-xx] 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何 fact/judgment/gap 标记。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "cdb8ef409f27952e7f3e9ec7d36d788f30e23f45b7205cb8c480473ef0072ca7",
+  "response_hash": "351bbb72707509d162cb88f42a3e4c8bb42ef6c64b56fdb1cec8946f84a1f8eb",
+  "run_id": "editorial-v4-qa:f54e7572-03b7-44a0-9532-fbe7229b3717",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "f54e7572-03b7-44a0-9532-fbe7229b3717",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:35:32+00:00"
+}

@@ -1,0 +1,194 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-14引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-15引用MIR睿工业统计，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-01引用欧睿数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-18引用奥维云网数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-19引用海外销售额占比，但未在正文中明确标注“公司披露”，将公司自述直接作为事实陈述，违反规则3。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-02引用线上/线下渠道销售额第一，但未在正文中明确标注“公司披露”，将公司自述直接作为事实陈述，违反规则3。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-05引用TEKA收购及欧洲收入双位数增长，但未在正文中明确标注“公司披露”，将公司自述直接作为事实陈述，违反规则3。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据F-01/F-02/F-03均正确引用evidence packet中的数值和同比变化，且明确标注了增长幅度。",
+    "所有判断类claim（J-01至J-06）均带有[J]标记和falsifier，符合规则6。",
+    "缺口类claim（G-01至G-04）明确指出了输入未提供的信息，未借缺口掩盖事实。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "J-01引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-14引用产业在线数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-15引用MIR睿工业统计，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-01引用欧睿数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-18引用奥维云网数据，但未在正文中明确标注“公司披露年报引用”，将第三方数据直接作为事实陈述，违反规则3。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-19引用海外销售额占比，但未在正文中明确标注“公司披露”，将公司自述直接作为事实陈述，违反规则3。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-02引用线上/线下渠道销售额第一，但未在正文中明确标注“公司披露”，将公司自述直接作为事实陈述，违反规则3。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "third_party_attribution_missing",
+      "message": "C-05引用TEKA收购及欧洲收入双位数增长，但未在正文中明确标注“公司披露”，将公司自述直接作为事实陈述，违反规则3。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "1a09bd4d99c6ae8b55ed94afb7cb7a7aa4665c5f0421a7eb76613dc42d4ed262",
+  "response_hash": "a72567c62932af6476383d9c7acbc638fb5ed8c2afc01f6eb54de3a4949b84a6",
+  "run_id": "editorial-v4-qa:385af642-e135-41cd-a9f2-a31c6fe017ca",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "385af642-e135-41cd-a9f2-a31c6fe017ca",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:42:00+00:00"
+}

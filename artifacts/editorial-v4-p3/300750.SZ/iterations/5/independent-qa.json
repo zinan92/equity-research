@@ -1,0 +1,169 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "value_mismatch",
+      "message": "F-01 和 F-02 的营收和净利润数值与 evidence packet 中千元单位不一致，报告未注明单位换算，可能误导读者。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "value_mismatch",
+      "message": "F-05 和 F-06 的营收和净利润数值与 evidence packet 中千元单位不一致，报告未注明单位换算，可能误导读者。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:0"
+      ]
+    }
+  ],
+  "strengths": [
+    "报告结构清晰，覆盖定位、团队、时间线、技术、财务、风险等关键维度。",
+    "多数事实性数据（如营收、净利润）有明确的 evidence packet 支持，且标注了 claim_id。",
+    "风险部分结合了公司披露和独立判断，并提供了部分 falsifier。",
+    "gap 声明诚实，指出了输入数据的局限性。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要它在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-01 引用了 catl_2025_annual_cninfo:narrative:17:3 和 20:6，但 17:3 的 quoted_anchor 未明确提及“绝对龙头”或“拉大领先身位”，仅称“全球领先”。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:17:3",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01 称“绝对龙头”和“拉大领先身位”，但证据仅显示公司自述“全球领先”，未提供独立第三方数据或量化对比，判断缺乏充分支撑。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:17:3",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_attribution",
+      "message": "C-02 称“公司年报披露，其动力与储能电池市占率已多年全球领跑”，但证据 17:3 和 20:6 中未明确出现“市占率已多年全球领跑”的原文，且未标注为“公司自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:17:3",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_falsifier",
+      "message": "J-03 的判断“彰显其成本转嫁与定价能力”未提供 falsifier，不符合 judgment 必须包含可证伪条件的要求。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "value_mismatch",
+      "message": "F-01 和 F-02 的营收和净利润数值与 evidence packet 中千元单位不一致，报告未注明单位换算，可能误导读者。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "value_mismatch",
+      "message": "F-05 和 F-06 的营收和净利润数值与 evidence packet 中千元单位不一致，报告未注明单位换算，可能误导读者。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2026_q1:32e4936e6dd68a89:fact:revenue:8:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_falsifier",
+      "message": "J-20 的判断“定价能力在行业竞争中进一步凸显”未提供 falsifier，不符合 judgment 必须包含可证伪条件的要求。",
+      "claim_id": "J-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_attribution",
+      "message": "C-30 称“公司年报披露，拥有及申请的国内外专利总数达54,538项”，但证据 20:6 中未明确出现“54,538项”的原文，且未标注为“公司自述”。",
+      "claim_id": "C-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_falsifier",
+      "message": "J-03 的判断“彰显其成本转嫁与定价能力”未提供 falsifier，不符合 judgment 必须包含可证伪条件的要求。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "missing_falsifier",
+      "message": "J-20 的判断“定价能力在行业竞争中进一步凸显”未提供 falsifier，不符合 judgment 必须包含可证伪条件的要求。",
+      "claim_id": "J-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    }
+  ],
+  "request_hash": "ff468adc87975e2a0db3b2c1c482071c6e1a81936e4f208209cc984b5b863efe",
+  "response_hash": "484cf3b95ec33184e44a676833aa5e3dda37e1bd63456b41217cd13782094ad7",
+  "run_id": "editorial-v4-qa:6052f5ad-08e2-4863-aba7-c53651d247b8",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "6052f5ad-08e2-4863-aba7-c53651d247b8",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:26:31+00:00"
+}
