@@ -1,0 +1,128 @@
+{
+  "status": "failed",
+  "ticker": "000333.SZ",
+  "chars": 2691,
+  "claims": 34,
+  "errors": [
+    {
+      "code": "judgment_numeric_unbound",
+      "message": "falsifier contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-02",
+      "number": "5%"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-10"
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-10",
+      "number": "850"
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-11",
+      "number": "205"
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "C-17",
+      "number": "400"
+    },
+    {
+      "code": "judgment_numeric_unbound",
+      "message": "falsifier contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-04",
+      "number": "5%"
+    },
+    {
+      "code": "judgment_numeric_unbound",
+      "message": "falsifier contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-06",
+      "number": "10%"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-07"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-08"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-09"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-10"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-11"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-12"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-13"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-14"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-15"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-16"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-20"
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "aggressive positioning sentence lacks an explicit [J-xx] judgment marker",
+      "excerpt": "简而言之，这是一个确定性较强但弹性有限的现金牛，外加两个高风险高回报的期权"
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion must carry at least one fact/judgment/gap marker"
+    },
+    {
+      "code": "third_party_attribution_missing",
+      "message": "third-party statistic must be attributed to the issuer filing before the provider name",
+      "claim_ids": [
+        "J-01"
+      ]
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "43",
+      "claim_ids": [
+        "J-05"
+      ]
+    }
+  ]
+}

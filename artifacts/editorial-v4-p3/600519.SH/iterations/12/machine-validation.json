@@ -1,0 +1,30 @@
+{
+  "status": "failed",
+  "ticker": "600519.SH",
+  "chars": 2408,
+  "claims": 37,
+  "errors": [
+    {
+      "code": "judgment_specific_unbound",
+      "message": "text contains a concrete market/business premise not present in this claim's cited evidence",
+      "claim_id": "J-06",
+      "cue": "批价"
+    },
+    {
+      "code": "judgment_specific_unbound",
+      "message": "falsifier contains a concrete market/business premise not present in this claim's cited evidence",
+      "claim_id": "J-06",
+      "cue": "批价"
+    },
+    {
+      "code": "historical_condition",
+      "message": "conditional claim is bound to already-disclosed evidence",
+      "claim_id": "J-06"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-06"
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence",
+      "message": "J-13 在 overall_conclusion 中出现，但未在 dossier claims 中定义，无法验证其 evidence 引用。",
+      "claim_id": "J-13",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparison",
+      "message": "C-12 引用零售净利润同比增长，但未提供具体增长幅度，违反同期对比需明确幅度的规则。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparison",
+      "message": "C-14 引用一般企业贷款余额增长 9.2%，但未提供具体增长幅度，违反同期对比需明确幅度的规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparison",
+      "message": "C-14 引用个人贷款余额下降 2.3%，但未提供具体下降幅度，违反同期对比需明确幅度的规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    }
+  ],
+  "strengths": [
+    "报告明确区分了公司自述与独立判断，所有 issuer_self_report 均标注“公司披露”或“年报自述”。",
+    "判断类声明均带有 [J] 标记、falsifier 和 evidence 引用，符合 judgment_synthesis 规则。",
+    "缺口声明（G-xx）清晰指出输入未提供的数据，未将缺口伪装成事实。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的“绝对龙头/强定价权/品牌护城河/精密制造杂货铺”等独特定位属于允许的 AI judgment",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-10、J-11、J-12 在 dossier claims 中定义，但未在报告正文任何 section 中渲染，导致无法验证其 evidence 引用。",
+      "claim_id": "J-10",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-11 未在报告正文渲染，无法验证其 evidence 引用。",
+      "claim_id": "J-11",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-12 未在报告正文渲染，无法验证其 evidence 引用。",
+      "claim_id": "J-12",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence",
+      "message": "J-13 在 overall_conclusion 中出现，但未在 dossier claims 中定义，无法验证其 evidence 引用。",
+      "claim_id": "J-13",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparison",
+      "message": "C-12 引用零售净利润同比增长，但未提供具体增长幅度，违反同期对比需明确幅度的规则。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparison",
+      "message": "C-14 引用一般企业贷款余额增长 9.2%，但未提供具体增长幅度，违反同期对比需明确幅度的规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparison",
+      "message": "C-14 引用个人贷款余额下降 2.3%，但未提供具体下降幅度，违反同期对比需明确幅度的规则。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-05 声称“技术叙事更多是集团资源的复用而非原生突破”，但未提供任何证据支持该判断，且未引用相关 evidence。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "6ad50c1175c7cd6486c1e6e551d29364de4f10bd3c9878aa2c80605f544b8f9e",
+  "response_hash": "1202e87134de1f5845d2fc038c5434c21d4fba6682a77f54611cc2f2177b6d58",
+  "run_id": "editorial-v4-qa:8e09453a-07b8-4a2f-aceb-4153d31736b7",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "8e09453a-07b8-4a2f-aceb-4153d31736b7",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:56:46+00:00"
+}

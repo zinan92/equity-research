@@ -1,0 +1,177 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-01引用moutai_2025_annual:narrative:26:28和27:29，但evidence packet中无此ID，应为moutai_2025_annual:narrative:26:28和27:29，但实际packet中为26:28和27:29，需确认。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-02引用moutai_2025_annual:narrative:24:26，但evidence packet中无此ID，应为moutai_2025_annual:narrative:24:26，但实际packet中为24:26，需确认。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:24:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-03引用moutai_2025_annual:narrative:9:4，但evidence packet中无此ID，应为moutai_2025_annual:narrative:9:4，但实际packet中为9:4，需确认。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04引用moutai_2025_annual:narrative:15:15，但evidence packet中无此ID，应为moutai_2025_annual:narrative:15:15，但实际packet中为15:15，需确认。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:15:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-05引用moutai_2025_annual:narrative:8:2，但evidence packet中无此ID，应为moutai_2025_annual:narrative:8:2，但实际packet中为8:2，需确认。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:8:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06引用moutai_2025_annual:narrative:16:16，但evidence packet中无此ID，应为moutai_2025_annual:narrative:16:16，但实际packet中为16:16，需确认。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实F-01至F-04均正确引用官方PDF页码和锚点，数值与evidence packet一致。",
+    "所有公司自述均明确标注“公司披露”，未冒充独立验证。",
+    "判断J-01至J-04均带有[J]标记和falsifier，符合judgment synthesis规则。",
+    "缺口G-01至G-03基于输入缺失，未借缺口掩盖事实。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式判断有[J]标记、相关底层证据和falsifier",
+    "报告有具体资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口明确且基于evidence packet的gaps"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-02引用moutai_2025_annual:narrative:16:16和21:20，但evidence packet中无此ID，应为moutai_2025_annual:narrative:16:16和21:20，但实际packet中为16:16和21:20，需确认。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03引用moutai_2025_annual:narrative:23:24和122:41，但evidence packet中无此ID，应为moutai_2025_annual:narrative:23:24和122:41，但实际packet中为23:24和122:41，需确认。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24",
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-01引用moutai_2025_annual:narrative:26:28和27:29，但evidence packet中无此ID，应为moutai_2025_annual:narrative:26:28和27:29，但实际packet中为26:28和27:29，需确认。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-02引用moutai_2025_annual:narrative:24:26，但evidence packet中无此ID，应为moutai_2025_annual:narrative:24:26，但实际packet中为24:26，需确认。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:24:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-03引用moutai_2025_annual:narrative:9:4，但evidence packet中无此ID，应为moutai_2025_annual:narrative:9:4，但实际packet中为9:4，需确认。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04引用moutai_2025_annual:narrative:15:15，但evidence packet中无此ID，应为moutai_2025_annual:narrative:15:15，但实际packet中为15:15，需确认。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:15:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-05引用moutai_2025_annual:narrative:8:2，但evidence packet中无此ID，应为moutai_2025_annual:narrative:8:2，但实际packet中为8:2，需确认。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:8:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06引用moutai_2025_annual:narrative:16:16，但evidence packet中无此ID，应为moutai_2025_annual:narrative:16:16，但实际packet中为16:16，需确认。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "ad67a83900f46eb114da61a89a0eb7ad4356b64ab6a7a3b152ac58f8df6c63a9",
+  "response_hash": "801fb2473ce8e5888fe4824cba741d1821d98cbf6f048d0fe5a3d00f3bfa55cf",
+  "run_id": "editorial-v4-qa:9d7897c3-5e67-4065-8d76-26fda9b12f9b",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "9d7897c3-5e67-4065-8d76-26fda9b12f9b",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:20:40+00:00"
+}

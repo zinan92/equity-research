@@ -1,0 +1,177 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06 引用 moutai_2025_annual:narrative:16:16 和 21:20，但 21:20 未提及五年周期，仅描述工艺，证据不完整。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-10 引用 moutai_2025_annual:narrative:21:21，但该页未出现“单品营收过千亿、市值上万亿”原文，证据缺失。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 moutai_2025_annual:narrative:15:15，但该页未明确“系列酒产能将在2026年释放”，仅提及在建产能，证据不匹配。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:15:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-07 引用 moutai_2025_annual:narrative:9:6，但该页仅说明营业收入变动原因，未提及“酱香系列酒产品结构调整”，证据不匹配。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-09 引用 moutai_2025_annual:narrative:23:24，但该页仅列风险类别，未展开说明，证据不完整。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-08 引用 moutai_2025_annual:narrative:122:41，但该页未提及“销售以预收款项为主，信用风险低”，证据不匹配。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01 至 F-04 均正确引用年报利润表，数值与 evidence packet 一致，且同比变化方向与幅度明确。",
+    "所有公司自述类 claim 均标注为 issuer_self_report，未冒充独立验证。",
+    "判断类 claim 均带有 [J] 标记和 falsifier，符合 judgment synthesis 规则。",
+    "缺口 G-01 至 G-03 基于输入缺失，未借 gap 掩盖事实。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的“绝对龙头/强定价权/品牌护城河/精密制造杂货铺”等独特定位属于允许的 AI judgment，不要因为没有一句逐字证据就要求删除",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-02 引用 moutai_2025_annual:narrative:16:16 和 21:20，但 21:20 未提及五年生产周期，仅描述工艺，证据不支撑护城河判断。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03 引用 moutai_2025_annual:narrative:23:24 和 122:41，但 23:24 仅列风险类别，未提定价权或批价，证据不支撑判断。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24",
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06 引用 moutai_2025_annual:narrative:16:16 和 21:20，但 21:20 未提及五年周期，仅描述工艺，证据不完整。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16",
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-10 引用 moutai_2025_annual:narrative:21:21，但该页未出现“单品营收过千亿、市值上万亿”原文，证据缺失。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 moutai_2025_annual:narrative:15:15，但该页未明确“系列酒产能将在2026年释放”，仅提及在建产能，证据不匹配。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:15:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-07 引用 moutai_2025_annual:narrative:9:6，但该页仅说明营业收入变动原因，未提及“酱香系列酒产品结构调整”，证据不匹配。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-09 引用 moutai_2025_annual:narrative:23:24，但该页仅列风险类别，未展开说明，证据不完整。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-08 引用 moutai_2025_annual:narrative:122:41，但该页未提及“销售以预收款项为主，信用风险低”，证据不匹配。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "d548560966c5b308ece81d366c62943f855fb1512f0660ffc968db63d9d49673",
+  "response_hash": "faa88960b4db17345775c8db8638fb14822a76a7ff9bc2a807573652fc831f54",
+  "run_id": "editorial-v4-qa:a08ba5f6-f276-4320-8a00-335d0cbb7641",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a08ba5f6-f276-4320-8a00-335d0cbb7641",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:16:33+00:00"
+}

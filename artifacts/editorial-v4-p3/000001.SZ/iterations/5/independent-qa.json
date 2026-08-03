@@ -1,0 +1,125 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_numeric_anchor",
+      "message": "C-14 引用 evidence 25:62，但该证据片段未包含“一般企业贷款余额较上年末增长9.2%”等具体数字，无法验证。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”或“年报自述”，未将自述冒充独立验证。",
+    "所有 judgment 类 claim 均带有 [J-xx] 标记、引用相关底层 evidence 并给出 falsifier，符合判断合成规范。",
+    "报告明确列出多个 gap，指出输入未提供的财务数据、高管履历、第三方验证等，缺口清晰。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-10、J-11、J-12 在正文中未渲染，但出现在 claims 列表，导致无法验证其 evidence_ids 与正文一致性。",
+      "claim_id": "J-10",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_numeric_anchor",
+      "message": "C-14 引用 evidence 25:62，但该证据片段未包含“一般企业贷款余额较上年末增长9.2%”等具体数字，无法验证。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_mismatch",
+      "message": "C-12 引用 evidence 23:58，但该证据片段未包含“零售业务营业收入同比下降”等完整叙述，仅部分匹配。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_mismatch",
+      "message": "C-13 引用 evidence 25:62，但该证据片段未包含“债券投资等业务非利息净收入下降”的明确表述。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_mismatch",
+      "message": "C-15 引用 evidence 25:63，但该证据片段仅提及“资本充足率提升”，未包含“践行资本精细化管理”完整表述。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:63"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_mismatch",
+      "message": "C-10 引用 evidence 14:39 和 56:151，但 14:39 仅提及“夯实风险数据底座”，未包含“AI大模型风险中台”等完整内容。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:39",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:151"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_mismatch",
+      "message": "C-19 引用多个 evidence，但部分片段（如 58:160）未包含“操作风险、国别风险”等完整制度性描述。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:161",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:59:162",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:59:163"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_mismatch",
+      "message": "C-20 引用 evidence 57:154，但该片段仅提及大额风险暴露合规，未包含“除监管豁免客户外”等完整表述。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:154"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "54dfb799262b5bd5ab6c1974dec993c9062169d2e45b6099f81169bbc07b37a5",
+  "response_hash": "686aa749b5a1d0b8bb21a4a5679860bc44f089f9e921e0778df22fe5119fa4ca",
+  "run_id": "editorial-v4-qa:8ec51c42-4fbd-45e3-9714-6f62e8bcfc6a",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "8ec51c42-4fbd-45e3-9714-6f62e8bcfc6a",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:01:39+00:00"
+}

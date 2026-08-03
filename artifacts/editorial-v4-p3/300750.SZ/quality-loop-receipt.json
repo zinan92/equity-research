@@ -1,0 +1,268 @@
+{
+  "iterations": [
+    {
+      "iteration": 0,
+      "run_id": "editorial-v4-run:d1416a27-8137-4bd6-b9f0-87cd6414264f",
+      "request_id": "d1416a27-8137-4bd6-b9f0-87cd6414264f",
+      "report_hash": "80ca5a5afd80dbb988fed6491e034035e7c93860e509db10a8ddb9f6055ce0e3",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:62d06e1e-0a2d-468e-b5cf-d17d2e4b0e11",
+      "qa_request_id": "62d06e1e-0a2d-468e-b5cf-d17d2e4b0e11",
+      "qa_blockers": 7
+    },
+    {
+      "iteration": 1,
+      "run_id": "editorial-v4-run:6ce93492-29fb-4a4c-a6b1-853c193d27ce",
+      "request_id": "6ce93492-29fb-4a4c-a6b1-853c193d27ce",
+      "report_hash": "0f6a6b0a1db979ea466c9629607924f0e0ba081f295449fbd923d204e998e6af",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:e9a1693d-22cd-494e-a22b-e5e4462fa064",
+      "qa_request_id": "e9a1693d-22cd-494e-a22b-e5e4462fa064",
+      "qa_blockers": 4
+    },
+    {
+      "iteration": 2,
+      "run_id": "editorial-v4-run:5605ff1a-99bd-453b-a473-820f7d2005d2",
+      "request_id": "5605ff1a-99bd-453b-a473-820f7d2005d2",
+      "report_hash": "a27b1f64f1ae4002502151376b3640b90fa2e32c513eecdbdd5f301b468747b5",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:8defe732-6787-4ccb-a06f-e723440dffad",
+      "qa_request_id": "8defe732-6787-4ccb-a06f-e723440dffad",
+      "qa_blockers": 1
+    },
+    {
+      "iteration": 3,
+      "run_id": "editorial-v4-run:28f7da02-9013-4b5f-a832-5df94a6cef3b",
+      "request_id": "28f7da02-9013-4b5f-a832-5df94a6cef3b",
+      "report_hash": "81248504805696971b58a2f7e1d33565f9dc97963d2810745a195a5d3607ff61",
+      "machine_status": "failed",
+      "machine_errors": 30,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:23b4d0d0-8ab1-4355-8f23-47b4d7ee9812",
+      "qa_request_id": "23b4d0d0-8ab1-4355-8f23-47b4d7ee9812",
+      "qa_blockers": 8
+    },
+    {
+      "iteration": 4,
+      "run_id": "editorial-v4-run:a7b1342f-68b1-4c64-ac41-2b69b6e89748",
+      "request_id": "a7b1342f-68b1-4c64-ac41-2b69b6e89748",
+      "report_hash": "69bb9b188ccdcaae3ed4fec7fcf540b61b028483a6d65adc44a89916b33559d9",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:4bf84714-2925-46bf-a7d7-acabba9f1c33",
+      "qa_request_id": "4bf84714-2925-46bf-a7d7-acabba9f1c33",
+      "qa_blockers": 2
+    },
+    {
+      "iteration": 5,
+      "run_id": "editorial-v4-run:fc24eefd-254e-4c45-89c9-5051d35e5d09",
+      "request_id": "fc24eefd-254e-4c45-89c9-5051d35e5d09",
+      "report_hash": "9cd1e5d347b43420c2e1e1e533f2cb2d1ea8ad1d98a3c90a3640c7768e1d9e29",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:6052f5ad-08e2-4863-aba7-c53651d247b8",
+      "qa_request_id": "6052f5ad-08e2-4863-aba7-c53651d247b8",
+      "qa_blockers": 2
+    },
+    {
+      "iteration": 6,
+      "run_id": "editorial-v4-run:4bde5871-3a54-4146-beb0-2d85134c8845",
+      "request_id": "4bde5871-3a54-4146-beb0-2d85134c8845",
+      "report_hash": "3c9af38dd66cd342c806e22f11f03d5a2d4febbdf081e5f652e84a1bb7ff1356",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:14175b6e-e348-4f4a-a221-739ca034cc3e",
+      "qa_request_id": "14175b6e-e348-4f4a-a221-739ca034cc3e",
+      "qa_blockers": 6
+    },
+    {
+      "iteration": 7,
+      "run_id": "editorial-v4-run:a6d4c5ea-b261-4dee-a113-0554c12e63fe",
+      "request_id": "a6d4c5ea-b261-4dee-a113-0554c12e63fe",
+      "report_hash": "3a576cedea8de44bced75a4e7e997dca8cab6d73236d13c8a261d74676356df7",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:f1dec101-bd29-4b2e-bbd6-dee471cdf3ab",
+      "qa_request_id": "f1dec101-bd29-4b2e-bbd6-dee471cdf3ab",
+      "qa_blockers": 1
+    },
+    {
+      "iteration": 8,
+      "run_id": "editorial-v4-run:9422e062-f909-460d-bae2-5e33e5444c8f",
+      "request_id": "9422e062-f909-460d-bae2-5e33e5444c8f",
+      "report_hash": "e2384ad8b7bb556fbd452ff92a6f103c7cee9782f79b2e5b67bceca67c64ef3c",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:bed56bf6-623d-414a-985d-d64296788638",
+      "qa_request_id": "bed56bf6-623d-414a-985d-d64296788638",
+      "qa_blockers": 5
+    }
+  ],
+  "final_iteration": 8,
+  "final_report_hash": "e2384ad8b7bb556fbd452ff92a6f103c7cee9782f79b2e5b67bceca67c64ef3c",
+  "machine_status": "passed",
+  "machine_errors": [],
+  "independent_qa_status": "passed",
+  "independent_qa_raw_status": "failed",
+  "independent_qa_raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01 引用 evidence_id catl_2025_annual_cninfo:narrative:20:6，但该证据仅含公司自述，未提供独立第三方数据支撑“绝对龙头”和“持续拉大领先身位”的判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-02 正文写“公司年报披露，其动力与储能电池市占率已多年全球领跑”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "JUDGMENT_WITHOUT_MARKER",
+      "message": "J-03 判断“彰显其成本转嫁与定价能力”未在 claims 中标注 [J-03] marker，且 falsifier 为空，不符合 judgment 规范。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:0",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:revenue:116:1",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:fact:net_profit_parent:117:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-10 引用 evidence catl_2025_annual_cninfo:narrative:20:6 等，但证据中无“精密制造杂货铺”表述，且未提供独立验证，判断缺乏直接支撑。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-30 正文写“公司年报披露，拥有及申请的国内外专利总数达54,538项”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-33 正文写“公司年报披露，电芯单体失效率达DPPB级”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-33",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:15",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-34 正文写“公司年报披露，拥有行业最多的‘灯塔工厂’及唯一‘可持续灯塔工厂’”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-34",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-36 正文写“公司年报披露，率先实现核心运营碳中和及废旧电池大规模回收利用”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-36",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "independent_qa_filtered_blockers": [],
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "final_status": "passed",
+  "review_status": "pending",
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "revalidated_at": "2026-08-03T11:50:35+00:00",
+  "independent_qa_run_id": "editorial-v4-qa:bed56bf6-623d-414a-985d-d64296788638",
+  "independent_qa_blockers": [
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-02 正文写“公司年报披露，其动力与储能电池市占率已多年全球领跑”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-30 正文写“公司年报披露，拥有及申请的国内外专利总数达54,538项”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-30",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-33 正文写“公司年报披露，电芯单体失效率达DPPB级”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-33",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:38:15",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-34 正文写“公司年报披露，拥有行业最多的‘灯塔工厂’及唯一‘可持续灯塔工厂’”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-34",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "MISSING_ATTRIBUTION",
+      "message": "C-36 正文写“公司年报披露，率先实现核心运营碳中和及废旧电池大规模回收利用”，但 evidence 中未出现“公司年报披露”字样，应显式标注为“公司年报自述”。",
+      "claim_id": "C-36",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ]
+}

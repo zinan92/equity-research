@@ -1,0 +1,122 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-07 引用 evidence_id 'midea_2025_annual:narrative:15:1'，但该证据中未出现“共8座灯塔工厂”字样，无法验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据（F-01, F-02, F-03）均正确引用自官方报表，且增长幅度与 derived metrics 一致。",
+    "所有公司自述的 claim 均明确标注为“公司披露”，未将自述冒充独立验证。",
+    "判断类 claim（J-01 至 J-06）均带有 [J] 标记和 falsifier，符合 judgment synthesis 规则。",
+    "缺口类 claim（G-01 至 G-04）明确指出了输入未提供的信息，未借 gap 掩盖已有数字。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-01 引用 evidence_id 'midea_2025_annual:narrative:41:22'，但该证据中未出现“欧睿数据”或“全球销量第一”字样，无法验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:31:16'，但该证据中未出现“家用空调压缩机、电机全球销量份额稳居第一”字样，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“库卡机器人国内销量份额9.6%稳居前三”字样，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-14 引用 evidence_id 'midea_2025_annual:narrative:31:16'，但该证据中未出现“离心机份额超16%”字样，无法验证。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-15 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“库卡工业机器人国内销量份额提升至9.6%”字样，无法验证。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-19 引用 evidence_id 'midea_2025_annual:narrative:42:23'，但该证据中未出现“海外销售额占公司总销售额40%以上”字样，无法验证。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-18 引用 evidence_id 'midea_2025_annual:narrative:15:1'，但该证据中未出现“奥维云网数据”或“国内家电零售额同比下滑4.3%”字样，无法验证。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "C-07 引用 evidence_id 'midea_2025_annual:narrative:15:1'，但该证据中未出现“共8座灯塔工厂”字样，无法验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "ea3525710a5f242f9ca4df2b8a88b74aace19f6f951d5c3f21c284bbf9732de6",
+  "response_hash": "b0ce0b77e562ebd92e6a6fb04baec54f8c278ccdc749e94da683293fe1af6091",
+  "run_id": "editorial-v4-qa:9aaec6af-57e7-4dff-af14-2e295792d2da",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "9aaec6af-57e7-4dff-af14-2e295792d2da",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T08:59:06+00:00"
+}

@@ -2,7 +2,8 @@
 
 状态：`active / review_only_unpublished`
 Issue：[#692](https://github.com/zinan92/equity-research/issues/692)
-版本：`park-editorial-v4-v1`
+P3 quality gate：[#694](https://github.com/zinan92/equity-research/issues/694)
+版本：`park-editorial-v4-v2`
 
 这份合同冻结的是爱牛式 V4 的可读输出，不替换 Round 7 的 canonical 九章
 契约，也不改变 Tier、B6 evidence gate、decision policy 或 blocked-fields。
@@ -57,8 +58,9 @@ AI 研究判断，不要求年报存在一行逐字证明它们。它们必须�
 - 最新数据卡若要展示股价、市值、PE/PB，必须有同一 `as_of` 的官方/授权
   行情 evidence；本次不从旧 M4 快照、fixture 或聚合器复用，缺失则只显示
   经营数据或写 `估值证据缺失`。
-- 目标正文对齐冻结的 Round 7/Ainiu 参考样本（当前基线 2,429 个中文字符）；实际字数写入 receipt。低于目标不自动
-  补写，必须列出证据覆盖或缺口原因。
+- 目标正文对齐冻结的 Round 7/Ainiu 参考样本（当前基线 2,429 个中文字符）；实际字数写入 receipt。低于硬下限不得通过；修复轮次必须用输入证据补充完整段落，不能复制旧正文或用空泛句子填充。
+- 数字闭包按当前句/claim marker 检查；另一条 claim 中出现同样数字不能替代本句证据。判断和证伪条件中的阈值若不在对应证据或确定性 derived metric 中必须阻断。
+- 年报引述 Euromonitor、产业在线、奥维云网、MIR 睿工业等第三方统计时，正文必须先写“年报引/公司披露年报引用”，不能把第三方原始来源伪装成输入材料；gap 不得夹带未绑定的“公开资料显示”。
 
 ## 输入与来源边界
 
@@ -78,11 +80,10 @@ report_period, page_number, quoted_anchor, source_url, raw_sha256`。
 
 机器 QA 必须 fail-closed 检查身份、结构、字数、来源绑定、数字闭包、三条
 推理规则、自述标记、未知项、禁止动作词、benchmark/ticker 泄漏和 receipt
-哈希。DeepSeek 独立 QA 只返回问题清单，不得自审通过；任何 blocker 必须
-通过带 request_id 的修复轮次，或保持 `blocked`。
+哈希。DeepSeek 独立 QA 的问题分为 `blocker` 与 `advisory`：激进判断没有逐字出现在年报只能是 advisory，只要底层 evidence、`[J]` marker 和 falsifier 完整；数字、页码、身份、具体事实或 evidence_id 错配仍是 blocker。任何 blocker 必须通过带 request_id 的修复轮次，或保持 `blocked`。
 
 QA receipt 必须绑定：输入包哈希、来源 manifest 哈希、模型 request/response
-哈希、Markdown/HTML 哈希、每项 blocker、审阅状态和 `boundary`（不产生
+哈希、Markdown/HTML 哈希、每项 blocker/advisory、审阅状态和 `boundary`（不产生
 Tier/B6/decision/publication credit）。即使 editorial QA `passed`，输出也只
 能留在 `artifacts/editorial-v4/`；不得修改 Round 7 dossier 的
 `review_status`/quality gate 或进入 canonical public index。

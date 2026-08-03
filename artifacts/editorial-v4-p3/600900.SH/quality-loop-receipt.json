@@ -1,0 +1,210 @@
+{
+  "schema_version": "editorial-v4-quality-loop-receipt-v1",
+  "ticker": "600900.SH",
+  "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+  "iterations": [
+    {
+      "iteration": 0,
+      "run_id": "editorial-v4-run:cc38a3a6-480a-4006-b2cc-262a111e7c97",
+      "request_id": "cc38a3a6-480a-4006-b2cc-262a111e7c97",
+      "report_hash": "a9dcfda77c8f66659ff8b4600684c02f692b255adfdb9d74e70954963c73caf3",
+      "machine_status": "failed",
+      "machine_errors": 26,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:05807257-4aa6-44fa-b6a6-db31e5ad51b7",
+      "qa_request_id": "05807257-4aa6-44fa-b6a6-db31e5ad51b7",
+      "qa_blockers": 2,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 1,
+      "run_id": "editorial-v4-run:5f4a73b0-8630-478e-9836-fc140da25d19",
+      "request_id": "5f4a73b0-8630-478e-9836-fc140da25d19",
+      "report_hash": "d8b1c585ea847ec7d3e544737e821f48cb97b410ff81ca4a50cc42f8d7a838dd",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:559ab557-d017-4857-bfa3-6ef0d8c3c9d7",
+      "qa_request_id": "559ab557-d017-4857-bfa3-6ef0d8c3c9d7",
+      "qa_blockers": 2,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 2,
+      "run_id": "editorial-v4-run:939bc885-5804-4fb7-9401-0dea288d1afe",
+      "request_id": "939bc885-5804-4fb7-9401-0dea288d1afe",
+      "report_hash": "f4a4ce7bdf4e92d4d74f219c3bdd1d9acc15f8892cebcc252684de3cbb807820",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:75b63436-e5aa-4a4b-bdc6-f1e42d18e01a",
+      "qa_request_id": "75b63436-e5aa-4a4b-bdc6-f1e42d18e01a",
+      "qa_blockers": 1,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 3,
+      "run_id": "editorial-v4-run:720033d0-36ff-4b4a-b7e5-1d28ade81b2b",
+      "request_id": "720033d0-36ff-4b4a-b7e5-1d28ade81b2b",
+      "report_hash": "63531ec745a5803158ec45709d0c8e68c9f738553881e3c09336771203d32f69",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:81fd57cf-a6e9-42f7-83b6-1b04cf027d85",
+      "qa_request_id": "81fd57cf-a6e9-42f7-83b6-1b04cf027d85",
+      "qa_blockers": 1,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 4,
+      "run_id": "editorial-v4-run:33f996b8-787d-4d0d-b161-a630e85725b8",
+      "request_id": "33f996b8-787d-4d0d-b161-a630e85725b8",
+      "report_hash": "7a637f2dccb5e43aeacd3b86613341f7149c28928dae17f970240bf3455b03e4",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:40ce563e-6b6f-4849-a958-2f510e1b9eeb",
+      "qa_request_id": "40ce563e-6b6f-4849-a958-2f510e1b9eeb",
+      "qa_blockers": 3,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 5,
+      "run_id": "editorial-v4-run:055ce981-3d50-4605-a654-1fde3a018170",
+      "request_id": "055ce981-3d50-4605-a654-1fde3a018170",
+      "report_hash": "eb2e9948603e80c2fd00f98720f941ec51268beedf6d1d8e77a839c40cb5b016",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:3661ae61-b6ad-4e5b-a878-ec2cee502fb2",
+      "qa_request_id": "3661ae61-b6ad-4e5b-a878-ec2cee502fb2",
+      "qa_blockers": 1,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 6,
+      "run_id": "editorial-v4-run:09e1bb2a-340a-43dc-82db-7ecd805380b4",
+      "request_id": "09e1bb2a-340a-43dc-82db-7ecd805380b4",
+      "report_hash": "4d3c00a5592909deeac8d37b993f367e48318f2b0a8d45adfceefec62a1cbdea",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:1ec07370-4b3c-4ffd-9258-0b3081f10ac4",
+      "qa_request_id": "1ec07370-4b3c-4ffd-9258-0b3081f10ac4",
+      "qa_blockers": 1
+    },
+    {
+      "iteration": 7,
+      "run_id": "editorial-v4-run:541ca9da-68f1-4ae3-b428-2816a569f25a",
+      "request_id": "541ca9da-68f1-4ae3-b428-2816a569f25a",
+      "report_hash": "91bb3bab0eeb8e301747f13099fa07e849e9a8966695d5de4c0b85820fc31075",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:33e21460-7044-40c3-936e-adac279161d3",
+      "qa_request_id": "33e21460-7044-40c3-936e-adac279161d3",
+      "qa_blockers": 0
+    }
+  ],
+  "final_status": "passed",
+  "review_status": "pending",
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "advisory_count": 1,
+  "final_iteration": 7,
+  "final_report_hash": "91bb3bab0eeb8e301747f13099fa07e849e9a8966695d5de4c0b85820fc31075",
+  "machine_status": "passed",
+  "independent_qa_status": "passed",
+  "machine_errors": [],
+  "independent_qa_raw_status": "failed",
+  "independent_qa_raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-09 引用了 evidence_ids [cypc_2025_annual:narrative:12:5, cypc_2025_annual:narrative:39:33]，但 claim 中“绝对主力”和“类债券的收益基准”等判断未在引用页出现，且未标注 [J-09] 对应的 falsifier 和 refs。",
+      "claim_id": "J-09",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-01 引用了 evidence_ids [cypc_2025_annual:narrative:12:5, cypc_2025_annual:narrative:39:33]，但 claim 中“独家运营长江干流六座梯级电站”和“类债券逻辑”未在引用页出现，且未标注 [J-01] 对应的 falsifier 和 refs。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-02 引用了 evidence_ids [cypc_2025_annual:narrative:10:2, cypc_2025_annual:narrative:28:19, cypc_2025_annual:narrative:215:39]，但 claim 中“收益质量高度依赖于长江来水的丰枯和电力市场化改革下的上网电价”未在引用页出现，且未标注 [J-02] 对应的 falsifier 和 refs。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:28:19",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-10 引用了 evidence_ids [cypc_2025_annual:narrative:10:2]，但 claim 中“流域梯级调度能力是核心护城河”未在引用页出现，且未标注 [J-10] 对应的 falsifier 和 refs。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-03 引用了 evidence_ids [cypc_2025_annual:narrative:27:17]，但 claim 中“大水电的灵活调节价值和绿色价值在电力现货市场和绿电交易中具有获得溢价的潜力”未在引用页出现，且未标注 [J-03] 对应的 falsifier 和 refs。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-04 引用了 evidence_ids [cypc_2025_annual:narrative:10:2]，但 claim 中“长江来水的丰枯是决定发电量和收入的最核心变量”未在引用页出现，且未标注 [J-04] 对应的 falsifier 和 refs。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-05 引用了 evidence_ids [cypc_2025_annual:narrative:28:19]，但 claim 中“电力市场化交易比重上升可能导致上网电价下行”未在引用页出现，且未标注 [J-05] 对应的 falsifier 和 refs。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:28:19"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-06 引用了 evidence_ids [cypc_2025_annual:narrative:215:39]，但 claim 中“以浮动利率计息的巨额负债使公司对利率高度敏感”未在引用页出现，且未标注 [J-06] 对应的 falsifier 和 refs。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    }
+  ],
+  "independent_qa_filtered_blockers": [],
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "revalidated_at": "2026-08-03T11:50:35+00:00"
+}

@@ -565,3 +565,26 @@ Next: a human may review the 10 CATL queue items against their page citations; a
 
 - 现在在哪里：L3-M1~M10 已合并。可观测性、外部备份/恢复实测、性能/成本收据、回滚演练、三层 cadence、权限/私域交付、trigger/history、结果归因与受控扩张均有可复验边界记录。
 - 下一步：生产 Supabase/RLS、slow/periodic 真实运行、纠错 SLA 与成员自助数据权利仍未完成；这些缺口不得被 L3 的本地或私域验收记录覆盖。
+
+
+## 2026-08-03 · V4-P3 sustainable aggressive-judgment gate (Issue #694)
+
+Now: the whole-report V4 loop is fail-closed without deleting sharp Ainiu-style
+positioning.  `artifacts/editorial-v4-p3/aggregate-receipt.json` records five
+real DeepSeek dossiers whose deterministic machine validation and filtered
+independent QA both pass.  `[J-xx]` claims retain memorable phrases such as
+“绝对龙头”“精密制造杂货铺”“现金牛” and “绑在长江上的印钞机”; each keeps
+page-bound evidence refs and a falsifier.  Raw QA diagnostics are retained
+separately from the deterministic filter so a generic “not verbatim in the
+filing” judgment complaint cannot silently erase the research voice.
+
+Boundary: all five remain `review_only`, `action_state=blocked`, with no
+Tier/B6/decision/publication credit.  The gate still blocks unbound numbers,
+specific unsupported market premises, historical conditional conclusions,
+unattributed issuer/third-party disclosure, and action language.  The current
+Round 7 canonical dossier and Tier ladder are unchanged.
+
+Next: Park reviews the five persistent Markdown/HTML dossiers and page anchors;
+only a human-review receipt can move any text toward a canonical publication
+surface.  Future issuers use the same packet → one whole-report DeepSeek call →
+machine QA → independent QA → repair/recheck → aggregate receipt path.

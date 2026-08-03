@@ -1,0 +1,35 @@
+{
+  "status": "failed",
+  "ticker": "000001.SZ",
+  "chars": 2557,
+  "claims": 43,
+  "errors": [
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "timeline",
+      "chars": 290,
+      "minimum": 300
+    },
+    {
+      "code": "claim_refs",
+      "message": "non-gap claim has no evidence refs",
+      "claim_id": "J-04"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-10"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-11"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-12"
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "J-01引用的narrative:17:3和narrative:20:6不在evidence packet中，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-02引用的narrative:17:3和narrative:20:6不在evidence packet中，无法验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-10引用的narrative:47:25和narrative:47:26不在evidence packet中，无法验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:25",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-11引用的narrative:50:29不在evidence packet中，无法验证。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:50:29"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-12引用的narrative:42:20和narrative:43:21不在evidence packet中，无法验证。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:42:20",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:43:21"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-20引用的narrative:29:10不在evidence packet中，无法验证。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-21引用的narrative:55:34不在evidence packet中，无法验证。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:55:34"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-22引用的narrative:21:7不在evidence packet中，无法验证。",
+      "claim_id": "C-22",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:21:7"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实（F-01至F-08）均能由evidence packet中的利润表数据精确回溯，且同期对比方向与幅度明确。",
+    "所有公司自述（C-02、C-10等）均明确标注“公司年报披露”，未将自述冒充独立验证。",
+    "判断类claim（J-01、J-03等）均带有[J]标记、引用底层证据并给出falsifier，符合judgment synthesis规则。",
+    "报告明确列出缺失输入（G-01至G-06），未用空泛句子凑篇幅，缺口声明基于evidence packet gaps。",
+    "整体结论锋利且带judgment marker，未给出估值、目标价或行动建议，符合边界要求。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "J-01引用的narrative:17:3和narrative:20:6不在evidence packet中，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-02引用的narrative:17:3和narrative:20:6不在evidence packet中，无法验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:17:3",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:20:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-10引用的narrative:47:25和narrative:47:26不在evidence packet中，无法验证。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:25",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:47:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-11引用的narrative:50:29不在evidence packet中，无法验证。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:50:29"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-12引用的narrative:42:20和narrative:43:21不在evidence packet中，无法验证。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:42:20",
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:43:21"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-20引用的narrative:29:10不在evidence packet中，无法验证。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:29:10"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-21引用的narrative:55:34不在evidence packet中，无法验证。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:55:34"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_outside_packet",
+      "message": "C-22引用的narrative:21:7不在evidence packet中，无法验证。",
+      "claim_id": "C-22",
+      "evidence_ids": [
+        "official-filing:editorial-v4:catl_2025_annual_cninfo:c15272977147dee7:narrative:21:7"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "4bc310ef047f54d2268bbce3512281498a62848a5a25df8dba290cc25a2f81af",
+  "response_hash": "5305f1fd1b60f66842757bf145e08c125e34074c3226d846c06192d1b76d76f4",
+  "run_id": "editorial-v4-qa:23b4d0d0-8ab1-4355-8f23-47b4d7ee9812",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "23b4d0d0-8ab1-4355-8f23-47b4d7ee9812",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T11:19:29+00:00"
+}

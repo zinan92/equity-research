@@ -28,6 +28,9 @@ def main() -> None:
     parser.add_argument("--max-extra", type=int, default=5)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--key-file", type=Path, default=DEFAULT_KEY_FILE)
+    parser.add_argument("--reasoning-effort", default="high")
+    parser.add_argument("--thinking-type", choices=("enabled", "disabled"), default="enabled")
+    parser.add_argument("--max-tokens", type=int, default=22000)
     args = parser.parse_args()
     ticker = args.ticker.upper()
     out = args.root / ticker
@@ -35,12 +38,17 @@ def main() -> None:
     receipt_path = out / "quality-loop-receipt.json"
     receipt = json.loads(receipt_path.read_text(encoding="utf-8")) if receipt_path.exists() else {"iterations": []}
     iterations = receipt.setdefault("iterations", [])
-    prior_path = out / "report.json"
+    last_iter = max((int(row.get("iteration", -1)) for row in iterations), default=-1)
+    # The stable root is written only for a passed dossier.  When the latest
+    # candidate is needs_review, always continue from that latest iteration,
+    # never silently fall back to an older root report.
+    prior_path = out / "iterations" / str(last_iter) / "report.json" if last_iter >= 0 else out / "report.json"
+    if not prior_path.exists():
+        prior_path = out / "report.json"
     if not prior_path.exists():
         last = max((int(p.name) for p in (out / "iterations").iterdir() if p.name.isdigit()), default=-1)
         prior_path = out / "iterations" / str(last) / "report.json"
     prior = json.loads(prior_path.read_text(encoding="utf-8"))
-    last_iter = max((int(row.get("iteration", -1)) for row in iterations), default=-1)
     last_machine = validate_dossier(prior, packet)
     last_qa: dict[str, object] = {}
     for extra in range(max(1, args.max_extra)):
@@ -50,16 +58,36 @@ def main() -> None:
         last_machine, last_qa = machine, qa
         feedback = repair_feedback(machine, qa)
         if not feedback:
+            # A no-feedback recheck is still a real QA event.  Persist it
+            # instead of silently treating the previous iteration's stale QA
+            # file as proof; both deterministic machine validation and this
+            # fresh QA result must be passed.
+            recheck_dir = out / "iterations" / str(last_iter)
+            _write(recheck_dir / "independent-qa-recheck.json", qa)
+            _write(recheck_dir / "qa-recheck-provider-receipt.json", qa_receipt)
+            _write(recheck_dir / "qa-recheck-request.json", qa_request)
+            for row in iterations:
+                if int(row.get("iteration", -1)) == last_iter:
+                    row.update({
+                        "qa_status": qa.get("status"),
+                        "qa_run_id": qa.get("run_id"),
+                        "qa_request_id": qa_receipt.get("request_id"),
+                        "qa_blockers": len(qa.get("blockers") or []),
+                        "qa_advisories": len(qa.get("advisories") or []),
+                    })
             receipt["final_iteration"] = last_iter
             receipt["final_report_hash"] = canonical_hash(prior)
             receipt["machine_status"] = machine["status"]
             receipt["independent_qa_status"] = qa["status"]
-            receipt["final_status"] = "passed"
+            receipt["independent_qa_raw_status"] = qa.get("raw_status") or qa.get("status")
+            receipt["independent_qa_filtered_blockers"] = qa.get("blockers") or []
+            receipt["qa_filter_version"] = qa.get("filter_version")
+            receipt["final_status"] = "passed" if machine.get("status") == "passed" and qa.get("status") == "passed" else "needs_review"
             break
         dossier, provider_receipt, request = generate_once(
             packet, key_file=args.key_file, model=args.model, iteration=iteration,
             repair_feedback=feedback, prior_dossier=prior,
-            reasoning_effort="medium", max_tokens=16000, thinking_type="disabled",
+            reasoning_effort=args.reasoning_effort, max_tokens=args.max_tokens, thinking_type=args.thinking_type,
         )
         iteration_dir = out / "iterations" / str(iteration)
         iteration_dir.mkdir(parents=True, exist_ok=True)

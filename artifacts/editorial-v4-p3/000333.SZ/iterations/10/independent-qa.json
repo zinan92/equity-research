@@ -1,0 +1,143 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-03 引用 evidence_id 'midea_2025_annual:narrative:69:39' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:69:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-04 引用 evidence_id 'midea_2025_annual:narrative:65:38' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:65:38"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-05 引用 evidence_id 'midea_2025_annual:narrative:23:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01/F-02/F-03 均正确引用 evidence packet 中的事实条目，数字与 derived metrics 一致。",
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "判断类 claim J-01 至 J-06 均带有 [J] 标记、falsifier 和底层证据引用，符合 judgment_synthesis 规则。",
+    "缺口类 claim G-01 至 G-04 基于 evidence packet 的 gaps 写出，未借 gap 掩盖已有数字。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格要求。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-01 引用 evidence_id 'midea_2025_annual:narrative:41:22' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-02 引用 evidence_id 'midea_2025_annual:narrative:20:5' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:31:16' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-01 引用 evidence_id 'midea_2025_annual:narrative:42:23' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "J-02 引用 evidence_id 'midea_2025_annual:narrative:42:23' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-03 引用 evidence_id 'midea_2025_annual:narrative:69:39' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:69:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-04 引用 evidence_id 'midea_2025_annual:narrative:65:38' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:65:38"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_id",
+      "message": "C-05 引用 evidence_id 'midea_2025_annual:narrative:23:6' 在 evidence packet 中不存在，无法验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "e732ed9015288929b24ea6ac2de24833f3bdb39274de63a4c1c6a1f3ba7d093a",
+  "response_hash": "b0aa26093e3fe8e7fe6cd42069dbef5f334147fbc06dd252f578aada43d92f63",
+  "run_id": "editorial-v4-qa:a80497bb-38a4-427e-a853-b358f20733da",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a80497bb-38a4-427e-a853-b358f20733da",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "generated_at": "2026-08-03T09:05:43+00:00"
+}

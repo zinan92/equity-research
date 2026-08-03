@@ -1,0 +1,14 @@
+{
+  "status": "failed",
+  "ticker": "300750.SZ",
+  "chars": 2541,
+  "claims": 40,
+  "errors": [
+    {
+      "code": "numeric_claim_unbound",
+      "message": "text contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-20",
+      "number": "14.0%"
+    }
+  ]
+}

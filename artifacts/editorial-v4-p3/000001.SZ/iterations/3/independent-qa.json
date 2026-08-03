@@ -1,0 +1,82 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论未携带任何 fact/judgment/gap 标记，违反 editorial-v4 要求。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露”或“年报自述”，未将自述冒充独立验证。",
+    "所有 judgment 类 claim 均包含 [J-xx] 标记、相关底层 evidence 引用和可操作的 falsifier，符合 AI judgment 规范。",
+    "报告明确指出了大量证据缺口（G-01 至 G-11），未用空泛句子凑篇幅，且缺口基于 evidence packet 的 gaps 字段。",
+    "整体结论锋利且带有白话风格，符合爱牛式定位，且未夹带未提供证据的客户、订单、排名、份额、估值、股价或行动建议。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-10、J-11、J-12 在 dossier claims 中定义，但未在报告正文任何 section 中渲染，导致证据链断裂。",
+      "claim_id": "J-10",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-11 未在报告正文渲染，其引用的 evidence_ids 无法被读者追溯。",
+      "claim_id": "J-11",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-12 未在报告正文渲染，其引用的 evidence_ids 无法被读者追溯。",
+      "claim_id": "J-12",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论未携带任何 fact/judgment/gap 标记，违反 editorial-v4 要求。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论未携带任何 fact/judgment/gap 标记，违反 editorial-v4 要求。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "3a33dd283ffd138db0a74aca6fd48d86143759372c24a9295b95a579373d9a3c",
+  "response_hash": "6ebd3e3b1980aea53eb3ade020e419791a67ec4e13e2bdfc15a6a5534a5c1537",
+  "run_id": "editorial-v4-qa:b45c31f2-0c47-49b2-96db-33781e229110",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "b45c31f2-0c47-49b2-96db-33781e229110",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T09:58:24+00:00"
+}

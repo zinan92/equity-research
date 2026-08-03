@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "ticker": "600519.SH",
+  "chars": 2403,
+  "claims": 36,
+  "errors": [
+    {
+      "code": "judgment_marker_missing",
+      "message": "aggressive positioning sentence lacks an explicit [J-xx] judgment marker",
+      "excerpt": "贵州茅台仍是中国高端白酒的绝对龙头，年报自述已成长为“单品营收过千亿、市值上万亿”的全球烈性酒第一品牌[C-10]"
+    }
+  ]
+}

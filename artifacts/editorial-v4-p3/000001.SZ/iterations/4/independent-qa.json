@@ -1,0 +1,126 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparative_direction",
+      "message": "C-12 称零售净利润同比增长，但未给出具体幅度，且正文未明确写“增长”及确定性输入幅度。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparative_direction",
+      "message": "C-14 引用贷款余额变动，正文未明确写“增长9.2%”“下降2.3%”及同期对比方向。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有判断均标注 [J] 并配有 falsifier，符合 judgment 合成要求。",
+    "缺口声明（G-xx）均基于 evidence packet 的 gaps，未借缺口掩盖事实。",
+    "整体结论锋利且带 judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至 evidence_ids",
+    "同期对比数据明确方向与幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将未提供证据的客户/订单/排名等写成事实",
+    "判断有 [J] marker、refs 和 falsifier",
+    "报告有爱牛式定位、因果链和证伪条件",
+    "缺口基于 evidence packet gaps 且不掩盖事实"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-10、J-11、J-12 在正文中未渲染，但出现在 claims 列表，导致无法验证其 evidence_ids 与正文一致性。",
+      "claim_id": "J-10",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-11 未在正文中出现，无法检查其引用和判断标记。",
+      "claim_id": "J-11",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "claim_not_rendered",
+      "message": "J-12 未在正文中出现，无法检查其引用和判断标记。",
+      "claim_id": "J-12",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparative_direction",
+      "message": "C-12 称零售净利润同比增长，但未给出具体幅度，且正文未明确写“增长”及确定性输入幅度。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:23:58"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "missing_comparative_direction",
+      "message": "C-14 引用贷款余额变动，正文未明确写“增长9.2%”“下降2.3%”及同期对比方向。",
+      "claim_id": "C-14",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_self_report_label",
+      "message": "C-06 正文仅写“年报披露”，但 claim 标为 issuer_self_report，正文未显式写“年报自述/公司披露”。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:59:163"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_self_report_label",
+      "message": "C-13 正文写“年报披露”，但 claim 标为 issuer_self_report，未显式写“年报自述/公司披露”。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:62"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "missing_self_report_label",
+      "message": "C-15 正文写“年报披露”，但 claim 标为 issuer_self_report，未显式写“年报自述/公司披露”。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:25:63"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "dda5bec84646092061e4337107f33a1f82a26569d64103aa5adcd76edbd45168",
+  "response_hash": "a6ada4e8a56dba6c01b04a24746d90d9857b5c75f51615679347411625153f96",
+  "run_id": "editorial-v4-qa:b02e6eee-6c87-49bd-a4fd-46c28141c7f9",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "b02e6eee-6c87-49bd-a4fd-46c28141c7f9",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:00:01+00:00"
+}

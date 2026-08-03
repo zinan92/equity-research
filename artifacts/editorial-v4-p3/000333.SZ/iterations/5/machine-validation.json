@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "ticker": "000333.SZ",
+  "chars": 2791,
+  "claims": 34,
+  "errors": [
+    {
+      "code": "third_party_attribution_missing",
+      "message": "third-party statistic must be attributed to the issuer filing before the provider name",
+      "claim_ids": [
+        "J-01"
+      ]
+    }
+  ]
+}

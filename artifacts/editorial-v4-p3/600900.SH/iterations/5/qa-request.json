@@ -1,0 +1,1388 @@
+{
+  "request_schema": "editorial-v4-independent-qa-request-v2",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "ticker": "600900.SH",
+  "dossier_hash": "eb2e9948603e80c2fd00f98720f941ec51268beedf6d1d8e77a839c40cb5b016",
+  "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+  "machine_validation": {
+    "status": "failed",
+    "ticker": "600900.SH",
+    "chars": 1862,
+    "claims": 40,
+    "errors": [
+      {
+        "code": "section_short",
+        "message": "section is below minimum length",
+        "section": "technology_products",
+        "chars": 362,
+        "minimum": 400
+      },
+      {
+        "code": "section_short",
+        "message": "section is below minimum length",
+        "section": "risks_commentary",
+        "chars": 280,
+        "minimum": 350
+      },
+      {
+        "code": "section_short",
+        "message": "section is below minimum length",
+        "section": "plain_language",
+        "chars": 109,
+        "minimum": 150
+      },
+      {
+        "code": "dossier_short",
+        "message": "editorial body is materially shorter than the Round 7 V4 reference",
+        "chars": 1862,
+        "target": 2429
+      }
+    ]
+  },
+  "dossier": {
+    "latest_card": "2026Q1营收181.12亿元[F-01]，同比增长6.44%[F-02]；归母净利润67.61亿元[F-03]，同比增长30.50%[F-04]。2025年营收862.42亿元[F-05]，同比增长2.07%[F-06]；归母净利润345.03亿元[F-07]，同比增长6.17%[F-08]。",
+    "sections": [
+      {
+        "id": "one_line_position",
+        "title": "一句话定位",
+        "body": "长江电力凭借长江干流六座梯级电站的垄断性水电资产，获取稳定现金流，并承诺利润的70%以上用于分红，是典型的类债券型公用事业股[J-01]；其收益质量高度依赖于长江来水的丰枯和电力市场化改革下的上网电价，而浮动利率负债使其对利率变动敏感[J-02]。",
+        "claim_ids": [
+          "J-01",
+          "J-02"
+        ]
+      },
+      {
+        "id": "founder_team",
+        "title": "创始人与团队",
+        "body": "公司管理层由三峡集团资深干部组成。年报披露，副董事长何红心曾任三峡集团财务与资产管理部主任、副总会计师等职，现任三峡集团总经理助理，具有丰富的财务及跨板块管理经验[C-03]；副总经理林峰、姜德政等均拥有长期的水电站运营、营销及风险管理经验[C-04]。高级管理人员实行任期制和契约化管理，薪酬与经营业绩考核结果挂钩[C-05]。不过，公司作为央企子公司，未提供创始人相关信息，决策权集中于上级集团[G-01]。",
+        "claim_ids": [
+          "C-03",
+          "C-04",
+          "C-05",
+          "G-01"
+        ]
+      },
+      {
+        "id": "timeline",
+        "title": "发展时间线",
+        "body": "长江电力发展史与三峡工程密不可分，但早期沿革输入未提供[G-02]。近年战略演进清晰：公司披露，2016年6月，公司联合三峡资本设立三峡电能，以售电牌照进军市场化售电领域[C-06]。公司披露，2025年，公司运营的梯级电站发电量达3071.94亿千瓦时，关键运行指标创历史最优[C-07]。同年，公司加快抽水蓄能布局，公司披露，6月董事会通过江西寻乌抽水蓄能电站投资项目[C-08]；公司披露，7月审议通过葛洲坝航运扩能工程，体现其社会职能[C-09]。治理层面，公司披露，2025年公司取消监事会，由审计委员会承接监督职能[C-10]，并编制《市值管理制度》，推动大股东增持，制定未来五年分红规划，信息披露保持‘零差错’[C-11]；公司披露，公司因此荣获‘2025年度董事会最佳实践案例’[C-12]。这些举措标志着公司正从传统大水电向‘水电+抽蓄+新能源’综合平台转型，并加强与资本市场的沟通。",
+        "claim_ids": [
+          "G-02",
+          "C-06",
+          "C-07",
+          "C-08",
+          "C-09",
+          "C-10",
+          "C-11",
+          "C-12"
+        ]
+      },
+      {
+        "id": "technology_products",
+        "title": "技术与产品",
+        "body": "水电运营是技术核心。公司披露，公司梯级电站综合耗水率、水量利用率、短期预报精度等指标均创历史最优，设备检修精品率连续三年100%，关键运行指标国际领先[C-13][C-14]。数字化转型方面，公司披露，公司构建数字化检修管理体系，机器人基本实现全场景应用，加速形成新质生产力[C-15]。产品端，公司不仅销售大水电，还通过三峡电能开拓配售电和绿电交易。公司披露，2025年三峡电能全口径售电量超60亿千瓦时，业务覆盖9省，并参与全国首次多通道跨经营区绿电交易，占全市场成交量的6.18%[C-16]。此外，大水电的灵活调节价值和绿色价值在现货和绿电交易中具有溢价潜力[J-03]，但抽蓄和新能源项目仍处于建设期，盈利贡献尚不明朗[G-03]。公司还承担葛洲坝航运扩能等非电公共职能，体现了重大基础设施的社会效益[C-17]。",
+        "claim_ids": [
+          "C-13",
+          "C-14",
+          "C-15",
+          "C-16",
+          "J-03",
+          "G-03",
+          "C-17"
+        ]
+      },
+      {
+        "id": "financial_valuation",
+        "title": "财务与估值",
+        "body": "2025年公司实现营收862.42亿元[F-05]，归母净利润345.03亿元[F-07]，同比分别增长2.07%[F-06]和6.17%[F-08]。2026年一季度营收181.12亿元[F-01]，归母净利润67.61亿元[F-03]，同比增速分别为6.44%[F-02]和30.50%[F-04]，业绩提速。公司资产负债端，公司披露，长期借款中浮动利率合同金额高达2,341.59亿元，年报直陈利率波动会影响损益[C-19]。不过，公司披露，公司现金流充裕，拥有国内AAA级和国际主权级信用评级，融资渠道畅通[C-18]。在回报方面，公司披露，公司承诺每年现金分红不低于归母净利的70%[C-20]，为股东提供了高确定性收益。关于估值，输入未提供任何市盈率或目标价数据[G-04]，且投资项目的未来回报缺乏测算[G-05]，因此无法判断当前价格是否合理。",
+        "claim_ids": [
+          "F-01",
+          "F-02",
+          "F-03",
+          "F-04",
+          "F-05",
+          "F-06",
+          "F-07",
+          "F-08",
+          "C-18",
+          "C-19",
+          "C-20",
+          "G-04",
+          "G-05"
+        ]
+      },
+      {
+        "id": "risks_commentary",
+        "title": "风险与点评",
+        "body": "第一大风险是来水不确定性。尽管公司具备一流的水情预报与调度能力，但长期枯水会直接削减发电量，进而波及营收和利润[J-04]。第二大风险是电力市场化改革深化，公司部分电量正从计划电价转向竞争性市场电价，若成交价显著低于含补贴电价，将压缩利润空间[J-05]。第三大风险是利率，公司有巨额浮动利率债务，央行加息将增加财务费用，对净利润冲击显著[J-06]。治理层面，年报显示部分董事因公务长期缺席董事会，可能削弱有效监督与决策质量[J-08]。此外，公司披露，海外业务存在少量汇兑敞口，但公司已有监控措施[C-21]。综合来看，公司经营稳健，但外部变量需持续跟踪。",
+        "claim_ids": [
+          "J-04",
+          "J-05",
+          "J-06",
+          "J-08",
+          "C-21"
+        ]
+      },
+      {
+        "id": "plain_language",
+        "title": "大白话结论",
+        "body": "长江电力就是长江上的永动机，只要水在流，钱就进账，并承诺将七成利润分给股东，是一份会涨的高息债券；但它最怕两件事：老天不下雨和央行加息。证伪点：如果连续两年枯水或利率跳升吃掉一半以上净利润，这个逻辑就破了[J-07]。",
+        "claim_ids": [
+          "J-07"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "F-01",
+        "kind": "fact",
+        "text": "2026Q1营业收入181.12亿元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-02",
+        "kind": "fact",
+        "text": "2026Q1营收同比增长6.44%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:0",
+          "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:revenue"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-03",
+        "kind": "fact",
+        "text": "2026Q1归母净利润67.61亿元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-04",
+        "kind": "fact",
+        "text": "2026Q1归母净利润同比增长30.50%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:0",
+          "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:net_profit_parent"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-05",
+        "kind": "fact",
+        "text": "2025年营收862.42亿元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-06",
+        "kind": "fact",
+        "text": "2025年营收同比增长2.07%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:0",
+          "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:revenue"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-07",
+        "kind": "fact",
+        "text": "2025年归母净利润345.03亿元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-08",
+        "kind": "fact",
+        "text": "2025年归母净利润同比增长6.17%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:0",
+          "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:net_profit_parent"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "J-01",
+        "kind": "judgment",
+        "text": "长江电力凭借长江干流六座梯级电站的垄断性水电资产，获取稳定现金流，并承诺利润的70%以上用于分红，是典型的类债券型公用事业股",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:12:5",
+          "cypc_2025_annual:narrative:39:33"
+        ],
+        "derived_ids": [],
+        "falsifier": "若公司大幅降低分红比例或取消分红承诺，且来水偏枯导致净利润连续三年低于历史均值，则类债券逻辑失效。"
+      },
+      {
+        "claim_id": "J-02",
+        "kind": "judgment",
+        "text": "公司的收益质量高度依赖于长江来水的丰枯和电力市场化改革下的上网电价，而浮动利率负债使其对利率变动敏感",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:10:2",
+          "cypc_2025_annual:narrative:28:19",
+          "cypc_2025_annual:narrative:215:39"
+        ],
+        "derived_ids": [],
+        "falsifier": "若来水连续两年极端偏枯且市场化交易电价持续低于含补贴电价，同时利率大幅上升，则收益质量将严重受损。"
+      },
+      {
+        "claim_id": "C-03",
+        "kind": "issuer_self_report",
+        "text": "公司披露，副董事长何红心曾任三峡集团财务与资产管理部主任、副总会计师等职，现任三峡集团总经理助理，具有丰富的财务及跨板块管理经验",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:31:23"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-04",
+        "kind": "issuer_self_report",
+        "text": "公司披露，副总经理林峰、姜德政等均拥有长期的水电站运营、营销及风险管理经验",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:32:24"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-05",
+        "kind": "issuer_self_report",
+        "text": "公司披露，高级管理人员实行任期制和契约化管理，薪酬与经营业绩考核结果挂钩",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:41:35"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-01",
+        "kind": "gap",
+        "text": "输入未提供公司创始人及早期发展背景，公司为央企控股，无私人创始人",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-02",
+        "kind": "gap",
+        "text": "输入未提供公司早期发展的时间线和里程碑，仅能从2025年年报中提取近年事件",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-06",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2016年6月与三峡资本合资设立三峡电能，以售电牌照开展市场化售电业务",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:20:13"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-07",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2025年梯级电站累计发电3071.94亿千瓦时，综合耗水率等运行指标创历史最优",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:10:2"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-08",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2025年6月25日董事会审议通过投资建设江西寻乌抽水蓄能电站项目",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:36:28"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-09",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2025年7月29日董事会审议通过出资建设葛洲坝航运扩能工程议案",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:36:27"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-10",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2025年取消监事会设置，由董事会审计委员会承接监督职能",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:29:20"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-11",
+        "kind": "issuer_self_report",
+        "text": "公司披露，编制印发《市值管理制度》，实施大股东股份增持，制定未来五年分红规划，2025年信息披露保持零差错",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:29:21"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-12",
+        "kind": "issuer_self_report",
+        "text": "公司披露，荣获中国上市公司协会“2025年度董事会最佳实践案例”等多个奖项",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:11:3"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-13",
+        "kind": "issuer_self_report",
+        "text": "公司披露，设备设施大修检修精品率连续三年保持100%，关键运行指标国际领先",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:10:2"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-14",
+        "kind": "issuer_self_report",
+        "text": "公司披露，综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:10:2"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-15",
+        "kind": "issuer_self_report",
+        "text": "公司披露，以数字化转型赋能，机器人基本实现全场景应用，新质生产力加速形成",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:12:6"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-16",
+        "kind": "issuer_self_report",
+        "text": "公司披露，三峡电能2025年全口径市场化售电量超60亿千瓦时，售电区域拓展至9个省份，参与全国首次多通道跨经营区绿电交易，成交电量占全市场6.18%",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:20:13"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "J-03",
+        "kind": "judgment",
+        "text": "大水电的灵活调节价值和绿色价值在电力现货市场和绿电交易中具有获得溢价的潜力",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:27:17"
+        ],
+        "derived_ids": [],
+        "falsifier": "若现货市场规则未对调节性价值支付溢价，或绿电交易价格无法覆盖额外成本，则溢价潜力无法兑现。"
+      },
+      {
+        "claim_id": "G-03",
+        "kind": "gap",
+        "text": "输入未提供抽水蓄能及新能源项目的具体建设进度、投资回报预测和盈利能力展望",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-17",
+        "kind": "issuer_self_report",
+        "text": "公司披露，出资建设葛洲坝航运扩能工程，聚焦世界最大清洁能源走廊周边社区管理，实施库区帮扶等项目，体现重大基础设施的社会效益",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:36:27",
+          "cypc_2025_annual:narrative:43:36"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-18",
+        "kind": "issuer_self_report",
+        "text": "公司披露，财务状况优良，现金流稳定充沛，在国内拥有AAA级信用评级和与国际主权评级一致的国际信用评级",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:12:4"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-19",
+        "kind": "issuer_self_report",
+        "text": "公司披露，长期借款中浮动利率合同金额共计2,341.59亿元，利率上升将增加利息支出并对财务业绩产生不利影响",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:215:39"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-20",
+        "kind": "issuer_self_report",
+        "text": "公司披露，每年利润分配按不低于归属于母公司股东的净利润的70%进行现金分红，分红标准和比例明确",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:39:33"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-04",
+        "kind": "gap",
+        "text": "输入未提供市盈率、目标价或市值相关估值数据，无法判断当前股价合理性",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-05",
+        "kind": "gap",
+        "text": "输入未提供具体投资项目的内部回报率或资本分配计划，难以评估资本配置效率",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "J-04",
+        "kind": "judgment",
+        "text": "长江来水的丰枯是决定发电量和收入的最核心变量，连续枯水将直接打击公司盈利",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:10:2"
+        ],
+        "derived_ids": [],
+        "falsifier": "若长江干流来水连续三年低于常年均值，则盈利将受到严重冲击。"
+      },
+      {
+        "claim_id": "J-05",
+        "kind": "judgment",
+        "text": "电力市场化交易比重上升可能导致上网电价下行，若实际成交价显著低于现行计划电价，将压缩利润空间",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:28:19"
+        ],
+        "derived_ids": [],
+        "falsifier": "若市场化交易电量平均实现电价持续低于计划电价，则利润空间将被压缩。"
+      },
+      {
+        "claim_id": "J-06",
+        "kind": "judgment",
+        "text": "以浮动利率计息的巨额负债使公司对利率高度敏感，加息周期中财务费用将大幅增加，侵蚀净利润",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:215:39"
+        ],
+        "derived_ids": [],
+        "falsifier": "若央行大幅加息，导致财务费用显著上升，则净利润将受到侵蚀。"
+      },
+      {
+        "claim_id": "J-08",
+        "kind": "judgment",
+        "text": "年报显示部分董事因公务长期缺席董事会，可能削弱董事会的有效监督与决策质量",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:35:26"
+        ],
+        "derived_ids": [],
+        "falsifier": "若连续两届董事会出席率均达标并提升，则此担忧消除。"
+      },
+      {
+        "claim_id": "C-21",
+        "kind": "issuer_self_report",
+        "text": "公司披露，外汇风险主要来自港币、美元、索尔等，公司持续监控并采取措施最小化汇率波动影响",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:214:38"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "J-07",
+        "kind": "judgment",
+        "text": "长江电力就是长江上的永动机，只要水在流，钱就进账，并承诺将七成利润分给股东，是一份会涨的高息债券；但它最怕两件事：老天不下雨和央行加息。证伪点：如果连续两年枯水或利率跳升吃掉一半以上净利润，这个逻辑就破了",
+        "evidence_ids": [
+          "cypc_2025_annual:narrative:10:2",
+          "cypc_2025_annual:narrative:215:39",
+          "cypc_2025_annual:narrative:39:33"
+        ],
+        "derived_ids": [],
+        "falsifier": "如果连续两年枯水或利率跳升吃掉一半以上净利润，则永动机逻辑失效。"
+      }
+    ],
+    "missing_inputs": [
+      "创始人及早期发展史",
+      "抽水蓄能和新能源项目详细时间表与财务预测",
+      "估值参考数据",
+      "投资收益的具体测算"
+    ],
+    "overall_conclusion": "长江电力是水电行业的绝对龙头，高分红赋予其类债券的确定性回报，但来水与利率是两大不确定因素；当前需密切关注长江流域来水趋势和市场化电价走向，以评估其利润的可持续性。[J-09]",
+    "schema_version": "editorial-v4-dossier-v1",
+    "ticker": "600900.SH",
+    "issuer_name": "长江电力",
+    "input_packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+    "prompt_version": "editorial-v4-whole-report-prompt-v2",
+    "generation_receipt": {
+      "run_id": "editorial-v4-run:055ce981-3d50-4605-a654-1fde3a018170",
+      "provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "request_id": "055ce981-3d50-4605-a654-1fde3a018170",
+      "usage": {
+        "prompt_tokens": 36127,
+        "completion_tokens": 6133,
+        "total_tokens": 42260,
+        "prompt_tokens_details": {
+          "cached_tokens": 1664
+        },
+        "prompt_cache_hit_tokens": 1664,
+        "prompt_cache_miss_tokens": 34463
+      },
+      "finish_reason": "stop",
+      "prompt_version": "editorial-v4-whole-report-prompt-v2",
+      "request_hash": "87a18c15ca2e340e5423e4a801d62d5e7ade30ee0c5ef36a0a985f8bfc6e3a88",
+      "response_hash": "af20899d032d0d1c0f4be722c5d6491da73f6c50a94fdf7fc05031af3c973367",
+      "generated_at": "2026-08-03T09:37:16+00:00"
+    },
+    "production_record": {
+      "run_id": "editorial-v4-run:055ce981-3d50-4605-a654-1fde3a018170",
+      "generator_version": "editorial-v4-whole-report-generator-v2",
+      "prompt_version": "editorial-v4-whole-report-prompt-v2",
+      "model_provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "request_id": "055ce981-3d50-4605-a654-1fde3a018170",
+      "input_packet_sha256": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+      "model_packet_sha256": "c92c974522606645d9dc6172cbdd7f727339f7de52d5bfc76d7a256d37e96a6a",
+      "review_status": "pending",
+      "editorial_status": "draft",
+      "action_state": "blocked",
+      "tier_credit": false
+    },
+    "sources": [
+      {
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "长江电力 2025 年年度报告",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "page_count": 259,
+        "parser_version": "park-document-intelligence-v1"
+      },
+      {
+        "source_id": "cypc_2026_q1",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "长江电力 2026 年第一季度报告",
+        "report_period": "2026Q1",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "page_count": 17,
+        "parser_version": "park-document-intelligence-v1"
+      }
+    ],
+    "boundary": {
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_b6_credit": true,
+      "no_decision_policy_credit": true,
+      "no_publication_credit": true
+    }
+  },
+  "evidence_packet": {
+    "ticker": "600900.SH",
+    "issuer_name": "长江电力",
+    "sources": [
+      {
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "长江电力 2025 年年度报告",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "page_count": 259,
+        "parser_version": "park-document-intelligence-v1"
+      },
+      {
+        "source_id": "cypc_2026_q1",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "长江电力 2026 年第一季度报告",
+        "report_period": "2026Q1",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "page_count": 17,
+        "parser_version": "park-document-intelligence-v1"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "cypc_2025_annual:narrative:10:2",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 10,
+        "section_path": "第三节 管理层讨论与分析 > 二、经营情况讨论与分析",
+        "quoted_anchor": "五”期间年均增长 6.6%。2025年，我国聚焦能源发展、消费转型与市场建设，持续完善能源领域政策，为绿色低碳转型夯实政策基础。1 月，国家发展改革委、国家能源局联合印发《电力系统场参与路径三方面系统推进，着力提升电力系统调节能力和水电流域整体调节效能，以支撑年均电力总装机的 60%。其中，全国水电装机容量 4.5亿千瓦，同比增长 2.8%,约占全国电力总装机的电力市场方面，全国统一电力市场初步建成，多层次市场体系及多种类交易品种建设稳步推进。2025年，全国电力市场交易电量规模持续提升，市场化交易电量占比再创新高；跨区、跨省输送电量、交易电量持续增长；中长期市场连续稳定运行，电力现货市场、辅助服务市场机制进一步完善；新型储能、分布式电源、虚拟电厂等新型主体加速入市，为助力产业结构绿色转型、2025年，公司聚焦核心功能、履行战略使命，圆满完成年度各项目标任务，取得了“十四五”科学调度成效显著。精心研判来水形势，全力争取调度支持,梯级电站全年累计发电 3071.94瓦时，综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优，为梯级电站功能发挥精益运行硕果累累。完成三峡、葛洲坝状态检修试点示范并全流域推广。设备设施大修检修精品率连续三年保持 100%，关键运行指标保持国际领先。圆满完成全国两会、9.3 阅兵、四中全会等多个重要时段能源保供工作，收到多省市感谢信。安全生产保持“双零” 。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "五”期间年均增长 6.6%。2025年，我国聚焦能源发展、消费转型与市场建设，持续完善能源领域政策，为绿色低碳转型夯实政策基础。1 月，国家发展改革委、国家能源局联合印发《电力系统场参与路径三方面系统推进，着力提升电力系统调节能力和水电流域整体调节效能，以支撑年均电力总装机的 60%。其中，全国水电装机容量 4.5亿千瓦，同比增长 2.8%,约占全国电力总装机的电力市场方面，全国统一电力市场初步建成，多层次市场体系及多种类交易品种建设稳步推进。2025年，全国电力市场交易电量规模持续提升，市场化交易电量占比再创新高；跨区、跨省输送电量、交易电量持续增长；中长期市场连续稳定运行，电力现货市场、辅助服务市场机制进一步完善；新型储能、分布式电源、虚拟电厂等新型主体加速入市，为助力产业结构绿色转型、2025年，公司聚焦核心功能、履行战略使命，圆满完成年度各项目标任务，取得了“十四五”科学调度成效显著。精心研判来水形势，全力争取调度支持,梯级电站全年累计发电 3071.94瓦时，综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优，为梯级电站功能发挥精益运行硕果累累。完成三峡、葛洲坝状态检修试点示范并全流域推广。设备设施大修检修精品率连续三年保持 100%，关键运行指标保持国际领先。圆满完成全国两会、9.3 阅兵、四中全会等多个重要时段能源保供工作，收到多省市感谢信。安全生产保持“双零” 。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:11:3",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 11,
+        "section_path": "第三节 管理层讨论与分析 > 三、报告期内核心竞争力分析 > （二）大型水电站运行管理能力",
+        "quoted_anchor": "治理水平持续提升。全面加强董事会建设，优化公司治理结构，落实董事会审计委员会监督职能，荣获中国上市公司协会“2025 年度董事会最佳实践案例”等多个奖项。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "治理水平持续提升。全面加强董事会建设，优化公司治理结构，落实董事会审计委员会监督职能，荣获中国上市公司协会“2025 年度董事会最佳实践案例”等多个奖项。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:12:4",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 12,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+        "quoted_anchor": "公司始终坚持稳字当头、稳中奋进，坚持聚焦主责主业，利用平台、资源等优势，上下合力积极融入电力市场改革。公司将继续贯彻落实既有消纳方案、价格机制等政策安排，同时顺应电力市场发展方向，结合业务发展布局，构建适应全国统一大市场的大水电营销体系，促进公司整公司财务状况优良，现金流稳定充沛，在国际国内资本市场信誉良好，拥有国内 AAA级信用评级和与国家主权评级一致的国际信用评级，具有较强的投资并购和融资能力。近年来，公司坚持战略引领、聚焦主责主业，围绕清洁能源领域，稳健开展对外投资，投资结构更加合理、投资质量进一步优化，具备与公司规模相适应的投资收益贡献能力。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "公司始终坚持稳字当头、稳中奋进，坚持聚焦主责主业，利用平台、资源等优势，上下合力积极融入电力市场改革。公司将继续贯彻落实既有消纳方案、价格机制等政策安排，同时顺应电力市场发展方向，结合业务发展布局，构建适应全国统一大市场的大水电营销体系，促进公司整公司财务状况优良，现金流稳定充沛，在国际国内资本市场信誉良好，拥有国内 AAA级信用评级和与国家主权评级一致的国际信用评级，具有较强的投资并购和融资能力。近年来，公司坚持战略引领、聚焦主责主业，围绕清洁能源领域，稳健开展对外投资，投资结构更加合理、投资质量进一步优化，具备与公司规模相适应的投资收益贡献能力。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:12:5",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 12,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+        "quoted_anchor": "公司所属长江干流六座梯级电站均为国家能源重点工程和“西电东送”骨干电源，在保障国家能源安全、推动能源结构调整、助力实现节能减排目标以及落实长江经济带发展等国家战略方面发挥重要作用。公司大水电以跨大区、远距离配套线路外送至全国多个省市消纳，消纳范围主要为长三角、珠三角等经济发达地区，为我国经济发展提供稳定能源支撑。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "公司所属长江干流六座梯级电站均为国家能源重点工程和“西电东送”骨干电源，在保障国家能源安全、推动能源结构调整、助力实现节能减排目标以及落实长江经济带发展等国家战略方面发挥重要作用。公司大水电以跨大区、远距离配套线路外送至全国多个省市消纳，消纳范围主要为长三角、珠三角等经济发达地区，为我国经济发展提供稳定能源支撑。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:12:6",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 12,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+        "quoted_anchor": "公司持续强化大型水电站检修维护核心能力，以数字化转型赋能，构建数字化检修管理体系，结构化梳理检修数据，深化安全生产监控系统建设，持续改进适应全流域检修的技术管理体系、检修质量管理体系，推进技术装备智能化管理，机器人基本实现全场景应用，新质生产力加速形成。优化检修流程，持续开展设备状态评估，做到科学检修、诊断检修，动态优化岁修工作，实现流域检修智能化管控，进一步提升设备设施检修能力和水平。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "公司持续强化大型水电站检修维护核心能力，以数字化转型赋能，构建数字化检修管理体系，结构化梳理检修数据，深化安全生产监控系统建设，持续改进适应全流域检修的技术管理体系、检修质量管理体系，推进技术装备智能化管理，机器人基本实现全场景应用，新质生产力加速形成。优化检修流程，持续开展设备状态评估，做到科学检修、诊断检修，动态优化岁修工作，实现流域检修智能化管控，进一步提升设备设施检修能力和水平。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:20:13",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 20,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (四)行业经营性信息分析 > 8、 其他说明",
+        "quoted_anchor": "为顺应国家电力体制改革，2016 年 6月公司和三峡资本合资设立三峡电能，以其为平台开展市场化售电业务，在公司大水电、新能源消纳地区聚焦电力零售客户开发，着力培育并不断提升完善市场化环境下的售电能力。2025 年，三峡电能持续以自身售电牌照开展市场化售电业务，着力培育电力交易能力，全口径市场化售电量超 60亿千瓦时，售电区域拓展至 9个省份。参与全国首次多通道跨经营区绿电交易，成交电量占据全市场总成交量的 6.18%。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "为顺应国家电力体制改革，2016 年 6月公司和三峡资本合资设立三峡电能，以其为平台开展市场化售电业务，在公司大水电、新能源消纳地区聚焦电力零售客户开发，着力培育并不断提升完善市场化环境下的售电能力。2025 年，三峡电能持续以自身售电牌照开展市场化售电业务，着力培育电力交易能力，全口径市场化售电量超 60亿千瓦时，售电区域拓展至 9个省份。参与全国首次多通道跨经营区绿电交易，成交电量占据全市场总成交量的 6.18%。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:27:17",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 27,
+        "section_path": "第三节 管理层讨论与分析 > 五、关于公司未来发展的讨论与分析 > (三)经营计划",
+        "quoted_anchor": "按照中电联预测，综合考虑我国当前经济增长潜力、国民经济运行态势以及“十五五”规划千瓦时、同比增长 5%-6%；全年新增发电装机有望超过 4亿千瓦，新增新能源发电装机有望超过 3亿千瓦；到 2026年底，全国发电装机容量有望达到 43亿千瓦左右，非化石能源发电装机占总装机的比重升至 63%左右。综合需求增长、电源电网投产以及一次能源情况，预计 2026年，全国电力供需总体平衡，局地高峰时段电力供需偏紧，迎峰度夏期间，部分地区电力供需平衡偏紧；迎年，基本建成全国统一电力市场体系，各类型电源和除保障性用户外的电力用户全部直接参与电力市场，市场化交易电量占全社会用电量的 70%左右，跨省跨区和省内实现联合交易，现货市场全面转入正式运行；到 2035年，全面建成全国统一电力市场体系，跨省跨区和省内交易有机融合，电力资源的电能量、调节、环境、容量等多维价值全面由市场反映，电力资源全面实现全国范围公司运行管理的大水电均为国家重点能源工程和“西电东送”骨干电源，实现远距离、大范围优化配置资源。随着全国统一电力市场深化推进，流域梯级大水电的电能量价值、灵活性价值、“十五五”期间，公司将完整、准确、全面贯彻新发展理念，加快构建新发展格局，服务国家“双碳”战略和构建新型电力系统重要任务，聚焦主责主业，增强核心功能，盘活存量、做优增量，坚定不移推动高质量发展，实现“质”的有效提升和“量”的合理增长，进一步巩固世界水电行业引领者地位，加快创建以水电为核心的世界一流清洁能源上市公司。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "按照中电联预测，综合考虑我国当前经济增长潜力、国民经济运行态势以及“十五五”规划千瓦时、同比增长 5%-6%；全年新增发电装机有望超过 4亿千瓦，新增新能源发电装机有望超过 3亿千瓦；到 2026年底，全国发电装机容量有望达到 43亿千瓦左右，非化石能源发电装机占总装机的比重升至 63%左右。综合需求增长、电源电网投产以及一次能源情况，预计 2026年，全国电力供需总体平衡，局地高峰时段电力供需偏紧，迎峰度夏期间，部分地区电力供需平衡偏紧；迎年，基本建成全国统一电力市场体系，各类型电源和除保障性用户外的电力用户全部直接参与电力市场，市场化交易电量占全社会用电量的 70%左右，跨省跨区和省内实现联合交易，现货市场全面转入正式运行；到 2035年，全面建成全国统一电力市场体系，跨省跨区和省内交易有机融合，电力资源的电能量、调节、环境、容量等多维价值全面由市场反映，电力资源全面实现全国范围公司运行管理的大水电均为国家重点能源工程和“西电东送”骨干电源，实现远距离、大范围优化配置资源。随着全国统一电力市场深化推进，流域梯级大水电的电能量价值、灵活性价值、“十五五”期间，公司将完整、准确、全面贯彻新发展理念，加快构建新发展格局，服务国家“双碳”战略和构建新型电力系统重要任务，聚焦主责主业，增强核心功能，盘活存量、做优增量，坚定不移推动高质量发展，实现“质”的有效提升和“量”的合理增长，进一步巩固世界水电行业引领者地位，加快创建以水电为核心的世界一流清洁能源上市公司。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:28:19",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 28,
+        "section_path": "第三节 管理层讨论与分析 > 五、关于公司未来发展的讨论与分析 > (五)其他",
+        "quoted_anchor": "公司将围绕年度重点工作任务和安全生产目标，以科技兴安为手段，以安全生产管理评价为导向，确保安全生产治本攻坚三年行动收官，不断提升本质安全水平；建设高水平双重预防机制，依托“重点安全风险”管控巡查、“四不两直”6监督检查，聚焦关键节点、重要时段做好事前预控；建立有序高效的抽蓄建设安全管控机制；充分发挥科技兴安作用，持续推进工程项目作业面视频监控全覆盖和视频 AI智能识别的应用，提高视频监控“巡屏7”能力；建立科学的安全生产管理评价体系，细化安全生产管理评价要求，科学制定评价指标，班组标准化达标全覆盖，共同电力市场化改革持续深化，中长期、现货、辅助服务市场加速建设，新能源全面进入电力市场、抽水蓄能容量电价机制逐步完善，叠加宏观经济形势变化与气候波动等多重因素，电力供需公司将持续深化市场分析研究，聚焦新型电力系统建设、全国统一电力市场建设、电力市场化改革深化等，深入分析、研判形势，统筹谋划营销工作。紧密围绕量、价、费，强化生产-调度-营销协同联动的工作机制，发挥各自专业优势，确保梯级水电发电效益足额兑现。顺应电力体制改革方向，稳妥参与电力市场化交易，持续优化交易策略、做好风险研判及管控，积极争取实现合理收益。围绕绿色低碳发展战略，探索推进清洁能源绿色价值、调节价值兑现的有效路径，构建以“大水电”为核心的多元营销体系架构，持续提升电力市场营销能力，保障公司稳定收益。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "公司将围绕年度重点工作任务和安全生产目标，以科技兴安为手段，以安全生产管理评价为导向，确保安全生产治本攻坚三年行动收官，不断提升本质安全水平；建设高水平双重预防机制，依托“重点安全风险”管控巡查、“四不两直”6监督检查，聚焦关键节点、重要时段做好事前预控；建立有序高效的抽蓄建设安全管控机制；充分发挥科技兴安作用，持续推进工程项目作业面视频监控全覆盖和视频 AI智能识别的应用，提高视频监控“巡屏7”能力；建立科学的安全生产管理评价体系，细化安全生产管理评价要求，科学制定评价指标，班组标准化达标全覆盖，共同电力市场化改革持续深化，中长期、现货、辅助服务市场加速建设，新能源全面进入电力市场、抽水蓄能容量电价机制逐步完善，叠加宏观经济形势变化与气候波动等多重因素，电力供需公司将持续深化市场分析研究，聚焦新型电力系统建设、全国统一电力市场建设、电力市场化改革深化等，深入分析、研判形势，统筹谋划营销工作。紧密围绕量、价、费，强化生产-调度-营销协同联动的工作机制，发挥各自专业优势，确保梯级水电发电效益足额兑现。顺应电力体制改革方向，稳妥参与电力市场化交易，持续优化交易策略、做好风险研判及管控，积极争取实现合理收益。围绕绿色低碳发展战略，探索推进清洁能源绿色价值、调节价值兑现的有效路径，构建以“大水电”为核心的多元营销体系架构，持续提升电力市场营销能力，保障公司稳定收益。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:29:20",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 29,
+        "section_path": "第四节 公司治理、环境和社会 > 二、公司控股股东、实际控制人在保证公司资产、人员、财务、机构、业务等方面独立性的具体",
+        "quoted_anchor": "公司深入学习贯彻习近平总书记关于国有企业改革发展重要论述，贯彻落实党中央、国务院关于国有企业改革深化提升行动的决策部署，严格落实《公司法》《证券法》及中国证监会、上海证券交易所关于上市公司治理相关要求，取消监事会设置，并由董事会审计委员会承接监督职能，持续优化公司治理结构，建立健全以股东会、董事会和经营层为核心的公司法人治理结构，充分发挥董事会“定战略、作决策、防风险”，经营层“谋经营、抓落实、强管理”作用，持续提升公司治理水平，保障董事会规范运作，切实维护全体股东利益。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "公司深入学习贯彻习近平总书记关于国有企业改革发展重要论述，贯彻落实党中央、国务院关于国有企业改革深化提升行动的决策部署，严格落实《公司法》《证券法》及中国证监会、上海证券交易所关于上市公司治理相关要求，取消监事会设置，并由董事会审计委员会承接监督职能，持续优化公司治理结构，建立健全以股东会、董事会和经营层为核心的公司法人治理结构，充分发挥董事会“定战略、作决策、防风险”，经营层“谋经营、抓落实、强管理”作用，持续提升公司治理水平，保障董事会规范运作，切实维护全体股东利益。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:29:21",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 29,
+        "section_path": "第四节 公司治理、环境和社会 > 二、公司控股股东、实际控制人在保证公司资产、人员、财务、机构、业务等方面独立性的具体",
+        "quoted_anchor": "过率100％。持续强化董事履职保障，不断夯实“三汇报”（预汇报、日常汇报、重大事项汇报）、“两调研”（定期调研、专题调研）和“一闭环”（报告—落实—再报告）工作机制，确保董事会决议有效落实，并对决策执行情况进行跟踪。2025 年，组织董事现场调研 4次，涵盖大水电、公司扎实开展市值管理工作，贯彻落实国务院国资委《关于改进和加强中央企业控股上市公司市值管理工作的若干意见》及中国证监会《上市公司监管指引第 10号—市值管理》等相关文件要求，全面加强公司市值管理工作，编制印发《市值管理制度》，明确市值管理的目标、方法和工作流程，推动市值管理工作的规范化和科学化。积极探索新模式、新方法、新渠道，通过实施大股东股份增持、制定未来五年分红规划等措施，不断丰富和创新市值管理“工具箱”。公司在做好合规性披露的基础上加强主动性披露，年内共发布 62份信息披露材料，其中包括 4份定期报告、58份临时公告，公告内容准确、披露及时，继续保持“零差错”。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "过率100％。持续强化董事履职保障，不断夯实“三汇报”（预汇报、日常汇报、重大事项汇报）、“两调研”（定期调研、专题调研）和“一闭环”（报告—落实—再报告）工作机制，确保董事会决议有效落实，并对决策执行情况进行跟踪。2025 年，组织董事现场调研 4次，涵盖大水电、公司扎实开展市值管理工作，贯彻落实国务院国资委《关于改进和加强中央企业控股上市公司市值管理工作的若干意见》及中国证监会《上市公司监管指引第 10号—市值管理》等相关文件要求，全面加强公司市值管理工作，编制印发《市值管理制度》，明确市值管理的目标、方法和工作流程，推动市值管理工作的规范化和科学化。积极探索新模式、新方法、新渠道，通过实施大股东股份增持、制定未来五年分红规划等措施，不断丰富和创新市值管理“工具箱”。公司在做好合规性披露的基础上加强主动性披露，年内共发布 62份信息披露材料，其中包括 4份定期报告、58份临时公告，公告内容准确、披露及时，继续保持“零差错”。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:31:23",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 31,
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+        "quoted_anchor": "工商管理硕士，正高级会计师。历任中国长江三峡集团公司资本运营部副主任兼公司资本运营部经理，中国电力新能源发展有限公司执行董事、首席执行官兼中电国际新能源控股有限公司主要负责人，中国三峡新能源有限公司副总经理，中国长江三峡集团公司资产财务何红心 部副主任（主持工作）、主任，中国长江三峡集团有限公司副总会计师兼财务与资产管理部主任、资金金融管理中心主任、长江三峡投资管理有限公司党委书记、董事长，中国长江三峡集团有限公司副总会计师兼湖北能源集团股份有限公司董事长、党委书记。现任中国长江三峡集团有限公司总经理助理，公司副董事长、党委书记。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "工商管理硕士，正高级会计师。历任中国长江三峡集团公司资本运营部副主任兼公司资本运营部经理，中国电力新能源发展有限公司执行董事、首席执行官兼中电国际新能源控股有限公司主要负责人，中国三峡新能源有限公司副总经理，中国长江三峡集团公司资产财务何红心 部副主任（主持工作）、主任，中国长江三峡集团有限公司副总会计师兼财务与资产管理部主任、资金金融管理中心主任、长江三峡投资管理有限公司党委书记、董事长，中国长江三峡集团有限公司副总会计师兼湖北能源集团股份有限公司董事长、党委书记。现任中国长江三峡集团有限公司总经理助理，公司副董事长、党委书记。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:32:24",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 32,
+        "section_path": "第四节 公司治理、环境和社会 > 三、董事和高级管理人员的情况 > (一) 现任及报告期内离任董事和高级管理人员持股变动及薪酬情况",
+        "quoted_anchor": "经济学硕士，高级经济师。历任中国长江三峡集团公司企业管理部风险管理与内部控制处副处长，中国长江三峡集团有限公司企业管理林 峰 部风险管理与内部控制处处长、违规追责处处长，法律合规部（企业管理部）副主任，法律合规与企业管理部副主任。现任公司副总经工学硕士，正高级工程师。历任中国长江电力股份有限公司生产计划部生产技术管理主任，生产技术部技术业务主任、副经理、副主任，姜德政 三峡电厂党委委员、总工程师兼生产管理部主任，溪洛渡电厂党委委员、副厂长，溪洛渡电厂党委委员、副厂长兼安全总监（其间抽调至销售公司（市场营销部）工作），湖北能源集团股份有限公司党委委员、副总经理。现任公司副总经理、党委委员。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "经济学硕士，高级经济师。历任中国长江三峡集团公司企业管理部风险管理与内部控制处副处长，中国长江三峡集团有限公司企业管理林 峰 部风险管理与内部控制处处长、违规追责处处长，法律合规部（企业管理部）副主任，法律合规与企业管理部副主任。现任公司副总经工学硕士，正高级工程师。历任中国长江电力股份有限公司生产计划部生产技术管理主任，生产技术部技术业务主任、副经理、副主任，姜德政 三峡电厂党委委员、总工程师兼生产管理部主任，溪洛渡电厂党委委员、副厂长，溪洛渡电厂党委委员、副厂长兼安全总监（其间抽调至销售公司（市场营销部）工作），湖北能源集团股份有限公司党委委员、副总经理。现任公司副总经理、党委委员。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:35:26",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 35,
+        "section_path": "第四节 公司治理、环境和社会 > 四、董事履行职责情况 > (一)董事参加董事会和股东会的情况",
+        "quoted_anchor": "刘海波 董事、总经理 聘任 股东会选举、董事会聘任姓名 独立 本年应参 亲自出 以通讯 委托出 缺席 是否连续两 出席股东董事 加董事会 席次数 方式参 席次数 次数 次未亲自参 会的次数刘伟平董事因公务原因未亲自出席会议次数超过报告期间董事会会议总次数的二分之一；洪猛董事、李文中董事因公务原因连续两次未亲自出席董事会会议。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "刘海波 董事、总经理 聘任 股东会选举、董事会聘任姓名 独立 本年应参 亲自出 以通讯 委托出 缺席 是否连续两 出席股东董事 加董事会 席次数 方式参 席次数 次数 次未亲自参 会的次数刘伟平董事因公务原因未亲自出席会议次数超过报告期间董事会会议总次数的二分之一；洪猛董事、李文中董事因公务原因连续两次未亲自出席董事会会议。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:36:27",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 36,
+        "section_path": "第四节 公司治理、环境和社会 > 五、董事会下设专门委员会情况 > (三)报告期内审计委员会召开8次会议 > 3.《公司 2024年度财务决算报告》",
+        "quoted_anchor": "2025年7 第六届董事会战略与 ESG委员会第十次会议审议通过： 同意将本次会议议月 29日 1.《关于出资建设葛洲坝航运扩能工程的议案》 案提交董事会审议。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "2025年7 第六届董事会战略与 ESG委员会第十次会议审议通过： 同意将本次会议议月 29日 1.《关于出资建设葛洲坝航运扩能工程的议案》 案提交董事会审议。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:36:28",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 36,
+        "section_path": "第四节 公司治理、环境和社会 > 五、董事会下设专门委员会情况 > (三)报告期内审计委员会召开8次会议 > 3.《公司 2024年度财务决算报告》",
+        "quoted_anchor": "战略与 ESG委员会 刘伟平、何红心、刘海波、黄德林、黄 峰、李文中薪酬与考核委员会 黄 峰、黄德林、李文中、孙正运第六届董事会战略与 ESG委员会第八次会议审议通过：2025年6 第六届董事会战略与 ESG委员会第九次会议审议通过： 同意将本次会议议月 25日 1.《关于投资建设江西寻乌抽水蓄能电站项目的议案》 案提交董事会审议。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "战略与 ESG委员会 刘伟平、何红心、刘海波、黄德林、黄 峰、李文中薪酬与考核委员会 黄 峰、黄德林、李文中、孙正运第六届董事会战略与 ESG委员会第八次会议审议通过：2025年6 第六届董事会战略与 ESG委员会第九次会议审议通过： 同意将本次会议议月 25日 1.《关于投资建设江西寻乌抽水蓄能电站项目的议案》 案提交董事会审议。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:39:33",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 39,
+        "section_path": "第四节 公司治理、环境和社会 > 八、利润分配或资本公积金转增预案 > (二)现金分红政策的专项说明",
+        "quoted_anchor": "一是持续完善教育培训工作体系。强化教育培训年度计划管理和职工教育经费使用管理，做好企业核心课程与师资队伍建设，不断丰富教学方式方法，推动公司教育培训工作规范化、科学化、内涵式发展。二是推进干部素质能力提升行动。组织公司党员干部参加《习近平经济文选》第一卷联学培训和党的二十届三中全会精神专项培训，常态化实施“领航计划-干部经营管理能力提升培训”，综合运用专题讲座、领导干部上讲台等多样化的教学形式，全面提高干部德才素质和履职能力。三是夯实专业技术技能人才基础。深化工匠选拔与管理体系建设，组织开展第二届“长电工匠”选拔与聘任工作，落实高层次技能人才精准培养要求，高质量开展职业技能等级认定工作，持续畅通技能人才发展通道，努力锻造更多能工巧匠、大国工匠。四是厚植科技创新人才培养沃土。健全产学研用深度融合机制，充分发挥国家工程中心、重点实验室、博士后工作站等平台“孵化器”作用，围绕关键科研课题和重点科技专项攻关，加强科技创新平台及专职科研队伍建设；统筹做好高层次人才、博士后、工程硕博士等科技人才的培养使用，集聚各类创新资源，释放人才创新活力。五是强化经营管理人才培育储备。巩固实施“启航计划-青年英才培养项目”“巡航计划-MiniMBA培训”等重点培养项目，培育储备兼具专业技术背景和管理基础知识的经营管理后备人才。组织实施“远航计划-国际化人才培养项目”，选派优秀员工赴海外项目培公司利润分配符合《公司章程》规定和股东会决议的要求，分红标准和比例明确清晰，相关决策程序和机制完备，独立董事发表了明确意见，中小股东的意见和诉求得到充分表达，其合法每年度的利润分配按不低于当年合并报表中归属于母公司股东的净利润的 70%进行现金分红。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "一是持续完善教育培训工作体系。强化教育培训年度计划管理和职工教育经费使用管理，做好企业核心课程与师资队伍建设，不断丰富教学方式方法，推动公司教育培训工作规范化、科学化、内涵式发展。二是推进干部素质能力提升行动。组织公司党员干部参加《习近平经济文选》第一卷联学培训和党的二十届三中全会精神专项培训，常态化实施“领航计划-干部经营管理能力提升培训”，综合运用专题讲座、领导干部上讲台等多样化的教学形式，全面提高干部德才素质和履职能力。三是夯实专业技术技能人才基础。深化工匠选拔与管理体系建设，组织开展第二届“长电工匠”选拔与聘任工作，落实高层次技能人才精准培养要求，高质量开展职业技能等级认定工作，持续畅通技能人才发展通道，努力锻造更多能工巧匠、大国工匠。四是厚植科技创新人才培养沃土。健全产学研用深度融合机制，充分发挥国家工程中心、重点实验室、博士后工作站等平台“孵化器”作用，围绕关键科研课题和重点科技专项攻关，加强科技创新平台及专职科研队伍建设；统筹做好高层次人才、博士后、工程硕博士等科技人才的培养使用，集聚各类创新资源，释放人才创新活力。五是强化经营管理人才培育储备。巩固实施“启航计划-青年英才培养项目”“巡航计划-MiniMBA培训”等重点培养项目，培育储备兼具专业技术背景和管理基础知识的经营管理后备人才。组织实施“远航计划-国际化人才培养项目”，选派优秀员工赴海外项目培公司利润分配符合《公司章程》规定和股东会决议的要求，分红标准和比例明确清晰，相关决策程序和机制完备，独立董事发表了明确意见，中小股东的意见和诉求得到充分表达，其合法每年度的利润分配按不低于当年合并报表中归属于母公司股东的净利润的 70%进行现金分红。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:41:35",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 41,
+        "section_path": "第四节 公司治理、环境和社会 > 十一、报告期内对子公司的管理控制情况",
+        "quoted_anchor": "(四)报告期内对高级管理人员的考评机制，以及激励机制的建立、实施情况公司坚持经营业绩目标导向、激励约束相统一、短期与中长期相结合，对高级管理人员实行任期制和契约化管理，以固定任期和契约关系为基础，由董事会根据合同或协议约定开展年度和任期考核，并根据考核结果按照《高级管理人员薪酬管理办法》相关规定兑现薪酬。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "(四)报告期内对高级管理人员的考评机制，以及激励机制的建立、实施情况公司坚持经营业绩目标导向、激励约束相统一、短期与中长期相结合，对高级管理人员实行任期制和契约化管理，以固定任期和契约关系为基础，由董事会根据合同或协议约定开展年度和任期考核，并根据考核结果按照《高级管理人员薪酬管理办法》相关规定兑现薪酬。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:43:36",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 43,
+        "section_path": "第四节 公司治理、环境和社会 > 十六、巩固拓展脱贫攻坚成果、乡村振兴等工作具体情况",
+        "quoted_anchor": "三是压实帮扶责任，助力帮扶地区经济发展。聚焦世界最大清洁能源走廊的周边社区管理，统筹推进宜昌、三峡、金沙江库区的精准帮扶工作。实施宜昌市西坝街道维修改造、五峰县乡村会客厅建设、叙州区卫生院医疗设备更新、雷波三峡中学教师周转房建设、巧家县蔬菜产业提升等项目，持续提升库区乡村基础设施水平、公共服务能力和人居环境品质。组织开展“圆梦行动”“点亮微心愿”“幸福阳光班”等公益活动，联动地方搭建公益服务平台，鼓励员工定期赴四是创新工作举措，服务清洁能源战略发展。加强与帮扶区域能源开发合作，围绕抽水蓄能电站建设、金沙江下游水风光能源开发、电力销售等新业态开展战略性公益捐助，通过实施校企合作和社区开放活动等项目，推动企地共同发展。积极支持海外业务项目所在地民生发展和公益事业，主动谋划实施“秘鲁奖学金”“心灵庇护所”“健康之光 ”等高质量“小而美”的社会责任项目。持续推进智慧库区、零碳库区建设，拓展乡村清洁能源多重功能和多元价值。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "三是压实帮扶责任，助力帮扶地区经济发展。聚焦世界最大清洁能源走廊的周边社区管理，统筹推进宜昌、三峡、金沙江库区的精准帮扶工作。实施宜昌市西坝街道维修改造、五峰县乡村会客厅建设、叙州区卫生院医疗设备更新、雷波三峡中学教师周转房建设、巧家县蔬菜产业提升等项目，持续提升库区乡村基础设施水平、公共服务能力和人居环境品质。组织开展“圆梦行动”“点亮微心愿”“幸福阳光班”等公益活动，联动地方搭建公益服务平台，鼓励员工定期赴四是创新工作举措，服务清洁能源战略发展。加强与帮扶区域能源开发合作，围绕抽水蓄能电站建设、金沙江下游水风光能源开发、电力销售等新业态开展战略性公益捐助，通过实施校企合作和社区开放活动等项目，推动企地共同发展。积极支持海外业务项目所在地民生发展和公益事业，主动谋划实施“秘鲁奖学金”“心灵庇护所”“健康之光 ”等高质量“小而美”的社会责任项目。持续推进智慧库区、零碳库区建设，拓展乡村清洁能源多重功能和多元价值。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:214:38",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 214,
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > （三） 市场风险 > 1. 汇率风险",
+        "quoted_anchor": "流动性风险是指本公司在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的风险。公司持续监控短期和长期的资金需求，以确保维持充裕的现金储备；同时持续监控是否符合借款协议的规定，从主要金融机构获得提供足够备用资金的承诺，以满足短期和长期的资金账面净值 账面原值 1年以内 1-2年 2-5年 5年以上本公司的主要经营位于中国境内，主要业务以人民币结算。但本公司已确认的外币资产和负债及未来的外币交易（外币资产和负债及外币交易的计价货币主要为港币、美元、索尔和欧元等）依然存在汇率风险。本公司负责监控公司外币交易和外币资产及负债的规模，以最大程度降低面美元项目 港币项目 欧元项目 卢比项目 索尔项目 合计",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "流动性风险是指本公司在履行以交付现金或其他金融资产的方式结算的义务时发生资金短缺的风险。公司持续监控短期和长期的资金需求，以确保维持充裕的现金储备；同时持续监控是否符合借款协议的规定，从主要金融机构获得提供足够备用资金的承诺，以满足短期和长期的资金账面净值 账面原值 1年以内 1-2年 2-5年 5年以上本公司的主要经营位于中国境内，主要业务以人民币结算。但本公司已确认的外币资产和负债及未来的外币交易（外币资产和负债及外币交易的计价货币主要为港币、美元、索尔和欧元等）依然存在汇率风险。本公司负责监控公司外币交易和外币资产及负债的规模，以最大程度降低面美元项目 港币项目 欧元项目 卢比项目 索尔项目 合计"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:215:39",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 215,
+        "section_path": "第八节 财务报告 > 十二、 与金融工具相关的风险 > （三） 市场风险 > 2. 利率风险",
+        "quoted_anchor": "本公司的利率风险主要产生于银行借款、应付债券等。浮动利率的金融负债使本公司面临现金流量利率风险，固定利率的金融负债使本公司面临公允价值利率风险。本公司根据当时的市场本公司持续监控公司利率水平。利率上升会增加新增带息债务的成本以及本公司尚未付清的以浮动利率计息的带息债务的利息支出，并对本公司的财务业绩产生不利影响，管理层会依据最借款主要是人民币计价的浮动利率合同，长期借款浮动利率合同的金额共计 2,341.59亿元，详见上述敏感性分析假定在资产负债表日已发生利率变动，并且已应用于本公司所有按浮动利率",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "本公司的利率风险主要产生于银行借款、应付债券等。浮动利率的金融负债使本公司面临现金流量利率风险，固定利率的金融负债使本公司面临公允价值利率风险。本公司根据当时的市场本公司持续监控公司利率水平。利率上升会增加新增带息债务的成本以及本公司尚未付清的以浮动利率计息的带息债务的利息支出，并对本公司的财务业绩产生不利影响，管理层会依据最借款主要是人民币计价的浮动利率合同，长期借款浮动利率合同的金额共计 2,341.59亿元，详见上述敏感性分析假定在资产负债表日已发生利率变动，并且已应用于本公司所有按浮动利率"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:0",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 84,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 86,241,940,222.20 84,491,870,566.52 其中：营业收入 七、61 86,241,940,222.20 84,491,870,566.52 利息收入",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 86241940222.2,
+        "column_identity": "current_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2025 年年度报告 负债合计 149,398,556,960.76 149,188,869,625.21 所有者权益（或股东权益）： 股本 24,468,217,716.00 24,468,217,716.00 其他权益工具 其中：优先股 永续债 资本公积 73,804,530,699.39 74,174,169,744.67 减：库存股 其他综合收益 3,027,730,094.12 2,705,969,949.45 专项储备 26,135,681.57 盈余公积 22,934,762,401.97 22,934,762,40",
+        "source_title": "长江电力 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:1",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2024FY",
+        "page_number": 84,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 86,241,940,222.20 84,491,870,566.52 其中：营业收入 七、61 86,241,940,222.20 84,491,870,566.52 利息收入",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 84491870566.52,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2025 年年度报告 负债合计 149,398,556,960.76 149,188,869,625.21 所有者权益（或股东权益）： 股本 24,468,217,716.00 24,468,217,716.00 其他权益工具 其中：优先股 永续债 资本公积 73,804,530,699.39 74,174,169,744.67 减：库存股 其他综合收益 3,027,730,094.12 2,705,969,949.45 专项储备 26,135,681.57 盈余公积 22,934,762,401.97 22,934,762,40",
+        "source_title": "长江电力 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:0",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 85,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "1.归属于母公司股东的净利润（净 34,502,809,176.39 32,496,172,808.65 亏损以“-”号填列） 2.少数股东损益（净亏损以“-”号 446,461,711.16 434,026,586.54",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": 34502809176.39,
+        "column_identity": "current_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2025 年年度报告 产终止确认收益 汇兑收益（损失以“－”号填列） 净敞口套期收益（损失以“-”号 填列） 公允价值变动收益（损失以“－” 七、70 1,677,224,276.91 211,841,059.71 号填列） 信用减值损失（损失以“-”号填 七、71 -26,354,836.16 -32,451,428.30 列） 资产减值损失（损失以“-”号填 七、72 -1,504,725,889.21 -14,329,997.43 列） 资产处置收益（损失以“－”号 七、73 -456,669.39 -6,982,274.2",
+        "source_title": "长江电力 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:1",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2024FY",
+        "page_number": 85,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "1.归属于母公司股东的净利润（净 34,502,809,176.39 32,496,172,808.65 亏损以“-”号填列） 2.少数股东损益（净亏损以“-”号 446,461,711.16 434,026,586.54",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": 32496172808.65,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2025 年年度报告 产终止确认收益 汇兑收益（损失以“－”号填列） 净敞口套期收益（损失以“-”号 填列） 公允价值变动收益（损失以“－” 七、70 1,677,224,276.91 211,841,059.71 号填列） 信用减值损失（损失以“-”号填 七、71 -26,354,836.16 -32,451,428.30 列） 资产减值损失（损失以“-”号填 七、72 -1,504,725,889.21 -14,329,997.43 列） 资产处置收益（损失以“－”号 七、73 -456,669.39 -6,982,274.2",
+        "source_title": "长江电力 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:0",
+        "source_id": "cypc_2026_q1",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2026Q1",
+        "page_number": 8,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 18,111,540,767.50 17,015,283,778.59 其中：营业收入 18,111,540,767.50 17,015,283,778.59 利息收入",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 18111540767.5,
+        "column_identity": "current_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2026 年第一季度报告 盈余公积 24,968,300,565.59 24,968,300,565.59 一般风险准备 未分配利润 111,598,808,127.77 104,837,801,229.29 归属于母公司所有者权益（或 227,903,660,002.59 221,338,010,639.92 股东权益）合计 少数股东权益 11,914,157,647.32 12,022,650,677.73 所有者权益（或股东权益） 239,817,817,649.91 233,360,661,317.65 合计 负债和所有者",
+        "source_title": "长江电力 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:1",
+        "source_id": "cypc_2026_q1",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025Q1",
+        "page_number": 8,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 18,111,540,767.50 17,015,283,778.59 其中：营业收入 18,111,540,767.50 17,015,283,778.59 利息收入",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 17015283778.59,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2026 年第一季度报告 盈余公积 24,968,300,565.59 24,968,300,565.59 一般风险准备 未分配利润 111,598,808,127.77 104,837,801,229.29 归属于母公司所有者权益（或 227,903,660,002.59 221,338,010,639.92 股东权益）合计 少数股东权益 11,914,157,647.32 12,022,650,677.73 所有者权益（或股东权益） 239,817,817,649.91 233,360,661,317.65 合计 负债和所有者",
+        "source_title": "长江电力 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:0",
+        "source_id": "cypc_2026_q1",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2026Q1",
+        "page_number": 9,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "1.归属于母公司股东的净利润（净 6,761,006,898.48 5,180,785,597.87 亏损以“-”号填列） 2.少数股东损益（净亏损以“-”号 122,290,523.85 109,668,948.86",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": 6761006898.48,
+        "column_identity": "current_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2026 年第一季度报告 以摊余成本计量的金融资产 终止确认收益 汇兑收益（损失以“-”号填列） 净敞口套期收益（损失以“-”号 填列） 公允价值变动收益（损失以“-” 684,970,477.99 -51,067,212.35 号填列） 信用减值损失（损失以“-”号填 -1,476,491.54 234.62 列） 资产减值损失（损失以“-”号填 -38,254.02 列） 资产处置收益（损失以“-”号填 -1,047,232.69 -3,307,832.82 列） 三、营业利润（亏损以“-”号填列） 8,319,683,821",
+        "source_title": "长江电力 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:1",
+        "source_id": "cypc_2026_q1",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025Q1",
+        "page_number": 9,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "1.归属于母公司股东的净利润（净 6,761,006,898.48 5,180,785,597.87 亏损以“-”号填列） 2.少数股东损益（净亏损以“-”号 122,290,523.85 109,668,948.86",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+        "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": 5180785597.87,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "中国长江电力股份有限公司2026 年第一季度报告 以摊余成本计量的金融资产 终止确认收益 汇兑收益（损失以“-”号填列） 净敞口套期收益（损失以“-”号 填列） 公允价值变动收益（损失以“-” 684,970,477.99 -51,067,212.35 号填列） 信用减值损失（损失以“-”号填 -1,476,491.54 234.62 列） 资产减值损失（损失以“-”号填 -38,254.02 列） 资产处置收益（损失以“-”号填 -1,047,232.69 -3,307,832.82 列） 三、营业利润（亏损以“-”号填列） 8,319,683,821",
+        "source_title": "长江电力 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:2:0",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 2,
+        "section_path": "二、未出席董事情况 > 十、重大风险提示",
+        "quoted_anchor": "未出席董事职务 未出席董事姓名 未出席董事的原因说明 被委托人姓名三、信永中和会计师事务所（特殊普通合伙）为本公司出具了标准无保留意见的审计报告。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "未出席董事职务 未出席董事姓名 未出席董事的原因说明 被委托人姓名三、信永中和会计师事务所（特殊普通合伙）为本公司出具了标准无保留意见的审计报告。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:2:1",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 2,
+        "section_path": "二、未出席董事情况 > 十、重大风险提示",
+        "quoted_anchor": "本报告所涉及的未来计划、发展战略等前瞻性陈述，不构成公司对投资者的实质性承诺，请公司已在本报告中详细描述可能存在的风险，敬请查阅第三节管理层讨论与分析“六、关于",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "本报告所涉及的未来计划、发展战略等前瞻性陈述，不构成公司对投资者的实质性承诺，请公司已在本报告中详细描述可能存在的风险，敬请查阅第三节管理层讨论与分析“六、关于"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:12:7",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 12,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (一)主营业务分析 > 1、利润表及现金流量表相关科目变动分析表",
+        "quoted_anchor": "未来，公司将进一步发挥信用优势，拓宽融资路径，提升资金使用效率，优化债务结构，降低财务成本。主动服务长江经济带、长江大保护、“碳达峰、碳中和”等重大国家战略，把握清洁能源转型、新能源发展及电力市场改革机遇，围绕主业稳健开展投资，精心开展市值管理。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "未来，公司将进一步发挥信用优势，拓宽融资路径，提升资金使用效率，优化债务结构，降低财务成本。主动服务长江经济带、长江大保护、“碳达峰、碳中和”等重大国家战略，把握清洁能源转型、新能源发展及电力市场改革机遇，围绕主业稳健开展投资，精心开展市值管理。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:13:8",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 13,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (一)主营业务分析 > 2、 收入和成本分析",
+        "quoted_anchor": "本期公司业务类型、利润构成或利润来源发生重大变动的详细说明(1).主营业务分行业、分产品、分地区、分销售模式情况分行业 营业收入 营业成本 毛利率（%） 营业收入比 营业成本比 毛利率比上年分产品 营业收入 营业成本 毛利率（%） 营业收入比 营业成本比 毛利率比上年分行业 成本构成项 本期金额 成本比例 上年同期金额 期占总 上年同期变分产品 成本构成项 本期金额 成本比例 上年同期金额 期占总 上年同期变",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "本期公司业务类型、利润构成或利润来源发生重大变动的详细说明(1).主营业务分行业、分产品、分地区、分销售模式情况分行业 营业收入 营业成本 毛利率（%） 营业收入比 营业成本比 毛利率比上年分产品 营业收入 营业成本 毛利率（%） 营业收入比 营业成本比 毛利率比上年分行业 成本构成项 本期金额 成本比例 上年同期金额 期占总 上年同期变分产品 成本构成项 本期金额 成本比例 上年同期金额 期占总 上年同期变"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:14:9",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (一)主营业务分析 > 4、 研发投入",
+        "quoted_anchor": "(5).报告期主要子公司股权变动导致合并范围变化(6).公司报告期内业务、产品或服务发生重大变化或调整有关情况下列客户及供应商信息按照同一控制口径合并计算列示的情况说明本公司将属于同一控制人控制的客户（仅同受同一国有资产管理机构实际控制的除外）视为同一客户合并列示。本公司将属于同一控制人控制的供应商（仅同受同一国有资产管理机构实际B.报告期内向单个客户的销售比例超过总额的 50%、前5 名客户中存在新增客户的或严重依赖于序号 客户名称 销售额 占年度销售总额比例（%）报告期内向单个供应商的采购比例超过总额的 50%、前5 名供应商中存在新增供应商的或严重依",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "(5).报告期主要子公司股权变动导致合并范围变化(6).公司报告期内业务、产品或服务发生重大变化或调整有关情况下列客户及供应商信息按照同一控制口径合并计算列示的情况说明本公司将属于同一控制人控制的客户（仅同受同一国有资产管理机构实际控制的除外）视为同一客户合并列示。本公司将属于同一控制人控制的供应商（仅同受同一国有资产管理机构实际B.报告期内向单个客户的销售比例超过总额的 50%、前5 名客户中存在新增客户的或严重依赖于序号 客户名称 销售额 占年度销售总额比例（%）报告期内向单个供应商的采购比例超过总额的 50%、前5 名供应商中存在新增供应商的或严重依"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:15:10",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 15,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (三)资产、负债情况分析 > 1、资产及负债状况",
+        "quoted_anchor": "(4).研发人员构成发生重大变化的原因及对公司未来发展的影响项目名称 本期期末数 本期期末 上期期末数 上期期末 本期期末5根据公司规定，报告期从事研发活动的实际工作时间占制度工作时间 90%及以上的人员为全时研发人员，从事研发活动的实际工作时间占制度工作时间 10%（含）-90%（不含）的人员为非全时研发人员。本表格仅统计 2025年年末境内在职人数，未包括年内调出、离职或退休人员。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "(4).研发人员构成发生重大变化的原因及对公司未来发展的影响项目名称 本期期末数 本期期末 上期期末数 上期期末 本期期末5根据公司规定，报告期从事研发活动的实际工作时间占制度工作时间 90%及以上的人员为全时研发人员，从事研发活动的实际工作时间占制度工作时间 10%（含）-90%（不含）的人员为非全时研发人员。本表格仅统计 2025年年末境内在职人数，未包括年内调出、离职或退休人员。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:18:11",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 18,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (四)行业经营性信息分析 > 4、 发电效率情况分析",
+        "quoted_anchor": "发电量(万千瓦时) 上网电量(万千瓦时) 售电量(万千瓦时) (元/兆瓦经营地区/ 今年 上年同期 同比 今年 上年同期 同比 今年 上年同期 同比 今年发电量（万 售电量（万千 上年同 变动 本期金 占总 上年同 期占总 额较上类型 千瓦时） 同比 瓦时） 同比 收入 期数 比例 成本构成项目 额 成本 期金额 成本比 年同期",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "发电量(万千瓦时) 上网电量(万千瓦时) 售电量(万千瓦时) (元/兆瓦经营地区/ 今年 上年同期 同比 今年 上年同期 同比 今年 上年同期 同比 今年发电量（万 售电量（万千 上年同 变动 本期金 占总 上年同 期占总 额较上类型 千瓦时） 同比 瓦时） 同比 收入 期数 比例 成本构成项目 额 成本 期金额 成本比 年同期"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:19:12",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 19,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (四)行业经营性信息分析 > 6、 电力市场化交易",
+        "quoted_anchor": "工程名称 年初余额 本年增加 转入固定资产 其他减少 年末余额",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "工程名称 年初余额 本年增加 转入固定资产 其他减少 年末余额"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:24:14",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 24,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (七) 主要控股参股公司分析",
+        "quoted_anchor": "供电业务。一般项目：节能管理服务，销售代理，信息咨限公司 内的技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广，综合能源管理服务，合同能源管理服务。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "供电业务。一般项目：节能管理服务，销售代理，信息咨限公司 内的技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广，综合能源管理服务，合同能源管理服务。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:24:15",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 24,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (七) 主要控股参股公司分析",
+        "quoted_anchor": "发电业务、输电业务、供（配）电业务；水力发电；输电长电（张掖）能源 、供电、受电电力设施的安装、维修和试验。一般项目：服务；储能技术服务；工程管理服务；工程技术服务（规配售电系统开发、建设、设计及运营管理；电力销售及服三峡电能有限公 务；电力技术开发、咨询、转让、服务；承装、承修、承用服务；集供电、供气、供水、供热业务于一体的综合能长电（休宁）能源 发电业务、输电业务、供（配）电业务；水力发电；输电司 储能技术服务；新兴能源技术研发；太阳能发电技术服务奉节县菜籽坝抽 发电业务、输电业务、供（配）电业务，水力发电。一般发电业务、输电业务、供（配）电业务，水力发电，自来江西寻乌抽水蓄 水生产与供应。一般项目：储能技术服务，工程管理服务新兴能源技术研发，太阳能发电技术服务，风力发电技术发电业务、输电业务、供（配）电业务；水力发电；输电、供电、受电电力设施的安装、维修和试验。一般项目：水蓄能有限公司 服务；储能技术服务；工程管理服务；工程技术服务（规划管理、勘察、设计、监理除外）；旅游开发项目策划咨",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "发电业务、输电业务、供（配）电业务；水力发电；输电长电（张掖）能源 、供电、受电电力设施的安装、维修和试验。一般项目：服务；储能技术服务；工程管理服务；工程技术服务（规配售电系统开发、建设、设计及运营管理；电力销售及服三峡电能有限公 务；电力技术开发、咨询、转让、服务；承装、承修、承用服务；集供电、供气、供水、供热业务于一体的综合能长电（休宁）能源 发电业务、输电业务、供（配）电业务；水力发电；输电司 储能技术服务；新兴能源技术研发；太阳能发电技术服务奉节县菜籽坝抽 发电业务、输电业务、供（配）电业务，水力发电。一般发电业务、输电业务、供（配）电业务，水力发电，自来江西寻乌抽水蓄 水生产与供应。一般项目：储能技术服务，工程管理服务新兴能源技术研发，太阳能发电技术服务，风力发电技术发电业务、输电业务、供（配）电业务；水力发电；输电、供电、受电电力设施的安装、维修和试验。一般项目：水蓄能有限公司 服务；储能技术服务；工程管理服务；工程技术服务（规划管理、勘察、设计、监理除外）；旅游开发项目策划咨"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:26:16",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 26,
+        "section_path": "第三节 管理层讨论与分析 > 四、报告期内主要经营情况 > (八)公司控制的结构化主体情况",
+        "quoted_anchor": "设备零售；天然气的利用技术开发；太阳能光伏供电系统的研究、开发、设计；工程项目管理服务；节能技术推广服务；环保技术推广服务；可再生能源领域技术咨询、技术服务；市政设施管理；技术服务(不含许可审批项目)。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "设备零售；天然气的利用技术开发；太阳能光伏供电系统的研究、开发、设计；工程项目管理服务；节能技术推广服务；环保技术推广服务；可再生能源领域技术咨询、技术服务；市政设施管理；技术服务(不含许可审批项目)。"
+      },
+      {
+        "evidence_id": "cypc_2025_annual:narrative:27:18",
+        "source_id": "cypc_2025_annual",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 27,
+        "section_path": "第三节 管理层讨论与分析 > 五、关于公司未来发展的讨论与分析 > (三)经营计划",
+        "quoted_anchor": "融资计划：结合公司资金需求，科学研判债券市场走势，合理制定融资策略，精准把握发行窗口，全力压降融资成本。充分发挥境内外顶级资信优势，拓宽融资渠道，持续树立公司资本市场标杆形象。稳妥开展证券存续期管理，科学制定年度利润分配方案，维护优质上市公司形象。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+        "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+        "source_title": "长江电力 2025 年年度报告",
+        "text": "融资计划：结合公司资金需求，科学研判债券市场走势，合理制定融资策略，精准把握发行窗口，全力压降融资成本。充分发挥境内外顶级资信优势，拓宽融资渠道，持续树立公司资本市场标杆形象。稳妥开展证券存续期管理，科学制定年度利润分配方案，维护优质上市公司形象。"
+      }
+    ],
+    "derived_metrics": [
+      {
+        "derived_id": "derived:official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:net_profit_parent",
+        "metric": "net_profit_parent",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "current_evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:0",
+        "previous_evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:1",
+        "current_period": "2025FY",
+        "previous_period": "2024FY",
+        "current_value": 34502809176.39,
+        "previous_value": 32496172808.65,
+        "absolute_change": 2006636367.739998,
+        "percent_change": 6.174993,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:net_profit_parent",
+        "metric": "net_profit_parent",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "current_evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:0",
+        "previous_evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:1",
+        "current_period": "2026Q1",
+        "previous_period": "2025Q1",
+        "current_value": 6761006898.48,
+        "previous_value": 5180785597.87,
+        "absolute_change": 1580221300.61,
+        "percent_change": 30.501577,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:revenue",
+        "metric": "revenue",
+        "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+        "current_evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:0",
+        "previous_evidence_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:1",
+        "current_period": "2025FY",
+        "previous_period": "2024FY",
+        "current_value": 86241940222.2,
+        "previous_value": 84491870566.52,
+        "absolute_change": 1750069655.679993,
+        "percent_change": 2.071288,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:revenue",
+        "metric": "revenue",
+        "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+        "current_evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:0",
+        "previous_evidence_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:1",
+        "current_period": "2026Q1",
+        "previous_period": "2025Q1",
+        "current_value": 18111540767.5,
+        "previous_value": 17015283778.59,
+        "absolute_change": 1096256988.91,
+        "percent_change": 6.442778,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      }
+    ],
+    "gaps": [],
+    "truth_boundary": {
+      "official_pdf_only": true,
+      "issuer_disclosure_is_not_independent_proof": true,
+      "derived_direction_is_deterministic": true,
+      "no_valuation_or_action": true,
+      "no_old_report_prose": true
+    }
+  }
+}
