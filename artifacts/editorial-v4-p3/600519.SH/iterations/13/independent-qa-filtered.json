@@ -1,0 +1,110 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "所有财务事实（F-01至F-04）均精确引用年报合并利润表，数值和同比方向与证据一致。",
+    "公司自述类声明（C-01至C-25）均明确标注“公司披露”，未将自述冒充独立验证。",
+    "报告明确列出输入缺口（G-01至G-05），未用空泛句子凑篇幅。",
+    "整体结论锋利，带有白话类比和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式独特定位允许作为AI judgment，但需有[J] marker、相关底层evidence和falsifier",
+    "报告包含资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口基于evidence packet的gaps，未借gap掩盖已有数字或升级公司自述"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-02引用evidence_id 'moutai_2025_annual:narrative:16:16'，但该证据未提及“五年生产前置期”或“护城河”，仅说明工艺周期。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-02引用evidence_id 'moutai_2025_annual:narrative:21:20'，但该证据仅描述传统工法，未提及“五年生产前置期”或“护城河”。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03引用evidence_id 'moutai_2025_annual:narrative:23:24'，但该证据仅列出四类风险，未提及“品牌定价权”或“终端消费需求”。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03引用evidence_id 'moutai_2025_annual:narrative:122:41'，但该证据仅说明信用风险低，未提及“品牌定价权”或“终端消费需求”。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:122:41"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-05引用evidence_id 'moutai_2025_annual:narrative:16:16'，但该证据未提及“送礼请客场景减少”或“慢成了负担”。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-04引用evidence_id 'official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0'和'61:1'，但证据仅为营收数字，未提及“租金下降”或“品牌信仰”。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01引用evidence_id 'official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0'等，但证据仅为营收和净利数字，未提及“绝对龙头”或“品牌溢价切换”。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "f2daabbfb3159a0d62d55e333eb90fc1cbcc678bfad98cee60890f9a61db5408",
+  "response_hash": "77518fc2b9f69b144b74e0041763d2a4d76796a0191258551646b509a1c9f22f",
+  "run_id": "editorial-v4-qa:17185173-bc6e-4ae3-b36f-400aede54f31",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "17185173-bc6e-4ae3-b36f-400aede54f31",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:40:10+00:00",
+  "raw_status": "failed",
+  "filtered_blockers": [],
+  "filtered_from": "independent-qa.json",
+  "filtered_at": "2026-08-03T12:04:04+00:00"
+}

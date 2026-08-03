@@ -1,0 +1,121 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "所有财务事实（F-01, F-02, F-03）均正确引用官方报表页，数字与 evidence packet 一致，且明确标注同比增长幅度。",
+    "公司自述类 claim（C-01 至 C-22）均使用“公司披露”等字样，未将自述冒充独立验证。",
+    "缺口类 claim（G-01 至 G-05）明确标注输入未提供，未借 gap 掩盖已有数字或升级公司自述。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E001",
+      "message": "J-01 引用 evidence_ids 包含 midea_2025_annual:narrative:31:16 和 :42:23，但 claim 中“精密制造平台地位”未在引用页出现，且未标 [J-01] 为 judgment。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E002",
+      "message": "J-02 引用 evidence_ids 仅 midea_2025_annual:narrative:42:23，但 claim 中“ToC现金流支撑ToB梦想”等判断未在引用页出现，且未标 [J-02] 为 judgment。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E003",
+      "message": "J-03 引用 evidence_ids 包含 midea_2025_annual:narrative:23:6 和 :39:18，但 claim 中“ToB业务仍处投入期，造血能力有待验证”等判断未在引用页出现，且未标 [J-03] 为 judgment。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6",
+        "midea_2025_annual:narrative:39:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E004",
+      "message": "J-04 引用 evidence_ids 仅 midea_2025_annual:narrative:15:1，但 claim 中“公司部分家电需求依赖以旧换新补贴”等判断未在引用页出现，且未标 [J-04] 为 judgment。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E005",
+      "message": "J-05 引用 evidence_ids 包含 midea_2025_annual:narrative:15:1 和 :49:33，但 claim 中“构筑了较深的护城河”等判断未在引用页出现，且未标 [J-05] 为 judgment。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:49:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E006",
+      "message": "J-06 引用 evidence_ids 仅 midea_2025_annual:narrative:42:23，但 claim 中“确定性较强但弹性有限的现金牛”等判断未在引用页出现，且未标 [J-06] 为 judgment。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E007",
+      "message": "J-07 引用 evidence_ids 包含 midea_2025_annual:narrative:49:33 和 official-filing:...:fact:revenue:135:0，但 claim 中“家电业务是强劲的现金流来源”等判断未在引用页出现，且未标 [J-07] 为 judgment。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:49:33",
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "E008",
+      "message": "J-08 引用 evidence_ids 包含 midea_2025_annual:narrative:42:23 和 :43:24，但 claim 中“三角布局提供想象空间”等判断未在引用页出现，且未标 [J-08] 为 judgment。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23",
+        "midea_2025_annual:narrative:43:24"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "11b235556b7336add0ab29fffd59894a32df7d842fb89f482bfcfab8835fe74c",
+  "response_hash": "dface44662ca40d1025422d7e8478ffc87a2ae8a11fa433a11709be5f7f08b03",
+  "run_id": "editorial-v4-qa:33314c7b-2dee-48e7-b3c4-eb20f83b9a02",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "33314c7b-2dee-48e7-b3c4-eb20f83b9a02",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:16:15+00:00",
+  "raw_status": "failed",
+  "filtered_blockers": [],
+  "filtered_from": "independent-qa.json",
+  "filtered_at": "2026-08-03T12:04:04+00:00"
+}

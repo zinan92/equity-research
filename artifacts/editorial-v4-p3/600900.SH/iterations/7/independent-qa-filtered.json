@@ -1,0 +1,120 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "所有财务事实（F-01 至 F-08）均正确引用了官方 PDF 中的数字，且同期对比方向与幅度与 derived_metrics 一致。",
+    "所有 issuer_self_report 类型的 claim 均明确标注“公司披露”，未将自述冒充独立验证。",
+    "报告明确指出了多个信息缺口（G-01 至 G-07），未用空泛句子凑篇幅。",
+    "整体结论 J-09 和 J-07 带有明确的 falsifier，符合爱牛式判断要求。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要它在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-09 引用了 evidence_ids [cypc_2025_annual:narrative:12:5, cypc_2025_annual:narrative:39:33]，但 claim 中“绝对主力”和“类债券的收益基准”等判断未在引用页出现，且未标注 [J-09] 对应的 falsifier 和 refs。",
+      "claim_id": "J-09",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-01 引用了 evidence_ids [cypc_2025_annual:narrative:12:5, cypc_2025_annual:narrative:39:33]，但 claim 中“独家运营长江干流六座梯级电站”和“类债券逻辑”未在引用页出现，且未标注 [J-01] 对应的 falsifier 和 refs。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-02 引用了 evidence_ids [cypc_2025_annual:narrative:10:2, cypc_2025_annual:narrative:28:19, cypc_2025_annual:narrative:215:39]，但 claim 中“收益质量高度依赖于长江来水的丰枯和电力市场化改革下的上网电价”未在引用页出现，且未标注 [J-02] 对应的 falsifier 和 refs。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2",
+        "cypc_2025_annual:narrative:28:19",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-10 引用了 evidence_ids [cypc_2025_annual:narrative:10:2]，但 claim 中“流域梯级调度能力是核心护城河”未在引用页出现，且未标注 [J-10] 对应的 falsifier 和 refs。",
+      "claim_id": "J-10",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-03 引用了 evidence_ids [cypc_2025_annual:narrative:27:17]，但 claim 中“大水电的灵活调节价值和绿色价值在电力现货市场和绿电交易中具有获得溢价的潜力”未在引用页出现，且未标注 [J-03] 对应的 falsifier 和 refs。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-04 引用了 evidence_ids [cypc_2025_annual:narrative:10:2]，但 claim 中“长江来水的丰枯是决定发电量和收入的最核心变量”未在引用页出现，且未标注 [J-04] 对应的 falsifier 和 refs。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-05 引用了 evidence_ids [cypc_2025_annual:narrative:28:19]，但 claim 中“电力市场化交易比重上升可能导致上网电价下行”未在引用页出现，且未标注 [J-05] 对应的 falsifier 和 refs。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:28:19"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "missing_evidence_ref",
+      "message": "J-06 引用了 evidence_ids [cypc_2025_annual:narrative:215:39]，但 claim 中“以浮动利率计息的巨额负债使公司对利率高度敏感”未在引用页出现，且未标注 [J-06] 对应的 falsifier 和 refs。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "ed40b3f64aeba0e268b6af0b819c3de891d66eb9ad259d6568dba80891934fef",
+  "response_hash": "3ede4c7a1bf9e45ae7fb342e6cbb45833e66af828a463c66a432184a0300b267",
+  "run_id": "editorial-v4-qa:33e21460-7044-40c3-936e-adac279161d3",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "33e21460-7044-40c3-936e-adac279161d3",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-03T10:51:04+00:00",
+  "raw_status": "failed",
+  "filtered_blockers": [],
+  "filtered_from": "independent-qa.json",
+  "filtered_at": "2026-08-03T12:04:04+00:00"
+}

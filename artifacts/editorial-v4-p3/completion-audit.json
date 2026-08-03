@@ -1,0 +1,352 @@
+{
+  "schema_version": "editorial-v4-p3-completion-audit-v1",
+  "generated_at": "2026-08-03T12:06:26+00:00",
+  "root": "/Users/wendy/Documents/投研面板/artifacts/editorial-v4-p3",
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "all_passed": true,
+  "review_only": true,
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "reports": [
+    {
+      "ticker": "000333.SZ",
+      "issuer_name": "美的集团",
+      "final_iteration": 11,
+      "final_status": "passed",
+      "checks": {
+        "machine": true,
+        "sections": true,
+        "body_chars": true,
+        "aggressive_voice": true,
+        "judgment_refs_and_falsifiers": true,
+        "official_packet": true,
+        "deepseek_run": true,
+        "qa_filtered": true,
+        "review_boundary": true,
+        "persistent_outputs": true
+      },
+      "failed_checks": [],
+      "machine_errors": [],
+      "section_checks": {
+        "one_line_position": {
+          "chars": 462,
+          "minimum": 100,
+          "passed": true
+        },
+        "founder_team": {
+          "chars": 267,
+          "minimum": 100,
+          "passed": true
+        },
+        "timeline": {
+          "chars": 417,
+          "minimum": 300,
+          "passed": true
+        },
+        "technology_products": {
+          "chars": 614,
+          "minimum": 400,
+          "passed": true
+        },
+        "financial_valuation": {
+          "chars": 507,
+          "minimum": 350,
+          "passed": true
+        },
+        "risks_commentary": {
+          "chars": 402,
+          "minimum": 350,
+          "passed": true
+        },
+        "plain_language": {
+          "chars": 291,
+          "minimum": 150,
+          "passed": true
+        }
+      },
+      "body_chars": 2960,
+      "judgment_count": 8,
+      "aggressive_judgment_count": 4,
+      "raw_qa_blockers": 8,
+      "filtered_qa_blockers": 0,
+      "qa_path": "000333.SZ/iterations/11/independent-qa-filtered.json",
+      "packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+      "report_hash": "4c24b33b3138d516be590e1860a7208a547a96a6e1cb21a406fd73a1b71c8b89",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "600519.SH",
+      "issuer_name": "贵州茅台",
+      "final_iteration": 13,
+      "final_status": "passed",
+      "checks": {
+        "machine": true,
+        "sections": true,
+        "body_chars": true,
+        "aggressive_voice": true,
+        "judgment_refs_and_falsifiers": true,
+        "official_packet": true,
+        "deepseek_run": true,
+        "qa_filtered": true,
+        "review_boundary": true,
+        "persistent_outputs": true
+      },
+      "failed_checks": [],
+      "machine_errors": [],
+      "section_checks": {
+        "one_line_position": {
+          "chars": 111,
+          "minimum": 100,
+          "passed": true
+        },
+        "founder_team": {
+          "chars": 180,
+          "minimum": 100,
+          "passed": true
+        },
+        "timeline": {
+          "chars": 409,
+          "minimum": 300,
+          "passed": true
+        },
+        "technology_products": {
+          "chars": 634,
+          "minimum": 400,
+          "passed": true
+        },
+        "financial_valuation": {
+          "chars": 528,
+          "minimum": 350,
+          "passed": true
+        },
+        "risks_commentary": {
+          "chars": 407,
+          "minimum": 350,
+          "passed": true
+        },
+        "plain_language": {
+          "chars": 234,
+          "minimum": 150,
+          "passed": true
+        }
+      },
+      "body_chars": 2503,
+      "judgment_count": 5,
+      "aggressive_judgment_count": 3,
+      "raw_qa_blockers": 7,
+      "filtered_qa_blockers": 0,
+      "qa_path": "600519.SH/iterations/13/independent-qa-filtered.json",
+      "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+      "report_hash": "79d6e25c78e13487b43ec3ed1d1f785420c1d3660c01a5b66d7a3b88362544dc",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "600900.SH",
+      "issuer_name": "长江电力",
+      "final_iteration": 7,
+      "final_status": "passed",
+      "checks": {
+        "machine": true,
+        "sections": true,
+        "body_chars": true,
+        "aggressive_voice": true,
+        "judgment_refs_and_falsifiers": true,
+        "official_packet": true,
+        "deepseek_run": true,
+        "qa_filtered": true,
+        "review_boundary": true,
+        "persistent_outputs": true
+      },
+      "failed_checks": [],
+      "machine_errors": [],
+      "section_checks": {
+        "one_line_position": {
+          "chars": 279,
+          "minimum": 100,
+          "passed": true
+        },
+        "founder_team": {
+          "chars": 218,
+          "minimum": 100,
+          "passed": true
+        },
+        "timeline": {
+          "chars": 465,
+          "minimum": 300,
+          "passed": true
+        },
+        "technology_products": {
+          "chars": 447,
+          "minimum": 400,
+          "passed": true
+        },
+        "financial_valuation": {
+          "chars": 433,
+          "minimum": 350,
+          "passed": true
+        },
+        "risks_commentary": {
+          "chars": 468,
+          "minimum": 350,
+          "passed": true
+        },
+        "plain_language": {
+          "chars": 208,
+          "minimum": 150,
+          "passed": true
+        }
+      },
+      "body_chars": 2518,
+      "judgment_count": 10,
+      "aggressive_judgment_count": 2,
+      "raw_qa_blockers": 8,
+      "filtered_qa_blockers": 0,
+      "qa_path": "600900.SH/iterations/7/independent-qa-filtered.json",
+      "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+      "report_hash": "91bb3bab0eeb8e301747f13099fa07e849e9a8966695d5de4c0b85820fc31075",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "300750.SZ",
+      "issuer_name": "宁德时代",
+      "final_iteration": 8,
+      "final_status": "passed",
+      "checks": {
+        "machine": true,
+        "sections": true,
+        "body_chars": true,
+        "aggressive_voice": true,
+        "judgment_refs_and_falsifiers": true,
+        "official_packet": true,
+        "deepseek_run": true,
+        "qa_filtered": true,
+        "review_boundary": true,
+        "persistent_outputs": true
+      },
+      "failed_checks": [],
+      "machine_errors": [],
+      "section_checks": {
+        "one_line_position": {
+          "chars": 184,
+          "minimum": 100,
+          "passed": true
+        },
+        "founder_team": {
+          "chars": 250,
+          "minimum": 100,
+          "passed": true
+        },
+        "timeline": {
+          "chars": 436,
+          "minimum": 300,
+          "passed": true
+        },
+        "technology_products": {
+          "chars": 597,
+          "minimum": 400,
+          "passed": true
+        },
+        "financial_valuation": {
+          "chars": 475,
+          "minimum": 350,
+          "passed": true
+        },
+        "risks_commentary": {
+          "chars": 405,
+          "minimum": 350,
+          "passed": true
+        },
+        "plain_language": {
+          "chars": 191,
+          "minimum": 150,
+          "passed": true
+        }
+      },
+      "body_chars": 2538,
+      "judgment_count": 10,
+      "aggressive_judgment_count": 3,
+      "raw_qa_blockers": 8,
+      "filtered_qa_blockers": 0,
+      "qa_path": "300750.SZ/iterations/8/independent-qa-filtered.json",
+      "packet_hash": "e057471e09095e20abe87a5c29fcf08f8a0e2b155cd4b67ddc11d5ec3304e561",
+      "report_hash": "e2384ad8b7bb556fbd452ff92a6f103c7cee9782f79b2e5b67bceca67c64ef3c",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "000001.SZ",
+      "issuer_name": "平安银行",
+      "final_iteration": 7,
+      "final_status": "passed",
+      "checks": {
+        "machine": true,
+        "sections": true,
+        "body_chars": true,
+        "aggressive_voice": true,
+        "judgment_refs_and_falsifiers": true,
+        "official_packet": true,
+        "deepseek_run": true,
+        "qa_filtered": true,
+        "review_boundary": true,
+        "persistent_outputs": true
+      },
+      "failed_checks": [],
+      "machine_errors": [],
+      "section_checks": {
+        "one_line_position": {
+          "chars": 237,
+          "minimum": 100,
+          "passed": true
+        },
+        "founder_team": {
+          "chars": 204,
+          "minimum": 100,
+          "passed": true
+        },
+        "timeline": {
+          "chars": 472,
+          "minimum": 300,
+          "passed": true
+        },
+        "technology_products": {
+          "chars": 434,
+          "minimum": 400,
+          "passed": true
+        },
+        "financial_valuation": {
+          "chars": 567,
+          "minimum": 350,
+          "passed": true
+        },
+        "risks_commentary": {
+          "chars": 551,
+          "minimum": 350,
+          "passed": true
+        },
+        "plain_language": {
+          "chars": 400,
+          "minimum": 150,
+          "passed": true
+        }
+      },
+      "body_chars": 2865,
+      "judgment_count": 13,
+      "aggressive_judgment_count": 2,
+      "raw_qa_blockers": 8,
+      "filtered_qa_blockers": 0,
+      "qa_path": "000001.SZ/iterations/7/independent-qa-filtered.json",
+      "packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+      "report_hash": "ac699929a402c01a3e0b794d1d788af3cb381b02fcfbba303f30f8661ad364cb",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    }
+  ]
+}

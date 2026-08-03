@@ -2699,3 +2699,20 @@
   deterministic filtered result side by side. A fresh QA recheck is a new
   evidence event, not an implicit pass. This path remains review-only and
   cannot grant Tier, target price, position, action, or publication credit.
+
+## 2026-08-03 — V4-P3 follow-up makes QA receipt state self-describing (Issue #696)
+
+- Decision: keep `independent-qa.json`/`independent-qa-recheck.json` as raw
+  model diagnostics and write a separate `independent-qa-filtered.json` after
+  the deterministic filter. The aggregate and completion verifier read the
+  filtered artifact first, while raw blocker counts remain visible.
+- Why: a passed aggregate receipt must not require a future Agent to infer
+  whether `blockers` means raw or filtered output. Separating the two makes a
+  review-only pass replayable without weakening the aggressive-judgment rule.
+- Evidence: `scripts/revalidate_editorial_v4.py`,
+  `scripts/aggregate_editorial_v4_p3.py`, `scripts/verify_editorial_v4_p3.py`,
+  five filtered QA artifacts, and
+  `artifacts/editorial-v4-p3/completion-audit.json` (`all_passed=true`).
+- Gotchas: filtered QA is not human approval; it only records the current
+  deterministic interpretation of a raw model response. Any new packet,
+  prompt, or filter version requires a fresh revalidation and completion audit.
