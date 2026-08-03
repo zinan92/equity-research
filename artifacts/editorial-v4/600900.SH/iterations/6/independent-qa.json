@@ -1,0 +1,96 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "财务事实（F-01至F-04）均正确引用证据包中的数字和衍生指标，增长幅度与方向一致。",
+    "公司自述类声明（C-02至C-06、C-08、C-09）均明确标注“公司披露”，并引用相应证据。",
+    "缺口声明（G-01至G-05）准确反映了证据包中缺失的信息，未将缺口伪装为事实。",
+    "整体结论（J-07）带有判断标记和证伪条件，符合AI判断的规范。"
+  ],
+  "checked_rules": [
+    "数字和事实可追溯至证据ID",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述明确标注“公司披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、估值等写成事实",
+    "AI判断（J类）均带有标记、引用证据和证伪条件",
+    "报告包含资产定位、财务因果链、风险证伪和白话结论",
+    "缺口声明基于证据包缺失信息，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-01引用cypc_2025_annual:narrative:10:2，但该证据未提及“综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优”，仅提及发电量。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-07引用cypc_2025_annual:narrative:12:6，但该证据未提及“设备检修精品率连续三年保持100%”，该表述出现在narrative:10:2中。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:6"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01引用cypc_2025_annual:narrative:12:5，但该证据仅描述电站地位，未直接支持“垄断性水电资产，现金流稳定”的判断。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03引用cypc_2025_annual:narrative:12:6，但该证据仅描述数字化检修，未直接支持“精密运营护城河”的判断。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:6"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-05引用cypc_2025_annual:narrative:12:4和27:17，但12:4未提及电力市场化改革压低电价，27:17仅提及市场建设，未直接支持判断。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4",
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-06引用cypc_2025_annual:narrative:10:2，但该证据未提及“盈利高度依赖长江来水”，仅提及发电量。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-07引用cypc_2025_annual:narrative:12:5和215:39，但12:5未直接支持“现金牛资产”，215:39仅提及利率风险，未支持整体结论。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-08引用cypc_2025_annual:narrative:12:5，但该证据仅描述电站地位，未直接支持“绝对垄断，几乎无人能撼动”的判断。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ]
+    }
+  ],
+  "request_hash": "d5c947c14730948cd23390c186a40fc2304f7dbb6d32ebf5e12aee293bbb897f",
+  "response_hash": "f92ae3b36a1a08640d66f471726479efb831f95702f1a3f50fc749bc0e678c26",
+  "run_id": "editorial-v4-qa:84661c29-e350-42a5-962c-3c67daeac4d3",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "84661c29-e350-42a5-962c-3c67daeac4d3",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:53:40+00:00"
+}

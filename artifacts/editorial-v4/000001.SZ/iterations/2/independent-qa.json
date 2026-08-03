@@ -1,0 +1,156 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-21 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "C-17 引用的 evidence_id 56:150 不在 evidence packet 中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中“资本充足率升但具体数值未披露[G-08]”将缺口当作事实陈述，应仅说明未提供。",
+      "claim_id": "G-08",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有判断均标注 [J-xx] 并附有 falsifier 和证据引用，符合规则6。",
+    "缺口声明基于 evidence packet 的 gaps 编写，未借缺口掩盖已有数字。",
+    "整体结论锋利且带 judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "规则1：数字和事实可回溯到证据包。",
+    "规则2：同期对比数据明确写增长/下滑及幅度。",
+    "规则3：公司自述需显式写“公司披露/年报自述/公告披露”。",
+    "规则4：未将历史实际值写成条件句结论。",
+    "规则5：未将无证据的客户、订单、排名等写成事实。",
+    "规则6：判断允许锋利，但需标 [J-xx] 并有 refs/falsifier。",
+    "规则7：报告包含爱牛式定位、因果链、白话结论。",
+    "规则8：缺口明确，未用空泛句子凑篇幅。"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:12:27"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-05 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:11:23"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-11 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-11",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:14:37"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-12 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:55:149"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-20 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:57:157",
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:159"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-21 正文未显式写“公司披露/年报自述”，仅写“自述”，不符合规则3。",
+      "claim_id": "C-21",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:58:160"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "C-17 引用的 evidence_id 56:150 不在 evidence packet 中，无法验证。",
+      "claim_id": "C-17",
+      "evidence_ids": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中“资本充足率升但具体数值未披露[G-08]”将缺口当作事实陈述，应仅说明未提供。",
+      "claim_id": "G-08",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "7ac12a58b0b9864696ef76205f00937ac806466444ed457d1511d48e3f4beb7b",
+  "response_hash": "034f1d7853bad1912ef61a757520748fdbba46b440d9df59e894a942ba5d94fa",
+  "run_id": "editorial-v4-qa:965e7c86-222c-4f7c-9640-5825395bd40d",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "965e7c86-222c-4f7c-9640-5825395bd40d",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:47:30+00:00"
+}

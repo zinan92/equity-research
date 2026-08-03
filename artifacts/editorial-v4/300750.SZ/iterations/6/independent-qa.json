@@ -1,0 +1,158 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "machine_validation_action_language",
+      "message": "机器校验发现正文含禁止词'目标价'，违反no_valuation_or_action规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-05专利数54,538项引用catl_2025_annual_cninfo:narrative:20:6，但该证据未出现此数字。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-06售后服务网络覆盖75国/1200站引用catl_2025_annual_cninfo:narrative:21:7，但该证据未出现此数字。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-07曾毓群57岁、曾任ATL总裁引用catl_2025_annual_cninfo:narrative:47:26和47:25，但证据未出现57岁。",
+      "claim_id": "F-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:47:26",
+        "catl_2025_annual_cninfo:narrative:47:25"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-08董事会9人含3独董1职工董事引用catl_2025_annual_cninfo:narrative:42:20，但证据未出现职工代表董事。",
+      "claim_id": "F-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:20"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-09产品列表引用catl_2025_annual_cninfo:narrative:29:10，但证据未出现骁遥双核、钠新等产品名。",
+      "claim_id": "F-09",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-10 H股上市议案引用catl_2025_annual_cninfo:narrative:55:34，但证据未出现2025年5月审议通过字样。",
+      "claim_id": "F-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:55:34"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-11吨级eVTOL完成飞行验证引用catl_2025_annual_cninfo:narrative:20:6，但证据未出现此表述。",
+      "claim_id": "F-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据F-01至F-04均正确引用evidence packet中的fact条目，且增长幅度与derived_metrics一致。",
+    "所有判断类claim（J-01至J-06）均标注[J-xx]并配有falsifier和evidence_ids，符合AI judgment规则。",
+    "公司自述类claim（C-01至C-09）均明确标注'公司披露'，未冒充独立验证。",
+    "缺口类claim（G-01至G-07）基于evidence packet的gaps，未借缺口掩盖已有数字。",
+    "整体结论锋利且带judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字和事实可追溯至document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑/持平及幅度",
+    "公司自述显式写'公司披露/年报自述/公告披露'",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "AI judgment允许锋利定位，但需标[J-xx]、有refs和falsifier",
+    "报告含爱牛式资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口基于evidence packet的gaps，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "machine_validation_action_language",
+      "message": "机器校验发现正文含禁止词'目标价'，违反no_valuation_or_action规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-05专利数54,538项引用catl_2025_annual_cninfo:narrative:20:6，但该证据未出现此数字。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-06售后服务网络覆盖75国/1200站引用catl_2025_annual_cninfo:narrative:21:7，但该证据未出现此数字。",
+      "claim_id": "F-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-07曾毓群57岁、曾任ATL总裁引用catl_2025_annual_cninfo:narrative:47:26和47:25，但证据未出现57岁。",
+      "claim_id": "F-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:47:26",
+        "catl_2025_annual_cninfo:narrative:47:25"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-08董事会9人含3独董1职工董事引用catl_2025_annual_cninfo:narrative:42:20，但证据未出现职工代表董事。",
+      "claim_id": "F-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:20"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-09产品列表引用catl_2025_annual_cninfo:narrative:29:10，但证据未出现骁遥双核、钠新等产品名。",
+      "claim_id": "F-09",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-10 H股上市议案引用catl_2025_annual_cninfo:narrative:55:34，但证据未出现2025年5月审议通过字样。",
+      "claim_id": "F-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:55:34"
+      ]
+    },
+    {
+      "code": "fact_not_traceable",
+      "message": "F-11吨级eVTOL完成飞行验证引用catl_2025_annual_cninfo:narrative:20:6，但证据未出现此表述。",
+      "claim_id": "F-11",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "request_hash": "9d83c41a4167fd7a18b9bf6511c4ea4e7570078ff0a4bb4eddd32e95df3947f4",
+  "response_hash": "6bae3351da7c0c2876a77e2a71cc0b4bd193b7754149e50e6e4ce31dfb18f821",
+  "run_id": "editorial-v4-qa:713a2d77-5c35-430b-ba2f-badc665e0352",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "713a2d77-5c35-430b-ba2f-badc665e0352",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:34:31+00:00"
+}

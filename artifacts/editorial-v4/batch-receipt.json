@@ -1,0 +1,208 @@
+{
+  "schema_version": "editorial-v4-batch-receipt-v2",
+  "generated_at": "2026-08-03T08:03:46+00:00",
+  "model": "deepseek-v4-pro",
+  "contract": "docs/dossier-production/editorial-v4-contract.md",
+  "tickers": [
+    "600519.SH",
+    "000333.SZ",
+    "600900.SH",
+    "300750.SZ",
+    "000001.SZ"
+  ],
+  "all_machine_passed": true,
+  "all_independent_qa_passed": true,
+  "rows": [
+    {
+      "ticker": "600519.SH",
+      "status": "passed",
+      "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+      "report_hash": "184cf91fc0a425500941b221af5405d4cc54e518bf448415e30933a952cf570b",
+      "final_iteration": 15,
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_status": "passed",
+      "independent_qa_request_id": "90793176-9acd-4d82-9555-5a8375c242df",
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "chars": 2492,
+      "sections": {
+        "one_line_position": 261,
+        "founder_team": 310,
+        "timeline": 412,
+        "technology_products": 421,
+        "financial_valuation": 373,
+        "risks_commentary": 395,
+        "plain_language": 320
+      },
+      "claim_counts": {
+        "fact": 9,
+        "gap": 6,
+        "issuer_self_report": 10,
+        "judgment": 5
+      },
+      "paths": {
+        "json": "artifacts/editorial-v4/600519.SH/report.json",
+        "markdown": "artifacts/editorial-v4/600519.SH/report.md",
+        "html": "artifacts/editorial-v4/600519.SH/report.html",
+        "quality_receipt": "artifacts/editorial-v4/600519.SH/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "000333.SZ",
+      "status": "passed",
+      "packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+      "report_hash": "8255b9373939a3114e7e51754e660cb9b209fd30fd2e63482fdcce9328d6c446",
+      "final_iteration": 5,
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_status": "passed",
+      "independent_qa_request_id": null,
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "chars": 2513,
+      "sections": {
+        "one_line_position": 199,
+        "founder_team": 188,
+        "timeline": 474,
+        "technology_products": 683,
+        "financial_valuation": 372,
+        "risks_commentary": 359,
+        "plain_language": 238
+      },
+      "claim_counts": {
+        "fact": 6,
+        "gap": 3,
+        "issuer_self_report": 20,
+        "judgment": 4
+      },
+      "paths": {
+        "json": "artifacts/editorial-v4/000333.SZ/report.json",
+        "markdown": "artifacts/editorial-v4/000333.SZ/report.md",
+        "html": "artifacts/editorial-v4/000333.SZ/report.html",
+        "quality_receipt": "artifacts/editorial-v4/000333.SZ/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "600900.SH",
+      "status": "passed",
+      "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+      "report_hash": "d7ee7b5bf184bc8f6da6a87883e64d286ab851c9a709cce5e32615e2594683da",
+      "final_iteration": 15,
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_status": "passed",
+      "independent_qa_request_id": "editorial-v4-qa:a686aa44-5b89-4dee-aa60-6ecb9f5689d9",
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "chars": 2269,
+      "sections": {
+        "one_line_position": 175,
+        "founder_team": 184,
+        "timeline": 354,
+        "technology_products": 505,
+        "financial_valuation": 407,
+        "risks_commentary": 390,
+        "plain_language": 254
+      },
+      "claim_counts": {
+        "fact": 4,
+        "gap": 6,
+        "issuer_self_report": 14,
+        "judgment": 8
+      },
+      "paths": {
+        "json": "artifacts/editorial-v4/600900.SH/report.json",
+        "markdown": "artifacts/editorial-v4/600900.SH/report.md",
+        "html": "artifacts/editorial-v4/600900.SH/report.html",
+        "quality_receipt": "artifacts/editorial-v4/600900.SH/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "300750.SZ",
+      "status": "passed",
+      "packet_hash": "e057471e09095e20abe87a5c29fcf08f8a0e2b155cd4b67ddc11d5ec3304e561",
+      "report_hash": "868041f9e34cf7659ae9885a61b0ebbbdcecc4efd3a55ba6c447462ca161331d",
+      "final_iteration": 10,
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_status": "passed",
+      "independent_qa_request_id": "editorial-v4-qa:81109c54-16a9-47a2-ab21-fa7d64c372cf",
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "chars": 2515,
+      "sections": {
+        "one_line_position": 183,
+        "founder_team": 231,
+        "timeline": 390,
+        "technology_products": 490,
+        "financial_valuation": 459,
+        "risks_commentary": 487,
+        "plain_language": 275
+      },
+      "claim_counts": {
+        "fact": 10,
+        "gap": 7,
+        "issuer_self_report": 9,
+        "judgment": 6
+      },
+      "paths": {
+        "json": "artifacts/editorial-v4/300750.SZ/report.json",
+        "markdown": "artifacts/editorial-v4/300750.SZ/report.md",
+        "html": "artifacts/editorial-v4/300750.SZ/report.html",
+        "quality_receipt": "artifacts/editorial-v4/300750.SZ/quality-loop-receipt.json"
+      }
+    },
+    {
+      "ticker": "000001.SZ",
+      "status": "passed",
+      "packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+      "report_hash": "f2fe62419bb9ed05cc9e163947315dfe3b756cf2671feb06b7563cd4ac9758f0",
+      "final_iteration": 9,
+      "machine_status": "passed",
+      "machine_errors": [],
+      "independent_qa_status": "passed",
+      "independent_qa_request_id": "editorial-v4-qa:a660244b-137e-4ca0-8f86-761a1fb0d320",
+      "review_status": "pending",
+      "action_state": "blocked",
+      "no_tier_credit": true,
+      "no_publication_credit": true,
+      "chars": 2623,
+      "sections": {
+        "one_line_position": 245,
+        "founder_team": 154,
+        "timeline": 399,
+        "technology_products": 569,
+        "financial_valuation": 423,
+        "risks_commentary": 581,
+        "plain_language": 252
+      },
+      "claim_counts": {
+        "gap": 10,
+        "issuer_self_report": 28,
+        "judgment": 7
+      },
+      "paths": {
+        "json": "artifacts/editorial-v4/000001.SZ/report.json",
+        "markdown": "artifacts/editorial-v4/000001.SZ/report.md",
+        "html": "artifacts/editorial-v4/000001.SZ/report.html",
+        "quality_receipt": "artifacts/editorial-v4/000001.SZ/quality-loop-receipt.json"
+      }
+    }
+  ],
+  "boundary": {
+    "review_only": true,
+    "human_review_required": true,
+    "no_tier_credit": true,
+    "no_publication_credit": true,
+    "no_target_price_or_position": true
+  }
+}

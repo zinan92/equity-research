@@ -1,0 +1,161 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "action_language",
+      "message": "正文出现“目标价”等禁止性行动/估值语言，违反边界规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-01 引用公司自述“唯一入选全球百强创新机构”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-02 引用公司自述“电芯失效率DPPB级、灯塔工厂”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-04 引用公司自述“市场竞争加剧风险”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-05 引用公司自述“以更优质产品和服务应对竞争”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-06 引用公司自述“股东会召开符合规定”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:19"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-07 引用公司自述“政策文件带来机遇”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-08 引用公司自述“发布9MWh储能系统”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据与证据包完全一致，增长幅度引用准确。",
+    "判断类声明均标注[J-xx]并附有falsifier，符合AI judgment规则。",
+    "缺口声明基于证据包缺失项，未将缺口伪装为事实。",
+    "整体结论锋利且带有风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至证据包",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述需标明“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/排名/估值等写成事实",
+    "AI judgment需标[J-xx]并有refs/falsifier",
+    "报告包含资产定位、财务因果链、风险证伪和白话结论",
+    "缺口基于证据包缺失项，未借缺口掩盖已有数字或升级自述"
+  ],
+  "raw_blockers": [
+    {
+      "code": "action_language",
+      "message": "正文出现“目标价”等禁止性行动/估值语言，违反边界规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-01 引用公司自述“唯一入选全球百强创新机构”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-02 引用公司自述“电芯失效率DPPB级、灯塔工厂”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:38:15"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-04 引用公司自述“市场竞争加剧风险”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-05 引用公司自述“以更优质产品和服务应对竞争”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-06 引用公司自述“股东会召开符合规定”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:19"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-07 引用公司自述“政策文件带来机遇”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "C-08 引用公司自述“发布9MWh储能系统”，但正文未标明“公司披露/年报自述”。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    }
+  ],
+  "request_hash": "999a1cc235041cd031db5be20e71eeeb04116a157ef21ab3f64f87be3560b983",
+  "response_hash": "2d838b2258b512ea6afac706d9d6df2bb594eb414db45318b89d3ddfc9e41370",
+  "run_id": "editorial-v4-qa:45b05c78-ea78-4e60-8bd3-59241fb0d80c",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "45b05c78-ea78-4e60-8bd3-59241fb0d80c",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:35:56+00:00"
+}

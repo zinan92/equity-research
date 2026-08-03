@@ -1,0 +1,155 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称营业总收入131,580,870千元，但引用的证据页面锚点中未找到该数字。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-03 声称归母净利润12,674,556千元，但引用的证据页面锚点中未找到该数字。",
+      "claim_id": "F-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-05 声称营业总收入458,502,407千元，但引用的证据页面锚点中未找到该数字。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13 引用产业在线数据，但未在正文中显式标注“年报引产业在线数据”等自述标签。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-15 引用MIR睿工业统计，但未在正文中显式标注“年报引MIR睿工业统计”等自述标签。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-18 引用奥维云网数据，但未在正文中显式标注“年报引奥维云网推总数据”等自述标签。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-19 提及海外经营挑战，但未在正文中显式标注“年报提及”等自述标签。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中的数字未附带对应的 claim_id 引用，无法验证其与证据的关联。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有判断类声明均标注了 [J-xx] 并提供了 falsifier，符合 AI judgment 规范。",
+    "报告明确区分了 issuer_self_report 和 fact，大部分自述声明已标注“年报披露”。",
+    "缺口声明基于 evidence packet 的 gaps 编写，未将缺口伪装为事实。",
+    "整体结论锋利且带有白话结论，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至证据页面锚点",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注“年报披露”等",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、估值等写成事实",
+    "AI judgment 标注 [J-xx] 并带 refs 和 falsifier",
+    "报告包含爱牛式定位、因果链、白话结论",
+    "缺口基于 evidence packet 的 gaps 编写"
+  ],
+  "raw_blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称营业总收入131,580,870千元，但引用的证据页面锚点中未找到该数字。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-03 声称归母净利润12,674,556千元，但引用的证据页面锚点中未找到该数字。",
+      "claim_id": "F-03",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+      ]
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "F-05 声称营业总收入458,502,407千元，但引用的证据页面锚点中未找到该数字。",
+      "claim_id": "F-05",
+      "evidence_ids": [
+        "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13 引用产业在线数据，但未在正文中显式标注“年报引产业在线数据”等自述标签。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-15 引用MIR睿工业统计，但未在正文中显式标注“年报引MIR睿工业统计”等自述标签。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-18 引用奥维云网数据，但未在正文中显式标注“年报引奥维云网推总数据”等自述标签。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-19 提及海外经营挑战，但未在正文中显式标注“年报提及”等自述标签。",
+      "claim_id": "C-19",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中的数字未附带对应的 claim_id 引用，无法验证其与证据的关联。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "356518eadada935a757cdd2687aff12694503069ab0264f4254b73e47188da6f",
+  "response_hash": "232792ea2580e769e5a761ae2d2c6ea6547be1e7c2660d9b30ff48db6d4694e2",
+  "run_id": "editorial-v4-qa:f2550fa5-9ff4-43f6-a485-db5420361605",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "f2550fa5-9ff4-43f6-a485-db5420361605",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:26:28+00:00"
+}

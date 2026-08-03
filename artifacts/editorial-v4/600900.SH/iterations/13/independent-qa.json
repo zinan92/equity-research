@@ -1,0 +1,155 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现未绑定claim的数值'100'，无法追溯至evidence_ids。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现未绑定claim的数值'100%'，无法追溯至evidence_ids。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-01未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-02未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-03未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-04未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-05未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-06未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有财务事实均正确引用evidence_ids，增长幅度与derived metrics一致。",
+    "判断句均标注[J-xx]并配有falsifier，符合AI judgment规范。",
+    "缺口声明基于输入材料缺失，未将公司自述升级为事实。",
+    "整体结论锋利且带判断标记，未给出估值或行动建议。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至evidence_ids",
+    "同期对比明确增长/下滑及幅度",
+    "公司自述显式标注'公司披露'",
+    "未将历史值写成条件句结论",
+    "未将无证据的客户/订单/排名等写成事实",
+    "AI judgment有标记、refs和falsifier",
+    "报告有资产定位、因果链、白话结论",
+    "缺口基于evidence packet gaps"
+  ],
+  "raw_blockers": [
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现未绑定claim的数值'100'，无法追溯至evidence_ids。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现未绑定claim的数值'100%'，无法追溯至evidence_ids。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-01未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-02未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-03未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-04未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-05未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-06未在正文中显式标注'公司披露'，可能被误解为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    }
+  ],
+  "request_hash": "de2e54d2e07214c72d5a0a7b58814cf5a09f4f2c573378e0aaeae6a6fbe2aad8",
+  "response_hash": "04e7774e4c2993cbf16d06cc2d577ff28b48e66f3b178cbbe5bb2c9a0be7dda6",
+  "run_id": "editorial-v4-qa:a686aa44-5b89-4dee-aa60-6ecb9f5689d9",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a686aa44-5b89-4dee-aa60-6ecb9f5689d9",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:17:31+00:00"
+}

@@ -1,0 +1,84 @@
+{
+  "status": "failed",
+  "ticker": "300750.SZ",
+  "chars": 2450,
+  "claims": 31,
+  "errors": [
+    {
+      "code": "action_language",
+      "message": "editorial body contains blocked action/valuation language",
+      "matches": [
+        "目标价"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-05"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-07"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-08"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-05"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-06"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-07"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-08"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-09"
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "aggressive positioning sentence lacks an explicit [J-xx] judgment marker",
+      "excerpt": "综合而言，公司现有护城河深厚，但全球化与新技术两条路径的落地执行将是最大考验"
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion must carry at least one fact/judgment/gap marker"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "01"
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body contains a numeric literal without claim-text/evidence closure",
+      "token": "17%"
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body contains a numeric literal without claim-text/evidence closure",
+      "token": "42%"
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body contains a numeric literal without claim-text/evidence closure",
+      "token": "49%"
+    }
+  ]
+}

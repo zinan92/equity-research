@@ -1,0 +1,1268 @@
+{
+  "request_schema": "editorial-v4-independent-qa-request-v1",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "ticker": "000333.SZ",
+  "dossier_hash": "6c2ca7d03a39fc0d8e3937c3e47f853b0d4a7c8be082a9a943775980a50cf2da",
+  "packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+  "machine_validation": {
+    "status": "failed",
+    "ticker": "000333.SZ",
+    "chars": 2508,
+    "claims": 33,
+    "errors": [
+      {
+        "code": "numeric_quote_mismatch",
+        "message": "numeric claim value is not present in cited page anchor",
+        "claim_id": "F-01",
+        "number": "131,580,870千元"
+      },
+      {
+        "code": "numeric_quote_mismatch",
+        "message": "numeric claim value is not present in cited page anchor",
+        "claim_id": "F-03",
+        "number": "12,674,556千元"
+      },
+      {
+        "code": "numeric_quote_mismatch",
+        "message": "numeric claim value is not present in cited page anchor",
+        "claim_id": "F-05",
+        "number": "458,502,407千元"
+      },
+      {
+        "code": "self_report_unmarked",
+        "message": "issuer self-report claim lacks explicit label",
+        "claim_id": "C-13"
+      },
+      {
+        "code": "self_report_unmarked",
+        "message": "issuer self-report claim lacks explicit label",
+        "claim_id": "C-15"
+      },
+      {
+        "code": "self_report_unmarked",
+        "message": "issuer self-report claim lacks explicit label",
+        "claim_id": "C-18"
+      },
+      {
+        "code": "self_report_unmarked",
+        "message": "issuer self-report claim lacks explicit label",
+        "claim_id": "C-19"
+      },
+      {
+        "code": "self_report_body_unmarked",
+        "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+        "claim_id": "C-18"
+      },
+      {
+        "code": "self_report_body_unmarked",
+        "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+        "claim_id": "C-19"
+      },
+      {
+        "code": "latest_card_numeric_closure",
+        "message": "latest data card number has no claim text closure",
+        "token": "01"
+      },
+      {
+        "code": "latest_card_numeric_closure",
+        "message": "latest data card number has no claim text closure",
+        "token": "04"
+      },
+      {
+        "code": "latest_card_numeric_closure",
+        "message": "latest data card number has no claim text closure",
+        "token": "05"
+      },
+      {
+        "code": "latest_card_numeric_closure",
+        "message": "latest data card number has no claim text closure",
+        "token": "06"
+      }
+    ]
+  },
+  "dossier": {
+    "latest_card": "2026Q1营业总收入131,580,870千元，同比增长2.45%[F-01][F-02]；归母净利润12,674,556千元，同比增长2.03%[F-03][F-04]。2025年营业总收入458,502,407千元，同比增长12.08%[F-05][F-06]。",
+    "sections": [
+      {
+        "id": "one_line_position",
+        "title": "一句话定位",
+        "body": "美的集团是横跨智能家居与商业工业解决方案的全球科技巨头。年报自述每年服务超5亿用户，拥有41个研发中心、43个制造基地[C-01]。根据欧睿数据，其智能家电销量全球第一；产业在线显示，家用空调压缩机、电机等核心部件市占率亦居首位[C-20]。我们判断，美的已从传统家电龙头蜕变为以C端为压舱石、B端为增长翼的精密制造平台，‘杂货铺’式的多品类协同构筑了独特的规模与效率护城河[J-01]。",
+        "claim_ids": [
+          "C-01",
+          "C-20",
+          "J-01"
+        ]
+      },
+      {
+        "id": "founder_team",
+        "title": "创始人与团队",
+        "body": "创始人信息未在本次研究包中提供。公开资料显示创始人为何享健，但其当前角色、持股及影响力细节缺失，无法评估关键人风险[G-01]。管理层方面，年报披露执行董事顾炎民（2000年加入，博士，主管机器人及海外业务）等部分人员履历[C-02]。公司建立了完善的法人治理结构，拥有多期股权激励计划，但激励方案的具体绩效考核条件与达标情况未披露，团队稳定性与激励效果难以量化[G-02]。",
+        "claim_ids": [
+          "G-01",
+          "C-02",
+          "G-02"
+        ]
+      },
+      {
+        "id": "timeline",
+        "title": "发展时间线",
+        "body": "美的近年来大事不断，关键节点梳理如下：\n- 2025年完成对欧洲家电品牌TEKA的收购，并将其与先前收购的Clivet及ARBONIA Climate整合，成立MBT Climate，深化‘在欧洲，为欧洲’战略，年报披露[C-03]。\n- 智能制造屡获认证：2025年8月，洗衣机荆州工厂获WRCA认证，成为全球首个多场景智能体工厂；9月，空调泰国工厂获评世界经济论坛供应链韧性灯塔工厂，系家电行业海外首座；2026年1月，厨热芜湖工厂再获灯塔工厂，至此美的累计拥有8座灯塔工厂，年报披露[C-04]。\n- 机器人业务加速：2025年开发出三代共5款人形机器人；12月发布超人形机器人美罗U，该产品已在无锡工厂投入试用，年报披露[C-05]。\n- 核心部件产能扩张：冰箱压缩机合肥新基地变频生产线量产，新增年产能800万台；巴西电机工厂投产BLDC高效空调电机，年产能200万台；科陆电子在印尼启动储能基地，初期规划产能3GWh，年报披露[C-06]。\n这些事件表明美的正从规模扩张转向技术纵深与全球化深耕，但收购整合与新兴业务的效果仍需时间验证。",
+        "claim_ids": [
+          "C-03",
+          "C-04",
+          "C-05",
+          "C-06"
+        ]
+      },
+      {
+        "id": "technology_products",
+        "title": "技术与产品",
+        "body": "美的的产品版图覆盖从家电到工业部件的广泛领域，且持续迭代，展现出‘精密制造杂货铺’的特点[J-02]。\n在智能家居方面，空调产品针对不同市场推出差异化创新：北欧市场Raynor变频分体机兼具-40℃超低温运行能力与低噪音，获IFA金奖及红点奖，年报披露[C-07]；北美市场PTAC热泵为行业首款全气候整体式终端热泵，AI变频节能50%，年报披露[C-08]。洗衣机领域，国内推出行业首款850mm三筒分区洗烘一体机，获医护级健康认证，年报披露[C-09]；海外东芝T26后控波轮容量达21kg，溶解效率提升87%，护色率超90%，年报披露[C-10]。冰箱则推出熊墩墩系列，搭载PST+智能净化，600L产品中销量第一，年报披露[C-11]；面向海外推出抛冰技术冰箱，将制冰装置下置，优化空间体验，年报披露[C-12]。\n商业及工业解决方案端，楼宇科技国内中央空调销售额份额超20%，多联机、离心机等品部位居第一，年报引产业在线数据[C-13]；并迅速切入数据中心液冷市场，2026年启动顺德液冷智造基地，年报披露[C-14]。机器人板块，库卡工业机器人国内销量份额提升至9.6%，稳居前三，年报引MIR睿工业统计[C-15]；人形机器人美罗U已进入工厂执行质检、上料等任务，评估换线效率提升30%，年报披露[C-16]。新能源领域，科陆电子交付宁夏2GWh等大型储能项目，全栈自研的Aqua C2.5系统进入商业化，年报披露[C-17]。\n尽管产品矩阵丰富，但多数品类仍处于激烈竞争状态，技术壁垒并非不可逾越，长期领先需依赖持续的研发投入与品牌塑造[J-02]。",
+        "claim_ids": [
+          "J-02",
+          "C-07",
+          "C-08",
+          "C-09",
+          "C-10",
+          "C-11",
+          "C-12",
+          "C-13",
+          "C-14",
+          "C-15",
+          "C-16",
+          "C-17"
+        ]
+      },
+      {
+        "id": "financial_valuation",
+        "title": "财务与估值",
+        "body": "从披露的财务数据看，美的集团规模优势明显，但增速放缓。2025年度实现营业总收入458,502,407千元，同比增长12.08%[F-05][F-06]；2026年第一季度营收131,580,870千元，同比增幅收窄至2.45%[F-01][F-02]。归属于母公司股东的净利润2026Q1为12,674,556千元，同比增长2.03%[F-03][F-04]，利润增速略低于收入增速。更详细的盈利质量指标（如毛利率、净利率、经营现金流）以及分部业务的收入拆解未在本次资料中提供，因此无法分析盈利结构变化。资产负债表及负债水平同样缺失，对财务稳健性判断构成障碍。\n估值方面，本次研究包未包含任何市值、市盈率、市净率或可比公司估值数据，完全无法进行估值判断[G-03]。投资者需自行构建盈利预测与估值模型，注意家电行业周期性及海外扩张的不确定性。",
+        "claim_ids": [
+          "F-05",
+          "F-06",
+          "F-01",
+          "F-02",
+          "F-03",
+          "F-04",
+          "G-03"
+        ]
+      },
+      {
+        "id": "risks_commentary",
+        "title": "风险与点评",
+        "body": "美的面临的多重风险清晰可见。首先，国内市场天花板已现：年报引奥维云网数据，2025年国内家电零售规模同比下滑4.3%[C-18]，存量竞争加剧，美的虽然线上、线下渠道份额领先，但维持份额需持续投入价格与营销资源，可能侵蚀利润。其次，海外经营风险：年报坦承受贸易保护主义、汇率波动及地缘冲突影响，海外形势持续挑战[C-19]。美的虽通过本地化制造与收购部分对冲，但在欧美市场仍面临品牌认知和渠道壁垒。再次，新兴业务不确定性高：人形机器人、新能源储能投入巨大，短期收入贡献有限，且行业竞争激烈；库卡机器人全球份额仍远低于发那科等对手，尚未形成绝对优势。此外，美的庞大的组织架构可能导致决策效率下降和资源分散。我们判断，若国内白电基本盘增长停滞，同时海外OBM和新业务未能如期放量，公司整体估值逻辑可能遭遇挑战[J-03]。",
+        "claim_ids": [
+          "C-18",
+          "C-19",
+          "J-03"
+        ]
+      },
+      {
+        "id": "plain_language",
+        "title": "大白话结论",
+        "body": "简单说，美的是一台长年开动、什么家电都造的赚钱机器。它靠线上线下一网打尽的渠道、全球生产和海量规模压成本来赢，家里从空调、冰箱到机器人都产。但不要被大而全迷惑——家电这行当越来越像跑马拉松，增速快不起来；海外想卖自有品牌，得花大钱打市场；机器人、储能这些新业务听起来性感，眼下挣钱还难。核心看点就一个：它在大本营稳住利润的同时，能不能在海外和B端闯出第二个春天。如果某天国内空调市占率跌破20%，或者海外收入多年停在了40%出头，那眼下这套大国重器的逻辑就得重估[J-04]。",
+        "claim_ids": [
+          "J-04"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "F-01",
+        "kind": "fact",
+        "text": "2026年第一季度营业总收入为131,580,870千元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-02",
+        "kind": "fact",
+        "text": "2026年第一季度营业总收入同比增长2.45%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0",
+          "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:revenue"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-03",
+        "kind": "fact",
+        "text": "2026年第一季度归属于母公司股东的净利润为12,674,556千元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-04",
+        "kind": "fact",
+        "text": "2026年第一季度归属于母公司股东的净利润同比增长2.03%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0",
+          "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:net_profit_parent"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-05",
+        "kind": "fact",
+        "text": "2025年度营业总收入为458,502,407千元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-06",
+        "kind": "fact",
+        "text": "2025年度营业总收入同比增长12.08%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0",
+          "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:revenue"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-01",
+        "kind": "issuer_self_report",
+        "text": "年报披露：美的是一家全球运营的科技公司，业务与客户遍及全球，每年为全球超过5亿用户提供产品和服务，拥有超过600家子公司、41个研发中心和43个主要制造基地。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:14:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-02",
+        "kind": "issuer_self_report",
+        "text": "年报披露：顾炎民，男，博士，2000年加入公司，现任执行董事、副总裁、库卡集团监事会主席、美的电器（新加坡）等职务。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:69:39"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-03",
+        "kind": "issuer_self_report",
+        "text": "年报披露：2025年完成对TEKA的收购，并将意大利Clivet空调业务与新收购的ARBONIA Climate合并，成立MBT Climate。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:23:6",
+          "midea_2025_annual:narrative:31:16"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-04",
+        "kind": "issuer_self_report",
+        "text": "年报披露：2025年8月，美的洗衣机荆州工厂获WRCA认证成为全球首个多场景覆盖的智能体工厂；9月，空调泰国工厂获评世界经济论坛供应链韧性灯塔工厂，为家电行业首座海外灯塔工厂；2026年1月，厨热芜湖工厂入选灯塔工厂，美的累计拥有8座灯塔工厂。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:15:1"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-05",
+        "kind": "issuer_self_report",
+        "text": "年报披露：2025年已开发三代共5款人形机器人；12月发布超人形机器人美罗U，该产品已在美的无锡工厂投入试用。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:43:24"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-06",
+        "kind": "issuer_self_report",
+        "text": "年报披露：冰箱压缩机合肥新基地变频生产线量产，新增年产能800万台；巴西电机工厂正式投入运行，BLDC高效空调电机年产能200万台；科陆电子在印尼启动储能基地建设，初期规划产能3GWh。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:30:15",
+          "midea_2025_annual:narrative:39:19"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-07",
+        "kind": "issuer_self_report",
+        "text": "年报披露：北欧高性能变频分体产品Raynor，-25℃低温制热能力提升35%，-40℃超低温运行，获2025年IFA产品创新金奖、德国红点与iF设计奖。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:26:9"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-08",
+        "kind": "issuer_self_report",
+        "text": "年报披露：北美高热变频静音热泵PTAC搭载行业首款Intertek认证的全气候整体式终端热泵，AI变频节能50%，集成新风及控湿功能。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:26:9"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-09",
+        "kind": "issuer_self_report",
+        "text": "年报披露：推出行业首款850mm标准高度的三筒分区洗烘一体机，获中卫安医护级健康洗认证，荣获红顶奖与磐石奖。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:26:9"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-10",
+        "kind": "issuer_self_report",
+        "text": "年报披露：东芝T26后控系列波轮产品容量升级至21kg，溶解效率提升87%，护色率提升至90%以上。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:27:10"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-11",
+        "kind": "issuer_self_report",
+        "text": "年报披露：美的冰箱熊墩墩系列销量达15万台，在行业600L冰箱产品中销量第一。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:27:11"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-12",
+        "kind": "issuer_self_report",
+        "text": "年报披露：新一代搭载抛冰技术产品将制冰装置整合至冷冻室，释放约17升冷藏空间，抛冰技术可将冰块送至门前。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:27:12"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-13",
+        "kind": "issuer_self_report",
+        "text": "年报引产业在线数据：2025年美的中央空调国内市场销售额占比超过20%，商用多联机超过28%，离心机超过16%，均居行业第一。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:31:16"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-14",
+        "kind": "issuer_self_report",
+        "text": "年报披露：2025年楼宇科技推出液冷关键组件CDU、磁悬浮冷水机等产品；2026年在顺德启动液冷智造基地建设。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:34:17"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-15",
+        "kind": "issuer_self_report",
+        "text": "年报引MIR睿工业统计：2025年库卡工业机器人的国内市场销量份额提升至9.6%，稳居行业前三。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:42:23"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-16",
+        "kind": "issuer_self_report",
+        "text": "年报披露：经评估，美罗U可使相关生产线换线调整效率提升30%、设备占用空间减少40%。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:43:24"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-17",
+        "kind": "issuer_self_report",
+        "text": "年报披露：科陆电子完成宁夏2GWh等项目交付，全栈自研Aqua C2.5集装箱式储能系统实现大规模商用。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:39:18"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-18",
+        "kind": "issuer_self_report",
+        "text": "年报引奥维云网推总数据：2025年国内家电（不含3C）零售市场规模8,931亿元，同比下滑4.3%。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:15:1"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-19",
+        "kind": "issuer_self_report",
+        "text": "年报提及：海外市场由于贸易保护主义、汇率波动和地缘政治冲突持续的影响，海外经营形势持续面临挑战。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:20:5"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-20",
+        "kind": "issuer_self_report",
+        "text": "年报披露：按2025年各品牌全球智能家电销售量计，美的智能家电销量位居全球第一；家用空调压缩机、家用空调电机、洗衣机电机的全球市场销量份额均稳居行业第一。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:41:22"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "J-01",
+        "kind": "judgment",
+        "text": "美的集团已从传统家电企业进化为横跨C端与B端的科技平台，家电基本盘提供稳定现金流，楼宇、机器人与新能源构成第二增长曲线。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:14:0",
+          "midea_2025_annual:narrative:41:22",
+          "midea_2025_annual:narrative:31:16"
+        ],
+        "derived_ids": [],
+        "falsifier": "若国内空调市场份额连续下滑或库卡机器人销量份额降至5%以下，则平台化转型逻辑面临挑战。"
+      },
+      {
+        "claim_id": "J-02",
+        "kind": "judgment",
+        "text": "美的产品线广度与快速迭代能力构建了‘精密制造杂货铺’式护城河，但多数品类面临同质化竞争，技术壁垒并非绝对。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:26:9",
+          "midea_2025_annual:narrative:27:10",
+          "midea_2025_annual:narrative:27:11"
+        ],
+        "derived_ids": [],
+        "falsifier": "如果核心品类线上市场份额连续两年下降，或主要竞争对手在能效、智能等核心指标上显著反超。"
+      },
+      {
+        "claim_id": "J-03",
+        "kind": "judgment",
+        "text": "海外OBM增长强劲但需持续高投入，人形机器人等新业务尚处早期，短期难以贡献实质利润，若投入产出比长期低下将拖累整体回报。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:24:7",
+          "midea_2025_annual:narrative:43:24"
+        ],
+        "derived_ids": [],
+        "falsifier": "若2027年人形机器人业务仍未产生千万级收入，或海外OBM收入增速回落至10%以下。"
+      },
+      {
+        "claim_id": "J-04",
+        "kind": "judgment",
+        "text": "这是一台依靠极致效率、全渠道垄断和全球制造网络赚钱的家电航母，成于规模，困于增速；能否在ToB和海外品牌上兑现第二曲线，将是估值分化的关键。",
+        "evidence_ids": [
+          "midea_2025_annual:narrative:14:0",
+          "midea_2025_annual:narrative:41:22",
+          "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0",
+          "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:1"
+        ],
+        "derived_ids": [],
+        "falsifier": "若扣非净利润增速连续两年低于5%且海外收入占比停滞在40%以下，则‘航母’逻辑面临证伪。"
+      },
+      {
+        "claim_id": "G-01",
+        "kind": "gap",
+        "text": "创始人何享健的当前角色、持股比例及管理参与度未在输入资料中披露，无法评估关键人物风险。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-02",
+        "kind": "gap",
+        "text": "核心管理层持股及股权激励计划的具体业绩考核条件、授予与行权进度未披露，难以判断激励有效性。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-03",
+        "kind": "gap",
+        "text": "估值数据缺失，无法进行市盈率、市净率等任何估值与回报分析。",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      }
+    ],
+    "missing_inputs": [
+      "创始人何享健详细信息",
+      "毛利率、净利率及分部收入",
+      "资产负债及现金流数据",
+      "市值、市盈率等估值数据",
+      "股权激励具体方案与考核完成情况"
+    ],
+    "overall_conclusion": "美的集团凭借家电全品类垄断与全球制造网络构建了强大护城河，但增长放缓与新业务的不确定性是当前主要矛盾。兑现ToB与海外品牌升级将是估值重估的关键，证伪风险在于主业份额松动或新业务长期无贡献。[J-04]",
+    "schema_version": "editorial-v4-dossier-v1",
+    "ticker": "000333.SZ",
+    "issuer_name": "美的集团",
+    "input_packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "generation_receipt": {
+      "run_id": "editorial-v4-run:e6bb716c-e2d2-4f0a-8d03-07e54dad438d",
+      "provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "request_id": "e6bb716c-e2d2-4f0a-8d03-07e54dad438d",
+      "usage": {
+        "prompt_tokens": 50202,
+        "completion_tokens": 6112,
+        "total_tokens": 56314,
+        "prompt_tokens_details": {
+          "cached_tokens": 1408
+        },
+        "prompt_cache_hit_tokens": 1408,
+        "prompt_cache_miss_tokens": 48794
+      },
+      "finish_reason": "stop",
+      "prompt_version": "editorial-v4-whole-report-prompt-v1",
+      "request_hash": "334d1ed53cc2dbd0a29a73abb2c653a4068eda566f95b895822147b8b1f90abd",
+      "response_hash": "38be98743997aaa32e22933777fcf3a5c867dd1cbda4fd0203314bc83cca79f2",
+      "generated_at": "2026-08-03T06:26:08+00:00"
+    },
+    "production_record": {
+      "run_id": "editorial-v4-run:e6bb716c-e2d2-4f0a-8d03-07e54dad438d",
+      "generator_version": "editorial-v4-whole-report-generator-v1",
+      "prompt_version": "editorial-v4-whole-report-prompt-v1",
+      "model_provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "request_id": "e6bb716c-e2d2-4f0a-8d03-07e54dad438d",
+      "input_packet_sha256": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+      "model_packet_sha256": "70d23a2a69a96b4e5a094e410151ea469d91445ca74f6f29d9c21339089ce250",
+      "review_status": "pending",
+      "editorial_status": "draft",
+      "action_state": "blocked",
+      "tier_credit": false
+    },
+    "sources": [
+      {
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "美的集团 2025 年年度报告",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "page_count": 276,
+        "parser_version": "park-document-intelligence-v1"
+      },
+      {
+        "source_id": "midea_2026_q1",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "美的集团 2026 年第一季度报告",
+        "report_period": "2026Q1",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "page_count": 12,
+        "parser_version": "park-document-intelligence-v1"
+      }
+    ],
+    "boundary": {
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_b6_credit": true,
+      "no_decision_policy_credit": true,
+      "no_publication_credit": true
+    }
+  },
+  "evidence_packet": {
+    "ticker": "000333.SZ",
+    "issuer_name": "美的集团",
+    "sources": [
+      {
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "美的集团 2025 年年度报告",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "page_count": 276,
+        "parser_version": "park-document-intelligence-v1"
+      },
+      {
+        "source_id": "midea_2026_q1",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "美的集团 2026 年第一季度报告",
+        "report_period": "2026Q1",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "page_count": 12,
+        "parser_version": "park-document-intelligence-v1"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "midea_2025_annual:narrative:14:0",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "第三节 管理层讨论与分析 > 一、报告期内公司从事的主要业务 > （二）行业地位",
+        "quoted_anchor": "美的坚守“科技尽善，生活尽美”的企业愿景，将“联动人与万物，启迪美的世界”作为使命，秉持“敢知未来——志存高远、客户至上、变革创新、包容共协、务实奋进”的价值观，恪守“高质量发展与卓越运营”的经营管理规范，整合全球资源，推动技术创新，每年为全球超过 5亿用户及各领域的重要客户与战略合作伙伴提供满意的产品和服务，致力创造美好生活。面对数字互联网时代对产品和服务的更高要求，美的持续推动“科技领先、用户直达、数智驱动、全球突破”四大战略主轴，打造新时代的美的。其中，通过构建研发规模优势，加大对核心、前沿技术的布局和投入，实现科技领先；通过与用户直接联系互动，重塑产品服务及业务模式，实现用户直达；通过全面数字化全面智能化，内部提升效率和外部紧抓用户，实现数智驱动；通过在重点区域寻求市场、渠道和商业模式等维度突破，服务全美的是一家全球运营的公司，业务与客户遍及全球。迄今，美的在全球拥有超过 600家子公司、41研发中心和 43个主要制造基地，遍布二十多个国家和地区。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "美的坚守“科技尽善，生活尽美”的企业愿景，将“联动人与万物，启迪美的世界”作为使命，秉持“敢知未来——志存高远、客户至上、变革创新、包容共协、务实奋进”的价值观，恪守“高质量发展与卓越运营”的经营管理规范，整合全球资源，推动技术创新，每年为全球超过 5亿用户及各领域的重要客户与战略合作伙伴提供满意的产品和服务，致力创造美好生活。面对数字互联网时代对产品和服务的更高要求，美的持续推动“科技领先、用户直达、数智驱动、全球突破”四大战略主轴，打造新时代的美的。其中，通过构建研发规模优势，加大对核心、前沿技术的布局和投入，实现科技领先；通过与用户直接联系互动，重塑产品服务及业务模式，实现用户直达；通过全面数字化全面智能化，内部提升效率和外部紧抓用户，实现数智驱动；通过在重点区域寻求市场、渠道和商业模式等维度突破，服务全美的是一家全球运营的公司，业务与客户遍及全球。迄今，美的在全球拥有超过 600家子公司、41研发中心和 43个主要制造基地，遍布二十多个国家和地区。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:15:1",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 15,
+        "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司所处行业情况 > 1、家用电器行业",
+        "quoted_anchor": "2025年5月，美的集团凭借在 ESG管理体系的持续完善、管理水平的不断提升及其产品在节能、减还成功入选标普全球（S&P Global）发布的《可持续发展年鉴（中国版）2025》，进一步彰显了其在 ESG领域的工作成果；2025 年 8月，美的洗衣机荆州工厂获得总部位于伦敦的世界纪录认证机构 WRCA 的“世界卓越的首个多场景覆盖的智能体工厂”认证，标志着行业首个智能体工厂正式落地；2025年9 月，作为出海数字化标杆，美的空调泰国工厂获评世界经济论坛（ WEF）供应链韧性灯塔工厂，不仅是美的空调海外首座，也是中国家电行业首座海外灯塔工厂；2026 年 1月，美的厨热芜湖工厂也入选世界经济论坛（WEF）供应链韧性灯塔工厂，成为美的集团第八座灯塔工厂，同时也是全球首座全流程AI 赋能热厂、3家卓越级智能工厂以及 8家世界级灯塔工厂，充分展现出美的在全球制造行业领先的智能制造能力此外，美的获取标普、惠誉、穆迪三大国际信用评级，评级结果在全球同行业以及国内民营企业中2025年，在全球经济复苏乏力、地缘政治冲突不断和贸易保护主义抬头的复杂背景下，据海关总署国内家电市场则呈现前高后低的趋势，奥维云网（AVC）推总数据显示，2025 年国内家电（不含 3C）零售市场规模达到 8,931亿元，同比下滑 4.3%。未来家电行业发展呈现新趋势，一是增长端从流量驱动规模增长转向心智驱动价值增长，从需求满足到意义创造、从实物消费到服务消费；二是渠道端转向三场一体、无界零售，货架电商核心在货的升级、即时零售核心在人的捕捉、传统实体店核心在场的运营；三是在 AI时代，未来产业升级核心动力在智能生态，家电走向有温度的管家；四是随着人口老龄化程度继续加深，适老化的产品开发设计也将愈发重要。考虑到国补政策开展以来，已激发并前置部分家电需求，出“节能提效、舒适风感、健康空气、空间节省”四大产品趋势，以挂机为例，2025 年 APF>5.3的挂机线上销量占比增至 40%，线下销量占比增至 24%，高能效比的产品市场份额持续增长；舒适风感的气流",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "2025年5月，美的集团凭借在 ESG管理体系的持续完善、管理水平的不断提升及其产品在节能、减还成功入选标普全球（S&P Global）发布的《可持续发展年鉴（中国版）2025》，进一步彰显了其在 ESG领域的工作成果；2025 年 8月，美的洗衣机荆州工厂获得总部位于伦敦的世界纪录认证机构 WRCA 的“世界卓越的首个多场景覆盖的智能体工厂”认证，标志着行业首个智能体工厂正式落地；2025年9 月，作为出海数字化标杆，美的空调泰国工厂获评世界经济论坛（ WEF）供应链韧性灯塔工厂，不仅是美的空调海外首座，也是中国家电行业首座海外灯塔工厂；2026 年 1月，美的厨热芜湖工厂也入选世界经济论坛（WEF）供应链韧性灯塔工厂，成为美的集团第八座灯塔工厂，同时也是全球首座全流程AI 赋能热厂、3家卓越级智能工厂以及 8家世界级灯塔工厂，充分展现出美的在全球制造行业领先的智能制造能力此外，美的获取标普、惠誉、穆迪三大国际信用评级，评级结果在全球同行业以及国内民营企业中2025年，在全球经济复苏乏力、地缘政治冲突不断和贸易保护主义抬头的复杂背景下，据海关总署国内家电市场则呈现前高后低的趋势，奥维云网（AVC）推总数据显示，2025 年国内家电（不含 3C）零售市场规模达到 8,931亿元，同比下滑 4.3%。未来家电行业发展呈现新趋势，一是增长端从流量驱动规模增长转向心智驱动价值增长，从需求满足到意义创造、从实物消费到服务消费；二是渠道端转向三场一体、无界零售，货架电商核心在货的升级、即时零售核心在人的捕捉、传统实体店核心在场的运营；三是在 AI时代，未来产业升级核心动力在智能生态，家电走向有温度的管家；四是随着人口老龄化程度继续加深，适老化的产品开发设计也将愈发重要。考虑到国补政策开展以来，已激发并前置部分家电需求，出“节能提效、舒适风感、健康空气、空间节省”四大产品趋势，以挂机为例，2025 年 APF>5.3的挂机线上销量占比增至 40%，线下销量占比增至 24%，高能效比的产品市场份额持续增长；舒适风感的气流"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:20:5",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 20,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 1、中国区",
+        "quoted_anchor": "2025年，尽管得益于“以旧换新”补贴政策持续拉动，国内家电市场消费需求有所恢复，但围绕“用户流量”与“产品价格”的行业竞争仍在加剧，海外市场则由于贸易保护主义、汇率波动和地缘政治冲突持续的影响，海外经营形势持续面临挑战，美的集团坚定贯彻“以简化促增长，以自我颠覆直面挑战”的年度经营思路，持续聚焦核心业务和产品，尤其是海外业务发展成效显著，集团整体规模得到进一步增长，核心盈利指标进一步改善，展现了美的经营韧性与高质量增长的长期态势。2025 年，公司2025年，美的集团在国内市场继续推进落实“数一”战略，美的系产品在包括京东、天猫、抖音、拼多多等国内主流线上平台的家电销售额继续位居行业第一，在 KA、经销商、电商下沉等国内主要线下渠道的家电销售额亦位列行业第一，美的在 国内市场的电商销售额（含电商下沉）达到智能家居业务内销收入 55%以上。其中，在下沉市场美的系产品零售规模突破 300亿元，市场份额位居行业第一，实现市（1）坚定 DTC 变革引领新增长，聚焦零售能力，推进数字化业务模式创新，实现运营效率与用户打通零售资源要素以提升运营效率，深度融合线上线下以打造一致用户体验。 构建多流量平台引流体系，健全商机转化链路，提升留资转化能力；通过政策零售化实现零售驱动，拉通全价值链聚焦零售",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "2025年，尽管得益于“以旧换新”补贴政策持续拉动，国内家电市场消费需求有所恢复，但围绕“用户流量”与“产品价格”的行业竞争仍在加剧，海外市场则由于贸易保护主义、汇率波动和地缘政治冲突持续的影响，海外经营形势持续面临挑战，美的集团坚定贯彻“以简化促增长，以自我颠覆直面挑战”的年度经营思路，持续聚焦核心业务和产品，尤其是海外业务发展成效显著，集团整体规模得到进一步增长，核心盈利指标进一步改善，展现了美的经营韧性与高质量增长的长期态势。2025 年，公司2025年，美的集团在国内市场继续推进落实“数一”战略，美的系产品在包括京东、天猫、抖音、拼多多等国内主流线上平台的家电销售额继续位居行业第一，在 KA、经销商、电商下沉等国内主要线下渠道的家电销售额亦位列行业第一，美的在 国内市场的电商销售额（含电商下沉）达到智能家居业务内销收入 55%以上。其中，在下沉市场美的系产品零售规模突破 300亿元，市场份额位居行业第一，实现市（1）坚定 DTC 变革引领新增长，聚焦零售能力，推进数字化业务模式创新，实现运营效率与用户打通零售资源要素以提升运营效率，深度融合线上线下以打造一致用户体验。 构建多流量平台引流体系，健全商机转化链路，提升留资转化能力；通过政策零售化实现零售驱动，拉通全价值链聚焦零售"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:23:6",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 23,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 2、海外 OBM 业务",
+        "quoted_anchor": "外供应链端，美的持续深化海外供应链本地化与协同建设，持续推进数字化转型，成功在印尼、泰国推广落地全球关务系统，在意大利、德国落地本地仓配系统；不断深化生态合作，美的与中远海控、普洛斯达成战略合作，将共同建设泰国绿色智慧供应链交付中心，打造东南亚区域标杆性供应链枢纽，实现供应链智能化、低碳化、运营高效化；推进海外效率优化试点，试点落地马来西亚多品类集拼发货项目，2025年，美的持续推进本土化战略，以深入的市场和用户洞察驱动产品创新。在欧洲区域，顺利完成对 TEKA的收购，实现在家电产品的研发、制造、销售及渠道等方面资源的深度协同，全面推进全价值链“In Europe, for Europe”战略；通过系统整合，借助TEKA的优势资源，持续推动多品牌、多品类的交叉销售，带动欧洲区域收入实现双位数高速增长；美的于 2024年在欧洲上市的本土化创新代表产品Porta Split移动空调在2025年迎来爆发式增长，充分体现对当地市场需求的精准洞察，还推出 Essenza、Ispira和Eleva等系列产品；TEKA则推出 Van Gogh系列厨房产品以覆盖不同家庭结构和多样化人群需求，同时冰箱、洗衣机等核心品类的产品结构也在持续优化。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "外供应链端，美的持续深化海外供应链本地化与协同建设，持续推进数字化转型，成功在印尼、泰国推广落地全球关务系统，在意大利、德国落地本地仓配系统；不断深化生态合作，美的与中远海控、普洛斯达成战略合作，将共同建设泰国绿色智慧供应链交付中心，打造东南亚区域标杆性供应链枢纽，实现供应链智能化、低碳化、运营高效化；推进海外效率优化试点，试点落地马来西亚多品类集拼发货项目，2025年，美的持续推进本土化战略，以深入的市场和用户洞察驱动产品创新。在欧洲区域，顺利完成对 TEKA的收购，实现在家电产品的研发、制造、销售及渠道等方面资源的深度协同，全面推进全价值链“In Europe, for Europe”战略；通过系统整合，借助TEKA的优势资源，持续推动多品牌、多品类的交叉销售，带动欧洲区域收入实现双位数高速增长；美的于 2024年在欧洲上市的本土化创新代表产品Porta Split移动空调在2025年迎来爆发式增长，充分体现对当地市场需求的精准洞察，还推出 Essenza、Ispira和Eleva等系列产品；TEKA则推出 Van Gogh系列厨房产品以覆盖不同家庭结构和多样化人群需求，同时冰箱、洗衣机等核心品类的产品结构也在持续优化。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:24:7",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 24,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 2、海外 OBM 业务",
+        "quoted_anchor": "海外自有品牌电商业务连续两年高速增长，2025 全年同比提升 35%以上，并在英国、法国、意大利、韩国、巴西、阿根廷等多个国家的电商收入增速超过 50%。通过品类矩阵协同发力，增长动能多元充沛，全球化电商布局成效显著，自有品牌在亚马逊核心市场站点（北美、欧洲、日本）的 32个细分产品类目美的还持续拓展海外智能家居市场并提升用户体验，加强 AIoT技术在海外家电的应用，通过 AI全方位赋能节能、服务、智控等维度的用户体验，推出 AI ECOMASTER智慧能源解决方案和 AI Diag智能美的强化海外自有品牌建设，加速推进自有品牌全球突破步伐，推动品牌、产品、服务并驾齐驱，在前端市场深化用户触达渠道，扩展基于产品的品牌宣传，强化基于跨品类全屋家电的品牌认知；进一季起美的还将成为巴塞罗那足球俱乐部袖标级主要合作伙伴，并通过对亚足联、非洲足联、南美足联等区域性头部体育组织及赛事赞助，在不同市场区域有效触达全球数亿球迷及潜在家电消费者，持续提升品牌价值和扩大品牌影响力 ；通过 OBM 专项基金投入，在全球从线下终端零售体验、专业渠道拓展、社交媒体矩阵管理体系建立及全屋套系产品营销等多维度强化自有品牌影响力；加大线上站内外的内容营销，更新升级 51个海外品牌官网站点，并建立包含近 200个账号的社媒矩阵，完善多品牌矩阵，对内容规划、视觉呈现、购物体验全面升级，建立营销资源池；在 2025年德国IFA展上以更高品质的展台设计加快拓展和完善海外渠道布局，梳理相关国家渠道地图，建立并聚焦全球关键客户清单，与美洲、亚太、欧洲、中东非等区域重点客户不断深化协同；持续推动终端网点建设和专业渠道突破，在商品进驻、产品升级、终端建设、营销推广、用户服务、系统对接等全方位开展与渠道客户的合作，升级改善渠道结构；赋能前端导购，结合消费者洞察和产品核心卖点，为导购提供更生动形象、贴近本地消费者需求的话术指引；利用数字化工具赋能海外终端零售，2025 年新增超过 1.6万家数字化终端网点，借助数字化工具促进流量获取、转化提升以及用户沉淀等，通过数字化业务助手推广应用，实现每月上万次的",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "海外自有品牌电商业务连续两年高速增长，2025 全年同比提升 35%以上，并在英国、法国、意大利、韩国、巴西、阿根廷等多个国家的电商收入增速超过 50%。通过品类矩阵协同发力，增长动能多元充沛，全球化电商布局成效显著，自有品牌在亚马逊核心市场站点（北美、欧洲、日本）的 32个细分产品类目美的还持续拓展海外智能家居市场并提升用户体验，加强 AIoT技术在海外家电的应用，通过 AI全方位赋能节能、服务、智控等维度的用户体验，推出 AI ECOMASTER智慧能源解决方案和 AI Diag智能美的强化海外自有品牌建设，加速推进自有品牌全球突破步伐，推动品牌、产品、服务并驾齐驱，在前端市场深化用户触达渠道，扩展基于产品的品牌宣传，强化基于跨品类全屋家电的品牌认知；进一季起美的还将成为巴塞罗那足球俱乐部袖标级主要合作伙伴，并通过对亚足联、非洲足联、南美足联等区域性头部体育组织及赛事赞助，在不同市场区域有效触达全球数亿球迷及潜在家电消费者，持续提升品牌价值和扩大品牌影响力 ；通过 OBM 专项基金投入，在全球从线下终端零售体验、专业渠道拓展、社交媒体矩阵管理体系建立及全屋套系产品营销等多维度强化自有品牌影响力；加大线上站内外的内容营销，更新升级 51个海外品牌官网站点，并建立包含近 200个账号的社媒矩阵，完善多品牌矩阵，对内容规划、视觉呈现、购物体验全面升级，建立营销资源池；在 2025年德国IFA展上以更高品质的展台设计加快拓展和完善海外渠道布局，梳理相关国家渠道地图，建立并聚焦全球关键客户清单，与美洲、亚太、欧洲、中东非等区域重点客户不断深化协同；持续推动终端网点建设和专业渠道突破，在商品进驻、产品升级、终端建设、营销推广、用户服务、系统对接等全方位开展与渠道客户的合作，升级改善渠道结构；赋能前端导购，结合消费者洞察和产品核心卖点，为导购提供更生动形象、贴近本地消费者需求的话术指引；利用数字化工具赋能海外终端零售，2025 年新增超过 1.6万家数字化终端网点，借助数字化工具促进流量获取、转化提升以及用户沉淀等，通过数字化业务助手推广应用，实现每月上万次的"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:26:9",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 26,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 3、产品创新",
+        "quoted_anchor": "面向海外市场，推出北欧高性能变频分体产品 Raynor，全新搭载高密管蒸发器提升内机热交换效率，-25℃低温制热能力提升 35%，最大制热量可达 8kW；低槽级双转子高效压机配超低温油技术可实现最低运行室外温度低至-40℃，全频段降噪技术可实现外机噪音降幅达 8%，薄霜速融技术可实现室内温度波动降低 50%，产品荣获 2025年IFA产品创新金奖、德国红点设计奖与 iF设计奖。北美高热变频静音热泵PTAC搭载行业首款 Intertek认证的全气候整体式终端热泵，在-15℃至 46℃的温度区间实现能力输出不衰减；行业首创低温冷凝水处理技术，首创无需水暖改造即可在城市高层建筑使用的采暖方案，AI 变频节能50%，集成新风及控湿功能，60CFM 大风量循环，满足北美酒店建筑法规要求；采用复合隔音材料以聚焦“分区洗护、健康电催化、缓释去污、高效换热、清洁洗净、智能传感”六大方向进行技术攻关，美的全面构建全球洗护行业核心竞争力。面向国内市场，美的加大分区百搭、纯平大容量产品布局，并坚持快烘静音的烘干技术主线，推出行业首款 850mm标准高度的三筒分区洗烘一体机“美的三筒可爱多系列”，尺寸完美匹配主流定制柜体，无需改造，轻松换机；三筒健康洗护，小筒搭载行业首创美的元气棒 MINI2.0，除菌祛味除污渍，三筒均获得中卫安颁发的医护级健康洗认证；三筒可同时洗烘运行，三筒独立风道，内循环不串味，整机采用五横六纵减振平衡系统，运行时整机振动幅度小于",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "面向海外市场，推出北欧高性能变频分体产品 Raynor，全新搭载高密管蒸发器提升内机热交换效率，-25℃低温制热能力提升 35%，最大制热量可达 8kW；低槽级双转子高效压机配超低温油技术可实现最低运行室外温度低至-40℃，全频段降噪技术可实现外机噪音降幅达 8%，薄霜速融技术可实现室内温度波动降低 50%，产品荣获 2025年IFA产品创新金奖、德国红点设计奖与 iF设计奖。北美高热变频静音热泵PTAC搭载行业首款 Intertek认证的全气候整体式终端热泵，在-15℃至 46℃的温度区间实现能力输出不衰减；行业首创低温冷凝水处理技术，首创无需水暖改造即可在城市高层建筑使用的采暖方案，AI 变频节能50%，集成新风及控湿功能，60CFM 大风量循环，满足北美酒店建筑法规要求；采用复合隔音材料以聚焦“分区洗护、健康电催化、缓释去污、高效换热、清洁洗净、智能传感”六大方向进行技术攻关，美的全面构建全球洗护行业核心竞争力。面向国内市场，美的加大分区百搭、纯平大容量产品布局，并坚持快烘静音的烘干技术主线，推出行业首款 850mm标准高度的三筒分区洗烘一体机“美的三筒可爱多系列”，尺寸完美匹配主流定制柜体，无需改造，轻松换机；三筒健康洗护，小筒搭载行业首创美的元气棒 MINI2.0，除菌祛味除污渍，三筒均获得中卫安颁发的医护级健康洗认证；三筒可同时洗烘运行，三筒独立风道，内循环不串味，整机采用五横六纵减振平衡系统，运行时整机振动幅度小于"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:27:10",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 27,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 3、产品创新",
+        "quoted_anchor": "0.15mm，产品荣获红顶奖与中国家电行业“磐石奖”。东芝 XP5热泵洗烘一体机通过大筒径、大容积、大风量实现高效洗烘护，应用 UFB双微泡 PLUS技术，配合银离子抗菌技术，搭配 5档可控温水，高效去除顽固污渍；通过宽幅喷淋配合循环水流，实现洗涤剂高效溶解与渗透，洗涤时间缩短 14%，洗得更快、更净、更安心；升级 Fluffy Rich速干技术，全变频热泵烘干，平均 42℃低温柔烘，搭载 7种织物星面向海外市场，坚持以大容量为主线，聚焦新平台开发，提升东芝与美的双品牌的产品结构，持续完善产品线。美的 205滚干系列产品作为海外 OBM旗舰机型，以革命性纯平全嵌设计完美融入高端家装环境，独创 POWERGUARD智能节能系统，具有行业领先的能效表现；搭载 FABRICGUARD™专业护理系统，以低温轻柔烘干技术为高端面料提供专业呵护体验；应用 Multi-Sensor Pro智能传感矩阵，实现毫秒级湿度监测，具备自适应烘干算法，精准判断衣物干燥度。东芝 T26后控系列波轮产品创新采用后置控制面板设计与一体化纯平箱体结构，容量升级至 21kg超大洗涤空间，精准契合东南亚地区用户对大件衣物及家纺洗涤的迫切需求；全系搭载 Cyclone Mix洗涤剂预混科技和Rain Spray高效喷淋系统，溶解效率提升 87%；Aroma+智能香护系统升级为档位可调模式，留香效果提升 200%；独创的 Origin Color护色科技全面升级，护色率提升至 90%以上，出色应对衣物色彩丰富、面料多样的海外市场洗护需求。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "0.15mm，产品荣获红顶奖与中国家电行业“磐石奖”。东芝 XP5热泵洗烘一体机通过大筒径、大容积、大风量实现高效洗烘护，应用 UFB双微泡 PLUS技术，配合银离子抗菌技术，搭配 5档可控温水，高效去除顽固污渍；通过宽幅喷淋配合循环水流，实现洗涤剂高效溶解与渗透，洗涤时间缩短 14%，洗得更快、更净、更安心；升级 Fluffy Rich速干技术，全变频热泵烘干，平均 42℃低温柔烘，搭载 7种织物星面向海外市场，坚持以大容量为主线，聚焦新平台开发，提升东芝与美的双品牌的产品结构，持续完善产品线。美的 205滚干系列产品作为海外 OBM旗舰机型，以革命性纯平全嵌设计完美融入高端家装环境，独创 POWERGUARD智能节能系统，具有行业领先的能效表现；搭载 FABRICGUARD™专业护理系统，以低温轻柔烘干技术为高端面料提供专业呵护体验；应用 Multi-Sensor Pro智能传感矩阵，实现毫秒级湿度监测，具备自适应烘干算法，精准判断衣物干燥度。东芝 T26后控系列波轮产品创新采用后置控制面板设计与一体化纯平箱体结构，容量升级至 21kg超大洗涤空间，精准契合东南亚地区用户对大件衣物及家纺洗涤的迫切需求；全系搭载 Cyclone Mix洗涤剂预混科技和Rain Spray高效喷淋系统，溶解效率提升 87%；Aroma+智能香护系统升级为档位可调模式，留香效果提升 200%；独创的 Origin Color护色科技全面升级，护色率提升至 90%以上，出色应对衣物色彩丰富、面料多样的海外市场洗护需求。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:27:11",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 27,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 3、产品创新",
+        "quoted_anchor": "冰箱持续围绕以用户为中心，聚焦“智能、家居化、保鲜、基础性能”技术布局，构建智能健康家电核心竞争力，持续推出差异化引领产品。面向内销市场，围绕 大容量、嵌入式、健康净化等消费需求，美的冰箱开发熊墩墩系列产品，实现“标配即顶配”，产品实现“小占地、大容量”与“纯平全热技术，与主流橱柜实现无缝嵌入；全系搭载的 PST+智能净化科技，和中科大合作将催化领域前沿的单原子催化技术应用于冰箱，实现健康储鲜；通过采用构建“主动吸风 -快速电解-彻底催化”的净化闭环，实现 3分钟急速净味、90 秒去除空气浮游菌，实现行业最快净味除菌效果；全系产品包含标准版、 Pro版、Ultra版，满足不同用户群体需求，销量达 15万台，在行业 600L冰箱产品中销量第一。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "冰箱持续围绕以用户为中心，聚焦“智能、家居化、保鲜、基础性能”技术布局，构建智能健康家电核心竞争力，持续推出差异化引领产品。面向内销市场，围绕 大容量、嵌入式、健康净化等消费需求，美的冰箱开发熊墩墩系列产品，实现“标配即顶配”，产品实现“小占地、大容量”与“纯平全热技术，与主流橱柜实现无缝嵌入；全系搭载的 PST+智能净化科技，和中科大合作将催化领域前沿的单原子催化技术应用于冰箱，实现健康储鲜；通过采用构建“主动吸风 -快速电解-彻底催化”的净化闭环，实现 3分钟急速净味、90 秒去除空气浮游菌，实现行业最快净味除菌效果；全系产品包含标准版、 Pro版、Ultra版，满足不同用户群体需求，销量达 15万台，在行业 600L冰箱产品中销量第一。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:27:12",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 27,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 3、产品创新",
+        "quoted_anchor": "面向海外市场，新一代搭载抛冰技术产品将原本占据冷藏室的大体积制冰装置整合至冷冻室内部，释放约 17升冷藏收纳空间，优化冰箱使用空间，同时通过精简冷藏门上的出冰组件，门体更轻盈，外观更简洁；抛冰技术可将冰块“送到门前”，用户无需弯腰即可在门体位置轻松取冰，大幅提升日常使用体验；通过在冷冻室制冰与储存，温度更低，制冰效果更稳定，并提供不同规格的冰块选择，兼顾多种使用场景。面向欧洲市场，美的 Space Master系列产品采用超薄泡层、核心元器件小型化、最小压机仓等技术，做到相同尺寸下的内部空间更大，同时兼顾节能需求；Eco Master 超节能系列多门体产品通过冰箱制冷系统保压技术和智能防冷凝技术，结合低耗节能的风机和电控板，实现高效制冷系统热管理，提",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "面向海外市场，新一代搭载抛冰技术产品将原本占据冷藏室的大体积制冰装置整合至冷冻室内部，释放约 17升冷藏收纳空间，优化冰箱使用空间，同时通过精简冷藏门上的出冰组件，门体更轻盈，外观更简洁；抛冰技术可将冰块“送到门前”，用户无需弯腰即可在门体位置轻松取冰，大幅提升日常使用体验；通过在冷冻室制冰与储存，温度更低，制冰效果更稳定，并提供不同规格的冰块选择，兼顾多种使用场景。面向欧洲市场，美的 Space Master系列产品采用超薄泡层、核心元器件小型化、最小压机仓等技术，做到相同尺寸下的内部空间更大，同时兼顾节能需求；Eco Master 超节能系列多门体产品通过冰箱制冷系统保压技术和智能防冷凝技术，结合低耗节能的风机和电控板，实现高效制冷系统热管理，提"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:30:15",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 30,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 1、工业技术业务",
+        "quoted_anchor": "美的工业技术在全球范围内持续投入，服务全球暖通家电客户，坚定突破海外重点市场：已启动泰冰箱压缩机合肥新基地的两条变频生产线实现量产，新增年产能将达 800万台；位于巴西的电机工厂正式投入运行，BLDC 高效空调电机年产能达 200万台；此外，持续深化布局芯片产品技术，自研芯片出货量2025年，美的工业技术发布多款产品与解决方案，赢得全球客户广泛信赖与市场高度认可，包括 美芝宽频化转子压缩机、高可靠性静音宽域转子压缩机、R290 空调压缩机、KN 全铝定速压缩机、高效双级变容涡旋压缩机、M 系列集成式电子膨胀阀、轻商 Ultra超高效R290变频往复式压缩机，威灵热泵 EC风机、模块化 IPM高效静音电机等。美的工业技术的研发成果屡获行业殊荣其中“高转矩密度高效铁氧体电机系统及其低碳制造关键技术研究与产业化”项目和“基于提效增质的变频涡旋压缩机宽频关键技术研究及应用”项目分别荣获 2024年度中国轻工联科技奖一等奖和二等奖；“宽频全域运行高效静音压缩机关键技术研究及产业化”项目入选轻工业“十四五”先进科技创新成果。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "美的工业技术在全球范围内持续投入，服务全球暖通家电客户，坚定突破海外重点市场：已启动泰冰箱压缩机合肥新基地的两条变频生产线实现量产，新增年产能将达 800万台；位于巴西的电机工厂正式投入运行，BLDC 高效空调电机年产能达 200万台；此外，持续深化布局芯片产品技术，自研芯片出货量2025年，美的工业技术发布多款产品与解决方案，赢得全球客户广泛信赖与市场高度认可，包括 美芝宽频化转子压缩机、高可靠性静音宽域转子压缩机、R290 空调压缩机、KN 全铝定速压缩机、高效双级变容涡旋压缩机、M 系列集成式电子膨胀阀、轻商 Ultra超高效R290变频往复式压缩机，威灵热泵 EC风机、模块化 IPM高效静音电机等。美的工业技术的研发成果屡获行业殊荣其中“高转矩密度高效铁氧体电机系统及其低碳制造关键技术研究与产业化”项目和“基于提效增质的变频涡旋压缩机宽频关键技术研究及应用”项目分别荣获 2024年度中国轻工联科技奖一等奖和二等奖；“宽频全域运行高效静音压缩机关键技术研究及产业化”项目入选轻工业“十四五”先进科技创新成果。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:31:16",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 31,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 2、楼宇科技业务",
+        "quoted_anchor": "美的楼宇科技作为楼宇建筑智慧生态集成方案服务商，业务范畴包括暖通空调、电梯业务、楼宇智能化和能源管理，借助 iBUILDING数字化平台，打通楼宇建筑的软硬件设备和系统，提供数智建筑全栈解决方案，从而为客户提供更好的场景体验、更优的能源策略和更可靠的空间服务。产业在线数据显示，2025年，美的中央空调国内市场销售额占比超过 20%，保持行业第一；美的商用多联机的国内市场销售额占比超过 28%，继续稳居行业第一；美的离心机国内市场销售额占比超过 16%，位居行业第一，其中美的磁悬浮离心机国内市场销量占比亦位居行业第一；此外，美的还在风冷螺杆机、水冷螺杆机、模块机等细分国内市场份额均位居行业前列。2025 年菱王电梯发货量同比增长超过 40%，为工业全场景交付超10,000台货梯，并连续 3 年领跑国内货梯行业细分市场；国债支持的老旧电梯焕新工程，作为多地国美的楼宇科技在暖通空调业务的纵深发展同时，布局电梯、数据中心及工业领域，作为新的增长引擎。面向国内市场，围绕商业模式转型升级，聚焦高潜行业，行业垂直化深耕与模块化场景复制，推进渠道协同和后市场服务体系搭建，全面从设备提供商向“楼宇全生命周期运维”服务商转型。面向海外市场，以欧洲为第二主场，通过本地化产研销、渠道协同和全价值链提效，致力于成为欧洲采暖市场主流品牌，持续深耕东南亚、中东非、拉美等市场，发展本土化渠道和技术服务体系，持续提升海外 OBM业务占比。美的楼宇科技目前已在全球建立 16个产品制造基地和 7个创新研发中心，其中的 9个制造基2025年，美的将意大利 Clivet空调业务与新收购的ARBONIA Climate完成合并，成立MBT Climate。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "美的楼宇科技作为楼宇建筑智慧生态集成方案服务商，业务范畴包括暖通空调、电梯业务、楼宇智能化和能源管理，借助 iBUILDING数字化平台，打通楼宇建筑的软硬件设备和系统，提供数智建筑全栈解决方案，从而为客户提供更好的场景体验、更优的能源策略和更可靠的空间服务。产业在线数据显示，2025年，美的中央空调国内市场销售额占比超过 20%，保持行业第一；美的商用多联机的国内市场销售额占比超过 28%，继续稳居行业第一；美的离心机国内市场销售额占比超过 16%，位居行业第一，其中美的磁悬浮离心机国内市场销量占比亦位居行业第一；此外，美的还在风冷螺杆机、水冷螺杆机、模块机等细分国内市场份额均位居行业前列。2025 年菱王电梯发货量同比增长超过 40%，为工业全场景交付超10,000台货梯，并连续 3 年领跑国内货梯行业细分市场；国债支持的老旧电梯焕新工程，作为多地国美的楼宇科技在暖通空调业务的纵深发展同时，布局电梯、数据中心及工业领域，作为新的增长引擎。面向国内市场，围绕商业模式转型升级，聚焦高潜行业，行业垂直化深耕与模块化场景复制，推进渠道协同和后市场服务体系搭建，全面从设备提供商向“楼宇全生命周期运维”服务商转型。面向海外市场，以欧洲为第二主场，通过本地化产研销、渠道协同和全价值链提效，致力于成为欧洲采暖市场主流品牌，持续深耕东南亚、中东非、拉美等市场，发展本土化渠道和技术服务体系，持续提升海外 OBM业务占比。美的楼宇科技目前已在全球建立 16个产品制造基地和 7个创新研发中心，其中的 9个制造基2025年，美的将意大利 Clivet空调业务与新收购的ARBONIA Climate完成合并，成立MBT Climate。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:34:17",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 34,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 2、楼宇科技业务",
+        "quoted_anchor": "2025年，楼宇科技推出引领行业的液冷关键组件CDU、磁悬浮冷水机等产品，并获得较高市场占有率，持续研发全链条液冷产品线，致力于成为行业主要的液冷解决方案提供商。在国内与多家互联网头部企业保持合作共研的生态关系，进一步提升行业影响力；并持续开发适应海外市场的液冷产品，凭借庞大的海外销售、售后等体系，快速切入海外数据中心液冷市场。2026 年，美的楼宇科技在佛山顺德正式启动液冷智造基地建设，进一步加快在数据中心液冷温控领域的战略布局。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "2025年，楼宇科技推出引领行业的液冷关键组件CDU、磁悬浮冷水机等产品，并获得较高市场占有率，持续研发全链条液冷产品线，致力于成为行业主要的液冷解决方案提供商。在国内与多家互联网头部企业保持合作共研的生态关系，进一步提升行业影响力；并持续开发适应海外市场的液冷产品，凭借庞大的海外销售、售后等体系，快速切入海外数据中心液冷市场。2026 年，美的楼宇科技在佛山顺德正式启动液冷智造基地建设，进一步加快在数据中心液冷温控领域的战略布局。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:39:18",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 39,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 4、新能源业务",
+        "quoted_anchor": "在海外市场，科陆电子立足全球能源转型机遇，持续深化全球化布局，在美洲、欧洲搭建集销售、支持、服务于一体的区域化团队，深度挖掘当地客户差异化需求，推动业务落地；在中东非及亚太市场，通过联合当地合作伙伴渗透市场，逐步建立市场认知与渠道网络。海外业务拓展成效显著，新开拓希腊、保加利亚等多个国家的储能市场，顺利完成多个海外储能项目交付，全栈自研的 Aqua C2.5集装箱式储能系统实现大规模商用。在国内市场，科陆电子锚定央国企等战略客户，通过战略绑定与生态共建推动合作项目落地，于报告期内顺利完成多个大型储能项目交付，包括总容量达 2GWh的“宁夏项目”、GW 级智慧混储的“蒙西项目”、四川省首批新型储能示范项目之一的“绵阳港青项目”等。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "在海外市场，科陆电子立足全球能源转型机遇，持续深化全球化布局，在美洲、欧洲搭建集销售、支持、服务于一体的区域化团队，深度挖掘当地客户差异化需求，推动业务落地；在中东非及亚太市场，通过联合当地合作伙伴渗透市场，逐步建立市场认知与渠道网络。海外业务拓展成效显著，新开拓希腊、保加利亚等多个国家的储能市场，顺利完成多个海外储能项目交付，全栈自研的 Aqua C2.5集装箱式储能系统实现大规模商用。在国内市场，科陆电子锚定央国企等战略客户，通过战略绑定与生态共建推动合作项目落地，于报告期内顺利完成多个大型储能项目交付，包括总容量达 2GWh的“宁夏项目”、GW 级智慧混储的“蒙西项目”、四川省首批新型储能示范项目之一的“绵阳港青项目”等。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:39:19",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 39,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 4、新能源业务",
+        "quoted_anchor": "科陆电子工商储产品通过实施“科陆+美的”双品牌战略，依托美的在制造、研发与渠道方面的深度赋能，叠加自身在电力领域近 30年的深厚积淀，针对不同客户群体进行差异化定位，覆盖更广泛的市场需求；同时创新推出“区域运营商共创模式”，将渠道合作伙伴转变为长期利益共享的“区域能源运营商”，共同深耕本地市场。科陆电子先后上榜彭博新能源财经（BNEF）“2025 全球储能产品及系统集成商可融资性”榜单、“Tier1 全球一级储能厂商”榜单，被联合国工业发展组织和深圳知名品牌评价委员美的新能源旗下合康新能依托自主研发能力，成功自主研制出高压变频器首台低压自动化测试设备，实现产品测试自动化领域的关键突破；通过产线自动化升级与工艺优化，实现 EPC光伏逆变器、3-6KW产出效能；通过实施精益生产管理并优化物流布局，半成品交付周期较上一年度实现显著压缩；新增 1条中试生产线，专项支撑研发新品快速开发与打样需求；安庆生产基地于 2025年6月正式投产运营，保障未来发展。科陆电子宜春储能基地年产能已达 12GWh，为进一步完善海外布局，提升竞争力及整体抗风险能力，科陆电子已在印度尼西亚启动建设储能生产基地，初期规划产能可达 3GWh。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "科陆电子工商储产品通过实施“科陆+美的”双品牌战略，依托美的在制造、研发与渠道方面的深度赋能，叠加自身在电力领域近 30年的深厚积淀，针对不同客户群体进行差异化定位，覆盖更广泛的市场需求；同时创新推出“区域运营商共创模式”，将渠道合作伙伴转变为长期利益共享的“区域能源运营商”，共同深耕本地市场。科陆电子先后上榜彭博新能源财经（BNEF）“2025 全球储能产品及系统集成商可融资性”榜单、“Tier1 全球一级储能厂商”榜单，被联合国工业发展组织和深圳知名品牌评价委员美的新能源旗下合康新能依托自主研发能力，成功自主研制出高压变频器首台低压自动化测试设备，实现产品测试自动化领域的关键突破；通过产线自动化升级与工艺优化，实现 EPC光伏逆变器、3-6KW产出效能；通过实施精益生产管理并优化物流布局，半成品交付周期较上一年度实现显著压缩；新增 1条中试生产线，专项支撑研发新品快速开发与打样需求；安庆生产基地于 2025年6月正式投产运营，保障未来发展。科陆电子宜春储能基地年产能已达 12GWh，为进一步完善海外布局，提升竞争力及整体抗风险能力，科陆电子已在印度尼西亚启动建设储能生产基地，初期规划产能可达 3GWh。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:41:22",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 41,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > (一)智能家居业务和商业及工业解决方案的全球领先科技公司",
+        "quoted_anchor": "强化“ToC送装一体”能力，支持企业链接到用户，以终端能力建设为基础，推进运营商模式和直管工程师模式，通过ToC 直配且直管到车/司机的机制实现送装服务升级；在服务全链路深度应用AI 技术，通过AI智能预约系统，订单受理后自动匹配并锁定最优上门时段，依托算法派单引擎精准调度送装工程师，在履约环节通过智能路径规划工具动态优化工程师行程，保障服务高效交付。截至 2025年6月，在安装完工环节，引入 AI工具实现精准验收，在售后阶段搭载 AI智能客服系统，实现 7×24小时高效响应；国内合作网点数超 3,500个，送装服务团队成员人数超过 7万名，开展试点工程师“直管、直派、直付”模式，围绕家电“送装一体”、家居“三包、五包”、新能源“勘、装”、多品类“维保”等服务提供成美的作为智能家居业务和商业及工业解决方案领域的全球领先科技公司，为 200多个国家和地区的客户提供服务，并在多个方面取得市场领先地位，包括各类家电及其核心部件、商用暖通、机器人与自动在全球的领导力及卓越表现。美的坚持不懈的巩固在全球家电行业的市场领导地位，根据欧睿（Euromonitor）统计数据显示，按2025年各品牌全球智能家电销售量(自有品牌制造商)计，美的智能家电销量位居全球第一，全球范围内已实现超过 1.4亿智能家电联网，超过 1.5亿智能用户接入。目前，美的拥有面向高端市场、大众市场及年轻群体市场的广泛品牌矩阵，并可提供各类智能家电产品。 2025年，美的集团在国内市场继续推进落实“数一”战略，美的系产品在包括京东、天猫、抖音、拼多多等国内主流线上平台的家电销售额继续位居行业第一；美的系产品在 KA、经销商、电商下沉等国内主要线下渠道的家电销售额亦位列行业第一。同时，美的也是一家颇具规模的商业及工业解决方案供应商，在多个领域取得市场领先地位，产业在线数据显示，2025 年，美的家用空调压缩机、家用空调电机、洗衣机电机的全球市场销量份额均稳居行业第一，冰箱压缩机的全球市场销量份额亦位 居行业前列。产业在线数据显示，2025年，美的中央空调国内市场销售额占比超过 20%，保持行业第一；美的商用多联机的",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "强化“ToC送装一体”能力，支持企业链接到用户，以终端能力建设为基础，推进运营商模式和直管工程师模式，通过ToC 直配且直管到车/司机的机制实现送装服务升级；在服务全链路深度应用AI 技术，通过AI智能预约系统，订单受理后自动匹配并锁定最优上门时段，依托算法派单引擎精准调度送装工程师，在履约环节通过智能路径规划工具动态优化工程师行程，保障服务高效交付。截至 2025年6月，在安装完工环节，引入 AI工具实现精准验收，在售后阶段搭载 AI智能客服系统，实现 7×24小时高效响应；国内合作网点数超 3,500个，送装服务团队成员人数超过 7万名，开展试点工程师“直管、直派、直付”模式，围绕家电“送装一体”、家居“三包、五包”、新能源“勘、装”、多品类“维保”等服务提供成美的作为智能家居业务和商业及工业解决方案领域的全球领先科技公司，为 200多个国家和地区的客户提供服务，并在多个方面取得市场领先地位，包括各类家电及其核心部件、商用暖通、机器人与自动在全球的领导力及卓越表现。美的坚持不懈的巩固在全球家电行业的市场领导地位，根据欧睿（Euromonitor）统计数据显示，按2025年各品牌全球智能家电销售量(自有品牌制造商)计，美的智能家电销量位居全球第一，全球范围内已实现超过 1.4亿智能家电联网，超过 1.5亿智能用户接入。目前，美的拥有面向高端市场、大众市场及年轻群体市场的广泛品牌矩阵，并可提供各类智能家电产品。 2025年，美的集团在国内市场继续推进落实“数一”战略，美的系产品在包括京东、天猫、抖音、拼多多等国内主流线上平台的家电销售额继续位居行业第一；美的系产品在 KA、经销商、电商下沉等国内主要线下渠道的家电销售额亦位列行业第一。同时，美的也是一家颇具规模的商业及工业解决方案供应商，在多个领域取得市场领先地位，产业在线数据显示，2025 年，美的家用空调压缩机、家用空调电机、洗衣机电机的全球市场销量份额均稳居行业第一，冰箱压缩机的全球市场销量份额亦位 居行业前列。产业在线数据显示，2025年，美的中央空调国内市场销售额占比超过 20%，保持行业第一；美的商用多联机的"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:42:23",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 42,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > （三）商业及工业解决方案业务推动持续增长",
+        "quoted_anchor": "市场销售额占比超过 28%，继续稳居行业第一；美的离心机组国内市场销售额占比超过 16%，位居行业第一；美的还在风冷螺杆机、水冷螺杆机、模块机等细分国内市场份额均位居行业前列；此外，菱王电梯凭借其领先的专业技术实力及品牌口碑，连续3年领跑国内货梯行业细分市场。美的旗下的库卡集团是全球“四大”工业机器人公司之一，据 MIR睿工业统计，2025 年库卡工业机器人的国内市场销量份额也稳步提升至 9.6%，稳居行业前三；且在重载机器人领域具有显著优势，库卡 300kg以上负载机器人的国面向国内市场，经过多年发展与布局，美的已形成了业态布局完整、地域覆盖广阔的渠道网络，可快速满足线上与线下不同用户的家电购买需求。美的围绕用户需求角度不断完善线下业态布局，形成综合家电卖场、自有专卖体系、传统零售商以及电商下沉加盟店的全业态网络布局，覆盖从一线城市到乡镇的各级市场，同时还能为企业客户提供专业场景化解决方案；美的独有的数万家网点的专卖体系，如前装店、旗舰店、专业店、多品店等可满足用户从新装到更新的不同需求，并持续为零售门店提供行业领先的数字化平台服务，同时着力拓展建设 COLMO 和东芝的高端品牌门店；围绕“智能套系运营”和“全屋整装解决方案”，深度拓展与家装、家居、建材、设计等渠道的合作，积 极争取前置流量。通过以专卖体系门店为核心，形成覆盖全级别市场的“美云销+”生态体系，构建面向全市场具有核心竞争力专卖体系业务，坚定专卖体系服务、运营与全品零售等能力提升与转型。此外，美的还在拼多多、抖音、快手、小红书等新渠道加速发展，并结合会员运营、产品套系化与智能化驱动新的销售与用户增长。 截面向海外市场，美的已构建全球研发、制造及销售网络，具备全球化发展能力，在海外 11个国家设有29个海外研发中心，整合全球研发资源，形成优势互补的全球化技术研发能力；在全球的 65个主要生产基地中有 43个位于海外，实现全球生产和交付，把握海外市场的成长机会；美的海外销售额占公司总销售额 40%以上，产品已出口至全球超过 200个国家及地区，在许多海外市场已建立线上、线下销售网已加入海外销售平台；截至 20",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "市场销售额占比超过 28%，继续稳居行业第一；美的离心机组国内市场销售额占比超过 16%，位居行业第一；美的还在风冷螺杆机、水冷螺杆机、模块机等细分国内市场份额均位居行业前列；此外，菱王电梯凭借其领先的专业技术实力及品牌口碑，连续3年领跑国内货梯行业细分市场。美的旗下的库卡集团是全球“四大”工业机器人公司之一，据 MIR睿工业统计，2025 年库卡工业机器人的国内市场销量份额也稳步提升至 9.6%，稳居行业前三；且在重载机器人领域具有显著优势，库卡 300kg以上负载机器人的国面向国内市场，经过多年发展与布局，美的已形成了业态布局完整、地域覆盖广阔的渠道网络，可快速满足线上与线下不同用户的家电购买需求。美的围绕用户需求角度不断完善线下业态布局，形成综合家电卖场、自有专卖体系、传统零售商以及电商下沉加盟店的全业态网络布局，覆盖从一线城市到乡镇的各级市场，同时还能为企业客户提供专业场景化解决方案；美的独有的数万家网点的专卖体系，如前装店、旗舰店、专业店、多品店等可满足用户从新装到更新的不同需求，并持续为零售门店提供行业领先的数字化平台服务，同时着力拓展建设 COLMO 和东芝的高端品牌门店；围绕“智能套系运营”和“全屋整装解决方案”，深度拓展与家装、家居、建材、设计等渠道的合作，积 极争取前置流量。通过以专卖体系门店为核心，形成覆盖全级别市场的“美云销+”生态体系，构建面向全市场具有核心竞争力专卖体系业务，坚定专卖体系服务、运营与全品零售等能力提升与转型。此外，美的还在拼多多、抖音、快手、小红书等新渠道加速发展，并结合会员运营、产品套系化与智能化驱动新的销售与用户增长。 截面向海外市场，美的已构建全球研发、制造及销售网络，具备全球化发展能力，在海外 11个国家设有29个海外研发中心，整合全球研发资源，形成优势互补的全球化技术研发能力；在全球的 65个主要生产基地中有 43个位于海外，实现全球生产和交付，把握海外市场的成长机会；美的海外销售额占公司总销售额 40%以上，产品已出口至全球超过 200个国家及地区，在许多海外市场已建立线上、线下销售网已加入海外销售平台；截至 20"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:43:24",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 43,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > （三）商业及工业解决方案业务推动持续增长",
+        "quoted_anchor": "对于人形机器人技术，美的人形机器人创新中心主要研究三个方面，一是机器人核心零部件的研究、开发和应用；二是家电机器人化，在家电产品中融入机器人和 AI技术，例如视觉识别、机械臂运用以及人机交互技术等；三是机器人整机开发，深入挖掘应用场景，积极布局核心技术。按照“工业场景-商业场景-家庭场景”的发展规划，美的“美罗”和“美拉”人形机器人应运而生，前者面向工业场景，后者专注商业与家庭场景。2025 年，已经开发出三代共 5款人形机器人产品，针对工业场景应用，美的人形机器人“美罗”已进入美的洗衣机荆州工厂“上岗工作”，在“工厂大脑”的调度下，可执行 3D质检、设备巡检、钣金上料等任务，并与其他具身智能终端协同作业，共同构建起美的全球首个多场景覆盖的智能体工厂。针对商业场景应用，“美拉”已可实现从冰箱取物、用微波炉加热食物及咖啡机冲泡咖啡等系列动作，预计在 2026年正式亮相美的线下门店，提供导览、家电操作演示等服务。 此外，美的研发的高性能双足全人形机器人“美拉 X”具备全地形高动态运动能力，可实现爬坡、上下楼梯、跑步、跳舞等，2025年12月，美的发布超人形机器人“美罗 U（MIRO U）”，作为美的人形机器人家族的第三代旗舰产品，美罗 U腰部模块配置 3个运动自由度，可实现稳定升降与 360度原地转体；六条仿生人形机械臂分别搭载 6个高精度驱动关节，末端执行器支持灵巧手、真空吸盘等多类模组的快速切换，形成多维度协同作业系统，其核心价值在于突破形态模仿，实现工业场景下的作业效能跃升；经评估测算，美罗 U可使相关生产线的换线调整效率提升 30%、设备占用空间减少 40%，目前美罗 U 已在美的无锡双高端洗",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "对于人形机器人技术，美的人形机器人创新中心主要研究三个方面，一是机器人核心零部件的研究、开发和应用；二是家电机器人化，在家电产品中融入机器人和 AI技术，例如视觉识别、机械臂运用以及人机交互技术等；三是机器人整机开发，深入挖掘应用场景，积极布局核心技术。按照“工业场景-商业场景-家庭场景”的发展规划，美的“美罗”和“美拉”人形机器人应运而生，前者面向工业场景，后者专注商业与家庭场景。2025 年，已经开发出三代共 5款人形机器人产品，针对工业场景应用，美的人形机器人“美罗”已进入美的洗衣机荆州工厂“上岗工作”，在“工厂大脑”的调度下，可执行 3D质检、设备巡检、钣金上料等任务，并与其他具身智能终端协同作业，共同构建起美的全球首个多场景覆盖的智能体工厂。针对商业场景应用，“美拉”已可实现从冰箱取物、用微波炉加热食物及咖啡机冲泡咖啡等系列动作，预计在 2026年正式亮相美的线下门店，提供导览、家电操作演示等服务。 此外，美的研发的高性能双足全人形机器人“美拉 X”具备全地形高动态运动能力，可实现爬坡、上下楼梯、跑步、跳舞等，2025年12月，美的发布超人形机器人“美罗 U（MIRO U）”，作为美的人形机器人家族的第三代旗舰产品，美罗 U腰部模块配置 3个运动自由度，可实现稳定升降与 360度原地转体；六条仿生人形机械臂分别搭载 6个高精度驱动关节，末端执行器支持灵巧手、真空吸盘等多类模组的快速切换，形成多维度协同作业系统，其核心价值在于突破形态模仿，实现工业场景下的作业效能跃升；经评估测算，美罗 U可使相关生产线的换线调整效率提升 30%、设备占用空间减少 40%，目前美罗 U 已在美的无锡双高端洗"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:69:39",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 69,
+        "section_path": "第四节 公司治理、环境和社会 > 四、董事、监事和高级管理人员情况 > 1、基本情况 > 2、任职情况",
+        "quoted_anchor": "顾炎民，男，博士，2000年加入本公司，曾任本公司企划投资部总监、美的制冷家电集团海外战略发展部总监、美的制冷家电集团副总裁兼市场部海外业务拓展总监、本公司海外战略部总监、机器人与自动化事业部总裁等职务，现任本公司执行董事、副总裁、库卡集团监事会主席、美的电器（新加坡）",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "顾炎民，男，博士，2000年加入本公司，曾任本公司企划投资部总监、美的制冷家电集团海外战略发展部总监、美的制冷家电集团副总裁兼市场部海外业务拓展总监、本公司海外战略部总监、机器人与自动化事业部总裁等职务，现任本公司执行董事、副总裁、库卡集团监事会主席、美的电器（新加坡）"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 135,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 458,502,407 409,084,266 936,519 946,607 四(48), 其中：营业收入 十八(3) 456,451,731 407,149,600 936,519 946,607",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "unit": "千元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 458502407.0,
+        "column_identity": "current_period",
+        "column_header_excerpt": "美的集团股份有限公司 2025 年度合并及公司利润表 (除特别注明外，金额单位为人民币千元) 项目 附注 2025年度 2024年度 2025年度 2024年度 合并 合并 公司 公司 一、营业总收入 458,502,407 409,084,266 936,519 946,607 四(48), 其中：营业收入 十八(3) 456,451,731 407,149,600 936,519 946,607 利息收入 四(49) 2,050,168 1,934,090 - - 手续费及佣金收入 508 576 - - 减：营业成本 四(48) (335,989,",
+        "source_title": "美的集团 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:1",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2024FY",
+        "page_number": 135,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 458,502,407 409,084,266 936,519 946,607 四(48), 其中：营业收入 十八(3) 456,451,731 407,149,600 936,519 946,607",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "unit": "千元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 409084266.0,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "美的集团股份有限公司 2025 年度合并及公司利润表 (除特别注明外，金额单位为人民币千元) 项目 附注 2025年度 2024年度 2025年度 2024年度 合并 合并 公司 公司 一、营业总收入 458,502,407 409,084,266 936,519 946,607 四(48), 其中：营业收入 十八(3) 456,451,731 407,149,600 936,519 946,607 利息收入 四(49) 2,050,168 1,934,090 - - 手续费及佣金收入 508 576 - - 减：营业成本 四(48) (335,989,",
+        "source_title": "美的集团 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0",
+        "source_id": "midea_2026_q1",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2026Q1",
+        "page_number": 8,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 131,580,870 128,428,421 227,380 240,751 其中：营业收入 131,098,601 127,838,538 227,380 240,751 利息收入 482,157 589,752 - -",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "unit": "千元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 131580870.0,
+        "column_identity": "current_period",
+        "column_header_excerpt": "美的集团股份有限公司 2026 年第一季度报告 合并及公司利润表 编制单位：美的集团股份有限公司 单位:人民币千元 项 目 2026 年 1-3月 2025 年 1-3月 2026 年 1-3月 2025 年 1-3 月 合并 合并 公司 公司 一、营业总收入 131,580,870 128,428,421 227,380 240,751 其中：营业收入 131,098,601 127,838,538 227,380 240,751 利息收入 482,157 589,752 - - 手续费及佣金收入 112 131 - - 二、营业总成本 (118,69",
+        "source_title": "美的集团 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:1",
+        "source_id": "midea_2026_q1",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025Q1",
+        "page_number": 8,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 131,580,870 128,428,421 227,380 240,751 其中：营业收入 131,098,601 127,838,538 227,380 240,751 利息收入 482,157 589,752 - -",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "unit": "千元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 128428421.0,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "美的集团股份有限公司 2026 年第一季度报告 合并及公司利润表 编制单位：美的集团股份有限公司 单位:人民币千元 项 目 2026 年 1-3月 2025 年 1-3月 2026 年 1-3月 2025 年 1-3 月 合并 合并 公司 公司 一、营业总收入 131,580,870 128,428,421 227,380 240,751 其中：营业收入 131,098,601 127,838,538 227,380 240,751 利息收入 482,157 589,752 - - 手续费及佣金收入 112 131 - - 二、营业总成本 (118,69",
+        "source_title": "美的集团 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0",
+        "source_id": "midea_2026_q1",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2026Q1",
+        "page_number": 8,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "归属于母公司股东的净利润 12,674,556 12,422,233 (503,753) 245,043 少数股东损益 184,955 323,665 - - 六、其他综合收益的税后净额 (2,693,330) 216,367 8,225 (27,495)",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "unit": "千元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": 12674556.0,
+        "column_identity": "current_period",
+        "column_header_excerpt": "美的集团股份有限公司 2026 年第一季度报告 合并及公司利润表 编制单位：美的集团股份有限公司 单位:人民币千元 项 目 2026 年 1-3月 2025 年 1-3月 2026 年 1-3月 2025 年 1-3 月 合并 合并 公司 公司 一、营业总收入 131,580,870 128,428,421 227,380 240,751 其中：营业收入 131,098,601 127,838,538 227,380 240,751 利息收入 482,157 589,752 - - 手续费及佣金收入 112 131 - - 二、营业总成本 (118,69",
+        "source_title": "美的集团 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:1",
+        "source_id": "midea_2026_q1",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025Q1",
+        "page_number": 8,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "归属于母公司股东的净利润 12,674,556 12,422,233 (503,753) 245,043 少数股东损益 184,955 323,665 - - 六、其他综合收益的税后净额 (2,693,330) 216,367 8,225 (27,495)",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+        "raw_sha256": "a1a977c0ab10e36d744d45edc8ce3253666dff58f6ebb86efba40299eed02ef7",
+        "unit": "千元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": 12422233.0,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "美的集团股份有限公司 2026 年第一季度报告 合并及公司利润表 编制单位：美的集团股份有限公司 单位:人民币千元 项 目 2026 年 1-3月 2025 年 1-3月 2026 年 1-3月 2025 年 1-3 月 合并 合并 公司 公司 一、营业总收入 131,580,870 128,428,421 227,380 240,751 其中：营业收入 131,098,601 127,838,538 227,380 240,751 利息收入 482,157 589,752 - - 手续费及佣金收入 112 131 - - 二、营业总成本 (118,69",
+        "source_title": "美的集团 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:16:2",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 16,
+        "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司所处行业情况 > 1、家用电器行业",
+        "quoted_anchor": "额145亿元，同比下降 10.4%，从全年走势来看，市场呈现前高后低的显著特征。在价格端，线上市场呈现出明显“K型”分化，极具性价比的低端产品份额持续扩大，同时具备分区洗等创新功能的中高端产品也逆势增长。在销售端，“洗烘一体机”在线上渠道实现小幅增长，追求空间的集约与使用的便捷，而“单洗”产品在线下渠道则出现占比回升的迹象，同时“大容量”正在加速渗透。在产品端，热泵洗烘、分区洗持续拉动市场升级空间，当前产品创新表现为中高端功能的普及化和使用场景的精细化，其中分区洗护从“分开洗”到“洗得专”，多筒（三筒及以上）洗衣机的市场渗透率已突破 2%，并进入增长快车道；热泵洗烘一体机渗透率亦加快提升，线上销售额占比突破3.5%，线下销售额占比突破 5%，头部品牌新品不断加码，热泵洗烘功能开始向中高端价格段新品下沉，长期来看有望替代冷凝洗烘，逐步实现新已呈现四大方向，向专业精细、智能集成、健康节能、可视高颜维度升级。2025 年，“十字四门、法式多门”产品稳居市场主流地位，线上渠道占比超 60%，线下渠道占比接近 80%，成为冰箱品类核心产品；平嵌冰箱产品渗透率仍持续上行，尤其是美的平嵌冰箱在线上市场连续3 年监测销量第一；同时冰箱均呈下行趋势，其中集成灶波动尤为显著。分品类看，洗碗机零售额 127.3亿元，同比下降 3.6%，洗碗机",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "额145亿元，同比下降 10.4%，从全年走势来看，市场呈现前高后低的显著特征。在价格端，线上市场呈现出明显“K型”分化，极具性价比的低端产品份额持续扩大，同时具备分区洗等创新功能的中高端产品也逆势增长。在销售端，“洗烘一体机”在线上渠道实现小幅增长，追求空间的集约与使用的便捷，而“单洗”产品在线下渠道则出现占比回升的迹象，同时“大容量”正在加速渗透。在产品端，热泵洗烘、分区洗持续拉动市场升级空间，当前产品创新表现为中高端功能的普及化和使用场景的精细化，其中分区洗护从“分开洗”到“洗得专”，多筒（三筒及以上）洗衣机的市场渗透率已突破 2%，并进入增长快车道；热泵洗烘一体机渗透率亦加快提升，线上销售额占比突破3.5%，线下销售额占比突破 5%，头部品牌新品不断加码，热泵洗烘功能开始向中高端价格段新品下沉，长期来看有望替代冷凝洗烘，逐步实现新已呈现四大方向，向专业精细、智能集成、健康节能、可视高颜维度升级。2025 年，“十字四门、法式多门”产品稳居市场主流地位，线上渠道占比超 60%，线下渠道占比接近 80%，成为冰箱品类核心产品；平嵌冰箱产品渗透率仍持续上行，尤其是美的平嵌冰箱在线上市场连续3 年监测销量第一；同时冰箱均呈下行趋势，其中集成灶波动尤为显著。分品类看，洗碗机零售额 127.3亿元，同比下降 3.6%，洗碗机"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:18:3",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 18,
+        "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司所处行业情况 > 1、家用电器行业 > 3、楼宇科技行业",
+        "quoted_anchor": "半导体等相关产业的投资增加，同时随着工业机器人零部件国产化率持续提高，机器人整机价格继续下探，用户导入门槛进一步降低，工业机器人市场渗透率快速提升。根据 MIR 睿工业报告，具体分行业看，在电子行业，一方面是传统电子产品如手机等投资较多，AI 产业表现突出，机器人在 AI服务器整机组装及零部件如光模块、散热模块、PCB、内存、服务器结构件等细分领域中的装配、锁付、测试应用增多，另一方面是电子产业出海项目带来的自动化导入需求。在汽车行业，随着国家以旧换新补贴政策及工业设备更新补贴政策持续，新能源汽车产业在 2025年继续保持强劲增长态势，内需和出口共同拉动汽车产销高速增长；汽车零部件及电子新技术迭代加速，激光雷达、多联屏、HUD 等高端车型零部件向中低端车型渗透，同时跨界新入局国产汽车零部件玩家增多，带来新的自动化投资。在锂电行业，锂电池产业链出海，欧洲、东南亚作为主要市场提供增量需求；第二梯队厂商对终端自动化投资增多，加速抢占市场；头部储能电池厂商对终端投资旺盛，自动化导入需求增多；电动车新国标实施，加速电动车换代，楼宇科技行业聚焦楼宇建筑的产品、服务及相关产业，以建筑数字化平台为核心，打通建筑的交通流、信息流、体验流、能源流，为用户提供智能可持续的楼宇建筑整体解决方案。智能建筑生态主要包括暖通空调、电梯、楼宇建筑智能化（楼控）和综合能源管理等多方面业务，场景覆盖工业、医院、基从行业竞争格局来看，国内暖通、电梯及楼控的竞争格局都比较相似并具有两大特征，一是外资与合资品牌占比高，二是市场集中度较低，根据产业在线数据显示，2025 年，国内中央空调外资品牌占比",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "半导体等相关产业的投资增加，同时随着工业机器人零部件国产化率持续提高，机器人整机价格继续下探，用户导入门槛进一步降低，工业机器人市场渗透率快速提升。根据 MIR 睿工业报告，具体分行业看，在电子行业，一方面是传统电子产品如手机等投资较多，AI 产业表现突出，机器人在 AI服务器整机组装及零部件如光模块、散热模块、PCB、内存、服务器结构件等细分领域中的装配、锁付、测试应用增多，另一方面是电子产业出海项目带来的自动化导入需求。在汽车行业，随着国家以旧换新补贴政策及工业设备更新补贴政策持续，新能源汽车产业在 2025年继续保持强劲增长态势，内需和出口共同拉动汽车产销高速增长；汽车零部件及电子新技术迭代加速，激光雷达、多联屏、HUD 等高端车型零部件向中低端车型渗透，同时跨界新入局国产汽车零部件玩家增多，带来新的自动化投资。在锂电行业，锂电池产业链出海，欧洲、东南亚作为主要市场提供增量需求；第二梯队厂商对终端自动化投资增多，加速抢占市场；头部储能电池厂商对终端投资旺盛，自动化导入需求增多；电动车新国标实施，加速电动车换代，楼宇科技行业聚焦楼宇建筑的产品、服务及相关产业，以建筑数字化平台为核心，打通建筑的交通流、信息流、体验流、能源流，为用户提供智能可持续的楼宇建筑整体解决方案。智能建筑生态主要包括暖通空调、电梯、楼宇建筑智能化（楼控）和综合能源管理等多方面业务，场景覆盖工业、医院、基从行业竞争格局来看，国内暖通、电梯及楼控的竞争格局都比较相似并具有两大特征，一是外资与合资品牌占比高，二是市场集中度较低，根据产业在线数据显示，2025 年，国内中央空调外资品牌占比"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:19:4",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 19,
+        "section_path": "第三节 管理层讨论与分析 > 二、报告期内公司所处行业情况 > 1、家用电器行业 > 3、楼宇科技行业",
+        "quoted_anchor": "根据《中国电梯行业商务年鉴》的数据显示，电梯市场的外资与合资品牌依然占比较高，而头部国产品牌的收入规模和市场份额占比较低；楼控市场也是基本由霍尼韦尔、西门子、江森自控、施耐德等国外品牌主导。从市场规模和发展前景来看，根据产业在线数据显示，2025 年中国中央空调内外销市场总规要分为住宅、商业、工业、公共建筑等，按业务类型分，ToB 业务销售占比在 70%以上，从产业发展来看，中央空调非住宅部分周期性要小于住宅部分，与基建投资更相关，政府公建、交通运输、数据中心、文教娱乐、医疗等下游细分领域成长潜力较大，长期保持较高增长的确定性强；根据国家统计局数据显拖累；从主要厂商的经营数据来看，如结合单台电梯设备出厂均价与维保业务综合考虑，单台电梯对应的产值在 20万元左右，国内电梯设备对应的年市场规模已逼近 3,000亿元，老旧小区加装及更新电梯需宅单元应至少设置 1台电梯，有望推动行业规模进一步扩张。根据亿欧智库数据显示，楼宇建筑智能化目前市场规模相对较小，如果中央空调、电梯这种设备型业务是楼宇建筑中的“器官”，那么楼控则是楼宇建筑中的“神经系统”，通过连接控制各类设备，实现楼宇建筑的高效低碳运行，楼控决定着楼宇建筑整体解决方案能力的高低。整体来看，楼宇科技行业仅国内产业规模就已超过 4,000亿元，同时随着国务院印发《推动大规模设备更新和消费品以旧换新行动方案》的政策持续推进，产业需求亦有较强支撑。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "根据《中国电梯行业商务年鉴》的数据显示，电梯市场的外资与合资品牌依然占比较高，而头部国产品牌的收入规模和市场份额占比较低；楼控市场也是基本由霍尼韦尔、西门子、江森自控、施耐德等国外品牌主导。从市场规模和发展前景来看，根据产业在线数据显示，2025 年中国中央空调内外销市场总规要分为住宅、商业、工业、公共建筑等，按业务类型分，ToB 业务销售占比在 70%以上，从产业发展来看，中央空调非住宅部分周期性要小于住宅部分，与基建投资更相关，政府公建、交通运输、数据中心、文教娱乐、医疗等下游细分领域成长潜力较大，长期保持较高增长的确定性强；根据国家统计局数据显拖累；从主要厂商的经营数据来看，如结合单台电梯设备出厂均价与维保业务综合考虑，单台电梯对应的产值在 20万元左右，国内电梯设备对应的年市场规模已逼近 3,000亿元，老旧小区加装及更新电梯需宅单元应至少设置 1台电梯，有望推动行业规模进一步扩张。根据亿欧智库数据显示，楼宇建筑智能化目前市场规模相对较小，如果中央空调、电梯这种设备型业务是楼宇建筑中的“器官”，那么楼控则是楼宇建筑中的“神经系统”，通过连接控制各类设备，实现楼宇建筑的高效低碳运行，楼控决定着楼宇建筑整体解决方案能力的高低。整体来看，楼宇科技行业仅国内产业规模就已超过 4,000亿元，同时随着国务院印发《推动大规模设备更新和消费品以旧换新行动方案》的政策持续推进，产业需求亦有较强支撑。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:25:8",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 25,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 3、产品创新",
+        "quoted_anchor": "客户拜访，提升零售终端人效；利用新媒体内容营销强化产品与用户互动，优化在各触点投放内容的质持续完善全球服务体系，全面提升服务能力，坚持“以客户为中心”，围绕“备件交付、客户联络、服务网络、服务数字化、服务技术工程”五大关键维度，系统化推进服务改善。为支撑海外 OBM优先战略，美的对海外服务各领域进行专项投入，加快基础能力建设与客户体验优化，持续构建全球四级供应链体系，打造贴近海外制造基地的仓网布局，实现全球化供应保障；已完成中东与欧盟区域仓以及泰国在客户服务方面，构建国际化智能客服体系，自 2022年引入Amazon Connect云端全渠道客户联络系统，迭代升级全球呼叫中心，实现从用户触达到服务完成的全流程闭环管理，通过云化转型有效降低运营成本并提升语音通话质量，依托 Amazon云安全工具满足境外数据合规要求，保障终端用户隐私与数据安全；已在日本、美国、巴西等 22个国家和地区上线云呼叫系统，并推出海外智能语音机器人，结合AIGC技术实现语音分析、语义识别及社交媒体接入，持续构建快速响应、主动式的全球服务体系；通过搭建统一的知识库体系、场景化交互标准以 及智能应答能力，推动客服体验优化，智能及文本交互占比达18%。通过数字化 3.0项目持续完善海外售后服务系统 iService与云呼叫平台，优化全球网点与服务工程主数据管理，提升服务精准度与效率，2025 年 iService海外服务系统已推广至22个海外分公司，进一步提升服务管理的透明度与一致性，推动服务流程规范化与标准化；美的以直营服务中心、独家服务中心、独家服务工程师等多种模式拓展服务网络布局，并赋能第三方合作服务网点能力提升，实现工单处理效率同比提升 15%；为保障新产品上市服务，2024 年完成新品导入（NPI）服务准备流程与 IT系统功能导入，拉通价值链各环节协同，2025 年该项流程已覆盖应用于 17个海外分公司及中国、泰国、越南等地的工厂。此外，在越南、泰国、印尼等海外市场，美的还推出小家电“365 天以换代修”服务模式，并持续优化退换机体验，进一步提升客户满意度与品牌信任。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "客户拜访，提升零售终端人效；利用新媒体内容营销强化产品与用户互动，优化在各触点投放内容的质持续完善全球服务体系，全面提升服务能力，坚持“以客户为中心”，围绕“备件交付、客户联络、服务网络、服务数字化、服务技术工程”五大关键维度，系统化推进服务改善。为支撑海外 OBM优先战略，美的对海外服务各领域进行专项投入，加快基础能力建设与客户体验优化，持续构建全球四级供应链体系，打造贴近海外制造基地的仓网布局，实现全球化供应保障；已完成中东与欧盟区域仓以及泰国在客户服务方面，构建国际化智能客服体系，自 2022年引入Amazon Connect云端全渠道客户联络系统，迭代升级全球呼叫中心，实现从用户触达到服务完成的全流程闭环管理，通过云化转型有效降低运营成本并提升语音通话质量，依托 Amazon云安全工具满足境外数据合规要求，保障终端用户隐私与数据安全；已在日本、美国、巴西等 22个国家和地区上线云呼叫系统，并推出海外智能语音机器人，结合AIGC技术实现语音分析、语义识别及社交媒体接入，持续构建快速响应、主动式的全球服务体系；通过搭建统一的知识库体系、场景化交互标准以 及智能应答能力，推动客服体验优化，智能及文本交互占比达18%。通过数字化 3.0项目持续完善海外售后服务系统 iService与云呼叫平台，优化全球网点与服务工程主数据管理，提升服务精准度与效率，2025 年 iService海外服务系统已推广至22个海外分公司，进一步提升服务管理的透明度与一致性，推动服务流程规范化与标准化；美的以直营服务中心、独家服务中心、独家服务工程师等多种模式拓展服务网络布局，并赋能第三方合作服务网点能力提升，实现工单处理效率同比提升 15%；为保障新产品上市服务，2024 年完成新品导入（NPI）服务准备流程与 IT系统功能导入，拉通价值链各环节协同，2025 年该项流程已覆盖应用于 17个海外分公司及中国、泰国、越南等地的工厂。此外，在越南、泰国、印尼等海外市场，美的还推出小家电“365 天以换代修”服务模式，并持续优化退换机体验，进一步提升客户满意度与品牌信任。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:28:13",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 28,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （一）智能家居业务 > 3、产品创新",
+        "quoted_anchor": "面向全屋用水场景的国内市场，美的超导新能源热水器 CD80-Z800针对传统储水式电热水器热水量不足、体积过大难安装的长期行业痛点，通过超导储能换热技术，彻底告别传统内胆，通过 18倍换热面积构建起高效的能量传递通道；17kW 的瞬时换热功率是传统热水器加热效率的 3 倍，实现电热“无胆过流即热”的全新体验；产品体积仅为传统 80L电热的 60%，无内胆结构避免水垢堆积；凭借技术创新实现超快充，“储能 8分钟，沐浴半小时”；产品获得中国家用电器研究院的行业五星安全认证和“连续出反渗透净水机一体化集成，实现一台产品替代“前置 +软水+纯水”多机组合，采用厨下一体式安装方式，0.06m³小体积设计，节省橱柜空间 40%；通过离子交换树脂去除钙镁离子，软化高硬度水质，并保护后端RO 膜滤芯，实现 RO滤芯十年长效不更换，纯废水比大于 5:1，远优于国家一级水效标准，满足家庭沐浴洗衣和饮用烹饪多种用水需求。针对欧洲能源成本高企的痛点，美的推出“双擎智热”混动热水器，首创“智能双模混合加热系统”，集成高效 R290微通道、V型蒸发器与自研 Smart AI学习算法，全年耗电量仅 435度，可节省近 70%的电费；独创下置模块化设计，实现便捷替换，荣获德国 iF设计奖和红点面向国内市场，聚焦厨房环境舒适性持续提升，美的全时全隐无烟感油烟机 T9通过“反腔+风幕”技术构建“拢烟区+速吸区+畅排区”的黄金负压三区，实现在 800mm挂高，行业首款开关隐藏式设计，拥有一级净烟效果；创新温感联动技术，实现自动开关机，搭载烟感智控技术，能自动感知公共烟道阻力和烟雾浓度的大小，自动匹配适合风量风压，全程自动调节，真正实现烹饪全程无手动；获得“最高吸烟距离实现一级净烟的全隐油烟机”世界记录与中国家电行业“磐石奖”。面向欧洲市场，全隐藏吸油烟机 Tbox解决传统嵌入式产品的面板突出/安装不平齐痛点，最大程度释放厨下空间；同时风量高达800m3/h，吸力强劲，能效表现优秀，作为美的品牌产品首次突破欧洲嵌入式橱柜渠道。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "面向全屋用水场景的国内市场，美的超导新能源热水器 CD80-Z800针对传统储水式电热水器热水量不足、体积过大难安装的长期行业痛点，通过超导储能换热技术，彻底告别传统内胆，通过 18倍换热面积构建起高效的能量传递通道；17kW 的瞬时换热功率是传统热水器加热效率的 3 倍，实现电热“无胆过流即热”的全新体验；产品体积仅为传统 80L电热的 60%，无内胆结构避免水垢堆积；凭借技术创新实现超快充，“储能 8分钟，沐浴半小时”；产品获得中国家用电器研究院的行业五星安全认证和“连续出反渗透净水机一体化集成，实现一台产品替代“前置 +软水+纯水”多机组合，采用厨下一体式安装方式，0.06m³小体积设计，节省橱柜空间 40%；通过离子交换树脂去除钙镁离子，软化高硬度水质，并保护后端RO 膜滤芯，实现 RO滤芯十年长效不更换，纯废水比大于 5:1，远优于国家一级水效标准，满足家庭沐浴洗衣和饮用烹饪多种用水需求。针对欧洲能源成本高企的痛点，美的推出“双擎智热”混动热水器，首创“智能双模混合加热系统”，集成高效 R290微通道、V型蒸发器与自研 Smart AI学习算法，全年耗电量仅 435度，可节省近 70%的电费；独创下置模块化设计，实现便捷替换，荣获德国 iF设计奖和红点面向国内市场，聚焦厨房环境舒适性持续提升，美的全时全隐无烟感油烟机 T9通过“反腔+风幕”技术构建“拢烟区+速吸区+畅排区”的黄金负压三区，实现在 800mm挂高，行业首款开关隐藏式设计，拥有一级净烟效果；创新温感联动技术，实现自动开关机，搭载烟感智控技术，能自动感知公共烟道阻力和烟雾浓度的大小，自动匹配适合风量风压，全程自动调节，真正实现烹饪全程无手动；获得“最高吸烟距离实现一级净烟的全隐油烟机”世界记录与中国家电行业“磐石奖”。面向欧洲市场，全隐藏吸油烟机 Tbox解决传统嵌入式产品的面板突出/安装不平齐痛点，最大程度释放厨下空间；同时风量高达800m3/h，吸力强劲，能效表现优秀，作为美的品牌产品首次突破欧洲嵌入式橱柜渠道。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:29:14",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 29,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 1、工业技术业务",
+        "quoted_anchor": "持续围绕“精控微波、锁鲜蒸、飓风烤、全面火、AI 烹饪、健康烹饪”技术战略布局，面向国内市场，针对 Z世代烹饪新手，推出全球首款融合图像及语音识别 AI技术的可实现 AI自动烹饪的嵌入式微蒸烤复合机系列产品，自研的灵眸智慧烹饪系统突破摄像头受微波及高温辐射干扰的限制，实现智控熟度AI托管、食材识别匹配菜单，可免看管全自动烹饪，荣获“小红书年度种草产品”、韩国 PINUP设计奖。针对中国消费者复合烹饪、健康烹饪的需求，美的燃卡寻味 Pro微蒸烤炸一体机、小滋味微蒸烤一体机等产品融合微蒸烤组合烹饪与程序智能调控，实现低脂、低盐、低糖烹饪，应用国际领先的 130℃过热蒸技术，留住原汁原味营养，大幅提升花青素保留率；通过配备自研的小型化微波系统，小滋味微蒸烤一体机占地面积缩小 30%。面向海外市场，针对专业烹饪发烧友， 首创石墨烯窑烤披萨炉系列产品，搭载自研的碳中波石墨烯发热管，实现 450℃高温烤，成为全球首款可烹饪专业意式披萨的披萨炉（烹饪需达400℃以上高温）；应用行业首创的全面火燃烧技术，显著提升烹饪效率与性能，相比传统燃气披萨炉预热时间大幅缩短，整体烹饪效率提升 65%，烹饪效果媲美传统窑烤，上市全年销量达 12万台，已热面向用户多样化烹饪需求，美的高能效花瓣 PRO 电饭煲创新升级高能效“花瓣”式多维微区 IH加热与“SPA”微气泡多维沸腾技术，实现米饭口感、香气、观感三维同步提升，以全新外观重塑产品心智，持续强化行业头部地位。美的新风炎烤空气炸锅 首创新风技术，通过阶梯式智能精准温控提升食材酥脆风味，同时抑制上火因子丙烯酰胺生成，含油率大幅减少 90%以上，实现“低脂健康+极致口感”的双重突破；同步搭载吸氧排湿技术，通过腔体内外气体高效循环，提升食材表面水汽排出速率，大幅提升脆度和嫩度，满足烤、烘、炸等多元烹饪需求；炸桶/烤盘采用 0 氟陶瓷涂层材质，实现健康烹饪与便捷使美的工业技术聚焦暖通家电、新能源汽车、机器人核心部件领域，致力于用领先的科技、品质、服务，为客户提供绿色、高效、智慧的产品与技术解决方案，围绕着坚实的根技术，不断拓展技术矩阵，如热管理技术、电机与",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "持续围绕“精控微波、锁鲜蒸、飓风烤、全面火、AI 烹饪、健康烹饪”技术战略布局，面向国内市场，针对 Z世代烹饪新手，推出全球首款融合图像及语音识别 AI技术的可实现 AI自动烹饪的嵌入式微蒸烤复合机系列产品，自研的灵眸智慧烹饪系统突破摄像头受微波及高温辐射干扰的限制，实现智控熟度AI托管、食材识别匹配菜单，可免看管全自动烹饪，荣获“小红书年度种草产品”、韩国 PINUP设计奖。针对中国消费者复合烹饪、健康烹饪的需求，美的燃卡寻味 Pro微蒸烤炸一体机、小滋味微蒸烤一体机等产品融合微蒸烤组合烹饪与程序智能调控，实现低脂、低盐、低糖烹饪，应用国际领先的 130℃过热蒸技术，留住原汁原味营养，大幅提升花青素保留率；通过配备自研的小型化微波系统，小滋味微蒸烤一体机占地面积缩小 30%。面向海外市场，针对专业烹饪发烧友， 首创石墨烯窑烤披萨炉系列产品，搭载自研的碳中波石墨烯发热管，实现 450℃高温烤，成为全球首款可烹饪专业意式披萨的披萨炉（烹饪需达400℃以上高温）；应用行业首创的全面火燃烧技术，显著提升烹饪效率与性能，相比传统燃气披萨炉预热时间大幅缩短，整体烹饪效率提升 65%，烹饪效果媲美传统窑烤，上市全年销量达 12万台，已热面向用户多样化烹饪需求，美的高能效花瓣 PRO 电饭煲创新升级高能效“花瓣”式多维微区 IH加热与“SPA”微气泡多维沸腾技术，实现米饭口感、香气、观感三维同步提升，以全新外观重塑产品心智，持续强化行业头部地位。美的新风炎烤空气炸锅 首创新风技术，通过阶梯式智能精准温控提升食材酥脆风味，同时抑制上火因子丙烯酰胺生成，含油率大幅减少 90%以上，实现“低脂健康+极致口感”的双重突破；同步搭载吸氧排湿技术，通过腔体内外气体高效循环，提升食材表面水汽排出速率，大幅提升脆度和嫩度，满足烤、烘、炸等多元烹饪需求；炸桶/烤盘采用 0 氟陶瓷涂层材质，实现健康烹饪与便捷使美的工业技术聚焦暖通家电、新能源汽车、机器人核心部件领域，致力于用领先的科技、品质、服务，为客户提供绿色、高效、智慧的产品与技术解决方案，围绕着坚实的根技术，不断拓展技术矩阵，如热管理技术、电机与"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:40:20",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 40,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 4、新能源业务",
+        "quoted_anchor": "在数字化领域，安得智联持续加大数字化投入，有力支撑“1+3”供应链物流服务模型高效落地。数字化平台已服务数千家企业客户，通过科学的仓网规划与商品布局优化，助力客户降低物流成本、提速库存周转及精简全渠道库存；AI 技术深度嵌入订单管理、仓储运营、运输调度及送装一体等全链条，显著提升客户需求预测与补货准确率。为泛行业、全场景多元客户提供定制化解决方案，赋能客户数字化在生产物流领域，坚持“产品领先、数字驱动、全场景运营”的战略主轴。在产品端，持续沉淀九大核心应用场景，涵盖供应商管理库存（ VMI）、产中物流、智能装备、循环取货、集货仓库、中间产品CDC、精益制造、数字化管理及工业园区规划等；在数字化应用端，通过 PLS、TMS、WMS、CMP等数字化系统的优化升级，持续支撑业务增长和降本提效；在运营端，打造“运 +包+仓配”三位一体化场景，全场景数字化运营，实现运包一体、无人配送；在海外市场，在泰国、越南、印尼、埃及开展业务在干线领域，锚定线路制运营模式，以美的业务奠定的全国干线/零担网络为战略载体，高效聚合全域货源流量，精塑线路成本结构优化能力；推进全面线上化、SaaS 化，实现运营系统的数字化闭环管理；",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "在数字化领域，安得智联持续加大数字化投入，有力支撑“1+3”供应链物流服务模型高效落地。数字化平台已服务数千家企业客户，通过科学的仓网规划与商品布局优化，助力客户降低物流成本、提速库存周转及精简全渠道库存；AI 技术深度嵌入订单管理、仓储运营、运输调度及送装一体等全链条，显著提升客户需求预测与补货准确率。为泛行业、全场景多元客户提供定制化解决方案，赋能客户数字化在生产物流领域，坚持“产品领先、数字驱动、全场景运营”的战略主轴。在产品端，持续沉淀九大核心应用场景，涵盖供应商管理库存（ VMI）、产中物流、智能装备、循环取货、集货仓库、中间产品CDC、精益制造、数字化管理及工业园区规划等；在数字化应用端，通过 PLS、TMS、WMS、CMP等数字化系统的优化升级，持续支撑业务增长和降本提效；在运营端，打造“运 +包+仓配”三位一体化场景，全场景数字化运营，实现运包一体、无人配送；在海外市场，在泰国、越南、印尼、埃及开展业务在干线领域，锚定线路制运营模式，以美的业务奠定的全国干线/零担网络为战略载体，高效聚合全域货源流量，精塑线路成本结构优化能力；推进全面线上化、SaaS 化，实现运营系统的数字化闭环管理；"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:40:21",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 40,
+        "section_path": "第三节 管理层讨论与分析 > 三、主营业务分析 > （二）商业及工业解决方案 > 4、新能源业务",
+        "quoted_anchor": "坚持以供应链创新支持新增长，助力客户优化零售转型和拓展多品类经营，支撑渠道商及零售商客户的物流数字化变革及物流效率提升，实现高质量增长及可持续性发展。借助美的等头部企业客户行业领先的渠道变革实践经验以及不断完善的国内智能供应链仓网体系，为家电、家居、3C 电子、泛快消、汽车及汽配以及新能源等多个行业的企业客户提供定制化解决方案，推动各行业供应链变革。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "坚持以供应链创新支持新增长，助力客户优化零售转型和拓展多品类经营，支撑渠道商及零售商客户的物流数字化变革及物流效率提升，实现高质量增长及可持续性发展。借助美的等头部企业客户行业领先的渠道变革实践经验以及不断完善的国内智能供应链仓网体系，为家电、家居、3C 电子、泛快消、汽车及汽配以及新能源等多个行业的企业客户提供定制化解决方案，推动各行业供应链变革。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:44:25",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 44,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > （四）全球领先的研发能力以实现可持续创新 > 2、研发成果",
+        "quoted_anchor": "美的持续完善研发体系，构建以中央研究院和各事业部研 发单位及团队为核心的协同架构。通过深入研究技术、用户需求和市场趋势，形成“三个一代”的研发模式：中央研究院专注前沿技术、基础技术及共性技术布局，事业部聚焦产品技术开发，全面打造全球领先的研发能力，实现“四级研发体系”的高效协同与有机运行。美的加速全球化研发布局，在全球 12个国家设立 41个研发中心，构建“2+4+N”全球化研发网络，形成规模化研发优势。国内以顺德全球创新中心和上海全球创新园区为核心，海外以美国、欧洲、日本、意大利研发中心为重点，通过 CPI（成本加激励）模式推进本地化用户研究、产品支持和技术创新，充分发挥区位技术优势，整合全球研发资源，打造优势互补的全球化技术研发能力。截至2025年底，美的累计已拥有 16个国家级科创平台，包括全国重点实验室、国家人工智能开放创新平台、国家双跨平台、国家企业技术中心、国家级工业设计中心、国家级引才引智示范基地、博士后科研工作站等；85 个省部级科创平台，包括省部级企业技术中心、创新中心、工程技术研究中心、工业设计中心或重点实验室以及博士工作站等。同时，美的以科技领先战略为牵引，提升人才密度与厚度，依托海外研发中心的本地优势，引入各技术领域的顶尖领军人才和高端人才，构筑 全球化人才高地，为技术创新",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "美的持续完善研发体系，构建以中央研究院和各事业部研 发单位及团队为核心的协同架构。通过深入研究技术、用户需求和市场趋势，形成“三个一代”的研发模式：中央研究院专注前沿技术、基础技术及共性技术布局，事业部聚焦产品技术开发，全面打造全球领先的研发能力，实现“四级研发体系”的高效协同与有机运行。美的加速全球化研发布局，在全球 12个国家设立 41个研发中心，构建“2+4+N”全球化研发网络，形成规模化研发优势。国内以顺德全球创新中心和上海全球创新园区为核心，海外以美国、欧洲、日本、意大利研发中心为重点，通过 CPI（成本加激励）模式推进本地化用户研究、产品支持和技术创新，充分发挥区位技术优势，整合全球研发资源，打造优势互补的全球化技术研发能力。截至2025年底，美的累计已拥有 16个国家级科创平台，包括全国重点实验室、国家人工智能开放创新平台、国家双跨平台、国家企业技术中心、国家级工业设计中心、国家级引才引智示范基地、博士后科研工作站等；85 个省部级科创平台，包括省部级企业技术中心、创新中心、工程技术研究中心、工业设计中心或重点实验室以及博士工作站等。同时，美的以科技领先战略为牵引，提升人才密度与厚度，依托海外研发中心的本地优势，引入各技术领域的顶尖领军人才和高端人才，构筑 全球化人才高地，为技术创新"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:45:26",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 45,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > （五）数智驱动支撑企业的全价值链卓越运营",
+        "quoted_anchor": "美的专注技术创新、用户创新、设计创新、产品创新及开放式创新体系建设，持续加强先行研究体系构建，布局中长期技术储备，为保持产品技术的长期领先优势奠定坚实基础。在强化全球研发布局的同时，美的积极打造开放式创新生态平台，通过深化技术项目实施，整合全球优势技术资源，构建全球化创新体系。美的整合大型企业、科技公司、高校、科研院所及创新咨询机构等多方资源，持续拓展研发技术生态网络，已对接大量技术创新资源。与此同时，美的构建科学家体系，成立 8 个院士工作站（室），引入 19位战略合作院士，推动超过 200项合作项目，覆盖绿色、节能、健康、智能化、机器人美的围绕“数智驱动”战略，全面拥抱数字化和智能化技术。AI 作为核心战略方向，已建立一支超过400人的AI人才团队，重点围绕智慧家居、智能制造、智慧办公、行业赋能四大核心场景，打造“家庭大脑”与“工厂大脑”，进而重塑产业生态，实现全价值链数据运营与平台化运作，提升数字时代的企业竞争力。公司持续加大投入以推动数字化转型升级，仅2025年面向数字化与AI 领域的投入就超过30亿元。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "美的专注技术创新、用户创新、设计创新、产品创新及开放式创新体系建设，持续加强先行研究体系构建，布局中长期技术储备，为保持产品技术的长期领先优势奠定坚实基础。在强化全球研发布局的同时，美的积极打造开放式创新生态平台，通过深化技术项目实施，整合全球优势技术资源，构建全球化创新体系。美的整合大型企业、科技公司、高校、科研院所及创新咨询机构等多方资源，持续拓展研发技术生态网络，已对接大量技术创新资源。与此同时，美的构建科学家体系，成立 8 个院士工作站（室），引入 19位战略合作院士，推动超过 200项合作项目，覆盖绿色、节能、健康、智能化、机器人美的围绕“数智驱动”战略，全面拥抱数字化和智能化技术。AI 作为核心战略方向，已建立一支超过400人的AI人才团队，重点围绕智慧家居、智能制造、智慧办公、行业赋能四大核心场景，打造“家庭大脑”与“工厂大脑”，进而重塑产业生态，实现全价值链数据运营与平台化运作，提升数字时代的企业竞争力。公司持续加大投入以推动数字化转型升级，仅2025年面向数字化与AI 领域的投入就超过30亿元。"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:46:27",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 46,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > （五）数智驱动支撑企业的全价值链卓越运营",
+        "quoted_anchor": "引入智能装载算法与 AIGC自动化技术，实现物流全流程智能化升级，该系统已在全球多个区域落地，实现物流运作全程可视化率 95%、运货量提升 5%、仓储作业效率提高30%，有效降低物流成本；通过 DataAgent赋能海外业务通过 AI问数、AI 解读支持经营，助力用户增长，通过在中东非地区试点海外 AI仓在研发领域，围绕“科技领先”与“全球突破”战略主轴，持续推进“三个一代”研发体系落地与深化。在企划端，打造 ToC桌面研究报告 Agent、ToB竞争分析Agent，提升效率 70%，建立研发领域数据决策平台，通过 AI分析快速定位短板问题、异常变化、诊断归因等；通过推广技术货架模式应用，助力技术成果向产品转化，助力“研究一代”；通过以用户为中心的产品模式变革，搭建全球平台模块参数化能力，通过选配模式，快速满足市场差异化需求，实现平台效率提升与 SKU 精简，助力“储备一",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "引入智能装载算法与 AIGC自动化技术，实现物流全流程智能化升级，该系统已在全球多个区域落地，实现物流运作全程可视化率 95%、运货量提升 5%、仓储作业效率提高30%，有效降低物流成本；通过 DataAgent赋能海外业务通过 AI问数、AI 解读支持经营，助力用户增长，通过在中东非地区试点海外 AI仓在研发领域，围绕“科技领先”与“全球突破”战略主轴，持续推进“三个一代”研发体系落地与深化。在企划端，打造 ToC桌面研究报告 Agent、ToB竞争分析Agent，提升效率 70%，建立研发领域数据决策平台，通过 AI分析快速定位短板问题、异常变化、诊断归因等；通过推广技术货架模式应用，助力技术成果向产品转化，助力“研究一代”；通过以用户为中心的产品模式变革，搭建全球平台模块参数化能力，通过选配模式，快速满足市场差异化需求，实现平台效率提升与 SKU 精简，助力“储备一"
+      },
+      {
+        "evidence_id": "midea_2025_annual:narrative:46:28",
+        "source_id": "midea_2025_annual",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 46,
+        "section_path": "第三节 管理层讨论与分析 > 四、核心竞争力分析 > （五）数智驱动支撑企业的全价值链卓越运营",
+        "quoted_anchor": "盘货仓网融合”，通过“美云销 APP”直达零售商替代传统分销体系，在手机移动端即可实现“人不见人”交易，物流服务在线达成率达 100%，整合渠道库存实现“一盘货”共享机制，现货满足率超过 93%，库存周转率提升 10%，库存呆滞率降低 14%，中心仓库存周期平均缩短 13天；深化推进 OMO多平台流量项目，超过 2万家门店接入美团、高德、抖音、小红书等各类线上流量平台；打通线上线下系统，推行线上线下“同价、同促销、同服务”政策，用户线上下单后 2小时内即可在全国 5,000多家网点预约安装，实现无缝衔接的消费体验；基于 AIGC全面升级客服智能化水平，客服机器人已覆盖 95%业务及品类，为用户提供 7×24服务，提升用户问题解决率及满意度，客服坐席工作台实现用户意图识别、场景化录单、服务小结、知识推送、服务决策等智能化辅助，服务效率提升 20%。通过 Data Agent赋能DTC用户运营，实现触达用户超 20亿人次，实现门店用户推荐与私域运营，通过 AI对 1500+万条用户声音打标，实在外销领域，围绕全球业务效率提升和数字化转型，持续推进“数字化 3.0”项目，通过价值链端到端全景分析，聚焦海外业务全价值链的数字化能力提升，积极拥抱 AI技术应用，将国内先进的数字化经验推广到海外，助力全球突破战略；通过 Midea Club系统助力全球专业渠道突破，构建海外本地服务体系化能力，海外安装工超过 8万人，整合调配安装资源，联合海外高校与行业协会建立安装工认证培训与考试体系，已在 17个国家上线，覆盖美洲、欧洲、亚洲、非洲等市场，录单量突破 100万套，通过 AI技术实现安装商录单效率及审单效率分别提升 85%和 62%，安装故障率大幅降低；以 AI技术赋能 iService售后服务平台，打通服务价值链，覆盖全球 20多家分公司、5,000多家服务商；在多个区域完成云端部署，支持多语言、多币种和多业务场景；深度集成 AI智能客服和知识库，打造从服务报修、工单分派、备件管理、服务跟踪回访的全流程数字化闭环，持续提升服务效率与响应速度。此外，成功构建海外智能仓配系统，全面赋能",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+        "raw_sha256": "16f95f70527db59dcf2736f276a9479cf7ee917e5f71e4f6cbbe83acbad9f4b6",
+        "source_title": "美的集团 2025 年年度报告",
+        "text": "盘货仓网融合”，通过“美云销 APP”直达零售商替代传统分销体系，在手机移动端即可实现“人不见人”交易，物流服务在线达成率达 100%，整合渠道库存实现“一盘货”共享机制，现货满足率超过 93%，库存周转率提升 10%，库存呆滞率降低 14%，中心仓库存周期平均缩短 13天；深化推进 OMO多平台流量项目，超过 2万家门店接入美团、高德、抖音、小红书等各类线上流量平台；打通线上线下系统，推行线上线下“同价、同促销、同服务”政策，用户线上下单后 2小时内即可在全国 5,000多家网点预约安装，实现无缝衔接的消费体验；基于 AIGC全面升级客服智能化水平，客服机器人已覆盖 95%业务及品类，为用户提供 7×24服务，提升用户问题解决率及满意度，客服坐席工作台实现用户意图识别、场景化录单、服务小结、知识推送、服务决策等智能化辅助，服务效率提升 20%。通过 Data Agent赋能DTC用户运营，实现触达用户超 20亿人次，实现门店用户推荐与私域运营，通过 AI对 1500+万条用户声音打标，实在外销领域，围绕全球业务效率提升和数字化转型，持续推进“数字化 3.0”项目，通过价值链端到端全景分析，聚焦海外业务全价值链的数字化能力提升，积极拥抱 AI技术应用，将国内先进的数字化经验推广到海外，助力全球突破战略；通过 Midea Club系统助力全球专业渠道突破，构建海外本地服务体系化能力，海外安装工超过 8万人，整合调配安装资源，联合海外高校与行业协会建立安装工认证培训与考试体系，已在 17个国家上线，覆盖美洲、欧洲、亚洲、非洲等市场，录单量突破 100万套，通过 AI技术实现安装商录单效率及审单效率分别提升 85%和 62%，安装故障率大幅降低；以 AI技术赋能 iService售后服务平台，打通服务价值链，覆盖全球 20多家分公司、5,000多家服务商；在多个区域完成云端部署，支持多语言、多币种和多业务场景；深度集成 AI智能客服和知识库，打造从服务报修、工单分派、备件管理、服务跟踪回访的全流程数字化闭环，持续提升服务效率与响应速度。此外，成功构建海外智能仓配系统，全面赋能"
+      }
+    ],
+    "derived_metrics": [
+      {
+        "derived_id": "derived:official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:net_profit_parent",
+        "metric": "net_profit_parent",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "current_evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:0",
+        "previous_evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:net_profit_parent:8:1",
+        "current_period": "2026Q1",
+        "previous_period": "2025Q1",
+        "current_value": 12674556.0,
+        "previous_value": 12422233.0,
+        "absolute_change": 252323.0,
+        "percent_change": 2.031221,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:revenue",
+        "metric": "revenue",
+        "document_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d",
+        "current_evidence_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:0",
+        "previous_evidence_id": "official-filing:editorial-v4:midea_2025_annual:16f95f70527db59d:fact:revenue:135:1",
+        "current_period": "2025FY",
+        "previous_period": "2024FY",
+        "current_value": 458502407.0,
+        "previous_value": 409084266.0,
+        "absolute_change": 49418141.0,
+        "percent_change": 12.080186,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:revenue",
+        "metric": "revenue",
+        "document_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d",
+        "current_evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:0",
+        "previous_evidence_id": "official-filing:editorial-v4:midea_2026_q1:a1a977c0ab10e36d:fact:revenue:8:1",
+        "current_period": "2026Q1",
+        "previous_period": "2025Q1",
+        "current_value": 131580870.0,
+        "previous_value": 128428421.0,
+        "absolute_change": 3152449.0,
+        "percent_change": 2.454635,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      }
+    ],
+    "gaps": [],
+    "truth_boundary": {
+      "official_pdf_only": true,
+      "issuer_disclosure_is_not_independent_proof": true,
+      "derived_direction_is_deterministic": true,
+      "no_valuation_or_action": true,
+      "no_old_report_prose": true
+    }
+  }
+}

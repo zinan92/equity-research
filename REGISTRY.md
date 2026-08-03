@@ -9,6 +9,27 @@
   [`daily/YYYY-MM-DD.md`](daily/YYYY-MM-DD.md) as the format template.
 - Durable rationale and traps: [`decision-log.md`](decision-log.md).
 
+## 2026-08-03 · V4-P2 editorial five-company expansion (Issue #692)
+
+Now: the review-only Ainiu/V4 whole-report path has five official-PDF-bound
+editorial dossiers with machine validation and independent DeepSeek QA both
+`passed`: `600519.SH` 2,492 chars, `000333.SZ` 2,513, `600900.SH` 2,269,
+`300750.SZ` 2,515 and `000001.SZ` 2,623. Persistent outputs and the batch
+receipt are under [`artifacts/editorial-v4/`](artifacts/editorial-v4/), with
+one evidence packet per ticker under `evidence-packets/`.
+
+The quality path explicitly preserves sharp AI positioning (“绝对龙头/强定价权/
+精密制造杂货铺”等) as `[J-xx]` judgments with cited evidence and falsifiers;
+it only blocks unmarked or unbound assertions. Company self-report remains
+`[C-xx]`, page-bound numbers remain `[F-xx]`, and gaps remain `[G-xx]`.
+All five artifacts are review-only, pending human review, action-blocked, and
+grant no Tier/B6/decision/publication credit. Canonical Round 7 files, Tier
+ladder, B6 gate and decision policy are byte-unchanged.
+
+Next: Park reviews the five HTML/Markdown dossiers and their packet citations;
+only an explicit human-review receipt can move any text toward a canonical
+publication surface. Do not use these drafts as live recommendations.
+
 ## 2026-08-02 · V4-P1 canonical publication quality gate (Issue #686)
 
 Now: the process regression that produced the bad mobile report is closed. The

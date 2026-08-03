@@ -1,0 +1,97 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "财务事实（F-01至F-04）均正确引用证据包中的数字，且同期对比增长幅度与derived_metrics一致。",
+    "公司自述类claim（C-01至C-09）均明确标注'公司披露'，未将自述冒充独立验证。",
+    "所有判断类claim（J-01至J-08）均标注[J-xx]并包含falsifier，符合AI judgment规范。",
+    "报告明确列出缺失输入（G-01至G-05），未用空泛句子凑篇幅。",
+    "整体结论锋利，带有白话结论和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-01引用evidence_id 'cypc_2025_annual:narrative:10:2'，但该证据中未出现'3071.94亿千瓦时'，实际为'3071.94瓦时'，数字单位错误。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-07引用evidence_id 'cypc_2025_annual:narrative:12:6'，但该证据中未出现'设备检修精品率连续三年保持100%'，该表述出现在'cypc_2025_annual:narrative:10:2'。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:6"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03引用evidence_id 'cypc_2025_annual:narrative:12:6'，但该证据仅描述数字化检修体系，未直接支持'精密运营护城河'判断，应引用'cypc_2025_annual:narrative:10:2'中'检修精品率连续三年保持100%'。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:6"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-04引用evidence_id 'cypc_2025_annual:narrative:215:39'，但该证据仅提及'长期借款浮动利率合同金额共计2,341.59亿元'，未直接支持'利率上行将侵蚀利润'的判断，需补充利率敏感性分析证据。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-05引用evidence_id 'cypc_2025_annual:narrative:12:4'和'cypc_2025_annual:narrative:27:17'，但两者均未直接提及'电力市场化改革可能压低上网电价'，仅提及公司应对策略和市场建设目标。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4",
+        "cypc_2025_annual:narrative:27:17"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-06引用evidence_id 'cypc_2025_annual:narrative:10:2'，但该证据仅提及发电量创历史最优，未直接支持'盈利高度依赖长江来水'的判断，需补充来水与盈利关联的证据。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-07引用evidence_id 'cypc_2025_annual:narrative:12:5'和'cypc_2025_annual:narrative:215:39'，但两者均未直接支持'现金牛资产，护城河深厚，但成长有限'的整体判断，证据链不完整。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-08引用evidence_id 'cypc_2025_annual:narrative:12:5'，但该证据仅描述电站地位，未直接支持'护城河来自地理位置和规模的绝对垄断'的判断，需补充垄断性证据。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ]
+    }
+  ],
+  "request_hash": "e4926db4bd0406d614e67e115eb9d974558a17ecf41e14de290df929186e0220",
+  "response_hash": "f9be1f751e94e9a78b40fcbe0a10f1716245452401d37f77caa5366e1d4a64bf",
+  "run_id": "editorial-v4-qa:19b318cd-b692-4276-adeb-6c4d8acbae9e",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "19b318cd-b692-4276-adeb-6c4d8acbae9e",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:55:08+00:00"
+}

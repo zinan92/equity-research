@@ -1,0 +1,472 @@
+{
+  "latest_card": "最新年报(2025FY)：营业总收入 1720.54 亿元，同比下滑 1.20% [F-05]；归属净利润 823.20 亿元，同比下滑 4.53% [F-06]",
+  "sections": [
+    {
+      "id": "one_line_position",
+      "title": "一句话定位",
+      "body": "贵州茅台是中国高端白酒绝对龙头 [J-01]，核心资产为飞天茅台酒及其品牌体系。2025 年营业总收入 1720.54 亿元，同比下滑 1.20% [F-05]；归属净利润 823.20 亿元，同比下滑 4.53% [F-06]。公司披露营收下滑主因是酱香系列酒产品结构调整 [C-01]。公司自述拥有“品质、品牌、工艺、环境、文化”五大核心竞争力，且报告期内未发生重大变化 [C-02]。当前核心矛盾在于：行业调整期需求放缓，公司能否通过渠道变革和市场化转型实现增长，而管理层的行政化背景可能构成转型挑战 [J-02]。",
+      "claim_ids": [
+        "J-01",
+        "F-05",
+        "F-06",
+        "C-01",
+        "C-02",
+        "J-02"
+      ]
+    },
+    {
+      "id": "founder_team",
+      "title": "创始人与团队",
+      "body": "董事长陈华于 2025 年 10 月上任，此前历任贵州盘江煤电集团董事长、贵州省能源局局长等职，具有深厚的国企管理和政府背景 [F-07]。财务总监余思明在公司内部长期任职，曾任审计处、财务处负责人，现任财务公司董事长，熟悉公司财务体系 [F-08]。管理层整体呈现出鲜明的行政化特征，缺乏消费行业或市场化企业的多元经历 [J-02]。公司年报自述治理规范与经理层业绩考核，但控股股东承诺的股权激励计划因上级政策未出台而迟迟未能实施 [G-04]，核心团队激励不足可能影响转型动力。这种“官员型”高管结构，在行业上升期尚可依托品牌惯性，但在需要敏锐捕捉消费变迁、快速响应市场的调整期，其局限性可能逐渐显现 [J-02]。",
+      "claim_ids": [
+        "F-07",
+        "F-08",
+        "J-02",
+        "G-04"
+      ]
+    },
+    {
+      "id": "timeline",
+      "title": "发展时间线",
+      "body": "2024 年：全年营业总收入 1741.44 亿元，归母净利润 862.28 亿元 [F-02][F-04]。2025 年：公司面临宏观经济与行业调整压力。年报自述坚持稳中求进，推进“全面向 C”战略，旨在转型为消费者中心 [C-04]。全年营收微降 1.20%，归母净利润下滑 4.53% [F-05][F-06]。公司披露主要因系列酒产品结构调整 [C-01]。同时，公司持续进行产能扩建，推进茅台酒“十四五”产能扩建、中华 6 万吨勾调中心、坛厂包装物流园等项目 [F-09]。在渠道方面，年报自述将构建五大渠道并行体系，并推动 i 茅台平台产品矩阵 [C-05]。品牌建设上，参与达沃斯论坛等活动，品牌价值报告提升。2026 年计划：年报自述 2026 年主要目标，包括筑牢质量根基、全面推进市场化转型，构建“随行就市、相对平稳”的价格动态调整机制 [C-07]。但股权激励承诺仍未履行，形成治理瑕疵 [G-04]。",
+      "claim_ids": [
+        "F-02",
+        "F-04",
+        "C-04",
+        "F-05",
+        "F-06",
+        "C-01",
+        "F-09",
+        "C-05",
+        "C-07",
+        "G-04"
+      ]
+    },
+    {
+      "id": "technology_products",
+      "title": "技术与产品",
+      "body": "主导产品飞天茅台酒是我国大曲酱香型白酒的典型代表，集国家地理标志产品、有机食品和非物质文化遗产于一身。年报自述茅台酒遵循一年一个生产周期、端午踩曲、重阳下沙、纯粮酿造、开放式固态化发酵、陶坛长期贮存、以酒勾酒传统工法 [C-08]。基酒从生产到出厂至少需要五年，这种时间壁垒构成了难以复制的品质基石 [J-03]。在质量管理上，年报自述通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先 [C-03]。品牌层面，年报自述拥有“品质、品牌、工艺、环境、文化”五大核心竞争力 [C-02]，并声称已跃升为“世界蒸馏酒第一品牌” [J-04]。渠道变革方面，年报自述将构建批发、线下零售、线上零售、餐饮、私域“五大渠道”并行的布局，通过“线上+线下”融合转型 [C-05]。但具体研发投入金额、数字化进展的量化指标未在输入材料中披露 [G-02]，产品矩阵的具体价格带和定位也缺乏详细描述 [G-03]。",
+      "claim_ids": [
+        "C-08",
+        "J-03",
+        "C-03",
+        "C-02",
+        "J-04",
+        "C-05",
+        "G-02",
+        "G-03"
+      ]
+    },
+    {
+      "id": "financial_valuation",
+      "title": "财务与估值",
+      "body": "2025 年营业总收入 1720.54 亿元 [F-01]，同比下滑 1.20% [F-05]；归属净利润 823.20 亿元 [F-03]，同比下滑 4.53% [F-06]。利润降幅大于营收，显示盈利压力。公司披露营收下滑主因是酱香系列酒产品结构调整 [C-01]。现金流方面，年报自述经营活动产生的现金流量净额变动，主要受控股子公司财务公司吸收存款减少及同业存款增加影响 [C-06]，属金融业务正常波动。成本端，年报自述直销营业成本增长因销量增加及生产成本上涨 [C-09]，但输入未提供整体毛利率、费用率等关键盈利指标 [G-05]。资产负债表数据不完整，输入未提供独立资产负债表事实，无法计算资产负债率、流动比率等 [G-06]。估值层面，输入未提供市盈率、市净率、股息率等任何估值数据 [G-01]，因此无法对当前市场定价发表意见。",
+      "claim_ids": [
+        "F-01",
+        "F-05",
+        "F-03",
+        "F-06",
+        "C-01",
+        "C-06",
+        "C-09",
+        "G-05",
+        "G-06",
+        "G-01"
+      ]
+    },
+    {
+      "id": "risks_commentary",
+      "title": "风险与点评",
+      "body": "年报自述可能面对的风险包括：一是宏观经济风险；二是安全风险；三是舆情风险；四是环境保护风险 [C-10]。行业层面，白酒市场马太效应加剧，进入调整期可能淘汰弱势企业，但龙头地位相对稳固。然而，公司面临几大独特挑战：一是管理层行政色彩浓厚，股权激励长期缺位 [G-04]，可能削弱应对消费变化的敏锐度和执行效率 [J-02]。二是渠道转型存在争议，构建五大渠道及价格动态调整机制 [C-05][C-07]，可能冲击传统经销商利益，若批价失控将直接动摇品牌价值基座。三是食品安全始终是悬挂的白酒行业“达摩克利斯之剑”，任何质量事故都可能引发毁灭性打击。四是宏观经济若持续低迷，高端消费需求可能进一步压缩，公司增长将面临真正考验。证伪路径：若茅台酒批价出现显著持续下跌、渠道库存显著上升、或直销占比停滞不前，则当前判断偏乐观；反之，若市场化改革带来直销占比提升、价格体系更透明，则有望打开新动能。",
+      "claim_ids": [
+        "C-10",
+        "G-04",
+        "J-02",
+        "C-05",
+        "C-07"
+      ]
+    },
+    {
+      "id": "plain_language",
+      "title": "大白话结论",
+      "body": "茅台还是那个茅台，品牌硬、产品稀缺，但 2025 年的账本显示，钱不如以前好赚了——营收微降，利润多跌了几个点。最大的变化是换了有政府背景的新董事长，同时公司开始大谈“市场化转型”，比如让价格随行就市、渠道铺得更广。不过，喊口号容易，股权激励还欠着账 [G-04]，管理层能不能真的像市场化公司那样灵活反应，还是个未知数 [J-02]。对普通投资者来说，茅台依然是 A 股最安全的资产之一 [J-05]，但别指望它能像过去那样年年高增长 [J-05]。关键要盯紧茅台酒的实际成交价和渠道库存：如果批价持续下跌、货都堆在经销商仓库卖不动，那靠着品牌惯性吃饭的日子也就到头了。反过来，如果新品结构理顺了、直销比例慢慢上来，说不定又能再稳个几年。",
+      "claim_ids": [
+        "G-04",
+        "J-02",
+        "J-05"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "F-01",
+      "kind": "fact",
+      "text": "2025 年营业总收入为 172,054,171,890.91 元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0"
+      ],
+      "derived_ids": [],
+      "falsifier": "年报数据错误或重述"
+    },
+    {
+      "claim_id": "F-02",
+      "kind": "fact",
+      "text": "2024 年营业总收入为 174,144,069,958.25 元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1"
+      ],
+      "derived_ids": [],
+      "falsifier": "年报数据错误或重述"
+    },
+    {
+      "claim_id": "F-03",
+      "kind": "fact",
+      "text": "2025 年归属于母公司股东的净利润为 82,320,067,101.68 元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0"
+      ],
+      "derived_ids": [],
+      "falsifier": "年报数据错误或重述"
+    },
+    {
+      "claim_id": "F-04",
+      "kind": "fact",
+      "text": "2024 年归属于母公司股东的净利润为 86,228,146,421.62 元",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1"
+      ],
+      "derived_ids": [],
+      "falsifier": "年报数据错误或重述"
+    },
+    {
+      "claim_id": "F-05",
+      "kind": "fact",
+      "text": "2025 年营业总收入较上年下滑 1.20%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:revenue"
+      ],
+      "falsifier": "计算错误或基数调整"
+    },
+    {
+      "claim_id": "F-06",
+      "kind": "fact",
+      "text": "2025 年归属于母公司股东的净利润较上年下滑 4.53%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:net_profit_parent"
+      ],
+      "falsifier": "计算错误或基数调整"
+    },
+    {
+      "claim_id": "F-07",
+      "kind": "fact",
+      "text": "陈华现任中国贵州茅台酒厂（集团）有限责任公司党委书记、董事长、董事，贵州茅台酒股份有限公司党委书记、董事长、董事，曾任贵州盘江煤电集团董事长、贵州省能源局局长",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28"
+      ],
+      "derived_ids": [],
+      "falsifier": "人事信息未更新或简历不实"
+    },
+    {
+      "claim_id": "F-08",
+      "kind": "fact",
+      "text": "余思明现任贵州茅台酒股份有限公司党委委员、财务总监、代行董事会秘书职责，贵州茅台集团财务有限公司党支部书记、董事长",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:27:29"
+      ],
+      "derived_ids": [],
+      "falsifier": "人事信息未更新或简历不实"
+    },
+    {
+      "claim_id": "F-09",
+      "kind": "fact",
+      "text": "2025 年年报提及正在推进茅台酒“十四五”产能扩建、中华 6 万吨勾调中心、茅台酒用原料储备库、坛厂包装物流园项目一期工程等建设项目",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:25"
+      ],
+      "derived_ids": [],
+      "falsifier": "项目进度有重大延迟或取消"
+    },
+    {
+      "claim_id": "C-01",
+      "kind": "issuer_self_report",
+      "text": "公司披露营业收入变动原因主要是酱香系列酒产品结构调整影响",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:6"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续证明该解释不成立，例如系列酒实际营收增长或产品结构未变"
+    },
+    {
+      "claim_id": "C-02",
+      "kind": "issuer_self_report",
+      "text": "公司披露拥有“品质、品牌、工艺、环境、文化”五大核心竞争力，且报告期内未发生重大变化",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:5"
+      ],
+      "derived_ids": [],
+      "falsifier": "若发生重大质量事故、品牌危机等，证明某核心竞争力受损"
+    },
+    {
+      "claim_id": "C-03",
+      "kind": "issuer_self_report",
+      "text": "公司披露通过数字化手段构建覆盖全产业链的质量管理体系，制曲、制酒、勾贮、包装等关键环节质量指标保持领先，茅台酒产品品质稳定在卓越水平",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:3"
+      ],
+      "derived_ids": [],
+      "falsifier": "若出现产品质量问题或监管部门抽检不合格"
+    },
+    {
+      "claim_id": "C-04",
+      "kind": "issuer_self_report",
+      "text": "公司披露市场基本盘保持稳固，稳步推进“全面向 C”战略，通过推动场景、客群、服务“三个转型”与产品端、渠道端、终端“三端变革”，茅台酒、系列酒及国际化三大板块协同发力，有效稳住了市场基本盘",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:4"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续市场份额下滑或重大客户流失"
+    },
+    {
+      "claim_id": "C-05",
+      "kind": "issuer_self_report",
+      "text": "公司披露将构建批发、线下零售、线上零售、餐饮、私域“五大渠道”并行的渠道布局，未来将按照市场化原则逐步丰富 i 茅台上架产品矩阵",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:17:18"
+      ],
+      "derived_ids": [],
+      "falsifier": "若渠道改革进度缓慢或 i 茅台销售占比不及预期"
+    },
+    {
+      "claim_id": "C-06",
+      "kind": "issuer_self_report",
+      "text": "公司披露经营活动产生的现金流量净额变动原因主要是控股子公司贵州茅台集团财务有限公司吸收集团公司成员单位存款减少及不可随时支取的同业存款增加",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:9"
+      ],
+      "derived_ids": [],
+      "falsifier": "若该原因与实际现金流变动逻辑矛盾"
+    },
+    {
+      "claim_id": "C-07",
+      "kind": "issuer_self_report",
+      "text": "公司披露 2026 年将全面推进市场化转型，价格端以市场为导向，构建“随行就市、相对平稳”的自营体系零售价格动态调整机制",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:22:23"
+      ],
+      "derived_ids": [],
+      "falsifier": "若 2026 年实际并未推出该机制或价格机制失效"
+    },
+    {
+      "claim_id": "C-08",
+      "kind": "issuer_self_report",
+      "text": "公司披露茅台酒遵循一年一个生产周期、端午踩曲、重阳下沙、纯粮酿造、开放式固态化发酵、陶坛长期贮存、以酒勾酒传统工法",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:20"
+      ],
+      "derived_ids": [],
+      "falsifier": "若工艺有重大改变或出现相关质量争议"
+    },
+    {
+      "claim_id": "C-09",
+      "kind": "issuer_self_report",
+      "text": "公司披露直销营业成本增长主要是直销销量增加及生产成本上涨",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:10:8"
+      ],
+      "derived_ids": [],
+      "falsifier": "若实际成本上升主因并非销量上涨"
+    },
+    {
+      "claim_id": "C-10",
+      "kind": "issuer_self_report",
+      "text": "公司披露可能面对的风险包括：一是宏观经济风险；二是安全风险；三是舆情风险；四是环境保护风险",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:23:24"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司后续补充其他重大风险"
+    },
+    {
+      "claim_id": "J-01",
+      "kind": "judgment",
+      "text": "贵州茅台是中国高端白酒绝对龙头",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:9:5",
+        "moutai_2025_annual:narrative:21:21"
+      ],
+      "derived_ids": [],
+      "falsifier": "若第三方品牌价值排名显著下滑或出现重大品牌危机"
+    },
+    {
+      "claim_id": "J-02",
+      "kind": "judgment",
+      "text": "管理团队背景偏行政而非市场化，可能影响向消费者中心转型的效率",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:26:28",
+        "moutai_2025_annual:narrative:27:29",
+        "moutai_2025_annual:narrative:35:38"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续市场化改革成效显著，如直销占比明显提升、价格体系更灵活"
+    },
+    {
+      "claim_id": "J-03",
+      "kind": "judgment",
+      "text": "基酒从生产到出厂至少需要五年，这种时间壁垒构成了难以复制的品质基石",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:16:16"
+      ],
+      "derived_ids": [],
+      "falsifier": "若出现技术突破或工艺改变，缩短了陈酿时间而不影响品质"
+    },
+    {
+      "claim_id": "J-04",
+      "kind": "judgment",
+      "text": "公司声称已跃升为“世界蒸馏酒第一品牌”，品牌地位极强",
+      "evidence_ids": [
+        "moutai_2025_annual:narrative:21:21"
+      ],
+      "derived_ids": [],
+      "falsifier": "若第三方品牌价值排名显著下滑或出现重大品牌危机"
+    },
+    {
+      "claim_id": "J-05",
+      "kind": "judgment",
+      "text": "茅台依然是 A 股最安全的资产之一，但别指望它能像过去那样年年高增长",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:1",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:0",
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:net_profit_parent:62:1"
+      ],
+      "derived_ids": [],
+      "falsifier": "若宏观经济强劲复苏，白酒消费升级加速，茅台重回高增长轨道"
+    },
+    {
+      "claim_id": "G-01",
+      "kind": "gap",
+      "text": "输入未提供市盈率、市净率、股息率等估值指标，无法判断当前估值水平",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": "获取第三方估值数据后可评估"
+    },
+    {
+      "claim_id": "G-02",
+      "kind": "gap",
+      "text": "输入未提供研发投入具体金额及占收入比重，无法评估技术创新力度",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": "从年报全文中挖掘研发费用明细"
+    },
+    {
+      "claim_id": "G-03",
+      "kind": "gap",
+      "text": "输入未提供分产品、分渠道、分地区的详细营收拆分，无法评估营收结构变化的具体影响",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": "获取包含分部分析的详细报告"
+    },
+    {
+      "claim_id": "G-04",
+      "kind": "gap",
+      "text": "输入未提供股权激励计划的具体实施方案和上级部门未出台意见的详细情况，仅提及控股股东承诺未履行",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": "查阅公司专项说明或后续公告"
+    },
+    {
+      "claim_id": "G-05",
+      "kind": "gap",
+      "text": "输入未提供毛利率、费用率等关键盈利指标，无法评估盈利能力变化的具体原因",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": "从年报管理层讨论与分析中获取财务指标明细"
+    },
+    {
+      "claim_id": "G-06",
+      "kind": "gap",
+      "text": "输入未提供完整资产负债表及偿债能力指标，无法评估资产负债率、流动性等财务健康度",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": "获取完整资产负债表并计算相关比率"
+    }
+  ],
+  "missing_inputs": [
+    "市盈率、市净率等估值数据",
+    "分产品/渠道/地区营收拆分",
+    "毛利率、费用率等盈利指标",
+    "完整资产负债表及偿债能力指标",
+    "研发投入明细",
+    "股权激励计划详细方案"
+  ],
+  "overall_conclusion": "贵州茅台品牌护城河极深，2025年营收利润微降但整体可控，然而行政化团队能否驾驭市场化转型存疑，短期增长乏力，需观察渠道改革成效和批价稳定性 [J-02][J-05]。",
+  "schema_version": "editorial-v4-dossier-v1",
+  "ticker": "600519.SH",
+  "issuer_name": "贵州茅台",
+  "input_packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+  "prompt_version": "editorial-v4-whole-report-prompt-v1",
+  "generation_receipt": {
+    "run_id": "editorial-v4-run:8683e57e-2cc4-479d-9dd6-8fa6c62feef0",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "8683e57e-2cc4-479d-9dd6-8fa6c62feef0",
+    "usage": {
+      "prompt_tokens": 31489,
+      "completion_tokens": 5651,
+      "total_tokens": 37140,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 31489
+    },
+    "finish_reason": "stop",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "request_hash": "d59e8e9117ffa562779d9d4ac36563fcabc84e44ee98cfb9b53975f265dd73a2",
+    "response_hash": "b29304c29f48ed289d678553bab757129515b029b8b407d3c8225db0b81f4f8e",
+    "generated_at": "2026-08-03T06:11:46+00:00"
+  },
+  "production_record": {
+    "run_id": "editorial-v4-run:8683e57e-2cc4-479d-9dd6-8fa6c62feef0",
+    "generator_version": "editorial-v4-whole-report-generator-v1",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "model_provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "8683e57e-2cc4-479d-9dd6-8fa6c62feef0",
+    "input_packet_sha256": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+    "model_packet_sha256": "842f1396f866403f40d8e301f04f70bb115f728b5c2e39b9112dcc47373e6802",
+    "review_status": "pending",
+    "editorial_status": "draft",
+    "action_state": "blocked",
+    "tier_credit": false
+  },
+  "sources": [
+    {
+      "source_id": "moutai_2025_annual",
+      "document_id": "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "贵州茅台 2025 年年度报告",
+      "report_period": "2025FY",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-17/1225114741.PDF",
+      "raw_sha256": "474905deeaf0f875fc0a1b097a626c0c7852c427faadc5d7fc7816cbf45ea288",
+      "page_count": 143,
+      "parser_version": "park-document-intelligence-v1"
+    }
+  ],
+  "boundary": {
+    "review_only": true,
+    "no_tier_credit": true,
+    "no_b6_credit": true,
+    "no_decision_policy_credit": true,
+    "no_publication_credit": true
+  }
+}

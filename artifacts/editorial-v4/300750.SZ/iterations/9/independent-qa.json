@@ -1,0 +1,116 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-10 正文未显式标注“公司披露/年报自述”，仅以事实语气陈述，违反 issuer self-report 必须显式归属的规则。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式标注“公司披露/年报自述”，仅以事实语气陈述，违反 issuer self-report 必须显式归属的规则。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据与证据包完全一致，增长幅度计算准确。",
+    "所有 issuer self-report 在 claims 中均正确标记为 issuer_self_report。",
+    "gap 声明均基于证据包缺失项，未将缺口伪装为事实。",
+    "整体结论锋利且带有 judgment marker，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至证据包",
+    "同期对比数据明确标注增长/下滑及幅度",
+    "公司自述显式标注归属",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/排名/估值等写成事实",
+    "爱牛式判断需标注 [J-xx] 并有 refs/falsifier",
+    "报告包含资产定位、因果链、风险证伪和白话结论",
+    "缺口基于证据包缺失项，未借 gap 掩盖事实"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-10 正文未显式标注“公司披露/年报自述”，仅以事实语气陈述，违反 issuer self-report 必须显式归属的规则。",
+      "claim_id": "C-10",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-01 在正文中未标注 [J-01] 标记，违反 judgment 必须在正文中显式标注的规则。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-02 在正文中未标注 [J-02] 标记，违反 judgment 必须在正文中显式标注的规则。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:47:25",
+        "catl_2025_annual_cninfo:narrative:50:29"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-03 在正文中未标注 [J-03] 标记，违反 judgment 必须在正文中显式标注的规则。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-04 在正文中未标注 [J-04] 标记，违反 judgment 必须在正文中显式标注的规则。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-05 在正文中未标注 [J-05] 标记，违反 judgment 必须在正文中显式标注的规则。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    },
+    {
+      "code": "judgment_missing_marker",
+      "message": "J-06 在正文中未标注 [J-06] 标记，违反 judgment 必须在正文中显式标注的规则。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:39:17"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-01 正文未显式标注“公司披露/年报自述”，仅以事实语气陈述，违反 issuer self-report 必须显式归属的规则。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    }
+  ],
+  "request_hash": "3a27f224799c0b210648ebc0711616a31ea2321fc5b28923fc1392b0176bc8c8",
+  "response_hash": "42d124425f491d1c582370385fdeb9232c8a120cff42b2497b7fb400c174563f",
+  "run_id": "editorial-v4-qa:34ced3de-45b6-4341-9f54-310430e7c750",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "34ced3de-45b6-4341-9f54-310430e7c750",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:40:04+00:00"
+}

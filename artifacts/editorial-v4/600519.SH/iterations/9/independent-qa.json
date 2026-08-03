@@ -1,0 +1,49 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "Claim F-10 numeric value '178,999,246,453.61' not found in cited evidence page anchor.",
+      "claim_id": "F-10",
+      "evidence_ids": [
+        "official-filing:editorial-v4:moutai_2025_annual:474905deeaf0f875:fact:revenue:61:0"
+      ]
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "Body contains numeric literal '15%' without claim-text/evidence closure.",
+      "claim_id": null,
+      "evidence_ids": []
+    },
+    {
+      "code": "section_short",
+      "message": "Section 'technology_products' is below minimum length (430 chars).",
+      "claim_id": null,
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "All financial facts (F-01 to F-06) are correctly traced to validated page-row evidence with deterministic derived metrics.",
+    "Issuer self-report claims (C-01 to C-10) are explicitly labeled as company disclosures and not presented as independent verification.",
+    "Gap claims (G-01 to G-06) correctly identify missing inputs without fabricating data.",
+    "No valuation, price target, or action recommendation is given, respecting the no_valuation_or_action boundary.",
+    "The dossier avoids conditional conclusions for historical actuals and does not present unverified customer/order/market share claims."
+  ],
+  "checked_rules": [
+    "Every number/fact traceable to document_id, page, quoted_anchor via evidence_ids.",
+    "Year-over-year comparisons explicitly state direction and magnitude (e.g., '下滑 1.20%').",
+    "Issuer self-reports are labeled as '公司披露/年报自述/公告披露'.",
+    "No historical actuals presented as conditional 'if...then...' conclusions.",
+    "No unverified customer, order, ranking, share, moat, valuation, stock price, target price, or action advice.",
+    "Report includes specific asset positioning, financial causality, risk falsification conditions, and plain-language conclusion.",
+    "Gaps and next-step verification are clearly stated, not padded with generic sentences."
+  ],
+  "request_hash": "47b10eaca813da906e452fab3a24b541cc069b388419237d2710d9be6028b65a",
+  "response_hash": "279fe107883ac45d225a91c976c5acb6506a1ca868c7b6756d1265cc9dcf3cb4",
+  "run_id": "editorial-v4-qa:a76c3bab-3e7d-40d2-84a5-1f8039f5e27c",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a76c3bab-3e7d-40d2-84a5-1f8039f5e27c",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T05:56:05+00:00"
+}

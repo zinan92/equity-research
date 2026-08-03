@@ -1,0 +1,163 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 是公司自述应对策略，但正文未显式标注“公司披露/年报自述/公告披露”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-07 引用政策文件为公司自述，正文未显式标注“公司披露/年报自述/公告披露”。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 是公司自述产品发布，正文未显式标注“公司披露/年报自述/公告披露”。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    },
+    {
+      "code": "action_language",
+      "message": "财务与估值部分出现“目标价”一词，违反禁止行动建议/估值语言的规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-01 判断“绝对龙头、定价权、规模壁垒”未在正文中显式标注为研究判断 [J-01]。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-03 判断“精密制造杂货铺”模式未在正文中显式标注为研究判断 [J-03]。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-04 判断“地缘政治是最大不确定性”未在正文中显式标注为研究判断 [J-04]。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-05 判断“固态电池若对手率先量产，现有产能可能减值”未在正文中显式标注为研究判断 [J-05]。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据 F-01 至 F-04 均正确引用 evidence packet 中的事实，并明确标注同比增长幅度。",
+    "F-05、F-06、F-07、F-08、F-09、F-10、F-11 等事实性声明均正确引用证据，且多数已标注为公司自述。",
+    "G-01 至 G-07 缺口声明合理，基于 evidence packet 的 gaps 字段，未将缺口伪装为事实。",
+    "整体结论 J-06 及大白话结论均带有判断标记，并引用了相关底层证据和 falsifier。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到 document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑/持平及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式判断允许，但需标 [J-xx] 并有 refs/falsifier",
+    "报告包含爱牛式资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口明确，基于 evidence packet 的 gaps"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 是公司自述应对策略，但正文未显式标注“公司披露/年报自述/公告披露”。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-07 引用政策文件为公司自述，正文未显式标注“公司披露/年报自述/公告披露”。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 是公司自述产品发布，正文未显式标注“公司披露/年报自述/公告披露”。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    },
+    {
+      "code": "action_language",
+      "message": "财务与估值部分出现“目标价”一词，违反禁止行动建议/估值语言的规则。",
+      "claim_id": "G-06",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-01 判断“绝对龙头、定价权、规模壁垒”未在正文中显式标注为研究判断 [J-01]。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:20:6",
+        "catl_2025_annual_cninfo:narrative:17:3"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-03 判断“精密制造杂货铺”模式未在正文中显式标注为研究判断 [J-03]。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10",
+        "catl_2025_annual_cninfo:narrative:20:6"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-04 判断“地缘政治是最大不确定性”未在正文中显式标注为研究判断 [J-04]。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:17",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "missing_attribution",
+      "message": "J-05 判断“固态电池若对手率先量产，现有产能可能减值”未在正文中显式标注为研究判断 [J-05]。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:29:10"
+      ]
+    }
+  ],
+  "request_hash": "e026247ad2aab247b485cf39e91532f1a8d5e1d1671b83e9b493ead4dc409557",
+  "response_hash": "9ba0f78a096bde0ea094502aa760519e12a242455cb22abae4082fa26a0ee475",
+  "run_id": "editorial-v4-qa:4c70d93e-54c9-4c52-85a5-122e175c0758",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "4c70d93e-54c9-4c52-85a5-122e175c0758",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:35:02+00:00"
+}

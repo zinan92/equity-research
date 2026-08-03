@@ -1,0 +1,93 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13、C-15、C-18、C-19 的 kind 为 issuer_self_report，但正文未显式标注“年报披露/公司披露”等字样。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23",
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-02 至 C-19 的 issuer_self_report 标记未在正文中伴随显式归属声明，如“年报披露”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:69:39"
+      ]
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何事实/判断/缺口标记，需添加如 [J-xx] 或 [G-xx]。",
+      "claim_id": "overall_conclusion",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中数字 01、04、05、06 无对应 claim 文本闭合，需确保每个数字有 claim_id 引用。",
+      "claim_id": "latest_card",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务事实 F-01 至 F-06 均正确引用 evidence packet 中的数值与 derived metrics，增长方向与幅度明确。",
+    "判断 J-01 至 J-04 均标注 [J-xx]，附带 refs 与 falsifier，符合 AI judgment 规则。",
+    "缺口 G-01 至 G-03 基于 evidence packet 的 gaps 写出，未借 gap 掩盖已有数字或升级公司自述。",
+    "报告整体包含爱牛式定位、财务因果链、风险证伪条件与白话结论，非年报摘要。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯至 document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑/持平及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "AI judgment 标注 [J-xx]、附带 refs 与 falsifier",
+    "报告包含爱牛式定位、财务因果链、风险证伪条件与白话结论",
+    "缺口基于 evidence packet 的 gaps 写出，未空泛凑篇幅"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-13、C-15、C-18、C-19 的 kind 为 issuer_self_report，但正文未显式标注“年报披露/公司披露”等字样。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16",
+        "midea_2025_annual:narrative:42:23",
+        "midea_2025_annual:narrative:15:1",
+        "midea_2025_annual:narrative:20:5"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-02 至 C-19 的 issuer_self_report 标记未在正文中伴随显式归属声明，如“年报披露”。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:69:39"
+      ]
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何事实/判断/缺口标记，需添加如 [J-xx] 或 [G-xx]。",
+      "claim_id": "overall_conclusion",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest_card 中数字 01、04、05、06 无对应 claim 文本闭合，需确保每个数字有 claim_id 引用。",
+      "claim_id": "latest_card",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "7b58ad3c066d435c5ca00eb66aea28cb9d1ada643e37243ce0be19f34d6a1c19",
+  "response_hash": "79068bb96d97f050543698ec07852ad6e961bcc1160468229242ad710272308c",
+  "run_id": "editorial-v4-qa:595aee19-670d-4ac2-9a0e-5554a44c86f1",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "595aee19-670d-4ac2-9a0e-5554a44c86f1",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:25:13+00:00"
+}

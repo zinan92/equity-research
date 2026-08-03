@@ -1,0 +1,99 @@
+{
+  "status": "failed",
+  "ticker": "000001.SZ",
+  "chars": 1911,
+  "claims": 40,
+  "errors": [
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "timeline",
+      "chars": 269,
+      "minimum": 300
+    },
+    {
+      "code": "section_short",
+      "message": "section is below minimum length",
+      "section": "technology_products",
+      "chars": 344,
+      "minimum": 400
+    },
+    {
+      "code": "dossier_short",
+      "message": "editorial body is materially shorter than the Round 7 V4 reference",
+      "chars": 1911,
+      "target": 2429
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-04",
+      "missing": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "claim_refs",
+      "message": "non-gap claim has no evidence refs",
+      "claim_id": "J-02"
+    },
+    {
+      "code": "claim_refs",
+      "message": "claim references evidence outside packet",
+      "claim_id": "C-17",
+      "missing": [
+        "official:official-filing:cninfo_official_filing_document_v1:1225022887:narrative:56:150"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-01"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-05"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-11"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-12"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-20"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-21"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "03"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "08"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "14"
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "latest data card number has no claim text closure",
+      "token": "15"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "JUDGMENT_MISSING_MARKER",
+      "message": "J-01、J-02、J-03、J-04在dossier中已标为judgment并有falsifier，但整体结论未标[J-04]？实际已标，但需确认。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据F-01至F-06均正确引用官方PDF，同比增长计算准确。",
+    "所有issuer_self_report claims均明确标注“年报披露”或“年报引...数据”，未冒充独立验证。",
+    "判断claims均带有falsifier和证据引用，符合judgment规范。",
+    "缺口claims明确基于输入缺失，未借gap掩盖事实。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至document_id、页码、quoted_anchor",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注“年报披露”等",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、估值等写成事实",
+    "爱牛式判断允许，但需标[J-xx]并有refs/falsifier",
+    "报告包含资产定位、因果链、风险证伪和白话结论",
+    "缺口明确，基于evidence packet gaps"
+  ],
+  "raw_blockers": [
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-01引用midea_2025_annual:narrative:14:0，但该证据未提及“超过600家子公司”，原文为“超过600家子公司”在14页，但quoted_anchor未包含此句，需核对。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:14:0"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-03引用midea_2025_annual:narrative:23:6和31:16，但23:6仅提及TEKA收购，未提及Clivet与ARBONIA合并成立MBT Climate；31:16提及合并，但未提及TEKA收购。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:23:6",
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-06引用midea_2025_annual:narrative:30:15和39:19，但30:15提及冰箱压缩机合肥新基地和巴西电机工厂，未提及科陆电子印尼储能基地；39:19提及科陆电子印尼基地，但未提及前两者。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:30:15",
+        "midea_2025_annual:narrative:39:19"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-13引用midea_2025_annual:narrative:31:16，但该证据未提及“产业在线数据”，原文为“产业在线数据显示”，但quoted_anchor未包含此句，需核对。",
+      "claim_id": "C-13",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:31:16"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-15引用midea_2025_annual:narrative:42:23，但该证据未提及“MIR睿工业统计”，原文为“据 MIR睿工业统计”，但quoted_anchor未包含此句，需核对。",
+      "claim_id": "C-15",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:42:23"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-18引用midea_2025_annual:narrative:15:1，但该证据未提及“奥维云网推总数据”，原文为“奥维云网（AVC）推总数据显示”，但quoted_anchor未包含此句，需核对。",
+      "claim_id": "C-18",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:15:1"
+      ]
+    },
+    {
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-20引用midea_2025_annual:narrative:41:22，但该证据未提及“欧睿（Euromonitor）统计数据显示”，原文为“根据欧睿（Euromonitor）统计数据显示”，但quoted_anchor未包含此句，需核对。",
+      "claim_id": "C-20",
+      "evidence_ids": [
+        "midea_2025_annual:narrative:41:22"
+      ]
+    },
+    {
+      "code": "JUDGMENT_MISSING_MARKER",
+      "message": "J-01、J-02、J-03、J-04在dossier中已标为judgment并有falsifier，但整体结论未标[J-04]？实际已标，但需确认。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "6e7020620fcbd4d68b2a3c288b8713de12e1aaa8d66a1fc825f1ba6cd3da75aa",
+  "response_hash": "1940a33e1bcdff4a7ecb073f1873ce1a2aacf1de2eda45a41a137566ce254da3",
+  "run_id": "editorial-v4-qa:50867e27-328e-49ed-a45d-dd0062d06ee4",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "50867e27-328e-49ed-a45d-dd0062d06ee4",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T07:09:18+00:00"
+}

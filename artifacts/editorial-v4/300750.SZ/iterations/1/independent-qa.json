@@ -1,0 +1,141 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 未在正文中标明“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-07 未在正文中标明“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 未在正文中标明“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-06 正文未显式标注“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:19"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-07 正文未显式标注“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "action_language",
+      "message": "正文出现“目标价”等禁止性行动/估值语言，违反边界规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "最新数据卡“2026Q1营收1,291.31亿元”未闭合，缺少“同比增长52.45%”等完整表述。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据与证据包完全一致，引用准确。",
+    "判断类声明均标注[J-xx]并附falsifier，符合AI judgment规范。",
+    "缺口声明基于证据包缺失项，未虚构事实。",
+    "整体结论锋利且带判断标记，非年报摘要。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯至证据包",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注来源",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/估值等写成事实",
+    "AI judgment合规性检查",
+    "报告非年报摘要，有独特定位和因果链",
+    "缺口基于证据包缺失项，未掩盖已有数字"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 未在正文中标明“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:39:16",
+        "catl_2025_annual_cninfo:narrative:21:7"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-07 未在正文中标明“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 未在正文中标明“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:22:8"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-06 正文未显式标注“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:42:19"
+      ]
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "C-07 正文未显式标注“公司披露/年报自述”，可能被误认为独立验证。",
+      "claim_id": "C-07",
+      "evidence_ids": [
+        "catl_2025_annual_cninfo:narrative:18:4",
+        "catl_2025_annual_cninfo:narrative:18:5"
+      ]
+    },
+    {
+      "code": "action_language",
+      "message": "正文出现“目标价”等禁止性行动/估值语言，违反边界规则。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "latest_card_numeric_closure",
+      "message": "最新数据卡“2026Q1营收1,291.31亿元”未闭合，缺少“同比增长52.45%”等完整表述。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "17600483f75596cde05a4d1d772a8bedb5d646e6f29f64102b034d77d7a9386b",
+  "response_hash": "ab4893988db0dd458e8ad30d632fc464ecb15be44fcd897ec8ce1552a86dd92f",
+  "run_id": "editorial-v4-qa:6df7dc30-a73e-4d8d-9934-bfb68250f4de",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "6df7dc30-a73e-4d8d-9934-bfb68250f4de",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:33:45+00:00"
+}

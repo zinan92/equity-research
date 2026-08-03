@@ -1,0 +1,490 @@
+{
+  "latest_card": "2026年第一季度，营收181.12亿元，同比增长6.44%[F-02]，归母净利润67.61亿元，同比增长30.50%[F-04]。",
+  "sections": [
+    {
+      "id": "one_line_position",
+      "title": "一句话定位",
+      "body": "长江电力是全球最大的水电上市公司，控制着长江干流六座梯级电站，这是典型的垄断性稀缺资产，具备稳定现金流和强分红能力[J-01]。2025年全年营收862.42亿元，同比增长2.07%[F-01]；归母净利润345.03亿元，同比增长6.17%[F-03]。公司披露拥有国内AAA级信用评级及与国家主权评级一致的国际信用评级，融资能力极强[C-04]。",
+      "claim_ids": [
+        "J-01",
+        "F-01",
+        "F-03",
+        "C-04"
+      ]
+    },
+    {
+      "id": "founder_team",
+      "title": "创始人与团队",
+      "body": "公司的核心管理层多为三峡集团体系内部的资深高管。公司披露，副董事长、党委书记何红心为工商管理硕士、正高级会计师，曾历任集团副总会计师等职；副总经理林峰、姜德政等人均具有长年电力行业管理经验[C-05]。这种架构确保了战略延续性，但行政任命色彩浓厚，市场化激励与约束机制有待观察[J-02]。创始人信息及创业历程在输入材料中缺失，无法评估公司的原始创立基因[G-01]。",
+      "claim_ids": [
+        "C-05",
+        "J-02",
+        "G-01"
+      ]
+    },
+    {
+      "id": "timeline",
+      "title": "发展时间线",
+      "body": "2025年，公司披露梯级电站累计发电3071.94亿千瓦时，综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优[C-01]，全流域推广状态检修试点，安全生产保持‘双零’纪录[C-09]。战略层面，公司取消了监事会设置，由董事会审计委员会承接监督职能，优化治理结构[C-11]；同时编制印发《市值管理制度》，实施大股东股份增持、制定未来五年分红规划等，推动市值管理规范化[C-12]。市场化售电业务取得突破，旗下三峡电能全口径售电量超60亿千瓦时，售电区域覆盖9个省份，并参与全国首次多通道跨经营区绿电交易[C-02]。此外，董事会审议通过了葛洲坝航运扩能工程和江西寻乌抽水蓄能电站项目，为长期增长储备项目[C-06]。多项举措显示，公司在运营效率和战略扩张上均有实质性推进。",
+      "claim_ids": [
+        "C-01",
+        "C-09",
+        "C-11",
+        "C-12",
+        "C-02",
+        "C-06"
+      ]
+    },
+    {
+      "id": "technology_products",
+      "title": "技术与产品",
+      "body": "长江电力的核心产品是清洁电力，其核心资产——长江干流六座梯级电站——均为国家能源重点工程和‘西电东送’骨干电源，电力输送到长三角、珠三角等经济发达地区[C-13]，具有不可替代的基础设施属性。在运维层面，公司披露构建了数字化检修管理体系，机器人基本实现全场景应用，深化安全生产监控系统建设，推进技术装备智能化管理[C-07]。得益于这套体系，公司宣称设备设施大修检修精品率连续三年保持100%，关键运行指标保持国际领先[C-10]。这种将大型水电站维护水平做到极致的‘精密制造’能力，构筑了强大的运营护城河，竞争对手短期内难以复制[J-03]。为突破纯水电的成长边界，公司通过子公司布局了抽水蓄能、储能、综合能源服务及新能源发电等新业态，例如长电（张掖）能源提供储能技术服务，三峡电能开展综合能源管理，长电（休宁）能源涉足新兴能源技术研发与太阳能发电服务[C-08]。但这些新业务尚处培育期，收入贡献有限。此外，输入材料未提供研发投入金额和核心技术人员构成，难以量化公司技术创新的投入强度[G-03]。整体看，公司技术壁垒集中在运营而不是原创研发，其护城河更多源于规模、位置和精益管理。",
+      "claim_ids": [
+        "C-13",
+        "C-07",
+        "C-10",
+        "J-03",
+        "C-08",
+        "G-03"
+      ]
+    },
+    {
+      "id": "financial_valuation",
+      "title": "财务与估值",
+      "body": "公司2025年全年营业收入862.42亿元，同比增长2.07%[F-01]；归属于母公司股东的净利润345.03亿元，同比增长6.17%[F-03]。2026年第一季度营收181.12亿元，同比增长6.44%[F-02]；归母净利润67.61亿元，同比大增30.50%[F-04]，业绩加速明显。股东回报方面，公司披露长期执行高分红政策，每年以不低于当年归母净利润70%的比例进行现金分红[C-03]，为股东提供了稳定的现金收益。不过，由于输入材料仅提供利润表片段，完整资产负债表和现金流量表缺失，无法评估公司的实际杠杆水平、自由现金流及资本开支强度[G-04]。同时，成本构成、上网电价及电量等分项数据阙如，难以分解盈利增长的具体驱动因素[G-05]。此外，外部估值数据未提供，难以判断当前市值是否已充分反映资产价值[G-02]。总体而言，财务数据印证了公司稳健的盈利能力与分红意愿，但深入分析受限于信息完整度。",
+      "claim_ids": [
+        "F-01",
+        "F-03",
+        "F-02",
+        "F-04",
+        "C-03",
+        "G-04",
+        "G-05",
+        "G-02"
+      ]
+    },
+    {
+      "id": "risks_commentary",
+      "title": "风险与点评",
+      "body": "长江电力面临多重业务和财务风险。首先是来水不确定性风险，公司盈利高度依赖长江天然来水量，若遭遇连续枯水年，发电量下降将直接冲击利润[J-06]。其次，电力市场化改革推进可能压低上网电价；目前公司主要依赖既有消纳方案和价格机制，但若现货市场交易占比扩大，电价波动性将显著增加[J-05]。财务层面，公司背负巨额浮动利率债务，年报显示长期借款浮动利率合同金额高达2341.59亿元，利率上行将侵蚀利润[J-04]。此外，公司披露持有港币、美元、索尔等外币计价的资产和负债，面临汇率波动风险[C-14]。面对这些风险，公司宣称通过持续监控市场、优化债务结构、强化营销策略等方式进行管理，但实质上对来水和政策两大核心变量的掌控力有限。若出现极端干旱叠加利率急升的情景，公司盈利和高分红承诺可能同时承压。",
+      "claim_ids": [
+        "J-06",
+        "J-05",
+        "J-04",
+        "C-14"
+      ]
+    },
+    {
+      "id": "plain_language",
+      "title": "大白话结论",
+      "body": "长江电力本质上是‘长江水流发电机’，具有类债券的稳定回报特征。只要长江不断流，它的六座巨型水坝就能持续将水能转化为利润，并且把七成以上的利润分给股东[J-07]。它的护城河来自地理位置和规模的绝对垄断，几乎无人能撼动[J-08]。但代价也很明显：靠天吃饭——来水少了利润就降；政策饭——电价若随市场化走低，盈利会打折；高负债——利率上升侵蚀利润。如果连续两年干旱或电改导致市场化电价跳水，那么现在稳定分红的逻辑将遭到破坏。总结下来，长江电力是一个防御性强、收益可预期的资产，适合接受低增长、高确定性的投资者。",
+      "claim_ids": [
+        "J-07",
+        "J-08"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "F-01",
+      "kind": "fact",
+      "text": "2025年全年营业收入862.42亿元，同比增长2.07%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:0",
+        "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:revenue:84:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:revenue"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-02",
+      "kind": "fact",
+      "text": "2026年第一季度营收181.12亿元，同比增长6.44%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:0",
+        "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:revenue:8:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:revenue"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-03",
+      "kind": "fact",
+      "text": "2025年全年归母净利润345.03亿元，同比增长6.17%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:0",
+        "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:fact:net_profit_parent:85:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b:net_profit_parent"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "F-04",
+      "kind": "fact",
+      "text": "2026年第一季度归母净利润67.61亿元，同比增长30.50%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:0",
+        "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:fact:net_profit_parent:9:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef:net_profit_parent"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-01",
+      "kind": "issuer_self_report",
+      "text": "公司披露梯级电站全年累计发电3071.94亿千瓦时，综合耗水率、水量利用率、短期预报精度等关键指标均创历史最优",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续季度或次年独立机构数据表明发电量下滑或指标恶化"
+    },
+    {
+      "claim_id": "C-02",
+      "kind": "issuer_self_report",
+      "text": "公司披露三峡电能全口径市场化售电量超60亿千瓦时，售电区域拓展至9个省份",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续售电量下降或区域收缩"
+    },
+    {
+      "claim_id": "C-03",
+      "kind": "issuer_self_report",
+      "text": "公司披露每年度的利润分配按不低于当年合并报表中归属于母公司股东的净利润的70%进行现金分红",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ],
+      "derived_ids": [],
+      "falsifier": "若某年实际分红比例低于70%"
+    },
+    {
+      "claim_id": "C-04",
+      "kind": "issuer_self_report",
+      "text": "公司披露拥有国内AAA级信用评级和与国家主权评级一致的国际信用评级",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ],
+      "derived_ids": [],
+      "falsifier": "若信用评级被下调"
+    },
+    {
+      "claim_id": "C-05",
+      "kind": "issuer_self_report",
+      "text": "公司披露高管何红心为副董事长、党委书记，工商管理硕士、正高级会计师；林峰、姜德政等为副总经理",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司高管发生重大负面事件或监管处罚"
+    },
+    {
+      "claim_id": "C-06",
+      "kind": "issuer_self_report",
+      "text": "公司披露董事会审议通过出资建设葛洲坝航运扩能工程及投资江西寻乌抽水蓄能电站项目",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ],
+      "derived_ids": [],
+      "falsifier": "若项目进度严重滞后或预算大幅超支"
+    },
+    {
+      "claim_id": "C-07",
+      "kind": "issuer_self_report",
+      "text": "公司披露构建数字化检修管理体系，机器人基本实现全场景应用，深化安全生产监控系统建设",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:6"
+      ],
+      "derived_ids": [],
+      "falsifier": "若设备重大安全事故发生或运维指标恶化"
+    },
+    {
+      "claim_id": "C-08",
+      "kind": "issuer_self_report",
+      "text": "公司披露通过子公司布局抽水蓄能、储能、综合能源服务及新能源发电等业态",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:24:15"
+      ],
+      "derived_ids": [],
+      "falsifier": "若新业务长期无法贡献收入或利润"
+    },
+    {
+      "claim_id": "C-09",
+      "kind": "issuer_self_report",
+      "text": "公司披露全流域推广状态检修，安全生产保持‘双零’",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ],
+      "derived_ids": [],
+      "falsifier": "若发生人身或重大设备事故"
+    },
+    {
+      "claim_id": "C-10",
+      "kind": "issuer_self_report",
+      "text": "公司披露设备设施大修检修精品率连续三年保持100%，关键运行指标保持国际领先",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ],
+      "derived_ids": [],
+      "falsifier": "若后续年度官方报告显示精品率低于100%或运行指标下滑"
+    },
+    {
+      "claim_id": "C-11",
+      "kind": "issuer_self_report",
+      "text": "公司披露取消监事会设置，由董事会审计委员会承接监督职能，优化治理结构",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:29:20"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司重新设置监事会或治理架构倒退"
+    },
+    {
+      "claim_id": "C-12",
+      "kind": "issuer_self_report",
+      "text": "公司披露编制印发《市值管理制度》，实施大股东股份增持、制定未来五年分红规划",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:29:21"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司未实施所述分红规划或市值管理措施"
+    },
+    {
+      "claim_id": "C-13",
+      "kind": "issuer_self_report",
+      "text": "公司披露所属长江干流六座梯级电站均为国家能源重点工程和‘西电东送’骨干电源",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ],
+      "derived_ids": [],
+      "falsifier": "若国家能源政策调整导致骨干电源地位变化"
+    },
+    {
+      "claim_id": "C-14",
+      "kind": "issuer_self_report",
+      "text": "公司披露持有港币、美元、索尔等外币计价的资产和负债，面临汇率波动风险",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:214:38"
+      ],
+      "derived_ids": [],
+      "falsifier": "若未来年度汇兑损益影响显著"
+    },
+    {
+      "claim_id": "J-01",
+      "kind": "judgment",
+      "text": "长江电力控制长江干流六座梯级电站，具有垄断性水电资产，现金流稳定",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ],
+      "derived_ids": [],
+      "falsifier": "若来水持续偏枯或电价大幅下降，盈利稳定性受损"
+    },
+    {
+      "claim_id": "J-02",
+      "kind": "judgment",
+      "text": "管理层行政任命色彩浓厚，市场化激励与约束机制有待观察",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ],
+      "derived_ids": [],
+      "falsifier": "若出现重大投资失误或业绩明显下滑，表明治理失效"
+    },
+    {
+      "claim_id": "J-03",
+      "kind": "judgment",
+      "text": "数字化检修与机器人应用构建了强大的运行壁垒，形成精密运营护城河",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:6"
+      ],
+      "derived_ids": [],
+      "falsifier": "若新项目或技术革新导致运营优势被追赶"
+    },
+    {
+      "claim_id": "J-04",
+      "kind": "judgment",
+      "text": "公司面临利率风险，长期借款浮动利率合同金额2341.59亿元，利率上行将侵蚀利润",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:215:39"
+      ],
+      "derived_ids": [],
+      "falsifier": "若未来利率持续下行，利息支出减少"
+    },
+    {
+      "claim_id": "J-05",
+      "kind": "judgment",
+      "text": "电力市场化改革可能压低上网电价，增加盈利不确定性",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4",
+        "cypc_2025_annual:narrative:27:17"
+      ],
+      "derived_ids": [],
+      "falsifier": "若政府保持现行电价保护机制"
+    },
+    {
+      "claim_id": "J-06",
+      "kind": "judgment",
+      "text": "公司盈利高度依赖长江来水，来水不确定性是核心风险",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ],
+      "derived_ids": [],
+      "falsifier": "若未来几年实际来水持续高于预期"
+    },
+    {
+      "claim_id": "J-07",
+      "kind": "judgment",
+      "text": "长江电力是现金牛资产，护城河深厚，但成长有限，来水和电价是关键变量",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:215:39"
+      ],
+      "derived_ids": [],
+      "falsifier": "若连续两年枯水或电改导致电价大幅下滑"
+    },
+    {
+      "claim_id": "J-08",
+      "kind": "judgment",
+      "text": "它的护城河来自地理位置和规模的绝对垄断，几乎无人能撼动",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5"
+      ],
+      "derived_ids": [],
+      "falsifier": "若出现颠覆性技术或政策强制拆分"
+    },
+    {
+      "claim_id": "G-01",
+      "kind": "gap",
+      "text": "输入材料未提供创始人信息及创业历程",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-02",
+      "kind": "gap",
+      "text": "输入材料未提供估值相关数据，无法进行估值判断",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-03",
+      "kind": "gap",
+      "text": "输入材料未提供研发投入金额及核心技术人员构成，无法量化技术创新强度",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-04",
+      "kind": "gap",
+      "text": "输入仅包含利润表片段，缺失完整资产负债表及现金流量表，无法评估杠杆与现金流",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-05",
+      "kind": "gap",
+      "text": "缺少成本、电价、电量等分项数据，无法分解盈利增长驱动因素",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    }
+  ],
+  "missing_inputs": [
+    "创始人信息",
+    "完整财务报表（资产负债表、现金流量表）",
+    "成本及电价分项数据",
+    "估值数据（市盈率、市净率等）",
+    "研发投入及人员细节"
+  ],
+  "overall_conclusion": "长江电力是中国的核心水电资产，盈利确定性高，但高度依赖自然条件与政策保护，增长空间有限。若来水持续偏枯或电力市场化改革大幅压价，其高分红模式将面临挑战。[J-07]",
+  "schema_version": "editorial-v4-dossier-v1",
+  "ticker": "600900.SH",
+  "issuer_name": "长江电力",
+  "input_packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+  "prompt_version": "editorial-v4-whole-report-prompt-v1",
+  "generation_receipt": {
+    "run_id": "editorial-v4-run:a14976ea-ea4b-435c-94aa-708440b135ac",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "a14976ea-ea4b-435c-94aa-708440b135ac",
+    "usage": {
+      "prompt_tokens": 34241,
+      "completion_tokens": 10825,
+      "total_tokens": 45066,
+      "prompt_tokens_details": {
+        "cached_tokens": 1536
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 5673
+      },
+      "prompt_cache_hit_tokens": 1536,
+      "prompt_cache_miss_tokens": 32705
+    },
+    "finish_reason": "stop",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "request_hash": "bda26a8c9ce14fef30972b15900f05ab51ba5b9e775e2f972c17e1e33b9d3c27",
+    "response_hash": "1eac788583c66f3d682fca3e52b49a104233d67a344d0aaa59dc19b339db56be",
+    "generated_at": "2026-08-03T07:20:46+00:00"
+  },
+  "production_record": {
+    "run_id": "editorial-v4-run:a14976ea-ea4b-435c-94aa-708440b135ac",
+    "generator_version": "editorial-v4-whole-report-generator-v1",
+    "prompt_version": "editorial-v4-whole-report-prompt-v1",
+    "model_provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "a14976ea-ea4b-435c-94aa-708440b135ac",
+    "input_packet_sha256": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+    "model_packet_sha256": "c92c974522606645d9dc6172cbdd7f727339f7de52d5bfc76d7a256d37e96a6a",
+    "review_status": "pending",
+    "editorial_status": "draft",
+    "action_state": "blocked",
+    "tier_credit": false
+  },
+  "sources": [
+    {
+      "source_id": "cypc_2025_annual",
+      "document_id": "official-filing:editorial-v4:cypc_2025_annual:aa0cdb92e3aad81b",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "长江电力 2025 年年度报告",
+      "report_period": "2025FY",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+      "raw_sha256": "aa0cdb92e3aad81b1e6454594a64cacbcfeb9013b10dd31f47a93a94e7a70f91",
+      "page_count": 259,
+      "parser_version": "park-document-intelligence-v1"
+    },
+    {
+      "source_id": "cypc_2026_q1",
+      "document_id": "official-filing:editorial-v4:cypc_2026_q1:3536efda5117d4ef",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "长江电力 2026 年第一季度报告",
+      "report_period": "2026Q1",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+      "raw_sha256": "3536efda5117d4ef071729a16b9de8449846aedca0a8f2d7ff9a5eafa2cafe84",
+      "page_count": 17,
+      "parser_version": "park-document-intelligence-v1"
+    }
+  ],
+  "boundary": {
+    "review_only": true,
+    "no_tier_credit": true,
+    "no_b6_credit": true,
+    "no_decision_policy_credit": true,
+    "no_publication_credit": true
+  }
+}

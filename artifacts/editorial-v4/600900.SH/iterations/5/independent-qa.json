@@ -1,0 +1,155 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100%”但未绑定到任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100”但未绑定到任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-01未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-02未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-03未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-04未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-05未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-06未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务数据与证据包完全一致，增长幅度计算准确。",
+    "所有判断均标注为J类并附有falsifier，符合AI judgment规范。",
+    "缺口声明基于证据包缺失项，未虚构事实。",
+    "整体结论锋利且带有风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至证据包",
+    "同期对比明确增长/下滑及幅度",
+    "公司自述需标注“公司披露”",
+    "未将历史值写成条件句结论",
+    "未将无证据的客户/订单/估值等写成事实",
+    "AI judgment需标注J-xx并有refs/falsifier",
+    "允许爱牛式定位与锋利结论",
+    "缺口基于证据包缺失项"
+  ],
+  "raw_blockers": [
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100%”但未绑定到任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "unbound_numeric",
+      "message": "正文出现“100”但未绑定到任何claim或evidence，无法验证来源。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-01未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-02未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-03未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-04未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:4"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-05未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "missing_issuer_label",
+      "message": "C-06未在正文中明确标注“公司披露”，可能被误读为独立验证。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    }
+  ],
+  "request_hash": "6b2b0d480a9767fa9f56a85552931dde8906e2da43112698d9a7b57de07685a0",
+  "response_hash": "2b589e60d532bd49df126e6b6005e53ed9393a07d85137752b6a23ebcfc91068",
+  "run_id": "editorial-v4-qa:48c394bd-d828-4b48-858d-eb180357aaca",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "48c394bd-d828-4b48-858d-eb180357aaca",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:52:31+00:00"
+}

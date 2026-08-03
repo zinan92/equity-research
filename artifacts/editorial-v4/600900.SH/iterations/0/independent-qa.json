@@ -1,0 +1,165 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-01 正文未写“公司披露”，仅写“公司披露梯级电站…”，但实际正文为“2025年，公司梯级电站累计发电…”，未显式标注公司自述。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-02 正文未写“公司披露”，仅写“市场化售电方面，旗下三峡电能全口径售电量超60亿千瓦时…”，未显式标注公司自述。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-03 正文未写“公司披露”，仅写“公司长期执行高分红政策，每年以不低于当年归母净利润70%的比例进行现金分红”，未显式标注公司自述。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 正文未写“公司披露”，仅写“公司的核心管理层多为三峡集团体系内部的资深高管。副董事长、党委书记何红心为工商管理硕士…”，未显式标注公司自述。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-06 正文未写“公司披露”，仅写“项目投资方面，董事会批准了葛洲坝航运扩能工程和江西寻乌抽水蓄能电站项目”，未显式标注公司自述。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 正文未写“公司披露”，仅写“为拓展增长空间，公司通过子公司布局了抽水蓄能、储能、综合能源服务及新能源发电等业态”，未显式标注公司自述。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:24:15"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-09 正文未写“公司披露”，仅写“公司全流域推广状态检修试点，安全生产保持‘双零’纪录”，未显式标注公司自述。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“它的护城河来自地理位置和规模的绝对垄断，几乎无人能撼动”未标[J-xx]，属于判断但无标记。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    }
+  ],
+  "strengths": [
+    "财务事实F-01至F-04均正确引用evidence packet中的数字和同比变化，且正文明确写了增长幅度。",
+    "J-01至J-06均标为judgment，有refs和falsifier，符合AI judgment要求。",
+    "G-01至G-05明确指出了输入材料的缺口，未用空泛句子凑篇幅。",
+    "整体结论带有判断标记，且未将公司自述升级为独立验证。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到evidence_ids",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、估值等写成事实",
+    "AI judgment有[J-xx]标记、refs和falsifier",
+    "报告有爱牛式定位、因果链和风险证伪",
+    "缺口基于evidence packet gaps，未掩盖已有数字"
+  ],
+  "raw_blockers": [
+    {
+      "code": "self_report_unmarked",
+      "message": "C-01 正文未写“公司披露”，仅写“公司披露梯级电站…”，但实际正文为“2025年，公司梯级电站累计发电…”，未显式标注公司自述。",
+      "claim_id": "C-01",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-02 正文未写“公司披露”，仅写“市场化售电方面，旗下三峡电能全口径售电量超60亿千瓦时…”，未显式标注公司自述。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:20:13"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-03 正文未写“公司披露”，仅写“公司长期执行高分红政策，每年以不低于当年归母净利润70%的比例进行现金分红”，未显式标注公司自述。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:39:33"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-05 正文未写“公司披露”，仅写“公司的核心管理层多为三峡集团体系内部的资深高管。副董事长、党委书记何红心为工商管理硕士…”，未显式标注公司自述。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:31:23",
+        "cypc_2025_annual:narrative:32:24"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-06 正文未写“公司披露”，仅写“项目投资方面，董事会批准了葛洲坝航运扩能工程和江西寻乌抽水蓄能电站项目”，未显式标注公司自述。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:36:27",
+        "cypc_2025_annual:narrative:36:28"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-08 正文未写“公司披露”，仅写“为拓展增长空间，公司通过子公司布局了抽水蓄能、储能、综合能源服务及新能源发电等业态”，未显式标注公司自述。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:24:15"
+      ]
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "C-09 正文未写“公司披露”，仅写“公司全流域推广状态检修试点，安全生产保持‘双零’纪录”，未显式标注公司自述。",
+      "claim_id": "C-09",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:10:2"
+      ]
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "大白话结论中“它的护城河来自地理位置和规模的绝对垄断，几乎无人能撼动”未标[J-xx]，属于判断但无标记。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "cypc_2025_annual:narrative:12:5",
+        "cypc_2025_annual:narrative:215:39"
+      ]
+    }
+  ],
+  "request_hash": "86e257c2c8842f23711b1bf10468cd5f75f5d8a5ce685acf7ed5f0be5d019925",
+  "response_hash": "9815b522757903ba5d16c83cde54d9bab0cd7f7e1d6cf155bef1e948cb4fe913",
+  "run_id": "editorial-v4-qa:0e10abf9-52db-448f-9f93-ed65531f4a4e",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "0e10abf9-52db-448f-9f93-ed65531f4a4e",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v1",
+  "generated_at": "2026-08-03T06:17:06+00:00"
+}
