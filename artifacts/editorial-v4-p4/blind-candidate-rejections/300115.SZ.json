@@ -1,0 +1,14 @@
+{
+  "schema_version": "editorial-v4-p4-blind-candidate-rejection-v1",
+  "ticker": "300115.SZ",
+  "status": "rejected_before_acceptance",
+  "reason_code": "benchmark_leak",
+  "reason": "The existing V4 machine contract identifies 长盈精密/300115.SZ as a historical benchmark; it is not eligible as the out-of-sample blind company.",
+  "packet_hash": "35228ffa6f3b6b22f6b9a049ba4ca11632f8bcd3a284d7f118eb3126d5835640",
+  "deepseek_run_id": "editorial-v4-run:bb8f0191-6aad-4b5f-a8a4-e3783325430c",
+  "machine_status": "failed",
+  "accepted_report": false,
+  "tier_credit": false,
+  "publication_credit": false,
+  "note": "The real model call was stopped after the first failed candidate; no template or old report was used to bypass the gate."
+}

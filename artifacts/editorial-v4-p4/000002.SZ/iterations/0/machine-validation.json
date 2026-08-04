@@ -1,0 +1,56 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 2988,
+  "claims": 40,
+  "errors": [
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-02"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-16"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-31"
+    },
+    {
+      "code": "historical_condition",
+      "message": "conditional claim is bound to already-disclosed evidence",
+      "claim_id": "J-07"
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion must carry at least one fact/judgment/gap marker"
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "23.9%",
+      "claim_ids": [
+        "C-02"
+      ]
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "4.7%",
+      "claim_ids": [
+        "C-02"
+      ]
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "494.78亿元",
+      "claim_ids": [
+        "C-01"
+      ]
+    }
+  ]
+}

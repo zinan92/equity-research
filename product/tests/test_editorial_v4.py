@@ -181,6 +181,88 @@ class EditorialV4ContractTests(unittest.TestCase):
         bad["claims"][0]["text"] = "2025年营业总收入为999亿元"
         self.assertIn("numeric_quote_mismatch", {row["code"] for row in validate_dossier(bad, self.packet)["errors"]})
 
+    def test_loss_semantic_closes_parenthesized_negative_fact(self) -> None:
+        packet = copy.deepcopy(self.packet)
+        loss = {
+            "evidence_id": "e-loss-previous",
+            "source_id": "src-1",
+            "document_id": "official-doc-1",
+            "source_url": packet["sources"][0]["source_url"],
+            "raw_sha256": packet["sources"][0]["raw_sha256"],
+            "report_period": "2024FY",
+            "page_number": 10,
+            "quoted_anchor": "归属于母公司股东的净利润(净亏损) (105000000.00)",
+            "metric": "net_profit_parent",
+            "value": -105000000.0,
+            "unit": "元",
+        }
+        packet["evidence"].append(loss)
+        packet["financial_facts"].append(loss)
+        packet["packet_hash"] = canonical_hash({k: v for k, v in packet.items() if k != "packet_hash"})
+        claim = {
+            "claim_id": "F-LOSS",
+            "kind": "issuer_self_report",
+            "text": "年报披露，2024年归母净亏损为105000000元",
+            "evidence_ids": ["e-loss-previous"],
+            "derived_ids": [],
+            "falsifier": "",
+        }
+        dossier = self._with_claim(claim, "年报披露，2024年归母净亏损为105000000元[F-LOSS]。")
+        result = validate_dossier(dossier, packet)
+        self.assertNotIn("numeric_quote_mismatch", {row["code"] for row in result["errors"]})
+
+    def test_derived_loss_values_allow_unit_conversion_and_magnitude(self) -> None:
+        packet = copy.deepcopy(self.packet)
+        loss_current = {
+            "evidence_id": "e-loss-current",
+            "source_id": "src-1",
+            "document_id": "official-doc-1",
+            "source_url": packet["sources"][0]["source_url"],
+            "raw_sha256": packet["sources"][0]["raw_sha256"],
+            "report_period": "2025FY",
+            "page_number": 10,
+            "quoted_anchor": "归属于母公司股东的净利润(净亏损) (88556470495.64)",
+            "metric": "net_profit_parent",
+            "value": -88556470495.64,
+            "unit": "元",
+        }
+        loss_previous = dict(loss_current)
+        loss_previous["evidence_id"] = "e-loss-previous"
+        loss_previous["report_period"] = "2024FY"
+        loss_previous["value"] = -49478429211.96
+        loss_previous["quoted_anchor"] = "归属于母公司股东的净利润(净亏损) (49478429211.96)"
+        packet["evidence"].extend([loss_current, loss_previous])
+        packet["financial_facts"].extend([loss_current, loss_previous])
+        packet["derived_metrics"].append({
+            "derived_id": "d-loss",
+            "metric": "net_profit_parent",
+            "current_evidence_id": "e-loss-current",
+            "previous_evidence_id": "e-loss-previous",
+            "current_period": "2025FY",
+            "previous_period": "2024FY",
+            "current_value": -88556470495.64,
+            "previous_value": -49478429211.96,
+            "absolute_change": -39078041283.68,
+            "percent_change": -78.979955,
+            "direction": "下滑",
+            "formula": "deterministic",
+            "computed_by": "test",
+        })
+        packet["packet_hash"] = canonical_hash({k: v for k, v in packet.items() if k != "packet_hash"})
+        claim = {
+            "claim_id": "J-LOSS",
+            "kind": "judgment",
+            "text": "2025年归母净亏损885.56亿元，亏损同比扩大78.98%，形成历史性压力",
+            "evidence_ids": ["e-loss-current", "e-loss-previous"],
+            "derived_ids": ["d-loss"],
+            "falsifier": "若亏损后续收窄则重审",
+        }
+        dossier = self._with_claim(claim, "2025年归母净亏损885.56亿元，亏损同比扩大78.98%，形成历史性压力[J-LOSS]。")
+        result = validate_dossier(dossier, packet)
+        codes = {row["code"] for row in result["errors"]}
+        self.assertNotIn("numeric_claim_unbound", codes)
+        self.assertNotIn("comparison_direction_missing", codes)
+
     def test_comparison_must_state_deterministic_direction(self) -> None:
         claim = {"claim_id": "F-01", "kind": "fact", "text": "2025年营业总收入的当期数值", "evidence_ids": ["e-current", "e-previous"], "derived_ids": ["d-revenue"], "falsifier": ""}
         dossier = self._with_claim(claim, "2025年营业总收入的当期数值[F-01]。")
@@ -284,6 +366,19 @@ class EditorialV4ContractTests(unittest.TestCase):
             "evidence_ids": ["e-narr"],
         }]}
         self.assertEqual(_filter_false_positive_blockers(raw, dossier, self.packet), [])
+
+    def test_qa_filter_reconciles_numeric_blocker_after_machine_closure(self) -> None:
+        claim = {"claim_id": "F-01", "kind": "fact", "text": "2025年营业总收入为1亿元", "evidence_ids": ["e-current"], "derived_ids": [], "falsifier": ""}
+        dossier = self._with_claim(claim, "2025年营业总收入为1亿元[F-01]。")
+        raw = {"blockers": [{"severity": "blocker", "category": "numeric", "code": "numeric_quote_mismatch", "message": "单位换算未逐字出现", "claim_id": "F-01"}]}
+        self.assertEqual(_filter_false_positive_blockers(raw, dossier, self.packet, {"status": "passed", "errors": []}), [])
+        self.assertEqual(len(_filter_false_positive_blockers(raw, dossier, self.packet, {"status": "failed", "errors": [{"code": "numeric_quote_mismatch"}]})), 1)
+
+    def test_qa_filter_drops_long_anchor_not_mentioned_false_positive(self) -> None:
+        claim = {"claim_id": "C-01", "kind": "issuer_self_report", "text": "公司披露具备独特的制造能力", "evidence_ids": ["e-narr"], "derived_ids": [], "falsifier": ""}
+        dossier = self._with_claim(claim, "公司披露具备独特的制造能力[C-01]。")
+        raw = {"blockers": [{"severity": "blocker", "category": "provenance", "code": "EVIDENCE_MISMATCH", "message": "证据未提及独特的制造能力", "claim_id": "C-01", "evidence_ids": ["e-narr"]}]}
+        self.assertEqual(_filter_false_positive_blockers(raw, dossier, self.packet, {"status": "passed", "errors": []}), [])
 
     def test_qa_filter_accepts_explicit_self_report_attribution(self) -> None:
         claim = {

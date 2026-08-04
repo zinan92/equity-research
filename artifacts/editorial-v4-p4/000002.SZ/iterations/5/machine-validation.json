@@ -1,0 +1,20 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 3725,
+  "claims": 50,
+  "errors": [
+    {
+      "code": "derived_binding",
+      "message": "comparison claim must cite both deterministic input facts",
+      "claim_id": "J-04",
+      "derived_id": "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:revenue"
+    },
+    {
+      "code": "derived_binding",
+      "message": "comparison claim must cite both deterministic input facts",
+      "claim_id": "J-04",
+      "derived_id": "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:revenue"
+    }
+  ]
+}

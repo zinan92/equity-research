@@ -1,0 +1,106 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称 2024 年归母净亏损为 -49,478,429,211.96 元，但引用证据页 155 的 quoted_anchor 中未出现该数字，无法验证。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 文本含数字 885.56亿元、78.98%、59.52亿元，但该 claim 的 evidence_ids 中未直接出现这些数字，且未引用 derived 指标。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何 fact/judgment/gap 标记（如 [J-xx]），不符合 editorial-v4 规范。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露/年报披露”，未将自述冒充独立验证。",
+    "同期对比数据均明确写出增长/下滑及幅度，如 C-01 的“同比下滑31.98%”和 C-02 的“同比收窄4.71%”。",
+    "判断类 claim（J-01 至 J-07）均带有 [J] 标记、引用相关底层证据并给出 falsifier，符合 judgment_synthesis 规则。",
+    "报告包含白话结论和风险证伪条件，体现了爱牛式分析风格，而非单纯年报摘要。",
+    "明确指出了输入缺口（G-01），未用空泛句子凑篇幅。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位是否标 [J-xx]、有 refs 和 falsifier，否则报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称 2024 年归母净亏损为 -49,478,429,211.96 元，但引用证据页 155 的 quoted_anchor 中未出现该数字，无法验证。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 文本含数字 885.56亿元、78.98%、59.52亿元，但该 claim 的 evidence_ids 中未直接出现这些数字，且未引用 derived 指标。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何 fact/judgment/gap 标记（如 [J-xx]），不符合 editorial-v4 规范。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion 未携带任何 fact/judgment/gap 标记（如 [J-xx]），不符合 editorial-v4 规范。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "c90a81cd0e7e6693ae0ae419423f3de8993b3e93daca2b766b10bde9811508d5",
+  "response_hash": "ab9fca1815d7296b32c9b2a17c65a059cb15e43da9463792582bbb3eb80c589a",
+  "run_id": "editorial-v4-qa:da4bc413-ba0b-47b6-9d5c-261386086a6b",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "da4bc413-ba0b-47b6-9d5c-261386086a6b",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T03:36:07+00:00"
+}

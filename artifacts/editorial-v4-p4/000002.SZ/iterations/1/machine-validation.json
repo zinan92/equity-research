@@ -1,0 +1,34 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 3214,
+  "claims": 45,
+  "errors": [
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-31"
+    },
+    {
+      "code": "self_report_unmarked",
+      "message": "issuer self-report claim lacks explicit label",
+      "claim_id": "C-38"
+    },
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "F-01",
+      "number": "494.78亿元"
+    },
+    {
+      "code": "historical_condition",
+      "message": "conditional claim is bound to already-disclosed evidence",
+      "claim_id": "J-07"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-08"
+    }
+  ]
+}

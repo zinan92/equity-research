@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "所有财务事实（如营收、净亏损）均精确引用年报和季报的页码与行，数字可追溯。",
+    "公司自述类声明均明确标注“公司披露”或“年报披露”，未将自述冒充独立验证。",
+    "报告明确指出了证据缺口（如货币资金、经营现金流缺失），并据此说明估值无法锚定。",
+    "判断类声明均附有 falsifier 和 [J] 标记，符合 judgment 合成的基本要求。"
+  ],
+  "checked_rules": [
+    "数字与事实可追溯至 evidence_ids",
+    "同期对比数据明确增长/下滑及幅度",
+    "公司自述显式标注来源",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户/订单/排名等写成事实",
+    "判断类声明有 [J] 标记、refs 和 falsifier",
+    "报告包含爱牛式定位、因果链和证伪条件",
+    "缺口基于 evidence packet 的 gaps 写出"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01 引用了 vanke_2025_annual:narrative:13:0，但该证据未提及“债务展期博弈”或“经营性现金流覆盖到期债务”，判断缺乏直接证据支撑。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-04 声称“2026年可能仍会出现流动性缺口”，但未提供货币资金、经营现金流或债务到期结构等量化证据，属于无证据的预测性事实陈述。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-05 断言“经营性现金流能否覆盖利息和到期本金”是最大风险，但未引用任何经营现金流或利息支出数据，判断缺乏事实基础。",
+      "claim_id": "J-05",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-06 称“一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解”，但未提供银行信用条件或融资安排的具体证据。",
+      "claim_id": "J-06",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-07 提到“乐观预期建立在深铁持续输血的假设上”，但未提供深铁未来资金支持承诺或相关协议的证据，属于无依据的假设性陈述。",
+      "claim_id": "J-07",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-09 判断万科是“还债公司”，核心任务为债务展期与资产处置，但未引用债务到期明细或资产处置计划的具体证据，定位缺乏事实支撑。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [],
+  "request_hash": "74c319e3cee6c835749b30bc1a20e3de134951a5481fa3d7aab7489757d4bef9",
+  "response_hash": "64afdaaba40546b92a4311a6f104cf994b4a8d1e3a8f022a0e40b86c8388f1da",
+  "run_id": "editorial-v4-qa:6058216f-1e85-4094-b9d5-deb4a96c3c8e",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "6058216f-1e85-4094-b9d5-deb4a96c3c8e",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T04:37:15+00:00",
+  "filtered_blockers": [],
+  "filtered_from": "independent-qa.json",
+  "filtered_at": "2026-08-04T04:37:49+00:00"
+}

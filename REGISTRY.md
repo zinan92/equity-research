@@ -1,5 +1,33 @@
 # REGISTRY
 
+## 2026-08-04 · V4-P4 golden set and out-of-sample blind report (Issue #698)
+
+Now: Park's explicit approval of the five-report V4/P3 batch is frozen as the
+golden set in [`artifacts/editorial-v4-p4/golden-set-manifest.json`](artifacts/editorial-v4-p4/golden-set-manifest.json).
+Generation is prose/evidence isolated from that set. A true out-of-sample
+000002.SZ (万科A) packet contains two official CNINFO PDFs, 50 page-bound
+evidence rows and eight financial facts; the real DeepSeek whole-report loop
+converged at iteration 15 to 4,059 body characters, 9 judgments and all seven
+sections above their minimums. Machine validation and filtered independent QA
+both pass. The acceptance audit and compact hand-off receipt are
+[`artifacts/editorial-v4-p4/blind-acceptance-audit.json`](artifacts/editorial-v4-p4/blind-acceptance-audit.json)
+and [`artifacts/editorial-v4-p4/final-receipt.json`](artifacts/editorial-v4-p4/final-receipt.json);
+the persistent reader files are under
+[`artifacts/editorial-v4-p4/000002.SZ/`](artifacts/editorial-v4-p4/000002.SZ/).
+
+The historical 300115.SZ attempt was rejected before acceptance because the
+machine contract correctly identified it as a benchmark leak; it remains a
+negative receipt, not a report. All V4-P4 outputs remain review-only,
+`pending`, action-blocked, and grant no Tier/B6/decision/publication credit.
+Tier ladder, B6 gate and decision policy are unchanged. The remaining raw QA
+blockers are retained in the receipt; only packet-backed false positives were
+filtered, yielding zero filtered blockers.
+
+Next: Park reviews the 000002.SZ report and page anchors, then choose the next
+issuer for the same isolated official-packet/whole-report loop. Do not promote
+the blind draft or the golden set to a live recommendation without human
+review.
+
 ## Operating documents (2026-08-02)
 
 - Stable intent and completion evidence: [`NORTH_STAR.md`](NORTH_STAR.md).

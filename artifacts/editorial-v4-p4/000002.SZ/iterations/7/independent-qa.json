@@ -1,0 +1,153 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 vanke_2025_annual:narrative:72:18，但该证据仅描述董事会组成规则，未提及当前董事会实际人数，无法验证“11名董事”的事实。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-08 引用 vanke_2025_annual:narrative:80:25 和 81:26，但 80:25 仅包含廖子彬和沈向洋信息，张懿宸信息在 81:26，且 80:25 中沈向洋信息不完整，无法完整验证三位独立董事背景。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:80:25",
+        "vanke_2025_annual:narrative:81:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-41 引用 vanke_2025_annual:narrative:25:6，但该证据未提及大客户留存率约70%，仅提到引入独角兽企业177家，无法验证留存率。",
+      "claim_id": "C-41",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:25:6"
+      ]
+    }
+  ],
+  "strengths": [
+    "报告明确区分了公司自述事实与研究判断，所有判断均标注[J]并附有falsifier。",
+    "财务数据引用准确，营收和净利润的同比变化均与evidence packet中的derived metrics一致。",
+    "风险部分明确指出了证据缺口（如货币资金、经营现金流），未用空泛句子掩盖。",
+    "整体结论锋利，带有明确证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 vanke_2025_annual:narrative:72:18，但该证据仅描述董事会组成规则，未提及当前董事会实际人数，无法验证“11名董事”的事实。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-08 引用 vanke_2025_annual:narrative:80:25 和 81:26，但 80:25 仅包含廖子彬和沈向洋信息，张懿宸信息在 81:26，且 80:25 中沈向洋信息不完整，无法完整验证三位独立董事背景。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:80:25",
+        "vanke_2025_annual:narrative:81:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-30 引用 vanke_2025_annual:narrative:26:8，但该证据未提及万物云管理费用同比下降10.1%，仅提到万物云利用AI重构中后台运营体系，无法验证具体降幅。",
+      "claim_id": "C-30",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:26:8"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-40 引用 vanke_2025_annual:narrative:24:5，但该证据未提及运输收入6.2亿元及同比增长55%，仅提到运输收入6.2亿元，同比增长55%出现在另一处，无法完整验证。",
+      "claim_id": "C-40",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:24:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-41 引用 vanke_2025_annual:narrative:25:6，但该证据未提及大客户留存率约70%，仅提到引入独角兽企业177家，无法验证留存率。",
+      "claim_id": "C-41",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:25:6"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-42 引用 vanke_2025_annual:narrative:29:12，但该证据未提及商业业务获取广州、西安项目，仅提到商业业务实现能力复制与品牌输出，无法验证具体项目获取。",
+      "claim_id": "C-42",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:29:12"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03 引用 vanke_2025_annual:narrative:24:5，但该证据为物流仓储业务数据，与判断中“经营性业务收入来源”关联性弱，无法支撑判断。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3",
+        "vanke_2025_annual:narrative:27:9",
+        "vanke_2025_annual:narrative:26:8",
+        "vanke_2025_annual:narrative:24:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-04 引用 vanke_2025_annual:narrative:91:37，但该证据仅提及流动性面临较大挑战，未提供资产处置和销售回款速度的量化证据，无法支撑“可能出现流动性缺口”的判断。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "c282525435575cb350240eba5f5fd2c6270f85841b8502e662d49b42d8c45456",
+  "response_hash": "692d672a8a989b2199ac25c4763cfae4a784ecd86cb13913806e114fa3bddffb",
+  "run_id": "editorial-v4-qa:a21f1f8d-a97b-4740-83a7-3193743f6434",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "a21f1f8d-a97b-4740-83a7-3193743f6434",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T03:59:46+00:00"
+}

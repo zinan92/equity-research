@@ -1,0 +1,97 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "orphan_marker",
+      "message": "正文出现 [J-01] 标记，但 claims 中无对应 claim_id，无法验证其证据与判断依据。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_body_unmarked",
+      "message": "C-02a 为 issuer_self_report，但正文未显式标注“公司披露/年报自述/公告披露”，可能误导为独立验证。",
+      "claim_id": "C-02a",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论中“核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断”为判断句，但未标 [J-xx]。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "财务数据均引用自年报/季报，且同期对比幅度与 derived_metrics 一致，numeric 规则执行良好。",
+    "公司自述类事实均标注“年报披露/公司披露”，未将自述冒充独立验证。",
+    "判断句均配有 falsifier 和底层 evidence，符合 judgment_synthesis 要求。",
+    "明确列出证据缺口（货币资金、经营现金流等），未用空泛句子凑篇幅。"
+  ],
+  "checked_rules": [
+    "数字与事实可回溯至 document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑/持平及幅度",
+    "公司自述显式标注“公司披露/年报自述/公告披露”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "判断句有 [J] marker、底层 evidence 和 falsifier",
+    "报告有爱牛式定位、因果链、白话结论，非年报摘要",
+    "缺口基于 evidence packet 的 gaps 写出，未借 gap 掩盖已有数字"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "orphan_marker",
+      "message": "正文出现 [J-01] 标记，但 claims 中无对应 claim_id，无法验证其证据与判断依据。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_body_unmarked",
+      "message": "C-02a 为 issuer_self_report，但正文未显式标注“公司披露/年报自述/公告披露”，可能误导为独立验证。",
+      "claim_id": "C-02a",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论中“核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断”为判断句，但未标 [J-xx]。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论中“核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断”为判断句，但未标 [J-xx]。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "4159bbe4ae1970272239f4f52449046bdfd4daa6d64551635847b1bce139f5ca",
+  "response_hash": "7e9503ca380651f53ef28095cc1d6968175b8cb309172354c0c94293282d87a0",
+  "run_id": "editorial-v4-qa:52a85915-887e-42b2-9841-65668f4ab086",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "52a85915-887e-42b2-9841-65668f4ab086",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T04:20:23+00:00"
+}

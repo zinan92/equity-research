@@ -30,6 +30,10 @@ SCHEMA = "editorial-v4-evidence-packet-v1"
 OFFICIAL_HOSTS = {"static.cninfo.com.cn", "www.cninfo.com.cn"}
 
 OFFICIAL_URLS = {
+    "vanke_2025_annual": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+    "vanke_2026_q1": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+    "longying_2025_annual": "https://static.cninfo.com.cn/finalpage/2026-04-18/1225120097.PDF",
+    "longying_2026_q1": "https://static.cninfo.com.cn/finalpage/2026-04-23/1225144413.PDF",
     "midea_2025_annual": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
     "midea_2026_q1": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
     "cypc_2025_annual": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
@@ -71,6 +75,22 @@ STRICT_ROWS: dict[tuple[str, str], tuple[tuple[str, int, tuple[str, ...], str], 
         ("revenue", 61, ("一、营业总收入",), "172,054,171,890.91"),
         ("net_profit_parent", 62, ("归属于母公司股东的净利润",), "82,320,067,101.68"),
     ),
+    ("300115.SZ", "2025FY"): (
+        ("revenue", 84, ("一、营业总收入",), "18,818,693,525.67"),
+        ("net_profit_parent", 85, ("归属于母公司股东的净利润",), "597,666,576.59"),
+    ),
+    ("300115.SZ", "2026Q1"): (
+        ("revenue", 9, ("一、营业总收入",), "5,130,825,705.85"),
+        ("net_profit_parent", 10, ("归属于母公司所有者的净利润",), "125,232,197.99"),
+    ),
+    ("000002.SZ", "2025FY"): (
+        ("revenue", 155, ("一、营业总收入",), "233,432,768,960.43"),
+        ("net_profit_parent", 155, ("归属于母公司股东的净利润",), "88,556,470,495.64"),
+    ),
+    ("000002.SZ", "2026Q1"): (
+        ("revenue", 10, ("一、营业总收入",), "28,927,889,365.26"),
+        ("net_profit_parent", 11, ("归属于母公司所有者的净利润",), "5,952,156,227.34"),
+    ),
 }
 
 STRICT_SECOND: dict[tuple[str, str, str], str] = {
@@ -88,9 +108,17 @@ STRICT_SECOND: dict[tuple[str, str, str], str] = {
     ("300750.SZ", "2026Q1", "net_profit_parent"): "13,962,558",
     ("600519.SH", "2025FY", "revenue"): "174,144,069,958.25",
     ("600519.SH", "2025FY", "net_profit_parent"): "86,228,146,421.62",
+    ("300115.SZ", "2025FY", "revenue"): "16,934,153,115.29",
+    ("300115.SZ", "2025FY", "net_profit_parent"): "771,529,452.81",
+    ("300115.SZ", "2026Q1", "revenue"): "4,395,138,974.74",
+    ("300115.SZ", "2026Q1", "net_profit_parent"): "174,874,009.78",
+    ("000002.SZ", "2025FY", "revenue"): "343,176,440,712.96",
+    ("000002.SZ", "2025FY", "net_profit_parent"): "49,478,429,211.96",
+    ("000002.SZ", "2026Q1", "revenue"): "37,994,649,925.08",
+    ("000002.SZ", "2026Q1", "net_profit_parent"): "6,246,208,543.03",
 }
 STRICT_UNITS = {
-    "000333.SZ": "千元", "600900.SH": "元", "300750.SZ": "千元", "600519.SH": "元",
+    "000002.SZ": "元", "000333.SZ": "千元", "600900.SH": "元", "300750.SZ": "千元", "600519.SH": "元", "300115.SZ": "元",
 }
 
 
@@ -131,6 +159,20 @@ COMPANIES: dict[str, dict[str, Any]] = {
         "name": "贵州茅台",
         "docs": [
             {"source_id": "moutai_2025_annual", "period": "2025FY", "file": "moutai_2025_annual.pdf", "title": "贵州茅台 2025 年年度报告"},
+        ],
+    },
+    "300115.SZ": {
+        "name": "长盈精密",
+        "docs": [
+            {"source_id": "longying_2025_annual", "period": "2025FY", "file": "longying_2025_annual.pdf", "title": "长盈精密 2025 年年度报告"},
+            {"source_id": "longying_2026_q1", "period": "2026Q1", "file": "longying_2026_q1.pdf", "title": "长盈精密 2026 年第一季度报告"},
+        ],
+    },
+    "000002.SZ": {
+        "name": "万科A",
+        "docs": [
+            {"source_id": "vanke_2025_annual", "period": "2025FY", "file": "vanke_2025_annual.pdf", "title": "万科A 2025 年年度报告"},
+            {"source_id": "vanke_2026_q1", "period": "2026Q1", "file": "vanke_2026_q1.pdf", "title": "万科A 2026 年第一季度报告"},
         ],
     },
 }
@@ -273,7 +315,14 @@ def _strict_financial_facts(ticker: str, period: str, document_id: str, raw_hash
         if not ("年度" in header or "季度" in header or "本期发生额" in header or "年 1" in header or "年1" in header):
             continue
         unit = STRICT_UNITS[ticker]
-        values = (float(expected_first.replace(",", "")), float(expected_second.replace(",", "")))
+        def signed_value(token: str) -> float:
+            value = float(token.replace(",", ""))
+            position = combined.find(token)
+            if position > 0 and combined[position - 1] == "(":
+                return -value
+            return value
+
+        values = (signed_value(expected_first), signed_value(expected_second))
         for offset, value in enumerate(values):
             row_period = period if offset == 0 else (f"{int(period[:4]) - 1}FY" if period.endswith("FY") else f"{int(period[:4]) - 1}Q1")
             evidence_id = f"{document_id}:fact:{metric}:{page_number}:{offset}"

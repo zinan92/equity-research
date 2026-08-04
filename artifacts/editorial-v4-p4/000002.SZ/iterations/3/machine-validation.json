@@ -1,0 +1,36 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 3337,
+  "claims": 45,
+  "errors": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "F-01",
+      "number": "49,478,429,211.96元"
+    },
+    {
+      "code": "numeric_claim_unbound",
+      "message": "text contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-08",
+      "number": "885.56亿元"
+    },
+    {
+      "code": "numeric_claim_unbound",
+      "message": "text contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-08",
+      "number": "78.98%"
+    },
+    {
+      "code": "numeric_claim_unbound",
+      "message": "text contains numeric literal not present in this claim's cited evidence",
+      "claim_id": "J-08",
+      "number": "59.52亿元"
+    },
+    {
+      "code": "overall_judgment_marker_missing",
+      "message": "overall_conclusion must carry at least one fact/judgment/gap marker"
+    }
+  ]
+}

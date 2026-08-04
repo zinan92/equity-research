@@ -1,0 +1,278 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称净亏损 49,478,429,211.96 元，但引用证据页 155 的 anchor 中未出现该数字，仅见 -88,556,470,495.64 和 -49,478,429,211.96，后者为 2024 年值，但 claim 文本未明确标注为 2024 年数据。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称 2025 年归母净亏损 885.56 亿元，但引用证据页 155 的值为 -88,556,470,495.64 元，即约 885.56 亿元，数值一致但未在引用 anchor 中直接出现，且 claim 未标注单位换算。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称亏损同比扩大 78.98%，但该百分比未在引用证据中直接出现，而是由 derived metric 计算得出，claim 应引用 derived_id 或明确标注为计算值。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称 2026 年一季度归母净亏损 59.52 亿元，但引用证据页 11 的值为 -5,952,156,227.34 元，即约 59.52 亿元，数值一致但未在引用 anchor 中直接出现，且 claim 未标注单位换算。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-03 引用 evidence_id 'vanke_2025_annual:narrative:13:0'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:13:0'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 evidence_id 'vanke_2025_annual:narrative:72:18'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:72:18'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-05 引用 evidence_id 'vanke_2025_annual:narrative:79:23'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:79:23'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:79:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06 引用 evidence_id 'vanke_2025_annual:narrative:82:28'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:82:28'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:82:28"
+      ]
+    }
+  ],
+  "strengths": [
+    "报告结构完整，包含定位、团队、时间线、技术产品、财务、风险、白话结论等模块，符合 editorial-v4 要求。",
+    "判断类 claim 均标注 [J-xx] 并给出 falsifier，如 J-01、J-02 等，符合 judgment synthesis 规则。",
+    "公司自述类 claim 明确标注“公司披露/年报披露”，如 C-03、C-04 等，未将自述冒充独立验证。",
+    "整体结论锋利，带有白话总结和风险证伪条件，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker；若未标 [J-xx] 或没有 refs/falsifier，才报 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称净亏损 49,478,429,211.96 元，但引用证据页 155 的 anchor 中未出现该数字，仅见 -88,556,470,495.64 和 -49,478,429,211.96，后者为 2024 年值，但 claim 文本未明确标注为 2024 年数据。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称 2025 年归母净亏损 885.56 亿元，但引用证据页 155 的值为 -88,556,470,495.64 元，即约 885.56 亿元，数值一致但未在引用 anchor 中直接出现，且 claim 未标注单位换算。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称亏损同比扩大 78.98%，但该百分比未在引用证据中直接出现，而是由 derived metric 计算得出，claim 应引用 derived_id 或明确标注为计算值。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称 2026 年一季度归母净亏损 59.52 亿元，但引用证据页 11 的值为 -5,952,156,227.34 元，即约 59.52 亿元，数值一致但未在引用 anchor 中直接出现，且 claim 未标注单位换算。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-03 引用 evidence_id 'vanke_2025_annual:narrative:13:0'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:13:0'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 evidence_id 'vanke_2025_annual:narrative:72:18'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:72:18'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-05 引用 evidence_id 'vanke_2025_annual:narrative:79:23'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:79:23'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:79:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06 引用 evidence_id 'vanke_2025_annual:narrative:82:28'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:82:28'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:82:28"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "a0c61ff4d7d63ee73fe19604955cf5d39c63df39c627d242de86656cbbe2cf8a",
+  "response_hash": "19482cca02eb82d39f7055f4890a09d1e3ae6d9a1f34bdc1f0b10016d192d04b",
+  "run_id": "editorial-v4-qa:6f8a08b8-c033-4a37-aced-37fce9f21539",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "6f8a08b8-c033-4a37-aced-37fce9f21539",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T03:40:42+00:00",
+  "filtered_blockers": [
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_quote_mismatch",
+      "message": "F-01 声称净亏损 49,478,429,211.96 元，但引用证据页 155 的 anchor 中未出现该数字，仅见 -88,556,470,495.64 和 -49,478,429,211.96，后者为 2024 年值，但 claim 文本未明确标注为 2024 年数据。",
+      "claim_id": "F-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称 2025 年归母净亏损 885.56 亿元，但引用证据页 155 的值为 -88,556,470,495.64 元，即约 885.56 亿元，数值一致但未在引用 anchor 中直接出现，且 claim 未标注单位换算。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称亏损同比扩大 78.98%，但该百分比未在引用证据中直接出现，而是由 derived metric 计算得出，claim 应引用 derived_id 或明确标注为计算值。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "numeric_claim_unbound",
+      "message": "J-08 声称 2026 年一季度归母净亏损 59.52 亿元，但引用证据页 11 的值为 -5,952,156,227.34 元，即约 59.52 亿元，数值一致但未在引用 anchor 中直接出现，且 claim 未标注单位换算。",
+      "claim_id": "J-08",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-03 引用 evidence_id 'vanke_2025_annual:narrative:13:0'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:13:0'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 evidence_id 'vanke_2025_annual:narrative:72:18'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:72:18'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-05 引用 evidence_id 'vanke_2025_annual:narrative:79:23'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:79:23'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-05",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:79:23"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-06 引用 evidence_id 'vanke_2025_annual:narrative:82:28'，但该 ID 在 evidence packet 中不存在，正确 ID 应为 'vanke_2025_annual:narrative:82:28'（实际存在），但 claim 中 evidence_ids 列表未包含该 ID，而是直接写了字符串，需检查 dossier 中 evidence_ids 格式。",
+      "claim_id": "C-06",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:82:28"
+      ]
+    }
+  ],
+  "filtered_from": "independent-qa.json",
+  "filtered_at": "2026-08-04T03:45:53+00:00"
+}

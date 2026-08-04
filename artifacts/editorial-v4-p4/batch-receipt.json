@@ -1,0 +1,93 @@
+{
+  "schema_version": "editorial-v4-batch-receipt-v1",
+  "generated_at": "2026-08-04T03:40:42+00:00",
+  "model": "deepseek-v4-pro",
+  "tickers": [
+    "000002.SZ"
+  ],
+  "rows": [
+    {
+      "ticker": "000002.SZ",
+      "status": "needs_review",
+      "receipt": {
+        "schema_version": "editorial-v4-quality-loop-receipt-v1",
+        "ticker": "000002.SZ",
+        "packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+        "iterations": [
+          {
+            "iteration": 0,
+            "run_id": "editorial-v4-run:7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+            "request_id": "7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+            "report_hash": "b1c00619d1a03d7904a1c0013e6f144d3bd7c2cb1f2e83d5e4b0a93ba41ea76a",
+            "machine_status": "failed",
+            "machine_errors": 8,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:843cd8fb-a65e-472a-9fab-c393af01e5eb",
+            "qa_request_id": "843cd8fb-a65e-472a-9fab-c393af01e5eb",
+            "qa_blockers": 7,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 1,
+            "run_id": "editorial-v4-run:b9ddaa85-51f0-4657-abff-411b14e8095a",
+            "request_id": "b9ddaa85-51f0-4657-abff-411b14e8095a",
+            "report_hash": "b4b8544f2117801d05757e4823272317f78d44551c0b8d91217e1ea763dcbd6b",
+            "machine_status": "failed",
+            "machine_errors": 5,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:257470be-19bd-4a7a-baab-14edac18ab60",
+            "qa_request_id": "257470be-19bd-4a7a-baab-14edac18ab60",
+            "qa_blockers": 3,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 2,
+            "run_id": "editorial-v4-run:34727eb4-edff-453e-ac45-7efd7b973b33",
+            "request_id": "34727eb4-edff-453e-ac45-7efd7b973b33",
+            "report_hash": "ef71e2d9666028850cd14a08957649beae7c07d8d3e395a541bfba54638b7cc9",
+            "machine_status": "failed",
+            "machine_errors": 6,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:e16b3ae1-0fd7-41b1-882c-282fa2525683",
+            "qa_request_id": "e16b3ae1-0fd7-41b1-882c-282fa2525683",
+            "qa_blockers": 3,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 3,
+            "run_id": "editorial-v4-run:e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+            "request_id": "e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+            "report_hash": "549fcd780024342386a9547ef9b5831f50497ba027ed3de9ce17ca7abcc404e6",
+            "machine_status": "failed",
+            "machine_errors": 5,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:da4bc413-ba0b-47b6-9d5c-261386086a6b",
+            "qa_request_id": "da4bc413-ba0b-47b6-9d5c-261386086a6b",
+            "qa_blockers": 3,
+            "qa_advisories": 1
+          },
+          {
+            "iteration": 4,
+            "run_id": "editorial-v4-run:14e8eeb9-68f7-4dab-a897-f49255240c01",
+            "request_id": "14e8eeb9-68f7-4dab-a897-f49255240c01",
+            "report_hash": "0105f407c85be1d812953130d21ff683881e7124f515122f78250026b5fad7fe",
+            "machine_status": "failed",
+            "machine_errors": 4,
+            "qa_status": "failed",
+            "qa_run_id": "editorial-v4-qa:6f8a08b8-c033-4a37-aced-37fce9f21539",
+            "qa_request_id": "6f8a08b8-c033-4a37-aced-37fce9f21539",
+            "qa_blockers": 8,
+            "qa_advisories": 0
+          }
+        ],
+        "final_status": "needs_review",
+        "review_status": "pending",
+        "action_state": "blocked",
+        "no_tier_credit": true,
+        "no_publication_credit": true,
+        "advisory_count": 0
+      },
+      "started_at": "2026-08-04T03:22:17+00:00"
+    }
+  ]
+}

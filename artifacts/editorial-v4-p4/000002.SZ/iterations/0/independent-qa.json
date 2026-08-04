@@ -1,0 +1,179 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_unmarked",
+      "message": "C-02 为发行人自述，但正文未标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_unmarked",
+      "message": "C-16 为发行人自述，但正文未标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-16",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_unmarked",
+      "message": "C-31 为发行人自述，但正文未标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-31",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:36"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-07 将已披露的历史事实包装为条件句结论，违反规则4。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论未标注判断标记，违反规则6。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "body_numeric_unbound",
+      "message": "latest_card中“23.9%”和“4.7%”未绑定claim/evidence，违反规则1。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "body_numeric_unbound",
+      "message": "财务与估值段“494.78亿元”未绑定claim/evidence，违反规则1。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "strengths": [
+    "多数发行人自述已标注“公司披露/年报披露”，符合规则3。",
+    "判断句均带有[J]标记和falsifier，符合规则6。",
+    "缺口G-01明确基于输入缺失，未借缺口掩盖事实。",
+    "整体结论锋利且带白话结论，符合爱牛风格。"
+  ],
+  "checked_rules": [
+    "规则1：数字和事实可回溯到证据",
+    "规则2：同期对比明确增长/下滑及幅度",
+    "规则3：发行人自述显式标注",
+    "规则4：历史实际值不写成条件句",
+    "规则5：未提供证据的客户/订单/排名等不写成事实",
+    "规则6：判断句带[J]标记和falsifier",
+    "规则7：爱牛式定位和结论允许",
+    "规则8：缺口明确且基于输入缺失"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_unmarked",
+      "message": "C-02 为发行人自述，但正文未标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-02",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_unmarked",
+      "message": "C-16 为发行人自述，但正文未标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-16",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "self_report_attribution",
+      "code": "self_report_unmarked",
+      "message": "C-31 为发行人自述，但正文未标注“公司披露/年报自述”，违反规则3。",
+      "claim_id": "C-31",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:36"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "historical_condition",
+      "code": "historical_condition",
+      "message": "J-07 将已披露的历史事实包装为条件句结论，违反规则4。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论未标注判断标记，违反规则6。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "body_numeric_unbound",
+      "message": "latest_card中“23.9%”和“4.7%”未绑定claim/evidence，违反规则1。",
+      "claim_id": "",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "numeric",
+      "code": "body_numeric_unbound",
+      "message": "财务与估值段“494.78亿元”未绑定claim/evidence，违反规则1。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "overall_judgment_marker_missing",
+      "message": "整体结论未标注判断标记，违反规则6。",
+      "claim_id": "",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "e987ce063f565f13b4af75094fe20376a110c1de4be0f860fcc48e17bbad3549",
+  "response_hash": "1314761ea4232405bb55ec70e4bdc7ea600a26301c45da65d612ec7246b5d7b6",
+  "run_id": "editorial-v4-qa:843cd8fb-a65e-472a-9fab-c393af01e5eb",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "843cd8fb-a65e-472a-9fab-c393af01e5eb",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T03:25:44+00:00"
+}

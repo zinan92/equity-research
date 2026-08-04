@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 4060,
+  "claims": 55,
+  "errors": [
+    {
+      "code": "judgment_marker_missing",
+      "message": "aggressive positioning sentence lacks an explicit [J-xx] judgment marker",
+      "excerpt": "核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断"
+    }
+  ]
+}

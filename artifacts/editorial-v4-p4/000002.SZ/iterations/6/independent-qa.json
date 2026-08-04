@@ -1,0 +1,132 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-03 引用 evidence_ids 为 vanke_2025_annual:narrative:13:0，但该证据未提及“退出冰雪业务”，冰雪退出在 narrative:25:7。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有 issuer_self_report 类 claim 均明确标注“公司披露/年报披露”，未将自述冒充独立验证。",
+    "财务数据引用准确，与 evidence packet 中的事实值一致，且同期对比幅度计算正确。",
+    "判断类 claim 均带有 [J-xx] 标记和明确的 falsifier，符合 judgment_synthesis 规则。",
+    "报告明确指出了证据缺口（如货币资金、经营现金流数据缺失），未用空泛句子凑篇幅。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由 evidence_ids 回溯到 document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的 AI judgment，只要在 claims 中是 judgment、引用了相关底层 evidence、明确是研究判断并有 falsifier，就不算 blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-03 引用 evidence_ids 为 vanke_2025_annual:narrative:13:0，但该证据未提及“退出冰雪业务”，冰雪退出在 narrative:25:7。",
+      "claim_id": "C-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01 引用 evidence_ids 包含 vanke_2025_annual:narrative:91:37，但该证据未直接支持“债务展期博弈”判断，且缺少 narrative:13:0 的引用。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-12 引用 evidence_ids 为 vanke_2025_annual:narrative:13:0，但该证据未提及“退出冰雪业务”，冰雪退出在 narrative:25:7。",
+      "claim_id": "C-12",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-36 引用 evidence_ids 为 vanke_2025_annual:narrative:25:7，但该证据未提及“扬州有熊酒店以轻资产模式开业”，仅提及“如期开业”。",
+      "claim_id": "C-36",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:25:7"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "C-42 引用 evidence_ids 为 vanke_2025_annual:narrative:29:12，但该证据未提及“获取广州、西安等重点城市的优质项目”，仅提及“成功获取位于广州、西安等重点城市的优质项目”。",
+      "claim_id": "C-42",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:29:12"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-03 引用 evidence_ids 包含 vanke_2025_annual:narrative:24:5，但该证据为物流仓储业务，与“产品标准化和AI降本增效”判断关联性弱。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3",
+        "vanke_2025_annual:narrative:27:9",
+        "vanke_2025_annual:narrative:26:8",
+        "vanke_2025_annual:narrative:24:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-04 引用 evidence_ids 包含 derived metrics，但判断中“2026年可能仍会出现流动性缺口”未直接引用任何流动性证据。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-06 引用 evidence_ids 包含 vanke_2025_annual:narrative:13:0，但该证据未直接支持“一旦主要合作银行收紧信用条件”的判断。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:37",
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "721d9441c86be31eaeeb2843d26004b73206b6200c8a92fab88615e19863f1f3",
+  "response_hash": "350ece2712e031aa0c8185f61f66b0b07bdd34653b7b595ae97dc1d658476273",
+  "run_id": "editorial-v4-qa:93fbbb81-acb9-4751-a8d5-350660efa0cf",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "93fbbb81-acb9-4751-a8d5-350660efa0cf",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T03:55:56+00:00"
+}

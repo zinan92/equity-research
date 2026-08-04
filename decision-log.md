@@ -2716,3 +2716,43 @@
 - Gotchas: filtered QA is not human approval; it only records the current
   deterministic interpretation of a raw model response. Any new packet,
   prompt, or filter version requires a fresh revalidation and completion audit.
+# 2026-08-04 · V4-P4 golden set and blind generalization
+
+## Decision
+
+Freeze Park's accepted five-report V4/P3 batch as a golden set and validate
+generalization with a company absent from both that set and the historical
+benchmark pool. Use the existing whole-report DeepSeek loop, official CNINFO
+packet, deterministic machine contract, independent QA and repair receipts.
+
+## Why
+
+The next risk is not another hand-picked sample; it is whether the aggressive,
+evidence-bound reader shape survives a true issuer. A golden set must constrain
+regression review without becoming prompt prose or evidence. A failed benchmark
+candidate must be rejected rather than silently counted as out-of-sample.
+
+## Evidence
+
+- Issue #698: `https://github.com/zinan92/equity-research/issues/698`.
+- Golden manifest: `artifacts/editorial-v4-p4/golden-set-manifest.json`.
+- Official 000002.SZ packet: SHA-256
+  `85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98`, two
+  official CNINFO PDFs, 50 evidence rows and eight financial facts.
+- Final blind receipt/audit: `artifacts/editorial-v4-p4/final-receipt.json` and
+  `artifacts/editorial-v4-p4/blind-acceptance-audit.json`; final iteration 15,
+  4,059 body characters, machine/filtered QA passed, review-only/action-blocked.
+- Rejected candidate receipt:
+  `artifacts/editorial-v4-p4/blind-candidate-rejections/300115.SZ.json`.
+
+## Gotchas
+
+- `300115.SZ` is a historical Ainiu/V4 benchmark and must never be called a
+  blind result; its real model call is retained only as a rejection receipt.
+- The independent model can report stale literal-anchor blockers for rounded
+  negative losses, deterministic derived percentages and long CNINFO narrative
+  IDs. The filter may remove only those cases after the packet-backed machine
+  contract passes; raw QA remains retained and visible.
+- Positive loss magnitudes such as “净亏损 885.56 亿元” are accepted only with
+  an explicit loss semantic and a bound negative source fact; unit conversion
+  does not authorize a new metric or Tier/publication credit.

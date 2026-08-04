@@ -13,8 +13,8 @@ from deepseek_writer import DEFAULT_KEY_FILE, DEFAULT_MODEL, call_structured_dee
 from editorial_v4_contract import EDITORIAL_V4_SCHEMA, SECTION_IDS, SECTION_TITLES, canonical_hash, validate_evidence_packet
 
 
-PROMPT_VERSION = "editorial-v4-whole-report-prompt-v2"
-GENERATOR_VERSION = "editorial-v4-whole-report-generator-v2"
+PROMPT_VERSION = "editorial-v4-whole-report-prompt-v3"
+GENERATOR_VERSION = "editorial-v4-whole-report-generator-v3"
 
 
 SYSTEM_PROMPT = """你是 Park Equity Research 的资深中文研究员。你要把一个已经冻结的、官方 PDF 页级绑定的 evidence packet 写成一篇爱牛式 V4 读者报告。
@@ -28,7 +28,7 @@ SYSTEM_PROMPT = """你是 Park Equity Research 的资深中文研究员。你要
 篇幅和结构不是摘要：请贴近输入 JSON 标注的 Round 7 V4 参考档案（总正文约 2429 字）。用户 JSON 的 length_contract 是硬验收，不是建议：总正文少于 2200 字或任一章低于其中的 per_section_min 就是失败。七章都必须有实质内容，不能用空泛同义句填充；每章至少包含一个具体证据或一个明确缺口；当材料不足时，写出缺口、为什么不能判断、下一步要验证什么。
 
 硬规则：
-1. 每个事实/数字都要在 claims 中列出 evidence_ids；evidence_ids 只能来自输入包；数字必须和 cited evidence 的 quoted_anchor/事实 value+unit 一致。官方表格的单位可能在表头而不在 quoted_anchor 中，此时沿用输入 evidence 的 unit，不要自行换算或补造精度。derived_metrics 的增长/下滑方向和幅度是确定性输入，模型不得自行计算。引用一个 derived_metric 时，evidence_ids 必须同时包含它的 current_evidence_id 和 previous_evidence_id，不能只引当前值。任何分析假设、证伪阈值或条件句中的数字（例如利率冲击阈值、份额下限）若未在 packet 中出现就不要写；改写为不带未经证据支持的数字的条件句。最新数据卡中的每个数字必须和该句中显示的事实 claim marker 一一对应，不能只挂增长 claim 而漏掉当期值 claim。
+1. 每个事实/数字都要在 claims 中列出 evidence_ids；evidence_ids 只能来自输入包；数字必须和 cited evidence 的 quoted_anchor/事实 value+unit 一致。官方表格的单位可能在表头而不在 quoted_anchor 中，此时沿用输入 evidence 的 unit，不要自行换算或补造精度。负数利润/亏损可以写成“净亏损 885.56 亿元”等语义金额，括号负号由“亏损/净亏损”承担；不得把正数伪装成利润，且必须仍绑定原始负值 evidence。若把元/千元换成亿元/万元显示，只能按 evidence 的 unit 做确定性换算并保留 derived_ids（比较数字必须绑定 derived_metrics），不得自行计算新指标。derived_metrics 的增长/下滑方向和幅度是确定性输入，模型不得自行计算。引用一个 derived_metric 时，evidence_ids 必须同时包含它的 current_evidence_id 和 previous_evidence_id，不能只引当前值。任何分析假设、证伪阈值或条件句中的数字（例如利率冲击阈值、份额下限）若未在 packet 中出现就不要写；改写为不带未经证据支持的数字的条件句。最新数据卡中的每个数字必须和该句中显示的事实 claim marker 一一对应，不能只挂增长 claim 而漏掉当期值 claim。
 2. 只要 claim 引用了 derived_metrics，就必须在 claim text 中同时写方向（增长/下滑/持平）和幅度（百分比或绝对差额），并填写 derived_ids。历史已披露实际值不得作为“如果……那么……”的结论；条件句只写未来/待验证假设。
 3. judgement 必须有证据 refs 和 falsifier；issuer_self_report 必须有显式自述措辞（如“公司披露”“年报自述”“公告披露”“年报引/年报提及”），且正文在同一完整句中保留对应的公司/年报归因；gap 必须说明具体缺口。不要把同一个 claim 同时标成多个概念：每条 claim 只选一个 kind。
 4. 不得输出目标价数字、仓位、买卖/加减仓/止损或执行动作；可以在 gap 中明确说明“未提供目标价/估值证据缺失”，但不能给出任何目标价或行动建议。
@@ -130,7 +130,7 @@ def build_request(packet: Mapping[str, Any], *, iteration: int = 0, repair_feedb
             directives.append(f"{claim_id or '相关 claim'}：逐项从当前输入 packet 复制真实存在的完整 evidence_id（包括 official/document 前缀）；不得缩短、猜测或把来源页码拼成不存在的 ID。若 packet 没有对应页级证据，改成 gap 或删除该具体事实。")
         elif str(item.get("category") or "").lower() == "provenance" or code.upper().startswith("E"):
             directives.append(f"{claim_id or '相关 claim'}：逐字核对 cited evidence 的 quoted_anchor；删除该页没有的具体词/数字，或改用包含该表述的正确页级 evidence。不要用语义相近但页内没有的改写冒充可核验事实。")
-        elif code in {"judgment_marker_missing", "overall_judgment_marker_missing"}:
+        elif code == "overall_judgment_marker_missing":
             directives.append("所有锋利定位、核心矛盾和白话结论判断都要有对应 [J-xx] claim、底层 refs 和 falsifier；overall_conclusion 也要带 marker。")
         elif code == "gap_unbound_source":
             directives.append(f"{claim_id or '相关 gap'}：只写输入包缺少什么、为什么不能判断和下一步验证，不要写‘公开资料显示/公开信息称’等无 refs 的事实。")
@@ -143,7 +143,17 @@ def build_request(packet: Mapping[str, Any], *, iteration: int = 0, repair_feedb
         elif code == "dossier_short":
             directives.append("整篇正文低于 Round 7 V4 篇幅合同；逐章补足具体官方 evidence、财务因果、风险证伪和白话解释，保留 aggressive [J] 判断，不要删章、压缩成摘要或用无证据数字扩写。")
         elif code == "judgment_marker_missing":
-            directives.append("将机器指出的锋利定位/核心矛盾句明确标注为 [J-xx]，并确保对应 judgment claim 有底层 evidence_ids 与 falsifier；保留这句的 aggressive 词汇，不要删除或改成平淡公司自述。")
+            excerpt = str(item.get("excerpt") or "").strip()
+            target_ids = []
+            if prior_dossier and excerpt:
+                for prior_claim in prior_dossier.get("claims") or []:
+                    if not isinstance(prior_claim, Mapping):
+                        continue
+                    claim_text = str(prior_claim.get("text") or "")
+                    if excerpt[:24] and excerpt[:24] in claim_text:
+                        target_ids.append(str(prior_claim.get("claim_id") or ""))
+            marker_hint = f"对应 marker 为 [{target_ids[0]}]" if target_ids and target_ids[0] else "对应已有的 [J-xx] marker"
+            directives.append(f"机器指出以下句子缺少同句判断标记：{excerpt or '见上一轮错误'}。必须把 {marker_hint} 直接放在这一个句子的末尾（不要只放在后一个句子或段落末尾），保留 aggressive 词汇；对应 judgment claim 仍须有底层 evidence_ids 与 falsifier。")
         elif code == "overall_judgment_marker_missing":
             directives.append("overall_conclusion 必须保留研究判断并在同一句加已有 [J-xx] 或 [F-xx] marker；不要删除结论来规避门禁，也不要加入行动指令。")
         elif code in {"claim_not_rendered", "orphan_marker", "claim_identity"}:

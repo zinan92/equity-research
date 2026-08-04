@@ -1,0 +1,161 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02b引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02b",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02b引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02b",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02a引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02a",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02a引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02a",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有事实性claim均明确标注为'公司披露'或'年报披露'，未将自述冒充独立验证。",
+    "同期对比数据均明确写出增长/下滑及幅度，符合规则2。",
+    "判断类claim均包含falsifier和底层evidence引用，符合judgment synthesis要求。",
+    "报告明确指出了数据缺口（如货币资金、经营现金流），未用空泛句子凑篇幅。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论J-08的文本中未显式标注[J-08]标记，违反judgment必须带[J-xx]标记的规则。",
+      "claim_id": "J-08",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02b引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02b",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02b引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02b",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02a引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02a",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "C-02a引用evidence_id 'official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1'，但evidence packet中该ID不存在。",
+      "claim_id": "C-02a",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-01引用evidence_id 'vanke_2025_annual:narrative:13:0'，但evidence packet中该ID不存在。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-04引用evidence_id 'vanke_2025_annual:narrative:91:37'，但evidence packet中该ID不存在。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_not_found",
+      "message": "J-05引用evidence_id 'vanke_2025_annual:narrative:33:13'，但evidence packet中该ID不存在。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:33:13"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论J-08的文本中未显式标注[J-08]标记，违反judgment必须带[J-xx]标记的规则。",
+      "claim_id": "J-08",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "2913c5fa3e6b5a17797a87571f92f5bb303fe87a0778a611c69ad1ecd0fe2e49",
+  "response_hash": "d0cfac9d3d0a6bcef9712911ab08954be40c544fada99539e4b8c0b81566e4bd",
+  "run_id": "editorial-v4-qa:cc744706-536a-4b3a-8241-e173b63d972d",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "cc744706-536a-4b3a-8241-e173b63d972d",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T04:30:11+00:00"
+}

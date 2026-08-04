@@ -1,0 +1,291 @@
+{
+  "schema_version": "editorial-v4-golden-set-v1",
+  "frozen_at": "2026-08-04",
+  "acceptance_basis": "Park explicitly approved the five-report V4/P3 batch in the controlling thread.",
+  "park_review_status": "accepted",
+  "golden_contract": "Round 7/Ainiu V4 seven-section whole-report contract",
+  "prose_reuse_for_generation": false,
+  "evidence_reuse_for_generation": false,
+  "review_only": true,
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "tickers": [
+    "000333.SZ",
+    "600519.SH",
+    "600900.SH",
+    "300750.SZ",
+    "000001.SZ"
+  ],
+  "reports": [
+    {
+      "ticker": "000333.SZ",
+      "issuer_name": "美的集团",
+      "final_iteration": 11,
+      "report_sha256": "4c24b33b3138d516be590e1860a7208a547a96a6e1cb21a406fd73a1b71c8b89",
+      "packet_hash": "effe415bd14924c71c639facc8604d39bbf0ca7270b25e612ebcd1c226fc74c7",
+      "report_chars": 2960,
+      "sections": {
+        "one_line_position": 462,
+        "founder_team": 267,
+        "timeline": 417,
+        "technology_products": 614,
+        "financial_valuation": 507,
+        "risks_commentary": 402,
+        "plain_language": 291
+      },
+      "section_contract": [
+        {
+          "id": "one_line_position",
+          "minimum_chars": 100
+        },
+        {
+          "id": "founder_team",
+          "minimum_chars": 100
+        },
+        {
+          "id": "timeline",
+          "minimum_chars": 300
+        },
+        {
+          "id": "technology_products",
+          "minimum_chars": 400
+        },
+        {
+          "id": "financial_valuation",
+          "minimum_chars": 350
+        },
+        {
+          "id": "risks_commentary",
+          "minimum_chars": 350
+        },
+        {
+          "id": "plain_language",
+          "minimum_chars": 150
+        }
+      ],
+      "judgment_count": 8,
+      "aggressive_judgment_count": 4,
+      "official_packet": true,
+      "model_provider": "DeepSeek",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "600519.SH",
+      "issuer_name": "贵州茅台",
+      "final_iteration": 13,
+      "report_sha256": "79d6e25c78e13487b43ec3ed1d1f785420c1d3660c01a5b66d7a3b88362544dc",
+      "packet_hash": "9fd9c8556326f8acb754f5641deb12d8e8f4512de5bf3e599f75a819d6fab895",
+      "report_chars": 2503,
+      "sections": {
+        "one_line_position": 111,
+        "founder_team": 180,
+        "timeline": 409,
+        "technology_products": 634,
+        "financial_valuation": 528,
+        "risks_commentary": 407,
+        "plain_language": 234
+      },
+      "section_contract": [
+        {
+          "id": "one_line_position",
+          "minimum_chars": 100
+        },
+        {
+          "id": "founder_team",
+          "minimum_chars": 100
+        },
+        {
+          "id": "timeline",
+          "minimum_chars": 300
+        },
+        {
+          "id": "technology_products",
+          "minimum_chars": 400
+        },
+        {
+          "id": "financial_valuation",
+          "minimum_chars": 350
+        },
+        {
+          "id": "risks_commentary",
+          "minimum_chars": 350
+        },
+        {
+          "id": "plain_language",
+          "minimum_chars": 150
+        }
+      ],
+      "judgment_count": 5,
+      "aggressive_judgment_count": 3,
+      "official_packet": true,
+      "model_provider": "DeepSeek",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "600900.SH",
+      "issuer_name": "长江电力",
+      "final_iteration": 7,
+      "report_sha256": "91bb3bab0eeb8e301747f13099fa07e849e9a8966695d5de4c0b85820fc31075",
+      "packet_hash": "c46c5da34bc36649efb2342248d64bb0b22b2d55443a86b9bb345c590aac02e5",
+      "report_chars": 2518,
+      "sections": {
+        "one_line_position": 279,
+        "founder_team": 218,
+        "timeline": 465,
+        "technology_products": 447,
+        "financial_valuation": 433,
+        "risks_commentary": 468,
+        "plain_language": 208
+      },
+      "section_contract": [
+        {
+          "id": "one_line_position",
+          "minimum_chars": 100
+        },
+        {
+          "id": "founder_team",
+          "minimum_chars": 100
+        },
+        {
+          "id": "timeline",
+          "minimum_chars": 300
+        },
+        {
+          "id": "technology_products",
+          "minimum_chars": 400
+        },
+        {
+          "id": "financial_valuation",
+          "minimum_chars": 350
+        },
+        {
+          "id": "risks_commentary",
+          "minimum_chars": 350
+        },
+        {
+          "id": "plain_language",
+          "minimum_chars": 150
+        }
+      ],
+      "judgment_count": 10,
+      "aggressive_judgment_count": 2,
+      "official_packet": true,
+      "model_provider": "DeepSeek",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "300750.SZ",
+      "issuer_name": "宁德时代",
+      "final_iteration": 8,
+      "report_sha256": "e2384ad8b7bb556fbd452ff92a6f103c7cee9782f79b2e5b67bceca67c64ef3c",
+      "packet_hash": "e057471e09095e20abe87a5c29fcf08f8a0e2b155cd4b67ddc11d5ec3304e561",
+      "report_chars": 2538,
+      "sections": {
+        "one_line_position": 184,
+        "founder_team": 250,
+        "timeline": 436,
+        "technology_products": 597,
+        "financial_valuation": 475,
+        "risks_commentary": 405,
+        "plain_language": 191
+      },
+      "section_contract": [
+        {
+          "id": "one_line_position",
+          "minimum_chars": 100
+        },
+        {
+          "id": "founder_team",
+          "minimum_chars": 100
+        },
+        {
+          "id": "timeline",
+          "minimum_chars": 300
+        },
+        {
+          "id": "technology_products",
+          "minimum_chars": 400
+        },
+        {
+          "id": "financial_valuation",
+          "minimum_chars": 350
+        },
+        {
+          "id": "risks_commentary",
+          "minimum_chars": 350
+        },
+        {
+          "id": "plain_language",
+          "minimum_chars": 150
+        }
+      ],
+      "judgment_count": 10,
+      "aggressive_judgment_count": 3,
+      "official_packet": true,
+      "model_provider": "DeepSeek",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    },
+    {
+      "ticker": "000001.SZ",
+      "issuer_name": "平安银行",
+      "final_iteration": 7,
+      "report_sha256": "ac699929a402c01a3e0b794d1d788af3cb381b02fcfbba303f30f8661ad364cb",
+      "packet_hash": "bcb95f79c9afa438973782d375619dfb0f40b22d23f54a01c782e19274fe3792",
+      "report_chars": 2865,
+      "sections": {
+        "one_line_position": 237,
+        "founder_team": 204,
+        "timeline": 472,
+        "technology_products": 434,
+        "financial_valuation": 567,
+        "risks_commentary": 551,
+        "plain_language": 400
+      },
+      "section_contract": [
+        {
+          "id": "one_line_position",
+          "minimum_chars": 100
+        },
+        {
+          "id": "founder_team",
+          "minimum_chars": 100
+        },
+        {
+          "id": "timeline",
+          "minimum_chars": 300
+        },
+        {
+          "id": "technology_products",
+          "minimum_chars": 400
+        },
+        {
+          "id": "financial_valuation",
+          "minimum_chars": 350
+        },
+        {
+          "id": "risks_commentary",
+          "minimum_chars": 350
+        },
+        {
+          "id": "plain_language",
+          "minimum_chars": 150
+        }
+      ],
+      "judgment_count": 13,
+      "aggressive_judgment_count": 2,
+      "official_packet": true,
+      "model_provider": "DeepSeek",
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_publication_credit": true
+    }
+  ]
+}

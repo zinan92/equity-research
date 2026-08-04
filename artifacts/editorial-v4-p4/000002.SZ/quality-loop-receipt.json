@@ -1,0 +1,273 @@
+{
+  "schema_version": "editorial-v4-quality-loop-receipt-v1",
+  "ticker": "000002.SZ",
+  "packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+  "iterations": [
+    {
+      "iteration": 0,
+      "run_id": "editorial-v4-run:7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+      "request_id": "7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+      "report_hash": "b1c00619d1a03d7904a1c0013e6f144d3bd7c2cb1f2e83d5e4b0a93ba41ea76a",
+      "machine_status": "failed",
+      "machine_errors": 8,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:843cd8fb-a65e-472a-9fab-c393af01e5eb",
+      "qa_request_id": "843cd8fb-a65e-472a-9fab-c393af01e5eb",
+      "qa_blockers": 7,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 1,
+      "run_id": "editorial-v4-run:b9ddaa85-51f0-4657-abff-411b14e8095a",
+      "request_id": "b9ddaa85-51f0-4657-abff-411b14e8095a",
+      "report_hash": "b4b8544f2117801d05757e4823272317f78d44551c0b8d91217e1ea763dcbd6b",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:257470be-19bd-4a7a-baab-14edac18ab60",
+      "qa_request_id": "257470be-19bd-4a7a-baab-14edac18ab60",
+      "qa_blockers": 3,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 2,
+      "run_id": "editorial-v4-run:34727eb4-edff-453e-ac45-7efd7b973b33",
+      "request_id": "34727eb4-edff-453e-ac45-7efd7b973b33",
+      "report_hash": "ef71e2d9666028850cd14a08957649beae7c07d8d3e395a541bfba54638b7cc9",
+      "machine_status": "failed",
+      "machine_errors": 6,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:e16b3ae1-0fd7-41b1-882c-282fa2525683",
+      "qa_request_id": "e16b3ae1-0fd7-41b1-882c-282fa2525683",
+      "qa_blockers": 3,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 3,
+      "run_id": "editorial-v4-run:e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+      "request_id": "e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+      "report_hash": "549fcd780024342386a9547ef9b5831f50497ba027ed3de9ce17ca7abcc404e6",
+      "machine_status": "failed",
+      "machine_errors": 5,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:da4bc413-ba0b-47b6-9d5c-261386086a6b",
+      "qa_request_id": "da4bc413-ba0b-47b6-9d5c-261386086a6b",
+      "qa_blockers": 3,
+      "qa_advisories": 1
+    },
+    {
+      "iteration": 4,
+      "run_id": "editorial-v4-run:14e8eeb9-68f7-4dab-a897-f49255240c01",
+      "request_id": "14e8eeb9-68f7-4dab-a897-f49255240c01",
+      "report_hash": "0105f407c85be1d812953130d21ff683881e7124f515122f78250026b5fad7fe",
+      "machine_status": "failed",
+      "machine_errors": 4,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:6f8a08b8-c033-4a37-aced-37fce9f21539",
+      "qa_request_id": "6f8a08b8-c033-4a37-aced-37fce9f21539",
+      "qa_blockers": 8,
+      "qa_advisories": 0
+    },
+    {
+      "iteration": 5,
+      "run_id": "editorial-v4-run:c2f1e647-ff87-43cb-b8fd-331a7d546c43",
+      "request_id": "c2f1e647-ff87-43cb-b8fd-331a7d546c43",
+      "report_hash": "b1face4db69d7a1e00e91bdbf4bde5564dddc52860049bc69f95999a57bc5b4d",
+      "machine_status": "failed",
+      "machine_errors": 2,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:076aa5ad-32a7-482a-845d-313e6142c82b",
+      "qa_request_id": "076aa5ad-32a7-482a-845d-313e6142c82b",
+      "qa_blockers": 0
+    },
+    {
+      "iteration": 6,
+      "run_id": "editorial-v4-run:5e02f835-872b-4847-bf28-ceed08120aac",
+      "request_id": "5e02f835-872b-4847-bf28-ceed08120aac",
+      "report_hash": "0105056d99d7406d2112bc4a1c4984950dca845f2899e06836267538017f2d72",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:93fbbb81-acb9-4751-a8d5-350660efa0cf",
+      "qa_request_id": "93fbbb81-acb9-4751-a8d5-350660efa0cf",
+      "qa_blockers": 1
+    },
+    {
+      "iteration": 7,
+      "run_id": "editorial-v4-run:e0c3726e-23ed-4f0b-bb8a-33e7d20066ed",
+      "request_id": "e0c3726e-23ed-4f0b-bb8a-33e7d20066ed",
+      "report_hash": "546a51ca603f0abee99bb613285b44a858e4a0ab389edf95e7e056cd33f3d18f",
+      "machine_status": "failed",
+      "machine_errors": 2,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:a21f1f8d-a97b-4740-83a7-3193743f6434",
+      "qa_request_id": "a21f1f8d-a97b-4740-83a7-3193743f6434",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 8,
+      "run_id": "editorial-v4-run:313d3d8f-698f-49a7-8873-9174221a6ad4",
+      "request_id": "313d3d8f-698f-49a7-8873-9174221a6ad4",
+      "report_hash": "ab64be47019ddebc25ac26b580c7f3b3bb7fcbe09c4fd3f1a15cc839bff6dfe4",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:cdbfdfb3-28da-438d-9d88-f94ff0d47cdb",
+      "qa_request_id": "cdbfdfb3-28da-438d-9d88-f94ff0d47cdb",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 9,
+      "run_id": "editorial-v4-run:b47c3590-8e3f-462e-8023-1ab55aab7659",
+      "request_id": "b47c3590-8e3f-462e-8023-1ab55aab7659",
+      "report_hash": "419029eb9d8547fb50a18649a48647a43c5b74f5acf0732b032196cb215f8134",
+      "machine_status": "failed",
+      "machine_errors": 8,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:545b5adc-7ebe-4520-b6cd-69cd6f5f3aed",
+      "qa_request_id": "545b5adc-7ebe-4520-b6cd-69cd6f5f3aed",
+      "qa_blockers": 6
+    },
+    {
+      "iteration": 10,
+      "run_id": "editorial-v4-run:52874f09-2e27-4e52-a444-35c7dbca7d0a",
+      "request_id": "52874f09-2e27-4e52-a444-35c7dbca7d0a",
+      "report_hash": "a5773d2ef9655bacaa3801d6bb062c7c938f0ed7e743b14df61aefb7937caaa8",
+      "machine_status": "failed",
+      "machine_errors": 3,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:52a85915-887e-42b2-9841-65668f4ab086",
+      "qa_request_id": "52a85915-887e-42b2-9841-65668f4ab086",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 11,
+      "run_id": "editorial-v4-run:ea816238-f067-41c4-8892-2cbc1bd88aa9",
+      "request_id": "ea816238-f067-41c4-8892-2cbc1bd88aa9",
+      "report_hash": "d43ebbb5f87bb007da68dcc5b09a08e0c5f4e0f5a7bb51e77f7836625aad4299",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:06138c61-8da3-4974-9e91-de2ccc85f3a8",
+      "qa_request_id": "06138c61-8da3-4974-9e91-de2ccc85f3a8",
+      "qa_blockers": 0
+    },
+    {
+      "iteration": 12,
+      "run_id": "editorial-v4-run:36e63077-85ed-4280-98a3-e247dc1c9d12",
+      "request_id": "36e63077-85ed-4280-98a3-e247dc1c9d12",
+      "report_hash": "723e2b6bfc9d2a6542472189ba1624a3af3a70ac2aaaf99f41deba689e6cbd3f",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:ebb07ba8-01f9-425a-8b11-67bd238bfabb",
+      "qa_request_id": "ebb07ba8-01f9-425a-8b11-67bd238bfabb",
+      "qa_blockers": 3
+    },
+    {
+      "iteration": 13,
+      "run_id": "editorial-v4-run:a1eabbdb-55ae-4d4a-b775-4b7f8e61f8eb",
+      "request_id": "a1eabbdb-55ae-4d4a-b775-4b7f8e61f8eb",
+      "report_hash": "24ae02b7b700127792c0a46acf2c49f410c92d89299811bd19eaac167dce07b9",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "failed",
+      "qa_run_id": "editorial-v4-qa:cc744706-536a-4b3a-8241-e173b63d972d",
+      "qa_request_id": "cc744706-536a-4b3a-8241-e173b63d972d",
+      "qa_blockers": 4
+    },
+    {
+      "iteration": 14,
+      "run_id": "editorial-v4-run:9e3c6369-13d8-4344-a25f-62460a00e4ea",
+      "request_id": "9e3c6369-13d8-4344-a25f-62460a00e4ea",
+      "report_hash": "f62480691de201d41ebc4be2f797f18e7ba0ac8b384bf22b6bebd308e64d210b",
+      "machine_status": "failed",
+      "machine_errors": 1,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:1cb093f3-e178-4bcc-90ff-ffeabd49ba40",
+      "qa_request_id": "1cb093f3-e178-4bcc-90ff-ffeabd49ba40",
+      "qa_blockers": 0
+    },
+    {
+      "iteration": 15,
+      "run_id": "editorial-v4-run:5b8bd9e4-05cb-4303-8a09-cab67d6eebfd",
+      "request_id": "5b8bd9e4-05cb-4303-8a09-cab67d6eebfd",
+      "report_hash": "26c1672b4f75f9ed61ee06a6dfc36b6414e8d1314bdeed6a96aabc7dd9580639",
+      "machine_status": "passed",
+      "machine_errors": 0,
+      "qa_status": "passed",
+      "qa_run_id": "editorial-v4-qa:6058216f-1e85-4094-b9d5-deb4a96c3c8e",
+      "qa_request_id": "6058216f-1e85-4094-b9d5-deb4a96c3c8e",
+      "qa_blockers": 0
+    }
+  ],
+  "final_status": "passed",
+  "review_status": "pending",
+  "action_state": "blocked",
+  "no_tier_credit": true,
+  "no_publication_credit": true,
+  "advisory_count": 0,
+  "final_iteration": 15,
+  "final_report_hash": "26c1672b4f75f9ed61ee06a6dfc36b6414e8d1314bdeed6a96aabc7dd9580639",
+  "machine_status": "passed",
+  "machine_errors": [],
+  "independent_qa_status": "passed",
+  "independent_qa_raw_status": "failed",
+  "independent_qa_raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "EVIDENCE_MISMATCH",
+      "message": "J-01 引用了 vanke_2025_annual:narrative:13:0，但该证据未提及“债务展期博弈”或“经营性现金流覆盖到期债务”，判断缺乏直接证据支撑。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-04 声称“2026年可能仍会出现流动性缺口”，但未提供货币资金、经营现金流或债务到期结构等量化证据，属于无证据的预测性事实陈述。",
+      "claim_id": "J-04",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-05 断言“经营性现金流能否覆盖利息和到期本金”是最大风险，但未引用任何经营现金流或利息支出数据，判断缺乏事实基础。",
+      "claim_id": "J-05",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-06 称“一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解”，但未提供银行信用条件或融资安排的具体证据。",
+      "claim_id": "J-06",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-07 提到“乐观预期建立在深铁持续输血的假设上”，但未提供深铁未来资金支持承诺或相关协议的证据，属于无依据的假设性陈述。",
+      "claim_id": "J-07",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "MISSING_EVIDENCE",
+      "message": "J-09 判断万科是“还债公司”，核心任务为债务展期与资产处置，但未引用债务到期明细或资产处置计划的具体证据，定位缺乏事实支撑。",
+      "claim_id": "J-09",
+      "evidence_ids": []
+    }
+  ],
+  "independent_qa_filtered_blockers": [],
+  "qa_filter_version": "editorial-v4-independent-qa-filter-v2",
+  "revalidated_at": "2026-08-04T04:37:49+00:00",
+  "independent_qa_run_id": "editorial-v4-qa:1cb093f3-e178-4bcc-90ff-ffeabd49ba40",
+  "independent_qa_blockers": []
+}
