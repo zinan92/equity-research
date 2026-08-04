@@ -1,0 +1,93 @@
+{
+  "schema_version": "editorial-v4-p4-blind-acceptance-audit-v1",
+  "generated_at": "2026-08-04T04:46:36+00:00",
+  "golden_manifest_hash": "4e4ba47bbc3dd9f85982dd65fdf9a9dac3fc38c1933805624bd686857adf4c28",
+  "golden_checks": {
+    "park_review_accepted": true,
+    "five_report_set": true,
+    "no_prose_reuse": true,
+    "no_evidence_reuse": true,
+    "all_review_only": true
+  },
+  "blind_ticker": "000002.SZ",
+  "blind_checks": {
+    "not_in_golden_set": true,
+    "official_packet": true,
+    "fresh_deepseek_receipt": true,
+    "no_golden_text_in_request": true,
+    "blind_audit_passed": true,
+    "review_only": true
+  },
+  "blind_report": {
+    "ticker": "000002.SZ",
+    "issuer_name": "万科A",
+    "final_iteration": 15,
+    "final_status": "passed",
+    "checks": {
+      "machine": true,
+      "sections": true,
+      "body_chars": true,
+      "aggressive_voice": true,
+      "judgment_refs_and_falsifiers": true,
+      "official_packet": true,
+      "deepseek_run": true,
+      "qa_filtered": true,
+      "review_boundary": true,
+      "persistent_outputs": true
+    },
+    "failed_checks": [],
+    "machine_errors": [],
+    "section_checks": {
+      "one_line_position": {
+        "chars": 298,
+        "minimum": 100,
+        "passed": true
+      },
+      "founder_team": {
+        "chars": 311,
+        "minimum": 100,
+        "passed": true
+      },
+      "timeline": {
+        "chars": 530,
+        "minimum": 300,
+        "passed": true
+      },
+      "technology_products": {
+        "chars": 1102,
+        "minimum": 400,
+        "passed": true
+      },
+      "financial_valuation": {
+        "chars": 636,
+        "minimum": 350,
+        "passed": true
+      },
+      "risks_commentary": {
+        "chars": 681,
+        "minimum": 350,
+        "passed": true
+      },
+      "plain_language": {
+        "chars": 501,
+        "minimum": 150,
+        "passed": true
+      }
+    },
+    "body_chars": 4059,
+    "judgment_count": 9,
+    "aggressive_judgment_count": 2,
+    "raw_qa_blockers": 6,
+    "filtered_qa_blockers": 0,
+    "qa_path": "000002.SZ/iterations/15/independent-qa-filtered.json",
+    "packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+    "report_hash": "26c1672b4f75f9ed61ee06a6dfc36b6414e8d1314bdeed6a96aabc7dd9580639",
+    "review_only": true,
+    "no_tier_credit": true,
+    "no_publication_credit": true
+  },
+  "all_passed": true,
+  "review_only": true,
+  "no_tier_credit": true,
+  "no_publication_credit": true
+}

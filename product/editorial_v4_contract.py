@@ -39,6 +39,7 @@ ABSENCE_WORDS = re.compile(r"未提供|没有|缺失|无法|不提供|不含|禁
 CONDITIONAL_RE = re.compile(r"如果.{0,80}(?:那么|则)|若.{0,80}(?:那么|则)|假如.{0,80}(?:那么|则)")
 COMPARISON_WORDS = re.compile(r"同比|环比|较上期|较去年|增长|下滑|下降|增加|减少|持平|提升|回落")
 SELF_REPORT_WORDS = re.compile(r"公司披露|年报披露|年报自述|公告披露|公司自述|公司宣称|公司声称|年报宣称|管理层表示|公司称|公司认为|据年报|年报引|年报提及|年报坦承|年报称|年报说明|公司年报")
+LOSS_SEMANTIC_WORDS = re.compile(r"亏损|净亏损|损失|负")
 THIRD_PARTY_CUES = re.compile(
     r"欧睿|Euromonitor|产业在线|奥维|MIR|睿工业|IDC|Gartner|弗若斯特|Frost|SNE|NBD|新华|CPNN|"
     r"东财|东方财富|Wind|彭博|Bloomberg"
@@ -211,7 +212,13 @@ _UNIT_TO_BASE = {
 }
 
 
-def _numeric_token_matches_evidence(token: str, refs: list[str], evidence_by_id: Mapping[str, Mapping[str, Any]]) -> bool:
+def _numeric_token_matches_evidence(
+    token: str,
+    refs: list[str],
+    evidence_by_id: Mapping[str, Mapping[str, Any]],
+    *,
+    allow_absolute: bool = False,
+) -> bool:
     """Close a displayed amount against the frozen fact value and unit.
 
     Official table anchors often carry the number but put the unit in a
@@ -243,7 +250,15 @@ def _numeric_token_matches_evidence(token: str, refs: list[str], evidence_by_id:
         if not isinstance(value, (int, float)) or unit not in _UNIT_TO_BASE:
             continue
         expected_base = float(value) * _UNIT_TO_BASE[unit]
-        if abs(displayed_base - expected_base) <= max(tolerance, abs(expected_base) * 1e-9):
+        candidates = [expected_base]
+        # Losses are often written as a positive display amount with an
+        # explicit semantic cue ("净亏损 59.52 亿元").  The sign then comes
+        # from the wording, while the page-bound fact remains negative.  Do
+        # not make this a global sign relaxation: callers must opt in only
+        # when the claim/body carries that loss semantic.
+        if allow_absolute and expected_base < 0:
+            candidates.append(abs(expected_base))
+        if any(abs(displayed_base - expected) <= max(tolerance, abs(expected) * 1e-9) for expected in candidates):
             return True
     return False
 
@@ -258,7 +273,13 @@ def _is_year_token(token: str) -> bool:
     return len(bare) == 4 and bare.startswith(("19", "20"))
 
 
-def _numeric_token_in_refs(token: str, refs: list[str], evidence_by_id: Mapping[str, Mapping[str, Any]]) -> bool:
+def _numeric_token_in_refs(
+    token: str,
+    refs: list[str],
+    evidence_by_id: Mapping[str, Mapping[str, Any]],
+    *,
+    allow_absolute: bool = False,
+) -> bool:
     """Check one displayed numeric literal against only its claim's refs.
 
     This is deliberately claim-local.  A ``20%`` in a different claim must not
@@ -273,7 +294,7 @@ def _numeric_token_in_refs(token: str, refs: list[str], evidence_by_id: Mapping[
         )
         if normalized and normalized in re.sub(r"[\s,]", "", text):
             return True
-        if _numeric_token_matches_evidence(token, [ref], evidence_by_id):
+        if _numeric_token_matches_evidence(token, [ref], evidence_by_id, allow_absolute=allow_absolute):
             return True
     return False
 
@@ -282,6 +303,9 @@ def _numeric_token_in_derived(
     token: str,
     derived_ids: list[str],
     derived_by_id: Mapping[str, Mapping[str, Any]],
+    evidence_by_id: Mapping[str, Mapping[str, Any]],
+    *,
+    allow_absolute: bool = False,
 ) -> bool:
     """Allow only deterministic derived values, with displayed precision."""
     raw = re.sub(r"[\s,]", "", token)
@@ -295,24 +319,36 @@ def _numeric_token_in_derived(
         displayed = float(raw)
     except ValueError:
         return False
+    token_base = _UNIT_TO_BASE.get(unit, 1.0)
     for derived_id in derived_ids:
         item = derived_by_id.get(derived_id) or {}
-        candidates: list[float] = []
+        candidates: list[tuple[float, float]] = []
         if unit == "%":
             value = item.get("percent_change")
             if isinstance(value, (int, float)):
-                candidates.append(float(value))
+                # Percentage changes are displayed as magnitudes together
+                # with a deterministic direction word (增长/下滑/收窄).
+                candidates.append((abs(float(value)), 1.0))
         else:
+            current_ref = str(item.get("current_evidence_id") or "")
+            evidence_unit = str((evidence_by_id.get(current_ref) or {}).get("unit") or "")
+            evidence_base = _UNIT_TO_BASE.get(evidence_unit, 1.0)
             for key in ("absolute_change", "current_value", "previous_value"):
                 value = item.get(key)
                 if isinstance(value, (int, float)):
-                    candidates.append(float(value))
-        for expected in candidates:
+                    # Convert the deterministic packet value (usually 元 or
+                    # 千元) to the unit the writer actually displayed.  A
+                    # negative profit/loss may be shown as a positive amount
+                    # when the text explicitly says "净亏损"; permit that
+                    # semantic magnitude while preserving the packet sign.
+                    candidates.append((float(value) * evidence_base / token_base, 1.0))
+        for expected, _ in candidates:
             # The displayed decimal precision controls the deterministic
             # rounding tolerance (42.3% may represent 42.283446%).
             decimals = len(raw.split(".", 1)[1]) if "." in raw else 0
             tolerance = max(0.5 * (10 ** (-decimals)), abs(expected) * 1e-9)
-            if abs(displayed - expected) <= tolerance:
+            possible = (expected, abs(expected)) if expected < 0 and allow_absolute else (expected,)
+            if any(abs(displayed - candidate) <= tolerance for candidate in possible):
                 return True
     return False
 
@@ -330,10 +366,11 @@ def _numeric_claim_errors(
     errors: list[dict[str, Any]] = []
     derived_ids = derived_ids or []
     derived_by_id = derived_by_id or {}
+    allow_absolute = bool(LOSS_SEMANTIC_WORDS.search(value))
     for token in _numeric_tokens(value):
         if _is_year_token(token):
             continue
-        if not _numeric_token_in_refs(token, refs, evidence_by_id) and not _numeric_token_in_derived(token, derived_ids, derived_by_id):
+        if not _numeric_token_in_refs(token, refs, evidence_by_id, allow_absolute=allow_absolute) and not _numeric_token_in_derived(token, derived_ids, derived_by_id, evidence_by_id, allow_absolute=allow_absolute):
             errors.append(
                 _error(
                     "judgment_numeric_unbound" if field == "falsifier" else "numeric_claim_unbound",
@@ -473,7 +510,7 @@ def validate_dossier(dossier: Mapping[str, Any], packet: Mapping[str, Any]) -> d
             ]
             normalized_quote = re.sub(r"[\s,]", "", quoted)
             for number in long_numbers:
-                if re.sub(r"[\s,]", "", number) not in normalized_quote and not _numeric_token_matches_evidence(number, refs, evidence_by_id):
+                if re.sub(r"[\s,]", "", number) not in normalized_quote and not _numeric_token_matches_evidence(number, refs, evidence_by_id, allow_absolute=bool(LOSS_SEMANTIC_WORDS.search(text))):
                     errors.append(_error("numeric_quote_mismatch", "numeric claim value is not present in cited page anchor", claim_id=claim_id, number=number))
         # Judgments may be sharp and synthetic, but they cannot smuggle in a
         # made-up threshold, percentage, or other numeric premise.  A future
@@ -556,7 +593,7 @@ def validate_dossier(dossier: Mapping[str, Any], packet: Mapping[str, Any]) -> d
             # closure.
             if ticker_digits and re.sub(r"[^0-9]", "", token) == ticker_digits:
                 continue
-            if not any(_number_token_is_closed(token, text) for text in claim_texts) and not _numeric_token_in_refs(token, refs, evidence_by_id):
+            if not any(_number_token_is_closed(token, text) for text in claim_texts) and not _numeric_token_in_refs(token, refs, evidence_by_id, allow_absolute=any(LOSS_SEMANTIC_WORDS.search(text) for text in claim_texts)):
                 errors.append(_error("body_numeric_unbound", "body numeric literal is not closed by the same sentence's claim/evidence", token=token, claim_ids=marker_ids))
         # Third-party rankings or market statistics inside an issuer filing
         # remain company-reported material.  Attribution must precede the

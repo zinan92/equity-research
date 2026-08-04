@@ -78,8 +78,10 @@ def main() -> None:
             receipt["final_iteration"] = last_iter
             receipt["final_report_hash"] = canonical_hash(prior)
             receipt["machine_status"] = machine["status"]
+            receipt["machine_errors"] = machine.get("errors") or []
             receipt["independent_qa_status"] = qa["status"]
             receipt["independent_qa_raw_status"] = qa.get("raw_status") or qa.get("status")
+            receipt["independent_qa_raw_blockers"] = qa.get("raw_blockers") or []
             receipt["independent_qa_filtered_blockers"] = qa.get("blockers") or []
             receipt["qa_filter_version"] = qa.get("filter_version")
             receipt["final_status"] = "passed" if machine.get("status") == "passed" and qa.get("status") == "passed" else "needs_review"
@@ -108,7 +110,22 @@ def main() -> None:
         if next_machine["status"] == "passed" and next_qa["status"] == "passed":
             write_draft(dossier, out)
             render_dossier(dossier, packet, out)
-            receipt.update({"final_iteration": iteration, "final_report_hash": canonical_hash(dossier), "machine_status": "passed", "independent_qa_status": "passed", "final_status": "passed", "review_status": "pending", "action_state": "blocked", "no_tier_credit": True, "no_publication_credit": True})
+            receipt.update({
+                "final_iteration": iteration,
+                "final_report_hash": canonical_hash(dossier),
+                "machine_status": "passed",
+                "machine_errors": [],
+                "independent_qa_status": "passed",
+                "independent_qa_raw_status": next_qa.get("raw_status") or next_qa.get("status"),
+                "independent_qa_raw_blockers": next_qa.get("raw_blockers") or [],
+                "independent_qa_filtered_blockers": next_qa.get("blockers") or [],
+                "qa_filter_version": next_qa.get("filter_version"),
+                "final_status": "passed",
+                "review_status": "pending",
+                "action_state": "blocked",
+                "no_tier_credit": True,
+                "no_publication_credit": True,
+            })
             break
     else:
         receipt.update({"final_iteration": last_iter, "final_report_hash": canonical_hash(prior), "final_status": "needs_review", "machine_status": last_machine.get("status"), "machine_errors": last_machine.get("errors") or [], "independent_qa_status": last_qa.get("status"), "independent_qa_run_id": last_qa.get("run_id"), "independent_qa_blockers": last_qa.get("blockers") or []})

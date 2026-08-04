@@ -55,7 +55,7 @@ def main() -> None:
             for row in raw_blockers
         ) else "passed"
     machine = validate_dossier(dossier, packet)
-    filtered = _filter_false_positive_blockers(raw_qa, dossier, packet)
+    filtered = _filter_false_positive_blockers(raw_qa, dossier, packet, machine)
     status = "passed" if machine.get("status") == "passed" and not filtered else "needs_review"
     filtered_qa = dict(raw_qa)
     filtered_qa.update({

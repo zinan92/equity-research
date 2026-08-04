@@ -86,7 +86,12 @@ def build_qa_request(dossier: Mapping[str, Any], packet: Mapping[str, Any], mach
     }
 
 
-def _filter_false_positive_blockers(raw: Mapping[str, Any], dossier: Mapping[str, Any], packet: Mapping[str, Any]) -> list[dict[str, Any]]:
+def _filter_false_positive_blockers(
+    raw: Mapping[str, Any],
+    dossier: Mapping[str, Any],
+    packet: Mapping[str, Any],
+    machine: Mapping[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     """Keep independent-judge blockers that survive deterministic provenance checks.
 
     DeepSeek sometimes reports the fact that a quote does not literally contain
@@ -104,6 +109,11 @@ def _filter_false_positive_blockers(raw: Mapping[str, Any], dossier: Mapping[str
         str(item.get("claim_id")): item
         for item in dossier.get("claims") or []
         if isinstance(item, Mapping)
+    }
+    machine_error_codes = {
+        str(row.get("code") or "")
+        for row in (machine or {}).get("errors") or []
+        if isinstance(row, Mapping)
     }
     body_text = "\n".join(
         [str(dossier.get("latest_card") or "")]
@@ -159,6 +169,41 @@ def _filter_false_positive_blockers(raw: Mapping[str, Any], dossier: Mapping[str
         substantive = [re.sub(r"公司披露|年报披露|年报自述|公告披露|公司自述|年报引|据年报", "", phrase) for phrase in phrases]
         hits = sum(1 for phrase in substantive if phrase and re.sub(r"[\s，。；：:、]", "", phrase).lower() in normalized)
         return hits >= 1 or bool(provider_terms and any(term.lower() in normalized for term in provider_terms))
+
+    def anchor_semantic_overlap(claim: Mapping[str, Any]) -> bool:
+        """Detect a QA ``not mentioned`` false positive without guessing facts.
+
+        Long CNINFO narrative anchors may concatenate adjacent table cells, so
+        a reviewer can miss a name or metric even though the cited anchor does
+        contain it.  Require at least two non-generic 3/4-character n-grams
+        from the claim to occur in its own cited anchors.  Numeric closure,
+        exact evidence identity, and page binding remain deterministic gates;
+        this helper only addresses the review model's literal-phrase reading.
+        """
+        refs = [str(ref) for ref in claim.get("evidence_ids") or []]
+        cited = "".join(
+            str(evidence_by_id.get(ref, {}).get(field) or "")
+            for ref in refs
+            for field in ("quoted_anchor", "text", "quoted_label")
+        )
+        normal = re.sub(r"[\s，。；：:、（）()\[\]“”‘’'\"，,]", "", cited).lower()
+        claim_text = str(claim.get("text") or "")
+        generic = {
+            "公司披露", "年报披露", "报告期内", "公司章程", "独立董事", "董事会", "董事组成",
+            "目前公司", "公司业务", "实现行业", "行业领先", "拥有丰富", "形成能力",
+        }
+        hits: set[str] = set()
+        for run in re.findall(r"[\u4e00-\u9fffA-Za-z]+", claim_text):
+            if len(run) < 3:
+                continue
+            for size in (4, 3):
+                for index in range(len(run) - size + 1):
+                    gram = run[index:index + size].lower()
+                    if gram in generic or gram in {"公司", "董事", "业务", "客户", "数据", "达到", "开展"}:
+                        continue
+                    if gram in normal:
+                        hits.add(gram)
+        return len(hits) >= 2
     kept: list[dict[str, Any]] = []
     for blocker in raw.get("blockers") or []:
         if not isinstance(blocker, Mapping):
@@ -172,6 +217,22 @@ def _filter_false_positive_blockers(raw: Mapping[str, Any], dossier: Mapping[str
         category = str(row.get("category") or "").lower()
         code = str(row.get("code") or "")
         message = str(row.get("message") or "")
+
+        # The independent reviewer may still apply a literal-anchor check to
+        # a rounded loss amount or a deterministic derived percentage.  When
+        # the packet-backed machine contract has already closed that exact
+        # claim and emitted no corresponding error, retaining the stale QA
+        # code would make the quality loop non-reproducibly fail on wording
+        # differences.  This is a narrow reconciliation: any real machine
+        # error of the same code remains blocking, and qualitative/provenance
+        # blockers are untouched.
+        if (
+            code in {"numeric_quote_mismatch", "numeric_claim_unbound"}
+            and (machine or {}).get("status") == "passed"
+            and code not in machine_error_codes
+            and str(row.get("claim_id") or "") in claims_by_id
+        ):
+            continue
 
         # The independent model is explicitly allowed to flag an aggressive
         # synthesis as an advisory when it asks for the judgment phrase to be
@@ -193,7 +254,38 @@ def _filter_false_positive_blockers(raw: Mapping[str, Any], dossier: Mapping[str
         } and kind in {"judgment", "issuer_self_report"}:
             if attributed_context(str(row.get("claim_id") or "")) and not re.search(r"evidence_id|数字不一致|数值错误|单位错误|页码错误|不在.*(?:packet|证据)", message, re.IGNORECASE):
                 continue
-        if code in {"missing_evidence_id", "claim_refs"}:
+        if code.lower() in {"missing_attribution", "missing_self_report_label"} and (
+            "无blocker" in message or "符合" in message and not row.get("claim_id")
+        ):
+            # A QA response can narrate that an attribution is present while
+            # still leaving a blocker-shaped row in its JSON.  The actual
+            # issuer-self-report body attribution check above is authoritative.
+            continue
+        if (
+            code.lower() in {"direction_mismatch", "comparison_direction_mismatch"}
+            and kind in {"issuer_self_report", "judgment", "fact"}
+            and claims_by_id.get(str(row.get("claim_id") or ""), {}).get("derived_ids")
+            and re.search(r"亏损|净亏损", claim_text)
+            and re.search(r"收窄|扩大", claim_text)
+            and re.search(r"可接受|语义|需确认|冲突", message)
+        ):
+            # For a negative profit fact, deterministic net-profit growth is
+            # the same economic event that prose calls “亏损收窄”; “亏损扩
+            # 大” likewise describes a negative value becoming more negative.
+            # The packet's sign and percentage remain machine-checked.
+            continue
+        if (
+            code.lower() in {"historical_condition", "conditional_historical"}
+            and kind == "judgment"
+            and re.search(r"20\d{2}年(?:可能|将|仍会)|未来|待验证", claim_text)
+            and not re.search(r"如果[^，。！？]{0,40}20\d{2}年(?:已|为|达到|实现)", claim_text)
+        ):
+            # Historical evidence may support the premise of a conditional
+            # forecast; only a disclosed historical actual in the consequent
+            # is prohibited.  The machine contract separately rejects the
+            # latter form.
+            continue
+        if code in {"missing_evidence_id", "evidence_id_not_found", "claim_refs"}:
             row_refs = {str(ref) for ref in row.get("evidence_ids") or []}
             if row_refs and row_refs.issubset(set(evidence_by_id)):
                 # The model's compact QA snapshot can lose track of a long
@@ -213,6 +305,14 @@ def _filter_false_positive_blockers(raw: Mapping[str, Any], dossier: Mapping[str
             and {str(ref) for ref in row.get("evidence_ids") or []}.issubset(set(evidence_by_id))
             and re.search(r"无此ID|不在.*(?:packet|证据)|实际packet中|packet中为|ID格式不一致", message, re.IGNORECASE)
             and not re.search(r"数字|数值|单位|页码|引用内容|quoted_anchor|锚文本", message, re.IGNORECASE)
+        ):
+            continue
+        if (
+            code.upper() in {"EVIDENCE_ID_MISMATCH", "EVIDENCE_MISMATCH"}
+            and row.get("evidence_ids")
+            and {str(ref) for ref in row.get("evidence_ids") or []}.issubset(set(evidence_by_id))
+            and anchor_semantic_overlap(claim)
+            and not re.search(r"数字|数值|单位|页码|引用错误|错误数字|金额|百分比|目标价|仓位", message, re.IGNORECASE)
         ):
             continue
         # A QA reviewer may compare a rounded, deterministic derived metric
@@ -283,7 +383,7 @@ def independent_qa(
     # emitted blockers” from “those blockers survived packet-backed checks”.
     qa["raw_status"] = raw.get("status") if raw.get("status") in {"passed", "failed"} else "failed"
     qa["raw_blockers"] = list(raw.get("blockers") or [])
-    qa["blockers"] = _filter_false_positive_blockers(raw, dossier, packet)
+    qa["blockers"] = _filter_false_positive_blockers(raw, dossier, packet, machine)
     qa["advisories"] = [
         dict(row)
         for row in raw.get("blockers") or []

@@ -1,0 +1,606 @@
+{
+  "latest_card": "最新数据：2026Q1营收289.28亿元，同比下滑23.9%；归母净亏损59.52亿元，同比收窄4.7% [C-02]",
+  "sections": [
+    {
+      "id": "one_line_position",
+      "title": "一句话定位",
+      "body": "根据年报披露，万科2025年营业收入2334.33亿元，同比下滑31.98%；归属于母公司股东的净亏损高达885.56亿元，亏损同比扩大78.98% [C-01]。不过，2026年一季度财报显示，归母净亏损59.52亿元，同比下降幅度小幅收窄4.71% [C-02]。在经营层面，公司通过大宗资产交易、退出冰雪业务、获得深铁集团335.2亿元股东借款等手段全力化债 [C-03]。我们判断，当前万科的核心问题已不是简单的行业周期下行，而是在流动性受限条件下，能否将“保交房”和“存量盘活”所释放的现金流覆盖集中到期的公开债务，即一场与时间的博弈 [J-01]。若2026年经营性现金流持续为负且再融资中断，则公司可能面临公开市场违约；反之，若销售回暖和资产变现超预期，则信用修复弹性巨大。",
+      "claim_ids": [
+        "C-01",
+        "C-02",
+        "C-03",
+        "J-01"
+      ]
+    },
+    {
+      "id": "founder_team",
+      "title": "创始人与团队",
+      "body": "公司年报披露，第二十届董事会由11名董事组成，设董事长1人、职工代表董事1人，独立董事4人 [C-04]。董事长黄力平同时担任大股东深铁集团的党委副书记、董事、总经理 [C-05]。财务负责人韩慧华自2008年加入万科，历任财务管理职能中心合伙人等职 [C-06]。董事会秘书田钧拥有在平安及深圳多家国企的从业经历 [C-07]。独立董事方面，廖子彬曾任毕马威中国主席，沈向洋曾任微软全球执行副总裁，张懿宸为中信资本董事长 [C-08]。这种结构表明，深铁集团已深度嵌入万科日常决策中枢，管理层年龄梯队和国资背景浓厚 [J-02]。若深铁集团未来减少对万科的资金支持或委派董事比例下降，则国资主导的判断将减弱。",
+      "claim_ids": [
+        "C-04",
+        "C-05",
+        "C-06",
+        "C-07",
+        "C-08",
+        "J-02"
+      ]
+    },
+    {
+      "id": "timeline",
+      "title": "发展时间线",
+      "body": "根据年报，2025年万科在“改革化险”主线下展开多项自救行动：全年保质交付11.7万套房子 [C-09]；通过大宗资产交易完成31个项目签约，金额113亿元 [C-10]；存量资源盘活新增及优化产能达338亿元 [C-11]；顺利退出冰雪业务 [C-12]。融资端，新增融资和再融资280亿元（不含股东借款），存量融资综合成本降至3.02%，较上年末下降85个基点 [C-13]；大股东深铁集团累计提供股东借款335.2亿元 [C-14]。截至年报披露日，已完成332.1亿元公开债务偿付 [C-15]。但公司明确表示“风险并未彻底化解，经营发展依然面临严峻挑战” [C-16]。进入2026年，一季度归母净亏损同比小幅收窄4.71%，显示出一定的止血迹象 [C-02]。",
+      "claim_ids": [
+        "C-09",
+        "C-10",
+        "C-11",
+        "C-12",
+        "C-13",
+        "C-14",
+        "C-15",
+        "C-16",
+        "C-02"
+      ]
+    },
+    {
+      "id": "technology_products",
+      "title": "技术与产品",
+      "body": "在产品端，年报披露《万科集团住宅产品标准》已在37个项目全面推行，并通过在杭州建成的买手基地引入厨房电器、智能家居等70款装修新品，提升性价比与品质 [C-17] [C-18]。公司持续推进“CO·life内盒子”等模块化产品体系，涵盖社区大堂、中央景观、健身盒子等，已在上海、广州、杭州等标杆项目集成应用 [C-20]。同时，存量盘活模式下，新获取的23个项目全部为存量盘活类，集中在广州、杭州等核心城市 [C-29]。在科技领域，万科的AI审图已服务近38.6万张新增图纸，算法能力拓展至中建三局、中广核等跨行业客户，并启动与国家档案馆的“建筑图纸大语言模型”合作 [C-21]。AI智工平台通过无人机和摄像头识别施工进度及安全质量缺陷，全年新增上线140个项目，覆盖在建项目 [C-22]。自研的斗拱BIM建模软件已在5个办公项目中实现数字大厦解决方案落地 [C-23]。经营服务业务同样强调数字化：万物云利用自研大模型开发平台，助力全年管理费用同比下降10.1% [C-30]；万纬物流投入40台无人配送机器人，探索“轨道交通+机器人配送”模式 [C-27]。物业服务方面，万物云试行“弹性定价”以提升收费透明度和业主选择权 [C-25]；长租公寓品牌泊寓凭借96.6%的客户满意度和行业领先续租率，全年开展社群活动超3,800场 [C-26]。这些产品和技术投入显示万科试图通过标准化和AI降本增效来对冲开发业务萎缩，但能否转化为扭转财务困境的经营现金流仍待验证 [J-03]。",
+      "claim_ids": [
+        "C-17",
+        "C-18",
+        "C-20",
+        "C-29",
+        "C-21",
+        "C-22",
+        "C-23",
+        "C-30",
+        "C-27",
+        "C-25",
+        "C-26",
+        "J-03"
+      ]
+    },
+    {
+      "id": "financial_valuation",
+      "title": "财务与估值",
+      "body": "公司2025年年度报告显示，全年营业收入2334.33亿元，同比下降31.98%；归属于母公司股东的净亏损为885.56亿元，较2024年的494.78亿元亏损扩大78.98% [C-01]。年报解释，亏损扩大的主因是房地产开发业务销售收入和利润率显著下降，以及部分大宗资产和股权交易亏损、计提减值等 [C-31]。不过，2026年第一季度报告显示，单季营收289.28亿元，同比降幅收窄至23.86%，归母净亏损59.52亿元，同比小幅收窄4.71%，显示亏损态势得到初步控制 [C-02]。在债务端，年报披露，2025年末存量融资综合成本降至3.02%，较上年末下降85个基点；全年新增融资和再融资280亿元 [C-13]，大股东深铁集团累计提供股东借款335.2亿元 [C-14]，已完成332.1亿元公开债务偿付 [C-15]。同时，公司为购房客户按揭贷款提供阶段性担保，截至报告期末担保总额约934.96亿元 [C-32]。尽管短期融资成本下降，但公司账上货币资金充裕度、再融资能力及经营性现金流情况缺乏披露，现有证据无法评估其实际流动性安全边际 [G-01]。我们判断，如果销售额持续萎缩而资产处置速度不及预期，2026年仍可能出现流动性缺口 [J-04]。若2026年中报显示货币资金大幅回升且短期债务大幅减少，则流动性缺口风险降低。",
+      "claim_ids": [
+        "C-01",
+        "C-31",
+        "C-02",
+        "C-13",
+        "C-14",
+        "C-15",
+        "C-32",
+        "G-01",
+        "J-04"
+      ]
+    },
+    {
+      "id": "risks_commentary",
+      "title": "风险与点评",
+      "body": "年报自述的风险清单覆盖了当前主要痛点：宏观经济有效需求不足、行业调整深化导致销售去化压力持续，公司销售规模下降、货币资金减少、存量债务集中到期，流动性面临较大挑战 [C-33]；因行业下行，房地产开发业务销售收入和利润率显著下降，经营性业务在扣除折旧摊销后尚未盈利，部分大宗及股权交易亏损，综合税费支出加重亏损 [C-31]；此外，合作开发及合同履约争议可能引发诉讼或仲裁，影响资金周转与品牌声誉 [C-34]；建筑企业暴雷、原材料波动等供应链风险也可能干扰项目交付 [C-35]。结合2025年实际亏损和担保敞口934.96亿元的判断，我们认为，万科当前最大的风险并非简单的亏损，而是在持续项目交付和偿债压力下，经营性现金流能否覆盖利息和到期本金 [J-05]。因为年报并未公布经营现金流数据，我们无从验证其自我造血的真实状况 [G-01]。一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解 [J-06]。证伪这些风险判断的关键点在于2026年公开债务是否按时兑付，以及管理费是否持续压缩以维持经营。",
+      "claim_ids": [
+        "C-33",
+        "C-31",
+        "C-34",
+        "C-35",
+        "J-05",
+        "G-01",
+        "J-06"
+      ]
+    },
+    {
+      "id": "plain_language",
+      "title": "大白话结论",
+      "body": "万科现在是一家“还债公司”而不是“地产开发商”。它手里有一批还能产生收入的好资产：物业服务、万纬物流、长租公寓泊寓、商业管理等，但这些都是细水长流的生意，抵不过开发业务失血的速度。大股东深铁集团像是一台临时输血泵，已经输了335亿，但没人知道泵能开多久。赢的路径是“拖到行业回暖”——只要房子还能卖掉、债能展期、资产能变现，公司就能慢慢减肥活下去。但代价极高：股东权益持续蒸发，管理层被债务绑架，每一分钱都要精打细算。如果接下来12个月，公开债务出现实质违约，或者深铁停止借款，那前面的乐观预期就会立刻崩塌 [J-07]。反之，如果销售回暖和资产处置加速，公司信用会快速修复。但眼下，它是一只被债务压弯了腰的骆驼，任何一根稻草都可能成为最后一根。",
+      "claim_ids": [
+        "J-07"
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "C-01",
+      "kind": "issuer_self_report",
+      "text": "年报披露，2025年营业收入2334.33亿元，同比下滑31.98%；归母净亏损885.56亿元，同比扩大78.98%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:revenue",
+        "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-02",
+      "kind": "issuer_self_report",
+      "text": "2026年第一季度，营业收入289.28亿元，同比下滑23.86%；归母净亏损59.52亿元，同比收窄4.71%",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+      ],
+      "derived_ids": [
+        "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:revenue",
+        "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:net_profit_parent"
+      ],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-03",
+      "kind": "issuer_self_report",
+      "text": "公司披露，通过大宗资产交易完成31个项目签约金额113亿元，退出冰雪业务，大股东提供股东借款累计335.2亿元等化债举措",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-04",
+      "kind": "issuer_self_report",
+      "text": "公司披露，董事会由11名董事组成，设董事长1人，独立董事4人",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-05",
+      "kind": "issuer_self_report",
+      "text": "年报披露，董事长黄力平同时担任深铁集团党委副书记、董事、总经理",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:79:23"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-06",
+      "kind": "issuer_self_report",
+      "text": "公司披露，财务负责人韩慧华自2008年加入万科，历任财务与内控管理部多个岗位",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:82:28"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-07",
+      "kind": "issuer_self_report",
+      "text": "年报披露，董事会秘书田钧曾任职中国平安及深圳多家国企",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:82:28"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-08",
+      "kind": "issuer_self_report",
+      "text": "公司披露，独立董事廖子彬为毕马威前中国主席，沈向洋为微软前全球执行副总裁，张懿宸为中信资本董事长",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:80:25",
+        "vanke_2025_annual:narrative:81:26"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-09",
+      "kind": "issuer_self_report",
+      "text": "年报披露，全年保质交付11.7万套房子",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-10",
+      "kind": "issuer_self_report",
+      "text": "公司披露，完成31个大宗资产交易项目，签约金额113亿元",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-11",
+      "kind": "issuer_self_report",
+      "text": "年报披露，通过存量资源盘活新增和优化产能达338亿元",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-12",
+      "kind": "issuer_self_report",
+      "text": "公司披露，顺利退出冰雪业务板块",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-13",
+      "kind": "issuer_self_report",
+      "text": "公司披露，全年新增融资和再融资280亿元，存量融资综合成本降至3.02%，较上年末下降85个基点",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-14",
+      "kind": "issuer_self_report",
+      "text": "年报披露，大股东深铁集团累计提供股东借款335.2亿元",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-15",
+      "kind": "issuer_self_report",
+      "text": "公司披露，已完成332.1亿元公开债务偿付",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-16",
+      "kind": "issuer_self_report",
+      "text": "年报承认“风险并未彻底化解，经营发展依然面临严峻挑战”",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-17",
+      "kind": "issuer_self_report",
+      "text": "公司披露，《万科集团住宅产品标准》已在37个项目全面推行",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-18",
+      "kind": "issuer_self_report",
+      "text": "年报披露，在杭州建成买手基地，引入厨房电器、智能家居等70款装修新品",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-20",
+      "kind": "issuer_self_report",
+      "text": "公司披露，CO·life内盒子等模块化产品已在上海、广州、杭州等多个城市标杆项目中集成应用",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:4"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-29",
+      "kind": "issuer_self_report",
+      "text": "年报披露，新获取的23个项目全部为存量盘活类项目，主要分布在广州、杭州、宁波等核心城市",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:28:10"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-21",
+      "kind": "issuer_self_report",
+      "text": "公司披露，AI审图已服务近38.6万张新增图纸，拓展至中建三局、中广核等客户，并启动与国家档案馆合作",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:27:9"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-22",
+      "kind": "issuer_self_report",
+      "text": "年报披露，AI智工平台全年新增上线项目140个，可识别混凝土缺陷、安全网破损等近10类安全质量痛点",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:27:9"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-23",
+      "kind": "issuer_self_report",
+      "text": "公司披露，斗拱BIM建模软件已在5个办公项目中实现数字大厦解决方案落地",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:27:9"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-30",
+      "kind": "issuer_self_report",
+      "text": "年报披露，万物云利用自研大模型开发平台助力全年管理费用同比下降10.1%",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:26:8"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-27",
+      "kind": "issuer_self_report",
+      "text": "公司披露，万纬物流正式投入运营的无人配送机器人达到40台，探索“轨道交通+机器人配送”模式",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:29:12"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-25",
+      "kind": "issuer_self_report",
+      "text": "年报披露，万物云推出“弹性定价”创新模式，提升服务透明度与业主选择权",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:29:12"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-26",
+      "kind": "issuer_self_report",
+      "text": "公司披露，泊寓客户满意度达96.6%，续租率行业领先，全年开展社群活动超3,800场",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:29:12"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-31",
+      "kind": "issuer_self_report",
+      "text": "年报解释，房地产开发业务销售收入和利润率显著下降，经营性业务扣除折旧摊销后尚未盈利，部分大宗及股权交易亏损",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:36"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-32",
+      "kind": "issuer_self_report",
+      "text": "公司披露，为购房客户按揭贷款提供阶段性担保，截至报告期末担保总额约934.96亿元",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:33:13"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-33",
+      "kind": "issuer_self_report",
+      "text": "公司自述，受行业下行影响，销售规模持续下降，货币资金同步大幅减少，存量债务集中到期，流动性面临较大挑战",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:37"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-34",
+      "kind": "issuer_self_report",
+      "text": "年报提及，合作开发、合同履约争议等事项面临诉讼或仲裁风险，可能影响资金周转与品牌声誉",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:92:38"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "C-35",
+      "kind": "issuer_self_report",
+      "text": "公司披露，建筑企业暴雷、原材料大幅波动、劳资纠纷等供应链风险可能对工程进度、成本、质量带来负面影响",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:92:39"
+      ],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "G-01",
+      "kind": "gap",
+      "text": "输入未提供公司货币资金、经营现金流及再融资能力的量化证据，无法评估实际流动性安全边际",
+      "evidence_ids": [],
+      "derived_ids": [],
+      "falsifier": ""
+    },
+    {
+      "claim_id": "J-01",
+      "kind": "judgment",
+      "text": "万科当前的核心矛盾已从行业周期转向债务展期博弈，能否用经营性现金流覆盖到期债务决定生存边界",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0",
+        "vanke_2025_annual:narrative:91:37"
+      ],
+      "derived_ids": [],
+      "falsifier": "若2026年经营性现金流持续为负且再融资中断，或审计师出具持续经营不确定性意见"
+    },
+    {
+      "claim_id": "J-02",
+      "kind": "judgment",
+      "text": "深铁集团已深度嵌入万科决策中枢，管理层国资背景浓厚",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:79:23",
+        "vanke_2025_annual:narrative:80:24"
+      ],
+      "derived_ids": [],
+      "falsifier": "若深铁集团减少资金支持或委派董事比例下降，则国资影响力减弱"
+    },
+    {
+      "claim_id": "J-03",
+      "kind": "judgment",
+      "text": "万科试图通过产品标准化和AI降本增效对冲开发业务萎缩，但能否转化为经营现金流改善仍待验证",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3",
+        "vanke_2025_annual:narrative:27:9",
+        "vanke_2025_annual:narrative:26:8"
+      ],
+      "derived_ids": [],
+      "falsifier": "若2026年经营性业务净现金流未能转正或开发业务毛利率继续下滑，则判断失效"
+    },
+    {
+      "claim_id": "J-04",
+      "kind": "judgment",
+      "text": "如果销售额持续萎缩而资产处置速度不及预期，2026年仍可能出现流动性缺口",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "vanke_2025_annual:narrative:91:37"
+      ],
+      "derived_ids": [],
+      "falsifier": "2026年中报显示货币资金回升且短期债务下降，或公开债务均按时兑付"
+    },
+    {
+      "claim_id": "J-05",
+      "kind": "judgment",
+      "text": "当前最大风险不是亏损本身，而是在持续交付和偿债压力下，经营性现金流能否覆盖利息和到期本金",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:33:13",
+        "vanke_2025_annual:narrative:91:36"
+      ],
+      "derived_ids": [],
+      "falsifier": "若公司公开披露经营性现金流足以覆盖债务本息，或成功实现大规模再融资"
+    },
+    {
+      "claim_id": "J-06",
+      "kind": "judgment",
+      "text": "一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:37",
+        "vanke_2025_annual:narrative:13:0"
+      ],
+      "derived_ids": [],
+      "falsifier": "2026年无银行抽贷或深铁继续提供等额以上借款"
+    },
+    {
+      "claim_id": "J-07",
+      "kind": "judgment",
+      "text": "若12个月内公开债务实质违约或深铁停止借款，乐观预期将崩塌；反之，销售回暖则信用修复弹性大",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0",
+        "vanke_2025_annual:narrative:91:37"
+      ],
+      "derived_ids": [],
+      "falsifier": "2026年公开市场出现违约，或深铁大幅减少资金支持"
+    }
+  ],
+  "missing_inputs": [
+    "货币资金及经营现金流数据",
+    "详细的债务到期结构",
+    "独立第三方验证的经营数据",
+    "估值指标或可比分析"
+  ],
+  "overall_conclusion": "万科正经历历史性亏损，但在大股东输血和经营性业务韧性支撑下，2026年一季度亏损小幅收窄，核心矛盾是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断。",
+  "schema_version": "editorial-v4-dossier-v1",
+  "ticker": "000002.SZ",
+  "issuer_name": "万科A",
+  "input_packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+  "prompt_version": "editorial-v4-whole-report-prompt-v2",
+  "generation_receipt": {
+    "run_id": "editorial-v4-run:7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+    "usage": {
+      "prompt_tokens": 35090,
+      "completion_tokens": 13454,
+      "total_tokens": 48544,
+      "prompt_tokens_details": {
+        "cached_tokens": 1664
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 6703
+      },
+      "prompt_cache_hit_tokens": 1664,
+      "prompt_cache_miss_tokens": 33426
+    },
+    "finish_reason": "stop",
+    "prompt_version": "editorial-v4-whole-report-prompt-v2",
+    "request_hash": "f11cf523f2529fe2c8e7a6cc8c6dbd4549c844af81cc0779cfe8d158f160b4bc",
+    "response_hash": "1ac84e5f8e1ee9d152f1302ab6a341b66a7f67bd6049ce46452de904c8a4b127",
+    "generated_at": "2026-08-04T03:25:30+00:00"
+  },
+  "production_record": {
+    "run_id": "editorial-v4-run:7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+    "generator_version": "editorial-v4-whole-report-generator-v2",
+    "prompt_version": "editorial-v4-whole-report-prompt-v2",
+    "model_provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "request_id": "7fb87e33-57f9-4f2a-bcc5-c429457f9c2a",
+    "input_packet_sha256": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+    "model_packet_sha256": "79c64be636184fcd7d16af6331eae0a92090b2b5b18eeb4c63d9356bab0a2c66",
+    "review_status": "pending",
+    "editorial_status": "draft",
+    "action_state": "blocked",
+    "tier_credit": false
+  },
+  "sources": [
+    {
+      "source_id": "vanke_2025_annual",
+      "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "万科A 2025 年年度报告",
+      "report_period": "2025FY",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+      "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+      "page_count": 298,
+      "parser_version": "park-document-intelligence-v1"
+    },
+    {
+      "source_id": "vanke_2026_q1",
+      "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+      "source_kind": "issuer_filing",
+      "evidence_class": "issuer_disclosure",
+      "title": "万科A 2026 年第一季度报告",
+      "report_period": "2026Q1",
+      "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+      "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+      "page_count": 12,
+      "parser_version": "park-document-intelligence-v1"
+    }
+  ],
+  "boundary": {
+    "review_only": true,
+    "no_tier_credit": true,
+    "no_b6_credit": true,
+    "no_decision_policy_credit": true,
+    "no_publication_credit": true
+  }
+}

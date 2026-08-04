@@ -1,0 +1,1476 @@
+{
+  "request_schema": "editorial-v4-independent-qa-request-v2",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "ticker": "000002.SZ",
+  "dossier_hash": "549fcd780024342386a9547ef9b5831f50497ba027ed3de9ce17ca7abcc404e6",
+  "packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+  "machine_validation": {
+    "status": "failed",
+    "ticker": "000002.SZ",
+    "chars": 3337,
+    "claims": 45,
+    "errors": [
+      {
+        "code": "numeric_quote_mismatch",
+        "message": "numeric claim value is not present in cited page anchor",
+        "claim_id": "F-01",
+        "number": "49,478,429,211.96元"
+      },
+      {
+        "code": "numeric_claim_unbound",
+        "message": "text contains numeric literal not present in this claim's cited evidence",
+        "claim_id": "J-08",
+        "number": "885.56亿元"
+      },
+      {
+        "code": "numeric_claim_unbound",
+        "message": "text contains numeric literal not present in this claim's cited evidence",
+        "claim_id": "J-08",
+        "number": "78.98%"
+      },
+      {
+        "code": "numeric_claim_unbound",
+        "message": "text contains numeric literal not present in this claim's cited evidence",
+        "claim_id": "J-08",
+        "number": "59.52亿元"
+      },
+      {
+        "code": "overall_judgment_marker_missing",
+        "message": "overall_conclusion must carry at least one fact/judgment/gap marker"
+      }
+    ]
+  },
+  "dossier": {
+    "latest_card": "最新数据：2026Q1营收289.28亿元，同比下滑23.86%；归母净亏损59.52亿元，同比收窄4.71% [C-02]",
+    "sections": [
+      {
+        "id": "one_line_position",
+        "title": "一句话定位",
+        "body": "根据年报披露，万科2025年营业收入2334.33亿元，同比下滑31.98%；归属于母公司股东的净亏损高达885.56亿元，亏损同比扩大78.98% [C-01]。不过，公司2026年第一季度报告披露，归母净亏损59.52亿元，同比下降幅度小幅收窄4.71% [C-02]。在经营层面，公司通过大宗资产交易、退出冰雪业务、获得深铁集团335.2亿元股东借款等手段全力化债 [C-03]。我们判断，当前万科的核心问题已不是简单的行业周期下行，而是在流动性受限条件下，能否将“保交房”和“存量盘活”所释放的现金流覆盖集中到期的公开债务，即一场与时间的博弈 [J-01]。万科2025年归母净亏损885.56亿元，亏损同比扩大78.98%；2026年一季度归母净亏损59.52亿元，同比收窄4.71%。我们判断公司正经历历史性亏损，但在大股东输血和经营性业务韧性支撑下，亏损小幅收窄，核心矛盾是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断 [J-08]。",
+        "claim_ids": [
+          "C-01",
+          "C-02",
+          "C-03",
+          "J-01",
+          "J-08"
+        ]
+      },
+      {
+        "id": "founder_team",
+        "title": "创始人与团队",
+        "body": "公司年报披露，第二十届董事会由11名董事组成，设董事长1人、职工代表董事1人，独立董事4人 [C-04]。董事长黄力平同时担任大股东深铁集团的党委副书记、董事、总经理 [C-05]。财务负责人韩慧华自2008年加入万科，历任财务管理职能中心合伙人等职 [C-06]。董事会秘书田钧拥有在平安及深圳多家国企的从业经历 [C-07]。独立董事方面，廖子彬曾任毕马威中国主席，沈向洋曾任微软全球执行副总裁，张懿宸为中信资本董事长 [C-08]。这种结构表明，深铁集团已深度嵌入万科日常决策中枢，管理层年龄梯队和国资背景浓厚 [J-02]。若深铁集团未来减少对万科的资金支持或委派董事比例下降，则国资主导的判断将减弱。",
+        "claim_ids": [
+          "C-04",
+          "C-05",
+          "C-06",
+          "C-07",
+          "C-08",
+          "J-02"
+        ]
+      },
+      {
+        "id": "timeline",
+        "title": "发展时间线",
+        "body": "根据年报，2025年万科在“改革化险”主线下展开多项自救行动：全年保质交付11.7万套房子 [C-09]；通过大宗资产交易完成31个项目签约，金额113亿元 [C-10]；存量资源盘活新增及优化产能达338亿元 [C-11]；顺利退出冰雪业务 [C-12]。融资端，新增融资和再融资280亿元（不含股东借款），存量融资综合成本降至3.02%，较上年末下降85个基点 [C-13]；大股东深铁集团累计提供股东借款335.2亿元 [C-14]。截至年报披露日，已完成332.1亿元公开债务偿付 [C-15]。但年报自述“风险并未彻底化解，经营发展依然面临严峻挑战” [C-16]。业务优化方面，公司旗下潮州有熊酒店2025年整体收入同比提升23%，扬州有熊酒店以轻资产模式开业，聚焦文旅+城市更新 [C-36]；同时顺利完成冰雪业务退出，战略收敛聚焦核心主业 [C-12]。科技应用方面，AI审图新增38.6万张图纸，AI智工平台上线140个项目，斗拱BIM实现5个办公项目落地 [C-21][C-22][C-23]。进入2026年，一季度归母净亏损同比小幅收窄4.71%，显示出一定的止血迹象 [C-02]。",
+        "claim_ids": [
+          "C-09",
+          "C-10",
+          "C-11",
+          "C-12",
+          "C-13",
+          "C-14",
+          "C-15",
+          "C-16",
+          "C-36",
+          "C-21",
+          "C-22",
+          "C-23",
+          "C-02"
+        ]
+      },
+      {
+        "id": "technology_products",
+        "title": "技术与产品",
+        "body": "在产品端，年报披露《万科集团住宅产品标准》已在37个项目全面推行，并通过在杭州建成的买手基地引入厨房电器、智能家居等70款装修新品，提升性价比与品质 [C-17] [C-18]。公司持续推进“CO·life内盒子”等模块化产品体系，涵盖社区大堂、中央景观、健身盒子等，已在上海、广州、杭州等标杆项目集成应用 [C-20]。同时，存量盘活模式下，新获取的23个项目全部为存量盘活类，集中在广州、杭州等核心城市 [C-29]。在科技领域，万科的AI审图已服务近38.6万张新增图纸，算法能力拓展至中建三局、中广核等跨行业客户，并启动与国家档案馆的“建筑图纸大语言模型”合作 [C-21]。AI智工平台通过无人机和摄像头识别施工进度及安全质量缺陷，全年新增上线140个项目，覆盖在建项目 [C-22]。自研的斗拱BIM建模软件已在5个办公项目中实现数字大厦解决方案落地 [C-23]。经营服务业务同样强调数字化：万物云利用自研大模型开发平台，助力全年管理费用同比下降10.1% [C-30]；万纬物流投入40台无人配送机器人，探索“轨道交通+机器人配送”模式 [C-27]。物业服务方面，万物云试行“弹性定价”以提升收费透明度和业主选择权 [C-25]；长租公寓品牌泊寓凭借96.6%的客户满意度和行业领先续租率，全年开展社群活动超3,800场 [C-26]。这些产品和技术投入显示万科试图通过标准化和AI降本增效来对冲开发业务萎缩，但能否转化为扭转财务困境的经营现金流仍待验证 [J-03]。",
+        "claim_ids": [
+          "C-17",
+          "C-18",
+          "C-20",
+          "C-29",
+          "C-21",
+          "C-22",
+          "C-23",
+          "C-30",
+          "C-27",
+          "C-25",
+          "C-26",
+          "J-03"
+        ]
+      },
+      {
+        "id": "financial_valuation",
+        "title": "财务与估值",
+        "body": "公司2025年年度报告显示，全年营业收入2334.33亿元，同比下降31.98%；归属于母公司股东的净亏损为885.56亿元，较2024年的-49,478,429,211.96元扩大78.98% [C-01][F-01]。公司披露，亏损扩大的主因是房地产开发业务销售收入和利润率显著下降，以及部分大宗资产和股权交易亏损、计提减值等 [C-31]。不过，2026年第一季度报告显示，单季营收289.28亿元，同比降幅收窄至23.86%，归母净亏损59.52亿元，同比小幅收窄4.71%，显示亏损态势得到初步控制 [C-02]。在债务端，年报披露，2025年末存量融资综合成本降至3.02%，较上年末下降85个基点；全年新增融资和再融资280亿元 [C-13]，大股东深铁集团累计提供股东借款335.2亿元 [C-14]，已完成332.1亿元公开债务偿付 [C-15]。同时，公司为购房客户按揭贷款提供阶段性担保，截至报告期末担保总额约934.96亿元 [C-32]。此外，年报提及，2025年衍生品投资产生亏损人民币8,453.78万元 [C-37]。尽管短期融资成本改善，但年报未给出详细的债务到期结构，我们无法评估再融资风险 [G-01]。我们判断，如果销售额持续萎缩而资产处置速度不及预期，2026年仍可能出现流动性缺口 [J-04]。若2026年中报显示货币资金大幅回升且短期债务大幅减少，则流动性缺口风险降低。",
+        "claim_ids": [
+          "C-01",
+          "F-01",
+          "C-31",
+          "C-02",
+          "C-13",
+          "C-14",
+          "C-15",
+          "C-32",
+          "C-37",
+          "G-01",
+          "J-04"
+        ]
+      },
+      {
+        "id": "risks_commentary",
+        "title": "风险与点评",
+        "body": "年报自述的风险清单覆盖了当前主要痛点：宏观经济有效需求不足、行业调整深化导致销售去化压力持续，公司销售规模下降、货币资金减少、存量债务集中到期，流动性面临较大挑战 [C-33]；因行业下行，房地产开发业务销售收入和利润率显著下降，经营性业务在扣除折旧摊销后尚未盈利，部分大宗及股权交易亏损，综合税费支出加重亏损 [C-31]；此外，合作开发及合同履约争议可能引发诉讼或仲裁，影响资金周转与品牌声誉 [C-34]；建筑企业暴雷、原材料波动等供应链风险也可能干扰项目交付 [C-35]。公司披露，已建立完整的招采与供应链管理体系，通过第三方飞检常态化等举措强化履约管理 [C-38]。结合2025年实际亏损和担保敞口934.96亿元，我们认为，万科当前最大的风险并非简单的亏损，而是在持续项目交付和偿债压力下，经营性现金流能否覆盖利息和到期本金 [J-05]。因为年报并未公布经营现金流数据，我们无从验证其自我造血的真实状况 [G-01]。一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解 [J-06]。证伪这些风险判断的关键点在于2026年公开债务是否按时兑付，以及管理费是否持续压缩以维持经营。",
+        "claim_ids": [
+          "C-33",
+          "C-31",
+          "C-34",
+          "C-35",
+          "C-38",
+          "J-05",
+          "G-01",
+          "J-06"
+        ]
+      },
+      {
+        "id": "plain_language",
+        "title": "大白话结论",
+        "body": "万科现在是一家“还债公司”而不是“地产开发商”。它手里有一批还能产生收入的好资产：物业服务、万纬物流、长租公寓泊寓、商业管理等，但这些都是细水长流的生意，抵不过开发业务失血的速度。大股东深铁集团像是一台临时输血泵，已经输了335亿，但没人知道泵能开多久。赢的路径是“拖到行业回暖”——只要房子还能卖掉、债能展期、资产能变现，公司就能慢慢减肥活下去。但代价极高：股东权益持续蒸发，管理层被债务绑架，每一分钱都要精打细算。公司2025年已完成332.1亿元公开债务偿付[C-15]，但流动性风险仍高。当前乐观预期建立在深铁持续输血的假设上，一旦未来12个月出现公开市场实质违约或深铁停止资金支持，乐观预期将崩塌；反之，销售回暖则信用修复弹性大 [J-07]。",
+        "claim_ids": [
+          "C-15",
+          "J-07"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "claim_id": "C-01",
+        "kind": "issuer_self_report",
+        "text": "年报披露，2025年营业收入2334.33亿元，同比下滑31.98%；归母净亏损885.56亿元，同比扩大78.98%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:revenue",
+          "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-02",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2026年第一季度营业收入289.28亿元，同比下滑23.86%；归母净亏损59.52亿元，同比收窄4.71%",
+        "evidence_ids": [
+          "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+          "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+          "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+          "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:revenue",
+          "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:net_profit_parent"
+        ],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-03",
+        "kind": "issuer_self_report",
+        "text": "公司披露，通过大宗资产交易完成31个项目签约金额113亿元，退出冰雪业务，大股东提供股东借款累计335.2亿元等化债举措",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-04",
+        "kind": "issuer_self_report",
+        "text": "公司披露，董事会由11名董事组成，设董事长1人，独立董事4人",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:72:18"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-05",
+        "kind": "issuer_self_report",
+        "text": "年报披露，董事长黄力平同时担任深铁集团党委副书记、董事、总经理",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:79:23"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-06",
+        "kind": "issuer_self_report",
+        "text": "公司披露，财务负责人韩慧华自2008年加入万科，历任财务与内控管理部多个岗位",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:82:28"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-07",
+        "kind": "issuer_self_report",
+        "text": "年报披露，董事会秘书田钧曾任职中国平安及深圳多家国企",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:82:28"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-08",
+        "kind": "issuer_self_report",
+        "text": "公司披露，独立董事廖子彬为毕马威前中国主席，沈向洋为微软前全球执行副总裁，张懿宸为中信资本董事长",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:80:25",
+          "vanke_2025_annual:narrative:81:26"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-09",
+        "kind": "issuer_self_report",
+        "text": "年报披露，全年保质交付11.7万套房子",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-10",
+        "kind": "issuer_self_report",
+        "text": "公司披露，完成31个大宗资产交易项目，签约金额113亿元",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-11",
+        "kind": "issuer_self_report",
+        "text": "年报披露，通过存量资源盘活新增和优化产能达338亿元",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-12",
+        "kind": "issuer_self_report",
+        "text": "公司披露，顺利退出冰雪业务板块",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-13",
+        "kind": "issuer_self_report",
+        "text": "公司披露，全年新增融资和再融资280亿元，存量融资综合成本降至3.02%，较上年末下降85个基点",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-14",
+        "kind": "issuer_self_report",
+        "text": "年报披露，大股东深铁集团累计提供股东借款335.2亿元",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-15",
+        "kind": "issuer_self_report",
+        "text": "公司披露，已完成332.1亿元公开债务偿付",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-16",
+        "kind": "issuer_self_report",
+        "text": "年报自述，风险并未彻底化解，经营发展依然面临严峻挑战",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-17",
+        "kind": "issuer_self_report",
+        "text": "公司披露，《万科集团住宅产品标准》已在37个项目全面推行",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:20:3"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-18",
+        "kind": "issuer_self_report",
+        "text": "年报披露，在杭州建成买手基地，引入厨房电器、智能家居等70款装修新品",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:20:3"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-20",
+        "kind": "issuer_self_report",
+        "text": "公司披露，CO·life内盒子等模块化产品已在上海、广州、杭州等多个城市标杆项目中集成应用",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:20:4"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-21",
+        "kind": "issuer_self_report",
+        "text": "公司披露，AI审图已服务近38.6万张新增图纸，拓展至中建三局、中广核等客户，并启动与国家档案馆合作",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:27:9"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-22",
+        "kind": "issuer_self_report",
+        "text": "年报披露，AI智工平台全年新增上线项目140个，可识别混凝土缺陷、安全网破损等近10类安全质量痛点",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:27:9"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-23",
+        "kind": "issuer_self_report",
+        "text": "公司披露，斗拱BIM建模软件已在5个办公项目中实现数字大厦解决方案落地",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:27:9"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-25",
+        "kind": "issuer_self_report",
+        "text": "年报披露，万物云推出“弹性定价”创新模式，提升服务透明度与业主选择权",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:29:12"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-26",
+        "kind": "issuer_self_report",
+        "text": "公司披露，泊寓客户满意度达96.6%，续租率行业领先，全年开展社群活动超3,800场",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:29:12"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-27",
+        "kind": "issuer_self_report",
+        "text": "公司披露，万纬物流正式投入运营的无人配送机器人达到40台，探索“轨道交通+机器人配送”模式",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:29:12"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-29",
+        "kind": "issuer_self_report",
+        "text": "年报披露，新获取的23个项目全部为存量盘活类项目，主要分布在广州、杭州、宁波等核心城市",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:28:10"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-30",
+        "kind": "issuer_self_report",
+        "text": "年报披露，万物云利用自研大模型开发平台助力全年管理费用同比下降10.1%",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:26:8"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-31",
+        "kind": "issuer_self_report",
+        "text": "公司披露，亏损扩大的主因是房地产开发业务销售收入和利润率显著下降，以及部分大宗资产和股权交易亏损、计提减值等",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:91:36"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-32",
+        "kind": "issuer_self_report",
+        "text": "公司披露，为购房客户按揭贷款提供阶段性担保，截至报告期末担保总额约934.96亿元",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:33:13"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-33",
+        "kind": "issuer_self_report",
+        "text": "公司自述，受行业下行影响，销售规模持续下降，货币资金同步大幅减少，存量债务集中到期，流动性面临较大挑战",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:91:37"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-34",
+        "kind": "issuer_self_report",
+        "text": "年报提及，合作开发、合同履约争议等事项面临诉讼或仲裁风险，可能影响资金周转与品牌声誉",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:92:38"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-35",
+        "kind": "issuer_self_report",
+        "text": "公司披露，建筑企业暴雷、原材料大幅波动、劳资纠纷等供应链风险可能对工程进度、成本、质量带来负面影响",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:92:39"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-36",
+        "kind": "issuer_self_report",
+        "text": "年报披露，潮州有熊酒店2025年整体收入同比提升23%，扬州有熊酒店如期开业",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:25:7"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-37",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2025年衍生品投资产生亏损人民币8,453.78万元",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:60:15"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "C-38",
+        "kind": "issuer_self_report",
+        "text": "公司披露，已建立完整的招采与供应链管理体系，通过第三方飞检常态化等举措强化履约管理",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:92:39"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "F-01",
+        "kind": "issuer_self_report",
+        "text": "公司披露，2024年归属于母公司股东的净亏损为-49,478,429,211.96元",
+        "evidence_ids": [
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1"
+        ],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "G-01",
+        "kind": "gap",
+        "text": "输入未提供公司货币资金、经营现金流及再融资能力的量化证据，无法评估实际流动性安全边际",
+        "evidence_ids": [],
+        "derived_ids": [],
+        "falsifier": ""
+      },
+      {
+        "claim_id": "J-01",
+        "kind": "judgment",
+        "text": "万科当前的核心矛盾已从行业周期转向债务展期博弈，能否用经营性现金流覆盖到期债务决定生存边界",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0",
+          "vanke_2025_annual:narrative:91:37"
+        ],
+        "derived_ids": [],
+        "falsifier": "若2026年经营性现金流持续为负且再融资中断，或审计师出具持续经营不确定性意见"
+      },
+      {
+        "claim_id": "J-02",
+        "kind": "judgment",
+        "text": "深铁集团已深度嵌入万科决策中枢，管理层国资背景浓厚",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:79:23",
+          "vanke_2025_annual:narrative:80:24"
+        ],
+        "derived_ids": [],
+        "falsifier": "若深铁集团减少资金支持或委派董事比例下降，则国资影响力减弱"
+      },
+      {
+        "claim_id": "J-03",
+        "kind": "judgment",
+        "text": "万科试图通过产品标准化和AI降本增效对冲开发业务萎缩，但能否转化为经营现金流改善仍待验证",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:20:3",
+          "vanke_2025_annual:narrative:27:9",
+          "vanke_2025_annual:narrative:26:8"
+        ],
+        "derived_ids": [],
+        "falsifier": "若2026年经营性业务净现金流未能转正或开发业务毛利率继续下滑，则判断失效"
+      },
+      {
+        "claim_id": "J-04",
+        "kind": "judgment",
+        "text": "如果销售额持续萎缩而资产处置速度不及预期，2026年仍可能出现流动性缺口",
+        "evidence_ids": [
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+          "vanke_2025_annual:narrative:91:37"
+        ],
+        "derived_ids": [],
+        "falsifier": "2026年中报显示货币资金回升且短期债务下降，或公开债务均按时兑付"
+      },
+      {
+        "claim_id": "J-05",
+        "kind": "judgment",
+        "text": "当前最大风险不是亏损本身，而是在持续交付和偿债压力下，经营性现金流能否覆盖利息和到期本金",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:33:13",
+          "vanke_2025_annual:narrative:91:36"
+        ],
+        "derived_ids": [],
+        "falsifier": "若公司公开披露经营性现金流足以覆盖债务本息，或成功实现大规模再融资"
+      },
+      {
+        "claim_id": "J-06",
+        "kind": "judgment",
+        "text": "一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:91:37",
+          "vanke_2025_annual:narrative:13:0"
+        ],
+        "derived_ids": [],
+        "falsifier": "2026年无银行抽贷或深铁继续提供等额以上借款"
+      },
+      {
+        "claim_id": "J-07",
+        "kind": "judgment",
+        "text": "当前乐观预期建立在深铁持续输血的假设上，一旦未来12个月出现公开市场实质违约或深铁停止资金支持，乐观预期将崩塌；反之，销售回暖则信用修复弹性大",
+        "evidence_ids": [
+          "vanke_2025_annual:narrative:13:0",
+          "vanke_2025_annual:narrative:91:37"
+        ],
+        "derived_ids": [],
+        "falsifier": "证伪信号：公司经营性现金流持续为负或公开债务展期失败"
+      },
+      {
+        "claim_id": "J-08",
+        "kind": "judgment",
+        "text": "万科2025年归母净亏损885.56亿元，亏损同比扩大78.98%；2026年一季度归母净亏损59.52亿元，同比收窄4.71%。我们判断公司正经历历史性亏损，但在大股东输血和经营性业务韧性支撑下，亏损小幅收窄，核心矛盾是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断",
+        "evidence_ids": [
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+          "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1",
+          "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+          "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1"
+        ],
+        "derived_ids": [
+          "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent",
+          "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:net_profit_parent"
+        ],
+        "falsifier": "若2026年经营性现金流持续为负且再融资中断，或审计师出具持续经营不确定性意见"
+      }
+    ],
+    "missing_inputs": [
+      "货币资金及经营现金流数据",
+      "详细的债务到期结构",
+      "独立第三方验证的经营数据",
+      "估值指标或可比分析"
+    ],
+    "overall_conclusion": "我们判断公司正经历历史性亏损，但在大股东输血和经营性业务韧性支撑下，亏损小幅收窄，核心矛盾是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断。",
+    "schema_version": "editorial-v4-dossier-v1",
+    "ticker": "000002.SZ",
+    "issuer_name": "万科A",
+    "input_packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+    "prompt_version": "editorial-v4-whole-report-prompt-v2",
+    "generation_receipt": {
+      "run_id": "editorial-v4-run:e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+      "provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "request_id": "e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+      "usage": {
+        "prompt_tokens": 42990,
+        "completion_tokens": 15657,
+        "total_tokens": 58647,
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 8022
+        },
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 41198
+      },
+      "finish_reason": "stop",
+      "prompt_version": "editorial-v4-whole-report-prompt-v2",
+      "request_hash": "c8b584bb197343134595ef896f5c5b8d2c051628a4d95b42721ea68fe7ff4bc4",
+      "response_hash": "15903abb3e507eaca0ac49c92c2b7ac613bd690e8431ef0f8972268c155d4657",
+      "generated_at": "2026-08-04T03:35:52+00:00"
+    },
+    "production_record": {
+      "run_id": "editorial-v4-run:e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+      "generator_version": "editorial-v4-whole-report-generator-v2",
+      "prompt_version": "editorial-v4-whole-report-prompt-v2",
+      "model_provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "request_id": "e7911f6c-7803-4d73-b61b-afd22cfe4ef5",
+      "input_packet_sha256": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+      "model_packet_sha256": "79c64be636184fcd7d16af6331eae0a92090b2b5b18eeb4c63d9356bab0a2c66",
+      "review_status": "pending",
+      "editorial_status": "draft",
+      "action_state": "blocked",
+      "tier_credit": false
+    },
+    "sources": [
+      {
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "万科A 2025 年年度报告",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "page_count": 298,
+        "parser_version": "park-document-intelligence-v1"
+      },
+      {
+        "source_id": "vanke_2026_q1",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "万科A 2026 年第一季度报告",
+        "report_period": "2026Q1",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+        "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "page_count": 12,
+        "parser_version": "park-document-intelligence-v1"
+      }
+    ],
+    "boundary": {
+      "review_only": true,
+      "no_tier_credit": true,
+      "no_b6_credit": true,
+      "no_decision_policy_credit": true,
+      "no_publication_credit": true
+    }
+  },
+  "evidence_packet": {
+    "ticker": "000002.SZ",
+    "issuer_name": "万科A",
+    "sources": [
+      {
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "万科A 2025 年年度报告",
+        "report_period": "2025FY",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "page_count": 298,
+        "parser_version": "park-document-intelligence-v1"
+      },
+      {
+        "source_id": "vanke_2026_q1",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "title": "万科A 2026 年第一季度报告",
+        "report_period": "2026Q1",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+        "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "page_count": 12,
+        "parser_version": "park-document-intelligence-v1"
+      }
+    ],
+    "evidence": [
+      {
+        "evidence_id": "vanke_2025_annual:narrative:13:0",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 13,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析",
+        "quoted_anchor": "年有所收窄。12 月，中央经济工作会议 明确提出，要着力稳定房地产市场，因城施策控增在各方及大股东有力支持下，本集团稳步推进改革化险工作，尽全力化解债务风险、保障生产经营稳定，全年持续推进项目“兴交付”，保质交付 11.7万套房子；坚持积极销售，展大宗交易，完成 31个项目交易，签约金额 113亿元；通过存量资源盘活新增和优化产能达338亿元；顺利退出冰雪业务板块，实现集团战略收敛聚焦和业务组合优化。在融资端，积极争取各类金融机构支持，全年新增融资和再融资 280亿元（不含股东借款）。存量融资的综合成本为 3.02%，较上年末下降 85个基点。大股东深铁集团通过市场化、法治化手段予以支持，截至本报告披露日已累计提供股东借款 335.2亿元。同时，本集团积极推动降本增效工作，系统性压缩各项费用开支，开发业务管理费用已实现连续两年下降，长租公寓、商业本集团年内积极开展自救，截至本报告披露日，本集团已完成 332.1亿元的公开债务偿付。但受多种因素影响，风险并未彻底化解，经营发展依然面临严峻挑战。报告期内，本集商程序，目前展期议案已获得债券持有人会议表决通过。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "年有所收窄。12 月，中央经济工作会议 明确提出，要着力稳定房地产市场，因城施策控增在各方及大股东有力支持下，本集团稳步推进改革化险工作，尽全力化解债务风险、保障生产经营稳定，全年持续推进项目“兴交付”，保质交付 11.7万套房子；坚持积极销售，展大宗交易，完成 31个项目交易，签约金额 113亿元；通过存量资源盘活新增和优化产能达338亿元；顺利退出冰雪业务板块，实现集团战略收敛聚焦和业务组合优化。在融资端，积极争取各类金融机构支持，全年新增融资和再融资 280亿元（不含股东借款）。存量融资的综合成本为 3.02%，较上年末下降 85个基点。大股东深铁集团通过市场化、法治化手段予以支持，截至本报告披露日已累计提供股东借款 335.2亿元。同时，本集团积极推动降本增效工作，系统性压缩各项费用开支，开发业务管理费用已实现连续两年下降，长租公寓、商业本集团年内积极开展自救，截至本报告披露日，本集团已完成 332.1亿元的公开债务偿付。但受多种因素影响，风险并未彻底化解，经营发展依然面临严峻挑战。报告期内，本集商程序，目前展期议案已获得债券持有人会议表决通过。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:20:3",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 20,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （三）各项业务发展情况 > 1、房地产开发",
+        "quoted_anchor": "围绕体系化能力建设，同步完善制度基础与供应链支撑。《万科集团住宅产品标准》全面推行，已在 37个项目落地应用，夯实产品一致性与品质底线；在杭州建成集选品、研发、展示于一体的买手基地，通过市场优选与上下游优质供应商联合研发，引入厨房电器、智能家居等 70款装修相关新品，有效提升产品品质与性价比。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "围绕体系化能力建设，同步完善制度基础与供应链支撑。《万科集团住宅产品标准》全面推行，已在 37个项目落地应用，夯实产品一致性与品质底线；在杭州建成集选品、研发、展示于一体的买手基地，通过市场优选与上下游优质供应商联合研发，引入厨房电器、智能家居等 70款装修相关新品，有效提升产品品质与性价比。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:20:4",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 20,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （三）各项业务发展情况 > 1、房地产开发",
+        "quoted_anchor": "截至报告期末，本集团在建项目总计容建筑面积约 2,691.5万平方米，权益计容建筑面积1,824.7万平方米。此外，本集团还参与了一批旧城改造项目，按当前规划条件，总计容建筑有关本集团新增项目的具体信息，详见本报告“第四节董事会报告”节之“非募集资金持续推进产品力升级与模块化落地。依托“空间+内容+服务”的一体化模式，公司持续推进产品模块的标准化研发与场景化落地，系统构建涵盖社区大堂、中央景观、学习盒子、健身盒子等在内的 CO·life内盒子公共服务体系，并同步推出“烟火商街”街区模块与小镇中心产品模块，融合社区商业、邻里交往、运动休闲及公园绿地等多元功能，强化生活场景的完整性与运营可持续性。上述产品模块已在上海、广州、杭州、济南等多个城市的标杆项目中实现集成应用，有效支撑高品质交付与市场竞争力提升。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "截至报告期末，本集团在建项目总计容建筑面积约 2,691.5万平方米，权益计容建筑面积1,824.7万平方米。此外，本集团还参与了一批旧城改造项目，按当前规划条件，总计容建筑有关本集团新增项目的具体信息，详见本报告“第四节董事会报告”节之“非募集资金持续推进产品力升级与模块化落地。依托“空间+内容+服务”的一体化模式，公司持续推进产品模块的标准化研发与场景化落地，系统构建涵盖社区大堂、中央景观、学习盒子、健身盒子等在内的 CO·life内盒子公共服务体系，并同步推出“烟火商街”街区模块与小镇中心产品模块，融合社区商业、邻里交往、运动休闲及公园绿地等多元功能，强化生活场景的完整性与运营可持续性。上述产品模块已在上海、广州、杭州、济南等多个城市的标杆项目中实现集成应用，有效支撑高品质交付与市场竞争力提升。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:25:7",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 25,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （三）各项业务发展情况 > 8、业务优化和资产处置",
+        "quoted_anchor": "本集团旗下共运营 31家酒店，布局于北京、深圳、广州、成都等核心城市，以及阳朔、丽江等热门旅游目的地，形成以高端商务为定位的“瞻云”与立足城市人文的“有熊”报告期内，本集团以轻资产输出模式拓展的扬州有熊酒店如期开业。该项目秉持“文旅+城市更新”的创新路径，对扬州仁丰里 600年历史街区进行保护性改造 ，完整保留了传统建筑形制，并创造性融入非遗工坊、文化展厅等现代文旅功能，成为兼具商业价值与文化内涵的行业标杆。此外，潮州有熊酒店在 2025年经营业绩表现突出，整体收入同比提升 23%，聚焦核心主业发展，有序剥离非主营业务。 报告期内，本集团与中旅国际签署冰雪业务合作协议，顺利完成该业务板块退出，实现集团战略收敛聚焦和业务组合优化。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "本集团旗下共运营 31家酒店，布局于北京、深圳、广州、成都等核心城市，以及阳朔、丽江等热门旅游目的地，形成以高端商务为定位的“瞻云”与立足城市人文的“有熊”报告期内，本集团以轻资产输出模式拓展的扬州有熊酒店如期开业。该项目秉持“文旅+城市更新”的创新路径，对扬州仁丰里 600年历史街区进行保护性改造 ，完整保留了传统建筑形制，并创造性融入非遗工坊、文化展厅等现代文旅功能，成为兼具商业价值与文化内涵的行业标杆。此外，潮州有熊酒店在 2025年经营业绩表现突出，整体收入同比提升 23%，聚焦核心主业发展，有序剥离非主营业务。 报告期内，本集团与中旅国际签署冰雪业务合作协议，顺利完成该业务板块退出，实现集团战略收敛聚焦和业务组合优化。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:26:8",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 26,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （四）其他主要工作 > 2、降本增效",
+        "quoted_anchor": "明确了集团总部、地区公司及事业部三类组织的具体管理定位。开发业务的管理架构由原先的“三级半”简化为“集团总部—地区公司”两级，38 个区域及城市公司整合为 16个地区公司，有效缩短管理链条，原 9个事业部调整为 8个事业部，总部部门从 7个扩展至 13个，在人才发展方面，2025 年围绕改革化险阶段的实际需求，本集团在专业能力认证、培训体系建设及实训基地建设等方面推进了一系列工作。全年组织开发业务进行履职能力认证，并将认证结果应用于骨干员工的选拔与晋升；通过“谷雨行动”等专项计划累计培训超 6,000人次，首个实训基地建成并形成了标准化操作指引。结合用人需求分析与目标设定，积极采用内部招聘（“大江大海计划”）、外部招聘及专业交流等多种方式引进优秀人才，拓宽了为有效应对市场环境变化与经营压力，本集团将降本增效作为核心管理举措之一持续深化，在全面提升组织运行效率的基础上，系统性压缩各项费用开支。在开发业务板块，通过线上直播、全民营销等方式也实现了营销费率的有效控制；通过加强供应链及下游产业链管理，实现产品性能优化、充分市场竞价，有效降低了采购成本；通过实施精益化管控、优化组织架构与流程，有效降低了人工成本及中后台运营费用。经营服务业务结合自身业务特征挖掘经营潜力，其中万物云利用 AI与自动化技术深度重构中后台运营体系，通过自研大模型开发平台的大规模应用助力全年管理费用同比下降 10.1%；长租公寓、商业和物流仓储业务也均制定了降本行动举措，通过精细化管理、严控行政支出、科技赋能等举措，平台成本",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "明确了集团总部、地区公司及事业部三类组织的具体管理定位。开发业务的管理架构由原先的“三级半”简化为“集团总部—地区公司”两级，38 个区域及城市公司整合为 16个地区公司，有效缩短管理链条，原 9个事业部调整为 8个事业部，总部部门从 7个扩展至 13个，在人才发展方面，2025 年围绕改革化险阶段的实际需求，本集团在专业能力认证、培训体系建设及实训基地建设等方面推进了一系列工作。全年组织开发业务进行履职能力认证，并将认证结果应用于骨干员工的选拔与晋升；通过“谷雨行动”等专项计划累计培训超 6,000人次，首个实训基地建成并形成了标准化操作指引。结合用人需求分析与目标设定，积极采用内部招聘（“大江大海计划”）、外部招聘及专业交流等多种方式引进优秀人才，拓宽了为有效应对市场环境变化与经营压力，本集团将降本增效作为核心管理举措之一持续深化，在全面提升组织运行效率的基础上，系统性压缩各项费用开支。在开发业务板块，通过线上直播、全民营销等方式也实现了营销费率的有效控制；通过加强供应链及下游产业链管理，实现产品性能优化、充分市场竞价，有效降低了采购成本；通过实施精益化管控、优化组织架构与流程，有效降低了人工成本及中后台运营费用。经营服务业务结合自身业务特征挖掘经营潜力，其中万物云利用 AI与自动化技术深度重构中后台运营体系，通过自研大模型开发平台的大规模应用助力全年管理费用同比下降 10.1%；长租公寓、商业和物流仓储业务也均制定了降本行动举措，通过精细化管理、严控行政支出、科技赋能等举措，平台成本"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:27:9",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 27,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （四）其他主要工作 > 4、ESG",
+        "quoted_anchor": "深化“AI 审图”与“图云”应用，推动技术跨行业赋能。公司的“AI 审图”已服务近目，新增图纸 38.6万张，其 AI识图与算法能力已拓展至中建三局、中广核、信义玻璃等跨领域客户。报告期内，国家档案馆已启动与万科“建筑图纸大语言模型”相关合作，“AI 图全面推进“AI 智工”应用，提升工程管理智能化与精细化水平。万科 AI数字工程管理平台持续通过无人机与 360摄像头采集数据，借助计算机视觉技术精准识别施工进度并预判风险。产品进一步拓展 AI应用场景，将混凝土缺陷、安全网破损等近 10类安全质量痛点纳入智能识别范围，实现施工现场全方位智能管控。全年新增上线项目 140个，在建项目覆盖自研“斗拱 BIM智能建模软件”，赋能设计提效与多场景数字化管理。斗拱 BIM智能建模软件凭借其智能排布与计算功能，显著提升项目设计决策效率。2025 年全年已有 5个办公项目基于斗拱构建的数字大厦解决方案实现落地。同时，全年基于斗拱提供的轻量化三维全面部署营销数字沙盘并试点户型选装功能，优化客户体验。 营销数字沙盘作为核心数字化营销工具，为客户提供突破时空限制的直观看房体验，并实现对房屋信息的精准管理。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "深化“AI 审图”与“图云”应用，推动技术跨行业赋能。公司的“AI 审图”已服务近目，新增图纸 38.6万张，其 AI识图与算法能力已拓展至中建三局、中广核、信义玻璃等跨领域客户。报告期内，国家档案馆已启动与万科“建筑图纸大语言模型”相关合作，“AI 图全面推进“AI 智工”应用，提升工程管理智能化与精细化水平。万科 AI数字工程管理平台持续通过无人机与 360摄像头采集数据，借助计算机视觉技术精准识别施工进度并预判风险。产品进一步拓展 AI应用场景，将混凝土缺陷、安全网破损等近 10类安全质量痛点纳入智能识别范围，实现施工现场全方位智能管控。全年新增上线项目 140个，在建项目覆盖自研“斗拱 BIM智能建模软件”，赋能设计提效与多场景数字化管理。斗拱 BIM智能建模软件凭借其智能排布与计算功能，显著提升项目设计决策效率。2025 年全年已有 5个办公项目基于斗拱构建的数字大厦解决方案实现落地。同时，全年基于斗拱提供的轻量化三维全面部署营销数字沙盘并试点户型选装功能，优化客户体验。 营销数字沙盘作为核心数字化营销工具，为客户提供突破时空限制的直观看房体验，并实现对房屋信息的精准管理。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:28:10",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 28,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （五）核心竞争力分析",
+        "quoted_anchor": "万科作为拥有四十余年积淀的中国房地产行业先行者，始终将品牌声誉视为企业的生命线。面对行业深刻变革，万科凭借精准匹配需求的设计能力和覆盖全周期的服务体系，在市场波动中树立了极高的客户信任。这种信任不仅体现在住宅开发领域，更延伸至物业服务、长租公寓等多元赛道，使万科在行业转型期依然能够保持品牌美誉度与市场号召力的行业领随着行业进入存量时代，存量资源转化能力和高效操盘能力已成为万科的核心竞争壁垒。在存量资源转化方面，报告期内本集团新获取的23 个项目全部为存量盘活类项目，主要分布在广州、杭州、宁波等核心城市。通过系统化的攻坚打法，我们成功推动了杭州河语光年项目转为保障性租赁住房，并助力天津天拖北项目通过国家土地储备专项债实现资金回笼。在操盘能力方面，本集团持续优化操盘效率、夯实运营能力，确保新项目高标准落地并万科始终坚持“好房子、好服务、好社区”的经营理念，与当前国家推动 房地产高质量发展的政策导向高度契合。我们通过对“拾系”、“庐系”等住宅产品线的持续迭代，将“好房子”的标准转化为可量产的产品体系，赢得了客户与市场的广泛青睐。这种以客户认可为导向、兼顾品牌口碑与经营效率的开发能力，使万科在现房销售、代建业务等领域持续保持行业领先的市场竞争力。面对行业向现房销售制度转型的趋势，本集团实现营销模式的深度迭代，构建了涵盖定制装修、销售行为优化、场景更新、现房保鲜、入住率提升及社区",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "万科作为拥有四十余年积淀的中国房地产行业先行者，始终将品牌声誉视为企业的生命线。面对行业深刻变革，万科凭借精准匹配需求的设计能力和覆盖全周期的服务体系，在市场波动中树立了极高的客户信任。这种信任不仅体现在住宅开发领域，更延伸至物业服务、长租公寓等多元赛道，使万科在行业转型期依然能够保持品牌美誉度与市场号召力的行业领随着行业进入存量时代，存量资源转化能力和高效操盘能力已成为万科的核心竞争壁垒。在存量资源转化方面，报告期内本集团新获取的23 个项目全部为存量盘活类项目，主要分布在广州、杭州、宁波等核心城市。通过系统化的攻坚打法，我们成功推动了杭州河语光年项目转为保障性租赁住房，并助力天津天拖北项目通过国家土地储备专项债实现资金回笼。在操盘能力方面，本集团持续优化操盘效率、夯实运营能力，确保新项目高标准落地并万科始终坚持“好房子、好服务、好社区”的经营理念，与当前国家推动 房地产高质量发展的政策导向高度契合。我们通过对“拾系”、“庐系”等住宅产品线的持续迭代，将“好房子”的标准转化为可量产的产品体系，赢得了客户与市场的广泛青睐。这种以客户认可为导向、兼顾品牌口碑与经营效率的开发能力，使万科在现房销售、代建业务等领域持续保持行业领先的市场竞争力。面对行业向现房销售制度转型的趋势，本集团实现营销模式的深度迭代，构建了涵盖定制装修、销售行为优化、场景更新、现房保鲜、入住率提升及社区"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:29:12",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 29,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （六）经营和财务状况分析 > 1、利润状况",
+        "quoted_anchor": "运营在内的现房全周期经营体系。这种兼顾高品质产品和现房精细化经营的能力，使万科在本集团通过构建涵盖居住、购物、办公、物流在内的多业态服务体系，实现了与客户全生命周期的深度链接。在保持各赛道行业领先地位的同时，本集团不断迭代服务标准与商业模式，将经营韧性转化为发展动能。2025年，万物云推出“弹性定价”创新模式，为破解行业收费难和客户满意度低的矛盾做出有益探索，提升服务透明度与业主选择权。泊寓以96.6%的客户满意度及行业领先的续租率，为城市青年提供了高品质的居住选择，全年在全国范围内开展社群活动超 3,800场，持续升级租户社 区生活体验。商业业务依托在购物中心、社区商业、历史文化街区等各类项目中积累的成熟运营经验，实现商业运营能力复制与品牌输出，报告期内成功获取位于广州、西安等重点城市的优质项目，操盘能力获得行业广万科将科技深度融入业务流程，通过数字化手段实现向新质生产力的转化。在开发业务领域，在工业化建造方面，我们拥有成熟的“5+2”技术体系；在数字化应用方面，自研的AI审图、资产可视化建模软件“斗拱”等已成为行业级标杆。在物业服务领域，万物云自建超20万件，显著提升一线响应效率与服务标准化水平，成为物业行业 AI场景化应用的代表性成果。在长租公寓领域，泊寓通过迭代退租验房单、上线空房巡检、开展空房验收及销控房管理功能试点，结合房态标签优化，逐步实现销控房全流程标准化线上管理，有效提升房态品质与销售周转效率。在物流仓储领域，万纬物流依托深铁集团的资源优势，探索“轨道交通+机器人配送”这一创新城市物流模式，截至 2025年末正式投入运营的无人配送机器人达到 40台。这种将人工智能应用于业务场景、实现降本增效的能力，为集团在迈向新发展",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "运营在内的现房全周期经营体系。这种兼顾高品质产品和现房精细化经营的能力，使万科在本集团通过构建涵盖居住、购物、办公、物流在内的多业态服务体系，实现了与客户全生命周期的深度链接。在保持各赛道行业领先地位的同时，本集团不断迭代服务标准与商业模式，将经营韧性转化为发展动能。2025年，万物云推出“弹性定价”创新模式，为破解行业收费难和客户满意度低的矛盾做出有益探索，提升服务透明度与业主选择权。泊寓以96.6%的客户满意度及行业领先的续租率，为城市青年提供了高品质的居住选择，全年在全国范围内开展社群活动超 3,800场，持续升级租户社 区生活体验。商业业务依托在购物中心、社区商业、历史文化街区等各类项目中积累的成熟运营经验，实现商业运营能力复制与品牌输出，报告期内成功获取位于广州、西安等重点城市的优质项目，操盘能力获得行业广万科将科技深度融入业务流程，通过数字化手段实现向新质生产力的转化。在开发业务领域，在工业化建造方面，我们拥有成熟的“5+2”技术体系；在数字化应用方面，自研的AI审图、资产可视化建模软件“斗拱”等已成为行业级标杆。在物业服务领域，万物云自建超20万件，显著提升一线响应效率与服务标准化水平，成为物业行业 AI场景化应用的代表性成果。在长租公寓领域，泊寓通过迭代退租验房单、上线空房巡检、开展空房验收及销控房管理功能试点，结合房态标签优化，逐步实现销控房全流程标准化线上管理，有效提升房态品质与销售周转效率。在物流仓储领域，万纬物流依托深铁集团的资源优势，探索“轨道交通+机器人配送”这一创新城市物流模式，截至 2025年末正式投入运营的无人配送机器人达到 40台。这种将人工智能应用于业务场景、实现降本增效的能力，为集团在迈向新发展"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:33:13",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 33,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （六）经营和财务状况分析 > 15、根据《深圳证券交易所上市公司自律监管指引第 3 号——行业信息披露》相关要求",
+        "quoted_anchor": "本集团按行业惯例为购房客户的按揭贷款提供担保，主要为阶段性担保，担保期限自保证合同生效之日起，至客户所购产品的房地产证办出及抵押登记手续办妥并交付银行执管之日止。截至报告期末，本集团为客户的按揭贷款提供担保总额约 934.96亿元。本集团过去从未因上述担保蒙受任何重大损失。本集团认为无须就该等担保在财务报表中作出拨备。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "本集团按行业惯例为购房客户的按揭贷款提供担保，主要为阶段性担保，担保期限自保证合同生效之日起，至客户所购产品的房地产证办出及抵押登记手续办妥并交付银行执管之日止。截至报告期末，本集团为客户的按揭贷款提供担保总额约 934.96亿元。本集团过去从未因上述担保蒙受任何重大损失。本集团认为无须就该等担保在财务报表中作出拨备。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:60:15",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 60,
+        "section_path": "第四节 董事会报告 > 二、公司投资情况 > （二）非募集资金使用情况 > 1、金融资产投资",
+        "quoted_anchor": "截至报告期末，本集团持有的衍生金融工具主要有交叉货币报告期衍生品持仓的风险分析及控制措施说明（包括但 互换合约（CCS）。CCS 所面临的风险与汇率市场风险以及本集不限于市场风险、流动性风险、信用风险、操作风险、 团的未来外币债务现金流的确定性有关。本集团对衍生金融工具法律风险等） 的控制措施主要体现在：针对衍生品交易，本集团严格规范授权及业务操作流程，审慎选择和决定新增衍生金融工具的种类和数已投资衍生品报告期内市场价格或产品公允价值变动的 报告期内，本年衍生品投资产生亏损人民币 8,453.78万元。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "截至报告期末，本集团持有的衍生金融工具主要有交叉货币报告期衍生品持仓的风险分析及控制措施说明（包括但 互换合约（CCS）。CCS 所面临的风险与汇率市场风险以及本集不限于市场风险、流动性风险、信用风险、操作风险、 团的未来外币债务现金流的确定性有关。本集团对衍生金融工具法律风险等） 的控制措施主要体现在：针对衍生品交易，本集团严格规范授权及业务操作流程，审慎选择和决定新增衍生金融工具的种类和数已投资衍生品报告期内市场价格或产品公允价值变动的 报告期内，本年衍生品投资产生亏损人民币 8,453.78万元。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:72:18",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 72,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 五、董事会 > （三）董事履职情况 > 1、董事会召开情况",
+        "quoted_anchor": "按照《公司章程》，本公司董事会由 11名董事组成，设董事长 1人、职工代表董事 1人，可以设副董事长 1-2人，独立董事人数不低于 1/3。每届董事会任期三年。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "按照《公司章程》，本公司董事会由 11名董事组成，设董事长 1人、职工代表董事 1人，可以设副董事长 1-2人，独立董事人数不低于 1/3。每届董事会任期三年。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:79:23",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 79,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 七、董事和高级管理人员情况（截至本报告披露日） > （一）基本情况及主要经历 > 1、董事",
+        "quoted_anchor": "起取消监事会设置。在此之前，公司第十一届监事会由 3名组成，分别是监事会主席解冻、黄力平先生，1968 年出生，现任公司董事长、审计委员会委员，深铁集团党委副书记、安居集团有限公司党委副书记、董事、总经理；2021 年 2月至今，任深铁集团党委副书记、获武汉大学管理学学士学位；1992年获中南财经大学（现中南财经政法大学）经济学硕士学位；2002年获南开大学经济学博士学位；现为正高级会计师。胡先生曾在深圳建设集团工调研员、副处长，深圳市国资委统计预算处处长，企业二处处长、深圳市国资委总经济师、党委书记、董事长；2020 年 7月至今，任公司董事。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "起取消监事会设置。在此之前，公司第十一届监事会由 3名组成，分别是监事会主席解冻、黄力平先生，1968 年出生，现任公司董事长、审计委员会委员，深铁集团党委副书记、安居集团有限公司党委副书记、董事、总经理；2021 年 2月至今，任深铁集团党委副书记、获武汉大学管理学学士学位；1992年获中南财经大学（现中南财经政法大学）经济学硕士学位；2002年获南开大学经济学博士学位；现为正高级会计师。胡先生曾在深圳建设集团工调研员、副处长，深圳市国资委统计预算处处长，企业二处处长、深圳市国资委总经济师、党委书记、董事长；2020 年 7月至今，任公司董事。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:80:24",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 80,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 七、董事和高级管理人员情况（截至本报告披露日） > （一）基本情况及主要经历 > 2、独立董事",
+        "quoted_anchor": "司技术科长、海外公司副总工程师；2003 年 9月至今任职于深铁集团，先后担任 5号线建设分公司副经理、7 号线分公司经理，深圳地铁工程咨询有限公司总经理，建设总部副总经理兼工程一中心总经理、建设总部执行董事兼党委书记，深圳地铁建设集团有限公司董事长兼党委书记，深铁集团副总经理等职务；2021 年 11月至今，任公司董事。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "司技术科长、海外公司副总工程师；2003 年 9月至今任职于深铁集团，先后担任 5号线建设分公司副经理、7 号线分公司经理，深圳地铁工程咨询有限公司总经理，建设总部副总经理兼工程一中心总经理、建设总部执行董事兼党委书记，深圳地铁建设集团有限公司董事长兼党委书记，深铁集团副总经理等职务；2021 年 11月至今，任公司董事。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:80:25",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 80,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 七、董事和高级管理人员情况（截至本报告披露日） > （一）基本情况及主要经历 > 2、独立董事",
+        "quoted_anchor": "廖子彬先生，1962 年出生，现为公司独立董事、审计委员会召集人、独立董事专门委员会召集人，香港商界会计师协会荣誉顾问。廖子彬先生具有丰富的内地和香港资本市场合并、收购、重组和上市项目实务经验，1985年获伦敦政治经济学院经济学学士学位，拥有英格兰及威尔士特许会计师公会会员资格、香港会计师公会资深会员资格。曾任毕马威中国主席、香港毕马威会计师事务所高级顾问，曾获委任为中国财政部会计咨询专家，天津市政协香港委员。廖先生目前兼任中国平安人寿保险股份有限公司独立董事、深圳前海微众银行股份有限公司独立董事、中信银行股份有限公司（上海证券交易所上市公司，股份代码：林明彦先生，1963年出生，现为公司独立董事、审计委员会委员、薪酬与提名委员会委学商学院的高级管理课程。林先生在中国及新加坡的房地产开发及投资领域拥有丰富经验。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "廖子彬先生，1962 年出生，现为公司独立董事、审计委员会召集人、独立董事专门委员会召集人，香港商界会计师协会荣誉顾问。廖子彬先生具有丰富的内地和香港资本市场合并、收购、重组和上市项目实务经验，1985年获伦敦政治经济学院经济学学士学位，拥有英格兰及威尔士特许会计师公会会员资格、香港会计师公会资深会员资格。曾任毕马威中国主席、香港毕马威会计师事务所高级顾问，曾获委任为中国财政部会计咨询专家，天津市政协香港委员。廖先生目前兼任中国平安人寿保险股份有限公司独立董事、深圳前海微众银行股份有限公司独立董事、中信银行股份有限公司（上海证券交易所上市公司，股份代码：林明彦先生，1963年出生，现为公司独立董事、审计委员会委员、薪酬与提名委员会委学商学院的高级管理课程。林先生在中国及新加坡的房地产开发及投资领域拥有丰富经验。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:81:26",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 81,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 七、董事和高级管理人员情况（截至本报告披露日） > （一）基本情况及主要经历 > 3、高级管理人员",
+        "quoted_anchor": "执行兼首席独立董事等职务。林先生曾任建业地产股份有限公司（联交所上市公司，股份代沈向洋先生，1966 年出生。现为公司独立董事、薪酬与提名委员会召集人，香港科技大学校董会主席、粤港澳大湾区数字经济研究院理事长、清华大学高等研究院双聘教授。1996年获得卡内基梅隆大学计算机学院机器人专业博士学位，历任微软亚洲研究院院长、微软全球副总裁和微软全球执行副总裁，主管微软技术与研发部并主要负责推动微软中长期总体技术战略、策略以及前瞻性研究与开发工作。沈先生是美国国家工程院外籍院士、英国皇家工程院外籍院士。目前兼任美团和网易有道的独立非执行董事，曾任东方明珠新媒体股份有限张懿宸先生，1963 年出生，现任公司独立董事、投资与决策委员会召集人，中信资本控股有限公司董事长兼首席执行官、信宸资本董事长。张先生 1986年毕业于美国麻省理工学场公司、担任东京银行纽约分部证券自营交易业务负责人、美林证券大中华区债券资本市场富信息科技有限公司总裁； 2002年参与创 建中信资本控股有限公司（以下简称“中信资本”），目前担任中信资本董事长兼首席执行官。张先生目前还在中信资本投资的部分公司中兼任董事等职务，如兼任 Grand Foods Holdings Limited（麦当劳中国内地和香港特许经营商）董事会主席、哈药集团有限公司董事长、美国保健品企业GNC（健安喜）董事长，张先生目前兼任香港交易及结算所有限公司（联交所上市公司，股份代码：0388）独立董事。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "执行兼首席独立董事等职务。林先生曾任建业地产股份有限公司（联交所上市公司，股份代沈向洋先生，1966 年出生。现为公司独立董事、薪酬与提名委员会召集人，香港科技大学校董会主席、粤港澳大湾区数字经济研究院理事长、清华大学高等研究院双聘教授。1996年获得卡内基梅隆大学计算机学院机器人专业博士学位，历任微软亚洲研究院院长、微软全球副总裁和微软全球执行副总裁，主管微软技术与研发部并主要负责推动微软中长期总体技术战略、策略以及前瞻性研究与开发工作。沈先生是美国国家工程院外籍院士、英国皇家工程院外籍院士。目前兼任美团和网易有道的独立非执行董事，曾任东方明珠新媒体股份有限张懿宸先生，1963 年出生，现任公司独立董事、投资与决策委员会召集人，中信资本控股有限公司董事长兼首席执行官、信宸资本董事长。张先生 1986年毕业于美国麻省理工学场公司、担任东京银行纽约分部证券自营交易业务负责人、美林证券大中华区债券资本市场富信息科技有限公司总裁； 2002年参与创 建中信资本控股有限公司（以下简称“中信资本”），目前担任中信资本董事长兼首席执行官。张先生目前还在中信资本投资的部分公司中兼任董事等职务，如兼任 Grand Foods Holdings Limited（麦当劳中国内地和香港特许经营商）董事会主席、哈药集团有限公司董事长、美国保健品企业GNC（健安喜）董事长，张先生目前兼任香港交易及结算所有限公司（联交所上市公司，股份代码：0388）独立董事。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:82:28",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 82,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 七、董事和高级管理人员情况（截至本报告披露日） > （一）基本情况及主要经历 > 3、高级管理人员",
+        "quoted_anchor": "西财经大学管理学硕士学位，于 2003年获中国科学技术大学管理学学士学位，现为中国注册会计师非执业会员。韩女士于 2008年加入万科，历任公司财务与内控管理部业务经理、助理总经理、副总经理、管理中心财务管理职能中心合伙人。韩女士于 2020年 3月至今任公司执行副总裁、财务负责人，目前还兼任公司控股子公司万科海外投资控股有限公司（联交所上市公司，股份代号：1036）非执行董事。在加入万科之前，韩女士曾任职于江西省九田钧先生，1970 年出生，现任公司董事会秘书。田先生获中南财经大学经济学学士、堪培拉大学工商管理硕士。历任中国平安保险 (集团) 股份有限公司财务分析师、集团投资管理委员会执行秘书、集团财务管理委员会执行秘书，平安资产管理、平安人寿、平安证券、平安基金、平安汇通投资、前海结算等公司高管等重要职位。2017 年 7月起，先后担任深业集团、深圳市地铁集团、鲲鹏资本、深圳市国有免税集团、深圳市投资控股有限公司和深圳市创新投资集团有限公司的专职外部董事。2025 年 1月至今，任公司董事会秘书。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "西财经大学管理学硕士学位，于 2003年获中国科学技术大学管理学学士学位，现为中国注册会计师非执业会员。韩女士于 2008年加入万科，历任公司财务与内控管理部业务经理、助理总经理、副总经理、管理中心财务管理职能中心合伙人。韩女士于 2020年 3月至今任公司执行副总裁、财务负责人，目前还兼任公司控股子公司万科海外投资控股有限公司（联交所上市公司，股份代号：1036）非执行董事。在加入万科之前，韩女士曾任职于江西省九田钧先生，1970 年出生，现任公司董事会秘书。田先生获中南财经大学经济学学士、堪培拉大学工商管理硕士。历任中国平安保险 (集团) 股份有限公司财务分析师、集团投资管理委员会执行秘书、集团财务管理委员会执行秘书，平安资产管理、平安人寿、平安证券、平安基金、平安汇通投资、前海结算等公司高管等重要职位。2017 年 7月起，先后担任深业集团、深圳市地铁集团、鲲鹏资本、深圳市国有免税集团、深圳市投资控股有限公司和深圳市创新投资集团有限公司的专职外部董事。2025 年 1月至今，任公司董事会秘书。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:91:36",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 91,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 十六、风险管理 > （三）业绩亏损风险",
+        "quoted_anchor": "公司将继续全力以赴推进生产经营改善，积极推动销售回款，加快资产变现。同步与金融机构通力合作争取支持，保持融资稳定。在大股东及各方支持下，公司将尽最大努力保障因行业深度调整影响，房地产开发业务销售收入和利润率显著下降；公司经营性业务在扣除折旧摊销后尚未盈利，同时部分大宗资产交易和股权交易面临亏损风险，综合各类税费公司将在大股东及各方支持下，上下凝心聚力，继续全力以赴推进经营改善，积极响应国家各类政策，在保交房前提下，加大力度盘活资产，强化产品竞争力，加强预算控制，制定利润提升目标。公司将争取早日摆脱困境，回归健康发展的轨道。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "公司将继续全力以赴推进生产经营改善，积极推动销售回款，加快资产变现。同步与金融机构通力合作争取支持，保持融资稳定。在大股东及各方支持下，公司将尽最大努力保障因行业深度调整影响，房地产开发业务销售收入和利润率显著下降；公司经营性业务在扣除折旧摊销后尚未盈利，同时部分大宗资产交易和股权交易面临亏损风险，综合各类税费公司将在大股东及各方支持下，上下凝心聚力，继续全力以赴推进经营改善，积极响应国家各类政策，在保交房前提下，加大力度盘活资产，强化产品竞争力，加强预算控制，制定利润提升目标。公司将争取早日摆脱困境，回归健康发展的轨道。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:91:37",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 91,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 十六、风险管理 > （三）业绩亏损风险",
+        "quoted_anchor": "定的发展策略，对经济形势、产业政策、市场竞争、资源供给等外部风险因素以及财务状况、资金状况、资产管理、运营管理等内部风险因素进行研究，对主要风险进行识别及评估，为制订风险应对策略提供依据，并持续监控风险管理系统的健全性、合理性和有效性，提升风经过认真评估，公司目前面临的主要风险和相关应对措施如下：2025年公司仍面临复杂外部环境风险，有效需求不足对房地产市场形成持续制约。房地产市场分化加剧、去化压力犹存，行业仍处于调整期。政策层面释放出支持市场平稳健康发展的积极信号，但各地政策落地节奏、执行力度及实施效果存在差异，可能对公司经营环境、公司将积极应对外部环境变化，坚守稳健经营底线。以保交房为首要任务，全力保障项目交付；严守现金流安全，抢抓市场窗口全力推进销售，加快资金回笼；充分把握政策利好，优化融资结构，稳定融资渠道，多措并举盘活存量资产。持续提升产品力，优化经营服务水平，打造好房子、好服务、好社区，以精细化运营与高质量发展抵御市场波动，保障公司持受行业下行影响，公司销售规模持续下降，货币资金同步大幅减少，财务状况下行迹象明显，同时面对集中到期的存量债务压力，流动性面临较大挑战。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "定的发展策略，对经济形势、产业政策、市场竞争、资源供给等外部风险因素以及财务状况、资金状况、资产管理、运营管理等内部风险因素进行研究，对主要风险进行识别及评估，为制订风险应对策略提供依据，并持续监控风险管理系统的健全性、合理性和有效性，提升风经过认真评估，公司目前面临的主要风险和相关应对措施如下：2025年公司仍面临复杂外部环境风险，有效需求不足对房地产市场形成持续制约。房地产市场分化加剧、去化压力犹存，行业仍处于调整期。政策层面释放出支持市场平稳健康发展的积极信号，但各地政策落地节奏、执行力度及实施效果存在差异，可能对公司经营环境、公司将积极应对外部环境变化，坚守稳健经营底线。以保交房为首要任务，全力保障项目交付；严守现金流安全，抢抓市场窗口全力推进销售，加快资金回笼；充分把握政策利好，优化融资结构，稳定融资渠道，多措并举盘活存量资产。持续提升产品力，优化经营服务水平，打造好房子、好服务、好社区，以精细化运营与高质量发展抵御市场波动，保障公司持受行业下行影响，公司销售规模持续下降，货币资金同步大幅减少，财务状况下行迹象明显，同时面对集中到期的存量债务压力，流动性面临较大挑战。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:92:38",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 92,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 十六、风险管理 > （六）诉讼风险",
+        "quoted_anchor": "公司因合作开发、合同履约争议等事项面临诉讼或仲裁风险，可能导致公司承担赔偿责任等情况，影响资金周转与经营业绩，对日常经营管理带来影响。同时，诉讼过程中的声誉风险可能对公司品牌造成负面影响，降低客户信任度与市场竞争力。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "公司因合作开发、合同履约争议等事项面临诉讼或仲裁风险，可能导致公司承担赔偿责任等情况，影响资金周转与经营业绩，对日常经营管理带来影响。同时，诉讼过程中的声誉风险可能对公司品牌造成负面影响，降低客户信任度与市场竞争力。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:92:39",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 92,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 十六、风险管理 > （六）诉讼风险",
+        "quoted_anchor": "建筑行业的困境对于项目开发经营产生负面的影响，包括建筑企业暴雷、原材料大幅波动、劳资纠纷、安全意外事故等因素，可能对工程进度、客户满意度、项目成本、房屋质量等带公司已建立完整的招采与供应链管理体系，持续关注供应商经营及履约状态。通过工程后评估、第三方飞检常态化等举措强化履约管理。定期前置梳理客户风险并建立风险清单，面向交付、客户设立专业应对小组，保障业务有序开展；深入二级供应链，前置管控材料、设备的品质与供应稳定性，确保项目高品质稳定交付。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "建筑行业的困境对于项目开发经营产生负面的影响，包括建筑企业暴雷、原材料大幅波动、劳资纠纷、安全意外事故等因素，可能对工程进度、客户满意度、项目成本、房屋质量等带公司已建立完整的招采与供应链管理体系，持续关注供应商经营及履约状态。通过工程后评估、第三方飞检常态化等举措强化履约管理。定期前置梳理客户风险并建立风险清单，面向交付、客户设立专业应对小组，保障业务有序开展；深入二级供应链，前置管控材料、设备的品质与供应稳定性，确保项目高品质稳定交付。"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 155,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 (五)42 233,432,768,960.43 343,176,440,712.96 其中：营业收入 233,432,768,960.43 343,176,440,712.96 二、营业总成本 (五)42 211,347,291,770.88 308,264,871,439.50",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 233432768960.43,
+        "column_identity": "current_period",
+        "column_header_excerpt": "万科企业股份有限公司 财务报表 2025 年 12 月 31 日止年度 合并利润表 人民币元 项目 附注 本年发生额 上年发生额 一、营业总收入 (五)42 233,432,768,960.43 343,176,440,712.96 其中：营业收入 233,432,768,960.43 343,176,440,712.96 二、营业总成本 (五)42 211,347,291,770.88 308,264,871,439.50 其中：营业成本 211,347,291,770.88 308,264,871,439.50 税金及附加 (五)43 9,376,5",
+        "source_title": "万科A 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2024FY",
+        "page_number": 155,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 (五)42 233,432,768,960.43 343,176,440,712.96 其中：营业收入 233,432,768,960.43 343,176,440,712.96 二、营业总成本 (五)42 211,347,291,770.88 308,264,871,439.50",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 343176440712.96,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "万科企业股份有限公司 财务报表 2025 年 12 月 31 日止年度 合并利润表 人民币元 项目 附注 本年发生额 上年发生额 一、营业总收入 (五)42 233,432,768,960.43 343,176,440,712.96 其中：营业收入 233,432,768,960.43 343,176,440,712.96 二、营业总成本 (五)42 211,347,291,770.88 308,264,871,439.50 其中：营业成本 211,347,291,770.88 308,264,871,439.50 税金及附加 (五)43 9,376,5",
+        "source_title": "万科A 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 155,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "1.归属于母公司股东的净利润(净亏损) (88,556,470,495.64) (49,478,429,211.96) 2.少数股东损益 (3,253,620,605.85) 774,494,809.63 附注为财务报表的组成部分",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": -88556470495.64,
+        "column_identity": "current_period",
+        "column_header_excerpt": "万科企业股份有限公司 财务报表 2025 年 12 月 31 日止年度 合并利润表 人民币元 项目 附注 本年发生额 上年发生额 一、营业总收入 (五)42 233,432,768,960.43 343,176,440,712.96 其中：营业收入 233,432,768,960.43 343,176,440,712.96 二、营业总成本 (五)42 211,347,291,770.88 308,264,871,439.50 其中：营业成本 211,347,291,770.88 308,264,871,439.50 税金及附加 (五)43 9,376,5",
+        "source_title": "万科A 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2024FY",
+        "page_number": 155,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司股东的净利润",
+        "quoted_anchor": "1.归属于母公司股东的净利润(净亏损) (88,556,470,495.64) (49,478,429,211.96) 2.少数股东损益 (3,253,620,605.85) 774,494,809.63 附注为财务报表的组成部分",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": -49478429211.96,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "万科企业股份有限公司 财务报表 2025 年 12 月 31 日止年度 合并利润表 人民币元 项目 附注 本年发生额 上年发生额 一、营业总收入 (五)42 233,432,768,960.43 343,176,440,712.96 其中：营业收入 233,432,768,960.43 343,176,440,712.96 二、营业总成本 (五)42 211,347,291,770.88 308,264,871,439.50 其中：营业成本 211,347,291,770.88 308,264,871,439.50 税金及附加 (五)43 9,376,5",
+        "source_title": "万科A 2025 年年度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "source_id": "vanke_2026_q1",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2026Q1",
+        "page_number": 10,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 28,927,889,365.26 37,994,649,925.08 其中：营业收入 28,927,889,365.26 37,994,649,925.08 二、营业总成本 26,282,323,060.09 35,676,863,952.73",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+        "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 28927889365.26,
+        "column_identity": "current_period",
+        "column_header_excerpt": "应付股利 297,833,253.66 298,578,685.60 一年内到期的非流动负债 136,683,077,866.95 136,650,283,100.60 其他流动负债 8,208,072,794.70 8,711,792,075.11 流动负债合计 557,101,329,229.73 565,197,947,462.75 非流动负债： 长期借款 149,584,289,699.57 157,185,809,950.29 应付债券 10,188,822,426.35 11,295,348,685.75 租赁负债 13,340,587,82",
+        "source_title": "万科A 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "source_id": "vanke_2026_q1",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025Q1",
+        "page_number": 10,
+        "section_path": "consolidated_statement",
+        "quoted_label": "一、营业总收入",
+        "quoted_anchor": "一、营业总收入 28,927,889,365.26 37,994,649,925.08 其中：营业收入 28,927,889,365.26 37,994,649,925.08 二、营业总成本 26,282,323,060.09 35,676,863,952.73",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+        "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "revenue",
+        "value": 37994649925.08,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "应付股利 297,833,253.66 298,578,685.60 一年内到期的非流动负债 136,683,077,866.95 136,650,283,100.60 其他流动负债 8,208,072,794.70 8,711,792,075.11 流动负债合计 557,101,329,229.73 565,197,947,462.75 非流动负债： 长期借款 149,584,289,699.57 157,185,809,950.29 应付债券 10,188,822,426.35 11,295,348,685.75 租赁负债 13,340,587,82",
+        "source_title": "万科A 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "source_id": "vanke_2026_q1",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2026Q1",
+        "page_number": 11,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司所有者的净利润",
+        "quoted_anchor": "1.归属于母公司所有者的净利润（净亏损） (5,952,156,227.34) (6,246,208,543.03) 2.少数股东损益 (139,448,528.48) (168,989,982.22) 六、其他综合收益的税后净额 (403,179,038.88) (1,601,288,187.97)",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+        "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": -5952156227.34,
+        "column_identity": "current_period",
+        "column_header_excerpt": "减：所得税费用 1,105,087,155.11 (315,777,572.96) 五、净利润（净亏损） (6,091,604,755.82) (6,415,198,525.25) （一）按经营持续性分类 1.持续经营净利润（净亏损） (6,091,604,755.82) (6,415,198,525.25) （二）按所有权归属分类 1.归属于母公司所有者的净利润（净亏损） (5,952,156,227.34) (6,246,208,543.03) 2.少数股东损益 (139,448,528.48) (168,989,982.22) 六、其他综合收益的税",
+        "source_title": "万科A 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1",
+        "source_id": "vanke_2026_q1",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025Q1",
+        "page_number": 11,
+        "section_path": "consolidated_statement",
+        "quoted_label": "归属于母公司所有者的净利润",
+        "quoted_anchor": "1.归属于母公司所有者的净利润（净亏损） (5,952,156,227.34) (6,246,208,543.03) 2.少数股东损益 (139,448,528.48) (168,989,982.22) 六、其他综合收益的税后净额 (403,179,038.88) (1,601,288,187.97)",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225264061.PDF",
+        "raw_sha256": "4d49af4d1483d7600ab17cc42ada6f032b169ab58c36c230f1a998e75ee180c2",
+        "unit": "元",
+        "currency": "CNY",
+        "metric": "net_profit_parent",
+        "value": -6246208543.03,
+        "column_identity": "previous_period",
+        "column_header_excerpt": "减：所得税费用 1,105,087,155.11 (315,777,572.96) 五、净利润（净亏损） (6,091,604,755.82) (6,415,198,525.25) （一）按经营持续性分类 1.持续经营净利润（净亏损） (6,091,604,755.82) (6,415,198,525.25) （二）按所有权归属分类 1.归属于母公司所有者的净利润（净亏损） (5,952,156,227.34) (6,246,208,543.03) 2.少数股东损益 (139,448,528.48) (168,989,982.22) 六、其他综合收益的税",
+        "source_title": "万科A 2026 年第一季度报告",
+        "validation_status": "page_row_validated_v1"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:14:1",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 14,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （一）2025年市场回顾 > 2、物业服务",
+        "quoted_anchor": "新项目增长放缓，行业竞争加剧。国家统计局数据显示，2025 年全国住宅竣工面积同比下降 20.2%，新增供给持续收缩。面对市场环境变化，物业服务企业普遍将业务重心转向存量住宅及非住宅领域，以寻求新的增长路径。但当前住宅存量市场竞争加剧，非住宅市场缴率降至 71%，连续四年下滑。中指研究院数据显示，2025年二十个重点城市物业服务均价为 2.72元/平方米/月，同比微跌 0.23%。多重因素的综合影响下，物业服务企业经营压力凸企业主动战略收缩，拥抱科技，提升盈利能力。为应对市场客观压力并提升可持续发展能力，物业服务企业普遍采取战略收缩，主动退出低效项目，从追求“管理面积”转向深耕“经济效益”。行业科技化建设正从“单点工具应用”向“多元场景覆盖”逐步升级。AI助手、数字员工、智能工单系统等应用的持续深化，已显著提升了物业服务企业的运营效率。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "新项目增长放缓，行业竞争加剧。国家统计局数据显示，2025 年全国住宅竣工面积同比下降 20.2%，新增供给持续收缩。面对市场环境变化，物业服务企业普遍将业务重心转向存量住宅及非住宅领域，以寻求新的增长路径。但当前住宅存量市场竞争加剧，非住宅市场缴率降至 71%，连续四年下滑。中指研究院数据显示，2025年二十个重点城市物业服务均价为 2.72元/平方米/月，同比微跌 0.23%。多重因素的综合影响下，物业服务企业经营压力凸企业主动战略收缩，拥抱科技，提升盈利能力。为应对市场客观压力并提升可持续发展能力，物业服务企业普遍采取战略收缩，主动退出低效项目，从追求“管理面积”转向深耕“经济效益”。行业科技化建设正从“单点工具应用”向“多元场景覆盖”逐步升级。AI助手、数字员工、智能工单系统等应用的持续深化，已显著提升了物业服务企业的运营效率。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:15:2",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 15,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （一）2025年市场回顾 > 5、物流仓储",
+        "quoted_anchor": "住房租赁条例施行，促进行业规范发展。我国首部住房租赁行政法规《住房租赁条例》于 2025年9月正式施行，为规范市场秩序、保障租赁双方权益、推动行业高质量发展提供供需两端政策支持力度不断强化。供给端方面，政策重心逐步从大规模建设转向以需定供、品质提升及规范化管理等。需求端方面，各地进一步降低居民租金负担，从公积金、住房补贴等方面为承租人提供支持，并与人口、人才政策相结合，持续拉动住房租赁市场的潜社会消费品零售总额保持增长。国家统计局数据显示， 2025年社会消费品零售总额同消费两极分化明显。消费呈理性与体验并存趋势。一端是极致“性价化”，品牌光环逐步减弱，国货替代国际大牌，消费更加注重实际使用价值；另一端是高“心价比”，消费者愿意为情绪价值支付溢价，潮玩、宠物、娱乐等品类增长迅速。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "住房租赁条例施行，促进行业规范发展。我国首部住房租赁行政法规《住房租赁条例》于 2025年9月正式施行，为规范市场秩序、保障租赁双方权益、推动行业高质量发展提供供需两端政策支持力度不断强化。供给端方面，政策重心逐步从大规模建设转向以需定供、品质提升及规范化管理等。需求端方面，各地进一步降低居民租金负担，从公积金、住房补贴等方面为承租人提供支持，并与人口、人才政策相结合，持续拉动住房租赁市场的潜社会消费品零售总额保持增长。国家统计局数据显示， 2025年社会消费品零售总额同消费两极分化明显。消费呈理性与体验并存趋势。一端是极致“性价化”，品牌光环逐步减弱，国货替代国际大牌，消费更加注重实际使用价值；另一端是高“心价比”，消费者愿意为情绪价值支付溢价，潮玩、宠物、娱乐等品类增长迅速。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:24:5",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 24,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （三）各项业务发展情况 > 5、物流仓储",
+        "quoted_anchor": "报告期内，物流仓储业务实现营业收入 42.8亿元，同比增长 8.0%。其中冷链营业收入规模保持行业领先，仓储基本盘稳中有升。万纬物流累计开业项目 147个，可租赁面积年，结合区域市场采取差异化的经营策略，实现高标仓稳定期出租率 89%，冷库稳定期库容聚焦重点行业做深做透，深挖客户需求。万纬物流聚焦重点行业，在商超零售、餐饮、茶饮咖啡领域持续突破，品牌影响力显著提升，全年商超零售行业收入同比增长 13%，餐饮行业收入同比增长 48%。客户策略上，公司坚持“稳存量、求增量”，通过深挖现有客户需求，头部客户收入同比增长 28.3%；积极开拓区域新兴客户，全年新增客户超 110家，客户加速推进服务转型，服务收入快速增长。报告期内，万纬物流持续夯实运营基本盘，不断拓展重点客户的服务场景和合作机会，通过库内运营操作、“一件代发”、运输及增值服40%，其中运输收入 6.2亿元，同比增长 55%。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "报告期内，物流仓储业务实现营业收入 42.8亿元，同比增长 8.0%。其中冷链营业收入规模保持行业领先，仓储基本盘稳中有升。万纬物流累计开业项目 147个，可租赁面积年，结合区域市场采取差异化的经营策略，实现高标仓稳定期出租率 89%，冷库稳定期库容聚焦重点行业做深做透，深挖客户需求。万纬物流聚焦重点行业，在商超零售、餐饮、茶饮咖啡领域持续突破，品牌影响力显著提升，全年商超零售行业收入同比增长 13%，餐饮行业收入同比增长 48%。客户策略上，公司坚持“稳存量、求增量”，通过深挖现有客户需求，头部客户收入同比增长 28.3%；积极开拓区域新兴客户，全年新增客户超 110家，客户加速推进服务转型，服务收入快速增长。报告期内，万纬物流持续夯实运营基本盘，不断拓展重点客户的服务场景和合作机会，通过库内运营操作、“一件代发”、运输及增值服40%，其中运输收入 6.2亿元，同比增长 55%。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:25:6",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 25,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （三）各项业务发展情况 > 8、业务优化和资产处置",
+        "quoted_anchor": "光伏发电系统，实现光伏可再生能源供给超 1.7亿度，累计碳减排 9万吨以上。凭借在低碳物流领域的积极践行与创新实践，万纬物流荣获罗戈网颁发的“2025LOG 低碳供应链物流杰本集团产业办公业务始终以企业客户需求为核心，依托数智化运营与人性化服务，打造2025年，本集团新签约面积 55万平方米，其中多个项目实现酒店、医疗等经营业态租户引入。截至报告期末，已在全国布局 21个城市，经营项目 62个，经营规模位居国内办公行业独角兽企业 177家，大客户留存率约 70%。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "光伏发电系统，实现光伏可再生能源供给超 1.7亿度，累计碳减排 9万吨以上。凭借在低碳物流领域的积极践行与创新实践，万纬物流荣获罗戈网颁发的“2025LOG 低碳供应链物流杰本集团产业办公业务始终以企业客户需求为核心，依托数智化运营与人性化服务，打造2025年，本集团新签约面积 55万平方米，其中多个项目实现酒店、医疗等经营业态租户引入。截至报告期末，已在全国布局 21个城市，经营项目 62个，经营规模位居国内办公行业独角兽企业 177家，大客户留存率约 70%。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:28:11",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 28,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （五）核心竞争力分析",
+        "quoted_anchor": "企业社会责任。公司已制定了近 50项可持续发展目标，涉及减排降碳、资源能源管理、气候变化应对、产品与服务质量、健康与安全及供应链管理等多个方面，为可持续发展规划明确路径。2025年，为积极回应联交所与沪深交易所对气候信息披露的最新要求，公司启动气候相关财务影响的系统性梳理工作，进一步提升对气候相关风险与机遇的治理水平。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "企业社会责任。公司已制定了近 50项可持续发展目标，涉及减排降碳、资源能源管理、气候变化应对、产品与服务质量、健康与安全及供应链管理等多个方面，为可持续发展规划明确路径。2025年，为积极回应联交所与沪深交易所对气候信息披露的最新要求，公司启动气候相关财务影响的系统性梳理工作，进一步提升对气候相关风险与机遇的治理水平。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:34:14",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 34,
+        "section_path": "第四节 董事会报告 > 一、经营情况讨论与分析 > （七）未来发展展望",
+        "quoted_anchor": "坚持打造“好房子”产品，完善绿色、智慧、宜居的住宅标准，持续落地“好房子、好服务、好社区”的理念。在业务实践中，将通过对“拾系”、“庐系”等标杆产品线的持续精研，推动开发业务向产品标准化与经营精益化深度融合。这种以客户需求为导向的产品迭代，不仅是公司应对行业环境变化的基石，更是公司在新发展阶段夯实核心竞争力的根本保3、积极响应政策导向，以“绣花功夫”深耕城市更新。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "坚持打造“好房子”产品，完善绿色、智慧、宜居的住宅标准，持续落地“好房子、好服务、好社区”的理念。在业务实践中，将通过对“拾系”、“庐系”等标杆产品线的持续精研，推动开发业务向产品标准化与经营精益化深度融合。这种以客户需求为导向的产品迭代，不仅是公司应对行业环境变化的基石，更是公司在新发展阶段夯实核心竞争力的根本保3、积极响应政策导向，以“绣花功夫”深耕城市更新。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:68:16",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 68,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 一、公司企业文化与公司治理情况综述 > 1、公司文化 > 2、公司治理情况",
+        "quoted_anchor": "对客户：万科坚信客户是永远的伙伴，尊重客户、理解客户，持续为客户提供好产品、对员工：万科坚信人才是唯一的资本，尊重每一位员工的个性，在发展机会面前人人平等，倡导健康丰盛的人生，鼓励员工追求身心健康，家庭的和睦，个人生活内容的极大丰对社会：万科坚持对内平等，对外开放，致力于建设“阳光照亮的体制”，始终追求卓越，做中国地产行业的领跑者，树立一个阳光健康的现代企业形象。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "对客户：万科坚信客户是永远的伙伴，尊重客户、理解客户，持续为客户提供好产品、对员工：万科坚信人才是唯一的资本，尊重每一位员工的个性，在发展机会面前人人平等，倡导健康丰盛的人生，鼓励员工追求身心健康，家庭的和睦，个人生活内容的极大丰对社会：万科坚持对内平等，对外开放，致力于建设“阳光照亮的体制”，始终追求卓越，做中国地产行业的领跑者，树立一个阳光健康的现代企业形象。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:68:17",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 68,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 一、公司企业文化与公司治理情况综述 > 1、公司文化 > 2、公司治理情况",
+        "quoted_anchor": "报告期内，公司严格遵守《公司法》《证券法》《上市公司治理准则》以及《联交所上市规则》等治理要求，并结合公司实际情况，不断完善公司治理结构，规范公司运作。公司治理的实际状况与法律、行政法规和中国证监会发布的关于上市公司治理的规定不存在重大《企业管治守则》第 C.1.6条规定，独立非执行董事及其他非执行董事应出席股东会，对公司股东的意见有公正的了解。《企业管治守则》第F.2.2 条规定，董事会主席应出席股东周年大会，并邀请审核委员会、薪酬委员会、提名委员会及任何其他委员会的主席出席。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "报告期内，公司严格遵守《公司法》《证券法》《上市公司治理准则》以及《联交所上市规则》等治理要求，并结合公司实际情况，不断完善公司治理结构，规范公司运作。公司治理的实际状况与法律、行政法规和中国证监会发布的关于上市公司治理的规定不存在重大《企业管治守则》第 C.1.6条规定，独立非执行董事及其他非执行董事应出席股东会，对公司股东的意见有公正的了解。《企业管治守则》第F.2.2 条规定，董事会主席应出席股东周年大会，并邀请审核委员会、薪酬委员会、提名委员会及任何其他委员会的主席出席。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:74:19",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 74,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 五、董事会 > （四）董事的培训情况",
+        "quoted_anchor": "报告期内，董事积极参与讨论并运用自身的专业能力和丰富经验对决策事项提出合理的意见或建议，为促进公司科学决策、维护公司及公司股东尤其是中小股东的利益发挥了积极作用。公司认真听取及采纳董事的各项建议，针对董事相关建议安排董事会专项汇报、在公报告期内，公司部分董事参加了深圳证监局指导深圳上市公司协会举办的 2025年深圳辖区上市公司董事、高管培训班；公司董事会办公室向董事提供监管机构监管情况通报、监",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "报告期内，董事积极参与讨论并运用自身的专业能力和丰富经验对决策事项提出合理的意见或建议，为促进公司科学决策、维护公司及公司股东尤其是中小股东的利益发挥了积极作用。公司认真听取及采纳董事的各项建议，针对董事相关建议安排董事会专项汇报、在公报告期内，公司部分董事参加了深圳证监局指导深圳上市公司协会举办的 2025年深圳辖区上市公司董事、高管培训班；公司董事会办公室向董事提供监管机构监管情况通报、监"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:75:20",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 75,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 五、董事会 > （六）董事会专业委员会",
+        "quoted_anchor": "公司战略/行 法律、法规、 风险管理及内 公司治理/财 企业管治及环董事姓名 业和业务最新 监管规则的遵 部监控 务汇报/信息 境、社会事宜 总培训小时数报告期内，公司独立非执行董事 4名，任期均为 3年。每位独立董事已通过提供《联交所上市规则》第 3.13条规定的独立性确认函确认其与公司的独立性，而公司亦认可独立董事的独立性。2025年，各位独立董事勤勉履职，出席董事会会议，听取公司汇报，参加专业委员会讨论，审阅董事会文件。报告期内，公司召开独立董事专门会议 13次，审议关联交易等事项。报告期内，独立董事未对公司有关事项提出异议。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "公司战略/行 法律、法规、 风险管理及内 公司治理/财 企业管治及环董事姓名 业和业务最新 监管规则的遵 部监控 务汇报/信息 境、社会事宜 总培训小时数报告期内，公司独立非执行董事 4名，任期均为 3年。每位独立董事已通过提供《联交所上市规则》第 3.13条规定的独立性确认函确认其与公司的独立性，而公司亦认可独立董事的独立性。2025年，各位独立董事勤勉履职，出席董事会会议，听取公司汇报，参加专业委员会讨论，审阅董事会文件。报告期内，公司召开独立董事专门会议 13次，审议关联交易等事项。报告期内，独立董事未对公司有关事项提出异议。"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:76:21",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 76,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 五、董事会 > （六）董事会专业委员会 > 1、审计委员会",
+        "quoted_anchor": "林明彦 审计委员会委员、薪酬与提名委员会委员 7 1 1 -审计委员会主要负责审核公司的司财务信息及其披露、监督及评估内外部审计工作和内部控制，检查和评估公司风险管理系统，行使《公司法》规定的监事会的职权等。第二十届董事会审计委员会目前由独立非执行董事廖子彬、林明彦和非执行董事黄力平组成，廖子彬报告期内，审计委员会召开工作会议 8次，会议的举行均符合《公司章程》和《董事会审计委员会实施细则》的规定，审议或听取了年度审计工作安排、定期财务报告、利润分配、内部控制、内部监察审计、会计师事务所选聘及减值准备等事项。审计委员会对报告期第二十届董事 听取毕马威 2024年度审计工作进展的汇报第十二次会议 听取公司 2024年报编制工作进展和相关事项工作进展的汇报第二十届董事 听取公司 2024年报编制工作进展和相关事项工作进展的汇报听取会计师事务所关于 2024年度财务报告审计工作的汇报第二十届董事 审议 2024年度经审计的财务报告第十四次会议 审议关于审计委员会对会计师事务所 2024年度履职情况评估及履行监督职责情况报告",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "林明彦 审计委员会委员、薪酬与提名委员会委员 7 1 1 -审计委员会主要负责审核公司的司财务信息及其披露、监督及评估内外部审计工作和内部控制，检查和评估公司风险管理系统，行使《公司法》规定的监事会的职权等。第二十届董事会审计委员会目前由独立非执行董事廖子彬、林明彦和非执行董事黄力平组成，廖子彬报告期内，审计委员会召开工作会议 8次，会议的举行均符合《公司章程》和《董事会审计委员会实施细则》的规定，审议或听取了年度审计工作安排、定期财务报告、利润分配、内部控制、内部监察审计、会计师事务所选聘及减值准备等事项。审计委员会对报告期第二十届董事 听取毕马威 2024年度审计工作进展的汇报第十二次会议 听取公司 2024年报编制工作进展和相关事项工作进展的汇报第二十届董事 听取公司 2024年报编制工作进展和相关事项工作进展的汇报听取会计师事务所关于 2024年度财务报告审计工作的汇报第二十届董事 审议 2024年度经审计的财务报告第十四次会议 审议关于审计委员会对会计师事务所 2024年度履职情况评估及履行监督职责情况报告"
+      },
+      {
+        "evidence_id": "vanke_2025_annual:narrative:78:22",
+        "source_id": "vanke_2025_annual",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "source_kind": "issuer_filing",
+        "evidence_class": "issuer_disclosure",
+        "report_period": "2025FY",
+        "page_number": 78,
+        "section_path": "第五节 公司治理报告暨企业管治报告 > 五、董事会 > （六）董事会专业委员会 > 3、投资与决策委员会",
+        "quoted_anchor": "薪酬及提名委员会主要负责拟定董事、高级管理人员的选择标准和程序，对董事、高级管理人员人选及其任职资格进行遴选、审核，制定董事、高级管理人员的考核标准并进行考核，制定、审查董事、高级管理人员的薪酬决定机制、决策流程、支付与止付追索安排等薪酬政策与方案，并就提名或者任免董事、聘任或者解聘高级管理人员、董事及高级管理人员第二十届董事会薪酬与提名委员会目前由独立非执行董事沈向洋、林明彦以及非执行董薪酬与提名委员会在工作中已积极实践了董事会成员多元化的政策，即甄选董事人选将按一系列多元化范畴为基准，包括但不限于性别、年龄、文化及教育背景、专业经验、技能及知识等。在此基础上，将按人选对本公司业务及发展的综合价值、可为董事会提供的贡献、及保证本公司董事会成员的多元化等客观条件而作出决定。",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-01/1225067794.PDF",
+        "raw_sha256": "b2befc9da2a9e09c798702c351e6af65a4b148e32baa07737b941edc2caf1eba",
+        "source_title": "万科A 2025 年年度报告",
+        "text": "薪酬及提名委员会主要负责拟定董事、高级管理人员的选择标准和程序，对董事、高级管理人员人选及其任职资格进行遴选、审核，制定董事、高级管理人员的考核标准并进行考核，制定、审查董事、高级管理人员的薪酬决定机制、决策流程、支付与止付追索安排等薪酬政策与方案，并就提名或者任免董事、聘任或者解聘高级管理人员、董事及高级管理人员第二十届董事会薪酬与提名委员会目前由独立非执行董事沈向洋、林明彦以及非执行董薪酬与提名委员会在工作中已积极实践了董事会成员多元化的政策，即甄选董事人选将按一系列多元化范畴为基准，包括但不限于性别、年龄、文化及教育背景、专业经验、技能及知识等。在此基础上，将按人选对本公司业务及发展的综合价值、可为董事会提供的贡献、及保证本公司董事会成员的多元化等客观条件而作出决定。"
+      }
+    ],
+    "derived_metrics": [
+      {
+        "derived_id": "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent",
+        "metric": "net_profit_parent",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "current_evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+        "previous_evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1",
+        "current_period": "2025FY",
+        "previous_period": "2024FY",
+        "current_value": -88556470495.64,
+        "previous_value": -49478429211.96,
+        "absolute_change": -39078041283.68,
+        "percent_change": -78.979955,
+        "direction": "下滑",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:net_profit_parent",
+        "metric": "net_profit_parent",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "current_evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "previous_evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1",
+        "current_period": "2026Q1",
+        "previous_period": "2025Q1",
+        "current_value": -5952156227.34,
+        "previous_value": -6246208543.03,
+        "absolute_change": 294052315.69,
+        "percent_change": 4.707693,
+        "direction": "增长",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:revenue",
+        "metric": "revenue",
+        "document_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c",
+        "current_evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "previous_evidence_id": "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "current_period": "2025FY",
+        "previous_period": "2024FY",
+        "current_value": 233432768960.43,
+        "previous_value": 343176440712.96,
+        "absolute_change": -109743671752.53003,
+        "percent_change": -31.97879,
+        "direction": "下滑",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      },
+      {
+        "derived_id": "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:revenue",
+        "metric": "revenue",
+        "document_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760",
+        "current_evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "previous_evidence_id": "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "current_period": "2026Q1",
+        "previous_period": "2025Q1",
+        "current_value": 28927889365.26,
+        "previous_value": 37994649925.08,
+        "absolute_change": -9066760559.820004,
+        "percent_change": -23.863256,
+        "direction": "下滑",
+        "formula": "(current_value - previous_value) / abs(previous_value) * 100",
+        "computed_by": "editorial-v4-deterministic-derived-metrics-v1"
+      }
+    ],
+    "gaps": [],
+    "truth_boundary": {
+      "official_pdf_only": true,
+      "issuer_disclosure_is_not_independent_proof": true,
+      "derived_direction_is_deterministic": true,
+      "no_valuation_or_action": true,
+      "no_old_report_prose": true
+    }
+  }
+}

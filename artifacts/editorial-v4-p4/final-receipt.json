@@ -1,0 +1,43 @@
+{
+  "schema_version": "editorial-v4-p4-final-receipt-v1",
+  "generated_at": "2026-08-04T04:46:36+00:00",
+  "golden_manifest_hash": "4e4ba47bbc3dd9f85982dd65fdf9a9dac3fc38c1933805624bd686857adf4c28",
+  "golden_tickers": [
+    "000001.SZ",
+    "000333.SZ",
+    "300750.SZ",
+    "600519.SH",
+    "600900.SH"
+  ],
+  "rejected_candidates": [
+    {
+      "ticker": "300115.SZ",
+      "reason_code": "benchmark_leak",
+      "status": "rejected_before_acceptance"
+    }
+  ],
+  "blind": {
+    "ticker": "000002.SZ",
+    "issuer_name": "万科A",
+    "packet_hash": "85ecd085395673b171cc03a83ebf1836f04d27f968522d08e378c70516393c98",
+    "final_iteration": 15,
+    "report_hash": "26c1672b4f75f9ed61ee06a6dfc36b6414e8d1314bdeed6a96aabc7dd9580639",
+    "body_chars": 4059,
+    "judgment_count": 9,
+    "aggressive_judgment_count": 2,
+    "machine_status": "passed",
+    "qa_raw_status": "failed",
+    "qa_raw_blockers": 6,
+    "qa_filtered_status": "passed",
+    "qa_filtered_blockers": 0,
+    "review_status": "pending",
+    "action_state": "blocked",
+    "no_tier_credit": true,
+    "no_publication_credit": true
+  },
+  "acceptance_audit": "blind-acceptance-audit.json",
+  "all_passed": true,
+  "review_only": true,
+  "no_tier_credit": true,
+  "no_publication_credit": true
+}

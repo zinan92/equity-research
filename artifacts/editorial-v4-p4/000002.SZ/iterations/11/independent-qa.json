@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "blockers": [],
+  "strengths": [
+    "所有事实性数字均能回溯到官方PDF页码和quoted_anchor，且同期对比数据均明确给出了方向和幅度。",
+    "公司自述内容均明确标注为“公司披露/年报披露”，未将自述冒充独立验证。",
+    "报告明确指出了证据缺口（如货币资金、经营现金流数据缺失），并据此说明无法评估流动性安全边际，未用空泛句子凑篇幅。",
+    "整体结论带有锋利判断，并提供了falsifier，符合爱牛式风格。"
+  ],
+  "checked_rules": [
+    "每个数字和事实是否能由evidence_ids回溯到document_id、页码、quoted_anchor",
+    "引用有同期对比的数据时，正文是否明确写增长/下滑/持平及确定性输入给出的幅度",
+    "只要是公司年报/季报自述，是否显式写“公司披露/年报自述/公告披露”，没有把自述冒充独立验证",
+    "是否把已经披露的历史实际值写成“如果…那么…”的条件句结论",
+    "是否把未提供证据的客户、订单、排名、份额、估值、股价、目标价或行动建议写成事实",
+    "爱牛式的独特定位属于允许的AI judgment，只要在claims中是judgment、引用了相关底层evidence、明确是研究判断并有falsifier，就不算blocker；若未标[J-xx]或没有refs/falsifier，才报blocker",
+    "是否有爱牛式的具体资产定位、财务因果链、风险证伪条件和白话结论，而不是公司年报摘要",
+    "是否明确缺口和下一步验证，不用空泛句子凑篇幅"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论句“核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断”未标[J-xx]标记，但属于判断性结论。",
+      "claim_id": "J-08",
+      "evidence_ids": []
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-07中“乐观预期建立在深铁持续输血的假设上”未在引用证据中直接体现，且“乐观预期”本身未定义，属于未提供证据的假设性事实。",
+      "claim_id": "J-07",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:13:0",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-06中“一旦主要合作银行收紧信用条件或大股东支持力度减弱，现有融资安排可能瓦解”未在引用证据中提及，属于无证据的假设性事实。",
+      "claim_id": "J-06",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:37",
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-05中“当前最大风险不是亏损本身，而是在持续交付和偿债压力下，经营性现金流能否覆盖利息和到期本金”未在引用证据中直接体现，且未提供经营性现金流数据。",
+      "claim_id": "J-05",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:33:13",
+        "vanke_2025_annual:narrative:91:36"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-04中“如果资产处置和销售回款速度未能显著改善，2026年可能仍会出现流动性缺口”未在引用证据中直接体现，属于无证据的假设性事实。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-01中“当前万科的核心矛盾已从行业周期转向债务展期博弈，能否用经营性现金流覆盖到期债务决定生存边界”未在引用证据中直接体现，且未提供经营性现金流数据。",
+      "claim_id": "J-01",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:net_profit_parent:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:net_profit_parent:11:1",
+        "vanke_2025_annual:narrative:13:0"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-03中“万科试图通过产品标准化和AI降本增效来对冲开发业务萎缩，并拓展经营性业务收入来源”未在引用证据中直接体现，属于无证据的假设性事实。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3",
+        "vanke_2025_annual:narrative:27:9",
+        "vanke_2025_annual:narrative:26:8",
+        "vanke_2025_annual:narrative:24:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "unsupported_specific_fact",
+      "code": "unsupported_claim",
+      "message": "J-02中“深铁集团已深度嵌入万科决策中枢，管理层国资背景浓厚”未在引用证据中直接体现，属于无证据的假设性事实。",
+      "claim_id": "J-02",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:79:23",
+        "vanke_2025_annual:narrative:80:24"
+      ]
+    }
+  ],
+  "advisories": [
+    {
+      "severity": "blocker",
+      "category": "judgment_synthesis",
+      "code": "judgment_marker_missing",
+      "message": "整体结论句“核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断”未标[J-xx]标记，但属于判断性结论。",
+      "claim_id": "J-08",
+      "evidence_ids": []
+    }
+  ],
+  "request_hash": "ee4e15d6564ba5d18319ff40bd0d87ed3cfdb6ee00c20de052a898f95baee645",
+  "response_hash": "c00b46879443a6988dfbfb2b57cf744b6285191736ef75dc8cc7136ca2451b63",
+  "run_id": "editorial-v4-qa:06138c61-8da3-4974-9e91-de2ccc85f3a8",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "06138c61-8da3-4974-9e91-de2ccc85f3a8",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T04:24:09+00:00"
+}

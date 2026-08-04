@@ -1,0 +1,156 @@
+{
+  "status": "failed",
+  "blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 evidence_ids 为 narrative:72:18 和 narrative:75:20，但 72:18 仅提及董事会组成，未提及独立董事不低于1/3；75:20 提及独立非执行董事4名，但未提及公司章程规定。需拆分或修正引用。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18",
+        "vanke_2025_annual:narrative:75:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-08 引用 evidence_ids 为 narrative:80:25 和 narrative:81:26，但 80:25 仅提及廖子彬，81:26 提及沈向洋和张懿宸，未覆盖全部三位独立董事的完整背景。需确保每个独立董事信息均有对应证据。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:80:25",
+        "vanke_2025_annual:narrative:81:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-43 引用 evidence_ids 为 narrative:91:36，但该证据未提及“加大资产盘活力度、加强预算控制”。需补充证据或修正引用。",
+      "claim_id": "C-43",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:36"
+      ]
+    }
+  ],
+  "strengths": [
+    "所有财务数据均精确引用自官方PDF，并标注了具体的evidence_id和页码。",
+    "公司自述内容均明确标注为“公司披露”或“年报披露”，未将自述冒充独立验证。",
+    "判断性结论均带有[J-xx]标记和falsifier，符合judgment synthesis规则。",
+    "报告明确指出了数据缺口（如货币资金、经营现金流），并据此提出下一步验证方向。",
+    "整体结论锋利且带有白话总结，符合爱牛式风格要求。"
+  ],
+  "checked_rules": [
+    "数字和事实可回溯到document_id、页码、quoted_anchor",
+    "同期对比数据明确写增长/下滑及幅度",
+    "公司自述显式标注“公司披露/年报自述”",
+    "未将历史实际值写成条件句结论",
+    "未将无证据的客户、订单、排名等写成事实",
+    "判断性结论有[J]标记、refs和falsifier",
+    "报告包含资产定位、财务因果链、风险证伪条件和白话结论",
+    "缺口基于evidence packet的gaps，未借gap掩盖已有数字"
+  ],
+  "raw_status": "failed",
+  "raw_blockers": [
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-04 引用 evidence_ids 为 narrative:72:18 和 narrative:75:20，但 72:18 仅提及董事会组成，未提及独立董事不低于1/3；75:20 提及独立非执行董事4名，但未提及公司章程规定。需拆分或修正引用。",
+      "claim_id": "C-04",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:72:18",
+        "vanke_2025_annual:narrative:75:20"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-08 引用 evidence_ids 为 narrative:80:25 和 narrative:81:26，但 80:25 仅提及廖子彬，81:26 提及沈向洋和张懿宸，未覆盖全部三位独立董事的完整背景。需确保每个独立董事信息均有对应证据。",
+      "claim_id": "C-08",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:80:25",
+        "vanke_2025_annual:narrative:81:26"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-36 引用 evidence_ids 为 narrative:25:7，但该证据仅提及潮州有熊酒店收入同比提升23%和扬州有熊酒店开业，未提及“轻资产模式”。需补充证据或修正表述。",
+      "claim_id": "C-36",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:25:7"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-42 引用 evidence_ids 为 narrative:29:12，但该证据未提及商业业务获取广州、西安项目。需补充证据或修正引用。",
+      "claim_id": "C-42",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:29:12"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-43 引用 evidence_ids 为 narrative:91:36，但该证据未提及“加大资产盘活力度、加强预算控制”。需补充证据或修正引用。",
+      "claim_id": "C-43",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:91:36"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "C-44 引用 evidence_ids 为 narrative:90:35，但该证据仅提及董事会每年检讨风险管理及内部监控系统有效性，未提及“听取管理层汇报主要风险及应对措施”。需补充证据或修正引用。",
+      "claim_id": "C-44",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:90:35"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-03 引用 evidence_ids 包含 narrative:24:5，但该证据为物流仓储业务数据，与产品标准化和AI降本增效无直接关联。需修正引用或调整判断依据。",
+      "claim_id": "J-03",
+      "evidence_ids": [
+        "vanke_2025_annual:narrative:20:3",
+        "vanke_2025_annual:narrative:27:9",
+        "vanke_2025_annual:narrative:26:8",
+        "vanke_2025_annual:narrative:24:5"
+      ]
+    },
+    {
+      "severity": "blocker",
+      "category": "provenance",
+      "code": "evidence_id_mismatch",
+      "message": "J-04 引用 evidence_ids 包含 narrative:91:37，但该证据仅提及流动性挑战，未直接支持“2026年可能仍会出现流动性缺口”的判断。需补充证据或调整判断。",
+      "claim_id": "J-04",
+      "evidence_ids": [
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:0",
+        "official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:fact:revenue:155:1",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:0",
+        "official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:fact:revenue:10:1",
+        "vanke_2025_annual:narrative:91:37"
+      ]
+    }
+  ],
+  "advisories": [],
+  "request_hash": "2499a875a7c3ce49b28278f150872d533257b5ab3220d53019ff4c0e2a975fb7",
+  "response_hash": "1f0dc437342e98c555f23494ddd2e1d39adbfc49b4f3c5b61159afe5c94ad7c0",
+  "run_id": "editorial-v4-qa:cdbfdfb3-28da-438d-9d88-f94ff0d47cdb",
+  "provider": "DeepSeek",
+  "model": "deepseek-v4-pro",
+  "request_id": "cdbfdfb3-28da-438d-9d88-f94ff0d47cdb",
+  "prompt_version": "editorial-v4-independent-qa-prompt-v2",
+  "filter_version": "editorial-v4-independent-qa-filter-v2",
+  "generated_at": "2026-08-04T04:04:55+00:00"
+}

@@ -1,0 +1,41 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 3321,
+  "claims": 45,
+  "errors": [
+    {
+      "code": "numeric_quote_mismatch",
+      "message": "numeric claim value is not present in cited page anchor",
+      "claim_id": "F-01",
+      "number": "49,478,429,211.96元"
+    },
+    {
+      "code": "historical_condition",
+      "message": "conditional claim is bound to already-disclosed evidence",
+      "claim_id": "J-07"
+    },
+    {
+      "code": "judgment_falsifier",
+      "message": "judgment claim lacks falsifier/trigger",
+      "claim_id": "J-07"
+    },
+    {
+      "code": "comparison_direction_missing",
+      "message": "comparison-backed claim does not state direction",
+      "claim_id": "J-08"
+    },
+    {
+      "code": "derived_binding",
+      "message": "comparison claim must cite both deterministic input facts",
+      "claim_id": "J-08",
+      "derived_id": "derived:official-filing:editorial-v4:vanke_2025_annual:b2befc9da2a9e09c:net_profit_parent"
+    },
+    {
+      "code": "derived_binding",
+      "message": "comparison claim must cite both deterministic input facts",
+      "claim_id": "J-08",
+      "derived_id": "derived:official-filing:editorial-v4:vanke_2026_q1:4d49af4d1483d760:net_profit_parent"
+    }
+  ]
+}

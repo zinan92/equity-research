@@ -1,0 +1,59 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 4001,
+  "claims": 49,
+  "errors": [
+    {
+      "code": "orphan_marker",
+      "message": "body marker has no claim registry row",
+      "marker": "[C-17]"
+    },
+    {
+      "code": "orphan_marker",
+      "message": "body marker has no claim registry row",
+      "marker": "[C-18]"
+    },
+    {
+      "code": "orphan_marker",
+      "message": "body marker has no claim registry row",
+      "marker": "[C-20]"
+    },
+    {
+      "code": "orphan_marker",
+      "message": "body marker has no claim registry row",
+      "marker": "[C-29]"
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "aggressive positioning sentence lacks an explicit [J-xx] judgment marker",
+      "excerpt": "核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断"
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "37",
+      "claim_ids": [
+        "C-17",
+        "C-18"
+      ]
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "70",
+      "claim_ids": [
+        "C-17",
+        "C-18"
+      ]
+    },
+    {
+      "code": "body_numeric_unbound",
+      "message": "body numeric literal is not closed by the same sentence's claim/evidence",
+      "token": "23",
+      "claim_ids": [
+        "C-29"
+      ]
+    }
+  ]
+}

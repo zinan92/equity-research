@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 4025,
+  "claims": 53,
+  "errors": [
+    {
+      "code": "orphan_marker",
+      "message": "body marker has no claim registry row",
+      "marker": "[J-01]"
+    },
+    {
+      "code": "self_report_body_unmarked",
+      "message": "issuer self-report marker is not accompanied by an explicit attribution in rendered prose",
+      "claim_id": "C-02a"
+    },
+    {
+      "code": "judgment_marker_missing",
+      "message": "aggressive positioning sentence lacks an explicit [J-xx] judgment marker",
+      "excerpt": "核心矛盾仍是能否在流动性耗竭前完成债务重组和资产盘活，证伪信号是公开市场违约或资金支持中断"
+    }
+  ]
+}

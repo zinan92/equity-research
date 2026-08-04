@@ -1,0 +1,18 @@
+{
+  "status": "failed",
+  "ticker": "000002.SZ",
+  "chars": 3596,
+  "claims": 49,
+  "errors": [
+    {
+      "code": "comparison_direction_missing",
+      "message": "comparison-backed claim does not state direction",
+      "claim_id": "J-08"
+    },
+    {
+      "code": "claim_not_rendered",
+      "message": "claim registry row is not visible in body",
+      "claim_id": "J-08"
+    }
+  ]
+}
