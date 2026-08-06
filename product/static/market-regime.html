@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Park Market Regime Radar：跨资产日 K、风险偏好、市场风格与领导力。">
+  <title>Market Regime Radar · Park</title>
+  <link rel="stylesheet" href="/market-regime.css">
+  <script src="/market-regime.js" defer></script>
+</head>
+<body>
+  <div class="page-grid" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/market-regime" aria-label="Market Regime Radar 首页">
+      <span class="brand-mark">P</span>
+      <span>
+        <strong>MARKET REGIME</strong>
+        <small>PARK RESEARCH RADAR</small>
+      </span>
+    </a>
+    <div class="topbar-status">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span id="top-quality">读取本地快照</span>
+      <span class="topbar-divider" aria-hidden="true"></span>
+      <span id="top-schedule">4H CYCLE</span>
+      <button class="icon-button" id="reload-button" type="button" aria-label="重新读取本地市场快照">
+        <span aria-hidden="true">↻</span>
+        <span>重新读取</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero loading-shell" id="hero" aria-busy="true">
+      <div class="hero-copy">
+        <div class="section-kicker">
+          <span>GLOBAL RISK MAP</span>
+          <span class="hairline"></span>
+          <span id="verdict-date">等待已完成日线</span>
+        </div>
+        <h1 id="hero-headline">正在拼合全球盘面</h1>
+        <p class="hero-deck" id="hero-deck">
+          读取美股、A 股、亚洲与大宗商品的最后完整交易日，寻找风险偏好与资金风格是否同向。
+        </p>
+        <div class="truth-tags" aria-label="数据与判断边界">
+          <span id="data-kind-tag">LOCAL SNAPSHOT</span>
+          <span id="review-tag">MODEL · UNREVIEWED</span>
+          <span id="advice-tag">NOT INVESTMENT ADVICE</span>
+        </div>
+      </div>
+
+      <div class="risk-console" aria-label="市场风险仪表盘">
+        <div class="risk-readout">
+          <span class="risk-caption">RISK APPETITE</span>
+          <strong id="risk-score">—</strong>
+          <span id="risk-label">WAITING</span>
+        </div>
+        <div class="risk-scale" aria-hidden="true">
+          <div class="risk-gradient"></div>
+          <div class="risk-zero"></div>
+          <div class="risk-marker" id="risk-marker"></div>
+        </div>
+        <div class="risk-scale-labels" aria-hidden="true">
+          <span>RISK OFF</span>
+          <span>MIXED</span>
+          <span>RISK ON</span>
+        </div>
+        <dl class="risk-meta">
+          <div>
+            <dt>置信度</dt>
+            <dd id="confidence-value">—</dd>
+          </div>
+          <div>
+            <dt>证据状态</dt>
+            <dd id="analysis-status">—</dd>
+          </div>
+          <div>
+            <dt>跨市场时差</dt>
+            <dd id="close-skew">—</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="signal-grid" aria-label="市场状态四维">
+      <article class="signal-card" data-dimension="risk">
+        <span class="signal-index">01</span>
+        <div>
+          <p>风险偏好</p>
+          <h2 id="signal-risk-label">读取中</h2>
+        </div>
+        <strong id="signal-risk-score">—</strong>
+        <div class="mini-axis"><span id="signal-risk-axis"></span></div>
+      </article>
+      <article class="signal-card" data-dimension="posture">
+        <span class="signal-index">02</span>
+        <div>
+          <p>市场姿态</p>
+          <h2 id="signal-posture-label">读取中</h2>
+        </div>
+        <strong id="signal-posture-score">—</strong>
+        <div class="mini-axis"><span id="signal-posture-axis"></span></div>
+      </article>
+      <article class="signal-card" data-dimension="style">
+        <span class="signal-index">03</span>
+        <div>
+          <p>资金风格</p>
+          <h2 id="signal-style-label">读取中</h2>
+        </div>
+        <strong id="signal-style-score">—</strong>
+        <div class="mini-axis"><span id="signal-style-axis"></span></div>
+      </article>
+      <article class="signal-card" data-dimension="leadership">
+        <span class="signal-index">04</span>
+        <div>
+          <p>跨资产主线</p>
+          <h2 id="signal-leadership-label">读取中</h2>
+        </div>
+        <strong id="signal-leadership-score">—</strong>
+        <div class="mini-axis"><span id="signal-leadership-axis"></span></div>
+      </article>
+    </section>
+
+    <section class="story-grid">
+      <article class="story-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="section-kicker">WHAT'S GOING ON?</span>
+            <h2>盘面正在说什么</h2>
+          </div>
+          <span class="scenario-code" id="scenario-code">WAITING</span>
+        </div>
+        <div class="story-lines">
+          <div class="story-line">
+            <span>主确认</span>
+            <p id="story-confirmation">等待完整证据。</p>
+          </div>
+          <div class="story-line">
+            <span>内部轮动</span>
+            <p id="story-rotation">等待完整证据。</p>
+          </div>
+          <div class="story-line warning">
+            <span>主要背离</span>
+            <p id="story-divergence">等待完整证据。</p>
+          </div>
+          <div class="story-line muted">
+            <span>失效条件</span>
+            <p id="story-invalidation">等待完整证据。</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="leadership-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="section-kicker">CROSS-ASSET LEADERSHIP</span>
+            <h2>谁在领跑</h2>
+          </div>
+          <span id="leadership-state" class="panel-status">—</span>
+        </div>
+        <div class="leadership-bars" id="leadership-bars" aria-live="polite">
+          <div class="placeholder-row"></div>
+          <div class="placeholder-row"></div>
+          <div class="placeholder-row"></div>
+          <div class="placeholder-row"></div>
+          <div class="placeholder-row"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="probe-strip" aria-labelledby="probe-title">
+      <div class="probe-intro">
+        <span class="section-kicker">CONFIRMATION PROBES</span>
+        <h2 id="probe-title">三个辅助证据</h2>
+      </div>
+      <div id="probe-cards" class="probe-cards">
+        <article class="probe-card"><span>VIX</span><strong>—</strong><small>读取中</small></article>
+        <article class="probe-card"><span>中证红利</span><strong>—</strong><small>读取中</small></article>
+        <article class="probe-card"><span>美股红利</span><strong>—</strong><small>读取中</small></article>
+      </div>
+    </section>
+
+    <section class="charts-section" aria-labelledby="charts-title">
+      <div class="charts-toolbar">
+        <div>
+          <span class="section-kicker">DAILY CANDLESTICKS · COMPLETED SESSIONS ONLY</span>
+          <h2 id="charts-title">九个市场，一张图</h2>
+        </div>
+        <div class="range-switcher" role="group" aria-label="K 线显示区间">
+          <button type="button" data-range="22">1M</button>
+          <button type="button" data-range="66" class="active" aria-pressed="true">3M</button>
+          <button type="button" data-range="132">6M</button>
+          <button type="button" data-range="260">1Y</button>
+        </div>
+      </div>
+
+      <div class="market-group">
+        <div class="group-heading"><span>01</span><h3>美国市场</h3><small>US EQUITIES</small></div>
+        <div class="chart-grid two" id="group-us"></div>
+      </div>
+      <div class="market-group">
+        <div class="group-heading"><span>02</span><h3>A 股市场</h3><small>CHINA A-SHARES</small></div>
+        <div class="chart-grid two" id="group-china"></div>
+      </div>
+      <div class="market-group">
+        <div class="group-heading"><span>03</span><h3>大宗商品</h3><small>COMMODITIES</small></div>
+        <div class="chart-grid three" id="group-commodities"></div>
+      </div>
+      <div class="market-group">
+        <div class="group-heading"><span>04</span><h3>亚洲市场</h3><small>ASIA EX-CHINA</small></div>
+        <div class="chart-grid two" id="group-asia"></div>
+      </div>
+    </section>
+
+    <section class="runtime-panel" aria-labelledby="runtime-title">
+      <div>
+        <span class="section-kicker">SYSTEM PULSE</span>
+        <h2 id="runtime-title">下一次刷新</h2>
+        <p id="next-due">读取调度状态…</p>
+      </div>
+      <dl>
+        <div><dt>周期</dt><dd id="runtime-interval">—</dd></div>
+        <div><dt>上次成功</dt><dd id="runtime-success">—</dd></div>
+        <div><dt>运行状态</dt><dd id="runtime-state">—</dd></div>
+        <div><dt>数据质量</dt><dd id="runtime-quality">—</dd></div>
+      </dl>
+    </section>
+
+    <section class="boundary-note">
+      <span>RESEARCH BOUNDARY</span>
+      <p id="license-boundary">
+        本页面仅展示本机研究快照；模型判断尚未经过人工复核，不构成投资建议。
+      </p>
+      <p class="snapshot-id" id="snapshot-id">NO VERIFIED BUNDLE YET</p>
+    </section>
+  </main>
+
+  <div class="error-banner" id="error-banner" role="alert" hidden>
+    <strong>快照暂不可用</strong>
+    <span id="error-message">请确认本地数据服务已启动。</span>
+    <button id="error-retry" type="button">重试</button>
+  </div>
+
+  <div class="chart-tooltip" id="chart-tooltip" hidden></div>
+</body>
+</html>

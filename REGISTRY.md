@@ -1,5 +1,31 @@
 # REGISTRY
 
+## 2026-08-06 · Market Regime Radar M4 local reader (Issue #710)
+
+Now: Park can open `http://127.0.0.1:8896/market-regime` and read the current
+cross-asset state in one page. The first viewport preserves M2 的 Risk,
+posture, style, leadership, confidence and deterministic What is going on
+receipt. Five leadership rows, three confirmation probes and nine Canvas daily
+candlestick charts follow, grouped into US, China A-shares, commodities and
+Asia ex-China with one 1M/3M/6M/1Y control. Partial, stale, unavailable and API
+failure states remain visible and never substitute demo bars.
+
+The page and assets are same-origin under the existing CSP, with no CDN,
+remote font or inline script. Two user launch agents are installed with
+KeepAlive: a loopback web service and a serial 4h scheduler. Runtime/logs live
+outside git under `~/Library/Application Support/ParkMarketRegime/`. The
+reader/operations contract is
+[`docs/market-regime/web-and-local-service.md`](docs/market-regime/web-and-local-service.md).
+
+Acceptance served the clean URL, CSS, JavaScript and both JSON APIs over the
+installed service; the verified payload contained nine charts, three probes,
+the headline `偏 Risk On · 偏防守 · 偏红利`, and
+`action_eligible=false`.
+
+Next: use the page as a read-only market map and review whether 4h or 12h is the
+preferred operating cadence. Do not expose the current local-evaluation feed
+publicly or turn the dashboard into an order/position engine.
+
 ## 2026-08-06 · Market Regime Radar M3 local API and scheduler (Issue #707)
 
 Now: the Market Regime reader consumes one verified `market-regime-api-v1`

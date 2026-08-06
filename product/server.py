@@ -1126,7 +1126,10 @@ class DashboardHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _static(self, route: str) -> None:
-        requested = "index.html" if route in {"", "/"} else route.lstrip("/")
+        if route in {"/market-regime", "/market-regime/"}:
+            requested = "market-regime.html"
+        else:
+            requested = "index.html" if route in {"", "/"} else route.lstrip("/")
         target = (STATIC_DIR / requested).resolve()
         if STATIC_DIR.resolve() not in target.parents and target != STATIC_DIR.resolve():
             self.send_error(HTTPStatus.FORBIDDEN)

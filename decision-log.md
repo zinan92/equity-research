@@ -1,5 +1,28 @@
 # Decision Log
 
+## 2026-08-06 · One market map, not nine disconnected charts (Issue #710)
+
+- Decision: make the M2 state receipt the largest object on the page, then
+  reveal leadership/probes and the nine requested daily charts in that order.
+  Canvas draws OHLC/MA20/MA60 locally from the cohesive M3 bundle; one global
+  horizon control prevents nine mismatched comparisons. Front-end code renders
+  the frozen explanation and never recomputes a verdict.
+- Why: nine charts alone create scanning work but do not answer what the market
+  is doing. The useful product is the contradiction between aggregate risk,
+  internal posture, style and leadership, with charts available immediately to
+  challenge that conclusion.
+- Evidence: static/HTTP contracts verify the clean route, CSP-local assets,
+  required four dimensions/four explanation lines/four groups/four horizons,
+  exact nine assets, explicit missing/API-failure copy, nine-chart/three-probe
+  API and non-actionable truth boundary. User launch agents and the live URL
+  were additionally checked through their health endpoint.
+- Gotchas: port 8878 was already occupied by an unrelated authenticated local
+  service, which produced a misleading 401 while the new launch agent was
+  repeatedly failing to bind. The canonical page therefore uses free port
+  8896. Launchd can inherit user environment variables, so the loopback plist
+  explicitly fixes auth/private-preview flags to local mode. Current data
+  rights still forbid public hosting, even though the page itself is complete.
+
 ## 2026-08-06 · Market pages read a cohesive last-successful bundle (Issue #707)
 
 - Decision: separate scheduled acquisition/compilation from HTTP reads. A
