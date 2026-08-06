@@ -89,6 +89,14 @@ from .market_regime_data import (
     license_decision,
     normalize_capture,
 )
+from .market_regime_model import (
+    ANALYSIS_SCHEMA_VERSION,
+    MODEL_VERSION as MARKET_REGIME_MODEL_VERSION,
+    MarketRegimeAnalysisStore,
+    MarketRegimeModelError,
+    build_asset_feature,
+    compile_market_regime,
+)
 from .ingestion import (
     AdapterContractError,
     AdapterRegistry,
@@ -359,6 +367,9 @@ __all__ = [
     "LOCAL_EVALUATION", "LicenseDecision", "LicenseGateError", "MarketRegimeDataError",
     "MarketRegimeDataStore", "SourceCaptureError", "instrument_registry_payload",
     "license_decision", "normalize_capture",
+    "ANALYSIS_SCHEMA_VERSION", "MARKET_REGIME_MODEL_VERSION",
+    "MarketRegimeAnalysisStore", "MarketRegimeModelError",
+    "build_asset_feature", "compile_market_regime",
     "RAW_BUCKET", "StorageObjectKey", "raw_storage_key",
     "AdapterContractError", "AdapterRegistry", "AuthoritySink", "AuthoritySinkError",
     "BatchQuality", "FetchedPayload", "FetchCache", "FetchRequest", "IngestionAttempt",

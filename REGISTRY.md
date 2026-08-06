@@ -1,5 +1,30 @@
 # REGISTRY
 
+## 2026-08-06 · Market Regime Radar M2 deterministic model (Issue #705)
+
+Now: the 12-instrument frozen M1 snapshot compiles into a byte-replayable,
+evidence-bound market-state receipt. It reports per-asset 1/5/20/60-session
+returns, moving averages, realized volatility and trend score, then separates
+Risk On/Off, offense/defense, technology/dividend, cross-asset leadership and
+scenario state. Missing VIX, dividend probes or leadership groups degrade only
+their dependent dimension; an incomplete leadership universe cannot name a
+winner. The contract and one-shot compiler are
+[`docs/market-regime/model-contract.md`](docs/market-regime/model-contract.md)
+and [`scripts/compile_market_regime.py`](scripts/compile_market_regime.py).
+
+The full 2026-08-06 acceptance replay over M1 run
+`market-regime-20260806T061658Z-f248d65a445c` returned high-confidence
+`leaning_risk_on`, but simultaneously `leaning_defense` and
+`leaning_dividend`; precious metals and US equities were too close to name a
+leader, so the scenario correctly remained `cross_asset_rotation` rather than
+claiming a broad growth-led rally. The receipt is
+`model_generated_unreviewed`, read-only, non-actionable and non-publishable.
+
+Next: expose only verified M1/M2 receipts through the private-preview M3 API,
+add the operator-selectable 4h/12h refresh loop and observable run health. Do
+not fetch upstream data in an HTTP request or turn this model into position or
+trading advice.
+
 ## 2026-08-06 · Market Regime Radar M1 data authority (Issue #701)
 
 Now: the read-only global market-state product has a fixed 12-instrument data
