@@ -1,5 +1,28 @@
 # REGISTRY
 
+## 2026-08-06 · Market Regime Radar M1 data authority (Issue #701)
+
+Now: the read-only global market-state product has a fixed 12-instrument data
+contract: nine requested daily-candlestick assets plus VIX and the China/US
+dividend evidence probes. Yahoo Chart and Tencent K-line inputs are normalized
+to completed daily OHLC with symbol/currency/session checks, immutable raw and
+run receipts, source hashes, explicit fresh/partial/stale/unavailable states,
+and atomic per-asset latest-good snapshots. A failed refresh never replaces a
+previously accepted capture. The contract and one-shot entry point are
+[`docs/market-regime/data-contract.md`](docs/market-regime/data-contract.md)
+and [`scripts/refresh_market_regime_data.py`](scripts/refresh_market_regime_data.py).
+
+The 2026-08-06 real-source acceptance run collected all 12 instruments as
+`fresh` (243–260 completed bars each). The raw payloads and receipt remain in
+the gitignored local runtime, not the repository. These sources are explicitly
+`supplementary_only`: the default result is Park-local evaluation and
+`publication_eligible=false`; private-beta/public use fails closed without an
+operator-supplied commercial-rights receipt.
+
+Next: implement the replayable M2 regime contract over this frozen snapshot.
+Do not infer Risk On/Off yet, expose a private-preview API, schedule refreshes,
+or publicly redistribute the local-evaluation market data from M1.
+
 ## 2026-08-06 · Round 7 verifier is checkout-portable (Issue #702)
 
 Now: the canonical Round 7 replay verifier compares a receipt's artifact path

@@ -2785,3 +2785,44 @@ not artifact identity.
   current repository still fail.
 - Path portability does not replace markdown/HTML SHA-256, dossier receipt
   hash, ticker, chapter, review, or publication checks.
+
+# 2026-08-06 · Market Regime Radar freezes data identity before scoring
+
+## Decision
+
+Give the market-state page a fixed allowlist of nine chart assets and three
+visible evidence probes, then freeze completed daily OHLC and its wire identity
+before any regime calculation. Keep Yahoo Chart and Tencent K-line as
+`supplementary_only` local-evaluation sources; require an opaque, operator-held
+commercial-rights receipt before private-beta or public mode can read them.
+
+## Why
+
+Risk-on/off and leadership prose is only replayable if every input has stable
+symbol, currency, timezone, price basis, source hash, and last completed
+session. Separating collection from scoring also lets one failed market remain
+visible without silently replacing it or changing the judgment during an HTTP
+request.
+
+## Evidence
+
+- Issue #701 and `docs/market-regime/data-contract.md`.
+- `product/data_core/market_regime_data.py` and its focused contract tests.
+- Real-source run `market-regime-20260806T061658Z-f248d65a445c`: 12/12
+  instruments accepted as fresh, with 243–260 completed bars each and a raw
+  SHA-256 per response in the local gitignored runtime.
+
+## Gotchas
+
+- Tencent currently returns valid JSON with a declared `text/html` MIME. The
+  exception must remain provider-specific and still pass JSON, symbol, row,
+  status, and OHLC checks; generic HTML remains rejected.
+- Yahoo VIX history can contain all-null holiday rows. Drop and disclose rows
+  only when all four OHLC values are null; a partially null row is corruption
+  and fails the asset.
+- A 4-hour refresh does not make a daily bar complete. Current-session bars are
+  excluded until provider session metadata and the exchange-local close plus
+  safety grace confirm completion.
+- The license environment variable is only an operator attestation. M1 keeps
+  private-beta/public modes disabled and publication eligibility false until a
+  provider/scope/deployment-bound approval receipt verifier exists.

@@ -74,6 +74,21 @@ from .market_snapshot import (
     normalize_global_ticker,
     sec_point_in_time_inputs,
 )
+from .market_regime_data import (
+    COMMERCIAL_RIGHTS_APPROVED,
+    DISABLED,
+    INSTRUMENTS,
+    INSTRUMENT_BY_KEY,
+    LOCAL_EVALUATION,
+    LicenseDecision,
+    LicenseGateError,
+    MarketRegimeDataError,
+    MarketRegimeDataStore,
+    SourceCaptureError,
+    instrument_registry_payload,
+    license_decision,
+    normalize_capture,
+)
 from .ingestion import (
     AdapterContractError,
     AdapterRegistry,
@@ -340,6 +355,10 @@ __all__ = [
     "CONTRACT_VERSION", "RECORD_SCHEMAS", "Provenance", "RawCapture",
     "RecordDomain", "RecordEnvelope", "RecordSchema", "RecordStatus",
     "SourceManifest", "contract_descriptor", "validate_adapter_output",
+    "COMMERCIAL_RIGHTS_APPROVED", "DISABLED", "INSTRUMENTS", "INSTRUMENT_BY_KEY",
+    "LOCAL_EVALUATION", "LicenseDecision", "LicenseGateError", "MarketRegimeDataError",
+    "MarketRegimeDataStore", "SourceCaptureError", "instrument_registry_payload",
+    "license_decision", "normalize_capture",
     "RAW_BUCKET", "StorageObjectKey", "raw_storage_key",
     "AdapterContractError", "AdapterRegistry", "AuthoritySink", "AuthoritySinkError",
     "BatchQuality", "FetchedPayload", "FetchCache", "FetchRequest", "IngestionAttempt",
