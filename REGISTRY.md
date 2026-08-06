@@ -1,5 +1,32 @@
 # REGISTRY
 
+## 2026-08-06 · Market Regime Radar M3 local API and scheduler (Issue #707)
+
+Now: the Market Regime reader consumes one verified `market-regime-api-v1`
+bundle containing nine daily OHLC charts, three supporting probes and the full
+M2 explanation. `GET /api/market-regime` and `/api/market-regime/health` never
+call an upstream source or compiler. A separate serial runner supports exactly
+4h or 12h cadence, records health atomically, rejects overlapping cycles and
+advances the API pointer only after M1 data, M2 analysis and the final bundle
+all pass hash/schema/identity verification. The operating contract is
+[`docs/market-regime/runtime-contract.md`](docs/market-regime/runtime-contract.md).
+
+The endpoint is loopback-only while market-data rights remain
+`local_evaluation_only`; existing dashboard auth/entitlement still applies.
+The prior verified API bundle survives refresh, compile or publication-stage
+failure.
+
+The 2026-08-06 live acceptance cycle completed 12/12 instruments as `fresh`,
+published source run `market-regime-20260806T070751Z-d022965b84b3`, analysis
+`market-regime-analysis:5b9e705369bcee4db298005da2a0cf8b99294eab7d6b6e5817f89f7193f7376f`
+and an API bundle with digest prefix `947a6a108d05`.
+Both live HTTP routes returned verified real-data results; the 4h next due was
+recorded as `2026-08-06T11:08:29.435064Z`.
+
+Next: build the M4 single-page reader over these two GET routes, capture desktop
+and mobile evidence, then start the local 4h service. Do not add HTTP refresh,
+public hosting, news/LLM prose or trade execution.
+
 ## 2026-08-06 · Market Regime Radar M2 deterministic model (Issue #705)
 
 Now: the 12-instrument frozen M1 snapshot compiles into a byte-replayable,

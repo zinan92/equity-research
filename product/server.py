@@ -57,6 +57,11 @@ from spot_audit_store import SpotAuditReviewError, append_spot_audit_review, exp
 from spot_audit_assignment_reader import SpotAuditAssignmentReadError, load_assignment
 from v4_quality_gate import evaluate_round7_quality
 from partial_model_store import PartialModelStoreError, load_partial_model
+from market_regime_runtime import (
+    MarketRegimeRuntimeError,
+    market_regime_health_payload,
+    market_regime_payload,
+)
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
     payment_controls, record_payment, record_refund, set_payment_controls,
@@ -310,6 +315,8 @@ def route_entitlement(route: str) -> str:
 
 
 def private_preview_get_entitlement(route: str) -> str | None:
+    if route in {"/api/market-regime", "/api/market-regime/health"}:
+        return "dashboard"
     if route == "/api/private-preview":
         return "dashboard"
     if route == "/api/industry-intelligence" or route.startswith("/api/industry-intelligence/dossiers/"):
@@ -549,6 +556,32 @@ class DashboardHandler(BaseHTTPRequestHandler):
                     return
             elif self._authorize(route_entitlement(route)) is None:
                 return
+        if route in {"/api/market-regime", "/api/market-regime/health"}:
+            bound_host = str(self.server.server_address[0])
+            try:
+                loopback = ipaddress.ip_address(bound_host).is_loopback
+            except ValueError:
+                loopback = bound_host == "localhost"
+            if not loopback:
+                self._json(
+                    {"error": "market_regime_requires_loopback"},
+                    HTTPStatus.FORBIDDEN,
+                )
+                return
+            try:
+                payload = (
+                    market_regime_health_payload()
+                    if route.endswith("/health")
+                    else market_regime_payload()
+                )
+            except MarketRegimeRuntimeError as exc:
+                self._json(
+                    {"error": "market_regime_unavailable", "detail": str(exc)},
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                )
+            else:
+                self._json(payload)
+            return
         if route == "/api/private-preview":
             try:
                 payload = canonical_private_preview_payload()

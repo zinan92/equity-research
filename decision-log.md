@@ -1,5 +1,26 @@
 # Decision Log
 
+## 2026-08-06 · Market pages read a cohesive last-successful bundle (Issue #707)
+
+- Decision: separate scheduled acquisition/compilation from HTTP reads. A
+  successful cycle verifies M1 and M2, writes a content-addressed API bundle,
+  verifies that bundle, then advances one pointer. The only schedules are 4h
+  and 12h, guarded by a non-blocking process lock.
+- Why: a chart request must be fast, reproducible and immune to a slow provider.
+  A source or compiler failure must remain visible in scheduler health without
+  replacing the page with an incoherent mix of a new M1 run and an old M2
+  conclusion.
+- Evidence: focused runtime tests cover nine charts/three probes, bundle
+  tampering, run mismatch, 4h/12h next due, refresh/compile failure, lock
+  contention and two HTTP no-network reads. The live acceptance bundle digest
+  starts with `947a6a108d05`;
+  real-source and baseline receipts are recorded in the corresponding PR
+  validation.
+- Gotchas: `scheduler/status.json` is operational state, not market evidence.
+  A crashed process can leave `state=running`; health cross-checks the file lock
+  and reports `interrupted`. Loopback binding is part of the license boundary:
+  a local-evaluation bundle is not a public/private-beta data entitlement.
+
 ## 2026-08-06 · Market regime separates risk appetite from market posture (Issue #705)
 
 - Decision: compile the frozen 12-asset OHLC set with deterministic, versioned
