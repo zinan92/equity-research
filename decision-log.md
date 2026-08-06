@@ -2756,3 +2756,32 @@ candidate must be rejected rather than silently counted as out-of-sample.
 - Positive loss magnitudes such as “净亏损 885.56 亿元” are accepted only with
   an explicit loss semantic and a bound negative source fact; unit conversion
   does not authorize a new metric or Tier/publication credit.
+
+# 2026-08-06 · Replay artifact identity survives checkout relocation
+
+## Decision
+
+Treat the exact repository-relative artifact path plus the existing content
+hash as the stable replay identity. Historical absolute checkout prefixes are
+not identity; they may change in a Git worktree or CI clone.
+
+## Why
+
+The canonical receipt was generated under `/Users/wendy/Documents/投研面板`, so
+the same commit failed its own replay test from an isolated worktree despite
+byte-identical Markdown and HTML. The old comparison tested machine location,
+not artifact identity.
+
+## Evidence
+
+- Issue #702.
+- `scripts/verify_round7_generated_dossier.py` and
+  `product/tests/test_round7_generated_dossier_verifier.py`.
+
+## Gotchas
+
+- Only the checkout prefix is portable. Temporary declared paths, wrong
+  repository-relative suffixes, wrong filenames, and actual files outside the
+  current repository still fail.
+- Path portability does not replace markdown/HTML SHA-256, dossier receipt
+  hash, ticker, chapter, review, or publication checks.

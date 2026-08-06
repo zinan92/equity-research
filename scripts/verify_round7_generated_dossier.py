@@ -29,6 +29,33 @@ def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _is_persistent_artifact(declared_value: object, actual: Path) -> bool:
+    """Compare a receipt path by stable repo identity, not checkout prefix.
+
+    Historical receipts froze the absolute path of the checkout that generated
+    them.  A Git worktree or CI clone has a different prefix while preserving
+    the exact repository-relative artifact.  Content hashes remain the primary
+    identity; this guard additionally rejects temp declarations and wrong
+    repo-relative locations.
+    """
+
+    raw = str(declared_value or "").strip()
+    if not raw:
+        return False
+    declared = Path(raw)
+    if declared.is_absolute() and str(declared).startswith(("/tmp/", "/private/tmp/")):
+        return False
+    try:
+        relative_actual = actual.resolve().relative_to(ROOT.resolve())
+    except ValueError:
+        return False
+    if declared.is_absolute():
+        if len(declared.parts) < len(relative_actual.parts):
+            return False
+        return tuple(declared.parts[-len(relative_actual.parts):]) == relative_actual.parts
+    return declared == relative_actual
+
+
 def verify(ticker: str, directory: Path) -> dict:
     receipt_path = directory / f"{ticker}.receipt.json"
     markdown_path = directory / f"{ticker}.md"
@@ -98,10 +125,7 @@ def verify(ticker: str, directory: Path) -> dict:
         ("markdown_path", markdown_path),
         ("html_path", html_path),
     ):
-        declared = Path(str(artifacts.get(key) or ""))
-        if declared.resolve() != actual.resolve() or str(declared).startswith(
-            ("/tmp/", "/private/tmp/")
-        ):
+        if not _is_persistent_artifact(artifacts.get(key), actual):
             problems.append(f"{key} is not the persistent artifact")
 
     north_star = verify_round7_document(markdown_path)
