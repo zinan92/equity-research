@@ -1,5 +1,16 @@
 # REGISTRY
 
+## 2026-08-06 · Round 7 verifier is checkout-portable (Issue #702)
+
+Now: the canonical Round 7 replay verifier compares a receipt's artifact path
+by exact repository-relative identity after verifying the existing content
+hashes. Historical non-temporary absolute paths therefore remain valid in an
+isolated Git worktree or CI checkout; temporary declarations, wrong suffixes,
+wrong names, and actual files outside the current repository remain rejected.
+
+Next: keep new artifact receipts repository-relative when possible. Do not
+weaken the dossier, markdown, HTML, review, or receipt hash checks.
+
 ## 2026-08-04 · V4-P4 golden set and out-of-sample blind report (Issue #698)
 
 Now: Park's explicit approval of the five-report V4/P3 batch is frozen as the
