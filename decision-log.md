@@ -1,5 +1,28 @@
 # Decision Log
 
+## 2026-08-06 · Market regime separates risk appetite from market posture (Issue #705)
+
+- Decision: compile the frozen 12-asset OHLC set with deterministic, versioned
+  features and keep four distinct dimensions: aggregate risk, offense/defense,
+  technology/dividend and cross-asset leadership. Scenario labels require
+  confirming dimensions: a positive Nasdaq trend is not `growth_led_risk_on`
+  when posture is defensive or style favors dividends. Missing leadership
+  groups keep their available ranking but cannot produce a global winner.
+- Why: the useful answer is often a contradiction, not a single bullish or
+  bearish word. The live acceptance tape showed exactly that structure: risk
+  appetite was positive while defense/dividend positioning remained stronger,
+  with precious metals and US equities contesting leadership.
+- Evidence: 16 deterministic fixture/replay tests, analysis ID
+  `market-regime-analysis:f7256e499e16ca9ceb2169946bf5665c460cb37bbec6ce47d4b7bb85a7edd452`
+  over M1 run `market-regime-20260806T061658Z-f248d65a445c`, and the formula
+  disclosure in `docs/market-regime/model-contract.md`.
+- Gotchas: cross-market daily closes are asynchronous, so `verdict_as_of` is
+  the earliest completed close and more than 30 hours of skew downgrades the
+  whole receipt. Continuous futures with a non-positive close are preserved by
+  M1 but explicitly rejected by this return model. The deterministic Chinese
+  explanation is still `model_generated_unreviewed`; high statistical
+  confidence grants neither publication nor action eligibility.
+
 ## 2026-08-02 · V4-N2 generic issuer-profiled Round 7 run (Issue #684)
 
 - Decision: reuse the existing Round 7 whole-chapter DeepSeek transport for one
