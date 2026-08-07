@@ -2893,3 +2893,45 @@ request.
 - The license environment variable is only an operator attestation. M1 keeps
   private-beta/public modes disabled and publication eligibility false until a
   provider/scope/deployment-bound approval receipt verifier exists.
+
+# 2026-08-07 · Personal risk-card outreach requires five scope-bound approvals
+
+## Decision
+
+Treat data rights, securities-service scope, personal-information processing,
+the delivery channel and Park owner approval as five independent M1.0 entry
+receipts.  A disclaimer, environment variable, local test or oral approval
+cannot replace any receipt.  Until all five bind the same target scope, the
+canonical decision is `blocked` and no real-user outreach, holdings intake,
+delivery or payment may begin.
+
+## Why
+
+The existing radar is a valid Park-local research tool, but its market sources
+are explicitly `local_evaluation_only` and its judgment is non-actionable.
+Personalizing and charging for a card changes the use, audience, data and
+regulatory surface.  Freezing one hashed scope and independently expiring each
+approval prevents a narrower or stale permission from being silently promoted
+into a commercial private-beta authorization.
+
+## Evidence
+
+- Issue #712 and
+  `docs/market-regime/personal-holdings-risk-card-entry-contract.md`.
+- `product/schemas/personal-holdings-risk-card-entry-v1.schema.json`.
+- Canonical receipt
+  `evidence/market-regime-m1/entry-readiness.json`, receipt hash
+  `70bd53f723319a65a94052dbe08d1c9092a35399338fb2c891b978ff8dea254a`.
+- `scripts/verify_personal_holdings_risk_card_entry.py` and its blocked/go,
+  expiry, scope, tamper, language and personal-data tests.
+
+## Gotchas
+
+- Verifier exit 0 without `--require-go` proves that the declared blocked state
+  is honest; it does not authorize M1-S2.
+- `test_only` approval fixtures can exercise the go path but production mode
+  rejects them.  Test success is not an external approval.
+- Park's approval to execute the roadmap is not the same as Park's M1.0 owner
+  approval of the exact provider, channel, cohort, retention and paid scope.
+- An approval for local, free or non-distributed use cannot satisfy the frozen
+  20-user paid concierge scope.

@@ -1,0 +1,612 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://park.local/schemas/personal-holdings-risk-card-entry-v1.schema.json",
+  "title": "Personal Holdings Risk Card M1 Entry Readiness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "contract_id",
+    "generated_at",
+    "test_only",
+    "product_scope",
+    "data_sources",
+    "decision_window",
+    "communication_policy",
+    "personal_data_policy",
+    "human_review",
+    "incident_response",
+    "required_approvals",
+    "readiness_status",
+    "blocked_by",
+    "truth_boundary",
+    "receipt_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "personal-holdings-risk-card-entry-v1"
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "contract_id": {
+      "type": "string",
+      "pattern": "^m1-entry:[a-z0-9][a-z0-9._-]{2,80}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "test_only": {
+      "type": "boolean"
+    },
+    "product_scope": {
+      "$ref": "#/$defs/product_scope"
+    },
+    "data_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/data_source"
+      }
+    },
+    "decision_window": {
+      "$ref": "#/$defs/decision_window"
+    },
+    "communication_policy": {
+      "$ref": "#/$defs/communication_policy"
+    },
+    "personal_data_policy": {
+      "$ref": "#/$defs/personal_data_policy"
+    },
+    "human_review": {
+      "$ref": "#/$defs/human_review"
+    },
+    "incident_response": {
+      "$ref": "#/$defs/incident_response"
+    },
+    "required_approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "market_data_rights",
+        "securities_service_boundary",
+        "personal_information_processing",
+        "notification_channel",
+        "park_owner_approval"
+      ],
+      "properties": {
+        "market_data_rights": {
+          "$ref": "#/$defs/approval"
+        },
+        "securities_service_boundary": {
+          "$ref": "#/$defs/approval"
+        },
+        "personal_information_processing": {
+          "$ref": "#/$defs/approval"
+        },
+        "notification_channel": {
+          "$ref": "#/$defs/approval"
+        },
+        "park_owner_approval": {
+          "$ref": "#/$defs/approval"
+        }
+      }
+    },
+    "readiness_status": {
+      "enum": [
+        "blocked",
+        "go"
+      ]
+    },
+    "blocked_by": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "market_data_rights",
+          "securities_service_boundary",
+          "personal_information_processing",
+          "notification_channel",
+          "park_owner_approval"
+        ]
+      }
+    },
+    "truth_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legal_opinion_provided",
+        "commercial_rights_proven",
+        "external_distribution_allowed",
+        "real_user_data_allowed",
+        "payment_allowed",
+        "investment_advice_allowed",
+        "broker_connection_allowed",
+        "automatic_trading_allowed"
+      ],
+      "properties": {
+        "legal_opinion_provided": {
+          "type": "boolean"
+        },
+        "commercial_rights_proven": {
+          "type": "boolean"
+        },
+        "external_distribution_allowed": {
+          "type": "boolean"
+        },
+        "real_user_data_allowed": {
+          "type": "boolean"
+        },
+        "payment_allowed": {
+          "type": "boolean"
+        },
+        "investment_advice_allowed": {
+          "const": false
+        },
+        "broker_connection_allowed": {
+          "const": false
+        },
+        "automatic_trading_allowed": {
+          "const": false
+        }
+      }
+    },
+    "receipt_hash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullable_hash": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_string": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_datetime": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "product_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_name",
+        "use_case",
+        "deployment_mode",
+        "regions",
+        "audience",
+        "max_cohort_size",
+        "delivery_channels",
+        "commercial_mode",
+        "external_distribution",
+        "retention_days",
+        "portfolio_inputs",
+        "export_formats"
+      ],
+      "properties": {
+        "product_name": {
+          "const": "A 股开盘前个人持仓风险卡"
+        },
+        "use_case": {
+          "const": "08:45_a_share_preopen_personal_risk_card"
+        },
+        "deployment_mode": {
+          "enum": [
+            "local_prototype",
+            "m1_concierge",
+            "private_beta",
+            "public"
+          ]
+        },
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "audience": {
+          "enum": [
+            "park_only",
+            "invited_private_members",
+            "paid_private_members",
+            "public"
+          ]
+        },
+        "max_cohort_size": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "delivery_channels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "local_web",
+              "manual_private_message",
+              "approved_official_account",
+              "email",
+              "sms"
+            ]
+          }
+        },
+        "commercial_mode": {
+          "enum": [
+            "free",
+            "conditional_after_approval",
+            "paid"
+          ]
+        },
+        "external_distribution": {
+          "type": "boolean"
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3650
+        },
+        "portfolio_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ticker",
+              "portfolio_weight",
+              "holding_horizon",
+              "user_risk_rule"
+            ]
+          }
+        },
+        "export_formats": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "json",
+              "csv",
+              "png",
+              "pdf"
+            ]
+          }
+        }
+      }
+    },
+    "data_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_key",
+        "provider",
+        "fields",
+        "derived_outputs",
+        "current_license_status",
+        "target_use_status",
+        "external_distribution_allowed",
+        "commercial_use_allowed",
+        "approval_reference"
+      ],
+      "properties": {
+        "source_key": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{1,80}$"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "derived_outputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "current_license_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_use_status": {
+          "enum": [
+            "blocked_pending_rights",
+            "approved"
+          ]
+        },
+        "external_distribution_allowed": {
+          "type": "boolean"
+        },
+        "commercial_use_allowed": {
+          "type": "boolean"
+        },
+        "approval_reference": {
+          "$ref": "#/$defs/nullable_string"
+        }
+      }
+    },
+    "decision_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timezone",
+        "card_scheduled_at",
+        "knowledge_cutoff",
+        "a_share_session_policy",
+        "replay_policy",
+        "quality_states"
+      ],
+      "properties": {
+        "timezone": {
+          "const": "Asia/Shanghai"
+        },
+        "card_scheduled_at": {
+          "const": "08:45:00"
+        },
+        "knowledge_cutoff": {
+          "const": "08:44:59"
+        },
+        "a_share_session_policy": {
+          "const": "prior_completed_session_only"
+        },
+        "replay_policy": {
+          "const": "reject_observations_after_knowledge_cutoff"
+        },
+        "quality_states": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fresh",
+            "partial",
+            "stale",
+            "unknown"
+          ],
+          "properties": {
+            "fresh": {
+              "const": "eligible_for_supported_claims"
+            },
+            "partial": {
+              "const": "degrade_only_dependent_claims"
+            },
+            "stale": {
+              "const": "block_dependent_claims"
+            },
+            "unknown": {
+              "const": "block_dependent_claims"
+            }
+          }
+        }
+      }
+    },
+    "communication_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "permitted_capabilities",
+        "prohibited_capabilities",
+        "required_disclosures"
+      ],
+      "properties": {
+        "permitted_capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "prohibited_capabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required_disclosures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "personal_data_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_inputs",
+        "prohibited_inputs",
+        "consent_mode",
+        "human_access",
+        "export_sla_hours",
+        "deletion_sla_hours",
+        "post_deletion_audit"
+      ],
+      "properties": {
+        "minimum_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "prohibited_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "consent_mode": {
+          "const": "explicit_scope_bound_revocable"
+        },
+        "human_access": {
+          "const": "owner_authorized_audited_minimum_only"
+        },
+        "export_sla_hours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 168
+        },
+        "deletion_sla_hours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 168
+        },
+        "post_deletion_audit": {
+          "const": "receipt_without_portfolio_content"
+        }
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_before_delivery",
+        "checklist",
+        "correction_sla_hours",
+        "correction_policy"
+      ],
+      "properties": {
+        "required_before_delivery": {
+          "const": true
+        },
+        "checklist": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "correction_sla_hours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 24
+        },
+        "correction_policy": {
+          "const": "append_only_correction_never_rewrite_original_card"
+        }
+      }
+    },
+    "incident_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "unauthorized_disclosure",
+        "wrong_portfolio_identity",
+        "delivery_stop_control",
+        "owner_notification_sla_hours"
+      ],
+      "properties": {
+        "unauthorized_disclosure": {
+          "const": "stop_all_delivery_preserve_minimum_audit_escalate"
+        },
+        "wrong_portfolio_identity": {
+          "const": "stop_affected_delivery_notify_owner_correct_before_resume"
+        },
+        "delivery_stop_control": {
+          "const": "required_before_first_external_delivery"
+        },
+        "owner_notification_sla_hours": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 24
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "authority",
+        "scope_hash",
+        "evidence_ref",
+        "evidence_sha256",
+        "issued_at",
+        "expires_at",
+        "test_only"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ]
+        },
+        "authority": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "scope_hash": {
+          "$ref": "#/$defs/nullable_hash"
+        },
+        "evidence_ref": {
+          "$ref": "#/$defs/nullable_string"
+        },
+        "evidence_sha256": {
+          "$ref": "#/$defs/nullable_hash"
+        },
+        "issued_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/nullable_datetime"
+        },
+        "test_only": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
