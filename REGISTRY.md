@@ -1,5 +1,25 @@
 # REGISTRY
 
+## 2026-08-07 · Personal holdings risk card M1.0 entry gate (Issue #712)
+
+Now: the approved 08:45 personal-holdings risk-card roadmap has a versioned,
+fail-closed M1.0 entry contract.  Its frozen target is a maximum 20-person CN
+paid concierge cohort using only ticker, portfolio weight, holding horizon and
+user-defined risk rules.  The deterministic verifier binds that scope to five
+independent approvals, their safe evidence hashes and expiries; synthetic go
+receipts remain `test_only` and are rejected by production mode.
+
+The canonical receipt is valid but explicitly `blocked` by missing market-data
+rights, securities-service boundary review, personal-information processing
+review, notification-channel approval and Park owner approval.  Therefore no
+test-user contact, real holdings intake, external card delivery or payment is
+authorized.  The current Yahoo/Tencent radar remains local evaluation only.
+
+Next: obtain five safe, scope-bound approval receipts in a separate issue and
+run `python3 scripts/verify_personal_holdings_risk_card_entry.py --require-go`.
+Only a passing production receipt permits the M1-S2 3–5 person smoke; do not
+start M2 or treat the blocked contract as user validation.
+
 ## 2026-08-06 · Market Regime Radar M4 local reader (Issue #710)
 
 Now: Park can open `http://127.0.0.1:8896/market-regime` and read the current
