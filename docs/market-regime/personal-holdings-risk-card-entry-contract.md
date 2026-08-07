@@ -33,7 +33,7 @@ Canonical receipt 因此必须保持：
 }
 ```
 
-`python3 scripts/verify_personal_holdings_risk_card_entry.py` 返回 0 只表示这份 blocked 合同真实、完整、未被篡改；只有增加 `--require-go` 也通过，才表示 M1-S2 可以接触测试用户。
+`python3 scripts/verify_personal_holdings_risk_card_entry.py` 返回 0 只表示这份 blocked 合同真实、完整、未被篡改；只有 canonical checkout 上增加 `--require-go` 也通过，才表示 M1-S2 可以接触测试用户。Production gate 禁止同时使用 test mode、历史 `--reference-time` 或 root/contract/schema path override，避免把 replay/fixture/旧文件冒充当前 go。
 
 ## 2. 冻结的目标范围
 
@@ -119,28 +119,55 @@ M1 concierge 的每张卡在送达前必须由获授权的人完成：
 
 - 使用 `personal-holdings-risk-card-approval-v1`；
 - 绑定 canonical approval scope 的 SHA-256；该 scope 同时包含产品、provider/字段/衍生输出、08:45 截点、语言边界、个人数据、人工复核和事故响应合同；
-- 包含 approval key、authority、issued-at、expires-at 和 `approved` 决定；
+- 包含 approval key、`approved` 决定、批准机构的 safe identity/type/jurisdiction、允许的方法、独立复核身份与时间；
+- 记录受控系统中原件或合同包的 SHA-256 和不泄密的 locator；市场数据合同包必须精确覆盖 canonical 中每个 `source_key`；
+- 包含 issued-at、expires-at 和摘要自身的 canonical `receipt_hash`；
+- authority 与 verifier 的 safe identity 必须已在 `trust-policy.json` 通过独立身份原件 hash/locator 登记，且 trust policy 为 `ready`；只在批准摘要里自称“律师”“数据商”“Park”或“合规复核人”无效；
+- 同一个 approval key 的 authority 与 verifier 必须是不同 safe identity；身份在 receipt 的 `verified_at` 之后才登记，不能追溯验证旧 receipt；
+- 每份 production 摘要还必须有 dual-control HMAC，覆盖除 HMAC/receipt hash 外的全部摘要字段；只复制受信 identity、伪造 underlying hash 再自算 receipt hash 仍无效；
 - 以 `repo:` 相对路径指向仓库内的安全批准摘要；
 - canonical entry 中记录该摘要文件的 SHA-256；
 - 不是 `test_only`；
 - 在 verifier reference time 未过期。
 
-测试可以生成 `test_only=true` 的合成批准，但 production CLI 默认拒绝。任何 operator 字符串、环境变量、免责声明、口头同意或测试通过都不能替代批准 receipt。
+`verification_method` 与 `authority_type` 必须符合 approval key 的 schema 条件，例如通知渠道不能拿 Park 签字方法冒充渠道管理员确认。测试可以生成 `test_only=true` 的合成批准，但 contract、entry approval 和 safe summary 三层 test flag 必须一致；只要启用 `allow_test_only`，输出就固定 `production_eligible=false`。Production CLI 默认拒绝测试模式。任何 operator 字符串、环境变量、免责声明、口头同意、销售介绍页或测试通过都不能替代批准 receipt。
+
+Hash 证明“摘要绑定哪一份原件”，不自动证明原件真实、签发人有权或法律判断正确。因此原件必须由授权复核人从受控 locator 打开核对；最终 Park owner receipt 还必须确认亲自检查另外四份批准。仓库不得保存合同正文、法律意见全文、个人信息或凭证。
+
+当前 canonical `evidence/market-regime-m1/approval-requests/trust-policy.json` 为 `onboarding_required`，epoch `1`，有效至 `2027-08-07`，没有任何 production authority、verifier 或 production trust root 被信任。身份登记必须另有安全 identity-evidence hash、locator、登记人和时间；五个 key 均有相互独立的 authority/verifier 后，policy 才能改为 `ready`。Ready policy 还必须声明 epoch、签发/到期、`revokes_before_epoch` 和前序 policy hash；过期或被撤销 epoch 不能使用。
+
+Production trust root 的 SHA-256 与当前 ready policy 的 exact receipt hash 必须由 Park 在独立、明确批准的代码合同中同时登记；当前两个 verifier 常量均为 `None`，所以任意 `ready` policy 都会 fail closed。Pin exact policy receipt 可阻止 operator 在 authority 撤销后重放旧的、曾合法签名的 policy。对应至少 32 bytes dual-control secret 只通过目标运行环境的 `PARK_RISK_CARD_TRUST_HMAC_KEY` 提供，不得进入仓库、日志或 request packet。Ready policy 本身和每份 production approval summary 都必须用该 secret 生成 HMAC。这意味着同一 repo operator 即使照抄已信任 identity、手写底层证据 hash 并重算普通 receipt hash，也不能解锁。
+
+HMAC 是对称密钥：任何能读取该 secret 的人都能生成有效 HMAC。因此它只能由与施工/operator 权限隔离的 Park-controlled gate 在签发/验收时临时注入，不能放进普通 CLI shell、常驻网页服务或开发机通用环境。未来若要让多个独立机构自行签发，需迁移到 pinned public-key/Ed25519；在此之前 secret holder 就是 dual-control 审批边界。
+
+五份当前 draft request 由以下命令确定性生成；`--check` 会在 scope 或输出漂移时失败：
+
+```bash
+python3 scripts/build_personal_holdings_risk_card_approval_packet.py
+python3 scripts/build_personal_holdings_risk_card_approval_packet.py --check
+```
+
+- Forwardable Markdown：`docs/market-regime/approval-requests/`
+- Machine-readable JSON：`evidence/market-regime-m1/approval-requests/`
+- Provider 候选与权利缺口：`docs/market-regime/provider-rights-options.md`
 
 ## 8. 激活步骤
 
-1. 在独立 issue 中取得并保存每份安全批准摘要；
-2. 确认五份摘要绑定同一个 scope hash；
-3. 更新 data-source target rights 和 truth boundary；
-4. 重新计算 canonical `receipt_hash`；
-5. 运行：
+1. Park 明确授权发送对应 draft request；发送、签约、购买和接受条款不由 packet builder 自动授权；
+2. 在独立 issue 中取得并保存每份安全批准摘要；
+3. 确认五份摘要绑定同一个 scope hash；
+4. 登记相互独立的 authority/verifier identity，签发带 epoch/有效期/撤销边界的 ready trust policy；
+5. 由 Park 独立批准 production trust-root fingerprint 与当前 policy receipt pin，并把 HMAC secret 只注入隔离 gate；
+6. 更新 data-source target rights 和 truth boundary；
+7. 重新计算 canonical `receipt_hash`；
+8. 在无 test/replay/path override 的 canonical checkout 运行：
 
 ```bash
 python3 scripts/verify_personal_holdings_risk_card_entry.py --require-go
 ```
 
-6. Park 查看 exact diff 和 verifier 输出后明确批准；
-7. 只有这时才建立 M1-S2 issue，先做 3–5 人 × 3 个交易日 smoke，再扩到 20 人 × 10 个交易日。
+9. Park 查看 exact diff、四份外部批准摘要和 verifier 输出后，以 exact-scope owner receipt 明确批准；
+10. 只有这时才建立 M1-S2 issue，先做 3–5 人 × 3 个交易日 smoke，再扩到 20 人 × 10 个交易日。
 
 ## 9. 停止条件
 
