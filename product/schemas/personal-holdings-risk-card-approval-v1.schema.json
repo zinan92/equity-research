@@ -1,0 +1,645 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://park.local/schemas/personal-holdings-risk-card-approval-v1.schema.json",
+  "title": "Personal Holdings Risk Card Scope-bound Approval Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "approval_id",
+    "approval_key",
+    "decision",
+    "authority_identity",
+    "verification_method",
+    "scope_hash",
+    "underlying_evidence_sha256",
+    "safe_evidence_locator",
+    "dual_control_hmac_sha256",
+    "verified_by",
+    "verified_at",
+    "issued_at",
+    "expires_at",
+    "test_only",
+    "receipt_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "personal-holdings-risk-card-approval-v1"
+    },
+    "approval_id": {
+      "type": "string",
+      "pattern": "^m1-approval:[a-z0-9][a-z0-9._:-]{2,120}$"
+    },
+    "approval_key": {
+      "$ref": "#/$defs/approval_key"
+    },
+    "decision": {
+      "enum": [
+        "approved",
+        "rejected"
+      ]
+    },
+    "authority_identity": {
+      "$ref": "#/$defs/authority_identity"
+    },
+    "verification_method": {
+      "$ref": "#/$defs/verification_method"
+    },
+    "scope_hash": {
+      "$ref": "#/$defs/hash"
+    },
+    "underlying_evidence_sha256": {
+      "$ref": "#/$defs/hash"
+    },
+    "safe_evidence_locator": {
+      "type": "string",
+      "pattern": "^(vault|dms|github|email|contract|case|test):[A-Za-z0-9][A-Za-z0-9._/@+:-]{2,199}$"
+    },
+    "dual_control_hmac_sha256": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "verified_by": {
+      "$ref": "#/$defs/verifier_identity"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "test_only": {
+      "type": "boolean"
+    },
+    "receipt_hash": {
+      "$ref": "#/$defs/hash"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "approval_key": {
+            "const": "market_data_rights"
+          }
+        },
+        "required": [
+          "approval_key"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authority_identity": {
+            "properties": {
+              "authority_type": {
+                "enum": [
+                  "data_provider",
+                  "data_rights_bundle"
+                ]
+              }
+            }
+          },
+          "verification_method": {
+            "enum": [
+              "provider_executed_agreement",
+              "provider_written_permission",
+              "provider_agreement_bundle"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_key": {
+            "const": "securities_service_boundary"
+          }
+        },
+        "required": [
+          "approval_key"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authority_identity": {
+            "properties": {
+              "authority_type": {
+                "enum": [
+                  "qualified_legal_counsel",
+                  "licensed_securities_partner"
+                ]
+              }
+            }
+          },
+          "verification_method": {
+            "enum": [
+              "counsel_signed_opinion",
+              "licensed_partner_written_confirmation"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_key": {
+            "const": "personal_information_processing"
+          }
+        },
+        "required": [
+          "approval_key"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authority_identity": {
+            "properties": {
+              "authority_type": {
+                "enum": [
+                  "privacy_counsel",
+                  "data_protection_officer"
+                ]
+              }
+            }
+          },
+          "verification_method": {
+            "enum": [
+              "privacy_counsel_signed_assessment",
+              "dpo_signed_assessment"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_key": {
+            "const": "notification_channel"
+          }
+        },
+        "required": [
+          "approval_key"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authority_identity": {
+            "properties": {
+              "authority_type": {
+                "const": "channel_administrator"
+              }
+            }
+          },
+          "verification_method": {
+            "const": "channel_admin_written_confirmation"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "approval_key": {
+            "const": "park_owner_approval"
+          }
+        },
+        "required": [
+          "approval_key"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authority_identity": {
+            "properties": {
+              "authority_type": {
+                "const": "park_owner"
+              }
+            }
+          },
+          "verification_method": {
+            "enum": [
+              "park_github_approval",
+              "park_signed_approval"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "test_only": {
+            "const": true
+          }
+        },
+        "required": [
+          "test_only"
+        ]
+      },
+      "then": {
+        "properties": {
+          "dual_control_hmac_sha256": {
+            "type": "null"
+          },
+          "verified_by": {
+            "properties": {
+              "role": {
+                "const": "test_fixture"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "dual_control_hmac_sha256": {
+            "$ref": "#/$defs/hash"
+          },
+          "safe_evidence_locator": {
+            "type": "string",
+            "pattern": "^(vault|dms|github|email|contract|case):[A-Za-z0-9][A-Za-z0-9._/@+:-]{2,199}$"
+          },
+          "verified_by": {
+            "properties": {
+              "role": {
+                "enum": [
+                  "park_owner",
+                  "authorized_compliance_reviewer"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "approval_key": {
+      "enum": [
+        "market_data_rights",
+        "securities_service_boundary",
+        "personal_information_processing",
+        "notification_channel",
+        "park_owner_approval"
+      ]
+    },
+    "verification_method": {
+      "enum": [
+        "provider_executed_agreement",
+        "provider_written_permission",
+        "provider_agreement_bundle",
+        "counsel_signed_opinion",
+        "licensed_partner_written_confirmation",
+        "privacy_counsel_signed_assessment",
+        "dpo_signed_assessment",
+        "channel_admin_written_confirmation",
+        "park_github_approval",
+        "park_signed_approval"
+      ]
+    },
+    "authority_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "display_name",
+        "authority_type",
+        "safe_identifier",
+        "jurisdiction",
+        "covered_source_keys"
+      ],
+      "properties": {
+        "display_name": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 160
+        },
+        "authority_type": {
+          "enum": [
+            "data_provider",
+            "data_rights_bundle",
+            "qualified_legal_counsel",
+            "licensed_securities_partner",
+            "privacy_counsel",
+            "data_protection_officer",
+            "channel_administrator",
+            "park_owner"
+          ]
+        },
+        "safe_identifier": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{1,39}:[A-Za-z0-9][A-Za-z0-9._/@+-]{1,119}$"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}([+-][A-Z]{2})*$"
+        },
+        "covered_source_keys": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{1,80}$"
+          }
+        }
+      }
+    },
+    "verifier_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "safe_identifier"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "park_owner",
+            "authorized_compliance_reviewer",
+            "test_fixture"
+          ]
+        },
+        "safe_identifier": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]{1,39}:[A-Za-z0-9][A-Za-z0-9._/@+-]{1,119}$"
+        }
+      }
+    },
+    "trust_safe_identifier": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._-]{1,39}:[A-Za-z0-9][A-Za-z0-9._/@+-]{1,119}$"
+    },
+    "trust_safe_locator": {
+      "type": "string",
+      "pattern": "^(vault|dms|github|email|contract|case):[A-Za-z0-9][A-Za-z0-9._/@+:-]{2,199}$"
+    },
+    "trust_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "safe_identifier",
+        "authority_type",
+        "jurisdiction",
+        "identity_evidence_sha256",
+        "safe_identity_locator",
+        "enrolled_by",
+        "enrolled_at"
+      ],
+      "properties": {
+        "safe_identifier": {
+          "$ref": "#/$defs/trust_safe_identifier"
+        },
+        "authority_type": {
+          "enum": [
+            "data_provider",
+            "data_rights_bundle",
+            "qualified_legal_counsel",
+            "licensed_securities_partner",
+            "privacy_counsel",
+            "data_protection_officer",
+            "channel_administrator",
+            "park_owner"
+          ]
+        },
+        "jurisdiction": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}([+-][A-Z]{2})*$"
+        },
+        "identity_evidence_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "safe_identity_locator": {
+          "$ref": "#/$defs/trust_safe_locator"
+        },
+        "enrolled_by": {
+          "$ref": "#/$defs/trust_safe_identifier"
+        },
+        "enrolled_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "trust_authority_list": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/trust_authority"
+      }
+    },
+    "trust_verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "safe_identifier",
+        "role",
+        "approval_keys",
+        "identity_evidence_sha256",
+        "safe_identity_locator",
+        "enrolled_by",
+        "enrolled_at"
+      ],
+      "properties": {
+        "safe_identifier": {
+          "$ref": "#/$defs/trust_safe_identifier"
+        },
+        "role": {
+          "enum": [
+            "park_owner",
+            "authorized_compliance_reviewer"
+          ]
+        },
+        "approval_keys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/approval_key"
+          }
+        },
+        "identity_evidence_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "safe_identity_locator": {
+          "$ref": "#/$defs/trust_safe_locator"
+        },
+        "enrolled_by": {
+          "$ref": "#/$defs/trust_safe_identifier"
+        },
+        "enrolled_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "trust_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "policy_id",
+        "status",
+        "policy_epoch",
+        "issued_at",
+        "expires_at",
+        "revokes_before_epoch",
+        "previous_policy_receipt_hash",
+        "trust_root_key_sha256",
+        "dual_control_hmac_sha256",
+        "trusted_authorities",
+        "trusted_verifiers",
+        "receipt_hash"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "personal-holdings-risk-card-approval-trust-v1"
+        },
+        "policy_id": {
+          "const": "m1-approval-trust:personal-holdings-risk-card-v1"
+        },
+        "status": {
+          "enum": [
+            "onboarding_required",
+            "ready"
+          ]
+        },
+        "policy_epoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "revokes_before_epoch": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "previous_policy_receipt_hash": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trust_root_key_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dual_control_hmac_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trusted_authorities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "market_data_rights",
+            "securities_service_boundary",
+            "personal_information_processing",
+            "notification_channel",
+            "park_owner_approval"
+          ],
+          "properties": {
+            "market_data_rights": {
+              "$ref": "#/$defs/trust_authority_list"
+            },
+            "securities_service_boundary": {
+              "$ref": "#/$defs/trust_authority_list"
+            },
+            "personal_information_processing": {
+              "$ref": "#/$defs/trust_authority_list"
+            },
+            "notification_channel": {
+              "$ref": "#/$defs/trust_authority_list"
+            },
+            "park_owner_approval": {
+              "$ref": "#/$defs/trust_authority_list"
+            }
+          }
+        },
+        "trusted_verifiers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/trust_verifier"
+          }
+        },
+        "receipt_hash": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "onboarding_required"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "trust_root_key_sha256": {
+                "type": "null"
+              },
+              "dual_control_hmac_sha256": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "trust_root_key_sha256": {
+                "$ref": "#/$defs/hash"
+              },
+              "dual_control_hmac_sha256": {
+                "$ref": "#/$defs/hash"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

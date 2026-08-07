@@ -1,0 +1,21 @@
+{
+  "schema_version": "personal-holdings-risk-card-approval-trust-v1",
+  "policy_id": "m1-approval-trust:personal-holdings-risk-card-v1",
+  "status": "onboarding_required",
+  "policy_epoch": 1,
+  "issued_at": "2026-08-07T00:00:00Z",
+  "expires_at": "2027-08-07T00:00:00Z",
+  "revokes_before_epoch": 0,
+  "previous_policy_receipt_hash": null,
+  "trust_root_key_sha256": null,
+  "dual_control_hmac_sha256": null,
+  "trusted_authorities": {
+    "market_data_rights": [],
+    "securities_service_boundary": [],
+    "personal_information_processing": [],
+    "notification_channel": [],
+    "park_owner_approval": []
+  },
+  "trusted_verifiers": [],
+  "receipt_hash": "ce6cfce97152acdd8c41c0de00128d89aeb31dcfacfc8c692e3dabb34776869c"
+}

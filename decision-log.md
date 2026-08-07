@@ -2935,3 +2935,84 @@ into a commercial private-beta authorization.
   approval of the exact provider, channel, cohort, retention and paid scope.
 - An approval for local, free or non-distributed use cannot satisfy the frozen
   20-user paid concierge scope.
+
+# 2026-08-07 · Approval summaries bind originals but never replace them
+
+## Decision
+
+Generate five deterministic, non-sendable approval request pairs from the
+canonical M1.0 scope.  Accept a future approval only when its safe summary uses
+the approval-key-specific authority type and verification method, binds an
+independently checked external original/contract-bundle SHA-256 and safe
+locator, covers the exact scope and source keys, remains unexpired and passes
+both its own receipt hash and the canonical entry file hash.  Production
+authority and verifier identifiers must also be pre-enrolled in a separately
+self-hashed trust policy against controlled identity evidence.  The ready
+policy and every production approval must additionally carry a dual-control
+HMAC rooted in a Park-enrolled fingerprint; ordinary receipt hashes alone are
+not authentication.  Authority and verifier identities must be distinct, and
+the production gate pins the exact current policy receipt/epoch rather than
+accepting any previously valid policy.
+
+## Why
+
+The original gate proved scope, expiry and repository file identity but an
+operator-authored eight-field JSON could still look like a receipt.  The new
+contract separates three identities: the external authority, the controlled
+original evidence and the person who verified that original.  It also handles
+the current two-provider market scope as one rights bundle that must cover
+every source rather than allowing a permission for one endpoint to unlock all
+data.
+
+## Evidence
+
+- Issue #714 and
+  `product/schemas/personal-holdings-risk-card-approval-v1.schema.json`.
+- `scripts/build_personal_holdings_risk_card_approval_packet.py` with five
+  generated request pairs under `docs/market-regime/approval-requests/` and
+  `evidence/market-regime-m1/approval-requests/`.
+- `docs/market-regime/provider-rights-options.md` records current-source gaps
+  and official provider candidate pages without promoting them to approval.
+- Verifier tests cover method/key mismatch, missing original hash, safe-summary
+  hash tampering, incomplete source coverage, scope drift, expiry and
+  production rejection of test fixtures, self-verification, post-dated identity
+  enrollment, mixed test/production flags, policy replay and CLI replay/path
+  overrides.
+- `evidence/market-regime-m1/approval-requests/trust-policy.json` is valid but
+  `onboarding_required`; the untrusted-operator attack test proves arbitrary
+  production identity strings cannot unlock the gate.  The trusted-name attack
+  test proves that copying enrolled names and changing an underlying evidence
+  hash still fails without a valid per-receipt HMAC.
+
+## Gotchas
+
+- SHA-256 proves which bytes were reviewed, not that a contract is genuine,
+  the signer has authority or a legal opinion is correct.  The authorized
+  verifier must open the controlled locator and check the original out of band;
+  Park's final owner receipt confirms that four-way review.
+- The trust policy is an explicit trust anchor, not an automatic identity
+  oracle.  Enrolling an authority/reviewer is a reviewed contract change and
+  requires its own identity-evidence hash and controlled locator; currently no
+  production identity is enrolled.
+- The production trust-root fingerprint and current policy receipt pin are
+  intentionally `None`.  Enrolling both requires a separate Park-approved code
+  contract; its ≥32-byte secret belongs only in the target secret store as
+  `PARK_RISK_CARD_TRUST_HMAC_KEY`.  A repo operator must never receive it merely
+  to generate or test packets.
+- HMAC is symmetric: anyone who can read the secret can sign.  The secret must
+  be injected only into an isolated Park-controlled approval gate, never the
+  ordinary operator shell or persistent product runtime.  If independent
+  issuers later need their own signing authority, migrate to pinned public-key
+  signatures rather than sharing this secret.
+- `--require-go` is a current-production gate: it rejects test mode, historical
+  reference times and alternate root/contract/schema paths.  Replay and fixture
+  evaluation can still run without `--require-go`, but returns explicit
+  `test_only` and `production_eligible` fields.
+- Public pricing, feature pages, API success and a commercial subscription do
+  not prove paid external distribution.  Exchange permissions and fees may be
+  separate.
+- Every packet says `draft_not_sent` and
+  `outbound_action_authorized=false`.  Building it does not authorize sending,
+  buying, accepting terms, collecting holdings or charging users.
+- Replacing Yahoo/Tencent with Wind, Choice, Twelve Data or another provider
+  changes the scope hash and invalidates all generated requests and approvals.

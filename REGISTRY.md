@@ -1,5 +1,44 @@
 # REGISTRY
 
+## 2026-08-07 · Personal risk-card auditable approval packets (Issue #714)
+
+Now: the five M1.0 approvals have deterministic JSON/Markdown request packets
+bound to approval scope
+`fbd101f1933bbc3603d4e35f4093d9bddede2520cd903a97b57d8aa6d71746bd`.
+The approval schema and verifier now require the authority type and safe
+identity, key-specific verification method, independently checked underlying
+evidence hash and controlled locator, verification identity/time, validity
+window and a self-hashed safe summary.  Market-data rights must cover every
+canonical source key; a Park signature cannot masquerade as provider, counsel,
+privacy or channel approval.
+
+The separate trust policy is `onboarding_required` with no production identity
+or trust root enrolled.  A self-declared authority/reviewer string, arbitrary
+underlying hash or operator-recomputed receipt therefore cannot make an
+otherwise well-shaped approval pass.  Authority and verifier identities need
+controlled identity evidence, while the ready policy and every production
+approval need a dual-control HMAC whose secret is not held in the repository.
+Authority and verifier must be different identities for each key.  A ready
+policy additionally needs a valid epoch/window/revocation chain and its exact
+receipt plus trust-root fingerprint pinned by a separate Park-approved code
+change; both pins are intentionally unset today.
+
+All packets remain `draft_not_sent` with `outbound_action_authorized=false`.
+Provider research identifies Twelve Data plus Wind/Choice as contract
+candidates, not approved sources.  The canonical entry receipt is unchanged
+and truthfully blocked by all five approvals; no real-user contact, holdings,
+delivery, purchase, contract acceptance or payment is authorized.
+
+Next: Park chooses whether to pursue the current Yahoo/Tencent scope or replace
+it with a licensed A-share plus global provider and separately authorizes
+outreach, identity enrollment and a separate Park-approved trust-root
+enrollment.  Any provider/source/field change returns to
+the contract step and regenerates all five packets.  M1 can advance only after
+the trust policy becomes ready, the four external approval originals are
+independently checked, Park issues the exact-scope owner receipt and
+canonical `--require-go` passes without test, replay-time or path overrides;
+do not start M2.
+
 ## 2026-08-07 · Personal holdings risk card M1.0 entry gate (Issue #712)
 
 Now: the approved 08:45 personal-holdings risk-card roadmap has a versioned,
