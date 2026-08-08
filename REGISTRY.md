@@ -1,5 +1,28 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime Live S4 local decision surface (Issue #724)
+
+Now: `http://127.0.0.1:8896/market-regime` is a local, read-only two-horizon
+decision surface.  The first screen keeps the completed-daily structural regime
+frozen while a separate 15-minute-target layer answers what changed, the A-share
+confirmation state, up to three evidence-bound signed contributions, exactly
+two threshold-bound watch conditions and freshness/session/provider time for all
+14 cash/proxy identities.  Cash indices and futures proxies remain explicitly
+separate; stale open-session relations become `上次确认/背离` and cannot light the
+current-state indicator.
+
+All three launchd services are installed against a stable app worktree.  Real
+Saturday acceptance recorded both schedulers idle with `last_error=null`, API
+v2 available, 14/14 accepted identities, all 14 sessions closed and overlay
+relation `closed`.  Desktop 1440 and mobile 390 render with no horizontal
+overflow, two watch conditions and nine daily charts.  Evidence is in
+[`evidence/market-regime-live-s4/runtime-acceptance.json`](evidence/market-regime-live-s4/runtime-acceptance.json).
+
+The page polls only same-origin read endpoints every 60 seconds and contains no
+provider request, notification, holding, order or action surface.  Next: collect
+a separate weekday open-session receipt before claiming provider latency or
+current-state reliability; weekend closed acceptance is not a realtime SLA.
+
 ## 2026-08-08 · Market Regime daily structural rebind repair (Issue #731)
 
 Now: a completed-daily refresh may rebind the exact latest verified intraday

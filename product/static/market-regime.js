@@ -25,9 +25,12 @@
     partial: "部分",
     unavailable: "不可用",
     idle: "等待下一轮",
+    busy: "等待发布锁",
     running: "刷新中",
     failed: "上轮失败",
     interrupted: "上轮中断",
+    stopped: "已停止",
+    closed: "休市",
   };
 
   const TREND_NAMES = {
@@ -36,6 +39,54 @@
     flat: "横盘",
     down: "下行",
     strong_down: "强势下行",
+  };
+
+  const SESSION_NAMES = {
+    pre: "盘前",
+    open: "交易中",
+    lunch_break: "午休",
+    post: "盘后",
+    maintenance: "维护时段",
+    closed: "休市",
+    unknown: "时段未知",
+  };
+
+  const ASSET_LABELS = {
+    sp500_cash: {name: "S&P 500 Cash", tag: "CASH · ^GSPC"},
+    nasdaq_cash: {name: "Nasdaq Composite Cash", tag: "CASH · ^IXIC"},
+    sp500_futures_proxy: {name: "S&P 500 Futures Proxy", tag: "PROXY · ES=F"},
+    nasdaq100_futures_proxy: {name: "Nasdaq-100 Futures Proxy", tag: "PROXY · NQ=F"},
+    wti: {name: "WTI Continuous", tag: "FUTURE · CL=F"},
+    gold: {name: "Gold Continuous", tag: "FUTURE · GC=F"},
+    silver: {name: "Silver Continuous", tag: "FUTURE · SI=F"},
+    kospi: {name: "KOSPI Cash", tag: "CASH · ^KS11"},
+    nikkei: {name: "Nikkei 225 Cash", tag: "CASH · ^N225"},
+    vix: {name: "VIX Cash", tag: "CASH · ^VIX"},
+    us_dividend: {name: "US Dividend ETF", tag: "ETF · SCHD"},
+    shanghai: {name: "上证指数 Cash", tag: "CASH · 000001.SH"},
+    star50: {name: "科创 50 Cash", tag: "CASH · 000688.SH"},
+    china_dividend: {name: "上证红利 Cash", tag: "CASH · 000015.SH"},
+  };
+
+  const A_SHARE_INTRADAY_KEYS = new Set(["shanghai", "star50", "china_dividend"]);
+
+  const RELATION_VIEWS = {
+    confirms: {
+      label: "确认日线结构",
+      copy: "A股可用盘中证据与冻结的日线结构同向；这是一致性判断，不是涨跌预测。",
+    },
+    diverges: {
+      label: "背离日线结构",
+      copy: "A股可用盘中证据与冻结的日线结构反向；先观察背离是否持续，不据此自动行动。",
+    },
+    insufficient: {
+      label: "证据不足",
+      copy: "缺少可用时段、关键A股身份或连续确认，因此不判定确认或背离。",
+    },
+    closed: {
+      label: "A股已休市",
+      copy: "A股依赖均处于已知非交易时段；休市不是转弱，也不会被标记为当前行情。",
+    },
   };
 
   const state = {
@@ -87,6 +138,58 @@
     if (!value) return "—";
     const parts = String(value).split("-");
     return parts.length === 3 ? `${parts[1]}/${parts[2]}` : String(value);
+  }
+
+  function shortId(value, size = 12) {
+    if (!value) return "—";
+    const textValue = String(value);
+    const digest = textValue.includes(":") ? textValue.split(":").at(-1) : textValue;
+    return digest.length > size ? `${digest.slice(0, size)}…` : digest;
+  }
+
+  function ageLabel(value) {
+    if (!value) return "AGE —";
+    const timestamp = new Date(value).getTime();
+    if (!Number.isFinite(timestamp)) return "AGE UNKNOWN";
+    const seconds = Math.max(0, Math.floor((Date.now() - timestamp) / 1000));
+    if (seconds < 60) return `AGE ${seconds}S`;
+    if (seconds < 3600) return `AGE ${Math.floor(seconds / 60)}M`;
+    if (seconds < 86400) return `AGE ${Math.floor(seconds / 3600)}H`;
+    return `AGE ${Math.floor(seconds / 86400)}D`;
+  }
+
+  function compactValue(value) {
+    if (value == null || value === "") return "—";
+    if (Array.isArray(value)) return value.length ? value.join(", ") : "无";
+    if (typeof value === "object") {
+      return Object.entries(value)
+        .map(([key, item]) => `${key}:${item}`)
+        .join(" · ");
+    }
+    return String(value);
+  }
+
+  function freshnessView(asset) {
+    const session = String(asset.session_state || "unknown");
+    const freshness = String(asset.freshness || "unavailable");
+    const providerTime = new Date(asset.provider_timestamp || 0).getTime();
+    const ageSeconds = Number.isFinite(providerTime)
+      ? Math.max(0, Math.floor((Date.now() - providerTime) / 1000))
+      : Number.POSITIVE_INFINITY;
+    if (asset.refresh_status === "rejected" || freshness === "unavailable") {
+      return {
+        state: freshness === "unavailable" ? "unavailable" : "delayed",
+        label: asset.refresh_status === "rejected" ? "刷新失败 · 保留旧证据" : "证据不可用",
+      };
+    }
+    if (session !== "open") {
+      return {state: session === "unknown" ? "unknown" : "closed", label: SESSION_NAMES[session] || session};
+    }
+    if (freshness === "live_candidate" && ageSeconds <= 15 * 60) {
+      return {state: "current", label: "CURRENT ≤15M"};
+    }
+    if (freshness === "stale") return {state: "delayed", label: "STALE"};
+    return {state: "delayed", label: "DELAYED"};
   }
 
   function tone(value) {
@@ -174,6 +277,227 @@
     text("story-rotation", explanation.rotation);
     text("story-divergence", explanation.divergence);
     text("story-invalidation", explanation.invalidation);
+  }
+
+  function renderOverlay(bundle) {
+    const overlay = bundle.overlay || {};
+    const intraday = bundle.intraday || {};
+    const relation = String(overlay.relation || "insufficient");
+    const view = RELATION_VIEWS[relation] || RELATION_VIEWS.insufficient;
+    const aShare = overlay.a_share_tape || {};
+    const assets = Array.isArray(intraday.assets) ? intraday.assets : [];
+    const providerTimes = assets
+      .map((asset) => asset.provider_timestamp)
+      .filter(Boolean)
+      .map((value) => new Date(value))
+      .filter((value) => !Number.isNaN(value.getTime()));
+    const newestProvider = providerTimes.length
+      ? new Date(Math.max(...providerTimes.map((value) => value.getTime()))).toISOString()
+      : null;
+    const sessions = [...new Set(Object.values(aShare.session_states || {}))];
+    const sessionText = sessions.length
+      ? sessions.map((session) => SESSION_NAMES[session] || session).join(" / ")
+      : "时段未知";
+
+    const aShareAssets = assets.filter((asset) => A_SHARE_INTRADAY_KEYS.has(asset.instrument?.key));
+    const aShareStates = aShareAssets.map(freshnessView);
+    const aShareIsCurrent = aShareAssets.length === A_SHARE_INTRADAY_KEYS.size &&
+      aShareStates.every((item) => item.state === "current");
+    const recordedRelationIsHistoric = ["confirms", "diverges"].includes(relation) && !aShareIsCurrent;
+    const displayedLabel = recordedRelationIsHistoric ? `上次${view.label}` : view.label;
+    const displayedCopy = recordedRelationIsHistoric
+      ? `这是 ${dateTime(overlay.generated_at)} 已验证 overlay 的历史关系；A股盘中证据已超过 15 分钟，不代表当前盘面。`
+      : view.copy;
+    const displayedSession = relation === "closed"
+      ? "A股 · 休市"
+      : sessions.includes("open")
+        ? `A股 · 交易中 · ${aShareIsCurrent ? "CURRENT ≤15M" : "数据延迟"}`
+        : `A股 · ${sessionText}`;
+
+    $("overlay-card").dataset.relation = relation;
+    $("overlay-card").dataset.current = aShareIsCurrent ? "true" : "false";
+    text("overlay-relation", displayedLabel);
+    text("overlay-copy", displayedCopy);
+    text("overlay-session", displayedSession);
+    text("overlay-a-score", signed(aShare.impulse_score));
+    text("overlay-cross-score", signed(overlay.cross_asset?.score));
+    text("overlay-provider-time", dateTime(newestProvider));
+    text("overlay-generated", `OVERLAY ${dateTime(overlay.generated_at)} · ${ageLabel(overlay.generated_at)}`);
+    text(
+      "overlay-quality",
+      `${String(intraday.quality || "unknown").toUpperCase()} · ${intraday.accepted_count ?? 0}/14 ACCEPTED`
+    );
+    text(
+      "top-quality",
+      `${String(intraday.quality || "unknown").toUpperCase()} ${intraday.accepted_count ?? 0}/14 · ${displayedLabel}`
+    );
+    const dot = $("top-state-dot");
+    if (dot) {
+      dot.dataset.state = relation === "closed"
+        ? "closed"
+        : relation === "insufficient" || intraday.quality !== "complete"
+          ? "degraded"
+          : aShareIsCurrent
+            ? "current"
+            : "degraded";
+    }
+  }
+
+  function renderChange(bundle) {
+    const overlay = bundle.overlay || {};
+    const receipt = bundle.material_change_receipt || {};
+    const change = receipt.change || overlay.material_change || {};
+    const relation = String(overlay.relation || "insufficient");
+    const previous = receipt.previous_overlay_id || overlay.baseline_overlay_id;
+    const material = change.is_material === true;
+    let title = "没有可比较的上一份盘中层";
+    let copy = "这是第一份已验证 overlay；不会把首次出现误写成市场发生了变化。";
+    if (previous) {
+      if (relation === "closed") {
+        title = "A股进入已知非交易时段";
+        copy = "本轮相对上一份成功 overlay 只确认休市状态；休市不代表风险偏好转弱。";
+      } else if (relation === "insufficient") {
+        title = "关键盘中证据暂不足";
+        copy = "当前无法复验确认或背离；页面保留上一份基线身份，但不延用它的结论。";
+      } else if (relation === "diverges") {
+        title = material ? "A股背离达到实质变化门槛" : "A股出现背离，尚未达到实质变化门槛";
+        copy = "背离来自可验证市场信号与冻结日线结构的方向比较，不是新闻原因或交易指令。";
+      } else {
+        title = material ? "A股确认达到实质变化门槛" : "A股仍在确认结构，未达到实质变化门槛";
+        copy = "确认仅表示盘中证据与日线结构同向；阈值、连续性和冷却状态仍然有效。";
+      }
+    }
+    $("change-card").dataset.material = material ? "true" : "false";
+    text("change-state", material ? "MATERIAL CHANGE" : "NO MATERIAL CHANGE");
+    text("change-title", title);
+    text("change-copy", copy);
+    text("change-a-delta", `A股 Δ ${signed(change.a_share_score_delta)}`);
+    text("change-cross-delta", `跨资产 Δ ${signed(change.cross_asset_score_delta)}`);
+    text("change-baseline", `BASELINE ${shortId(previous, 18)}`);
+  }
+
+  function renderDrivers(bundle) {
+    const host = $("top-contributions");
+    const rows = (bundle.overlay?.top_drivers || []).slice(0, 3);
+    host.replaceChildren();
+    if (!rows.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty-copy";
+      empty.textContent = "当前没有达到可展示条件的市场信号；不会补写新闻原因。";
+      host.append(empty);
+      return;
+    }
+    rows.forEach((row) => {
+      const identity = ASSET_LABELS[row.instrument] || {name: row.instrument, tag: "SIGNAL"};
+      const item = document.createElement("div");
+      item.className = "driver-row";
+      item.title = `${row.evidence_id || ""} · ${row.normalized_artifact_sha256 || ""}`;
+      const main = document.createElement("div");
+      main.className = "driver-main";
+      const name = document.createElement("strong");
+      name.textContent = identity.name;
+      const value = document.createElement("span");
+      value.textContent = signed(row.contribution, 2);
+      main.append(name, value);
+      const meta = document.createElement("small");
+      meta.textContent = `${identity.tag} · ${dateTime(row.provider_timestamp)} · EVIDENCE ${shortId(row.evidence_id, 10)}`;
+      item.append(main, meta);
+      host.append(item);
+    });
+  }
+
+  function renderWatchConditions(bundle) {
+    const host = $("watch-conditions");
+    const rows = (bundle.overlay?.watch_conditions || []).slice(0, 2);
+    const evidence = shortId(bundle.intraday_snapshot_id, 10);
+    host.replaceChildren();
+    if (!rows.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty-copy";
+      empty.textContent = "当前 overlay 没有可验证的观察条件。";
+      host.append(empty);
+      return;
+    }
+    rows.forEach((row, index) => {
+      const item = document.createElement("div");
+      item.className = "watch-row";
+      const main = document.createElement("div");
+      main.className = "watch-main";
+      const name = document.createElement("strong");
+      name.textContent = `${String(index + 1).padStart(2, "0")} ${String(row.code || "condition").replaceAll("_", " ").toUpperCase()}`;
+      const threshold = document.createElement("small");
+      threshold.textContent = `阈值 ${compactValue(row.threshold)}`;
+      main.append(name, threshold);
+      const condition = document.createElement("p");
+      condition.textContent = row.condition || "条件说明不可用";
+      const meta = document.createElement("small");
+      meta.textContent = `当前 ${compactValue(row.current)} · SNAPSHOT ${evidence}`;
+      item.append(main, condition, meta);
+      host.append(item);
+    });
+  }
+
+  function renderFreshness(bundle, health) {
+    const host = $("intraday-assets");
+    const assets = Array.isArray(bundle.intraday?.assets) ? bundle.intraday.assets : [];
+    host.replaceChildren();
+    const stateCounts = {};
+    assets.forEach((asset) => {
+      const key = asset.instrument?.key || "unknown";
+      const identity = ASSET_LABELS[key] || {
+        name: asset.instrument?.display_name || key,
+        tag: asset.instrument?.canonical_symbol || "UNKNOWN",
+      };
+      const freshness = freshnessView(asset);
+      stateCounts[freshness.state] = (stateCounts[freshness.state] || 0) + 1;
+      const card = document.createElement("article");
+      card.className = "freshness-card";
+      card.dataset.asset = key;
+      card.dataset.state = freshness.state;
+      card.title = `${asset.evidence?.sha256 || "NO EVIDENCE HASH"}`;
+      const header = document.createElement("header");
+      const name = document.createElement("h3");
+      name.textContent = identity.name;
+      const tag = document.createElement("span");
+      tag.className = "identity-tag";
+      tag.textContent = identity.tag;
+      header.append(name, tag);
+      const status = document.createElement("div");
+      status.className = "freshness-state";
+      status.textContent = `${freshness.label} · ${SESSION_NAMES[asset.session_state] || asset.session_state || "未知"}`;
+      const footer = document.createElement("footer");
+      const provider = document.createElement("span");
+      provider.textContent = `PROVIDER ${dateTime(asset.provider_timestamp)}`;
+      const age = document.createElement("span");
+      age.textContent = ageLabel(asset.provider_timestamp);
+      footer.append(provider, age);
+      card.append(header, status, footer);
+      host.append(card);
+    });
+    const layer = health?.latest?.layers?.intraday || {};
+    const sessions = Object.entries(layer.session_counts || {})
+      .map(([key, count]) => `${SESSION_NAMES[key] || key} ${count}`)
+      .join(" · ");
+    const errors = Array.isArray(layer.errors) ? layer.errors.length : 0;
+    const freshnessCounts = [
+      stateCounts.current ? `CURRENT ${stateCounts.current}` : null,
+      stateCounts.delayed ? `DELAYED ${stateCounts.delayed}` : null,
+      stateCounts.closed ? `CLOSED ${stateCounts.closed}` : null,
+      stateCounts.unavailable ? `UNAVAILABLE ${stateCounts.unavailable}` : null,
+      stateCounts.unknown ? `UNKNOWN ${stateCounts.unknown}` : null,
+    ].filter(Boolean).join(" · ");
+    text(
+      "freshness-summary",
+      `${assets.length}/14 IDENTITIES · ${sessions || "SESSION UNKNOWN"}${freshnessCounts ? ` · ${freshnessCounts}` : ""}${errors ? ` · ${errors} ERROR` : ""}`
+    );
+  }
+
+  function renderLiveLayer(bundle, health) {
+    renderOverlay(bundle);
+    renderChange(bundle);
+    renderDrivers(bundle);
+    renderWatchConditions(bundle);
+    renderFreshness(bundle, health);
   }
 
   function renderLeadership(leadership) {
@@ -507,13 +831,26 @@
 
   function renderHealth(health, bundle) {
     const scheduler = health?.scheduler || {};
-    const next = scheduler.next_due_at;
-    text("top-schedule", `${scheduler.interval_hours || 4}H CYCLE`);
-    text("next-due", next ? `${dateTime(next)}（北京时间）` : "尚未记录下一次运行");
-    text("runtime-interval", `${scheduler.interval_hours || "—"} 小时`);
-    text("runtime-success", dateTime(scheduler.last_success_at));
-    text("runtime-state", STATE_NAMES[scheduler.state] || scheduler.state || "不可用");
-    text("runtime-quality", String(bundle.data_quality || "unknown").toUpperCase());
+    const intradayScheduler = health?.intraday_scheduler || {};
+    const next = intradayScheduler.next_due_at;
+    const intradayState = STATE_NAMES[intradayScheduler.state] || intradayScheduler.state || "不可用";
+    text("top-schedule", `${intradayScheduler.interval_minutes || 15}M TARGET · ${intradayState}`);
+    text(
+      "next-due",
+      next
+        ? `盘中下一目标 ${dateTime(next)}（北京时间）`
+        : `盘中尚未记录下一目标；日线下一轮 ${dateTime(scheduler.next_due_at)}`
+    );
+    text("runtime-interval", `${intradayScheduler.interval_minutes || 15} 分钟目标`);
+    text("runtime-success", dateTime(intradayScheduler.last_success_at));
+    text("runtime-state", intradayState);
+    text("runtime-quality", String(bundle.intraday?.quality || "unknown").toUpperCase());
+    text("structural-runtime-interval", `${scheduler.interval_hours || "—"} 小时`);
+    text("structural-runtime-success", dateTime(scheduler.last_success_at));
+    const dot = $("top-state-dot");
+    if (dot && ["failed", "interrupted", "stopped"].includes(intradayScheduler.state)) {
+      dot.dataset.state = intradayScheduler.state;
+    }
   }
 
   function renderBoundary(bundle) {
@@ -532,6 +869,7 @@
     state.bundle = bundle;
     state.health = health;
     renderHero(bundle);
+    renderLiveLayer(bundle, health);
     renderLeadership(bundle.analysis?.dimensions?.leadership);
     renderProbes(bundle);
     renderCharts(bundle);
@@ -552,7 +890,8 @@
     $("hero").classList.remove("loading-shell");
     $("hero").setAttribute("aria-busy", "false");
     text("hero-headline", "快照暂不可用");
-    text("hero-deck", "页面没有拿到通过校验的本地行情包，因此不会用演示数据伪装实时市场。请检查本机服务后重试。");
+    text("hero-deck", "页面没有拿到通过校验的本地行情包，因此不会用演示数据伪装当前市场。请检查本机服务后重试。");
+    $("top-state-dot").dataset.state = "failed";
     document.body.dataset.ready = "error";
     window.__MARKET_REGIME_READY__ = false;
   }
@@ -566,10 +905,12 @@
     return payload;
   }
 
-  async function load() {
+  async function load({silent = false} = {}) {
     const button = $("reload-button");
-    button.classList.add("loading");
-    button.disabled = true;
+    if (!silent) {
+      button.classList.add("loading");
+      button.disabled = true;
+    }
     try {
       const [bundle, healthResult] = await Promise.all([
         fetchJson("/api/market-regime"),
@@ -580,10 +921,17 @@
       ]);
       render(bundle, healthResult);
     } catch (error) {
-      showError(error);
+      if (silent && state.bundle) {
+        $("top-state-dot").dataset.state = "failed";
+        text("top-quality", "本地读取失败 · 保留上次已验证成果");
+      } else {
+        showError(error);
+      }
     } finally {
-      button.classList.remove("loading");
-      button.disabled = false;
+      if (!silent) {
+        button.classList.remove("loading");
+        button.disabled = false;
+      }
     }
   }
 
@@ -610,4 +958,5 @@
   $("error-retry").addEventListener("click", load);
   window.addEventListener("resize", redrawAll, {passive: true});
   load();
+  window.setInterval(() => load({silent: true}), 60_000);
 })();

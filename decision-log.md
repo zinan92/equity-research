@@ -3332,3 +3332,52 @@ refresh impossible.  Identity-constrained rebind preserves both contracts.
   resets instead of carrying a directional confirmation across analyses.
 - The repair does not turn the independent 4h/12h and 15-minute services into
   one schedule, and it does not relax the cohesive API identity gate.
+
+# 2026-08-08 · The first screen is a decision layer, not a quote wall
+
+## Decision
+
+Keep the completed-daily structural verdict visually dominant and put one dense
+15-minute-target decision deck directly beneath it: A-share relation, What
+Changed, up to three signed evidence contributions, exactly two watch
+conditions and 14 per-identity freshness cards.  The browser reads the cohesive
+local bundle and health every 60 seconds; it never contacts a provider or
+recomputes the model.
+
+## Why
+
+The user needs to know whether the structural story is being confirmed or
+challenged, what evidence changed and what would invalidate the current read.
+Nine charts and a generic Risk On/Off label cannot answer that quickly.  A
+separate overlay preserves the different time horizons without pretending that
+a 15-minute target service is an exchange realtime feed.
+
+## Evidence
+
+- Issue #724 and
+  `evidence/market-regime-live-s4/runtime-acceptance.json`.
+- Real local launchd acceptance: three services loaded; daily and intraday
+  schedulers idle; API v2 available; 14/14 accepted; all 14 Saturday sessions
+  closed; overlay relation closed; non-actionable truth boundary intact.
+- Browser acceptance at 1440x1000 and 390x844: body ready, no horizontal
+  overflow, 14 freshness cards, two watch conditions, nine daily charts and no
+  console warning/error.  Screenshots are stored beside the acceptance receipt.
+- Focused web/launchd tests and the full market-regime suite cover same-origin
+  no-store reads, CSP, Cash/Proxy naming, relation states, stale-state wording,
+  responsive fallbacks and absence of provider/trading/notification surfaces.
+
+## Gotchas
+
+- `complete 14/14` describes identity acceptance, not current prices.  An old
+  open-session overlay is displayed as `上次确认/背离 · 数据延迟`, and the header
+  remains degraded unless all three A-share inputs are open, `live_candidate`
+  and at most 15 minutes old.
+- Closed sessions can correctly have zero eligible signed drivers.  The page
+  says none reached display conditions and refuses to invent a news cause, but
+  still shows the two evidence-bound reopening/persistence conditions.
+- Real closed-state thresholds contain long identity strings.  Fixed fixture
+  copy did not expose their intrinsic-width overflow; acceptance therefore
+  checks actual DOM width and forces long evidence text to wrap.
+- Saturday proves service survival and the closed branch only.  Weekday
+  open-session provider latency, source entitlements and current-state behavior
+  remain separate acceptance work.
