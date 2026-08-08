@@ -1,0 +1,78 @@
+{
+  "schema_version": "market-regime-live-source-probe-safe-projection-v1",
+  "run_id": "market-regime-live-probe-20260808T065906Z-646a24c6",
+  "generated_at": "2026-08-08T06:59:07.081252Z",
+  "purpose": "bounded_non_gate_local_reachability_observation",
+  "deployment_mode": "local_prototype",
+  "license_status": "local_evaluation_only",
+  "publication_eligible": false,
+  "action_eligible": false,
+  "probe_count": 4,
+  "runtime_receipt": {
+    "locator": "local-runtime:intraday-probes/receipts/market-regime-live-probe-20260808T065906Z-646a24c6.json",
+    "file_bytes": 6676,
+    "file_sha256": "44d14d5e667cd1210f13a1c7cfcd30e834e0de8f0bf65189be66e582ba18d12a",
+    "payload_sha256": "43fcf8539770954c1352f1f2a48bcac3f545dd912ab5df7a6bf9d5db760db565"
+  },
+  "probes": [
+    {
+      "key": "tencent_a_share_quote_batch",
+      "requested_url": "https://qt.gtimg.cn/q=sh000001,sh000688,sh000015",
+      "status_code": 200,
+      "content_type": "text/html",
+      "received_at": "2026-08-08T06:59:06.574680Z",
+      "body_bytes": 1371,
+      "raw_sha256": "57a55055102197cd4bbcd9ef358144a27041aba0cdc932f4f336677e82ef8105",
+      "raw_capture_locator": "local-runtime:intraday-probes/raw/market-regime-live-probe-20260808T065906Z-646a24c6/tencent_a_share_quote_batch.bin",
+      "bounded_raw_excerpt": "v_sh000001=\"1~上证指数~000001~3940.04~3900.35~3896.49",
+      "observation_only": true
+    },
+    {
+      "key": "tencent_shanghai_m5",
+      "requested_url": "https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=sh000001,m5,,80",
+      "status_code": 200,
+      "content_type": "text/html",
+      "received_at": "2026-08-08T06:59:06.725932Z",
+      "body_bytes": 8044,
+      "raw_sha256": "3747852c814c6f557d148d98d26670b4e920e0620af99ac6d51057cd8fc5e42d",
+      "raw_capture_locator": "local-runtime:intraday-probes/raw/market-regime-live-probe-20260808T065906Z-646a24c6/tencent_shanghai_m5.bin",
+      "bounded_raw_excerpt": "{\"code\":0,\"msg\":\"\",\"data\":{\"sh000001\":{\"qt\":{\"sh000001\":[\"1\",\"\\u4e0a\\u8bc1\\u6307\\u6570\"]}}}",
+      "observation_only": true
+    },
+    {
+      "key": "yahoo_query1_es_m5",
+      "requested_url": "https://query1.finance.yahoo.com/v8/finance/chart/ES=F?interval=5m&range=1d",
+      "status_code": 200,
+      "content_type": "application/json",
+      "received_at": "2026-08-08T06:59:06.919109Z",
+      "body_bytes": 13251,
+      "raw_sha256": "49e31aa61509e91f19a1cfda65858e9dd46daf8f506351a4569227da6e29ed5d",
+      "raw_capture_locator": "local-runtime:intraday-probes/raw/market-regime-live-probe-20260808T065906Z-646a24c6/yahoo_query1_es_m5.json",
+      "bounded_raw_excerpt": "{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USD\",\"symbol\":\"ES=F\",\"exchangeName\":\"CME\"}}]}}",
+      "observation_only": true
+    },
+    {
+      "key": "yahoo_query2_es_m5",
+      "requested_url": "https://query2.finance.yahoo.com/v8/finance/chart/ES=F?interval=5m&range=1d",
+      "status_code": 429,
+      "content_type": "text/html",
+      "received_at": "2026-08-08T06:59:07.080511Z",
+      "body_bytes": 23,
+      "raw_sha256": "0d24c98db98d3b4a87b9626a026e7d72c99754ab6bd88211a17bc372350b7d89",
+      "raw_capture_locator": "local-runtime:intraday-probes/raw/market-regime-live-probe-20260808T065906Z-646a24c6/yahoo_query2_es_m5.bin",
+      "bounded_raw_excerpt": "Edge: Too Many Requests",
+      "transport_error": "HTTPError: Too Many Requests",
+      "observation_only": true
+    }
+  ],
+  "limitations": [
+    "one observation does not establish reliability or latency",
+    "HTTP 200 does not establish valid market data",
+    "the query2 429 does not establish source unavailability",
+    "the Saturday run cannot establish market-open behavior",
+    "the probe grants no private, public or commercial redistribution right"
+  ],
+  "reliability_proven": false,
+  "exchange_realtime_proven": false,
+  "redistribution_rights_proven": false
+}
