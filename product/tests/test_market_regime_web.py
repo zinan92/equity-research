@@ -134,6 +134,8 @@ class MarketRegimeWebTest(unittest.TestCase):
         self.assertIn("@media (max-width: 480px)", css)
         self.assertIn("@media (max-width: 800px)", css)
         self.assertIn("overflow-x: hidden", css)
+        self.assertIn(".watch-main small", css)
+        self.assertIn("overflow-wrap: anywhere", css)
         self.assertNotIn("https://", css + javascript)
         self.assertNotIn("http://", css + javascript)
         self.assertIn('fetchJson("/api/market-regime")', javascript)

@@ -611,6 +611,7 @@ main {
 
 .driver-main,
 .watch-main {
+  min-width: 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -647,6 +648,15 @@ main {
   color: var(--text-soft);
   font-size: 10px;
   line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.watch-main small {
+  max-width: 52%;
+  flex: 0 1 auto;
+  overflow-wrap: anywhere;
+  text-align: right;
+  white-space: normal;
 }
 
 .freshness-heading {
