@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://park.local/schemas/market-regime-intraday-data-v1.schema.json",
+  "title": "Market Regime Intraday Data Snapshot v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "generated_at",
+    "quality",
+    "instrument_count",
+    "accepted_count",
+    "rejected_count",
+    "registry_sha256",
+    "license",
+    "data_kind",
+    "publication_eligible",
+    "action_eligible",
+    "instruments",
+    "snapshot_id"
+  ],
+  "properties": {
+    "schema_version": {"const": "market-regime-intraday-data-v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "quality": {"enum": ["complete", "partial", "unavailable"]},
+    "instrument_count": {"type": "integer", "minimum": 1},
+    "accepted_count": {"type": "integer", "minimum": 0},
+    "rejected_count": {"type": "integer", "minimum": 0},
+    "registry_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "license": {"type": "object"},
+    "data_kind": {"enum": ["real", "fixture"]},
+    "publication_eligible": {"const": false},
+    "action_eligible": {"const": false},
+    "instruments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "instrument",
+          "bars",
+          "bar_count",
+          "provider_timestamp",
+          "observed_at",
+          "received_at",
+          "current_age_seconds",
+          "session_state",
+          "freshness",
+          "publication_eligible",
+          "action_eligible"
+        ],
+        "properties": {
+          "schema_version": {"const": "market-regime-intraday-data-v1"},
+          "instrument": {"type": "object"},
+          "bars": {"type": "array"},
+          "bar_count": {"type": "integer", "minimum": 0},
+          "provider_timestamp": {"type": ["string", "null"]},
+          "observed_at": {"type": "string", "format": "date-time"},
+          "received_at": {"type": ["string", "null"]},
+          "current_age_seconds": {"type": ["integer", "null"], "minimum": 0},
+          "session_state": {"enum": ["pre", "open", "lunch_break", "post", "maintenance", "closed", "unknown"]},
+          "freshness": {"enum": ["live_candidate", "delayed", "stale", "unavailable"]},
+          "publication_eligible": {"const": false},
+          "action_eligible": {"const": false}
+        }
+      }
+    },
+    "snapshot_id": {"type": "string", "pattern": "^market-regime-intraday-snapshot:[0-9a-f]{64}$"}
+  }
+}

@@ -3063,3 +3063,46 @@ structural regime.
   translated into bearishness or “does not confirm”.
 - Last-good fallback keeps its original timestamps.  Serving or rehashing an
   old record can never make it fresh.
+
+# 2026-08-08 · Yahoo intraday evidence is identity-first and session-local
+
+## Decision
+
+Admit Yahoo 5-minute data only through an eleven-instrument registry that keeps
+cash indices, futures proxies and rolling commodity contracts independent.
+Use query1 as the primary endpoint and query2 only as a recorded fallback.
+Require completed bars, exact symbol/currency/timezone and provider-period
+session evidence before advancing an asset latest-good pointer.
+
+## Why
+
+The useful overnight signal often comes from ES/NQ while the US cash indices
+are closed, but those futures are not the same instruments or price series.
+Likewise, a frequent poll is useful only if it preserves the original bar time
+and recognizes when a market is closed.  Identity and session truth therefore
+belong in the data authority, before any regime delta is scored.
+
+## Evidence
+
+- Issue #719 and `docs/market-regime/live-data-contract.md`.
+- `product/data_core/market_regime_intraday_data.py` and its JSON schema.
+- Fixed Yahoo query1 200/query2 429 fixtures and deterministic replay tests
+  covering invalid bars, weekend, holiday, DST, lunch, maintenance, fallback,
+  last-good recovery and tamper rejection.
+
+## Gotchas
+
+- Yahoo's futures grid can contain null/zero-volume placeholder rows during
+  maintenance as well as at the tail.  Preserve the timestamp gap, disclose
+  internal versus trailing drops, and reject partially-null rows or null OHLC
+  paired with non-zero volume.
+- Provider `currentTradingPeriod` is needed before asserting `open`.  A weekday
+  schedule alone cannot distinguish a holiday, and a futures maintenance hour
+  is not a cash-market post session.
+- A closed asset may have old-looking age by design.  Session state explains
+  that age; it must not be converted into a directional signal.
+- An aggregate partial attempt may advance the aggregate snapshot for honest
+  observability, while the failed asset's latest-good pointer remains exactly
+  unchanged.  Those are different identities.
+- Query2 returning 200 after query1 fails is evidence-backed fallback, not
+  proof of reliability or permission to redistribute Yahoo data.
