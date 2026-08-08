@@ -1,5 +1,38 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime Live S2 deterministic overlay (Issue #721)
+
+Now: the verified completed-daily analysis remains the immutable structural
+regime, while a separate `market-regime-intraday-overlay-v1` answers only
+whether the currently eligible A-share tape `confirms`, `diverges`, is
+`insufficient`, or is `closed`.  The experimental impulse uses completed
+contiguous 5-minute bars, fixed signal-group weights and evidence identities;
+its largest contributors are observable model inputs, never news causes.
+
+The relation enters at 18, exits at 8, needs two unique verified overlays and
+applies a 30-minute directional cooldown.  Closed or genuinely missing/current
+session evidence degrades immediately.  A partial A-share snapshot remains
+usable when Shanghai plus either STAR 50 or SSE Dividend is eligible, while a
+missing Shanghai dependency makes the main relation insufficient.
+
+Material change compares only with the previous successfully verified overlay.
+Duplicate inputs and failed compilation/persistence do not advance the
+baseline or persistence counter.  Overlay artifacts and per-version history
+entries are immutable and SHA-256 linked; the only mutable file is an atomic
+latest pointer, and full-chain verification rejects gaps, cycles, path escape
+and tampering.  The frozen contract is
+[`docs/market-regime/live-model-contract.md`](docs/market-regime/live-model-contract.md).
+
+The model remains experimental, local-only, non-predictive, non-publishable
+and non-actionable.  A real 14/14 Saturday intraday snapshot replayed to
+`closed` for all three A-share session states, but used a fixture structural
+input and did not persist history; this proves only the weekend closed branch,
+not market-open reliability or provider latency.
+
+Next: execute Issue #722 from latest main to expose the verified structural and
+overlay read models through the existing local API and page.  Do not add the
+15-minute scheduler, notification, prediction or trading action in that PR.
+
 ## 2026-08-08 · Market Regime Live S1b A-share intraday authority (Issue #720)
 
 Now: the unified live-v1 snapshot contains all 14 fixed identities: 11 Yahoo
