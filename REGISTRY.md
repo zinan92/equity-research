@@ -1,5 +1,30 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime Live S1b A-share intraday authority (Issue #720)
+
+Now: the unified live-v1 snapshot contains all 14 fixed identities: 11 Yahoo
+cash/proxy/commodity/Asia/style signals plus Tencent's Shanghai, STAR 50 and
+SSE Dividend indices.  One exact Tencent batch quote binds code and quote time;
+each index then binds its own m5 rows and embedded quote within a two-minute
+skew.  The provider's text/html-for-data behavior is accepted only after the
+fixed GB18030/JSON identity and OHLC contracts pass.
+
+A-share session state is independent from every other market and distinguishes
+pre, morning open, lunch, afternoon open, post, closed and unknown.  Open
+requires a same-day quote plus Tencent `SH_open`; weekend/holiday remain
+closed, while schedule/provider conflicts become unknown rather than a false
+confirmation.  Each failure preserves raw evidence and the original asset
+latest-good time; one failed m5 degrades only that A-share input.
+
+Yahoo/Tencent inputs remain local-evaluation-only, non-publishable and
+non-actionable.  The data layer still calculates no regime delta, causal story,
+forecast or trade.  The unified contract is
+[`docs/market-regime/live-data-contract.md`](docs/market-regime/live-data-contract.md).
+
+Next: execute Issue #721 from latest main to compile a deterministic,
+experimental live impulse against the completed-daily structural analysis and
+the previous verified overlay.  Do not expose an API or scheduler in that PR.
+
 ## 2026-08-08 · Market Regime Live S1a Yahoo intraday authority (Issue #719)
 
 Now: the live-v1 data layer has a fixed 11-instrument Yahoo registry with

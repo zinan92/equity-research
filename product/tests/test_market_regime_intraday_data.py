@@ -17,6 +17,7 @@ sys.path.insert(0, str(PRODUCT))
 from data_core.market_regime_data import HttpCapture, LicenseGateError, SourceCaptureError
 from data_core.market_regime_intraday_data import (
     INSTRUMENT_BY_KEY,
+    INTRADAY_INSTRUMENTS,
     YAHOO_INSTRUMENTS,
     MarketRegimeIntradayDataError,
     MarketRegimeIntradayDataStore,
@@ -82,7 +83,8 @@ class MarketRegimeIntradayDataTest(unittest.TestCase):
     def test_registry_freezes_cash_proxy_identity_and_yahoo_scope(self) -> None:
         registry = registry_payload()
         self.assertEqual(len(YAHOO_INSTRUMENTS), 11)
-        self.assertEqual(registry["provider"], "yahoo_chart")
+        self.assertEqual(len(INTRADAY_INSTRUMENTS), 14)
+        self.assertEqual(registry["providers"], ["yahoo_chart", "tencent_quote_m5"])
         self.assertEqual(registry["interval"], "5m")
         self.assertFalse(registry["publication_eligible"])
         self.assertEqual(INSTRUMENT_BY_KEY["sp500_cash"].canonical_symbol, "^GSPC")

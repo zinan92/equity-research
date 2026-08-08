@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh the local-only Yahoo 5-minute Market Regime snapshot once."""
+"""Refresh the local-only Yahoo/Tencent 5-minute Market Regime snapshot once."""
 from __future__ import annotations
 
 import argparse
@@ -14,7 +14,7 @@ PRODUCT = ROOT / "product"
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_intraday_data import (  # noqa: E402
-    YAHOO_INSTRUMENTS,
+    INTRADAY_INSTRUMENTS,
     MarketRegimeIntradayDataStore,
 )
 
@@ -29,8 +29,8 @@ def main() -> int:
     parser.add_argument(
         "--instrument",
         action="append",
-        choices=[item.key for item in YAHOO_INSTRUMENTS],
-        help="repeat to limit the frozen registry; default refreshes all Yahoo identities",
+        choices=[item.key for item in INTRADAY_INSTRUMENTS],
+        help="repeat to limit the frozen registry; default refreshes all fixed identities",
     )
     parser.add_argument(
         "--deployment-mode",

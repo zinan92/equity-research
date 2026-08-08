@@ -29,11 +29,12 @@ from .market_regime_data import (
 
 
 SCHEMA_VERSION = "market-regime-intraday-data-v1"
-REGISTRY_VERSION = "market-regime-intraday-registry-v1"
+REGISTRY_VERSION = "market-regime-intraday-registry-v2"
 BAR_SECONDS = 300
 COMPLETION_GRACE_SECONDS = 30
 LIVE_CANDIDATE_MAX_AGE_SECONDS = 15 * 60
 DEFAULT_MAX_SILENCE_SECONDS = 96 * 60 * 60
+MAX_TENCENT_QUOTE_SKEW_SECONDS = 120
 SESSION_STATES = frozenset(
     {"pre", "open", "lunch_break", "post", "maintenance", "closed", "unknown"}
 )
@@ -41,6 +42,8 @@ FRESHNESS_STATES = frozenset({"live_candidate", "delayed", "stale", "unavailable
 
 YAHOO_QUERY1_BASE = "https://query1.finance.yahoo.com/v8/finance/chart/"
 YAHOO_QUERY2_BASE = "https://query2.finance.yahoo.com/v8/finance/chart/"
+TENCENT_QUOTE_BASE = "https://qt.gtimg.cn/q="
+TENCENT_M5_BASE = "https://ifzq.gtimg.cn/appstock/app/kline/mkline?param="
 
 
 class MarketRegimeIntradayDataError(RuntimeError):
@@ -62,6 +65,7 @@ class IntradayInstrumentSpec:
     proxy_for: str | None = None
     min_completed_bars: int = 2
     max_expected_silence_seconds: int = DEFAULT_MAX_SILENCE_SECONDS
+    provider: str = "yahoo_chart"
 
 
 YAHOO_INSTRUMENTS: tuple[IntradayInstrumentSpec, ...] = (
@@ -77,8 +81,14 @@ YAHOO_INSTRUMENTS: tuple[IntradayInstrumentSpec, ...] = (
     IntradayInstrumentSpec("vix", "VIX cash volatility index", "^VIX", "^VIX", "volatility_index", "USD", "America/Chicago", "vix_cash", "provider_unadjusted_index_level", "risk_evidence"),
     IntradayInstrumentSpec("us_dividend", "Schwab US Dividend Equity ETF", "SCHD", "SCHD", "etf", "USD", "America/New_York", "us_cash", "provider_unadjusted_trade_price", "style_evidence"),
 )
-INSTRUMENT_BY_KEY = {item.key: item for item in YAHOO_INSTRUMENTS}
-if len(INSTRUMENT_BY_KEY) != len(YAHOO_INSTRUMENTS):  # pragma: no cover
+TENCENT_INSTRUMENTS: tuple[IntradayInstrumentSpec, ...] = (
+    IntradayInstrumentSpec("shanghai", "SSE Composite cash index", "sh000001", "000001.SH", "price_index", "CNY", "Asia/Shanghai", "a_share_cash", "provider_unadjusted_index_level", "cash_confirmation", provider="tencent_quote_m5"),
+    IntradayInstrumentSpec("star50", "STAR 50 cash index", "sh000688", "000688.SH", "price_index", "CNY", "Asia/Shanghai", "a_share_cash", "provider_unadjusted_index_level", "cash_confirmation", provider="tencent_quote_m5"),
+    IntradayInstrumentSpec("china_dividend", "SSE Dividend cash index", "sh000015", "000015.SH", "price_index", "CNY", "Asia/Shanghai", "a_share_cash", "provider_unadjusted_index_level", "style_evidence", provider="tencent_quote_m5"),
+)
+INTRADAY_INSTRUMENTS = (*YAHOO_INSTRUMENTS, *TENCENT_INSTRUMENTS)
+INSTRUMENT_BY_KEY = {item.key: item for item in INTRADAY_INSTRUMENTS}
+if len(INSTRUMENT_BY_KEY) != len(INTRADAY_INSTRUMENTS):  # pragma: no cover
     raise RuntimeError("intraday instrument keys must be unique")
 if INSTRUMENT_BY_KEY["sp500_cash"].canonical_symbol == INSTRUMENT_BY_KEY["sp500_futures_proxy"].canonical_symbol:  # pragma: no cover
     raise RuntimeError("cash and futures identities must remain distinct")
@@ -89,10 +99,10 @@ if INSTRUMENT_BY_KEY["nasdaq_cash"].canonical_symbol == INSTRUMENT_BY_KEY["nasda
 def registry_payload() -> dict[str, Any]:
     payload = {
         "schema_version": REGISTRY_VERSION,
-        "provider": "yahoo_chart",
+        "providers": ["yahoo_chart", "tencent_quote_m5"],
         "interval": "5m",
         "range": "5d",
-        "instruments": [asdict(item) for item in YAHOO_INSTRUMENTS],
+        "instruments": [asdict(item) for item in INTRADAY_INSTRUMENTS],
         "hard_invariants": [
             "^GSPC != ES=F",
             "^IXIC != NQ=F",
@@ -146,6 +156,125 @@ def yahoo_urls(spec: IntradayInstrumentSpec) -> tuple[str, str]:
     symbol = quote(spec.provider_symbol, safe="")
     suffix = f"{symbol}?interval=5m&range=5d"
     return YAHOO_QUERY1_BASE + suffix, YAHOO_QUERY2_BASE + suffix
+
+
+def tencent_quote_url(specs: Iterable[IntradayInstrumentSpec]) -> str:
+    selected = list(specs)
+    symbols = [item.provider_symbol for item in selected]
+    if not symbols or any(item.provider != "tencent_quote_m5" for item in selected):
+        raise MarketRegimeIntradayDataError("Tencent quote batch requires fixed Tencent instruments")
+    return TENCENT_QUOTE_BASE + ",".join(symbols)
+
+
+def tencent_m5_url(spec: IntradayInstrumentSpec) -> str:
+    if spec.provider != "tencent_quote_m5":
+        raise MarketRegimeIntradayDataError("Tencent m5 requires a fixed Tencent instrument")
+    return f"{TENCENT_M5_BASE}{spec.provider_symbol},m5,,320"
+
+
+def parse_tencent_quote_batch(
+    capture: HttpCapture,
+    specs: Iterable[IntradayInstrumentSpec],
+) -> dict[str, dict[str, Any]]:
+    expected = {item.provider_symbol: item for item in specs}
+    if capture.status_code != 200:
+        raise SourceCaptureError(f"Tencent quote HTTP status {capture.status_code}", capture=capture)
+    if capture.content_type != "text/html":
+        raise SourceCaptureError(
+            f"Tencent quote content type {capture.content_type or 'missing'}", capture=capture
+        )
+    try:
+        text = capture.body.decode("gb18030")
+    except UnicodeDecodeError as exc:
+        raise SourceCaptureError("Tencent quote is not valid GB18030", capture=capture) from exc
+    parsed: dict[str, dict[str, Any]] = {}
+    pattern = re.compile(r'^v_(sh\d{6})="(.*)";$')
+    for raw_line in text.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        match = pattern.fullmatch(line)
+        if match is None:
+            raise SourceCaptureError("Tencent quote line shape mismatch", capture=capture)
+        symbol, raw_fields = match.groups()
+        if symbol not in expected or symbol in parsed:
+            raise SourceCaptureError("Tencent quote symbol identity mismatch", capture=capture)
+        fields = raw_fields.split("~")
+        if len(fields) <= 30 or fields[2] != symbol[2:]:
+            raise SourceCaptureError("Tencent quote field identity mismatch", capture=capture)
+        try:
+            quote_at = datetime.strptime(fields[30], "%Y%m%d%H%M%S").replace(
+                tzinfo=ZoneInfo("Asia/Shanghai")
+            )
+        except (ValueError, TypeError) as exc:
+            raise SourceCaptureError("Tencent quote timestamp mismatch", capture=capture) from exc
+        parsed[symbol] = {
+            "provider_symbol": symbol,
+            "name": fields[1],
+            "code": fields[2],
+            "price": _finite(fields[3], field=f"{symbol}.quote_price"),
+            "previous_close": _finite(fields[4], field=f"{symbol}.previous_close"),
+            "open": _finite(fields[5], field=f"{symbol}.quote_open"),
+            "quote_at": quote_at,
+        }
+    if set(parsed) != set(expected):
+        missing = sorted(set(expected) - set(parsed))
+        raise SourceCaptureError(
+            f"Tencent quote batch missing: {', '.join(missing)}", capture=capture
+        )
+    return parsed
+
+
+def _parse_tencent_market_state(raw: str) -> tuple[datetime, str | None]:
+    parts = str(raw).split("|")
+    try:
+        observed = datetime.strptime(parts[0], "%Y-%m-%d %H:%M:%S").replace(
+            tzinfo=ZoneInfo("Asia/Shanghai")
+        )
+    except (ValueError, IndexError) as exc:
+        raise SourceCaptureError("Tencent market-state timestamp mismatch") from exc
+    state = None
+    for token in parts[1:]:
+        fields = token.split("_", 2)
+        if len(fields) >= 2 and fields[0] == "SH":
+            state = fields[1].lower()
+            break
+    return observed, state
+
+
+def classify_tencent_session(
+    observed_at: datetime,
+    *,
+    quote_at: datetime,
+    market_observed_at: datetime,
+    market_state: str | None,
+) -> str:
+    current = observed_at.astimezone(ZoneInfo("Asia/Shanghai"))
+    local_clock = current.timetz().replace(tzinfo=None)
+    if current.weekday() >= 5:
+        return "closed"
+    current_date = current.date()
+    if quote_at.date() < current_date:
+        return "unknown" if market_state == "open" else "closed"
+    if time(9, 0) <= local_clock < time(9, 30):
+        return "pre"
+    if time(9, 30) <= local_clock < time(11, 30) or time(13, 0) <= local_clock < time(15, 0):
+        quote_age = abs((current - quote_at.astimezone(ZoneInfo("Asia/Shanghai"))).total_seconds())
+        market_age = abs(
+            (current - market_observed_at.astimezone(ZoneInfo("Asia/Shanghai"))).total_seconds()
+        )
+        return (
+            "open"
+            if market_state == "open"
+            and quote_age <= LIVE_CANDIDATE_MAX_AGE_SECONDS
+            and market_age <= LIVE_CANDIDATE_MAX_AGE_SECONDS
+            else "unknown"
+        )
+    if time(11, 30) <= local_clock < time(13, 0):
+        return "lunch_break" if market_state in {"close", "break", None} else "unknown"
+    if time(15, 0) <= local_clock < time(18, 0):
+        return "post"
+    return "closed"
 
 
 def _provider_periods(meta: Mapping[str, Any]) -> dict[str, tuple[datetime, datetime]]:
@@ -364,6 +493,171 @@ def normalize_yahoo_capture(
     }
 
 
+def normalize_tencent_captures(
+    spec: IntradayInstrumentSpec,
+    quote_row: Mapping[str, Any],
+    m5_capture: HttpCapture,
+    *,
+    observed_at: datetime,
+    received_at: datetime,
+) -> dict[str, Any]:
+    if spec.provider != "tencent_quote_m5":
+        raise MarketRegimeIntradayDataError("Tencent normalizer received a non-Tencent identity")
+    observed = observed_at.astimezone(timezone.utc)
+    received = received_at.astimezone(timezone.utc)
+    if received > observed:
+        raise MarketRegimeIntradayDataError("observed_at cannot precede received_at")
+    if quote_row.get("provider_symbol") != spec.provider_symbol or quote_row.get("code") != spec.provider_symbol[2:]:
+        raise SourceCaptureError("Tencent quote/m5 identity mismatch", capture=m5_capture)
+    if m5_capture.status_code != 200:
+        raise SourceCaptureError(
+            f"Tencent m5 HTTP status {m5_capture.status_code}", capture=m5_capture
+        )
+    if m5_capture.content_type not in {"text/html", "application/json"}:
+        raise SourceCaptureError(
+            f"Tencent m5 content type {m5_capture.content_type or 'missing'}",
+            capture=m5_capture,
+        )
+    if not m5_capture.body.lstrip().startswith(b"{"):
+        raise SourceCaptureError("Tencent m5 body is not JSON-shaped", capture=m5_capture)
+    try:
+        payload = json.loads(m5_capture.body)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise SourceCaptureError("Tencent m5 response is not valid JSON", capture=m5_capture) from exc
+    try:
+        if payload.get("code") != 0:
+            raise SourceCaptureError("Tencent m5 returned a provider error", capture=m5_capture)
+        data = payload["data"]
+        if not isinstance(data, Mapping) or set(data) != {spec.provider_symbol}:
+            raise SourceCaptureError("Tencent m5 symbol identity mismatch", capture=m5_capture)
+        instrument = data[spec.provider_symbol]
+        rows = instrument["m5"]
+        quote_payload = instrument["qt"]
+        embedded_quote = quote_payload[spec.provider_symbol]
+        market_values = quote_payload["market"]
+        if not isinstance(rows, list) or not isinstance(embedded_quote, list):
+            raise TypeError
+        if not isinstance(market_values, list) or len(market_values) != 1:
+            raise TypeError
+    except (KeyError, TypeError) as exc:
+        raise SourceCaptureError("Tencent m5 response shape mismatch", capture=m5_capture) from exc
+    if len(embedded_quote) <= 30 or embedded_quote[2] != spec.provider_symbol[2:]:
+        raise SourceCaptureError("Tencent embedded quote identity mismatch", capture=m5_capture)
+    try:
+        embedded_quote_at = datetime.strptime(embedded_quote[30], "%Y%m%d%H%M%S").replace(
+            tzinfo=ZoneInfo("Asia/Shanghai")
+        )
+    except (ValueError, TypeError) as exc:
+        raise SourceCaptureError("Tencent embedded quote timestamp mismatch", capture=m5_capture) from exc
+    quote_at = quote_row.get("quote_at")
+    if not isinstance(quote_at, datetime) or quote_at.tzinfo is None:
+        raise SourceCaptureError("Tencent batch quote timestamp mismatch", capture=m5_capture)
+    if quote_at.astimezone(timezone.utc) > observed + timedelta(seconds=60):
+        raise SourceCaptureError("Tencent batch quote timestamp is in the future", capture=m5_capture)
+    if embedded_quote_at.astimezone(timezone.utc) > observed + timedelta(seconds=60):
+        raise SourceCaptureError("Tencent embedded quote timestamp is in the future", capture=m5_capture)
+    if abs((embedded_quote_at - quote_at).total_seconds()) > MAX_TENCENT_QUOTE_SKEW_SECONDS:
+        raise SourceCaptureError("Tencent batch/m5 quote timestamp conflict", capture=m5_capture)
+    try:
+        market_observed_at, market_state = _parse_tencent_market_state(str(market_values[0]))
+    except SourceCaptureError as exc:
+        raise SourceCaptureError(str(exc), capture=m5_capture) from exc
+    if market_observed_at.astimezone(timezone.utc) > observed + timedelta(seconds=60):
+        raise SourceCaptureError("Tencent market-state timestamp is in the future", capture=m5_capture)
+
+    bars: list[dict[str, Any]] = []
+    dropped_unfinished: list[str] = []
+    previous: datetime | None = None
+    zone = ZoneInfo("Asia/Shanghai")
+    for index, row in enumerate(rows):
+        if not isinstance(row, list) or len(row) < 6:
+            raise SourceCaptureError("Tencent m5 row shape mismatch", capture=m5_capture)
+        try:
+            ended = datetime.strptime(str(row[0]), "%Y%m%d%H%M").replace(tzinfo=zone)
+        except ValueError as exc:
+            raise SourceCaptureError("Tencent m5 timestamp mismatch", capture=m5_capture) from exc
+        ended_utc = ended.astimezone(timezone.utc)
+        if previous is not None and ended_utc <= previous:
+            raise SourceCaptureError("Tencent m5 timestamps are duplicate or unordered", capture=m5_capture)
+        previous = ended_utc
+        if ended_utc > observed:
+            raise SourceCaptureError("Tencent m5 bar ends in the future", capture=m5_capture)
+        if ended_utc + timedelta(seconds=COMPLETION_GRACE_SECONDS) > observed:
+            dropped_unfinished.append(_iso(ended_utc))
+            continue
+        open_price = _finite(row[1], field=f"bar[{index}].open")
+        close = _finite(row[2], field=f"bar[{index}].close")
+        high = _finite(row[3], field=f"bar[{index}].high")
+        low = _finite(row[4], field=f"bar[{index}].low")
+        volume = _finite(row[5], field=f"bar[{index}].volume")
+        if low > min(open_price, close, high) or high < max(open_price, close, low):
+            raise SourceCaptureError("Tencent m5 OHLC containment failed", capture=m5_capture)
+        if volume < 0:
+            raise SourceCaptureError("Tencent m5 volume is negative", capture=m5_capture)
+        bars.append(
+            {
+                "provider_timestamp": int(ended_utc.timestamp()),
+                "started_at": _iso(ended_utc - timedelta(seconds=BAR_SECONDS)),
+                "ended_at": _iso(ended_utc),
+                "open": open_price,
+                "high": high,
+                "low": low,
+                "close": close,
+                "volume": volume,
+            }
+        )
+    if len(bars) < spec.min_completed_bars:
+        raise SourceCaptureError(
+            f"Tencent completed bar count {len(bars)} below {spec.min_completed_bars}",
+            capture=m5_capture,
+        )
+    latest_end = datetime.fromtimestamp(bars[-1]["provider_timestamp"], tz=timezone.utc)
+    age_seconds = max(0, int((observed - latest_end).total_seconds()))
+    session_state = classify_tencent_session(
+        observed,
+        quote_at=quote_at,
+        market_observed_at=market_observed_at,
+        market_state=market_state,
+    )
+    if session_state == "open" and age_seconds <= LIVE_CANDIDATE_MAX_AGE_SECONDS:
+        freshness = "live_candidate"
+    elif age_seconds <= spec.max_expected_silence_seconds:
+        freshness = "delayed"
+    else:
+        freshness = "stale"
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "instrument": asdict(spec),
+        "interval": "5m",
+        "timestamp_semantics": "interval_end",
+        "bars": bars,
+        "bar_count": len(bars),
+        "provider_timestamp": _iso(latest_end),
+        "last_completed_bar_end_at": _iso(latest_end),
+        "last_completed_session": latest_end.astimezone(zone).date().isoformat(),
+        "observed_at": _iso(observed),
+        "received_at": _iso(received),
+        "age_seconds": age_seconds,
+        "current_age_seconds": age_seconds,
+        "session_state": session_state,
+        "freshness": freshness,
+        "quote_at": _iso(quote_at),
+        "embedded_quote_at": _iso(embedded_quote_at),
+        "provider_market_observed_at": _iso(market_observed_at),
+        "provider_market_state": market_state,
+        "dropped_all_null_bars": [],
+        "dropped_internal_all_null_bars": [],
+        "dropped_trailing_all_null_bars": [],
+        "dropped_unfinished_bars": dropped_unfinished,
+        "provider_session_periods": {},
+        "source_quality_flags": ["provider_declares_text_html_for_json"]
+        if m5_capture.content_type == "text/html"
+        else [],
+        "publication_eligible": False,
+        "action_eligible": False,
+    }
+
+
 def _write_exclusive(path: Path, body: bytes) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("xb") as handle:
@@ -430,7 +724,7 @@ def _run_id(now: datetime) -> str:
 
 
 class MarketRegimeIntradayDataStore:
-    """Serial Yahoo collector with immutable raw/normalized evidence and last-good."""
+    """Serial intraday collector with immutable raw/normalized evidence and last-good."""
 
     def __init__(
         self,
@@ -487,7 +781,7 @@ class MarketRegimeIntradayDataStore:
             license_reference=license_reference,
             private_preview=False,
         )
-        selected = list(instrument_keys or [item.key for item in YAHOO_INSTRUMENTS])
+        selected = list(instrument_keys or [item.key for item in INTRADAY_INSTRUMENTS])
         if not selected or len(selected) != len(set(selected)):
             raise MarketRegimeIntradayDataError("instrument_keys must be non-empty and unique")
         unknown = [key for key in selected if key not in INSTRUMENT_BY_KEY]
@@ -495,6 +789,16 @@ class MarketRegimeIntradayDataStore:
             raise MarketRegimeIntradayDataError(
                 f"unknown intraday instruments: {', '.join(unknown)}"
             )
+        tencent_specs = [
+            INSTRUMENT_BY_KEY[key]
+            for key in selected
+            if INSTRUMENT_BY_KEY[key].provider == "tencent_quote_m5"
+        ]
+        tencent_quote_capture: HttpCapture | None = None
+        tencent_quote_received_at: datetime | None = None
+        tencent_quote_raw_relative: str | None = None
+        tencent_quote_rows: dict[str, dict[str, Any]] = {}
+        tencent_quote_error: str | None = None
         results: list[dict[str, Any]] = []
         snapshot_items: list[dict[str, Any]] = []
         pending_pointers: list[tuple[str, dict[str, Any]]] = []
@@ -503,55 +807,144 @@ class MarketRegimeIntradayDataStore:
             attempts: list[dict[str, Any]] = []
             accepted_artifact: dict[str, Any] | None = None
             selected_endpoint: str | None = None
-            for endpoint, url in zip(("query1", "query2"), yahoo_urls(spec)):
-                capture = self.http_get(url)
-                received_at = current if now is not None else self.clock().astimezone(timezone.utc)
-                suffix = ".json" if capture.content_type == "application/json" else ".bin"
-                raw_relative = None
-                if capture.body:
-                    raw_relative = f"intraday/raw/{identity}/{key}-{endpoint}{suffix}"
-                    _write_exclusive(self.root / raw_relative, capture.body)
-                try:
-                    normalized = normalize_yahoo_capture(
-                        spec,
-                        capture,
-                        observed_at=current if now is not None else received_at,
-                        received_at=received_at,
-                    )
-                except (SourceCaptureError, MarketRegimeIntradayDataError) as exc:
+            if spec.provider == "yahoo_chart":
+                for endpoint, url in zip(("query1", "query2"), yahoo_urls(spec)):
+                    capture = self.http_get(url)
+                    received_at = current if now is not None else self.clock().astimezone(timezone.utc)
+                    suffix = ".json" if capture.content_type == "application/json" else ".bin"
+                    raw_relative = None
+                    if capture.body:
+                        raw_relative = f"intraday/raw/{identity}/{key}-{endpoint}{suffix}"
+                        _write_exclusive(self.root / raw_relative, capture.body)
+                    try:
+                        normalized = normalize_yahoo_capture(
+                            spec,
+                            capture,
+                            observed_at=current if now is not None else received_at,
+                            received_at=received_at,
+                        )
+                    except (SourceCaptureError, MarketRegimeIntradayDataError) as exc:
+                        attempts.append(
+                            self._source_receipt(
+                                capture,
+                                raw_relative=raw_relative,
+                                received_at=received_at,
+                                endpoint=endpoint,
+                                accepted=False,
+                                reason=str(exc),
+                            )
+                        )
+                        continue
                     attempts.append(
                         self._source_receipt(
                             capture,
                             raw_relative=raw_relative,
                             received_at=received_at,
                             endpoint=endpoint,
-                            accepted=False,
-                            reason=str(exc),
+                            accepted=True,
+                            reason=None,
                         )
                     )
-                    continue
+                    selected_endpoint = endpoint
+                    accepted_artifact = {
+                        **normalized,
+                        "run_id": identity,
+                        "provider": "yahoo_chart",
+                        "selected_endpoint": endpoint,
+                        "source_attempts": attempts,
+                        "license": decision.as_json(),
+                        "data_kind": "real" if self._live_transport else "fixture",
+                        "refresh_status": "accepted",
+                    }
+                    break
+            elif spec.provider == "tencent_quote_m5":
+                if tencent_quote_capture is None:
+                    quote_url = tencent_quote_url(tencent_specs)
+                    tencent_quote_capture = self.http_get(quote_url)
+                    tencent_quote_received_at = (
+                        current if now is not None else self.clock().astimezone(timezone.utc)
+                    )
+                    if tencent_quote_capture.body:
+                        tencent_quote_raw_relative = (
+                            f"intraday/raw/{identity}/tencent-quote-batch.bin"
+                        )
+                        _write_exclusive(
+                            self.root / tencent_quote_raw_relative,
+                            tencent_quote_capture.body,
+                        )
+                    try:
+                        tencent_quote_rows = parse_tencent_quote_batch(
+                            tencent_quote_capture, tencent_specs
+                        )
+                    except SourceCaptureError as exc:
+                        tencent_quote_error = str(exc)
+                if tencent_quote_received_at is None:
+                    raise MarketRegimeIntradayDataError("Tencent quote batch was not timestamped")
+                quote_ok = tencent_quote_error is None
                 attempts.append(
                     self._source_receipt(
-                        capture,
-                        raw_relative=raw_relative,
-                        received_at=received_at,
-                        endpoint=endpoint,
-                        accepted=True,
-                        reason=None,
+                        tencent_quote_capture,
+                        raw_relative=tencent_quote_raw_relative,
+                        received_at=tencent_quote_received_at,
+                        endpoint="tencent_quote_batch",
+                        accepted=quote_ok,
+                        reason=tencent_quote_error,
                     )
                 )
-                selected_endpoint = endpoint
-                accepted_artifact = {
-                    **normalized,
-                    "run_id": identity,
-                    "provider": "yahoo_chart",
-                    "selected_endpoint": endpoint,
-                    "source_attempts": attempts,
-                    "license": decision.as_json(),
-                    "data_kind": "real" if self._live_transport else "fixture",
-                    "refresh_status": "accepted",
-                }
-                break
+                if quote_ok:
+                    m5_url = tencent_m5_url(spec)
+                    m5_capture = self.http_get(m5_url)
+                    received_at = current if now is not None else self.clock().astimezone(timezone.utc)
+                    suffix = ".json" if m5_capture.content_type == "application/json" else ".bin"
+                    raw_relative = None
+                    if m5_capture.body:
+                        raw_relative = f"intraday/raw/{identity}/{key}-tencent-m5{suffix}"
+                        _write_exclusive(self.root / raw_relative, m5_capture.body)
+                    try:
+                        normalized = normalize_tencent_captures(
+                            spec,
+                            tencent_quote_rows[spec.provider_symbol],
+                            m5_capture,
+                            observed_at=current if now is not None else received_at,
+                            received_at=received_at,
+                        )
+                    except (SourceCaptureError, MarketRegimeIntradayDataError) as exc:
+                        attempts.append(
+                            self._source_receipt(
+                                m5_capture,
+                                raw_relative=raw_relative,
+                                received_at=received_at,
+                                endpoint="tencent_m5",
+                                accepted=False,
+                                reason=str(exc),
+                            )
+                        )
+                    else:
+                        attempts.append(
+                            self._source_receipt(
+                                m5_capture,
+                                raw_relative=raw_relative,
+                                received_at=received_at,
+                                endpoint="tencent_m5",
+                                accepted=True,
+                                reason=None,
+                            )
+                        )
+                        selected_endpoint = "tencent_m5"
+                        accepted_artifact = {
+                            **normalized,
+                            "run_id": identity,
+                            "provider": "tencent_quote_m5",
+                            "selected_endpoint": selected_endpoint,
+                            "source_attempts": attempts,
+                            "license": decision.as_json(),
+                            "data_kind": "real" if self._live_transport else "fixture",
+                            "refresh_status": "accepted",
+                        }
+            else:  # pragma: no cover - registry invariant
+                raise MarketRegimeIntradayDataError(
+                    f"unsupported intraday provider: {spec.provider}"
+                )
             if accepted_artifact is not None:
                 relative = f"intraday/normalized/{identity}/{key}.json"
                 artifact_hash = _write_json_exclusive(self.root / relative, accepted_artifact)

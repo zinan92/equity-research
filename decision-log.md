@@ -3106,3 +3106,46 @@ belong in the data authority, before any regime delta is scored.
   unchanged.  Those are different identities.
 - Query2 returning 200 after query1 fails is evidence-backed fallback, not
   proof of reliability or permission to redistribute Yahoo data.
+
+# 2026-08-08 · A-share session truth needs quote, market state and completed m5
+
+## Decision
+
+Add only Shanghai, STAR 50 and SSE Dividend to the intraday registry.  Fetch
+their current identity/time in one Tencent quote batch, then bind each to its
+own completed m5 series and embedded quote.  Classify A-share state from the
+same-day quote, Tencent SH market status and the exchange-local clock; never
+infer confirmation from schedule alone.
+
+## Why
+
+The product must distinguish a weak A-share tape from a market that is simply
+pre-open, at lunch, closed for a holiday or returning delayed evidence.  A
+batch quote supplies current identity and provider time, while m5 supplies the
+completed price path.  Requiring both prevents a stale bar or mismatched code
+from being promoted into an intraday confirmation.
+
+## Evidence
+
+- Issue #720 and the Tencent section of
+  `docs/market-regime/live-data-contract.md`.
+- Fixed byte quote/m5 fixtures and tests for pre/morning/lunch/afternoon/post,
+  weekend, holiday, provider conflict, duplicate/future bars, quote skew,
+  isolated failure, last-good age and deterministic replay.
+- The same immutable store and JSON schema now cover the combined 14-identity
+  snapshot without changing the Yahoo cash/proxy boundaries.
+
+## Gotchas
+
+- Tencent m5 timestamps are interval ends, while Yahoo timestamps are interval
+  starts.  Normalization must preserve that distinction before completion
+  checks; shifting both as if they shared semantics creates look-ahead.
+- Tencent's quote and m5 calls can be seconds apart during an open session.
+  Exact timestamp equality is too strict; more than 120 seconds of skew is a
+  conflict, while bounded skew remains disclosed through both timestamps.
+- The m5 seventh field is not accepted as traded amount.  V1 uses only the
+  explicit OHLC and volume positions required by the fixed contract.
+- A shared quote-batch failure legitimately affects all three A-share inputs;
+  an individual m5 failure must not degrade the other two.
+- `SH_close` during lunch or a holiday is session evidence, not a bearish
+  signal.  Conflicting same-day `SH_open` at lunch becomes unknown.
