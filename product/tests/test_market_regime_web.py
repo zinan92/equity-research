@@ -110,6 +110,16 @@ class MarketRegimeWebTest(unittest.TestCase):
             "group-china",
             "group-commodities",
             "group-asia",
+            "live-deck-title",
+            "overlay-card",
+            "overlay-relation",
+            "overlay-provider-time",
+            "change-card",
+            "change-state",
+            "top-contributions",
+            "watch-conditions",
+            "intraday-assets",
+            "freshness-summary",
         }
         self.assertTrue(required.issubset(parser.ids))
 
@@ -128,8 +138,73 @@ class MarketRegimeWebTest(unittest.TestCase):
         self.assertNotIn("http://", css + javascript)
         self.assertIn('fetchJson("/api/market-regime")', javascript)
         self.assertIn('fetchJson("/api/market-regime/health")', javascript)
-        self.assertIn("不会用演示数据伪装实时市场", javascript)
+        self.assertIn("不会用演示数据伪装当前市场", javascript)
         self.assertIn("不以旧图伪装最新行情", javascript)
+        self.assertIn("window.setInterval(() => load({silent: true}), 60_000)", javascript)
+
+    def test_live_layer_distinguishes_time_horizons_relations_and_evidence(self) -> None:
+        _, _, html_body = self.request("/market-regime")
+        _, _, css_body = self.request("/market-regime.css")
+        _, _, js_body = self.request("/market-regime.js")
+        html = html_body.decode("utf-8")
+        css = css_body.decode("utf-8")
+        javascript = js_body.decode("utf-8")
+        self.assertIn("STRUCTURAL REGIME · COMPLETED DAILY", html)
+        self.assertIn("15-MIN TARGET OVERLAY · LOCAL READ MODEL", html)
+        self.assertIn("页面每 60 秒只读本地成果", html)
+        for phrase in (
+            "确认日线结构",
+            "背离日线结构",
+            "证据不足",
+            "A股已休市",
+            "休市不是转弱",
+            "NO MATERIAL CHANGE",
+            "MATERIAL CHANGE",
+            "数学贡献",
+            "不会补写新闻原因",
+        ):
+            self.assertIn(phrase, html + javascript)
+        self.assertIn(".overlay-card[data-relation=\"closed\"]", css)
+        self.assertIn(".freshness-card[data-state=\"current\"]", css)
+        self.assertIn("(bundle.overlay?.top_drivers || []).slice(0, 3)", javascript)
+        self.assertIn("(bundle.overlay?.watch_conditions || []).slice(0, 2)", javascript)
+        self.assertIn("bundle.intraday_snapshot_id", javascript)
+        self.assertIn("asset.provider_timestamp", javascript)
+        self.assertIn('A_SHARE_INTRADAY_KEYS = new Set(["shanghai", "star50", "china_dividend"])', javascript)
+        self.assertIn('aShareStates.every((item) => item.state === "current")', javascript)
+        self.assertIn("A股盘中证据已超过 15 分钟，不代表当前盘面", javascript)
+        self.assertIn(': aShareIsCurrent', javascript)
+        self.assertIn("DELAYED ${stateCounts.delayed}", javascript)
+
+    def test_intraday_identity_labels_never_conflate_cash_and_futures_proxy(self) -> None:
+        _, _, body = self.request("/market-regime.js")
+        javascript = body.decode("utf-8")
+        labels = {
+            "sp500_cash": "CASH · ^GSPC",
+            "sp500_futures_proxy": "PROXY · ES=F",
+            "nasdaq_cash": "CASH · ^IXIC",
+            "nasdaq100_futures_proxy": "PROXY · NQ=F",
+        }
+        for key, label in labels.items():
+            self.assertIn(f'{key}: {{name:', javascript)
+            self.assertIn(f'tag: "{label}"', javascript)
+        self.assertNotIn('sp500_cash: {name: "S&P 500 Futures', javascript)
+        self.assertNotIn('nasdaq_cash: {name: "Nasdaq-100 Futures', javascript)
+
+    def test_page_has_no_provider_trading_holdings_or_notification_surface(self) -> None:
+        _, _, html = self.request("/market-regime")
+        _, _, javascript = self.request("/market-regime.js")
+        surface = html.decode("utf-8") + javascript.decode("utf-8")
+        for forbidden in (
+            "query1.finance.yahoo.com",
+            "query2.finance.yahoo.com",
+            "qt.gtimg.cn",
+            "/api/orders",
+            "/api/positions",
+            "WebSocket(",
+            "notification.requestPermission",
+        ):
+            self.assertNotIn(forbidden, surface)
 
     def test_javascript_contract_contains_all_nine_assets_and_four_groups(self) -> None:
         _, _, body = self.request("/market-regime.js")

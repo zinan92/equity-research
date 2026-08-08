@@ -20,13 +20,13 @@
       </span>
     </a>
     <div class="topbar-status">
-      <span class="live-dot" aria-hidden="true"></span>
+      <span class="live-dot" id="top-state-dot" data-state="waiting" aria-hidden="true"></span>
       <span id="top-quality">读取本地快照</span>
       <span class="topbar-divider" aria-hidden="true"></span>
-      <span id="top-schedule">4H CYCLE</span>
+      <span id="top-schedule">15M TARGET</span>
       <button class="icon-button" id="reload-button" type="button" aria-label="重新读取本地市场快照">
         <span aria-hidden="true">↻</span>
-        <span>重新读取</span>
+        <span>读取最新成果</span>
       </button>
     </div>
   </header>
@@ -35,13 +35,13 @@
     <section class="hero loading-shell" id="hero" aria-busy="true">
       <div class="hero-copy">
         <div class="section-kicker">
-          <span>GLOBAL RISK MAP</span>
+          <span>STRUCTURAL REGIME · COMPLETED DAILY</span>
           <span class="hairline"></span>
           <span id="verdict-date">等待已完成日线</span>
         </div>
         <h1 id="hero-headline">正在拼合全球盘面</h1>
         <p class="hero-deck" id="hero-deck">
-          读取美股、A 股、亚洲与大宗商品的最后完整交易日，寻找风险偏好与资金风格是否同向。
+          读取美股、A 股、亚洲与大宗商品的最后完整交易日，形成不会被盘中噪声覆盖的结构判断。
         </p>
         <div class="truth-tags" aria-label="数据与判断边界">
           <span id="data-kind-tag">LOCAL SNAPSHOT</span>
@@ -50,9 +50,9 @@
         </div>
       </div>
 
-      <div class="risk-console" aria-label="市场风险仪表盘">
+      <div class="risk-console" aria-label="已完成日线结构风险仪表盘">
         <div class="risk-readout">
-          <span class="risk-caption">RISK APPETITE</span>
+          <span class="risk-caption">STRUCTURAL RISK APPETITE</span>
           <strong id="risk-score">—</strong>
           <span id="risk-label">WAITING</span>
         </div>
@@ -80,6 +80,84 @@
             <dd id="close-skew">—</dd>
           </div>
         </dl>
+      </div>
+    </section>
+
+    <section class="live-deck" aria-labelledby="live-deck-title">
+      <div class="live-deck-heading">
+        <div>
+          <span class="section-kicker">15-MIN TARGET OVERLAY · LOCAL READ MODEL</span>
+          <h2 id="live-deck-title">盘中发生了什么变化</h2>
+        </div>
+        <div class="overlay-clock">
+          <span id="overlay-quality">等待盘中快照</span>
+          <strong id="overlay-generated">—</strong>
+          <small>页面每 60 秒只读本地成果；不会从浏览器请求行情源</small>
+        </div>
+      </div>
+
+      <div class="live-summary-grid">
+        <article class="live-card overlay-card" id="overlay-card" data-relation="insufficient">
+          <div class="live-card-heading">
+            <span>A股确认状态</span>
+            <span class="state-pill" id="overlay-session">SESSION UNKNOWN</span>
+          </div>
+          <strong class="overlay-relation" id="overlay-relation">证据不足</strong>
+          <p id="overlay-copy">盘中层尚未形成可验证判断。</p>
+          <dl class="overlay-metrics">
+            <div><dt>A股脉冲</dt><dd id="overlay-a-score">—</dd></div>
+            <div><dt>跨资产脉冲</dt><dd id="overlay-cross-score">—</dd></div>
+            <div><dt>最新 Provider</dt><dd id="overlay-provider-time">—</dd></div>
+          </dl>
+        </article>
+
+        <article class="live-card change-card" id="change-card" data-material="false">
+          <div class="live-card-heading">
+            <span>WHAT CHANGED</span>
+            <span class="state-pill" id="change-state">WAITING</span>
+          </div>
+          <h3 id="change-title">等待上一份成功盘中层</h3>
+          <p id="change-copy">只有相对上一份已验证 overlay 的变化才会显示在这里。</p>
+          <div class="change-deltas">
+            <span id="change-a-delta">A股 Δ —</span>
+            <span id="change-cross-delta">跨资产 Δ —</span>
+          </div>
+          <small id="change-baseline">BASELINE —</small>
+        </article>
+
+        <article class="live-card drivers-card">
+          <div class="live-card-heading">
+            <span>最大信号贡献</span>
+            <span class="state-pill">数学贡献 ≠ 新闻原因</span>
+          </div>
+          <div class="driver-list" id="top-contributions" aria-live="polite">
+            <p class="empty-copy">等待可验证市场信号。</p>
+          </div>
+        </article>
+
+        <article class="live-card watch-card">
+          <div class="live-card-heading">
+            <span>两个观察条件</span>
+            <span class="state-pill">THRESHOLD-BOUND</span>
+          </div>
+          <div class="watch-list" id="watch-conditions" aria-live="polite">
+            <p class="empty-copy">等待阈值与证据身份。</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="freshness-heading">
+        <div>
+          <span>14 个盘中身份 · CASH 与 PROXY 分开</span>
+          <small id="freshness-summary">等待 session / freshness</small>
+        </div>
+        <span>时间均按北京时间展示</span>
+      </div>
+      <div class="freshness-grid" id="intraday-assets" aria-label="逐资产盘中新鲜度">
+        <article class="freshness-card placeholder-row"></article>
+        <article class="freshness-card placeholder-row"></article>
+        <article class="freshness-card placeholder-row"></article>
+        <article class="freshness-card placeholder-row"></article>
       </div>
     </section>
 
@@ -216,14 +294,16 @@
     <section class="runtime-panel" aria-labelledby="runtime-title">
       <div>
         <span class="section-kicker">SYSTEM PULSE</span>
-        <h2 id="runtime-title">下一次刷新</h2>
+        <h2 id="runtime-title">两个本地更新节奏</h2>
         <p id="next-due">读取调度状态…</p>
       </div>
       <dl>
-        <div><dt>周期</dt><dd id="runtime-interval">—</dd></div>
-        <div><dt>上次成功</dt><dd id="runtime-success">—</dd></div>
-        <div><dt>运行状态</dt><dd id="runtime-state">—</dd></div>
+        <div><dt>盘中目标</dt><dd id="runtime-interval">—</dd></div>
+        <div><dt>盘中上次成功</dt><dd id="runtime-success">—</dd></div>
+        <div><dt>盘中运行状态</dt><dd id="runtime-state">—</dd></div>
         <div><dt>数据质量</dt><dd id="runtime-quality">—</dd></div>
+        <div><dt>日线周期</dt><dd id="structural-runtime-interval">—</dd></div>
+        <div><dt>日线上次成功</dt><dd id="structural-runtime-success">—</dd></div>
       </dl>
     </section>
 
