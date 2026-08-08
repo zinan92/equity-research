@@ -115,3 +115,11 @@ rebound to `0.0.0.0` under the current source-rights receipt.
 
 Weekend/closed acceptance proves the closed-state branch and service survival;
 it does not prove weekday open-session provider latency or a realtime SLA.
+
+## Acceptance evidence
+
+The checked-in S4 receipt and desktop/mobile screenshots are under
+[`evidence/market-regime-live-s4/`](../../evidence/market-regime-live-s4/).
+They record the exact deployed commit, service states, cohesive identities,
+truth boundary, viewport counts and screenshot hashes.  Runtime payloads and
+logs remain outside the repository.

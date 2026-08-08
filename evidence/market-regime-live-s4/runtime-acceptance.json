@@ -1,0 +1,114 @@
+{
+  "schema_version": "market-regime-live-s4-acceptance-v1",
+  "verified_at": "2026-08-08T08:38:58.637752Z",
+  "url": "http://127.0.0.1:8896/market-regime",
+  "deployed_commit": "f91c1861bd1c7ac450b3525aa8a378e3f6b5f6bb",
+  "services": {
+    "com.park.market-regime.scheduler": true,
+    "com.park.market-regime.intraday-scheduler": true,
+    "com.park.market-regime.web": true
+  },
+  "runtime": {
+    "daily": {
+      "state": "idle",
+      "interval_hours": 4,
+      "last_success_at": "2026-08-08T08:36:21.809108Z",
+      "last_error": null,
+      "next_due_at": "2026-08-08T12:36:21.809108Z",
+      "source_run_id": "market-regime-20260808T083618Z-82a05d92b4ac",
+      "analysis_id": "market-regime-analysis:4b451754e95660efbf5abc706eacab1ccbf8e90b8d4bfa3bf479385f88a87dc7"
+    },
+    "intraday": {
+      "state": "idle",
+      "interval_minutes": 15,
+      "last_success_at": "2026-08-08T08:36:32.776219Z",
+      "last_error": null,
+      "last_provider_failure": null,
+      "provider_failure_streak": 0,
+      "cycle_failure_streak": 0,
+      "next_due_at": "2026-08-08T08:51:32.776219Z",
+      "stop_requested": false
+    },
+    "recovered_failure": {
+      "at": "2026-08-08T08:28:21.457231Z",
+      "error_type": "MarketRegimeIntradayModelError",
+      "message": "new intraday snapshot must be later than the previous successful overlay",
+      "repair_issue": 731,
+      "repair_pr": 732,
+      "preserved_in_last_failure": true
+    }
+  },
+  "latest": {
+    "api_schema_version": "market-regime-api-v2",
+    "status": "available",
+    "bundle_identity": {
+      "kind": "market-regime-api",
+      "sha256": "2b0c1dd1bbd2853bac21ad099ee00e0a904ef60634f4b98bfb9d85eeae325585"
+    },
+    "analysis_id": "market-regime-analysis:4b451754e95660efbf5abc706eacab1ccbf8e90b8d4bfa3bf479385f88a87dc7",
+    "intraday_snapshot_id": "market-regime-intraday-snapshot:00ef85ee95afdbd9fe40bad1c1d2ecd2c2f5acb9a68ebf4597742306d4e25763",
+    "overlay_id": "market-regime-intraday-overlay:c028ebdb5c3d3230147e895987e0081af32b67bf6e67eeccf4fedd83de29e461",
+    "material_change_receipt_id": "market-regime-material-change:99f9248b553b07f78f7e57e915f6b0ece7a5b0864fd47c1597c627f5b7a6ff43",
+    "intraday_quality": "complete",
+    "accepted_count": 14,
+    "rejected_count": 0,
+    "session_counts": {
+      "closed": 14
+    },
+    "freshness_counts": {
+      "delayed": 14
+    },
+    "overlay_relation": "closed",
+    "truth_boundary": {
+      "read_only": true,
+      "drivers_are_causal_claims": false,
+      "forecast": false,
+      "investment_advice": false,
+      "not_investment_advice": true,
+      "action_eligible": false,
+      "publication_eligible": false
+    }
+  },
+  "browser": {
+    "desktop": {
+      "viewport": "1440x1000",
+      "ready": true,
+      "ready_timeout_seconds": 15,
+      "top_state": "closed",
+      "relation": "A股已休市",
+      "watch_condition_count": 2,
+      "freshness_identity_count": 14,
+      "closed_identity_count": 14,
+      "daily_chart_count": 9,
+      "client_width": 1425,
+      "scroll_width": 1425,
+      "overflow_node_count": 0,
+      "console_error_count": 0,
+      "screenshot": {
+        "path": "evidence/market-regime-live-s4/market-regime-weekend-closed.png",
+        "sha256": "5925222ab94693260c3466ed63c654422a83095010ad52886e56372ced2561d2"
+      }
+    },
+    "mobile": {
+      "viewport": "390x844",
+      "ready": true,
+      "ready_timeout_seconds": 15,
+      "relation": "A股已休市",
+      "watch_condition_count": 2,
+      "freshness_identity_count": 14,
+      "daily_chart_count": 9,
+      "client_width": 375,
+      "scroll_width": 375,
+      "live_summary_columns": 1,
+      "freshness_columns": 1,
+      "screenshot": {
+        "path": "evidence/market-regime-live-s4/market-regime-weekend-closed-mobile.png",
+        "sha256": "88bac0da6ab51df531ab3c7067daa41c9a4ce08c454d335c7070479dc8642636"
+      }
+    }
+  },
+  "acceptance_boundary": {
+    "verified": "three launchd services, cohesive API v2, complete 14-identity weekend snapshot, closed relation, desktop/mobile rendering",
+    "not_verified": "weekday open-session provider latency, exchange realtime entitlement, public hosting, notifications, holdings, orders or any trading action"
+  }
+}
