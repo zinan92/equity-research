@@ -1,17 +1,17 @@
 # Market Regime Live v1 · intraday data contract
 
-Status: S1a Yahoo authority.  Schema:
-`market-regime-intraday-data-v1`.  Issue: #719.
+Status: S1b unified Yahoo/Tencent authority.  Schema:
+`market-regime-intraday-data-v1`.  Issues: #719 and #720.
 
 This layer collects and freezes completed 5-minute evidence.  It does not
 calculate an impulse, material change, forecast, recommendation, API payload
-or trading action.  Tencent/A-share support belongs to #720.
+or trading action.
 
-## Fixed Yahoo registry
+## Fixed registry
 
 The registry is code-owned by
 `product/data_core/market_regime_intraday_data.py`.  It contains exactly these
-eleven Yahoo identities in S1a:
+eleven Yahoo identities plus three Tencent A-share identities:
 
 | Key | Symbol | Session | Identity boundary |
 | --- | --- | --- | --- |
@@ -26,6 +26,9 @@ eleven Yahoo identities in S1a:
 | `nikkei` | `^N225` | Japan cash | Nikkei 225 cash price index |
 | `vix` | `^VIX` | US volatility cash | VIX cash index |
 | `us_dividend` | `SCHD` | US cash | ETF trade price, style evidence |
+| `shanghai` | `sh000001` | A-share cash | SSE Composite confirmation |
+| `star50` | `sh000688` | A-share cash | STAR 50 technology confirmation |
+| `china_dividend` | `sh000015` | A-share cash | SSE Dividend style evidence |
 
 `^GSPC != ES=F` and `^IXIC != NQ=F` are import-time invariants.  A proxy
 relationship is metadata; no consumer may splice, backfill or compare absolute
@@ -36,6 +39,13 @@ Yahoo `query1` Chart with `interval=5m&range=5d`; `query2` is attempted only
 after the primary response fails status, MIME, JSON, identity or bar
 validation.  Each attempt remains visible.  A fallback response never erases
 the failed primary capture.
+
+Tencent uses one batch quote request for the selected fixed A-share identities
+and one `m5,,320` request per identity.  The quote batch binds provider symbol,
+six-digit code and quote time.  Each m5 response must contain exactly the same
+instrument, an embedded quote within 120 seconds of the batch quote, provider
+market status, and the expected ordered 5-minute rows.  A failed batch skips
+all dependent m5 requests; one failed m5 degrades only that instrument.
 
 ## Raw response and normalization
 
@@ -64,6 +74,14 @@ listed as internal or trailing.  A partially-null row or an all-null OHLC row
 with non-zero volume is corruption and rejects the attempt.  Trailing
 unfinished priced rows are separately dropped and disclosed.
 
+Tencent's m5 timestamps are interval ends.  A row is complete only after
+`timestamp + 30 seconds <= observed_at`; future, duplicate, unordered, short,
+non-finite, negative-volume or invalid-containment rows fail closed.  Tencent
+currently declares JSON quote/K-line bodies as `text/html`.  That exception is
+provider-specific: the quote must decode as GB18030 and match the fixed line
+grammar; m5 must begin with a JSON object and pass complete JSON, identity,
+quote-skew and row validation.  Generic HTML remains rejected.
+
 ## Independent sessions and freshness
 
 There is no global open flag.  Each instrument is classified independently as
@@ -72,6 +90,15 @@ Provider `currentTradingPeriod` must cover the observation before the system
 asserts pre/open/post.  Weekday arithmetic alone cannot prove a holiday open.
 US DST is evaluated through `zoneinfo`; Japan lunch, futures daily maintenance,
 Friday close and weekend boundaries are explicit.  Saturday is closed.
+
+A-share classification combines the batch quote time, Tencent's `SH_*` market
+state, the newest completed m5 bar and the Asia/Shanghai schedule.  It covers
+09:00–09:30 pre, 09:30–11:30 morning, 11:30–13:00 lunch, 13:00–15:00
+afternoon, 15:00–18:00 post, overnight, weekend and holiday.  `open` requires
+same-day provider quote evidence plus `SH_open`; a stale quote conflicting with
+an open status becomes `unknown`.  Lunch with an open-status conflict is also
+`unknown`.  Holiday/closed and evidence-insufficient are never translated into
+“does not confirm”.
 
 Each accepted artifact keeps:
 
@@ -110,7 +137,8 @@ schema, path containment, SHA-256 and deterministic identity.
 
 ## Rights and live-probe boundary
 
-Yahoo Chart remains `supplementary_only` and `local_evaluation_only`.
+Yahoo Chart and Tencent quote/K-line remain `supplementary_only` and
+`local_evaluation_only`.
 `publication_eligible=false` and `action_eligible=false` are propagated through
 every artifact.  Private-beta/public/commercial modes fail closed.  HTTP 200,
 fixture success or a one-time live run proves neither reliability, latency nor
