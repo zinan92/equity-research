@@ -1,5 +1,31 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime Live S1a Yahoo intraday authority (Issue #719)
+
+Now: the live-v1 data layer has a fixed 11-instrument Yahoo registry with
+separate cash-index, futures-proxy, commodity-continuous, Asian cash, VIX and
+dividend identities.  `^GSPC` never becomes `ES=F`; `^IXIC` never becomes
+`NQ=F`, and NQ remains explicitly a Nasdaq-100 futures proxy.  Query1 5m/5d is
+primary and query2 is an evidence-preserving fallback rather than a silent
+source swap.
+
+Every accepted asset binds exact symbol/currency/timezone, completed 5-minute
+OHLC, provider/received/observed times, current age, per-asset session and
+freshness to immutable raw and normalized hashes.  Weekend, holiday, US DST,
+Japan lunch and futures maintenance semantics are replay tested.  A failed
+refresh cannot advance the asset's latest-good pointer or reset its timestamps;
+an aggregate partial snapshot can only expose the old record with a larger
+current age.  The contract is
+[`docs/market-regime/live-data-contract.md`](docs/market-regime/live-data-contract.md).
+
+Current inputs remain Park-local supplementary evidence with
+`publication_eligible=false` and `action_eligible=false`.  This story does not
+implement Tencent, overlay scoring, API publication, scheduling or UI.
+
+Next: execute Issue #720 from the latest main to add the three fixed Tencent A
+index identities and A-share pre/open/lunch/post/holiday semantics to the same
+snapshot contract.  Do not begin the impulse model until #720 closes.
+
 ## 2026-08-08 · Market Regime Live v1 direction contract (Issue #718)
 
 Now: the active product direction is again the local/private cross-asset market

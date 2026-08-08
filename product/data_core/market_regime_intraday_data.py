@@ -1,0 +1,706 @@
+"""Replayable Yahoo 5-minute authority for Market Regime Live v1.
+
+This module stops at normalized intraday evidence.  It does not score an
+overlay, publish an API, schedule itself, make a forecast or place an order.
+"""
+from __future__ import annotations
+
+from dataclasses import asdict, dataclass
+from datetime import datetime, time, timedelta, timezone
+from hashlib import sha256
+import json
+import math
+import os
+from pathlib import Path
+import re
+import tempfile
+from typing import Any, Callable, Iterable, Mapping
+from urllib.parse import quote
+from uuid import uuid4
+from zoneinfo import ZoneInfo
+
+from .market_regime_data import (
+    HttpCapture,
+    LicenseDecision,
+    SourceCaptureError,
+    http_get_capture,
+    license_decision,
+)
+
+
+SCHEMA_VERSION = "market-regime-intraday-data-v1"
+REGISTRY_VERSION = "market-regime-intraday-registry-v1"
+BAR_SECONDS = 300
+COMPLETION_GRACE_SECONDS = 30
+LIVE_CANDIDATE_MAX_AGE_SECONDS = 15 * 60
+DEFAULT_MAX_SILENCE_SECONDS = 96 * 60 * 60
+SESSION_STATES = frozenset(
+    {"pre", "open", "lunch_break", "post", "maintenance", "closed", "unknown"}
+)
+FRESHNESS_STATES = frozenset({"live_candidate", "delayed", "stale", "unavailable"})
+
+YAHOO_QUERY1_BASE = "https://query1.finance.yahoo.com/v8/finance/chart/"
+YAHOO_QUERY2_BASE = "https://query2.finance.yahoo.com/v8/finance/chart/"
+
+
+class MarketRegimeIntradayDataError(RuntimeError):
+    """Intraday data violated its frozen authority contract."""
+
+
+@dataclass(frozen=True)
+class IntradayInstrumentSpec:
+    key: str
+    display_name: str
+    provider_symbol: str
+    canonical_symbol: str
+    asset_type: str
+    currency: str
+    exchange_timezone: str
+    session_kind: str
+    price_basis: str
+    role: str
+    proxy_for: str | None = None
+    min_completed_bars: int = 2
+    max_expected_silence_seconds: int = DEFAULT_MAX_SILENCE_SECONDS
+
+
+YAHOO_INSTRUMENTS: tuple[IntradayInstrumentSpec, ...] = (
+    IntradayInstrumentSpec("sp500_cash", "S&P 500 cash index", "^GSPC", "^GSPC", "price_index", "USD", "America/New_York", "us_cash", "provider_unadjusted_index_level", "cash_confirmation"),
+    IntradayInstrumentSpec("nasdaq_cash", "Nasdaq Composite cash index", "^IXIC", "^IXIC", "price_index", "USD", "America/New_York", "us_cash", "provider_unadjusted_index_level", "cash_confirmation"),
+    IntradayInstrumentSpec("sp500_futures_proxy", "E-mini S&P 500 futures proxy", "ES=F", "ES=F", "continuous_future", "USD", "America/New_York", "us_future", "provider_continuous_front_month_unadjusted", "proxy", "us_large_cap_risk_appetite"),
+    IntradayInstrumentSpec("nasdaq100_futures_proxy", "E-mini Nasdaq-100 futures proxy", "NQ=F", "NQ=F", "continuous_future", "USD", "America/New_York", "us_future", "provider_continuous_front_month_unadjusted", "proxy", "us_growth_risk_appetite"),
+    IntradayInstrumentSpec("wti", "WTI continuous future", "CL=F", "CL=F", "continuous_future", "USD", "America/New_York", "commodity_future", "provider_continuous_front_month_unadjusted", "market_signal"),
+    IntradayInstrumentSpec("gold", "Gold continuous future", "GC=F", "GC=F", "continuous_future", "USD", "America/New_York", "commodity_future", "provider_continuous_front_month_unadjusted", "market_signal"),
+    IntradayInstrumentSpec("silver", "Silver continuous future", "SI=F", "SI=F", "continuous_future", "USD", "America/New_York", "commodity_future", "provider_continuous_front_month_unadjusted", "market_signal"),
+    IntradayInstrumentSpec("kospi", "KOSPI cash index", "^KS11", "^KS11", "price_index", "KRW", "Asia/Seoul", "korea_cash", "provider_unadjusted_index_level", "cash_confirmation"),
+    IntradayInstrumentSpec("nikkei", "Nikkei 225 cash index", "^N225", "^N225", "price_index", "JPY", "Asia/Tokyo", "japan_cash", "provider_unadjusted_index_level", "cash_confirmation"),
+    IntradayInstrumentSpec("vix", "VIX cash volatility index", "^VIX", "^VIX", "volatility_index", "USD", "America/Chicago", "vix_cash", "provider_unadjusted_index_level", "risk_evidence"),
+    IntradayInstrumentSpec("us_dividend", "Schwab US Dividend Equity ETF", "SCHD", "SCHD", "etf", "USD", "America/New_York", "us_cash", "provider_unadjusted_trade_price", "style_evidence"),
+)
+INSTRUMENT_BY_KEY = {item.key: item for item in YAHOO_INSTRUMENTS}
+if len(INSTRUMENT_BY_KEY) != len(YAHOO_INSTRUMENTS):  # pragma: no cover
+    raise RuntimeError("intraday instrument keys must be unique")
+if INSTRUMENT_BY_KEY["sp500_cash"].canonical_symbol == INSTRUMENT_BY_KEY["sp500_futures_proxy"].canonical_symbol:  # pragma: no cover
+    raise RuntimeError("cash and futures identities must remain distinct")
+if INSTRUMENT_BY_KEY["nasdaq_cash"].canonical_symbol == INSTRUMENT_BY_KEY["nasdaq100_futures_proxy"].canonical_symbol:  # pragma: no cover
+    raise RuntimeError("Nasdaq cash and futures identities must remain distinct")
+
+
+def registry_payload() -> dict[str, Any]:
+    payload = {
+        "schema_version": REGISTRY_VERSION,
+        "provider": "yahoo_chart",
+        "interval": "5m",
+        "range": "5d",
+        "instruments": [asdict(item) for item in YAHOO_INSTRUMENTS],
+        "hard_invariants": [
+            "^GSPC != ES=F",
+            "^IXIC != NQ=F",
+            "NQ=F is a Nasdaq-100 futures proxy, not Nasdaq Composite",
+            "cross-identity price splicing is forbidden",
+        ],
+        "authority_tier": "supplementary_only",
+        "publication_eligible": False,
+    }
+    payload["registry_sha256"] = sha256(_canonical(payload)).hexdigest()
+    return payload
+
+
+def _canonical(value: object) -> bytes:
+    return (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode()
+
+
+def _iso(value: datetime) -> str:
+    if value.tzinfo is None:
+        raise MarketRegimeIntradayDataError("timestamps must be timezone-aware")
+    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _instant(value: str) -> datetime:
+    return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(timezone.utc)
+
+
+def _finite(value: Any, *, field: str) -> float:
+    if isinstance(value, bool):
+        raise SourceCaptureError(f"{field} is not numeric")
+    try:
+        number = float(value)
+    except (TypeError, ValueError) as exc:
+        raise SourceCaptureError(f"{field} is not numeric") from exc
+    if not math.isfinite(number):
+        raise SourceCaptureError(f"{field} is not finite")
+    return number
+
+
+def _bounded_excerpt(body: bytes, limit: int = 320) -> str | None:
+    if not body:
+        return None
+    try:
+        text = body.decode("utf-8")
+    except UnicodeDecodeError:
+        text = body.decode("gb18030", errors="replace")
+    return " ".join(text.replace("\x00", " ").split())[:limit]
+
+
+def yahoo_urls(spec: IntradayInstrumentSpec) -> tuple[str, str]:
+    symbol = quote(spec.provider_symbol, safe="")
+    suffix = f"{symbol}?interval=5m&range=5d"
+    return YAHOO_QUERY1_BASE + suffix, YAHOO_QUERY2_BASE + suffix
+
+
+def _provider_periods(meta: Mapping[str, Any]) -> dict[str, tuple[datetime, datetime]]:
+    current = meta.get("currentTradingPeriod")
+    if not isinstance(current, Mapping):
+        return {}
+    result: dict[str, tuple[datetime, datetime]] = {}
+    for name in ("pre", "regular", "post"):
+        value = current.get(name)
+        if not isinstance(value, Mapping):
+            continue
+        try:
+            start = datetime.fromtimestamp(int(value["start"]), tz=timezone.utc)
+            end = datetime.fromtimestamp(int(value["end"]), tz=timezone.utc)
+        except (KeyError, TypeError, ValueError, OSError):
+            continue
+        if end > start:
+            result[name] = (start, end)
+    return result
+
+
+def classify_yahoo_session(
+    spec: IntradayInstrumentSpec,
+    observed_at: datetime,
+    meta: Mapping[str, Any],
+) -> str:
+    """Classify one asset; provider periods are required to assert open."""
+
+    current = observed_at.astimezone(timezone.utc)
+    local = current.astimezone(ZoneInfo(spec.exchange_timezone))
+    weekday = local.weekday()
+    local_clock = local.timetz().replace(tzinfo=None)
+
+    if spec.session_kind in {"us_future", "commodity_future"}:
+        if weekday == 5 or (weekday == 6 and local_clock < time(18, 0)):
+            return "closed"
+        if weekday == 4 and local_clock >= time(17, 0):
+            return "closed"
+        if time(17, 0) <= local_clock < time(18, 0):
+            return "maintenance"
+    elif weekday >= 5:
+        return "closed"
+
+    if spec.session_kind == "japan_cash" and time(11, 30) <= local_clock < time(12, 30):
+        return "lunch_break"
+
+    periods = _provider_periods(meta)
+    for name, state in (("pre", "pre"), ("regular", "open"), ("post", "post")):
+        period = periods.get(name)
+        if period and period[0] <= current < period[1]:
+            return state
+    if periods:
+        return "closed"
+    return "unknown"
+
+
+def _parse_yahoo(capture: HttpCapture) -> tuple[Mapping[str, Any], list[int], Mapping[str, list[Any]]]:
+    if capture.status_code != 200:
+        raise SourceCaptureError(f"Yahoo HTTP status {capture.status_code}", capture=capture)
+    if capture.content_type != "application/json":
+        raise SourceCaptureError(f"Yahoo content type {capture.content_type or 'missing'}", capture=capture)
+    try:
+        payload = json.loads(capture.body)
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise SourceCaptureError("Yahoo response is not valid JSON", capture=capture) from exc
+    try:
+        chart = payload["chart"]
+        if chart.get("error") is not None:
+            raise SourceCaptureError("Yahoo chart returned an error", capture=capture)
+        result = chart["result"]
+        if not isinstance(result, list) or len(result) != 1:
+            raise SourceCaptureError("Yahoo chart result cardinality mismatch", capture=capture)
+        row = result[0]
+        meta = row["meta"]
+        timestamps = row["timestamp"]
+        quotes = row["indicators"]["quote"]
+        if not isinstance(meta, Mapping) or not isinstance(timestamps, list):
+            raise TypeError
+        if not isinstance(quotes, list) or len(quotes) != 1 or not isinstance(quotes[0], Mapping):
+            raise TypeError
+    except (KeyError, TypeError) as exc:
+        raise SourceCaptureError("Yahoo chart shape mismatch", capture=capture) from exc
+    return meta, timestamps, quotes[0]
+
+
+def normalize_yahoo_capture(
+    spec: IntradayInstrumentSpec,
+    capture: HttpCapture,
+    *,
+    observed_at: datetime,
+    received_at: datetime,
+) -> dict[str, Any]:
+    """Normalize one fixed Yahoo identity into completed 5-minute bars."""
+
+    observed = observed_at.astimezone(timezone.utc)
+    received = received_at.astimezone(timezone.utc)
+    if received > observed:
+        raise MarketRegimeIntradayDataError("observed_at cannot precede received_at")
+    meta, timestamps, quote_rows = _parse_yahoo(capture)
+    if meta.get("symbol") != spec.provider_symbol:
+        raise SourceCaptureError("Yahoo symbol identity mismatch", capture=capture)
+    if meta.get("currency") != spec.currency:
+        raise SourceCaptureError("Yahoo currency identity mismatch", capture=capture)
+    if meta.get("exchangeTimezoneName") != spec.exchange_timezone:
+        raise SourceCaptureError("Yahoo timezone identity mismatch", capture=capture)
+    fields = {name: quote_rows.get(name) for name in ("open", "high", "low", "close")}
+    if any(not isinstance(values, list) or len(values) != len(timestamps) for values in fields.values()):
+        raise SourceCaptureError("Yahoo OHLC array length mismatch", capture=capture)
+    volumes = quote_rows.get("volume")
+    if volumes is not None and (not isinstance(volumes, list) or len(volumes) != len(timestamps)):
+        raise SourceCaptureError("Yahoo volume array length mismatch", capture=capture)
+
+    bars: list[dict[str, Any]] = []
+    dropped_all_null: list[str] = []
+    dropped_internal_all_null: list[str] = []
+    dropped_trailing_all_null: list[str] = []
+    dropped_unfinished: list[str] = []
+    previous_timestamp: int | None = None
+    for index, raw_timestamp in enumerate(timestamps):
+        if isinstance(raw_timestamp, bool):
+            raise SourceCaptureError("Yahoo timestamp is not an integer", capture=capture)
+        try:
+            timestamp = int(raw_timestamp)
+        except (TypeError, ValueError) as exc:
+            raise SourceCaptureError("Yahoo timestamp is not an integer", capture=capture) from exc
+        if previous_timestamp is not None and timestamp <= previous_timestamp:
+            raise SourceCaptureError("Yahoo timestamps are duplicate or unordered", capture=capture)
+        previous_timestamp = timestamp
+        start = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+        end = start + timedelta(seconds=BAR_SECONDS)
+        raw_values = [fields[name][index] for name in ("open", "high", "low", "close")]
+        if all(value is None for value in raw_values):
+            if volumes is not None and volumes[index] not in (None, 0, 0.0):
+                raise SourceCaptureError("Yahoo all-null OHLC has non-zero volume", capture=capture)
+            instant = _iso(start)
+            dropped_all_null.append(instant)
+            later_has_prices = any(
+                not all(fields[name][later] is None for name in ("open", "high", "low", "close"))
+                for later in range(index + 1, len(timestamps))
+            )
+            if later_has_prices:
+                dropped_internal_all_null.append(instant)
+            else:
+                dropped_trailing_all_null.append(instant)
+            continue
+        if any(value is None for value in raw_values):
+            raise SourceCaptureError("Yahoo bar is partially null", capture=capture)
+        if start > observed:
+            raise SourceCaptureError("Yahoo bar starts in the future", capture=capture)
+        if end + timedelta(seconds=COMPLETION_GRACE_SECONDS) > observed:
+            dropped_unfinished.append(_iso(start))
+            continue
+        open_price, high, low, close = [
+            _finite(value, field=f"bar[{index}].{name}")
+            for name, value in zip(("open", "high", "low", "close"), raw_values)
+        ]
+        if low > min(open_price, close, high) or high < max(open_price, close, low):
+            raise SourceCaptureError("Yahoo OHLC containment failed", capture=capture)
+        volume = None
+        if volumes is not None and volumes[index] is not None:
+            volume = _finite(volumes[index], field=f"bar[{index}].volume")
+            if volume < 0:
+                raise SourceCaptureError("Yahoo volume is negative", capture=capture)
+        bars.append(
+            {
+                "provider_timestamp": timestamp,
+                "started_at": _iso(start),
+                "ended_at": _iso(end),
+                "open": open_price,
+                "high": high,
+                "low": low,
+                "close": close,
+                "volume": volume,
+            }
+        )
+    if len(bars) < spec.min_completed_bars:
+        raise SourceCaptureError(
+            f"Yahoo completed bar count {len(bars)} below {spec.min_completed_bars}",
+            capture=capture,
+        )
+    latest_start = datetime.fromtimestamp(bars[-1]["provider_timestamp"], tz=timezone.utc)
+    age_seconds = max(0, int((observed - latest_start).total_seconds()))
+    session_state = classify_yahoo_session(spec, observed, meta)
+    if session_state == "open" and age_seconds <= LIVE_CANDIDATE_MAX_AGE_SECONDS:
+        freshness = "live_candidate"
+    elif age_seconds <= spec.max_expected_silence_seconds:
+        freshness = "delayed"
+    else:
+        freshness = "stale"
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "instrument": asdict(spec),
+        "interval": "5m",
+        "timestamp_semantics": "interval_start",
+        "bars": bars,
+        "bar_count": len(bars),
+        "provider_timestamp": _iso(latest_start),
+        "last_completed_bar_end_at": bars[-1]["ended_at"],
+        "last_completed_session": latest_start.astimezone(ZoneInfo(spec.exchange_timezone)).date().isoformat(),
+        "observed_at": _iso(observed),
+        "received_at": _iso(received),
+        "age_seconds": age_seconds,
+        "current_age_seconds": age_seconds,
+        "session_state": session_state,
+        "freshness": freshness,
+        "dropped_all_null_bars": dropped_all_null,
+        "dropped_internal_all_null_bars": dropped_internal_all_null,
+        "dropped_trailing_all_null_bars": dropped_trailing_all_null,
+        "dropped_unfinished_bars": dropped_unfinished,
+        "provider_session_periods": {
+            name: {"start": _iso(start), "end": _iso(end)}
+            for name, (start, end) in _provider_periods(meta).items()
+        },
+        "publication_eligible": False,
+        "action_eligible": False,
+    }
+
+
+def _write_exclusive(path: Path, body: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("xb") as handle:
+        handle.write(body)
+        handle.flush()
+        os.fsync(handle.fileno())
+    return sha256(body).hexdigest()
+
+
+def _write_json_exclusive(path: Path, payload: Mapping[str, Any]) -> str:
+    return _write_exclusive(path, _canonical(payload))
+
+
+def _write_atomic(path: Path, payload: Mapping[str, Any]) -> None:
+    encoded = _canonical(payload)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def _read_json(path: Path) -> dict[str, Any] | None:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    except json.JSONDecodeError as exc:
+        raise MarketRegimeIntradayDataError(f"invalid JSON: {path}") from exc
+    if not isinstance(value, dict):
+        raise MarketRegimeIntradayDataError(f"JSON object required: {path}")
+    return value
+
+
+def _read_bound_artifact(root: Path, reference: Mapping[str, Any]) -> dict[str, Any]:
+    relative = str(reference.get("path") or "")
+    expected_hash = str(reference.get("sha256") or "")
+    target = (root / relative).resolve()
+    if root not in target.parents or not relative.startswith("intraday/"):
+        raise MarketRegimeIntradayDataError("intraday artifact path escapes runtime root")
+    try:
+        encoded = target.read_bytes()
+    except FileNotFoundError as exc:
+        raise MarketRegimeIntradayDataError("intraday artifact is missing") from exc
+    if sha256(encoded).hexdigest() != expected_hash:
+        raise MarketRegimeIntradayDataError("intraday artifact hash mismatch")
+    try:
+        payload = json.loads(encoded)
+    except json.JSONDecodeError as exc:
+        raise MarketRegimeIntradayDataError("intraday artifact is not JSON") from exc
+    if not isinstance(payload, dict) or payload.get("schema_version") != SCHEMA_VERSION:
+        raise MarketRegimeIntradayDataError("intraday artifact schema mismatch")
+    return payload
+
+
+def _run_id(now: datetime) -> str:
+    return f"market-regime-intraday-{now:%Y%m%dT%H%M%SZ}-{uuid4().hex[:8]}"
+
+
+class MarketRegimeIntradayDataStore:
+    """Serial Yahoo collector with immutable raw/normalized evidence and last-good."""
+
+    def __init__(
+        self,
+        root: Path | str,
+        *,
+        http_get: Callable[[str], HttpCapture] = http_get_capture,
+        clock: Callable[[], datetime] | None = None,
+    ) -> None:
+        self.root = Path(root).expanduser().resolve()
+        self.http_get = http_get
+        self.clock = clock or (lambda: datetime.now(timezone.utc))
+        self._live_transport = http_get is http_get_capture
+
+    def _source_receipt(
+        self,
+        capture: HttpCapture,
+        *,
+        raw_relative: str | None,
+        received_at: datetime,
+        endpoint: str,
+        accepted: bool,
+        reason: str | None,
+    ) -> dict[str, Any]:
+        return {
+            **capture.receipt(raw_path=raw_relative),
+            "endpoint": endpoint,
+            "received_at": _iso(received_at),
+            "accepted": accepted,
+            "reason": reason,
+            "bounded_raw_excerpt": _bounded_excerpt(capture.body) if not accepted else None,
+        }
+
+    def refresh(
+        self,
+        *,
+        instrument_keys: Iterable[str] | None = None,
+        now: datetime | None = None,
+        run_id: str | None = None,
+        deployment_mode: str | None = None,
+        license_status: str | None = None,
+        license_reference: str | None = None,
+    ) -> dict[str, Any]:
+        if (now is not None or run_id is not None) and self._live_transport:
+            raise MarketRegimeIntradayDataError(
+                "clock/run overrides require an injected fixture transport"
+            )
+        current = (now or self.clock()).astimezone(timezone.utc)
+        identity = run_id or _run_id(current)
+        if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", identity) is None:
+            raise MarketRegimeIntradayDataError("run_id contains unsafe characters")
+        decision: LicenseDecision = license_decision(
+            deployment_mode=deployment_mode,
+            license_status=license_status,
+            license_reference=license_reference,
+            private_preview=False,
+        )
+        selected = list(instrument_keys or [item.key for item in YAHOO_INSTRUMENTS])
+        if not selected or len(selected) != len(set(selected)):
+            raise MarketRegimeIntradayDataError("instrument_keys must be non-empty and unique")
+        unknown = [key for key in selected if key not in INSTRUMENT_BY_KEY]
+        if unknown:
+            raise MarketRegimeIntradayDataError(
+                f"unknown intraday instruments: {', '.join(unknown)}"
+            )
+        results: list[dict[str, Any]] = []
+        snapshot_items: list[dict[str, Any]] = []
+        pending_pointers: list[tuple[str, dict[str, Any]]] = []
+        for key in selected:
+            spec = INSTRUMENT_BY_KEY[key]
+            attempts: list[dict[str, Any]] = []
+            accepted_artifact: dict[str, Any] | None = None
+            selected_endpoint: str | None = None
+            for endpoint, url in zip(("query1", "query2"), yahoo_urls(spec)):
+                capture = self.http_get(url)
+                received_at = current if now is not None else self.clock().astimezone(timezone.utc)
+                suffix = ".json" if capture.content_type == "application/json" else ".bin"
+                raw_relative = None
+                if capture.body:
+                    raw_relative = f"intraday/raw/{identity}/{key}-{endpoint}{suffix}"
+                    _write_exclusive(self.root / raw_relative, capture.body)
+                try:
+                    normalized = normalize_yahoo_capture(
+                        spec,
+                        capture,
+                        observed_at=current if now is not None else received_at,
+                        received_at=received_at,
+                    )
+                except (SourceCaptureError, MarketRegimeIntradayDataError) as exc:
+                    attempts.append(
+                        self._source_receipt(
+                            capture,
+                            raw_relative=raw_relative,
+                            received_at=received_at,
+                            endpoint=endpoint,
+                            accepted=False,
+                            reason=str(exc),
+                        )
+                    )
+                    continue
+                attempts.append(
+                    self._source_receipt(
+                        capture,
+                        raw_relative=raw_relative,
+                        received_at=received_at,
+                        endpoint=endpoint,
+                        accepted=True,
+                        reason=None,
+                    )
+                )
+                selected_endpoint = endpoint
+                accepted_artifact = {
+                    **normalized,
+                    "run_id": identity,
+                    "provider": "yahoo_chart",
+                    "selected_endpoint": endpoint,
+                    "source_attempts": attempts,
+                    "license": decision.as_json(),
+                    "data_kind": "real" if self._live_transport else "fixture",
+                    "refresh_status": "accepted",
+                }
+                break
+            if accepted_artifact is not None:
+                relative = f"intraday/normalized/{identity}/{key}.json"
+                artifact_hash = _write_json_exclusive(self.root / relative, accepted_artifact)
+                reference = {
+                    "path": relative,
+                    "sha256": artifact_hash,
+                    "schema_version": SCHEMA_VERSION,
+                }
+                pointer = {
+                    "schema_version": SCHEMA_VERSION,
+                    "instrument_key": key,
+                    "run_id": identity,
+                    "normalized_artifact": reference,
+                }
+                pending_pointers.append((key, pointer))
+                item = {**accepted_artifact, "normalized_artifact": reference}
+                snapshot_items.append(item)
+                results.append(
+                    {
+                        "key": key,
+                        "status": "accepted",
+                        "selected_endpoint": selected_endpoint,
+                        "freshness": item["freshness"],
+                        "session_state": item["session_state"],
+                        "normalized_artifact": reference,
+                        "source_attempts": attempts,
+                    }
+                )
+                continue
+            failure = {
+                "key": key,
+                "status": "rejected",
+                "reason": attempts[-1]["reason"] if attempts else "no source attempt",
+                "source_attempts": attempts,
+            }
+            results.append(failure)
+            latest_pointer = _read_json(
+                self.root / "intraday" / "instruments" / key / "latest-good.json"
+            )
+            if latest_pointer is None:
+                snapshot_items.append(
+                    {
+                        "schema_version": SCHEMA_VERSION,
+                        "instrument": asdict(spec),
+                        "bars": [],
+                        "bar_count": 0,
+                        "provider_timestamp": None,
+                        "observed_at": _iso(current),
+                        "received_at": None,
+                        "age_seconds": None,
+                        "current_age_seconds": None,
+                        "session_state": "unknown",
+                        "freshness": "unavailable",
+                        "refresh_status": "rejected",
+                        "refresh_failure": failure,
+                        "publication_eligible": False,
+                        "action_eligible": False,
+                    }
+                )
+                continue
+            reference = latest_pointer.get("normalized_artifact") or {}
+            latest = _read_bound_artifact(self.root, reference)
+            if (
+                latest_pointer.get("instrument_key") != key
+                or (latest.get("instrument") or {}).get("key") != key
+            ):
+                raise MarketRegimeIntradayDataError("intraday latest-good identity mismatch")
+            provider_time = _instant(str(latest["provider_timestamp"]))
+            current_age = max(0, int((current - provider_time).total_seconds()))
+            fallback_freshness = (
+                "delayed"
+                if current_age <= spec.max_expected_silence_seconds
+                else "stale"
+            )
+            snapshot_items.append(
+                {
+                    **latest,
+                    "normalized_artifact": reference,
+                    "last_good_original_freshness": latest.get("freshness"),
+                    "current_age_seconds": current_age,
+                    "freshness": fallback_freshness,
+                    "refresh_status": "rejected",
+                    "refresh_failure": failure,
+                }
+            )
+
+        accepted_count = sum(item["status"] == "accepted" for item in results)
+        usable_count = sum(bool(item.get("bars")) for item in snapshot_items)
+        quality = "complete" if accepted_count == len(selected) else "partial" if usable_count else "unavailable"
+        completed_at = current if now is not None else self.clock().astimezone(timezone.utc)
+        snapshot_core: dict[str, Any] = {
+            "schema_version": SCHEMA_VERSION,
+            "run_id": identity,
+            "generated_at": _iso(completed_at),
+            "quality": quality,
+            "instrument_count": len(selected),
+            "accepted_count": accepted_count,
+            "rejected_count": len(selected) - accepted_count,
+            "registry_sha256": registry_payload()["registry_sha256"],
+            "license": decision.as_json(),
+            "data_kind": "real" if self._live_transport else "fixture",
+            "publication_eligible": False,
+            "action_eligible": False,
+            "instruments": snapshot_items,
+        }
+        snapshot_hash = sha256(_canonical(snapshot_core)).hexdigest()
+        snapshot = {**snapshot_core, "snapshot_id": f"market-regime-intraday-snapshot:{snapshot_hash}"}
+        snapshot_relative = f"intraday/snapshots/{snapshot_hash}.json"
+        snapshot_file_hash = _write_json_exclusive(self.root / snapshot_relative, snapshot)
+        receipt = {
+            "schema_version": SCHEMA_VERSION,
+            "run_id": identity,
+            "generated_at": _iso(completed_at),
+            "results": results,
+            "snapshot": {
+                "path": snapshot_relative,
+                "sha256": snapshot_file_hash,
+                "snapshot_id": snapshot["snapshot_id"],
+            },
+            "quality": quality,
+        }
+        _write_json_exclusive(self.root / "intraday" / "runs" / f"{identity}.json", receipt)
+        for key, pointer in pending_pointers:
+            _write_atomic(
+                self.root / "intraday" / "instruments" / key / "latest-good.json",
+                pointer,
+            )
+        _write_atomic(
+            self.root / "intraday" / "latest.json",
+            {
+                "schema_version": SCHEMA_VERSION,
+                "run_id": identity,
+                "snapshot_id": snapshot["snapshot_id"],
+                "snapshot": {"path": snapshot_relative, "sha256": snapshot_file_hash},
+            },
+        )
+        return snapshot
+
+    def latest(self) -> dict[str, Any]:
+        pointer = _read_json(self.root / "intraday" / "latest.json")
+        if pointer is None or pointer.get("schema_version") != SCHEMA_VERSION:
+            raise MarketRegimeIntradayDataError("intraday latest snapshot is unavailable")
+        snapshot = _read_bound_artifact(self.root, pointer.get("snapshot") or {})
+        core = {key: value for key, value in snapshot.items() if key != "snapshot_id"}
+        identity = sha256(_canonical(core)).hexdigest()
+        if (
+            snapshot.get("snapshot_id") != f"market-regime-intraday-snapshot:{identity}"
+            or pointer.get("snapshot_id") != snapshot.get("snapshot_id")
+            or pointer.get("run_id") != snapshot.get("run_id")
+        ):
+            raise MarketRegimeIntradayDataError("intraday snapshot identity mismatch")
+        return snapshot
