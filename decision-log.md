@@ -3294,3 +3294,41 @@ intraday overlay publication.
 - The launchd plist is code/configuration evidence only.  Installation,
   process survival, real provider latency and browser visibility remain S4
   runtime acceptance work.
+
+# 2026-08-08 · Structural refresh may rebind only the identical intraday snapshot
+
+## Decision
+
+Permit an overlay with the same `generated_at` as its predecessor only when the
+intraday `snapshot_id` is exactly unchanged and the structural `analysis_id`
+changed.  Keep the duplicate-input short circuit ahead of this rule, and keep
+all different equal-time or earlier intraday snapshots fail-closed.
+
+## Why
+
+The completed-daily service is required to publish a cohesive API bundle after
+its structural analysis advances, but it intentionally does not recollect the
+15-minute layer.  Reusing the old overlay is forbidden because it binds the old
+analysis; requiring a later intraday snapshot makes a valid independent daily
+refresh impossible.  Identity-constrained rebind preserves both contracts.
+
+## Evidence
+
+- Issue #731 and the real launchd failure
+  `MarketRegimeIntradayModelError: new intraday snapshot must be later than the previous successful overlay`.
+- Compiler tests cover structural rebind, duplicate replay and rejection of a
+  different equal-time snapshot.
+- Runtime regression covers intraday success followed by a daily source and
+  analysis refresh with no new intraday snapshot, including two-entry immutable
+  overlay history and a cohesive `market-regime-api-v2` bundle.
+
+## Gotchas
+
+- Equal wall-clock time alone is never sufficient.  The intraday snapshot ID
+  must be byte-identity-derived and exactly equal, while the analysis ID must be
+  different.
+- A rebind is a new overlay with the old overlay as its baseline.  It is not a
+  duplicate and must append history, but structural persistence intentionally
+  resets instead of carrying a directional confirmation across analyses.
+- The repair does not turn the independent 4h/12h and 15-minute services into
+  one schedule, and it does not relax the cohesive API identity gate.

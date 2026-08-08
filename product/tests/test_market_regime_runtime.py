@@ -742,6 +742,45 @@ class MarketRegimeRuntimeTest(unittest.TestCase):
                 14,
             )
 
+    def test_daily_refresh_rebinds_unchanged_latest_intraday_after_analysis_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _, previous_analysis, intraday, previous_overlay = prepared_root(
+                root,
+                name="before-daily-rebind",
+            )
+            refreshed_snapshot = snapshot_for(
+                RISK_ON_RATES,
+                name="after-daily-rebind",
+            )
+            persist_snapshot(root, refreshed_snapshot)
+            start = datetime(2026, 8, 6, 8, 1, tzinfo=timezone.utc)
+            finish = datetime(2026, 8, 6, 8, 2, tzinfo=timezone.utc)
+
+            result = MarketRegimeRuntime(
+                root,
+                interval_hours=4,
+                clock=FixedClock(start, finish),
+                data_store_factory=FrozenDataStore,
+            ).cycle()
+
+            self.assertEqual(result["state"], "idle")
+            self.assertIsNone(result["last_error"])
+            self.assertNotEqual(result["analysis_id"], previous_analysis["analysis_id"])
+            self.assertEqual(result["intraday_snapshot_id"], intraday["snapshot_id"])
+            self.assertNotEqual(result["overlay_id"], previous_overlay["overlay_id"])
+            bundle = MarketRegimeApiStore(root).latest()
+            self.assertEqual(bundle["schema_version"], "market-regime-api-v2")
+            self.assertEqual(bundle["analysis_id"], result["analysis_id"])
+            self.assertEqual(bundle["intraday_snapshot_id"], intraday["snapshot_id"])
+            self.assertEqual(
+                bundle["overlay"]["baseline_overlay_id"],
+                previous_overlay["overlay_id"],
+            )
+            history = MarketRegimeIntradayOverlayStore(root).verify_history()
+            self.assertEqual(len(history), 2)
+            self.assertEqual(history[-1]["overlay_id"], result["overlay_id"])
+
     def test_twelve_hour_cycle_records_twelve_hour_next_due(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

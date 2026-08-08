@@ -703,7 +703,16 @@ def compile_intraday_overlay(
     generated_at = _instant(intraday.get("generated_at"), field="intraday.generated_at")
     if previous is not None:
         previous_at = _instant(previous.get("generated_at"), field="previous.generated_at")
-        if generated_at <= previous_at:
+        previous_intraday = previous.get("intraday") or {}
+        previous_structural = previous.get("structural") or {}
+        structural_rebind = (
+            generated_at == previous_at
+            and previous_intraday.get("snapshot_id") == intraday["snapshot_id"]
+            and previous_structural.get("analysis_id") != structural["analysis_id"]
+        )
+        if generated_at < previous_at or (
+            generated_at == previous_at and not structural_rebind
+        ):
             raise MarketRegimeIntradayModelError(
                 "new intraday snapshot must be later than the previous successful overlay"
             )
