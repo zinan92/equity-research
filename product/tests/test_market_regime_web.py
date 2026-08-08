@@ -15,14 +15,8 @@ from unittest.mock import patch
 PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
-from data_core.market_regime_data import MarketRegimeDataStore  # noqa: E402
-from data_core.market_regime_model import MarketRegimeAnalysisStore  # noqa: E402
 from market_regime_runtime import MarketRegimeApiStore  # noqa: E402
-from product.tests.test_market_regime_model import (  # noqa: E402
-    RISK_ON_RATES,
-    persist_snapshot,
-    snapshot_for,
-)
+from product.tests.test_market_regime_runtime import prepared_root  # noqa: E402
 
 
 class AssetParser(HTMLParser):
@@ -46,11 +40,7 @@ class AssetParser(HTMLParser):
 
 
 def prepare_bundle(root: Path) -> dict:
-    snapshot = snapshot_for(RISK_ON_RATES, name="web")
-    persist_snapshot(root, snapshot)
-    verified = MarketRegimeDataStore(root).latest()
-    analysis = MarketRegimeAnalysisStore(root).compile_latest()
-    return MarketRegimeApiStore(root).publish(verified, analysis)
+    return MarketRegimeApiStore(root).publish(*prepared_root(root, name="web"))
 
 
 class MarketRegimeWebTest(unittest.TestCase):
@@ -170,7 +160,13 @@ class MarketRegimeWebTest(unittest.TestCase):
         self.assertEqual(payload["bundle_id"], self.bundle["bundle_id"])
         self.assertEqual(len(payload["charts"]), 9)
         self.assertEqual(len(payload["probes"]), 3)
+        self.assertEqual(len(payload["intraday"]["assets"]), 14)
         self.assertIn("what_is_going_on", payload["analysis"])
+        self.assertIn(payload["overlay"]["relation"], {"confirms", "diverges", "insufficient", "closed"})
+        self.assertEqual(
+            payload["material_change_receipt"]["current_overlay_id"],
+            payload["overlay_id"],
+        )
         self.assertFalse(payload["truth_boundary"]["action_eligible"])
 
 

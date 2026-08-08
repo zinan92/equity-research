@@ -11,11 +11,37 @@ import tempfile
 import time
 from typing import Any, Callable, Mapping
 
-from data_core.market_regime_data import MarketRegimeDataStore
-from data_core.market_regime_model import MarketRegimeAnalysisStore
+from data_core.market_regime_data import (
+    SCHEMA_VERSION as DATA_SCHEMA_VERSION,
+    MarketRegimeDataStore,
+)
+from data_core.market_regime_intraday_data import (
+    INTRADAY_INSTRUMENTS,
+    SCHEMA_VERSION as INTRADAY_SCHEMA_VERSION,
+    MarketRegimeIntradayDataStore,
+)
+from data_core.market_regime_intraday_model import (
+    COOLDOWN_SECONDS,
+    ENTER_SCORE,
+    EXIT_SCORE,
+    MATERIAL_SCORE_DELTA,
+    OVERLAY_MODEL_VERSION,
+    OVERLAY_SCHEMA_VERSION,
+    PERSISTENCE_OVERLAYS,
+    MarketRegimeIntradayOverlayStore,
+    validate_overlay,
+)
+from data_core.market_regime_model import (
+    ANALYSIS_SCHEMA_VERSION,
+    MODEL_VERSION as STRUCTURAL_MODEL_VERSION,
+    MarketRegimeAnalysisStore,
+)
 
 
-API_SCHEMA_VERSION = "market-regime-api-v1"
+API_SCHEMA_VERSION = "market-regime-api-v2"
+MATERIAL_RECEIPT_SCHEMA_VERSION = "market-regime-material-change-receipt-v1"
+MATERIAL_THRESHOLD_POLICY_VERSION = "market-regime-intraday-thresholds-v1"
+HEALTH_SCHEMA_VERSION = "market-regime-health-v2"
 SCHEDULER_SCHEMA_VERSION = "market-regime-scheduler-v1"
 ALLOWED_INTERVAL_HOURS = (4, 12)
 PRIMARY_CHART_KEYS = (
@@ -30,6 +56,7 @@ PRIMARY_CHART_KEYS = (
     "nikkei",
 )
 PROBE_KEYS = ("vix", "china_dividend", "us_dividend")
+INTRADAY_KEYS = tuple(item.key for item in INTRADAY_INSTRUMENTS)
 
 
 class MarketRegimeRuntimeError(RuntimeError):
@@ -64,6 +91,109 @@ def _iso(value: datetime) -> str:
     if value.tzinfo is None:
         raise MarketRegimeRuntimeError("scheduler clock must include a timezone")
     return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _instant(value: Any, *, field: str) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise MarketRegimeRuntimeError(f"{field} must be ISO-8601") from exc
+    if parsed.tzinfo is None:
+        raise MarketRegimeRuntimeError(f"{field} must include timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def _age_seconds(value: Any, now: datetime, *, field: str) -> int | None:
+    if value in {None, ""}:
+        return None
+    observed = _instant(value, field=field)
+    return max(0, int((now.astimezone(timezone.utc) - observed).total_seconds()))
+
+
+def _content_identity(value: Mapping[str, Any]) -> str:
+    return sha256(_canonical_json(value).encode("utf-8")).hexdigest()
+
+
+def _require_non_actionable(
+    payload: Mapping[str, Any],
+    *,
+    name: str,
+    nested: bool = False,
+) -> None:
+    boundary = payload.get("truth_boundary") if nested else payload
+    if not isinstance(boundary, Mapping):
+        raise MarketRegimeRuntimeError(f"{name} truth boundary is unavailable")
+    if boundary.get("action_eligible") is not False:
+        raise MarketRegimeRuntimeError(f"{name} must remain non-actionable")
+    if boundary.get("publication_eligible") is not False:
+        raise MarketRegimeRuntimeError(f"{name} must remain non-publishable")
+
+
+def _validate_structural_identity(
+    snapshot: Mapping[str, Any], analysis: Mapping[str, Any]
+) -> None:
+    if snapshot.get("schema_version") != DATA_SCHEMA_VERSION:
+        raise MarketRegimeRuntimeError("structural snapshot schema mismatch")
+    if (
+        analysis.get("schema_version") != ANALYSIS_SCHEMA_VERSION
+        or analysis.get("model_version") != STRUCTURAL_MODEL_VERSION
+    ):
+        raise MarketRegimeRuntimeError("structural analysis schema mismatch")
+    if analysis.get("source_run_id") != snapshot.get("run_id"):
+        raise MarketRegimeRuntimeError("analysis and data snapshot run identities differ")
+    fingerprint = str(analysis.get("input_fingerprint") or "")
+    expected = sha256(
+        f"{STRUCTURAL_MODEL_VERSION}:{fingerprint}".encode("utf-8")
+    ).hexdigest()
+    if analysis.get("analysis_id") != f"market-regime-analysis:{expected}":
+        raise MarketRegimeRuntimeError("structural analysis identity mismatch")
+    _require_non_actionable(analysis, name="structural analysis", nested=True)
+    snapshot_publication = snapshot.get("publication_eligible")
+    snapshot_action = snapshot.get("action_eligible")
+    if snapshot_publication is True or snapshot_action is True:
+        raise MarketRegimeRuntimeError("structural snapshot truth boundary mismatch")
+
+
+def _validate_intraday_identity(snapshot: Mapping[str, Any]) -> None:
+    if snapshot.get("schema_version") != INTRADAY_SCHEMA_VERSION:
+        raise MarketRegimeRuntimeError("intraday snapshot schema mismatch")
+    core = {key: value for key, value in snapshot.items() if key != "snapshot_id"}
+    expected = sha256(_json_bytes(core)).hexdigest()
+    if snapshot.get("snapshot_id") != f"market-regime-intraday-snapshot:{expected}":
+        raise MarketRegimeRuntimeError("intraday snapshot identity mismatch")
+    _require_non_actionable(snapshot, name="intraday snapshot")
+
+
+def _validate_overlay_identity(
+    analysis: Mapping[str, Any],
+    intraday: Mapping[str, Any],
+    overlay: Mapping[str, Any],
+) -> None:
+    try:
+        validate_overlay(overlay)
+    except Exception as exc:
+        raise MarketRegimeRuntimeError(str(exc)) from exc
+    if overlay.get("schema_version") != OVERLAY_SCHEMA_VERSION:
+        raise MarketRegimeRuntimeError("overlay schema mismatch")
+    structural = overlay.get("structural")
+    live_input = overlay.get("intraday")
+    if (
+        not isinstance(structural, Mapping)
+        or structural.get("analysis_id") != analysis.get("analysis_id")
+    ):
+        raise MarketRegimeRuntimeError("overlay and structural analysis identities differ")
+    if (
+        not isinstance(live_input, Mapping)
+        or live_input.get("snapshot_id") != intraday.get("snapshot_id")
+    ):
+        raise MarketRegimeRuntimeError("overlay and intraday snapshot identities differ")
+    material = overlay.get("material_change")
+    if (
+        not isinstance(material, Mapping)
+        or material.get("baseline_overlay_id") != overlay.get("baseline_overlay_id")
+    ):
+        raise MarketRegimeRuntimeError("overlay material baseline identity mismatch")
+    _require_non_actionable(overlay, name="overlay", nested=True)
 
 
 def _write_atomic(path: Path, payload: Mapping[str, Any]) -> None:
@@ -134,11 +264,135 @@ def _instrument_projection(item: Mapping[str, Any]) -> dict[str, Any]:
     return projected
 
 
+def _intraday_projection(item: Mapping[str, Any]) -> dict[str, Any]:
+    instrument = item.get("instrument")
+    if not isinstance(instrument, Mapping):
+        raise MarketRegimeRuntimeError("intraday instrument identity is invalid")
+    reference = item.get("normalized_artifact")
+    evidence = None
+    if isinstance(reference, Mapping):
+        evidence = {
+            "path": reference.get("path"),
+            "sha256": reference.get("sha256"),
+            "schema_version": reference.get("schema_version"),
+        }
+    projected: dict[str, Any] = {
+        "instrument": dict(instrument),
+        "provider": item.get("provider"),
+        "selected_endpoint": item.get("selected_endpoint"),
+        "interval": item.get("interval"),
+        "bar_count": item.get("bar_count", 0),
+        "provider_timestamp": item.get("provider_timestamp"),
+        "last_completed_bar_end_at": item.get("last_completed_bar_end_at"),
+        "last_completed_session": item.get("last_completed_session"),
+        "observed_at": item.get("observed_at"),
+        "received_at": item.get("received_at"),
+        "age_seconds": item.get("age_seconds"),
+        "current_age_seconds": item.get("current_age_seconds"),
+        "session_state": item.get("session_state"),
+        "freshness": item.get("freshness"),
+        "refresh_status": item.get("refresh_status"),
+        "evidence": evidence,
+        "publication_eligible": item.get("publication_eligible", False),
+        "action_eligible": item.get("action_eligible", False),
+    }
+    if item.get("refresh_failure"):
+        failure = item["refresh_failure"]
+        if isinstance(failure, Mapping):
+            projected["refresh_failure"] = {
+                "reason": failure.get("reason"),
+                "source_attempts": failure.get("source_attempts"),
+            }
+    return projected
+
+
+def build_material_change_receipt(overlay: Mapping[str, Any]) -> dict[str, Any]:
+    material = overlay.get("material_change")
+    transition = overlay.get("transition")
+    contributions = overlay.get("signal_contributions")
+    if not isinstance(material, Mapping) or not isinstance(transition, Mapping):
+        raise MarketRegimeRuntimeError("overlay change state is incomplete")
+    if not isinstance(contributions, list):
+        raise MarketRegimeRuntimeError("overlay contribution evidence is incomplete")
+    evidence: list[dict[str, Any]] = []
+    for row in contributions:
+        if not isinstance(row, Mapping):
+            raise MarketRegimeRuntimeError("overlay contribution evidence is invalid")
+        instrument = str(row.get("instrument") or "")
+        evidence_id = str(row.get("evidence_id") or "")
+        artifact_sha = str(row.get("normalized_artifact_sha256") or "")
+        if instrument not in INTRADAY_KEYS or not evidence_id or len(artifact_sha) != 64:
+            raise MarketRegimeRuntimeError("overlay contribution evidence identity is invalid")
+        evidence.append(
+            {
+                "instrument": instrument,
+                "evidence_id": evidence_id,
+                "normalized_artifact_sha256": artifact_sha,
+                "last_completed_bar_end_at": row.get("last_completed_bar_end_at"),
+                "signed_weight": row.get("signed_weight"),
+                "impulse_score": row.get("impulse_score"),
+                "contribution": row.get("contribution"),
+            }
+        )
+    core: dict[str, Any] = {
+        "schema_version": MATERIAL_RECEIPT_SCHEMA_VERSION,
+        "generated_at": overlay.get("generated_at"),
+        "previous_overlay_id": overlay.get("baseline_overlay_id"),
+        "current_overlay_id": overlay.get("overlay_id"),
+        "structural_analysis_id": (overlay.get("structural") or {}).get("analysis_id"),
+        "intraday_snapshot_id": (overlay.get("intraday") or {}).get("snapshot_id"),
+        "input_fingerprint": overlay.get("input_fingerprint"),
+        "overlay_model_version": overlay.get("model_version"),
+        "threshold_policy": {
+            "version": MATERIAL_THRESHOLD_POLICY_VERSION,
+            "enter_score": ENTER_SCORE,
+            "exit_score": EXIT_SCORE,
+            "persistence_overlays": PERSISTENCE_OVERLAYS,
+            "cooldown_seconds": COOLDOWN_SECONDS,
+            "material_score_delta": MATERIAL_SCORE_DELTA,
+        },
+        "change": {
+            "relation": overlay.get("relation"),
+            "is_material": material.get("is_material"),
+            "reasons": material.get("reasons"),
+            "relation_from": material.get("relation_from"),
+            "relation_to": material.get("relation_to"),
+            "a_share_score_delta": material.get("a_share_score_delta"),
+            "cross_asset_score_delta": material.get("cross_asset_score_delta"),
+        },
+        "cooldown": {
+            "pending_relation": transition.get("pending_relation"),
+            "pending_count": transition.get("pending_count"),
+            "persistence_required": transition.get("persistence_required"),
+            "cooldown_until": transition.get("cooldown_until"),
+            "blocked_by_cooldown": transition.get("blocked_by_cooldown"),
+            "transitioned": transition.get("transitioned"),
+        },
+        "contribution_evidence": evidence,
+        "truth_boundary": {
+            "read_only": True,
+            "drivers_are_causal_claims": False,
+            "forecast": False,
+            "publication_eligible": False,
+            "action_eligible": False,
+        },
+    }
+    identity = _content_identity(core)
+    return {
+        **core,
+        "receipt_id": f"market-regime-material-change:{identity}",
+    }
+
+
 def build_market_regime_api_payload(
-    snapshot: Mapping[str, Any], analysis: Mapping[str, Any]
+    snapshot: Mapping[str, Any],
+    analysis: Mapping[str, Any],
+    intraday: Mapping[str, Any],
+    overlay: Mapping[str, Any],
 ) -> dict[str, Any]:
-    if analysis.get("source_run_id") != snapshot.get("run_id"):
-        raise MarketRegimeRuntimeError("analysis and data snapshot run identities differ")
+    _validate_structural_identity(snapshot, analysis)
+    _validate_intraday_identity(intraday)
+    _validate_overlay_identity(analysis, intraday, overlay)
     items = snapshot.get("instruments") or []
     if not isinstance(items, list):
         raise MarketRegimeRuntimeError("market-regime snapshot instruments are invalid")
@@ -153,23 +407,94 @@ def build_market_regime_api_payload(
     missing = [key for key in (*PRIMARY_CHART_KEYS, *PROBE_KEYS) if key not in by_key]
     if missing:
         raise MarketRegimeRuntimeError(f"market-regime API snapshot is missing: {', '.join(missing)}")
-    payload = {
-        "schema_version": API_SCHEMA_VERSION,
+    intraday_items = intraday.get("instruments") or []
+    if not isinstance(intraday_items, list):
+        raise MarketRegimeRuntimeError("intraday snapshot instruments are invalid")
+    intraday_by_key: dict[str, Mapping[str, Any]] = {}
+    for item in intraday_items:
+        if not isinstance(item, Mapping):
+            raise MarketRegimeRuntimeError("intraday snapshot instrument is invalid")
+        instrument = item.get("instrument")
+        key = str(instrument.get("key") if isinstance(instrument, Mapping) else "")
+        if key not in INTRADAY_KEYS or key in intraday_by_key:
+            raise MarketRegimeRuntimeError("intraday snapshot instrument identity is invalid")
+        if item.get("publication_eligible") is True or item.get("action_eligible") is True:
+            raise MarketRegimeRuntimeError("intraday instrument truth boundary mismatch")
+        intraday_by_key[key] = item
+    intraday_missing = [key for key in INTRADAY_KEYS if key not in intraday_by_key]
+    if intraday_missing:
+        raise MarketRegimeRuntimeError(
+            f"market-regime API intraday snapshot is missing: {', '.join(intraday_missing)}"
+        )
+    material_receipt = build_material_change_receipt(overlay)
+    structural_projection = {
         "source_run_id": snapshot.get("run_id"),
         "analysis_id": analysis.get("analysis_id"),
-        "generated_at": analysis.get("generated_at"),
+        "snapshot_generated_at": snapshot.get("generated_at"),
+        "analysis_generated_at": analysis.get("generated_at"),
         "verdict_as_of": analysis.get("verdict_as_of"),
         "latest_evidence_at": analysis.get("latest_evidence_at"),
         "data_quality": snapshot.get("quality"),
         "analysis_status": analysis.get("status"),
         "data_kind": analysis.get("data_kind"),
         "license": snapshot.get("license"),
-        "truth_boundary": analysis.get("truth_boundary"),
         "analysis": analysis,
         "charts": [_instrument_projection(by_key[key]) for key in PRIMARY_CHART_KEYS],
         "probes": [_instrument_projection(by_key[key]) for key in PROBE_KEYS],
     }
-    identity = sha256(_canonical_json(payload).encode("utf-8")).hexdigest()
+    intraday_projection = {
+        "snapshot_id": intraday.get("snapshot_id"),
+        "run_id": intraday.get("run_id"),
+        "generated_at": intraday.get("generated_at"),
+        "quality": intraday.get("quality"),
+        "data_kind": intraday.get("data_kind"),
+        "accepted_count": intraday.get("accepted_count"),
+        "rejected_count": intraday.get("rejected_count"),
+        "license": intraday.get("license"),
+        "assets": [
+            _intraday_projection(intraday_by_key[key])
+            for key in INTRADAY_KEYS
+        ],
+    }
+    data_kinds = {
+        str(structural_projection.get("data_kind") or "unknown"),
+        str(intraday_projection.get("data_kind") or "unknown"),
+    }
+    payload = {
+        "schema_version": API_SCHEMA_VERSION,
+        "generated_at": overlay.get("generated_at"),
+        "structural": structural_projection,
+        "intraday": intraday_projection,
+        "overlay": overlay,
+        "material_change_receipt": material_receipt,
+        "data_kind": next(iter(data_kinds)) if len(data_kinds) == 1 else "mixed",
+        "truth_boundary": {
+            "judgment_state": "model_generated_unreviewed",
+            "read_only": True,
+            "structural_labels_overwritten": False,
+            "drivers_are_causal_claims": False,
+            "forecast": False,
+            "investment_advice": False,
+            "not_investment_advice": True,
+            "publication_eligible": False,
+            "action_eligible": False,
+        },
+        # Backward-compatible daily projection for the pre-S4 local page.
+        "source_run_id": structural_projection["source_run_id"],
+        "analysis_id": structural_projection["analysis_id"],
+        "intraday_snapshot_id": intraday_projection["snapshot_id"],
+        "overlay_id": overlay.get("overlay_id"),
+        "material_change_receipt_id": material_receipt["receipt_id"],
+        "verdict_as_of": structural_projection["verdict_as_of"],
+        "latest_evidence_at": structural_projection["latest_evidence_at"],
+        "data_quality": structural_projection["data_quality"],
+        "analysis_status": structural_projection["analysis_status"],
+        "license": structural_projection["license"],
+        "analysis": analysis,
+        "charts": structural_projection["charts"],
+        "probes": structural_projection["probes"],
+    }
+    identity = _content_identity(payload)
     return {**payload, "bundle_id": f"market-regime-api:{identity}"}
 
 
@@ -179,20 +504,44 @@ class MarketRegimeApiStore:
     def __init__(self, root: Path | str) -> None:
         self.root = Path(root).expanduser().resolve()
 
-    def publish(self, snapshot: Mapping[str, Any], analysis: Mapping[str, Any]) -> dict[str, Any]:
-        payload = build_market_regime_api_payload(snapshot, analysis)
+    def publish(
+        self,
+        snapshot: Mapping[str, Any],
+        analysis: Mapping[str, Any],
+        intraday: Mapping[str, Any],
+        overlay: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        payload = build_market_regime_api_payload(
+            snapshot,
+            analysis,
+            intraday,
+            overlay,
+        )
         identity = payload["bundle_id"].split(":", 1)[1]
         relative = f"api/artifacts/{identity}.json"
         artifact_hash = _write_immutable(self.root / relative, payload)
+        encoded = (self.root / relative).read_bytes()
+        if sha256(encoded).hexdigest() != artifact_hash:
+            raise MarketRegimeRuntimeError("market-regime API staged artifact hash mismatch")
         pointer = {
             "schema_version": API_SCHEMA_VERSION,
             "bundle_id": payload["bundle_id"],
             "source_run_id": payload["source_run_id"],
             "analysis_id": payload["analysis_id"],
+            "intraday_snapshot_id": payload["intraday_snapshot_id"],
+            "overlay_id": payload["overlay_id"],
+            "material_change_receipt_id": payload["material_change_receipt_id"],
             "artifact": {"path": relative, "sha256": artifact_hash},
         }
         _write_atomic(self.root / "api" / "latest.json", pointer)
         return payload
+
+    def publish_latest(self) -> dict[str, Any]:
+        snapshot = MarketRegimeDataStore(self.root).latest()
+        analysis = MarketRegimeAnalysisStore(self.root).latest()
+        intraday = MarketRegimeIntradayDataStore(self.root).latest()
+        overlay = MarketRegimeIntradayOverlayStore(self.root).latest()
+        return self.publish(snapshot, analysis, intraday, overlay)
 
     def latest(self) -> dict[str, Any]:
         try:
@@ -226,12 +575,53 @@ class MarketRegimeApiStore:
         if not isinstance(payload, dict) or payload.get("schema_version") != API_SCHEMA_VERSION:
             raise MarketRegimeRuntimeError("market-regime API artifact schema mismatch")
         identity_payload = {key: value for key, value in payload.items() if key != "bundle_id"}
-        identity = sha256(_canonical_json(identity_payload).encode("utf-8")).hexdigest()
+        identity = _content_identity(identity_payload)
+        structural = payload.get("structural")
+        intraday = payload.get("intraday")
+        overlay = payload.get("overlay")
+        material = payload.get("material_change_receipt")
+        if not all(isinstance(value, Mapping) for value in (structural, intraday, overlay, material)):
+            raise MarketRegimeRuntimeError("market-regime API cohesive layers are incomplete")
+        assert isinstance(structural, Mapping)
+        assert isinstance(intraday, Mapping)
+        assert isinstance(overlay, Mapping)
+        assert isinstance(material, Mapping)
+        try:
+            validate_overlay(overlay)
+        except Exception as exc:
+            raise MarketRegimeRuntimeError(str(exc)) from exc
+        material_core = {key: value for key, value in material.items() if key != "receipt_id"}
+        material_identity = _content_identity(material_core)
+        assets = intraday.get("assets")
+        asset_keys = {
+            str((row.get("instrument") or {}).get("key") or "")
+            for row in assets
+            if isinstance(row, Mapping)
+        } if isinstance(assets, list) else set()
+        _require_non_actionable(payload, name="API bundle", nested=True)
         if (
             payload.get("bundle_id") != f"market-regime-api:{identity}"
             or pointer.get("bundle_id") != payload.get("bundle_id")
             or pointer.get("source_run_id") != payload.get("source_run_id")
             or pointer.get("analysis_id") != payload.get("analysis_id")
+            or pointer.get("intraday_snapshot_id") != payload.get("intraday_snapshot_id")
+            or pointer.get("overlay_id") != payload.get("overlay_id")
+            or pointer.get("material_change_receipt_id")
+            != payload.get("material_change_receipt_id")
+            or structural.get("analysis_id") != payload.get("analysis_id")
+            or intraday.get("snapshot_id") != payload.get("intraday_snapshot_id")
+            or overlay.get("overlay_id") != payload.get("overlay_id")
+            or (overlay.get("structural") or {}).get("analysis_id")
+            != structural.get("analysis_id")
+            or (overlay.get("intraday") or {}).get("snapshot_id")
+            != intraday.get("snapshot_id")
+            or material.get("receipt_id")
+            != f"market-regime-material-change:{material_identity}"
+            or material.get("receipt_id") != payload.get("material_change_receipt_id")
+            or material.get("current_overlay_id") != overlay.get("overlay_id")
+            or material.get("structural_analysis_id") != structural.get("analysis_id")
+            or material.get("intraday_snapshot_id") != intraday.get("snapshot_id")
+            or asset_keys != set(INTRADAY_KEYS)
             or relative != f"api/artifacts/{identity}.json"
         ):
             raise MarketRegimeRuntimeError("market-regime API artifact identity mismatch")
@@ -250,6 +640,8 @@ class MarketRegimeRuntime:
         sleeper: Callable[[float], None] | None = None,
         data_store_factory: Callable[[Path], Any] = MarketRegimeDataStore,
         analysis_store_factory: Callable[[Path], Any] = MarketRegimeAnalysisStore,
+        intraday_store_factory: Callable[[Path], Any] = MarketRegimeIntradayDataStore,
+        overlay_store_factory: Callable[[Path], Any] = MarketRegimeIntradayOverlayStore,
         api_store_factory: Callable[[Path], Any] = MarketRegimeApiStore,
     ) -> None:
         self.root = Path(root or market_regime_root()).expanduser().resolve()
@@ -258,6 +650,8 @@ class MarketRegimeRuntime:
         self.sleeper = sleeper or time.sleep
         self.data_store_factory = data_store_factory
         self.analysis_store_factory = analysis_store_factory
+        self.intraday_store_factory = intraday_store_factory
+        self.overlay_store_factory = overlay_store_factory
         self.api_store_factory = api_store_factory
         self.status_path = self.root / "scheduler" / "status.json"
         self.lock_path = self.root / "scheduler" / "refresh.lock"
@@ -324,9 +718,14 @@ class MarketRegimeRuntime:
                 "next_due_at": None,
                 "source_run_id": previous.get("source_run_id"),
                 "analysis_id": previous.get("analysis_id"),
+                "intraday_snapshot_id": previous.get("intraday_snapshot_id"),
+                "overlay_id": previous.get("overlay_id"),
+                "material_change_receipt_id": previous.get("material_change_receipt_id"),
                 "bundle_id": previous.get("bundle_id"),
                 "data_quality": previous.get("data_quality"),
                 "analysis_status": previous.get("analysis_status"),
+                "intraday_quality": previous.get("intraday_quality"),
+                "overlay_relation": previous.get("overlay_relation"),
             }
             _write_atomic(self.status_path, running)
             try:
@@ -344,8 +743,18 @@ class MarketRegimeRuntime:
                     raise MarketRegimeRuntimeError(
                         "compiled result differs from verified latest analysis"
                     )
+                intraday_store = self.intraday_store_factory(self.root)
+                intraday = intraday_store.latest()
+                overlay_store = self.overlay_store_factory(self.root)
+                compiled_overlay = overlay_store.compile_latest()
+                overlay = overlay_store.latest()
+                compiled_payload = compiled_overlay.get("overlay") or {}
+                if compiled_payload.get("overlay_id") != overlay.get("overlay_id"):
+                    raise MarketRegimeRuntimeError(
+                        "compiled result differs from verified latest overlay"
+                    )
                 api_store = self.api_store_factory(self.root)
-                published = api_store.publish(snapshot, analysis)
+                published = api_store.publish(snapshot, analysis, intraday, overlay)
                 bundle = api_store.latest()
                 if published.get("bundle_id") != bundle.get("bundle_id"):
                     raise MarketRegimeRuntimeError(
@@ -360,9 +769,16 @@ class MarketRegimeRuntime:
                     "next_due_at": _iso(finished + timedelta(hours=self.interval_hours)),
                     "source_run_id": snapshot.get("run_id"),
                     "analysis_id": analysis.get("analysis_id"),
+                    "intraday_snapshot_id": intraday.get("snapshot_id"),
+                    "overlay_id": overlay.get("overlay_id"),
+                    "material_change_receipt_id": bundle.get(
+                        "material_change_receipt_id"
+                    ),
                     "bundle_id": bundle.get("bundle_id"),
                     "data_quality": snapshot.get("quality"),
                     "analysis_status": analysis.get("status"),
+                    "intraday_quality": intraday.get("quality"),
+                    "overlay_relation": overlay.get("relation"),
                     "last_error": None,
                 }
             except Exception as exc:
@@ -388,6 +804,7 @@ class MarketRegimeRuntime:
     def health(self) -> dict[str, Any]:
         busy = self._lock_busy()
         status = self._read_status()
+        now = self.clock().astimezone(timezone.utc)
         if status is None:
             scheduler = {
                 "schema_version": SCHEDULER_SCHEMA_VERSION,
@@ -402,8 +819,50 @@ class MarketRegimeRuntime:
         try:
             bundle = self.api_store_factory(self.root).latest()
         except MarketRegimeRuntimeError as exc:
-            latest = {"status": "unavailable", "detail": str(exc)}
+            latest = {
+                "status": "unavailable",
+                "detail": str(exc),
+                "layers": {
+                    key: {"status": "unavailable"}
+                    for key in ("structural", "intraday", "overlay", "bundle")
+                },
+            }
         else:
+            structural = bundle["structural"]
+            intraday = bundle["intraday"]
+            overlay = bundle["overlay"]
+            assets = intraday.get("assets") or []
+            session_counts: dict[str, int] = {}
+            freshness_counts: dict[str, int] = {}
+            provider_ages: list[int] = []
+            asset_errors: list[dict[str, Any]] = []
+            for row in assets:
+                if not isinstance(row, Mapping):
+                    continue
+                session = str(row.get("session_state") or "unknown")
+                freshness = str(row.get("freshness") or "unavailable")
+                session_counts[session] = session_counts.get(session, 0) + 1
+                freshness_counts[freshness] = freshness_counts.get(freshness, 0) + 1
+                age = _age_seconds(
+                    row.get("provider_timestamp"),
+                    now,
+                    field=f"health.{(row.get('instrument') or {}).get('key')}.provider_timestamp",
+                )
+                if age is not None:
+                    provider_ages.append(age)
+                if row.get("refresh_failure"):
+                    asset_errors.append(
+                        {
+                            "instrument": (row.get("instrument") or {}).get("key"),
+                            "reason": (row.get("refresh_failure") or {}).get("reason"),
+                        }
+                    )
+            structural_reference = (
+                structural.get("latest_evidence_at")
+                or structural.get("analysis_generated_at")
+            )
+            overlay_generated = overlay.get("generated_at")
+            bundle_generated = bundle.get("generated_at")
             latest = {
                 "status": "available",
                 "bundle_id": bundle.get("bundle_id"),
@@ -412,11 +871,88 @@ class MarketRegimeRuntime:
                 "data_quality": bundle.get("data_quality"),
                 "analysis_status": bundle.get("analysis_status"),
                 "verdict_as_of": bundle.get("verdict_as_of"),
+                "intraday_snapshot_id": bundle.get("intraday_snapshot_id"),
+                "overlay_id": bundle.get("overlay_id"),
+                "material_change_receipt_id": bundle.get(
+                    "material_change_receipt_id"
+                ),
+                "layers": {
+                    "structural": {
+                        "status": structural.get("analysis_status"),
+                        "quality": structural.get("data_quality"),
+                        "partial": structural.get("analysis_status") != "full"
+                        or structural.get("data_quality") != "fresh",
+                        "last_success_at": structural.get("analysis_generated_at"),
+                        "evidence_at": structural_reference,
+                        "age_seconds": _age_seconds(
+                            structural_reference,
+                            now,
+                            field="health.structural.evidence_at",
+                        ),
+                        "analysis_id": structural.get("analysis_id"),
+                    },
+                    "intraday": {
+                        "status": "available",
+                        "quality": intraday.get("quality"),
+                        "partial": intraday.get("quality") != "complete",
+                        "last_success_at": intraday.get("generated_at"),
+                        "age_seconds": _age_seconds(
+                            intraday.get("generated_at"),
+                            now,
+                            field="health.intraday.generated_at",
+                        ),
+                        "newest_provider_age_seconds": min(provider_ages)
+                        if provider_ages
+                        else None,
+                        "oldest_provider_age_seconds": max(provider_ages)
+                        if provider_ages
+                        else None,
+                        "session_counts": dict(sorted(session_counts.items())),
+                        "freshness_counts": dict(sorted(freshness_counts.items())),
+                        "accepted_count": intraday.get("accepted_count"),
+                        "rejected_count": intraday.get("rejected_count"),
+                        "snapshot_id": intraday.get("snapshot_id"),
+                        "errors": asset_errors,
+                    },
+                    "overlay": {
+                        "status": "available",
+                        "last_success_at": overlay_generated,
+                        "age_seconds": _age_seconds(
+                            overlay_generated,
+                            now,
+                            field="health.overlay.generated_at",
+                        ),
+                        "overlay_id": overlay.get("overlay_id"),
+                        "relation": overlay.get("relation"),
+                        "material": (overlay.get("material_change") or {}).get(
+                            "is_material"
+                        ),
+                        "cooldown_until": (overlay.get("transition") or {}).get(
+                            "cooldown_until"
+                        ),
+                        "blocked_by_cooldown": (overlay.get("transition") or {}).get(
+                            "blocked_by_cooldown"
+                        ),
+                    },
+                    "bundle": {
+                        "status": "available",
+                        "last_success_at": bundle_generated,
+                        "age_seconds": _age_seconds(
+                            bundle_generated,
+                            now,
+                            field="health.bundle.generated_at",
+                        ),
+                        "bundle_id": bundle.get("bundle_id"),
+                    },
+                },
             }
         return {
-            "schema_version": SCHEDULER_SCHEMA_VERSION,
+            "schema_version": HEALTH_SCHEMA_VERSION,
+            "observed_at": _iso(now),
             "scheduler": scheduler,
             "latest": latest,
+            "last_error": scheduler.get("last_error")
+            or scheduler.get("last_failure"),
         }
 
     def run_forever(self) -> None:
