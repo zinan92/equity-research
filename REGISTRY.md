@@ -1,5 +1,34 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime Live S3a cohesive API (Issue #722)
+
+Now: `market-regime-api-v2` publishes one local, read-only identity chain across
+the completed-daily snapshot and structural analysis, the 14-asset intraday
+snapshot, the experimental overlay and a standalone material-change receipt.
+An analysis/run, overlay/analysis or overlay/intraday mismatch fails before the
+API latest pointer can move.  The legacy daily fields remain a same-bundle
+compatibility projection until the S4 page consumes the separated namespaces.
+
+The material receipt binds previous/current overlay IDs, threshold policy,
+material reasons/deltas, pending persistence, cooldown state and every signed
+contribution's evidence identity and normalized SHA-256.  “Contribution” is a
+deterministic market signal, not a news cause.  Partial, insufficient and closed
+states can publish when their full identity chain verifies; incomplete or
+forged inputs cannot.
+
+The browser routes remain loopback, entitled, no-store and strictly read-only.
+Health now separates structural, intraday, overlay and bundle last-success
+times, ages, quality/partial state, session/freshness counts and errors.  Age is
+recomputed from frozen evidence time and grows when health is re-read; serving
+the response never resets a provider or success timestamp.  The contract is
+[`docs/market-regime/live-runtime-contract.md`](docs/market-regime/live-runtime-contract.md).
+
+The existing completed-daily scheduler remains 4h/12h and recompiles a cohesive
+overlay before it publishes after a structural refresh.  It does not refresh
+intraday data in this story.  Next: execute Issue #723 from latest main to add
+the separate 15-minute target intraday cycle, bounded backoff, stop switch and
+local service status.  Do not redesign the page in that PR.
+
 ## 2026-08-08 · Market Regime Live S2 deterministic overlay (Issue #721)
 
 Now: the verified completed-daily analysis remains the immutable structural

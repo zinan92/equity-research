@@ -3199,3 +3199,48 @@ pretext for presenting stale confidence.
   appending history or advancing a persistence candidate.
 - “Driver” is a signed mathematical contribution with a frozen artifact hash,
   not a news narrative or causal explanation.
+
+# 2026-08-08 · The API publishes one structural/intraday identity chain
+
+## Decision
+
+Replace the daily-only API bundle with `market-regime-api-v2`.  Publish the
+verified daily snapshot/analysis, 14-asset intraday snapshot, experimental
+overlay and a content-addressed material-change receipt as one immutable
+artifact.  Validate all cross-layer identities and truth boundaries before the
+only mutable API latest pointer advances.  Keep the old daily fields as a
+temporary same-bundle compatibility projection for the pre-S4 page.
+
+## Why
+
+An overlay shown beside a different daily analysis or a different 5-minute
+snapshot is worse than an unavailable page because the explanation appears
+coherent while its evidence is not.  Binding all layers and the material
+receipt into one bundle makes the browser a pure reader and gives partial or
+closed states the same integrity guarantees as a full state.
+
+## Evidence
+
+- Issue #722 and `docs/market-regime/live-runtime-contract.md`.
+- Runtime tests cover cross-layer mismatch, hash/path tamper, material receipt,
+  partial/closed publication, pointer-write failure, overlay failure, health
+  age growth and read-only HTTP behavior.
+- Fixed Yahoo/Tencent response bytes replay through collection, normalized
+  snapshot, overlay, material receipt and API twice with identical snapshot,
+  overlay, receipt and bundle identities.
+
+## Gotchas
+
+- A valid `closed`, `insufficient` or `partial` result is publishable truth.  It
+  must not be held behind a “full only” gate, while malformed identities must
+  never be accepted as graceful degradation.
+- The daily 4h/12h cycle may change the structural analysis ID.  It therefore
+  recompiles the overlay against the latest verified intraday snapshot before
+  publishing; pairing a new analysis with the previous overlay is forbidden.
+- The API GET and health GET are readers.  They never refresh a provider,
+  compile a model, append overlay history or advance an API pointer.
+- Health response time is not source time.  Health may calculate a larger age
+  from the frozen provider/overlay timestamp, but cannot replace or reset that
+  timestamp when the endpoint is called.
+- The material receipt lists signed contribution evidence.  It does not turn
+  those signals into a causal explanation or a forecast.
