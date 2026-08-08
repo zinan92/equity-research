@@ -10,6 +10,7 @@ import tempfile
 from threading import Thread
 import unittest
 from unittest.mock import patch
+from zoneinfo import ZoneInfo
 
 
 PRODUCT = Path(__file__).resolve().parents[1]
@@ -29,11 +30,15 @@ from data_core.market_regime_intraday_model import (  # noqa: E402
 from data_core.market_regime_model import MarketRegimeAnalysisStore  # noqa: E402
 from market_regime_runtime import (  # noqa: E402
     HEALTH_SCHEMA_VERSION,
+    INTRADAY_SCHEDULER_SCHEMA_VERSION,
     MarketRegimeApiStore,
+    MarketRegimeIntradayRuntime,
     MarketRegimeRuntime,
     MarketRegimeRuntimeError,
+    _intraday_backoff_seconds,
     build_material_change_receipt,
     build_market_regime_api_payload,
+    configured_intraday_interval_minutes,
     configured_interval_hours,
 )
 from product.tests.test_market_regime_intraday_model import (  # noqa: E402
@@ -91,6 +96,37 @@ class FailedOverlayStore:
         raise RuntimeError("overlay compile failed")
 
 
+class FrozenIntradayDataStore:
+    def __init__(self, root: Path) -> None:
+        self.store = MarketRegimeIntradayDataStore(root)
+
+    def refresh(self) -> dict:
+        return self.store.latest()
+
+    def latest(self) -> dict:
+        return self.store.latest()
+
+
+class ForbiddenIntradayDataStore:
+    def __init__(self, root: Path) -> None:
+        self.root = root
+
+    def refresh(self) -> dict:
+        raise AssertionError("stopped scheduler must not collect")
+
+
+class FailAfterPublishApiStore:
+    def __init__(self, root: Path) -> None:
+        self.store = MarketRegimeApiStore(root)
+
+    def publish(self, *inputs):  # type: ignore[no-untyped-def]
+        self.store.publish(*inputs)
+        raise RuntimeError("failure after API pointer write")
+
+    def latest(self) -> dict:
+        return self.store.latest()
+
+
 class FixedClock:
     def __init__(self, *values: datetime) -> None:
         self.values = list(values)
@@ -135,12 +171,392 @@ def prepared_root(root: Path, *, name: str = "runtime") -> tuple[dict, dict, dic
     return verified, analysis, verified_intraday, overlay
 
 
+def live_rates() -> dict[str, float]:
+    return {
+        item.key: -0.001 if item.key in {"vix", "gold", "silver"} else 0.001
+        for item in INTRADAY_INSTRUMENTS
+    }
+
+
+def rejected_snapshot(
+    at: datetime,
+    *,
+    name: str,
+    status_code: int = 429,
+    provider_timestamp: str | None = None,
+) -> dict:
+    snapshot = intraday_snapshot(at, live_rates(), name=name)
+    shanghai = next(
+        row
+        for row in snapshot["instruments"]
+        if row["instrument"]["key"] == "shanghai"
+    )
+    shanghai["refresh_status"] = "rejected"
+    shanghai["freshness"] = "delayed"
+    if provider_timestamp is not None:
+        shanghai["provider_timestamp"] = provider_timestamp
+        shanghai["last_completed_bar_end_at"] = provider_timestamp
+    shanghai["refresh_failure"] = {
+        "reason": f"fixture provider HTTP status {status_code}",
+        "source_attempts": [
+            {
+                "endpoint": "fixture",
+                "status_code": status_code,
+                "accepted": False,
+            }
+        ],
+    }
+    snapshot["quality"] = "partial"
+    snapshot["accepted_count"] = 13
+    snapshot["rejected_count"] = 1
+    return resign_snapshot(snapshot)
+
+
 class MarketRegimeRuntimeTest(unittest.TestCase):
     def test_interval_is_restricted_to_four_or_twelve_hours(self) -> None:
         self.assertEqual(configured_interval_hours(4), 4)
         self.assertEqual(configured_interval_hours("12"), 12)
         with self.assertRaisesRegex(MarketRegimeRuntimeError, "4 or 12"):
             configured_interval_hours(6)
+
+    def test_intraday_interval_is_fixed_at_fifteen_minutes(self) -> None:
+        self.assertEqual(configured_intraday_interval_minutes(15), 15)
+        self.assertEqual(configured_intraday_interval_minutes("15"), 15)
+        with self.assertRaisesRegex(MarketRegimeRuntimeError, "15 minutes"):
+            configured_intraday_interval_minutes(5)
+        self.assertEqual(
+            [_intraday_backoff_seconds(15, count) for count in range(5)],
+            [900, 900, 1800, 3600, 3600],
+        )
+
+    def test_intraday_cycle_orders_stages_and_publishes_verified_identities(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared_root(root)
+            start = datetime(2026, 8, 6, 8, 1, tzinfo=timezone.utc)
+            finish = datetime(2026, 8, 6, 8, 2, tzinfo=timezone.utc)
+            runtime = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(start, finish),
+                intraday_store_factory=FrozenIntradayDataStore,
+            )
+            with patch.object(
+                runtime, "_write_phase", wraps=runtime._write_phase
+            ) as phase_writer:
+                result = runtime.cycle()
+            self.assertEqual(result["state"], "idle")
+            self.assertEqual(result["next_due_at"], "2026-08-06T08:17:00Z")
+            self.assertEqual(result["wait_seconds"], 900)
+            self.assertEqual(
+                [call.args[1] for call in phase_writer.call_args_list],
+                ["verify_collected", "compile", "verify_compiled", "publish"],
+            )
+            bundle = MarketRegimeApiStore(root).latest()
+            self.assertEqual(result["bundle_id"], bundle["bundle_id"])
+            self.assertEqual(
+                result["intraday_snapshot_id"], bundle["intraday_snapshot_id"]
+            )
+            self.assertEqual(
+                result["intraday_run_id"], bundle["intraday"]["run_id"]
+            )
+            self.assertEqual(result["overlay_id"], bundle["overlay_id"])
+            self.assertEqual(
+                result["material_change_receipt_id"],
+                bundle["material_change_receipt_id"],
+            )
+
+    def test_provider_backoff_is_bounded_and_recovery_resets_to_new_provider_age(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared_root(root)
+            first_at = datetime(2026, 8, 6, 8, 15, tzinfo=timezone.utc)
+            first_partial = rejected_snapshot(first_at, name="first-429")
+            persist_intraday(root, first_partial)
+            first = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(
+                    first_at + timedelta(minutes=1),
+                    first_at + timedelta(minutes=2),
+                ),
+                intraday_store_factory=FrozenIntradayDataStore,
+            ).cycle()
+            self.assertEqual(first["state"], "idle")
+            self.assertEqual(first["provider_failure_streak"], 1)
+            self.assertEqual(first["wait_seconds"], 900)
+            self.assertEqual(
+                first["last_provider_failure"]["failures"][0]["category"],
+                "rate_limited",
+            )
+
+            stale_provider_time = next(
+                row["provider_timestamp"]
+                for row in first_partial["instruments"]
+                if row["instrument"]["key"] == "shanghai"
+            )
+            second_at = datetime(2026, 8, 6, 8, 30, tzinfo=timezone.utc)
+            second_partial = rejected_snapshot(
+                second_at,
+                name="second-503",
+                status_code=503,
+                provider_timestamp=stale_provider_time,
+            )
+            persist_intraday(root, second_partial)
+            second = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(
+                    second_at + timedelta(minutes=1),
+                    second_at + timedelta(minutes=2),
+                ),
+                intraday_store_factory=FrozenIntradayDataStore,
+            ).cycle()
+            self.assertEqual(second["provider_failure_streak"], 2)
+            self.assertEqual(second["wait_seconds"], 1800)
+            self.assertEqual(
+                second["last_provider_failure"]["failures"][0]["category"],
+                "provider_server_error",
+            )
+            degraded_health = MarketRegimeRuntime(
+                root,
+                clock=FixedClock(second_at + timedelta(minutes=3)),
+            ).health()
+            self.assertGreaterEqual(
+                degraded_health["latest"]["layers"]["intraday"][
+                    "oldest_provider_age_seconds"
+                ],
+                20 * 60,
+            )
+
+            recovered_at = datetime(2026, 8, 6, 8, 45, tzinfo=timezone.utc)
+            recovered_snapshot = intraday_snapshot(
+                recovered_at,
+                live_rates(),
+                name="recovered",
+            )
+            persist_intraday(root, recovered_snapshot)
+            recovered = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(
+                    recovered_at + timedelta(minutes=1),
+                    recovered_at + timedelta(minutes=2),
+                ),
+                intraday_store_factory=FrozenIntradayDataStore,
+            ).cycle()
+            self.assertEqual(recovered["provider_failure_streak"], 0)
+            self.assertEqual(recovered["wait_seconds"], 900)
+            self.assertIsNone(recovered["last_error"])
+            recovered_health = MarketRegimeRuntime(
+                root,
+                clock=FixedClock(recovered_at + timedelta(minutes=3)),
+            ).health()
+            self.assertLessEqual(
+                recovered_health["latest"]["layers"]["intraday"][
+                    "oldest_provider_age_seconds"
+                ],
+                8 * 60,
+            )
+
+    def test_successful_fallback_keeps_complete_bundle_but_records_rate_limit(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared_root(root)
+            at = datetime(2026, 8, 6, 8, 15, tzinfo=timezone.utc)
+            snapshot = intraday_snapshot(at, live_rates(), name="fallback")
+            row = snapshot["instruments"][0]
+            row["source_attempts"] = [
+                {
+                    "endpoint": "query1",
+                    "status_code": 429,
+                    "accepted": False,
+                    "reason": "Yahoo HTTP status 429",
+                },
+                {
+                    "endpoint": "query2",
+                    "status_code": 200,
+                    "accepted": True,
+                    "reason": None,
+                },
+            ]
+            resign_snapshot(snapshot)
+            persist_intraday(root, snapshot)
+            result = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(
+                    at + timedelta(minutes=1),
+                    at + timedelta(minutes=2),
+                ),
+                intraday_store_factory=FrozenIntradayDataStore,
+            ).cycle()
+            self.assertEqual(result["state"], "idle")
+            self.assertEqual(result["intraday_quality"], "complete")
+            self.assertEqual(result["provider_failure_streak"], 1)
+            failure = result["last_provider_failure"]["failures"][0]
+            self.assertEqual(failure["category"], "rate_limited")
+            self.assertTrue(failure["degraded_fallback_succeeded"])
+            self.assertFalse(failure["asset_refresh_rejected"])
+
+    def test_closed_maintenance_and_lunch_are_not_provider_failures(self) -> None:
+        cases = {
+            "weekend": {item.key: "closed" for item in INTRADAY_INSTRUMENTS},
+            "lunch": {
+                item.key: (
+                    "lunch_break"
+                    if item.key in {"shanghai", "star50", "china_dividend"}
+                    else "open"
+                )
+                for item in INTRADAY_INSTRUMENTS
+            },
+            "maintenance": {
+                item.key: (
+                    "maintenance" if "futures_proxy" in item.key else "closed"
+                )
+                for item in INTRADAY_INSTRUMENTS
+            },
+        }
+        for name, states in cases.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                prepared_root(root, name=f"{name}-base")
+                at = datetime(2026, 8, 6, 8, 15, tzinfo=timezone.utc)
+                snapshot = intraday_snapshot(
+                    at,
+                    live_rates(),
+                    states=states,
+                    name=name,
+                )
+                persist_intraday(root, snapshot)
+                result = MarketRegimeIntradayRuntime(
+                    root,
+                    clock=FixedClock(
+                        at + timedelta(minutes=1),
+                        at + timedelta(minutes=2),
+                    ),
+                    intraday_store_factory=FrozenIntradayDataStore,
+                ).cycle()
+                self.assertEqual(result["state"], "idle")
+                self.assertEqual(result["provider_failure_streak"], 0)
+                self.assertEqual(result["wait_seconds"], 900)
+                self.assertIsNone(result["last_error"])
+
+    def test_intraday_next_due_is_elapsed_time_safe_across_dst_fallback(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared_root(root)
+            local = datetime(
+                2026,
+                11,
+                1,
+                1,
+                55,
+                tzinfo=ZoneInfo("America/New_York"),
+                fold=0,
+            )
+            result = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(local, local),
+                intraday_store_factory=FrozenIntradayDataStore,
+            ).cycle()
+            self.assertEqual(result["next_due_at"], "2026-11-01T06:10:00Z")
+
+    def test_intraday_stop_switch_prevents_collection_and_is_reversible(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            requested = datetime(2026, 8, 6, 8, 0, tzinfo=timezone.utc)
+            observed = requested + timedelta(seconds=1)
+            runtime = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(requested, observed),
+                intraday_store_factory=ForbiddenIntradayDataStore,
+            )
+            runtime.request_stop(reason="test")
+            result = runtime.cycle()
+            self.assertEqual(result["state"], "stopped")
+            self.assertTrue(result["stop_requested"])
+            self.assertEqual(runtime.status()["state"], "stopped")
+            runtime.clear_stop()
+            self.assertFalse(runtime.stop_requested())
+
+    def test_failed_publish_rolls_back_reachable_api_and_overlay_history(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            inputs = prepared_root(root)
+            MarketRegimeApiStore(root).publish(*inputs)
+            api_before = (root / "api" / "latest.json").read_bytes()
+            overlay_before = (
+                root / "intraday" / "overlay" / "latest.json"
+            ).read_bytes()
+            previous_bundle = MarketRegimeApiStore(root).latest()
+            previous_overlay = MarketRegimeIntradayOverlayStore(root).latest()
+            at = datetime(2026, 8, 6, 8, 15, tzinfo=timezone.utc)
+            persist_intraday(
+                root,
+                intraday_snapshot(at, live_rates(), name="rollback"),
+            )
+            result = MarketRegimeIntradayRuntime(
+                root,
+                clock=FixedClock(
+                    at + timedelta(minutes=1),
+                    at + timedelta(minutes=2),
+                ),
+                intraday_store_factory=FrozenIntradayDataStore,
+                api_store_factory=FailAfterPublishApiStore,
+            ).cycle()
+            self.assertEqual(result["state"], "failed")
+            self.assertEqual(result["failed_phase"], "publish")
+            self.assertEqual((root / "api" / "latest.json").read_bytes(), api_before)
+            self.assertEqual(
+                (root / "intraday" / "overlay" / "latest.json").read_bytes(),
+                overlay_before,
+            )
+            self.assertEqual(MarketRegimeApiStore(root).latest(), previous_bundle)
+            self.assertEqual(
+                MarketRegimeIntradayOverlayStore(root).latest(), previous_overlay
+            )
+
+    def test_intraday_busy_and_interrupted_states_are_queryable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runtime = MarketRegimeIntradayRuntime(root)
+            descriptor = runtime._try_lock()
+            self.assertIsNotNone(descriptor)
+            try:
+                busy = MarketRegimeIntradayRuntime(root).cycle()
+                self.assertEqual(busy["state"], "busy")
+                self.assertFalse(runtime.status_path.exists())
+            finally:
+                runtime._unlock(descriptor)
+            runtime.status_path.parent.mkdir(parents=True, exist_ok=True)
+            runtime.status_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                        "state": "running",
+                        "phase": "compile",
+                        "interval_minutes": 15,
+                    }
+                ),
+                encoding="utf-8",
+            )
+            interrupted = runtime.status()
+            self.assertEqual(interrupted["state"], "interrupted")
+            self.assertEqual(interrupted["phase"], "compile")
+
+    def test_daily_and_intraday_cycles_share_one_cohesive_pipeline_lock(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            daily = MarketRegimeRuntime(root)
+            pipeline = daily._try_pipeline_lock()
+            self.assertIsNotNone(pipeline)
+            try:
+                intraday_busy = MarketRegimeIntradayRuntime(root).cycle()
+                self.assertEqual(intraday_busy["state"], "busy")
+                self.assertEqual(
+                    intraday_busy["contention"], "cohesive_pipeline"
+                )
+                daily_busy = MarketRegimeRuntime(root).cycle()
+                self.assertEqual(daily_busy["state"], "busy")
+                self.assertEqual(daily_busy["contention"], "cohesive_pipeline")
+            finally:
+                daily._unlock(pipeline)
 
     def test_api_bundle_has_nine_charts_three_probes_and_verified_identity(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
