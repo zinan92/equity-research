@@ -3016,3 +3016,50 @@ data.
   buying, accepting terms, collecting holdings or charging users.
 - Replacing Yahoo/Tencent with Wind, Choice, Twelve Data or another provider
   changes the scope hash and invalidates all generated requests and approvals.
+
+# 2026-08-08 · Market Regime Live keeps structural and intraday truth separate
+
+## Decision
+
+Restore the active Market Regime product to Park's requested local/private
+cross-asset analysis page.  Keep the completed-daily model as the structural
+regime and add a separate experimental 5-minute overlay in seven sequential
+stories under Issue #717.  Describe the operating promise as a 15-minute
+target refresh with provider delay potentially unknown, never as exchange real
+time.  Preserve the personal-holdings proposal as superseded history and close
+its external-approval task without outreach.
+
+## Why
+
+The current 4-hour loop repeatedly recollects completed daily bars and normally
+cannot answer what changed within the session.  A useful intraday product must
+make cash/proxy identities, asset-specific sessions, original provider time and
+last-good age visible before it calculates any delta.  Keeping the overlay
+separate prevents a noisy or delayed 5-minute move from silently rewriting a
+structural regime.
+
+## Evidence
+
+- Tracking Issue #717 and S0 contract Issue #718.
+- `docs/market-regime/live-v1-contract.md`.
+- `scripts/probe_market_regime_intraday_sources.py` preserves full raw responses
+  under the gitignored runtime and emits a hash-bound safe receipt.
+- Issue #716 records that no external request, purchase, approval, user contact,
+  holdings collection or notification setup occurred before it was closed.
+
+## Gotchas
+
+- A 15-minute scheduler is a polling target, not a data-latency guarantee.
+  `provider_timestamp`, `received_at`, `observed_at` and current age are
+  different facts and must remain different fields.
+- `^GSPC` and `ES=F` are different instruments.  `^IXIC` and `NQ=F` are even
+  less interchangeable because NQ represents Nasdaq-100 futures rather than
+  the Nasdaq Composite.  A proxy relationship never authorizes price splicing.
+- HTTP 200 proves only that one response arrived.  It does not prove valid
+  bars, reliable uptime, exchange-real-time status or redistribution rights.
+  Conversely, one 429 is not proof that a source is generally unavailable.
+- Weekends, holidays, A-share lunch, US DST and futures maintenance are
+  asset-specific states.  Closed or insufficient evidence must not be
+  translated into bearishness or “does not confirm”.
+- Last-good fallback keeps its original timestamps.  Serving or rehashing an
+  old record can never make it fresh.

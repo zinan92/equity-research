@@ -1,8 +1,36 @@
 # REGISTRY
 
-## 2026-08-07 · Personal risk-card auditable approval packets (Issue #714)
+## 2026-08-08 · Market Regime Live v1 direction contract (Issue #718)
 
-Now: the five M1.0 approvals have deterministic JSON/Markdown request packets
+Now: the active product direction is again the local/private cross-asset market
+reader requested by Park.  The completed daily layer remains the structural
+regime.  Phase 2 adds a separate intraday overlay whose user job is to answer,
+within roughly 30 seconds, what materially changed since the previous verified
+overlay, which observable market signals contributed most, whether the A-share
+tape confirms/diverges/is closed/is insufficient, and which two conditions to
+watch next.  The frozen boundary is
+[`docs/market-regime/live-v1-contract.md`](docs/market-regime/live-v1-contract.md).
+
+The product promises a 15-minute target refresh, not exchange real time.
+Provider timestamps, receipt times, age, session state and delayed/unknown
+quality remain visible per asset.  Cash indices and futures proxies are
+different identities and can never be stitched or silently substituted.  The
+daily structural verdict cannot be overwritten by the intraday layer.  Current
+Yahoo/Tencent inputs remain supplementary, Park-local, non-publishable and
+non-actionable.
+
+The personal-holdings risk-card path in Issues #712/#714 was an agent-proposed
+route that Park did not adopt.  It is retained below as superseded history, not
+as current Next.  Issue #716 was closed without outreach, purchase, approval,
+user contact, holdings intake or notification setup.
+
+Next: execute Issue #719 only after #718 is merged: build the fixed Yahoo 5m
+schema, proxy/session registry and replayable local data authority.  Do not
+start Tencent integration, model, API, scheduler or UI in the same story.
+
+## 2026-08-07 · Superseded: personal risk-card approval packets (Issue #714)
+
+Historical record: the five proposed M1.0 approvals have deterministic JSON/Markdown request packets
 bound to approval scope
 `fbd101f1933bbc3603d4e35f4093d9bddede2520cd903a97b57d8aa6d71746bd`.
 The approval schema and verifier now require the authority type and safe
@@ -29,19 +57,13 @@ candidates, not approved sources.  The canonical entry receipt is unchanged
 and truthfully blocked by all five approvals; no real-user contact, holdings,
 delivery, purchase, contract acceptance or payment is authorized.
 
-Next: Park chooses whether to pursue the current Yahoo/Tencent scope or replace
-it with a licensed A-share plus global provider and separately authorizes
-outreach, identity enrollment and a separate Park-approved trust-root
-enrollment.  Any provider/source/field change returns to
-the contract step and regenerates all five packets.  M1 can advance only after
-the trust policy becomes ready, the four external approval originals are
-independently checked, Park issues the exact-scope owner receipt and
-canonical `--require-go` passes without test, replay-time or path overrides;
-do not start M2.
+Next: none.  This branch is superseded by #717 and grants no authorization to
+restart outreach, identity enrollment, approval collection, holdings intake or
+M1/M2 work.  A future revival would require a new Park decision and contract.
 
-## 2026-08-07 · Personal holdings risk card M1.0 entry gate (Issue #712)
+## 2026-08-07 · Superseded: personal holdings risk-card entry gate (Issue #712)
 
-Now: the approved 08:45 personal-holdings risk-card roadmap has a versioned,
+Historical record: the proposed 08:45 personal-holdings risk-card roadmap has a versioned,
 fail-closed M1.0 entry contract.  Its frozen target is a maximum 20-person CN
 paid concierge cohort using only ticker, portfolio weight, holding horizon and
 user-defined risk rules.  The deterministic verifier binds that scope to five
@@ -54,10 +76,8 @@ review, notification-channel approval and Park owner approval.  Therefore no
 test-user contact, real holdings intake, external card delivery or payment is
 authorized.  The current Yahoo/Tencent radar remains local evaluation only.
 
-Next: obtain five safe, scope-bound approval receipts in a separate issue and
-run `python3 scripts/verify_personal_holdings_risk_card_entry.py --require-go`.
-Only a passing production receipt permits the M1-S2 3–5 person smoke; do not
-start M2 or treat the blocked contract as user validation.
+Next: none.  The route was not adopted and remains historical, blocked and
+non-authorizing.  Do not obtain approvals, contact users or collect holdings.
 
 ## 2026-08-06 · Market Regime Radar M4 local reader (Issue #710)
 

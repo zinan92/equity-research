@@ -1,10 +1,10 @@
 # A 股开盘前个人持仓风险卡 · 产品路线图
 
-> 状态：`Execution approved 2026-08-07 · M1 in progress`
+> 状态：`Superseded / unadopted 2026-08-08 · historical proposal only`
 >
-> 已批准方向：以“08:45 A 股开盘前 90 秒个人持仓风险卡”为首个场景。
+> 该方向未被 Park 采用。当前 canonical Next 是 Issue #717 的本地/私有跨资产盘中分析页。
 >
-> Park 以“去做吧，直到做完”批准按 5 个 v1 milestone + 1 个有条件 post-v1 milestone 执行。该批准授权按“一 Story = 一 issue = 一 branch = 一 PR”开发，不替代 M1.0 所需的数据权利、专项合规、个人信息、通知渠道或收费批准。
+> 下文保留当时的代理提案以维持 provenance；它不是授权、产品路线或执行队列。不得据此外联、收集持仓、发送通知、采购、付款或进入任一 milestone。
 
 ## 1. 结论
 
