@@ -410,6 +410,52 @@ class MarketRegimeIntradayModelTest(unittest.TestCase):
         duplicate = compile_intraday_overlay(self.structural, snapshot, first)
         self.assertEqual(duplicate, first)
 
+    def test_structural_rebind_reuses_only_the_identical_intraday_snapshot(self) -> None:
+        snapshot = intraday_snapshot(self.base, self.positive, name="rebind-input")
+        previous = compile_intraday_overlay(self.structural, snapshot)
+        rebound_structural = structural_analysis(a_rate=-0.002, name="rebound")
+
+        rebound = compile_intraday_overlay(
+            rebound_structural,
+            snapshot,
+            previous,
+        )
+        self.assertNotEqual(rebound["overlay_id"], previous["overlay_id"])
+        self.assertEqual(rebound["generated_at"], previous["generated_at"])
+        self.assertEqual(
+            rebound["intraday"]["snapshot_id"],
+            previous["intraday"]["snapshot_id"],
+        )
+        self.assertEqual(
+            rebound["structural"]["analysis_id"],
+            rebound_structural["analysis_id"],
+        )
+        self.assertEqual(rebound["baseline_overlay_id"], previous["overlay_id"])
+        self.assertEqual(rebound["transition"]["pending_count"], 1)
+        self.assertIn(
+            "structural_analysis_changed",
+            rebound["material_change"]["reasons"],
+        )
+        self.assertEqual(
+            compile_intraday_overlay(rebound_structural, snapshot, rebound),
+            rebound,
+        )
+
+        different_same_time = intraday_snapshot(
+            self.base,
+            self.negative,
+            name="different-same-time",
+        )
+        with self.assertRaisesRegex(
+            MarketRegimeIntradayModelError,
+            "new intraday snapshot must be later",
+        ):
+            compile_intraday_overlay(
+                rebound_structural,
+                different_same_time,
+                previous,
+            )
+
     def test_tampered_structural_snapshot_or_overlay_identity_fails_closed(self) -> None:
         bad_structural = json.loads(json.dumps(self.structural))
         bad_structural["analysis_id"] = "market-regime-analysis:" + "0" * 64

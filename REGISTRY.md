@@ -1,5 +1,22 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime daily structural rebind repair (Issue #731)
+
+Now: a completed-daily refresh may rebind the exact latest verified intraday
+snapshot when, and only when, the structural analysis identity changed.  The
+new cohesive overlay keeps the previous overlay as its material-change
+baseline, resets structural-relation persistence, appends immutable history and
+publishes API v2.  Exact duplicate inputs still reuse the existing overlay;
+different equal-time or earlier intraday snapshots still fail closed.
+
+The regression reproduces the observed launchd order: one successful intraday
+overlay exists, the daily source/analysis advances without a newer intraday
+snapshot, and the daily scheduler must finish idle with a cohesive reachable
+bundle.  No provider, threshold, score, session, UI, forecast, action or trading
+boundary changed.  Next: rebase Issue #724 onto this repair, redeploy the three
+local services and repeat the real weekend-closed acceptance before claiming S4
+complete.
+
 ## 2026-08-08 · Market Regime Live S3b target scheduler (Issue #723)
 
 Now: the completed-daily scheduler remains restricted to 4h/12h.  A separate
