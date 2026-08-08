@@ -3149,3 +3149,53 @@ from being promoted into an intraday confirmation.
   an individual m5 failure must not degrade the other two.
 - `SH_close` during lunch or a holiday is session evidence, not a bearish
   signal.  Conflicting same-day `SH_open` at lunch becomes unknown.
+
+# 2026-08-08 · Intraday overlays change only after verified persistence
+
+## Decision
+
+Keep the completed-daily regime immutable and compile a separate experimental
+four-way A-share relation from currently accepted, open and `live_candidate`
+5-minute evidence.  Freeze enter at 18, exit at 8, persistence at two unique
+verified overlays, directional cooldown at 30 minutes, and material cross-
+asset score delta at 15 points.  Compare every delta with the previous
+successfully verified overlay and store each new version in an immutable,
+hash-linked history.
+
+## Why
+
+A 15-minute poll is useful only when a small bar revision cannot make the page
+oscillate between stories.  Persistence and hysteresis absorb boundary noise;
+cooldown makes an opposite candidate visible without immediately replacing the
+stable relation.  The separate evidence-state path still degrades closed,
+unknown or genuinely missing inputs immediately, so stability never becomes a
+pretext for presenting stale confidence.
+
+## Evidence
+
+- Issue #721 and `docs/market-regime/live-model-contract.md`.
+- `product/data_core/market_regime_intraday_model.py` plus fixed replay tests
+  covering threshold boundaries, persistence, cooldown, weak-signal exit,
+  closed/open recovery, partial/unknown inputs, duplicate/failure behavior,
+  cash/futures group separation and artifact/history tampering.
+- A local pure replay over the real S1b 14/14 Saturday snapshot returned
+  `closed` for Shanghai, STAR 50 and SSE Dividend.  Its structural input was a
+  fixture and no history was persisted, so the observation is intentionally
+  bounded to weekend session handling.
+
+## Gotchas
+
+- A last-good artifact can retain an old `closed` session label.  The overlay
+  may assert current `closed` only when all three A-share session records were
+  accepted in the current refresh; otherwise it reports `insufficient`.
+- `confirms` and `diverges` compare the A-share impulse with the frozen daily
+  A-share structure.  They do not upgrade, replace or recompute the global
+  structural Risk On/Off label.
+- Cash and futures signals can both be eligible, but the shared group weight is
+  divided between their separate evidence identities.  Their price histories
+  are never stitched and one is never silently substituted for the other.
+- The first verified overlay has no baseline and therefore does not claim a
+  material change.  Duplicate inputs return that existing overlay without
+  appending history or advancing a persistence candidate.
+- “Driver” is a signed mathematical contribution with a frozen artifact hash,
+  not a news narrative or causal explanation.
