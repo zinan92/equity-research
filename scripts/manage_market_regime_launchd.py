@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -16,8 +17,9 @@ from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEDULER_LABEL = "com.park.market-regime.scheduler"
+INTRADAY_SCHEDULER_LABEL = "com.park.market-regime.intraday-scheduler"
 WEB_LABEL = "com.park.market-regime.web"
-LABELS = (SCHEDULER_LABEL, WEB_LABEL)
+LABELS = (SCHEDULER_LABEL, INTRADAY_SCHEDULER_LABEL, WEB_LABEL)
 
 
 class LaunchdManagementError(RuntimeError):
@@ -37,6 +39,7 @@ def _validate_repo_root(value: Path | str) -> Path:
     required = (
         root / "product" / "server.py",
         root / "scripts" / "run_market_regime_scheduler.py",
+        root / "scripts" / "run_market_regime_intraday_scheduler.py",
         root / "product" / "static" / "market-regime.html",
     )
     if not all(path.is_file() for path in required):
@@ -50,6 +53,7 @@ def build_service_plists(
     state_root: Path | str,
     python_executable: Path | str = sys.executable,
     interval_hours: int = 4,
+    intraday_interval_minutes: int = 15,
     port: int = 8896,
 ) -> dict[str, dict[str, Any]]:
     repo = _validate_repo_root(repo_root)
@@ -57,6 +61,8 @@ def build_service_plists(
     python = Path(python_executable).expanduser().resolve()
     if interval_hours not in {4, 12}:
         raise LaunchdManagementError("interval must be 4 or 12 hours")
+    if intraday_interval_minutes != 15:
+        raise LaunchdManagementError("intraday interval must be 15 minutes")
     if port < 1024 or port > 65535:
         raise LaunchdManagementError("port must be between 1024 and 65535")
     runtime = state / "runtime"
@@ -86,6 +92,21 @@ def build_service_plists(
         "StandardOutPath": str(logs / "scheduler.stdout.log"),
         "StandardErrorPath": str(logs / "scheduler.stderr.log"),
     }
+    intraday_scheduler = {
+        **common,
+        "Label": INTRADAY_SCHEDULER_LABEL,
+        "KeepAlive": {"SuccessfulExit": False},
+        "ProgramArguments": [
+            str(python),
+            str(repo / "scripts" / "run_market_regime_intraday_scheduler.py"),
+            "--root",
+            str(runtime),
+            "--interval-minutes",
+            str(intraday_interval_minutes),
+        ],
+        "StandardOutPath": str(logs / "intraday-scheduler.stdout.log"),
+        "StandardErrorPath": str(logs / "intraday-scheduler.stderr.log"),
+    }
     web_environment = {
         **common["EnvironmentVariables"],
         "PARK_DASHBOARD_DB": str(state / "dashboard.db"),
@@ -109,7 +130,11 @@ def build_service_plists(
         "StandardOutPath": str(logs / "web.stdout.log"),
         "StandardErrorPath": str(logs / "web.stderr.log"),
     }
-    return {SCHEDULER_LABEL: scheduler, WEB_LABEL: web}
+    return {
+        SCHEDULER_LABEL: scheduler,
+        INTRADAY_SCHEDULER_LABEL: intraday_scheduler,
+        WEB_LABEL: web,
+    }
 
 
 def _atomic_plist(path: Path, payload: dict[str, Any]) -> None:
@@ -147,6 +172,7 @@ def install(
     launch_agents_root: Path | str,
     interval_hours: int,
     port: int,
+    intraday_interval_minutes: int = 15,
     python_executable: Path | str = sys.executable,
     load: bool = True,
 ) -> dict[str, Any]:
@@ -159,6 +185,7 @@ def install(
         state_root=state,
         python_executable=python_executable,
         interval_hours=interval_hours,
+        intraday_interval_minutes=intraday_interval_minutes,
         port=port,
     )
     paths: dict[str, str] = {}
@@ -169,7 +196,7 @@ def install(
     if load:
         for label in LABELS:
             _launchctl("bootout", f"{_domain()}/{label}", check=False)
-        for label in (SCHEDULER_LABEL, WEB_LABEL):
+        for label in LABELS:
             _launchctl("bootstrap", _domain(), paths[label])
             _launchctl("enable", f"{_domain()}/{label}")
             _launchctl("kickstart", "-k", f"{_domain()}/{label}")
@@ -178,12 +205,19 @@ def install(
         "repo_root": str(Path(repo_root).expanduser().resolve()),
         "state_root": str(state),
         "interval_hours": interval_hours,
+        "intraday_interval_minutes": intraday_interval_minutes,
+        "intraday_stop_switch": str(
+            state / "runtime" / "intraday" / "scheduler" / "STOP"
+        ),
         "url": f"http://127.0.0.1:{port}/market-regime",
         "plists": paths,
     }
 
 
-def service_status(*, port: int, load: bool = True) -> dict[str, Any]:
+def service_status(
+    *, state_root: Path | str, port: int, load: bool = True
+) -> dict[str, Any]:
+    state = Path(state_root).expanduser().resolve()
     services: dict[str, Any] = {}
     for label in LABELS:
         if not load:
@@ -202,7 +236,68 @@ def service_status(*, port: int, load: bool = True) -> dict[str, Any]:
     return {
         "services": services,
         "health": health,
+        "intraday_stop_requested": (
+            state / "runtime" / "intraday" / "scheduler" / "STOP"
+        ).exists(),
         "url": f"http://127.0.0.1:{port}/market-regime",
+    }
+
+
+def set_intraday_enabled(
+    *,
+    enabled: bool,
+    state_root: Path | str,
+    launch_agents_root: Path | str,
+    load: bool = True,
+) -> dict[str, Any]:
+    state = Path(state_root).expanduser().resolve()
+    agents = Path(launch_agents_root).expanduser().resolve()
+    stop_path = state / "runtime" / "intraday" / "scheduler" / "STOP"
+    target = f"{_domain()}/{INTRADAY_SCHEDULER_LABEL}"
+    if enabled:
+        try:
+            stop_path.unlink()
+        except FileNotFoundError:
+            pass
+        if load:
+            plist_path = agents / f"{INTRADAY_SCHEDULER_LABEL}.plist"
+            if not plist_path.is_file():
+                raise LaunchdManagementError(
+                    "intraday launch agent is not installed"
+                )
+            _launchctl("bootout", target, check=False)
+            _launchctl("bootstrap", _domain(), str(plist_path))
+            _launchctl("enable", target)
+            _launchctl("kickstart", "-k", target)
+    else:
+        stop_path.parent.mkdir(parents=True, exist_ok=True)
+        marker = {
+            "schema_version": "market-regime-intraday-scheduler-v1",
+            "requested_at": datetime.now(timezone.utc).isoformat().replace(
+                "+00:00", "Z"
+            ),
+            "reason": "operator_requested",
+        }
+        descriptor, temporary = tempfile.mkstemp(
+            prefix=f".{stop_path.name}.", dir=stop_path.parent
+        )
+        try:
+            with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+                json.dump(marker, handle, ensure_ascii=False, sort_keys=True)
+                handle.write("\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.replace(temporary, stop_path)
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
+        if load:
+            _launchctl("bootout", target, check=False)
+    return {
+        "status": "started" if enabled else "stopped",
+        "intraday_stop_requested": not enabled,
+        "stop_switch": str(stop_path),
+        "runtime_preserved": str(state / "runtime"),
     }
 
 
@@ -239,9 +334,16 @@ def main() -> int:
     install_parser = subparsers.add_parser("install")
     install_parser.add_argument("--repo-root", type=Path, default=ROOT)
     install_parser.add_argument("--interval-hours", type=int, choices=(4, 12), default=4)
+    install_parser.add_argument(
+        "--intraday-interval-minutes", type=int, choices=(15,), default=15
+    )
     install_parser.add_argument("--no-load", action="store_true")
     status_parser = subparsers.add_parser("status")
     status_parser.add_argument("--no-launchctl", action="store_true")
+    stop_parser = subparsers.add_parser("stop-intraday")
+    stop_parser.add_argument("--no-launchctl", action="store_true")
+    start_parser = subparsers.add_parser("start-intraday")
+    start_parser.add_argument("--no-launchctl", action="store_true")
     uninstall_parser = subparsers.add_parser("uninstall")
     uninstall_parser.add_argument("--no-launchctl", action="store_true")
     args = parser.parse_args()
@@ -251,11 +353,23 @@ def main() -> int:
             state_root=args.state_root,
             launch_agents_root=args.launch_agents_root,
             interval_hours=args.interval_hours,
+            intraday_interval_minutes=args.intraday_interval_minutes,
             port=args.port,
             load=not args.no_load,
         )
     elif args.command == "status":
-        result = service_status(port=args.port, load=not args.no_launchctl)
+        result = service_status(
+            state_root=args.state_root,
+            port=args.port,
+            load=not args.no_launchctl,
+        )
+    elif args.command in {"stop-intraday", "start-intraday"}:
+        result = set_intraday_enabled(
+            enabled=args.command == "start-intraday",
+            state_root=args.state_root,
+            launch_agents_root=args.launch_agents_root,
+            load=not args.no_launchctl,
+        )
     else:
         result = uninstall(
             state_root=args.state_root,

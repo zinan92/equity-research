@@ -67,8 +67,58 @@ or incoherent object may not.
 
 The completed-daily 4/12-hour cycle recompiles an overlay against the newest
 verified intraday snapshot before publishing, so a new structural analysis can
-never be paired with an old overlay identity. S3b will add a separate 15-minute
-target cycle that refreshes intraday data and uses the same publish gate.
+never be paired with an old overlay identity.
+
+## Two schedulers, one serial publication pipeline
+
+The structural scheduler remains configurable only at 4 or 12 hours.  The
+separate intraday scheduler is fixed at a 15-minute target interval.  “Target”
+means the next due time is calculated after the previous cycle finishes; it is
+not tick data, a WebSocket, an exchange feed, or a promise that the provider
+will be fresh every 15 minutes.
+
+Each scheduler has its own non-blocking same-kind lock.  Both also acquire one
+shared cohesive-pipeline lock before mutation, so a structural refresh and an
+intraday refresh cannot interleave their analysis, overlay, or API identities.
+Lock contention is `busy`, leaves status/latest pointers unchanged, and retries
+after 30 seconds rather than waiting another 4/12 hours.
+
+Every intraday cycle records and executes these phases in order:
+
+1. `collect` one immutable raw/normalized attempt per configured source;
+2. `verify_collected` by reading the hash-bound latest intraday snapshot;
+3. `compile` the overlay against the locked structural analysis;
+4. `verify_compiled` by reading the overlay/history chain;
+5. `publish` and re-read the cohesive API bundle.
+
+A successfully verified partial snapshot is an honest successful pipeline
+cycle, not a hidden full cycle.  A rejected asset keeps its original
+latest-good provider time, and API health calculates age from that old time.
+If a primary request returns 429/5xx/bad data but the frozen fallback succeeds,
+the bundle may remain complete while the scheduler still records a degraded-
+fallback provider failure.
+
+Provider or cycle failure streaks use a bounded delay of 15, 30, then at most
+60 minutes.  There is no rapid retry loop.  Accepted `closed`, `post`,
+`lunch_break`, or `maintenance` session evidence is not a provider failure and
+does not trigger backoff.  When all A-share dependencies are in known non-open
+states, the overlay publishes `closed`; it never changes the label to `live`.
+
+Before overlay compilation, the runtime snapshots the reachable overlay and
+API pointers.  A caught compile/publish/verification failure restores those
+pointer bytes, so the prior API and hash-linked history heads remain current;
+new immutable orphan artifacts may remain as audit evidence.  An interrupted
+process is reported as `interrupted` when its last status says `running` but
+its lock is free.
+
+The stop switch is
+`intraday/scheduler/STOP` under the external runtime root (or
+`PARK_MARKET_REGIME_INTRADAY_ENABLED=false`).  It prevents another provider
+request immediately between cycles.  An already-running bounded cycle drains
+before the in-process loop records `stopped`; the launchd operator command may
+instead unload it immediately, in which case a mid-cycle status is honestly
+reported as `interrupted`.  Clearing the switch and starting the agent is
+reversible and does not delete runtime evidence.
 
 ## Read-only HTTP and health
 
@@ -77,7 +127,8 @@ authenticated/entitled and `Cache-Control: no-store`. They only read and
 verify persisted artifacts. A GET cannot fetch Yahoo/Tencent, refresh data,
 compile either model, append overlay history or advance an API pointer.
 
-Health separates structural, intraday, overlay and API bundle status. Each
+Health separates the structural and intraday schedulers plus structural,
+intraday, overlay and API bundle status. Each
 layer exposes its original last-success/evidence time, current age calculated
 from that frozen time, quality/partial state, session/freshness counts and the
 last scheduler error. Re-serving health may increase age; it never rewrites or

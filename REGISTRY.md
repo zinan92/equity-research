@@ -1,5 +1,34 @@
 # REGISTRY
 
+## 2026-08-08 · Market Regime Live S3b target scheduler (Issue #723)
+
+Now: the completed-daily scheduler remains restricted to 4h/12h.  A separate
+intraday service executes one serial `collect → verify → compile → verify →
+publish` pipeline on a 15-minute target interval.  The two services have
+separate non-blocking locks and share one cohesive-pipeline lock, so structural
+and intraday identities cannot interleave during publication.  Contention
+retries after 30 seconds without changing a latest pointer.
+
+Rejected assets and degraded fallback attempts preserve exact provider
+receipts.  429, 5xx and bad/unavailable responses back off at 15, 30 and at
+most 60 minutes; a successful primary/fallback recovery resets the streak and
+health age is again calculated from the new provider time.  Accepted closed,
+lunch and maintenance session states do not trigger failure backoff.  A valid
+partial or closed pipeline may publish honest state, while a caught downstream
+failure restores the previous reachable overlay-history and API pointers.
+
+Intraday status exposes collect/verify/compile/publish phase, idle/busy/failed/
+interrupted/stopped state, last/full success, next due, failure streak/backoff,
+and structural/intraday/overlay/receipt/bundle identities.  The reversible STOP
+file and launchd start/stop commands preserve all runtime evidence.  The
+contract is
+[`docs/market-regime/live-runtime-contract.md`](docs/market-regime/live-runtime-contract.md).
+
+The repository now contains the third launchd service definition, but this
+story does not claim that it is installed or live on the target Mac.  Next:
+execute Issue #724 from latest main to migrate the local page, install/restart
+the services, collect visible runtime health and capture acceptance evidence.
+
 ## 2026-08-08 · Market Regime Live S3a cohesive API (Issue #722)
 
 Now: `market-regime-api-v2` publishes one local, read-only identity chain across

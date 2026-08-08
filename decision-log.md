@@ -3244,3 +3244,53 @@ closed states the same integrity guarantees as a full state.
   timestamp when the endpoint is called.
 - The material receipt lists signed contribution evidence.  It does not turn
   those signals into a causal explanation or a forecast.
+
+# 2026-08-08 · Intraday is a 15-minute target loop, not a realtime promise
+
+## Decision
+
+Keep completed-daily refresh at 4h/12h and run intraday collection in a
+separate service fixed at a 15-minute target interval.  Serialize both through
+one cohesive-pipeline lock.  Back off provider or pipeline failures at 15, 30,
+then at most 60 minutes; expose every state and identity through health.  Use a
+runtime STOP marker plus reversible launchd start/stop commands.
+
+## Why
+
+The user needs a market picture that updates without opening the page or
+manually running a command, but source frequency is not the same as exchange
+realtime.  A fixed target cadence, bounded retries and explicit freshness make
+the product useful without turning a delayed/free provider into a false live-
+feed claim.  The shared lock keeps a daily structural update from racing an
+intraday overlay publication.
+
+## Evidence
+
+- Issue #723 and the scheduler section of
+  `docs/market-regime/live-runtime-contract.md`.
+- Runtime tests cover exact stage order, same-kind/pipeline contention,
+  429/5xx and degraded fallback, 15/30/60-minute backoff, full recovery, stale
+  age preservation, closed/lunch/maintenance, DST fallback, STOP, interrupted
+  status and pointer rollback after a post-publication exception.
+- Launchd tests cover all three service plists, the fixed 15-minute argument,
+  crash-only KeepAlive for the intraday process, reversible stop/start and
+  runtime preservation on uninstall.
+
+## Gotchas
+
+- A fallback can produce a complete 14-asset snapshot and still be degraded.
+  If the primary request was rate-limited or malformed, the failure receipt and
+  backoff remain visible instead of being erased by the fallback success.
+- A partial provider cycle that verifies and publishes is `idle` with an
+  attached provider error, not a failed pipeline.  A compile/publish exception
+  is `failed` and restores the previous reachable API and overlay-history
+  pointers.  Immutable orphan artifacts are retained rather than deleted.
+- Latest-good time belongs to each provider asset.  Re-serving health or
+  publishing a partial bundle cannot reset it; only a newly accepted provider
+  observation can reduce age.
+- The STOP file prevents another in-process cycle.  `stop-intraday` may unload
+  launchd during a cycle, so the last running phase can correctly appear as
+  `interrupted` until the service is started again.
+- The launchd plist is code/configuration evidence only.  Installation,
+  process survival, real provider latency and browser visibility remain S4
+  runtime acceptance work.

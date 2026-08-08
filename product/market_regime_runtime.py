@@ -43,7 +43,13 @@ MATERIAL_RECEIPT_SCHEMA_VERSION = "market-regime-material-change-receipt-v1"
 MATERIAL_THRESHOLD_POLICY_VERSION = "market-regime-intraday-thresholds-v1"
 HEALTH_SCHEMA_VERSION = "market-regime-health-v2"
 SCHEDULER_SCHEMA_VERSION = "market-regime-scheduler-v1"
+INTRADAY_SCHEDULER_SCHEMA_VERSION = "market-regime-intraday-scheduler-v1"
+PROVIDER_FAILURE_SCHEMA_VERSION = "market-regime-provider-failure-v1"
 ALLOWED_INTERVAL_HOURS = (4, 12)
+ALLOWED_INTRADAY_INTERVAL_MINUTES = (15,)
+INTRADAY_MAX_BACKOFF_SECONDS = 60 * 60
+SCHEDULER_LOCK_RETRY_SECONDS = 30
+STOP_POLL_SECONDS = 5
 PRIMARY_CHART_KEYS = (
     "sp500",
     "nasdaq",
@@ -76,6 +82,25 @@ def configured_interval_hours(value: int | str | None = None) -> int:
         raise MarketRegimeRuntimeError("market-regime interval must be 4 or 12 hours") from exc
     if interval not in ALLOWED_INTERVAL_HOURS:
         raise MarketRegimeRuntimeError("market-regime interval must be 4 or 12 hours")
+    return interval
+
+
+def configured_intraday_interval_minutes(value: int | str | None = None) -> int:
+    raw = (
+        value
+        if value is not None
+        else os.getenv("PARK_MARKET_REGIME_INTRADAY_INTERVAL_MINUTES", "15")
+    )
+    try:
+        interval = int(raw)
+    except (TypeError, ValueError) as exc:
+        raise MarketRegimeRuntimeError(
+            "market-regime intraday interval must be 15 minutes"
+        ) from exc
+    if interval not in ALLOWED_INTRADAY_INTERVAL_MINUTES:
+        raise MarketRegimeRuntimeError(
+            "market-regime intraday interval must be 15 minutes"
+        )
     return interval
 
 
@@ -210,6 +235,67 @@ def _write_atomic(path: Path, payload: Mapping[str, Any]) -> None:
             os.unlink(temporary)
 
 
+def _write_bytes_atomic(path: Path, payload: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def _optional_bytes(path: Path) -> bytes | None:
+    try:
+        return path.read_bytes()
+    except FileNotFoundError:
+        return None
+
+
+def _restore_optional_bytes(path: Path, payload: bytes | None) -> None:
+    if payload is None:
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+        return
+    _write_bytes_atomic(path, payload)
+
+
+def _try_file_lock(path: Path) -> int | None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(path, os.O_CREAT | os.O_RDWR, 0o600)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        os.close(descriptor)
+        return None
+    return descriptor
+
+
+def _unlock_file(descriptor: int) -> None:
+    fcntl.flock(descriptor, fcntl.LOCK_UN)
+    os.close(descriptor)
+
+
+def _file_lock_busy(path: Path) -> bool:
+    try:
+        descriptor = os.open(path, os.O_RDWR)
+    except FileNotFoundError:
+        return False
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        os.close(descriptor)
+        return True
+    _unlock_file(descriptor)
+    return False
+
+
 def _write_immutable(path: Path, payload: Mapping[str, Any]) -> str:
     encoded = _json_bytes(payload)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -304,6 +390,88 @@ def _intraday_projection(item: Mapping[str, Any]) -> dict[str, Any]:
                 "source_attempts": failure.get("source_attempts"),
             }
     return projected
+
+
+def _provider_failure_receipt(snapshot: Mapping[str, Any]) -> dict[str, Any]:
+    rows = snapshot.get("instruments")
+    if not isinstance(rows, list):
+        raise MarketRegimeRuntimeError("intraday snapshot instruments are invalid")
+    failures: list[dict[str, Any]] = []
+    session_counts: dict[str, int] = {}
+    for row in rows:
+        if not isinstance(row, Mapping):
+            raise MarketRegimeRuntimeError("intraday snapshot instrument is invalid")
+        instrument = row.get("instrument")
+        key = str(instrument.get("key") if isinstance(instrument, Mapping) else "")
+        session = str(row.get("session_state") or "unknown")
+        session_counts[session] = session_counts.get(session, 0) + 1
+        rejected = row.get("refresh_status") == "rejected"
+        failure = row.get("refresh_failure")
+        attempts = (
+            failure.get("source_attempts")
+            if rejected and isinstance(failure, Mapping)
+            else row.get("source_attempts")
+        )
+        statuses: list[int | None] = []
+        endpoints: list[str] = []
+        failed_attempts: list[Mapping[str, Any]] = []
+        if isinstance(attempts, list):
+            for attempt in attempts:
+                if not isinstance(attempt, Mapping):
+                    continue
+                if attempt.get("accepted") is not False:
+                    continue
+                failed_attempts.append(attempt)
+                raw_status = attempt.get("status_code")
+                statuses.append(int(raw_status) if isinstance(raw_status, int) else None)
+                endpoint = str(attempt.get("endpoint") or "")
+                if endpoint:
+                    endpoints.append(endpoint)
+        if not rejected and not failed_attempts:
+            continue
+        reason = (
+            str(failure.get("reason") or "provider response rejected")
+            if rejected and isinstance(failure, Mapping)
+            else "; ".join(
+                str(attempt.get("reason") or "provider attempt rejected")
+                for attempt in failed_attempts
+            )
+        )
+        if 429 in statuses:
+            category = "rate_limited"
+        elif any(status is not None and status >= 500 for status in statuses):
+            category = "provider_server_error"
+        else:
+            category = "bad_or_unavailable_response"
+        failures.append(
+            {
+                "instrument": key,
+                "category": category,
+                "reason": reason,
+                "status_codes": statuses,
+                "endpoints": endpoints,
+                "asset_refresh_rejected": rejected,
+                "degraded_fallback_succeeded": not rejected,
+            }
+        )
+    return {
+        "schema_version": PROVIDER_FAILURE_SCHEMA_VERSION,
+        "detected": bool(failures),
+        "affected_count": len(failures),
+        "rejected_count": sum(
+            bool(failure["asset_refresh_rejected"]) for failure in failures
+        ),
+        "failures": failures,
+        "session_counts": dict(sorted(session_counts.items())),
+        "closed_or_maintenance_is_failure": False,
+    }
+
+
+def _intraday_backoff_seconds(interval_minutes: int, consecutive_failures: int) -> int:
+    base = interval_minutes * 60
+    if consecutive_failures <= 0:
+        return base
+    return min(INTRADAY_MAX_BACKOFF_SECONDS, base * (2 ** (consecutive_failures - 1)))
 
 
 def build_material_change_receipt(overlay: Mapping[str, Any]) -> dict[str, Any]:
@@ -655,6 +823,7 @@ class MarketRegimeRuntime:
         self.api_store_factory = api_store_factory
         self.status_path = self.root / "scheduler" / "status.json"
         self.lock_path = self.root / "scheduler" / "refresh.lock"
+        self.pipeline_lock_path = self.root / "scheduler" / "pipeline.lock"
 
     def _read_status(self) -> dict[str, Any] | None:
         try:
@@ -668,32 +837,17 @@ class MarketRegimeRuntime:
         return payload
 
     def _try_lock(self) -> int | None:
-        self.lock_path.parent.mkdir(parents=True, exist_ok=True)
-        descriptor = os.open(self.lock_path, os.O_CREAT | os.O_RDWR, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            os.close(descriptor)
-            return None
-        return descriptor
+        return _try_file_lock(self.lock_path)
+
+    def _try_pipeline_lock(self) -> int | None:
+        return _try_file_lock(self.pipeline_lock_path)
 
     @staticmethod
     def _unlock(descriptor: int) -> None:
-        fcntl.flock(descriptor, fcntl.LOCK_UN)
-        os.close(descriptor)
+        _unlock_file(descriptor)
 
     def _lock_busy(self) -> bool:
-        try:
-            descriptor = os.open(self.lock_path, os.O_RDWR)
-        except FileNotFoundError:
-            return False
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            os.close(descriptor)
-            return True
-        self._unlock(descriptor)
-        return False
+        return _file_lock_busy(self.lock_path)
 
     def cycle(self) -> dict[str, Any]:
         descriptor = self._try_lock()
@@ -703,10 +857,22 @@ class MarketRegimeRuntime:
                 "state": "busy",
                 "busy": True,
                 "interval_hours": self.interval_hours,
+                "retry_in_seconds": SCHEDULER_LOCK_RETRY_SECONDS,
+            }
+        pipeline_descriptor = self._try_pipeline_lock()
+        if pipeline_descriptor is None:
+            self._unlock(descriptor)
+            return {
+                "schema_version": SCHEDULER_SCHEMA_VERSION,
+                "state": "busy",
+                "busy": True,
+                "contention": "cohesive_pipeline",
+                "interval_hours": self.interval_hours,
+                "retry_in_seconds": SCHEDULER_LOCK_RETRY_SECONDS,
             }
         try:
             previous = self._read_status() or {}
-            started = self.clock()
+            started = self.clock().astimezone(timezone.utc)
             running = {
                 "schema_version": SCHEDULER_SCHEMA_VERSION,
                 "state": "running",
@@ -718,6 +884,7 @@ class MarketRegimeRuntime:
                 "next_due_at": None,
                 "source_run_id": previous.get("source_run_id"),
                 "analysis_id": previous.get("analysis_id"),
+                "intraday_run_id": previous.get("intraday_run_id"),
                 "intraday_snapshot_id": previous.get("intraday_snapshot_id"),
                 "overlay_id": previous.get("overlay_id"),
                 "material_change_receipt_id": previous.get("material_change_receipt_id"),
@@ -760,7 +927,7 @@ class MarketRegimeRuntime:
                     raise MarketRegimeRuntimeError(
                         "published result differs from verified latest API bundle"
                     )
-                finished = self.clock()
+                finished = self.clock().astimezone(timezone.utc)
                 result = {
                     **running,
                     "state": "idle",
@@ -769,6 +936,7 @@ class MarketRegimeRuntime:
                     "next_due_at": _iso(finished + timedelta(hours=self.interval_hours)),
                     "source_run_id": snapshot.get("run_id"),
                     "analysis_id": analysis.get("analysis_id"),
+                    "intraday_run_id": intraday.get("run_id"),
                     "intraday_snapshot_id": intraday.get("snapshot_id"),
                     "overlay_id": overlay.get("overlay_id"),
                     "material_change_receipt_id": bundle.get(
@@ -782,7 +950,7 @@ class MarketRegimeRuntime:
                     "last_error": None,
                 }
             except Exception as exc:
-                finished = self.clock()
+                finished = self.clock().astimezone(timezone.utc)
                 failure = {
                     "at": _iso(finished),
                     "error_type": type(exc).__name__,
@@ -799,6 +967,7 @@ class MarketRegimeRuntime:
             _write_atomic(self.status_path, result)
             return result
         finally:
+            self._unlock(pipeline_descriptor)
             self._unlock(descriptor)
 
     def health(self) -> dict[str, Any]:
@@ -890,6 +1059,9 @@ class MarketRegimeRuntime:
                             field="health.structural.evidence_at",
                         ),
                         "analysis_id": structural.get("analysis_id"),
+                        "errors": (structural.get("analysis") or {}).get(
+                            "rejected_inputs", []
+                        ),
                     },
                     "intraday": {
                         "status": "available",
@@ -916,6 +1088,7 @@ class MarketRegimeRuntime:
                     },
                     "overlay": {
                         "status": "available",
+                        "partial": overlay.get("relation") == "insufficient",
                         "last_success_at": overlay_generated,
                         "age_seconds": _age_seconds(
                             overlay_generated,
@@ -933,9 +1106,14 @@ class MarketRegimeRuntime:
                         "blocked_by_cooldown": (overlay.get("transition") or {}).get(
                             "blocked_by_cooldown"
                         ),
+                        "errors": overlay.get("excluded_signals") or [],
                     },
                     "bundle": {
                         "status": "available",
+                        "partial": structural.get("analysis_status") != "full"
+                        or structural.get("data_quality") != "fresh"
+                        or intraday.get("quality") != "complete"
+                        or overlay.get("relation") == "insufficient",
                         "last_success_at": bundle_generated,
                         "age_seconds": _age_seconds(
                             bundle_generated,
@@ -943,22 +1121,397 @@ class MarketRegimeRuntime:
                             field="health.bundle.generated_at",
                         ),
                         "bundle_id": bundle.get("bundle_id"),
+                        "errors": asset_errors,
                     },
                 },
             }
+        intraday_scheduler = MarketRegimeIntradayRuntime(
+            self.root, interval_minutes=15
+        ).status()
         return {
             "schema_version": HEALTH_SCHEMA_VERSION,
             "observed_at": _iso(now),
             "scheduler": scheduler,
+            "intraday_scheduler": intraday_scheduler,
             "latest": latest,
             "last_error": scheduler.get("last_error")
-            or scheduler.get("last_failure"),
+            or scheduler.get("last_failure")
+            or intraday_scheduler.get("last_error")
+            or intraday_scheduler.get("last_failure"),
         }
 
     def run_forever(self) -> None:
         while True:
-            self.cycle()
-            self.sleeper(self.interval_hours * 3600)
+            result = self.cycle()
+            delay = (
+                SCHEDULER_LOCK_RETRY_SECONDS
+                if result.get("state") == "busy"
+                else self.interval_hours * 3600
+            )
+            self.sleeper(delay)
+
+
+class MarketRegimeIntradayRuntime:
+    """Serial 15-minute target loop for the verified intraday pipeline."""
+
+    def __init__(
+        self,
+        root: Path | str | None = None,
+        *,
+        interval_minutes: int | str | None = None,
+        clock: Callable[[], datetime] | None = None,
+        sleeper: Callable[[float], None] | None = None,
+        data_store_factory: Callable[[Path], Any] = MarketRegimeDataStore,
+        analysis_store_factory: Callable[[Path], Any] = MarketRegimeAnalysisStore,
+        intraday_store_factory: Callable[[Path], Any] = MarketRegimeIntradayDataStore,
+        overlay_store_factory: Callable[[Path], Any] = MarketRegimeIntradayOverlayStore,
+        api_store_factory: Callable[[Path], Any] = MarketRegimeApiStore,
+    ) -> None:
+        self.root = Path(root or market_regime_root()).expanduser().resolve()
+        self.interval_minutes = configured_intraday_interval_minutes(interval_minutes)
+        self.clock = clock or (lambda: datetime.now(timezone.utc))
+        self.sleeper = sleeper or time.sleep
+        self.data_store_factory = data_store_factory
+        self.analysis_store_factory = analysis_store_factory
+        self.intraday_store_factory = intraday_store_factory
+        self.overlay_store_factory = overlay_store_factory
+        self.api_store_factory = api_store_factory
+        self.status_path = self.root / "intraday" / "scheduler" / "status.json"
+        self.lock_path = self.root / "intraday" / "scheduler" / "refresh.lock"
+        self.stop_path = self.root / "intraday" / "scheduler" / "STOP"
+        self.pipeline_lock_path = self.root / "scheduler" / "pipeline.lock"
+        self.overlay_pointer_path = self.root / "intraday" / "overlay" / "latest.json"
+        self.api_pointer_path = self.root / "api" / "latest.json"
+
+    def _read_status(self) -> dict[str, Any] | None:
+        try:
+            payload = json.loads(self.status_path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return None
+        except json.JSONDecodeError as exc:
+            raise MarketRegimeRuntimeError(
+                "market-regime intraday scheduler status is not JSON"
+            ) from exc
+        if (
+            not isinstance(payload, dict)
+            or payload.get("schema_version") != INTRADAY_SCHEDULER_SCHEMA_VERSION
+        ):
+            raise MarketRegimeRuntimeError(
+                "market-regime intraday scheduler status schema mismatch"
+            )
+        return payload
+
+    def stop_requested(self) -> bool:
+        raw = os.getenv("PARK_MARKET_REGIME_INTRADAY_ENABLED", "1").strip().lower()
+        if raw not in {"1", "true", "yes", "on", "0", "false", "no", "off"}:
+            raise MarketRegimeRuntimeError(
+                "PARK_MARKET_REGIME_INTRADAY_ENABLED must be true or false"
+            )
+        return raw in {"0", "false", "no", "off"} or self.stop_path.exists()
+
+    def request_stop(self, *, reason: str = "operator_requested") -> dict[str, Any]:
+        requested = self.clock().astimezone(timezone.utc)
+        marker = {
+            "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+            "requested_at": _iso(requested),
+            "reason": reason,
+        }
+        _write_atomic(self.stop_path, marker)
+        return marker
+
+    def clear_stop(self) -> None:
+        try:
+            self.stop_path.unlink()
+        except FileNotFoundError:
+            pass
+
+    def _try_lock(self) -> int | None:
+        return _try_file_lock(self.lock_path)
+
+    def _try_pipeline_lock(self) -> int | None:
+        return _try_file_lock(self.pipeline_lock_path)
+
+    @staticmethod
+    def _unlock(descriptor: int) -> None:
+        _unlock_file(descriptor)
+
+    def _lock_busy(self) -> bool:
+        return _file_lock_busy(self.lock_path)
+
+    def status(self) -> dict[str, Any]:
+        busy = self._lock_busy()
+        try:
+            stopped = self.stop_requested()
+            payload = self._read_status()
+        except MarketRegimeRuntimeError as exc:
+            return {
+                "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                "state": "unavailable",
+                "busy": busy,
+                "stop_requested": False,
+                "interval_minutes": self.interval_minutes,
+                "detail": str(exc),
+            }
+        if payload is None:
+            return {
+                "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                "state": "stopped" if stopped else "unavailable",
+                "busy": busy,
+                "stop_requested": stopped,
+                "interval_minutes": self.interval_minutes,
+            }
+        result = {**payload, "busy": busy, "stop_requested": stopped}
+        if stopped and not busy:
+            result["state"] = "stopped"
+        elif payload.get("state") == "running" and not busy:
+            result["state"] = "interrupted"
+        return result
+
+    def _record_stopped(self) -> dict[str, Any]:
+        previous = self._read_status() or {}
+        observed = self.clock().astimezone(timezone.utc)
+        result = {
+            **previous,
+            "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+            "state": "stopped",
+            "phase": None,
+            "busy": False,
+            "stop_requested": True,
+            "interval_minutes": self.interval_minutes,
+            "observed_at": _iso(observed),
+            "next_due_at": None,
+            "wait_seconds": None,
+        }
+        _write_atomic(self.status_path, result)
+        return result
+
+    def _write_phase(self, running: Mapping[str, Any], phase: str) -> dict[str, Any]:
+        payload = {**running, "phase": phase}
+        _write_atomic(self.status_path, payload)
+        return payload
+
+    def cycle(self) -> dict[str, Any]:
+        if self.stop_requested():
+            if self._lock_busy():
+                return {
+                    "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                    "state": "stopped",
+                    "busy": True,
+                    "stop_requested": True,
+                    "interval_minutes": self.interval_minutes,
+                    "detail": "active cycle is finishing without starting another request",
+                }
+            return self._record_stopped()
+        descriptor = self._try_lock()
+        if descriptor is None:
+            return {
+                "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                "state": "busy",
+                "busy": True,
+                "stop_requested": False,
+                "interval_minutes": self.interval_minutes,
+                "wait_seconds": SCHEDULER_LOCK_RETRY_SECONDS,
+            }
+        pipeline_descriptor = self._try_pipeline_lock()
+        if pipeline_descriptor is None:
+            self._unlock(descriptor)
+            return {
+                "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                "state": "busy",
+                "busy": True,
+                "contention": "cohesive_pipeline",
+                "stop_requested": False,
+                "interval_minutes": self.interval_minutes,
+                "wait_seconds": SCHEDULER_LOCK_RETRY_SECONDS,
+            }
+        try:
+            previous = self._read_status() or {}
+            started = self.clock().astimezone(timezone.utc)
+            running: dict[str, Any] = {
+                "schema_version": INTRADAY_SCHEDULER_SCHEMA_VERSION,
+                "state": "running",
+                "phase": "collect",
+                "busy": True,
+                "stop_requested": False,
+                "pid": os.getpid(),
+                "interval_minutes": self.interval_minutes,
+                "last_attempt_at": _iso(started),
+                "last_success_at": previous.get("last_success_at"),
+                "last_full_success_at": previous.get("last_full_success_at"),
+                "last_failure": previous.get("last_failure"),
+                "last_provider_failure": previous.get("last_provider_failure"),
+                "next_due_at": None,
+                "wait_seconds": None,
+                "provider_failure_streak": int(
+                    previous.get("provider_failure_streak") or 0
+                ),
+                "cycle_failure_streak": int(previous.get("cycle_failure_streak") or 0),
+                "source_run_id": previous.get("source_run_id"),
+                "analysis_id": previous.get("analysis_id"),
+                "intraday_run_id": previous.get("intraday_run_id"),
+                "intraday_snapshot_id": previous.get("intraday_snapshot_id"),
+                "overlay_id": previous.get("overlay_id"),
+                "material_change_receipt_id": previous.get(
+                    "material_change_receipt_id"
+                ),
+                "bundle_id": previous.get("bundle_id"),
+                "intraday_quality": previous.get("intraday_quality"),
+                "overlay_relation": previous.get("overlay_relation"),
+            }
+            _write_atomic(self.status_path, running)
+            overlay_pointer_before = _optional_bytes(self.overlay_pointer_path)
+            api_pointer_before = _optional_bytes(self.api_pointer_path)
+            overlay_attempted = False
+            api_attempted = False
+            try:
+                intraday_store = self.intraday_store_factory(self.root)
+                collected = intraday_store.refresh()
+                running = self._write_phase(running, "verify_collected")
+                intraday = intraday_store.latest()
+                if collected.get("snapshot_id") != intraday.get("snapshot_id"):
+                    raise MarketRegimeRuntimeError(
+                        "collected result differs from verified latest intraday snapshot"
+                    )
+                provider_failure = _provider_failure_receipt(intraday)
+
+                running = self._write_phase(running, "compile")
+                overlay_store = self.overlay_store_factory(self.root)
+                overlay_attempted = True
+                compiled = overlay_store.compile_latest()
+                running = self._write_phase(running, "verify_compiled")
+                overlay = overlay_store.latest()
+                compiled_overlay = compiled.get("overlay") or {}
+                if compiled_overlay.get("overlay_id") != overlay.get("overlay_id"):
+                    raise MarketRegimeRuntimeError(
+                        "compiled result differs from verified latest overlay"
+                    )
+                if (overlay.get("intraday") or {}).get("snapshot_id") != intraday.get(
+                    "snapshot_id"
+                ):
+                    raise MarketRegimeRuntimeError(
+                        "verified overlay differs from collected intraday snapshot"
+                    )
+
+                running = self._write_phase(running, "publish")
+                structural = self.data_store_factory(self.root).latest()
+                analysis = self.analysis_store_factory(self.root).latest()
+                api_store = self.api_store_factory(self.root)
+                api_attempted = True
+                published = api_store.publish(structural, analysis, intraday, overlay)
+                bundle = api_store.latest()
+                if published.get("bundle_id") != bundle.get("bundle_id"):
+                    raise MarketRegimeRuntimeError(
+                        "published result differs from verified latest API bundle"
+                    )
+
+                finished = self.clock().astimezone(timezone.utc)
+                provider_failed = bool(provider_failure["detected"])
+                provider_streak = (
+                    int(previous.get("provider_failure_streak") or 0) + 1
+                    if provider_failed
+                    else 0
+                )
+                wait_seconds = _intraday_backoff_seconds(
+                    self.interval_minutes, provider_streak
+                )
+                provider_failure = {
+                    **provider_failure,
+                    "at": _iso(finished),
+                    "consecutive_failures": provider_streak,
+                    "backoff_seconds": wait_seconds if provider_failed else 0,
+                }
+                result = {
+                    **running,
+                    "state": "idle",
+                    "phase": None,
+                    "busy": False,
+                    "last_success_at": _iso(finished),
+                    "last_full_success_at": (
+                        previous.get("last_full_success_at")
+                        if provider_failed
+                        else _iso(finished)
+                    ),
+                    "next_due_at": _iso(finished + timedelta(seconds=wait_seconds)),
+                    "wait_seconds": wait_seconds,
+                    "provider_failure_streak": provider_streak,
+                    "cycle_failure_streak": 0,
+                    "source_run_id": structural.get("run_id"),
+                    "analysis_id": analysis.get("analysis_id"),
+                    "intraday_run_id": intraday.get("run_id"),
+                    "intraday_snapshot_id": intraday.get("snapshot_id"),
+                    "overlay_id": overlay.get("overlay_id"),
+                    "material_change_receipt_id": bundle.get(
+                        "material_change_receipt_id"
+                    ),
+                    "bundle_id": bundle.get("bundle_id"),
+                    "intraday_quality": intraday.get("quality"),
+                    "overlay_relation": overlay.get("relation"),
+                    "last_provider_failure": (
+                        provider_failure
+                        if provider_failed
+                        else previous.get("last_provider_failure")
+                    ),
+                    "last_error": provider_failure if provider_failed else None,
+                }
+            except Exception as exc:
+                rollback_errors: list[str] = []
+                if api_attempted:
+                    try:
+                        _restore_optional_bytes(self.api_pointer_path, api_pointer_before)
+                    except OSError as rollback_exc:
+                        rollback_errors.append(f"api pointer rollback: {rollback_exc}")
+                if overlay_attempted:
+                    try:
+                        _restore_optional_bytes(
+                            self.overlay_pointer_path, overlay_pointer_before
+                        )
+                    except OSError as rollback_exc:
+                        rollback_errors.append(f"overlay pointer rollback: {rollback_exc}")
+                finished = self.clock().astimezone(timezone.utc)
+                cycle_streak = int(previous.get("cycle_failure_streak") or 0) + 1
+                wait_seconds = _intraday_backoff_seconds(
+                    self.interval_minutes, cycle_streak
+                )
+                failure = {
+                    "at": _iso(finished),
+                    "phase": running.get("phase"),
+                    "error_type": type(exc).__name__,
+                    "message": str(exc),
+                    "rollback_errors": rollback_errors,
+                }
+                result = {
+                    **running,
+                    "state": "failed",
+                    "phase": None,
+                    "failed_phase": failure["phase"],
+                    "busy": False,
+                    "last_failure": failure,
+                    "last_error": failure,
+                    "cycle_failure_streak": cycle_streak,
+                    "next_due_at": _iso(finished + timedelta(seconds=wait_seconds)),
+                    "wait_seconds": wait_seconds,
+                }
+            _write_atomic(self.status_path, result)
+            return result
+        finally:
+            self._unlock(pipeline_descriptor)
+            self._unlock(descriptor)
+
+    def run_forever(self) -> None:
+        while True:
+            result = self.cycle()
+            if result.get("state") == "stopped":
+                return
+            remaining = float(
+                result.get("wait_seconds") or self.interval_minutes * 60
+            )
+            while remaining > 0:
+                if self.stop_requested():
+                    self._record_stopped()
+                    return
+                step = min(float(STOP_POLL_SECONDS), remaining)
+                self.sleeper(step)
+                remaining -= step
 
 
 def market_regime_payload(root: Path | str | None = None) -> dict[str, Any]:
