@@ -3381,3 +3381,50 @@ a 15-minute target service is an exchange realtime feed.
 - Saturday proves service survival and the closed branch only.  Weekday
   open-session provider latency, source entitlements and current-state behavior
   remain separate acceptance work.
+
+# 2026-08-10 · One bounded Tencent next-interval row is unfinished evidence
+
+## Decision
+
+When a Tencent m5 response contains exactly one trailing row whose interval end
+is after `observed_at` but no more than one 5-minute bar ahead, preserve the raw
+response and record that row in `dropped_unfinished_bars` instead of rejecting
+the whole asset refresh.  Continue to reject every non-trailing future row,
+farther-future row, duplicate or unordered timestamp.
+
+## Why
+
+The preserved 2026-08-10 10:30 CST provider response carried a completed 10:30
+bar plus an actively forming row labelled by its 10:35 interval end.  The old
+parser rejected all three A-share identities before reaching its existing
+unfinished-bar path.  This caused a truthful but avoidable `PARTIAL 11/14`
+bundle and prevented consecutive open-session evidence from being evaluated.
+
+## Evidence
+
+- Issue #734 and PR #735 bind the change to the Tencent normalizer and its
+  focused regression tests.
+- Replaying the preserved 10:30 raw response now retains the 10:30 completed
+  bar, records 10:35 as unfinished and returns `open` / `live_candidate` while
+  keeping publication and action eligibility false.
+- The deployed 10:38 CST cycle independently reproduced the boundary with
+  10:40 trailing rows.  All three A-share assets accepted 10:35 as the latest
+  completed bar; health returned 14/14 accepted, zero rejected, idle and a
+  reset provider failure streak.
+- The same open browser page automatically moved from `PARTIAL 11/14` to
+  `COMPLETE 14/14` and `CURRENT <=15M` without reload.  Ten Tencent tests, 114
+  Market Regime tests, the 840-test baseline, diff checks and gitleaks passed.
+
+## Gotchas
+
+- The exception is defined by position and time bound, not by trusting the
+  provider's latest quote.  Two future rows fail because the first is not the
+  trailing row; one row more than five minutes ahead also fails.
+- Ordering is checked before the unfinished row can be dropped.  The row's OHLC
+  is never admitted as completed evidence.
+- `complete 14/14` still does not mean the overlay must confirm or diverge.  The
+  10:38 A-share impulse remained inside the frozen transition band, so the
+  correct relation was still `insufficient`.
+- A historical `last_provider_failure` receipt can remain visible after
+  recovery.  Current health is determined by `last_error=null`, zero failure
+  streak, accepted/rejected counts, provider ages and the new snapshot identity.

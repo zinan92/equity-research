@@ -1,5 +1,35 @@
 # REGISTRY
 
+## 2026-08-10 · Tencent trailing unfinished m5 boundary repair (Issue #734)
+
+Now: the A-share intraday authority keeps completed Tencent m5 evidence when a
+live response contains exactly one trailing, next-interval bar whose declared
+end is still in the future.  That row is recorded in
+`dropped_unfinished_bars` and is not parsed as completed OHLC.  A non-trailing
+future row, duplicate/unordered timestamp or end farther than one 5-minute bar
+from `observed_at` still fails closed.  Raw request/response receipts and
+content hashes remain unchanged; the local-only, non-publishable and
+non-actionable boundary is unchanged.
+
+Real open-session acceptance on the stable local deployment completed at
+2026-08-10 10:38 CST.  Run
+`market-regime-intraday-20260810T023802Z-9f4e3d48` received unfinished 10:40
+rows for Shanghai, STAR 50 and SSE Dividend, dropped those three rows, retained
+10:35 as the latest completed provider bar and published snapshot
+`market-regime-intraday-snapshot:05073db97603719c087366219408776db965a58dc911ec694f63da431510104c`.
+Health returned idle, 14/14 accepted, zero rejected and provider failure streak
+zero.  The already-open 470px browser page moved without reload from
+`PARTIAL 11/14` to `COMPLETE 14/14`, marked all three A-share inputs
+`CURRENT <=15M`, retained `insufficient` because the model threshold was not
+met, and had no horizontal overflow or console errors.
+
+Validation: 10 Tencent tests, 114 Market Regime tests and the 840-test baseline
+passed (one skipped); preserved 10:30 raw-response replay, `git diff --check`
+and gitleaks also passed.  Next: keep observing ordinary 15-minute cycles and
+provider entitlements; this repair proves the weekday open-session boundary
+case, not exchange realtime rights, an SLA, publication eligibility or an
+investment signal.
+
 ## 2026-08-08 · Market Regime Live S4 local decision surface (Issue #724)
 
 Now: `http://127.0.0.1:8896/market-regime` is a local, read-only two-horizon
