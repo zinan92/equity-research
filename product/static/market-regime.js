@@ -147,15 +147,51 @@
     return digest.length > size ? `${digest.slice(0, size)}…` : digest;
   }
 
-  function ageLabel(value) {
-    if (!value) return "AGE —";
+  function ageLabel(value, prefix = "AGE") {
+    if (!value) return `${prefix} —`;
     const timestamp = new Date(value).getTime();
-    if (!Number.isFinite(timestamp)) return "AGE UNKNOWN";
+    if (!Number.isFinite(timestamp)) return `${prefix} UNKNOWN`;
     const seconds = Math.max(0, Math.floor((Date.now() - timestamp) / 1000));
-    if (seconds < 60) return `AGE ${seconds}S`;
-    if (seconds < 3600) return `AGE ${Math.floor(seconds / 60)}M`;
-    if (seconds < 86400) return `AGE ${Math.floor(seconds / 3600)}H`;
-    return `AGE ${Math.floor(seconds / 86400)}D`;
+    if (seconds < 60) return `${prefix} ${seconds}S`;
+    if (seconds < 3600) return `${prefix} ${Math.floor(seconds / 60)}M`;
+    if (seconds < 86400) return `${prefix} ${Math.floor(seconds / 3600)}H`;
+    return `${prefix} ${Math.floor(seconds / 86400)}D`;
+  }
+
+  function durationLabel(value, prefix = "AGE") {
+    if (value == null || value === "") return `${prefix} UNKNOWN`;
+    const seconds = Number(value);
+    if (!Number.isFinite(seconds) || seconds < 0) return `${prefix} UNKNOWN`;
+    const wholeSeconds = Math.floor(seconds);
+    if (wholeSeconds < 60) return `${prefix} ${wholeSeconds}S`;
+    if (wholeSeconds < 3600) return `${prefix} ${Math.floor(wholeSeconds / 60)}M`;
+    if (wholeSeconds < 86400) return `${prefix} ${Math.floor(wholeSeconds / 3600)}H`;
+    return `${prefix} ${Math.floor(wholeSeconds / 86400)}D`;
+  }
+
+  function timestampView(value) {
+    if (!value) return {label: "—", iso: null};
+    const timestamp = new Date(value);
+    if (Number.isNaN(timestamp.getTime())) return {label: "UNKNOWN", iso: null};
+    return {label: dateTime(value), iso: String(value)};
+  }
+
+  function appendTimeIdentity(host, label, value) {
+    const identity = timestampView(value);
+    const row = document.createElement("div");
+    const term = document.createElement("dt");
+    const detail = document.createElement("dd");
+    const stamp = document.createElement("time");
+    term.textContent = label;
+    stamp.textContent = identity.label;
+    stamp.dataset.state = identity.iso ? "known" : "unknown";
+    if (identity.iso) {
+      stamp.setAttribute("datetime", identity.iso);
+      stamp.title = identity.iso;
+    }
+    detail.append(stamp);
+    row.append(term, detail);
+    host.append(row);
   }
 
   function compactValue(value) {
@@ -172,10 +208,18 @@
   function freshnessView(asset) {
     const session = String(asset.session_state || "unknown");
     const freshness = String(asset.freshness || "unavailable");
-    const providerTime = new Date(asset.provider_timestamp || 0).getTime();
+    const requiredTimes = [asset.provider_timestamp, asset.observed_at, asset.received_at]
+      .map((value) => value ? new Date(value).getTime() : Number.NaN);
+    const hasValidTimeIdentity = requiredTimes.every(Number.isFinite);
+    const providerTime = requiredTimes[0];
     const ageSeconds = Number.isFinite(providerTime)
       ? Math.max(0, Math.floor((Date.now() - providerTime) / 1000))
       : Number.POSITIVE_INFINITY;
+    const hasValidCaptureAge = asset.age_seconds != null && asset.age_seconds !== "" &&
+      Number.isFinite(Number(asset.age_seconds)) && Number(asset.age_seconds) >= 0;
+    if (!hasValidTimeIdentity || !hasValidCaptureAge) {
+      return {state: "unknown", label: "TIME IDENTITY UNKNOWN"};
+    }
     if (asset.refresh_status === "rejected" || freshness === "unavailable") {
       return {
         state: freshness === "unavailable" ? "unavailable" : "delayed",
@@ -465,13 +509,18 @@
       const status = document.createElement("div");
       status.className = "freshness-state";
       status.textContent = `${freshness.label} · ${SESSION_NAMES[asset.session_state] || asset.session_state || "未知"}`;
+      const times = document.createElement("dl");
+      times.className = "time-identities";
+      appendTimeIdentity(times, "PROVIDER", asset.provider_timestamp);
+      appendTimeIdentity(times, "OBSERVED", asset.observed_at);
+      appendTimeIdentity(times, "RECEIVED", asset.received_at);
       const footer = document.createElement("footer");
-      const provider = document.createElement("span");
-      provider.textContent = `PROVIDER ${dateTime(asset.provider_timestamp)}`;
-      const age = document.createElement("span");
-      age.textContent = ageLabel(asset.provider_timestamp);
-      footer.append(provider, age);
-      card.append(header, status, footer);
+      const captureAge = document.createElement("span");
+      captureAge.textContent = durationLabel(asset.age_seconds, "AGE@OBS");
+      const currentAge = document.createElement("span");
+      currentAge.textContent = ageLabel(asset.provider_timestamp, "AGE@NOW");
+      footer.append(captureAge, currentAge);
+      card.append(header, status, times, footer);
       host.append(card);
     });
     const layer = health?.latest?.layers?.intraday || {};

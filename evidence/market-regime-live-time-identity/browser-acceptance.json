@@ -1,0 +1,79 @@
+{
+  "schema_version": "market-regime-live-time-identity-acceptance-v1",
+  "captured_at": "2026-08-10T02:53:35Z",
+  "raw_precision_verified_at": "2026-08-10T02:58:10Z",
+  "issue": 736,
+  "candidate_url": "http://127.0.0.1:8897/market-regime",
+  "live_api": {
+    "schema_version": "market-regime-api-v2",
+    "generated_at": "2026-08-10T02:41:15.967241Z",
+    "bundle_id": "market-regime-api:1421273f7d31e2267cbc07fbcd71409b5560244bed3756795af542adfbba9450",
+    "intraday_run_id": "market-regime-intraday-20260810T024111Z-0a99f4c2",
+    "intraday_snapshot_id": "market-regime-intraday-snapshot:b545aed2f52624e5f2d7d0daf2be2643b5aee0ff1e8938f9d1bd7c1dfa21d96c",
+    "quality": "complete",
+    "accepted_count": 14,
+    "rejected_count": 0,
+    "time_identity_complete_count": 14,
+    "publication_eligible_true_count": 0,
+    "action_eligible_true_count": 0
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "body_client_width": 1265,
+    "body_scroll_width": 1265,
+    "asset_cards": 14,
+    "time_identity_rows": 42,
+    "datetime_attributes": 42,
+    "raw_datetime_sample": {
+      "asset": "sp500_cash",
+      "provider": "2026-08-07T20:00:00Z",
+      "observed": "2026-08-10T02:41:12.071979Z",
+      "received": "2026-08-10T02:41:12.071979Z"
+    },
+    "labels": [
+      "PROVIDER",
+      "OBSERVED",
+      "RECEIVED"
+    ],
+    "screenshot": "desktop-1280-time-cards.png"
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "html_client_width": 390,
+    "html_scroll_width": 390,
+    "body_client_width": 390,
+    "body_scroll_width": 390,
+    "asset_cards": 14,
+    "time_identity_rows": 42,
+    "datetime_attributes": 42,
+    "asset_card_width": 360,
+    "screenshot": "mobile-390-time-cards.png"
+  },
+  "console": {
+    "warning_count": 0,
+    "error_count": 0
+  },
+  "post_acceptance_runtime_cycle": {
+    "generated_at": "2026-08-10T02:56:37.016024Z",
+    "intraday_run_id": "market-regime-intraday-20260810T025632Z-ed1f44be",
+    "intraday_snapshot_id": "market-regime-intraday-snapshot:c5eaf5fe9825b988a2b759a186057c6d05ce1118f18d416f0ca0aa57ea1125d4",
+    "quality": "complete",
+    "accepted_count": 14,
+    "rejected_count": 0,
+    "scheduler_state": "idle",
+    "last_error": null,
+    "provider_failure_streak": 0
+  },
+  "truth_boundary": {
+    "local_evaluation_only": true,
+    "publication_eligible": false,
+    "action_eligible": false,
+    "exchange_realtime_claimed": false
+  }
+}

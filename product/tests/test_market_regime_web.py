@@ -178,6 +178,27 @@ class MarketRegimeWebTest(unittest.TestCase):
         self.assertIn(': aShareIsCurrent', javascript)
         self.assertIn("DELAYED ${stateCounts.delayed}", javascript)
 
+    def test_intraday_asset_cards_expose_all_three_time_identities_and_frozen_age(self) -> None:
+        _, _, css_body = self.request("/market-regime.css")
+        _, _, js_body = self.request("/market-regime.js")
+        css = css_body.decode("utf-8")
+        javascript = js_body.decode("utf-8")
+        for label, field in (
+            ("PROVIDER", "provider_timestamp"),
+            ("OBSERVED", "observed_at"),
+            ("RECEIVED", "received_at"),
+        ):
+            self.assertIn(f'appendTimeIdentity(times, "{label}", asset.{field})', javascript)
+        self.assertIn('const stamp = document.createElement("time")', javascript)
+        self.assertIn("iso: String(value)", javascript)
+        self.assertIn('stamp.setAttribute("datetime", identity.iso)', javascript)
+        self.assertIn('durationLabel(asset.age_seconds, "AGE@OBS")', javascript)
+        self.assertIn('ageLabel(asset.provider_timestamp, "AGE@NOW")', javascript)
+        self.assertIn("asset.observed_at, asset.received_at", javascript)
+        self.assertIn('return {state: "unknown", label: "TIME IDENTITY UNKNOWN"}', javascript)
+        self.assertIn(".time-identities", css)
+        self.assertIn("grid-template-columns: 50px minmax(0, 1fr)", css)
+
     def test_intraday_identity_labels_never_conflate_cash_and_futures_proxy(self) -> None:
         _, _, body = self.request("/market-regime.js")
         javascript = body.decode("utf-8")
