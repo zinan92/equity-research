@@ -581,6 +581,13 @@ def normalize_tencent_captures(
             raise SourceCaptureError("Tencent m5 timestamps are duplicate or unordered", capture=m5_capture)
         previous = ended_utc
         if ended_utc > observed:
+            trailing_unfinished = (
+                index == len(rows) - 1
+                and ended_utc <= observed + timedelta(seconds=BAR_SECONDS)
+            )
+            if trailing_unfinished:
+                dropped_unfinished.append(_iso(ended_utc))
+                continue
             raise SourceCaptureError("Tencent m5 bar ends in the future", capture=m5_capture)
         if ended_utc + timedelta(seconds=COMPLETION_GRACE_SECONDS) > observed:
             dropped_unfinished.append(_iso(ended_utc))

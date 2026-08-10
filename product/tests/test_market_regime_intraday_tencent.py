@@ -87,7 +87,11 @@ class StaticTransport:
         return self.responses[url]
 
 
-def fixture_transport(*, fail_symbol: str | None = None) -> StaticTransport:
+def fixture_transport(
+    *,
+    fail_symbol: str | None = None,
+    m5_mutator=None,  # type: ignore[no-untyped-def]
+) -> StaticTransport:
     quote_url = tencent_quote_url(TENCENT_INSTRUMENTS)
     responses = {
         quote_url: capture(QUOTE_BODY, url=quote_url),
@@ -97,7 +101,10 @@ def fixture_transport(*, fail_symbol: str | None = None) -> StaticTransport:
         if spec.provider_symbol == fail_symbol:
             responses[url] = capture(b"gateway", url=url, status=502)
         else:
-            responses[url] = capture(m5_body_for(spec.provider_symbol), url=url)
+            responses[url] = capture(
+                m5_body_for(spec.provider_symbol, m5_mutator),
+                url=url,
+            )
     return StaticTransport(responses)
 
 
@@ -121,6 +128,32 @@ class MarketRegimeIntradayTencentTest(unittest.TestCase):
         self.assertEqual(normalized["freshness"], "live_candidate")
         self.assertEqual(normalized["age_seconds"], 310)
         self.assertEqual(normalized["source_quality_flags"], ["provider_declares_text_html_for_json"])
+        self.assertFalse(normalized["publication_eligible"])
+        self.assertFalse(normalized["action_eligible"])
+
+    def test_trailing_next_interval_bar_is_dropped_as_unfinished(self) -> None:
+        quote_capture = capture(QUOTE_BODY, url=tencent_quote_url(TENCENT_INSTRUMENTS))
+        parsed = parse_tencent_quote_batch(quote_capture, TENCENT_INSTRUMENTS)
+        spec = INSTRUMENT_BY_KEY["shanghai"]
+
+        def next_interval(payload: dict) -> None:
+            payload["data"]["sh000001"]["m5"][-1][0] = "202608051050"
+
+        normalized = normalize_tencent_captures(
+            spec,
+            parsed[spec.provider_symbol],
+            capture(
+                m5_body_for("sh000001", next_interval),
+                url=tencent_m5_url(spec),
+            ),
+            observed_at=NOW,
+            received_at=NOW,
+        )
+
+        self.assertEqual(normalized["bar_count"], 3)
+        self.assertEqual(normalized["provider_timestamp"], "2026-08-05T02:40:00Z")
+        self.assertEqual(normalized["dropped_unfinished_bars"], ["2026-08-05T02:50:00Z"])
+        self.assertEqual(normalized["freshness"], "live_candidate")
         self.assertFalse(normalized["publication_eligible"])
         self.assertFalse(normalized["action_eligible"])
 
@@ -205,7 +238,12 @@ class MarketRegimeIntradayTencentTest(unittest.TestCase):
             rows[2][0] = rows[1][0]
 
         def future(payload: dict) -> None:
-            payload["data"]["sh000001"]["m5"][-1][0] = "202608051050"
+            payload["data"]["sh000001"]["m5"][-1][0] = "202608051055"
+
+        def internal_future(payload: dict) -> None:
+            rows = payload["data"]["sh000001"]["m5"]
+            rows[-2][0] = "202608051050"
+            rows[-1][0] = "202608051055"
 
         def quote_conflict(payload: dict) -> None:
             payload["data"]["sh000001"]["qt"]["sh000001"][30] = "20260805105000"
@@ -216,6 +254,7 @@ class MarketRegimeIntradayTencentTest(unittest.TestCase):
         for mutate, pattern in (
             (duplicate, "duplicate"),
             (future, "future"),
+            (internal_future, "future"),
             (quote_conflict, "future"),
             (embedded_future, "embedded quote timestamp is in the future"),
         ):
@@ -258,6 +297,29 @@ class MarketRegimeIntradayTencentTest(unittest.TestCase):
             item["source_attempts"][0]["raw_path"] for item in snapshot["instruments"]
         }
         self.assertEqual(len(quote_locators), 1)
+
+    def test_store_accepts_all_tencent_assets_with_one_trailing_unfinished_bar(self) -> None:
+        def next_interval(payload: dict) -> None:
+            instrument = next(iter(payload["data"].values()))
+            instrument["m5"][-1][0] = "202608051050"
+
+        transport = fixture_transport(m5_mutator=next_interval)
+        with tempfile.TemporaryDirectory() as directory:
+            snapshot = MarketRegimeIntradayDataStore(directory, http_get=transport).refresh(
+                instrument_keys=[item.key for item in TENCENT_INSTRUMENTS],
+                now=NOW,
+                run_id="trailing-unfinished",
+            )
+
+        self.assertEqual(snapshot["quality"], "complete")
+        self.assertEqual(snapshot["accepted_count"], 3)
+        self.assertEqual(snapshot["rejected_count"], 0)
+        for item in snapshot["instruments"]:
+            self.assertEqual(item["refresh_status"], "accepted")
+            self.assertEqual(item["provider_timestamp"], "2026-08-05T02:40:00Z")
+            self.assertEqual(item["dropped_unfinished_bars"], ["2026-08-05T02:50:00Z"])
+            self.assertTrue(item["source_attempts"][-1]["accepted"])
+            self.assertEqual(len(item["source_attempts"][-1]["raw_sha256"]), 64)
 
     def test_one_m5_failure_degrades_only_that_asset(self) -> None:
         transport = fixture_transport(fail_symbol="sh000688")
