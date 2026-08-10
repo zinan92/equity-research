@@ -684,7 +684,7 @@ main {
 
 .freshness-card {
   min-width: 0;
-  min-height: 69px;
+  min-height: 116px;
   padding: 9px 10px;
   background: var(--bg-raised);
 }
@@ -745,6 +745,46 @@ main {
 
 .freshness-card[data-state="unavailable"] .freshness-state::before {
   background: var(--up);
+}
+
+.time-identities {
+  margin: 0 0 7px;
+  display: grid;
+  gap: 3px;
+}
+
+.time-identities > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 5px;
+}
+
+.time-identities dt,
+.time-identities dd {
+  min-width: 0;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-identities dt {
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+.time-identities dd {
+  overflow: hidden;
+  color: var(--text-soft);
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time-identities time[data-state="unknown"] {
+  color: var(--accent);
 }
 
 .freshness-card footer {
@@ -1628,6 +1668,10 @@ main {
 
   .freshness-grid {
     grid-template-columns: 1fr;
+  }
+
+  .time-identities > div {
+    grid-template-columns: 64px minmax(0, 1fr);
   }
 
   .signal-grid {

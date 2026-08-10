@@ -3428,3 +3428,43 @@ bundle and prevented consecutive open-session evidence from being evaluated.
 - A historical `last_provider_failure` receipt can remain visible after
   recovery.  Current health is determined by `last_error=null`, zero failure
   streak, accepted/rejected counts, provider ages and the new snapshot identity.
+
+# 2026-08-10 · Evidence age and current age are two different clocks
+
+## Decision
+
+Render `provider_timestamp`, `observed_at` and `received_at` as three
+separate labelled `time` elements on every intraday asset card.  Display the
+frozen normalized `age_seconds` as `AGE@OBS`, and keep the page-relative
+age as a separately labelled `AGE@NOW`.  A missing/invalid timestamp or
+capture age forces `TIME IDENTITY UNKNOWN` before any current-state styling.
+
+## Why
+
+The Live v1 contract requires all three time identities and defines
+`age_seconds` as observation time minus provider time.  Showing only the
+provider time and an age derived from `Date.now()` hid receipt/normalization
+latency and made a refreshed page look capable of changing the frozen evidence
+age.  Users need both concepts, but they must never share one label.
+
+## Evidence
+
+- Issue #736 and
+  `evidence/market-regime-live-time-identity/browser-acceptance.json`.
+- A real cohesive API bundle exposed complete time identities for 14/14
+  accepted assets; desktop and 390px browser inspection found 14 cards, 42
+  labelled time rows, 42 raw datetime attributes and no horizontal overflow.
+- Focused web tests bind all three API fields, the semantic time element,
+  capture/current age labels and fail-closed unknown state.
+
+## Gotchas
+
+- Assigning the DOM `dateTime` property did not persist a readable attribute
+  in the target browser.  Explicit `setAttribute("datetime", iso)` did and is
+  what the browser acceptance checks.
+- `AGE@OBS` can remain one minute while `AGE@NOW` advances.  That is not a
+  contradiction: the former is immutable normalization evidence and the latter
+  is current staleness.
+- A complete 14/14 identity set can still produce an `insufficient` overlay.
+  Time transparency does not relax the frozen model thresholds or turn market
+  evidence into a forecast.

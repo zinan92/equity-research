@@ -1,5 +1,34 @@
 # REGISTRY
 
+## 2026-08-10 · Market Regime Live v1 time-identity closure (Issue #736)
+
+Now: every one of the 14 intraday cash/proxy cards visibly separates the
+provider bar time, normalization observation time and complete-response receipt
+time.  Valid values are semantic `time[datetime]` elements with the raw ISO
+instant in the DOM.  `AGE@OBS` is the frozen contract value
+`observed_at - provider_timestamp`; the separately labelled `AGE@NOW` may
+advance as the page polls.  Missing or malformed time identity fails the card
+to `TIME IDENTITY UNKNOWN` and cannot light the current-state indicator.
+
+Live candidate acceptance used a real `market-regime-api-v2` bundle with
+14/14 accepted assets, 42 visible time rows and 42 raw datetime attributes.
+The 1280px desktop and 390px mobile layouts had no horizontal overflow; the
+mobile cards remained 360px wide.  Browser console warnings/errors were zero.
+Evidence is in
+[`evidence/market-regime-live-time-identity/browser-acceptance.json`](evidence/market-regime-live-time-identity/browser-acceptance.json).
+The following ordinary 10:56 CST scheduler cycle also finished idle with
+14/14 accepted, zero rejected, `last_error=null` and provider failure streak
+zero.  Validation passed 8 focused web tests, all 115 Market Regime tests and
+the 841-test baseline (one skipped); JavaScript syntax, JSON, diff checks and
+gitleaks were also clean.
+
+This closes the last visible-field gap in the frozen Live v1 contract.  Cash
+and futures identities, the 15-minute target wording, same-origin reads and
+`publication_eligible=false` / `action_eligible=false` boundaries are
+unchanged.  Next: keep provider-rights and ordinary-cycle observation separate
+from product completion; this page still does not claim an exchange realtime
+SLA, publication permission, a forecast or a trading action.
+
 ## 2026-08-10 · Tencent trailing unfinished m5 boundary repair (Issue #734)
 
 Now: the A-share intraday authority keeps completed Tencent m5 evidence when a
