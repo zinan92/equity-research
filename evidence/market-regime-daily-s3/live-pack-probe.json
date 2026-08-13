@@ -1,0 +1,51 @@
+{
+  "schema_version": "market-regime-daily-evidence-probe-v1",
+  "captured_at": "2026-08-13T12:33:57Z",
+  "pack_id": "market-regime-daily-evidence:87a4ad9a4f8fff9899798ebd649e726908441285ca562ebee64ef6a01e619e6e",
+  "inputs": {
+    "daily_run_id": "market-regime-20260813T121344Z-8875ee3063f6",
+    "analysis_id": "market-regime-analysis:e94754e8f8685be6a2404d2dc357c835a7c1d8addc740887c28e049fe119437e",
+    "analysis_input_fingerprint": "55ef3b3040c08325951eb5b91dfc2b208dbfd9245cfb12f527f426c502dc796e",
+    "macro_run_id": "market-regime-macro-20260813T120719Z-cd1d13f04d77"
+  },
+  "quality": "fresh",
+  "coverage": {
+    "accepted": 16,
+    "total": 16,
+    "ratio": 1.0,
+    "unavailable_keys": [],
+    "critical_missing_keys": [],
+    "stale_keys": [],
+    "fallback_keys": []
+  },
+  "time": {
+    "joint_judgment_time": "2026-08-12T19:30:00Z",
+    "latest_evidence_time": "2026-08-13T07:00:00Z",
+    "cross_market_close_skew_hours": 11.5,
+    "full_quality_skew_limit_hours": 30.0
+  },
+  "evidence_slot_count": 16,
+  "evidence_id_count": 16,
+  "contradiction_candidate_count": 1,
+  "confidence_inputs": {
+    "base_analysis_confidence": 0.933,
+    "coverage_factor": 1.0,
+    "skew_factor": 1.0,
+    "freshness_factor": 1.0,
+    "fallback_factor": 1.0,
+    "critical_factor": 1.0,
+    "contradiction_factor": 0.95,
+    "score": 0.886,
+    "level": "high"
+  },
+  "artifact_sha256": "1011dee7e2a2606df274c3b72c76aa1cf3de4ebbd4fc6efdec53e1b45446b0e2",
+  "receipt_sha256": "834cd3f1b53f0b58d732b6e1b7360e0be9119560bd46946318fa2248b75d1cee",
+  "latest_pointer_sha256": "9500245638caf9ba7d403ce6e47c36f698d36acf33e8ae1ce5c0994a81ed0bf3",
+  "runtime_evidence_committed": false,
+  "publication_eligible": false,
+  "action_eligible": false,
+  "claims": {
+    "proves": "One controlled local run verified the current daily, deterministic-analysis and macro identity chains and compiled 16 resolvable evidence slots.",
+    "does_not_prove": "Provider SLA, redistribution rights, news causality, private-beta readiness, a market forecast or a trading action."
+  }
+}

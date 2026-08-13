@@ -1,5 +1,30 @@
 # REGISTRY
 
+## 2026-08-13 · Market Regime Daily Evidence Pack v1 (Issue #743)
+
+Now: a separate immutable compiler verifies the current completed-daily data,
+its deterministic analysis and the S1 macro authority, then freezes a 16-slot
+cross-asset Evidence Pack. Every accepted slot has an exact evidence ID binding
+source artifact/factor identity, completed session, close time, value,
+five-session change, unit, quality and source tier. Price/DXY changes remain
+percent returns; U.S. Treasury yield and curve changes remain basis points.
+Generated `what_is_going_on` prose is excluded from evidence.
+
+The pack publishes joint judgment time, latest evidence time, measured close
+skew, coverage/critical-missing/stale/fallback inputs, existing deterministic
+agreement inputs, mechanically degraded confidence inputs and non-causal
+contradiction candidates. Immutable artifact
+and receipt precede the atomic latest pointer; replay is stable and tamper,
+path, input and citation mismatch fail closed. The controlled local probe
+accepted 16/16 identities with 11.5 hours close skew and one observable
+contradiction candidate; its safe receipt is
+[`evidence/market-regime-daily-s3/live-pack-probe.json`](evidence/market-regime-daily-s3/live-pack-probe.json).
+
+Next: build the constrained LLM narrative compiler over this pack. It must cite
+only these evidence IDs, keep numeric facts unchanged, isolate untrusted text,
+validate posture/transmission/contradictions/exactly-two falsifiers, and publish
+a same-pack deterministic fallback on any provider/schema/citation failure.
+
 ## 2026-08-13 · Market Regime Daily v2 macro authority (Issue #741)
 
 Now: a separate `market-regime-macro-data-v1` authority freezes DXY, official
