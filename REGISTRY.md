@@ -1,5 +1,35 @@
 # REGISTRY
 
+## 2026-08-13 · Market Regime Daily constrained narrative compiler (Issue #745)
+
+Now: S4 adds a separate, versioned LLM narrative compiler over the immutable
+S3 Evidence Pack. The model returns only bounded posture/theme, driver/response
+and causal-status predicates, contradiction relationships and exactly two
+falsifier field/change pairs. A deterministic renderer owns all prose,
+confidence and truth-boundary language; known evidence IDs and enum
+relationships are validated before rendering. Model output remains
+`model_generated_unreviewed`, read-only,
+`publication_eligible=false` and `action_eligible=false`.
+
+Any missing key, timeout, provider/schema/citation/safety failure produces a
+same-pack deterministic `unknown` fallback and a fixed, secret-free reason
+code. Immutable artifact, per-run receipt and one atomic `state.json` bind the
+pack, request/prompt/compiler versions, output hash, validation result and
+truth boundary; `latest.json` is only a compatibility mirror. Readback rejects
+incoherent identity, path, receipt or boundary mismatches; content hashes do
+not claim external authenticity or anti-rollback protection against a party
+that can rewrite every bound file. The contract is
+[`docs/market-regime/daily-narrative-contract.md`](docs/market-regime/daily-narrative-contract.md).
+
+The controlled real-evidence probe is recorded in
+[`evidence/market-regime-daily-s4/live-narrative-probe.json`](evidence/market-regime-daily-s4/live-narrative-probe.json): the no-key run and
+one DeepSeek model attempt fell back to `unknown` while retaining the exact
+S3 pack identity; no provider success is claimed.
+
+Next: merge S4 after the adversarial receipt and full-baseline gates. Then implement S5's dedicated
+daily bundle/API/health runtime; do not modify the existing Live v1 API or
+15-minute cadence.
+
 ## 2026-08-13 · Market Regime Daily Evidence Pack v1 (Issue #743)
 
 Now: a separate immutable compiler verifies the current completed-daily data,

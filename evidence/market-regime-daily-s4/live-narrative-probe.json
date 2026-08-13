@@ -1,0 +1,35 @@
+{
+  "schema_version": "market-regime-daily-narrative-v2",
+  "probe": "real-evidence-pack-with-provider-and-no-key-fallbacks",
+  "pack_id": "market-regime-daily-evidence:87a4ad9a4f8fff9899798ebd649e726908441285ca562ebee64ef6a01e619e6e",
+  "fallback_probe": {
+    "narrative_id": "market-regime-daily-narrative:47eaa26b6a5db14b71a1b3aed1bf8da39a8d1c6c3a6d3c368329b752573d6041",
+    "generation_status": "deterministic_fallback",
+    "posture": "unknown",
+    "fallback_reason_code": "provider_missing",
+    "artifact_sha256": "87923fb8124c84ccbe938c264fae6b4728fc178ecc56b6fa2ae9f4e421a3d37d",
+    "receipt_sha256": "6d1f2409389fa8fc59e4db07dd3df47d456aef71456f4618866550c4c7528ff1",
+    "validation": {"status": "fallback", "reason": "provider_missing"},
+    "publication_eligible": false,
+    "action_eligible": false
+  },
+  "provider_probe": {
+    "provider": "DeepSeek",
+    "models_attempted": ["deepseek-chat"],
+    "generation_status": "deterministic_fallback",
+    "posture": "unknown",
+    "fallback_reason_code": "provider_error",
+    "narrative_id": "market-regime-daily-narrative:dea593bd5f4622beefccab1ba2584779232246d8416b95806b05bd7e5d4b40c0",
+    "artifact_sha256": "4113e952946509111d6c1e1d808faf6f411a63b00d83e3cc10afa4737a90ddea",
+    "receipt_sha256": "56e03993120bf6d28ebdb6721252d20c7dd4e5044288eb5335fa70dfe7aa9b2a",
+    "validation": {"status": "fallback", "reason": "provider_error"},
+    "provider_receipt": {},
+    "publication_eligible": false,
+    "action_eligible": false
+  },
+  "notes": [
+    "The same frozen pack identity was retained for every run.",
+    "The provider probe persisted no exception text, credential material or unsafe provider metadata.",
+    "Provider success is not claimed; the conservative fallback path is the accepted result for this run."
+  ]
+}
