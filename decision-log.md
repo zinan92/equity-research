@@ -3573,3 +3573,54 @@ already deployed daily and intraday identity chains.
   artifact.
 - Successful local capture does not upgrade Yahoo rights, establish a Treasury
   SLA or authorize member/public distribution.
+
+# 2026-08-13 · The LLM receives one frozen evidence vocabulary
+
+## Decision
+
+Compile the existing completed-daily data/analysis chain and the separate macro
+authority into a 16-slot, content-addressed Evidence Pack before any LLM call.
+Each accepted value receives one resolver-backed evidence ID. Keep unavailable
+slots visible, preserve per-market close times and units, and treat existing
+deterministic contradictions as observable non-causal candidates.
+
+## Why
+
+Allowing a narrative provider to read mutable latest files, duplicate numbers
+or generated newsletter prose would make citation and replay unverifiable. A
+single frozen vocabulary lets the next compiler reject unknown IDs, altered
+numbers, stale prose and unit mistakes without coupling provider failure to the
+already-shipped structural or intraday runtime.
+
+Bind status, quality, source tier/provider, failure identity and the immutable
+rights/action boundary inside each evidence/pack identity. Confidence is also
+code-owned: coverage, close skew, freshness, fallback, critical missing inputs
+and contradictions apply visible deterministic factors before any LLM sees the
+pack.
+
+## Evidence
+
+- Issue #743 and `docs/market-regime/daily-evidence-pack-contract.md`.
+- Focused tests bind 16-slot coverage, percent/bp semantics, analysis/daily
+  identity, resolver behavior, partial/stale/fallback degradation, replay,
+  tamper and CLI empty-state behavior.
+- `evidence/market-regime-daily-s3/live-pack-probe.json` records one controlled
+  local compilation of the current verified daily/analysis chain plus S1 macro
+  run: 16/16 accepted, 11.5 hours close skew and one contradiction candidate.
+
+## Gotchas
+
+- `joint_judgment_time` is the earliest accepted close, not a claim that every
+  market closed on that date. The latest evidence time and measured skew stay
+  visible beside it.
+- Model verification replay is used only to prove that the stored analysis
+  still binds the current daily snapshot. Its prose is not imported and no
+  model pointer is changed.
+- A last-good, stale or not-refreshed value can remain valid evidence while
+  still degrading pack quality. Evidence presence and current refresh success
+  are different facts.
+- A complete local pack does not prove publication rights, causality, a
+  forecast or readiness for member distribution.
+- Style contradictions describe a cross-market pair, not one instrument. They
+  bind all four supporting evidence IDs; a missing member fails the candidate
+  rather than inventing one representative asset.
