@@ -1,5 +1,27 @@
 # Decision Log
 
+## 2026-08-13 · Market Regime Daily v2 is the product North Star (Issue #748)
+
+- Decision: promote the approved 8898 “宏观世界模型 · 开盘前 90 秒判断”
+  experience to the explicit reader-facing North Star for the Market Regime
+  product. The use moment is one completed-daily page that answers what global
+  markets are pricing, states one market posture, explains its transmission
+  chain, shows contradictions and names exactly two observable falsifiers.
+- Why: Park's approved white vertical hierarchy is the product's attention
+  model. It turns nine-plus cross-asset charts and several deterministic
+  dimensions into one coherent world-model explanation instead of a confusing
+  collection of badges. The user outcome is a fast, falsifiable macro read
+  before the A-share open.
+- Evidence: the approved local 8898 discovery page; Issue #739;
+  `docs/market-regime/daily-v2-contract.md`; the S1–S4 data/evidence/narrative
+  contracts and their merged receipts.
+- Gotchas: the page's example numbers and scenario tabs are discovery fixtures,
+  not current facts or history. “All markets have the same completed daily
+  bar” is not a valid data claim; the product must show joint judgment time,
+  per-market completed sessions and close skew. The North Star changes the
+  product intent and information hierarchy, not the existing Live v1 API,
+  15-minute cadence, data rights or publication boundary.
+
 ## 2026-08-13 · Daily v2 narrative is a constrained compiler (Issue #745)
 
 - Decision: place the LLM after the immutable S3 Evidence Pack. The request is
