@@ -2,7 +2,8 @@
 
 ## 2026-08-13 · Market Regime Daily constrained narrative compiler (Issue #745)
 
-Now: S4 adds a separate, versioned LLM narrative compiler over the immutable
+Now: S4 is merged in PR #746 at
+`6b37f4da8a6b3413bbee3f5a389ac83452db0f11`. It adds a separate, versioned LLM narrative compiler over the immutable
 S3 Evidence Pack. The model returns only bounded posture/theme, driver/response
 and causal-status predicates, contradiction relationships and exactly two
 falsifier field/change pairs. A deterministic renderer owns all prose,
@@ -26,9 +27,8 @@ The controlled real-evidence probe is recorded in
 one DeepSeek model attempt fell back to `unknown` while retaining the exact
 S3 pack identity; no provider success is claimed.
 
-Next: merge S4 after the adversarial receipt and full-baseline gates. Then implement S5's dedicated
-daily bundle/API/health runtime; do not modify the existing Live v1 API or
-15-minute cadence.
+Next: implement S5's dedicated daily bundle/API/health runtime; do not modify
+the existing Live v1 API or 15-minute cadence.
 
 ## 2026-08-13 · Market Regime Daily Evidence Pack v1 (Issue #743)
 
