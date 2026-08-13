@@ -36,6 +36,7 @@ from data_core.market_regime_model import (
     MODEL_VERSION as STRUCTURAL_MODEL_VERSION,
     MarketRegimeAnalysisStore,
 )
+from market_regime_daily_runtime import MarketRegimeDailyRuntime
 
 
 API_SCHEMA_VERSION = "market-regime-api-v2"
@@ -811,6 +812,7 @@ class MarketRegimeRuntime:
         intraday_store_factory: Callable[[Path], Any] = MarketRegimeIntradayDataStore,
         overlay_store_factory: Callable[[Path], Any] = MarketRegimeIntradayOverlayStore,
         api_store_factory: Callable[[Path], Any] = MarketRegimeApiStore,
+        daily_runtime_factory: Callable[..., MarketRegimeDailyRuntime] = MarketRegimeDailyRuntime,
     ) -> None:
         self.root = Path(root or market_regime_root()).expanduser().resolve()
         self.interval_hours = configured_interval_hours(interval_hours)
@@ -821,6 +823,7 @@ class MarketRegimeRuntime:
         self.intraday_store_factory = intraday_store_factory
         self.overlay_store_factory = overlay_store_factory
         self.api_store_factory = api_store_factory
+        self.daily_runtime_factory = daily_runtime_factory
         self.status_path = self.root / "scheduler" / "status.json"
         self.lock_path = self.root / "scheduler" / "refresh.lock"
         self.pipeline_lock_path = self.root / "scheduler" / "pipeline.lock"
@@ -910,6 +913,21 @@ class MarketRegimeRuntime:
                     raise MarketRegimeRuntimeError(
                         "compiled result differs from verified latest analysis"
                     )
+                # Daily v2 is downstream of the verified completed-daily
+                # structural snapshot/analysis, not of the optional intraday
+                # surface.  It runs while this cycle already owns the cohesive
+                # pipeline lock and records its own fixed-code status.
+                try:
+                    self.daily_runtime_factory(
+                        self.root,
+                        interval_hours=self.interval_hours,
+                        pipeline_lock_already_held=True,
+                    ).cycle()
+                except Exception:
+                    # A Daily failure must not roll back or fail the
+                    # verified Live v1/API v2 result. The Daily runtime owns
+                    # its own fixed-code status, including macro-unavailable.
+                    pass
                 intraday_store = self.intraday_store_factory(self.root)
                 intraday = intraday_store.latest()
                 overlay_store = self.overlay_store_factory(self.root)

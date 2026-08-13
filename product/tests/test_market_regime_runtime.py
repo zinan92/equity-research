@@ -115,6 +115,22 @@ class ForbiddenIntradayDataStore:
         raise AssertionError("stopped scheduler must not collect")
 
 
+class FailedIntradayDataStore:
+    def __init__(self, root: Path) -> None:
+        self.root = root
+
+    def latest(self) -> dict:
+        raise RuntimeError("intraday unavailable")
+
+
+class RecordingDailyRuntime:
+    def __init__(self, calls: list[dict], **kwargs) -> None:  # type: ignore[no-untyped-def]
+        calls.append(kwargs)
+
+    def cycle(self) -> dict:
+        return {"state": "idle"}
+
+
 class FailAfterPublishApiStore:
     def __init__(self, root: Path) -> None:
         self.store = MarketRegimeApiStore(root)
@@ -228,6 +244,32 @@ class MarketRegimeRuntimeTest(unittest.TestCase):
             [_intraday_backoff_seconds(15, count) for count in range(5)],
             [900, 900, 1800, 3600, 3600],
         )
+
+    def test_daily_runs_after_structural_analysis_even_when_intraday_is_unavailable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared_root(root, name="daily-before-intraday")
+            (root / "macro").mkdir(exist_ok=True)
+            (root / "macro" / "latest.json").write_text("{}", encoding="utf-8")
+            calls: list[dict] = []
+
+            def daily_factory(_root: Path, **kwargs):  # type: ignore[no-untyped-def]
+                return RecordingDailyRuntime(calls, **kwargs)
+
+            runtime = MarketRegimeRuntime(
+                root,
+                clock=FixedClock(
+                    datetime(2026, 8, 6, 8, 1, tzinfo=timezone.utc),
+                    datetime(2026, 8, 6, 8, 2, tzinfo=timezone.utc),
+                ),
+                data_store_factory=FrozenDataStore,
+                intraday_store_factory=FailedIntradayDataStore,
+                daily_runtime_factory=daily_factory,
+            )
+            result = runtime.cycle()
+            self.assertEqual(result["state"], "failed")
+            self.assertEqual(len(calls), 1)
+            self.assertTrue(calls[0]["pipeline_lock_already_held"])
 
     def test_intraday_cycle_orders_stages_and_publishes_verified_identities(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

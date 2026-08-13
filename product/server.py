@@ -62,6 +62,11 @@ from market_regime_runtime import (
     market_regime_health_payload,
     market_regime_payload,
 )
+from market_regime_daily_runtime import (
+    MarketRegimeDailyRuntimeError,
+    market_regime_daily_health_payload,
+    market_regime_daily_payload,
+)
 from billing_store import (
     BillingError, billing_export, billing_status, effective_member, initialize_billing,
     payment_controls, record_payment, record_refund, set_payment_controls,
@@ -315,7 +320,12 @@ def route_entitlement(route: str) -> str:
 
 
 def private_preview_get_entitlement(route: str) -> str | None:
-    if route in {"/api/market-regime", "/api/market-regime/health"}:
+    if route in {
+        "/api/market-regime",
+        "/api/market-regime/health",
+        "/api/market-regime/daily",
+        "/api/market-regime/daily/health",
+    }:
         return "dashboard"
     if route == "/api/private-preview":
         return "dashboard"
@@ -577,6 +587,32 @@ class DashboardHandler(BaseHTTPRequestHandler):
             except MarketRegimeRuntimeError as exc:
                 self._json(
                     {"error": "market_regime_unavailable", "detail": str(exc)},
+                    HTTPStatus.SERVICE_UNAVAILABLE,
+                )
+            else:
+                self._json(payload)
+            return
+        if route in {"/api/market-regime/daily", "/api/market-regime/daily/health"}:
+            bound_host = str(self.server.server_address[0])
+            try:
+                loopback = ipaddress.ip_address(bound_host).is_loopback
+            except ValueError:
+                loopback = bound_host == "localhost"
+            if not loopback:
+                self._json(
+                    {"error": "market_regime_daily_requires_loopback", "code": "loopback_only"},
+                    HTTPStatus.FORBIDDEN,
+                )
+                return
+            try:
+                payload = (
+                    market_regime_daily_health_payload()
+                    if route.endswith("/health")
+                    else market_regime_daily_payload()
+                )
+            except MarketRegimeDailyRuntimeError:
+                self._json(
+                    {"error": "market_regime_daily_unavailable", "code": "daily_runtime_unavailable"},
                     HTTPStatus.SERVICE_UNAVAILABLE,
                 )
             else:
