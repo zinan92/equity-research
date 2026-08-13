@@ -27,6 +27,11 @@ The controlled real-evidence probe is recorded in
 one DeepSeek model attempt fell back to `unknown` while retaining the exact
 S3 pack identity; no provider success is claimed.
 
+The approved 8898 discovery experience is now the explicit Market Regime
+product North Star, recorded in [`NORTH_STAR.md`](NORTH_STAR.md) and executed
+by [`docs/market-regime/daily-v2-contract.md`](docs/market-regime/daily-v2-contract.md).
+Its example values and scenario tabs remain visual fixtures only.
+
 Next: implement S5's dedicated daily bundle/API/health runtime; do not modify
 the existing Live v1 API or 15-minute cadence.
 

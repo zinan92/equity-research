@@ -10,6 +10,43 @@ user can enter a ticker and receive a concise decision summary plus a
 standardized research report whose claims remain tied to verifiable,
 point-in-time evidence.
 
+## Approved product North Star — Market Regime Daily v2
+
+Within the Market Regime product, the reader-facing North Star is the
+**Macro World Model · pre-open 90-second judgment** experience represented by
+the approved 8898 discovery page. It is not a chart wall and it is not a set
+of co-equal labels. Before the A-share open, one local page should let the
+reader understand:
+
+1. what global markets are primarily pricing;
+2. the single current market posture;
+3. the observable transmission chain behind that synthesis;
+4. which assets contradict the dominant story; and
+5. exactly two observable conditions that would falsify it.
+
+The approved reading order is fixed:
+
+`posture → synthesis → evidence chain → five-session cross-section →
+contradictions → two falsifiers → completed-daily charts and deeper evidence`.
+
+The visual baseline is a white, narrow vertical research note: one dominant
+headline, clear Chinese serif hierarchy, separate posture/return color
+semantics, visible confidence and no mobile horizontal overflow. `进攻 / 等待 /
+防守 / 未知` describes market posture only; it never instructs a user to buy,
+sell, hedge, change a position or expect a return.
+
+The daily page is an explanation of a frozen completed-daily cross-asset model.
+Deterministic code owns facts, units, confidence, time identity and evidence
+links. LLM output is downstream explanation only and must fall back honestly
+when unavailable. `/market-regime` is the future daily macro home;
+`/market-regime/live` remains the separate 15-minute reader and cannot rewrite
+the daily judgment.
+
+The 8898 page, its scenario tabs and its example numbers are discovery
+references for hierarchy and visual language, not current market evidence or
+dated history. The executable details live in
+[`docs/market-regime/daily-v2-contract.md`](docs/market-regime/daily-v2-contract.md).
+
 ## Done looks like
 
 The product can serve its approved research universe with evidence-bound report
