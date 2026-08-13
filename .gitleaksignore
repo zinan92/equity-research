@@ -7,3 +7,5 @@ fce996c33e70eddce8e375f53cd252b549eb3d7c:skills/deep-analysis/scripts/tests/pipe
 # Audited source-policy identifiers; these are adapter names, not credentials.
 cfd3161e0cdc05f86d67656775ba1ecd2642b067:artifacts/e4-reports/300750.SZ.l1-m3-sell-side-admission.json:generic-api-key:22
 bedd7d3be91886ba0fb4e37e23853ff8f4fc01af:artifacts/e4-reports/300750.SZ.l1-m3-sell-side-admission.json:generic-api-key:22
+# Audited market-regime bundle identifiers; content-addressed IDs are not credentials.
+evidence/market-regime-live-time-identity/browser-acceptance.json:generic-api-key:10
