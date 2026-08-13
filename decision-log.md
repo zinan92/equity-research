@@ -3522,3 +3522,54 @@ clearer daily use moment.
 - S0 records a future route split but intentionally changes no route.  Until the
   scoped UI/runtime story is deployed, `/market-regime` continues to serve the
   existing Live v1 page.
+
+# 2026-08-13 · Rates are a separate macro authority, not synthetic price charts
+
+## Decision
+
+Keep DXY and U.S. Treasury explanatory factors outside the existing OHLC
+instrument registry. Reuse the verified OHLC normalizer for DXY, but parse the
+official Treasury year CSV as rate observations. Store 2Y and 10Y levels in
+percent; expose their changes and the same-date `10Y - 2Y` curve in basis
+points. Bind normalized identities to raw content while keeping fetch/run paths
+outside the content identity.
+
+## Why
+
+Forcing Treasury yields through a price-return contract would make the mockup's
+percent labels materially misleading and would blur official rate evidence with
+supplementary market-price providers. A separate authority can preserve the
+source's real units, derive 2s10s transparently and fail without affecting the
+already deployed daily and intraday identity chains.
+
+## Evidence
+
+- Issue #741 and `docs/market-regime/macro-data-contract.md`.
+- Ten focused tests cover unit semantics, CSV order/schema failures, same-date
+  derivation, immutable identity, replay, tamper detection, last-good fallback,
+  unknown-factor rejection and the rights gate.
+- `evidence/market-regime-daily-s1/live-source-probe.json` records one
+  controlled run: DXY and the official Treasury CSV returned HTTP 200 with the
+  preserved raw hashes, and all four factors were accepted for the 2026-08-12
+  completed session.
+
+## Gotchas
+
+- The Treasury page's generic all-years CSV path may be access-controlled while
+  its documented year-scoped CSV succeeds. Capture the exact response before
+  diagnosing source availability; never infer it from an adapter error.
+- A wholly descending Treasury file is normal and is explicitly reordered. A
+  mixed-order file, duplicate date, future date or `N/A` 2Y/10Y row fails the
+  entire rates capture so the curve cannot combine mismatched evidence.
+- A last-good factor plus a new failed refresh is not `fresh success`; the
+  snapshot becomes partial and carries the rejection receipt.
+- A scoped `--factor` refresh still projects all four identities. Untouched
+  verified factors are labelled `not_refreshed`; missing ones are
+  `not_requested` and unavailable. A one-factor run must never masquerade as a
+  complete fresh macro surface.
+- A zero-byte HTTP body is evidence, not the absence of evidence. Preserve the
+  empty file and its well-defined SHA-256; a status check may return exit 0 only
+  for a genuinely unused runtime, never for an existing corrupt pointer or
+  artifact.
+- Successful local capture does not upgrade Yahoo rights, establish a Treasury
+  SLA or authorize member/public distribution.

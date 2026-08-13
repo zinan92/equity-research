@@ -1,5 +1,30 @@
 # REGISTRY
 
+## 2026-08-13 · Market Regime Daily v2 macro authority (Issue #741)
+
+Now: a separate `market-regime-macro-data-v1` authority freezes DXY, official
+U.S. Treasury 2Y/10Y par yields and same-date derived 2s10s without changing the
+existing nine-chart authority, structural model, API v2 or 15-minute pipeline.
+DXY uses completed-daily percent returns. Treasury levels remain percent while
+1/5/20-session changes and the 2s10s level/change use basis points. Every
+accepted or rejected attempt retains a safe receipt and raw-body SHA-256; raw
+bodies stay under gitignored runtime storage. Immutable factor IDs are stable
+under exact-byte replay, latest-good pointers are atomic, and a rejected refresh
+publishes an explicit last-good-plus-failure or unavailable state.
+
+The controlled real probe accepted all four factors from Yahoo's DXY chart and
+the official 2026 Treasury CSV. It is recorded in
+[`evidence/market-regime-daily-s1/live-source-probe.json`](evidence/market-regime-daily-s1/live-source-probe.json)
+with source URLs, HTTP/content identities and factor IDs. This proves the S1
+capture path for that run only; the factors remain local evaluation,
+`publication_eligible=false` and `action_eligible=false`.
+
+Next: create Evidence Pack v1 to merge these four factors with the existing
+verified completed-daily market snapshot, compute cross-market close skew and
+issue exact evidence IDs. Defer the optional news/event-candidate adapter unless
+its original-source provenance contract is available; generated 财经日报 prose
+must not enter as evidence.
+
 ## 2026-08-13 · Market Regime Daily v2 approved contract (Issue #739)
 
 Now: Park approved the white vertical Daily v2 mockup as the product and

@@ -1,0 +1,75 @@
+{
+  "schema_version": "market-regime-macro-live-probe-v1",
+  "captured_at": "2026-08-13T12:07:19.617667Z",
+  "run_id": "market-regime-macro-20260813T120719Z-cd1d13f04d77",
+  "runtime_evidence_location": "gitignored product/runtime/market-regime/macro-s1-probe",
+  "runtime_evidence_committed": false,
+  "quality": "fresh",
+  "accepted_count": 4,
+  "rejected_count": 0,
+  "sources": [
+    {
+      "factor_keys": ["dxy"],
+      "method": "GET",
+      "requested_url": "https://query2.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?interval=1d&range=2y&events=history&includeAdjustedClose=false",
+      "final_url": "https://query2.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?interval=1d&range=2y&events=history&includeAdjustedClose=false",
+      "status_code": 200,
+      "content_type": "application/json",
+      "raw_bytes": 47240,
+      "raw_sha256": "93cef295c93978d8830eab7960cbe64292af8d0512ea5ad7115ec1d36de9dfc6"
+    },
+    {
+      "factor_keys": ["us2y", "us10y", "us2s10s"],
+      "method": "GET",
+      "requested_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv",
+      "final_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&_format=csv",
+      "status_code": 200,
+      "content_type": "text/csv",
+      "raw_bytes": 12584,
+      "raw_sha256": "06d532a26d1441d5a227c599aca44d2241ddcc09159bb3f558eb6127945e6e0c"
+    }
+  ],
+  "accepted_factors": [
+    {
+      "key": "dxy",
+      "last_completed_session": "2026-08-12",
+      "value": 100.01000213623047,
+      "level_unit": "index_points",
+      "factor_id": "market-regime-macro-data-v1:9eabbc34c3705147403dd1cd3f48e971e2550ffd0efe4430b267e4f2d7fc1b36"
+    },
+    {
+      "key": "us2y",
+      "last_completed_session": "2026-08-12",
+      "value": 4.2,
+      "level_unit": "percent",
+      "factor_id": "market-regime-macro-data-v1:ec81e7ff33881bb65ff6716fae282ebba3f25f88438211321556cde87d035dbc"
+    },
+    {
+      "key": "us10y",
+      "last_completed_session": "2026-08-12",
+      "value": 4.68,
+      "level_unit": "percent",
+      "factor_id": "market-regime-macro-data-v1:5fdb83aef81d9fd9c922c70725956328ff91a5bc387e78afec4d05f238fcafa8"
+    },
+    {
+      "key": "us2s10s",
+      "last_completed_session": "2026-08-12",
+      "value": 48.0,
+      "level_unit": "basis_points",
+      "factor_id": "market-regime-macro-data-v1:d2f71fa72095c89bd6ce7764647e7218c257fd4d419c38c4eb008c1485101187"
+    }
+  ],
+  "run_receipt_sha256": "2aa60ab0308ba8155b2070e65fde8baf3931373e16f64ff5d599b84418f767b4",
+  "latest_snapshot_sha256": "e9b227e725a8410de9e79666fc42f4a7946bcd02a4c2378b586d343d9836cbdd",
+  "license": {
+    "deployment_mode": "local_prototype",
+    "license_status": "local_evaluation_only",
+    "verified_for_publication": false
+  },
+  "publication_eligible": false,
+  "action_eligible": false,
+  "claims": {
+    "proves": "The two configured endpoints returned identity-preserved responses that passed the S1 source, shape, unit and history contracts in this controlled run.",
+    "does_not_prove": "Commercial redistribution rights, provider SLA, future availability, private-beta readiness, a market forecast or a trading action."
+  }
+}
