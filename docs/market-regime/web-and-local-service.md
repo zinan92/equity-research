@@ -1,5 +1,12 @@
 # Market Regime Radar · web and local service
 
+> **First-screen supersession:** Issue #739 freezes the approved Daily v2
+> information architecture in [`daily-v2-contract.md`](daily-v2-contract.md).
+> A later scoped story will make `/market-regime` the completed-daily macro
+> home and preserve this Live v1 reader at `/market-regime/live`. Until that
+> route-migration story merges and is deployed, the canonical local URL and
+> runtime behavior documented below remain unchanged.
+
 Status: S4 local-only decision reader. Canonical local URL:
 
 ```text

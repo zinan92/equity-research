@@ -1,5 +1,29 @@
 # REGISTRY
 
+## 2026-08-13 · Market Regime Daily v2 approved contract (Issue #739)
+
+Now: Park approved the white vertical Daily v2 mockup as the product and
+information-architecture baseline.  The executable contract is
+[`docs/market-regime/daily-v2-contract.md`](docs/market-regime/daily-v2-contract.md):
+one completed-daily market posture and synthesis lead the page, followed by an
+evidence chain, five-session cross-section, contradictions, exactly two
+falsifiers and the nine existing daily charts.  `进攻 / 等待 / 防守 / 未知` is a
+market description, never a personalized trading instruction.
+
+The contract records the future route split: `/market-regime` becomes the
+daily macro home and the existing 15-minute-target reader is preserved at
+`/market-regime/live`.  No route, provider, model, API, scheduler, launch agent
+or production page changes in S0.  DXY and U.S. Treasury factors require a new
+authority; 2Y/10Y and 2s10s use basis points rather than price-return semantics.
+LLM prose is downstream of frozen evidence and fails to a same-evidence
+deterministic fallback.  The existing API v2 identity chain, intraday scheduler,
+rollback and local-only rights boundary remain frozen.
+
+Next: execute the macro-authority story under tracking Issue #738.  Freeze DXY,
+official U.S. Treasury 2Y/10Y and derived 2s10s provenance, units, freshness,
+immutable receipts and explicit unavailable behavior before changing the
+evidence pack or UI.
+
 ## 2026-08-10 · Market Regime Live v1 time-identity closure (Issue #736)
 
 Now: every one of the 14 intraday cash/proxy cards visibly separates the

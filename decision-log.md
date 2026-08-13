@@ -3468,3 +3468,57 @@ age.  Users need both concepts, but they must never share one label.
 - A complete 14/14 identity set can still produce an `insufficient` overlay.
   Time transparency does not relax the frozen model thresholds or turn market
   evidence into a forecast.
+
+# 2026-08-13 · Daily macro explanation becomes the Market Regime home
+
+## Decision
+
+Adopt the approved white vertical Daily v2 mockup as the next Market Regime
+product and information-architecture baseline.  The future `/market-regime`
+home answers one completed-daily question—what the global market is pricing—
+through one market posture, one synthesis, an evidence chain, a five-session
+cross-section, contradictions and exactly two falsifiers.  Preserve the current
+15-minute-target reader at `/market-regime/live`; intraday state never rewrites
+the daily judgment.
+
+Treat `进攻 / 等待 / 防守 / 未知` as a market description rather than user advice.
+Keep deterministic facts, units, confidence and evidence identity code-owned.
+LLM prose is a separately validated explanation over a frozen evidence pack and
+falls back conservatively on the same evidence identity when unavailable or
+invalid.
+
+## Why
+
+The existing first screen exposes several co-equal deterministic dimensions and
+the intraday overlay before resolving the reader's main question.  Park approved
+a vertical research-note hierarchy because it directs attention from a single
+world model to supporting evidence and falsification.  Separating the daily and
+live routes preserves the already-verified Live v1 truth chain while allowing a
+clearer daily use moment.
+
+## Evidence
+
+- Tracking Issue #738 and contract Issue #739.
+- `docs/market-regime/daily-v2-contract.md` freezes the approved hierarchy,
+  semantic colors, route split, evidence/LLM boundary and discovery artifact
+  hashes.
+- Product and architecture plan reviews both returned GO with contract changes:
+  rates must use basis points, cross-market sessions must stay explicit, and
+  the current API v2/intraday rollback boundary must remain separate.
+
+## Gotchas
+
+- `Risk On` and defensive leadership can coexist.  Collapsing deterministic
+  dimensions into one label without explanation recreates the confusion the
+  new hierarchy is intended to remove.
+- Treasury yields are rate levels.  Five-session movement is a basis-point
+  change, and 2s10s is a derived spread; neither should be displayed as a price
+  return or candlestick.
+- There is no universal same-day close across U.S., China, Japan, Korea and
+  commodity sessions.  Use joint judgment time, per-asset session and close
+  skew rather than the discovery copy “全部市场同为某日完成日线”.
+- A prior 财经日报 is generated prose, not source evidence.  Only original,
+  identity-preserving article/event candidates may later enter as `plausible`.
+- S0 records a future route split but intentionally changes no route.  Until the
+  scoped UI/runtime story is deployed, `/market-regime` continues to serve the
+  existing Live v1 page.
