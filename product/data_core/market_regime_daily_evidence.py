@@ -33,6 +33,7 @@ from .market_regime_model import (
     MarketRegimeModelError,
     compile_market_regime,
 )
+from .market_regime_daily_lock import daily_publication_lock
 
 
 SCHEMA_VERSION = "market-regime-daily-evidence-v1"
@@ -652,6 +653,10 @@ class MarketRegimeDailyEvidenceStore:
         self.output_root = Path(output_root).expanduser().resolve()
 
     def compile_latest(self) -> dict[str, Any]:
+        with daily_publication_lock(self.output_root):
+            return self._compile_latest_unlocked()
+
+    def _compile_latest_unlocked(self) -> dict[str, Any]:
         try:
             daily = MarketRegimeDataStore(self.daily_root).latest()
             analysis = MarketRegimeAnalysisStore(self.daily_root).latest()

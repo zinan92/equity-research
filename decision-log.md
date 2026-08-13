@@ -1,5 +1,26 @@
 # Decision Log
 
+## 2026-08-13 · Daily v2 narrative is a constrained compiler (Issue #745)
+
+- Decision: place the LLM after the immutable S3 Evidence Pack. The request is
+  bounded to frozen slots, code-owned confidence inputs and contradiction
+  candidates; the model returns only posture/theme and relationship predicates.
+  A deterministic renderer creates all prose, confidence and boundary language.
+- Why: the product needs an answer to “what is going on?” that reconciles
+  risk-on/risk-off and style contradictions without turning deterministic rules
+  into unexplained co-equal labels. Keeping the compiler separate makes model
+  failure visible and preserves the existing live surface.
+- Evidence: `daily-narrative-contract.md`, focused tests covering request
+  boundary, strict schema/citations, unsafe/numeric text, fallback, replay,
+  provider-error redaction, receipt/path/tamper checks, and current-pack
+  mismatch.
+- Gotchas: a provider exception string can contain transport or credential
+  details, so receipts store only a fixed failure code and a bounded metadata
+  allowlist. `state.json` is the one atomic canonical pointer/floor object;
+  `latest.json` is a compatibility mirror. Content hashes bind integrity but
+  do not provide an external anti-rollback signature. LLM success still
+  remains unreviewed, non-publishable and non-actionable.
+
 ## 2026-08-06 · One market map, not nine disconnected charts (Issue #710)
 
 - Decision: make the M2 state receipt the largest object on the page, then

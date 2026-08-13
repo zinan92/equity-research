@@ -164,19 +164,21 @@ price-proven causality.
 
 The LLM is a separate compiler after deterministic evidence. It receives only a
 frozen, size-bounded evidence pack plus untrusted candidate text isolated as
-data. It must return a strict schema containing:
+data. It returns predicates rather than prose: one posture and theme enum, a
+finite chain of driver/response/status enums, contradiction relationships and
+exactly two falsifier field/change enums, all with evidence IDs. A deterministic
+renderer turns those predicates into the synthesis, chain text, confidence
+explanation and source-boundary disclosure. This keeps action, publication,
+confidence and causal semantics code-owned; arbitrary model prose cannot bypass
+the truth boundary.
 
-- one posture enum and one synthesis;
-- a finite transmission chain with evidence IDs and status per step;
-- at least one contradiction with evidence IDs;
-- exactly two falsifiers using observable frozen fields;
-- a prose explanation of the code-owned confidence; and
-- a source-boundary disclosure.
-
-Every numeric claim must match a frozen field and unit. Every factual claim must
-cite known evidence IDs. Unknown IDs, altered numbers, unsupported thresholds,
-causal upgrades, prompt instructions inside source text and trading language
-fail validation.
+Every displayed number and factual rendered sentence resolves to known evidence
+IDs and units. `supported_observation` additionally has to agree with the
+deterministic direction labels in the pack and cite both sides of the stated
+driver/response; uncertain relationships stay plausible or unavailable.
+Unknown IDs, altered numbers, unsupported enum combinations, causal upgrades,
+prompt instructions inside source text and trading language fail validation
+before rendering.
 
 Provider metadata, model, prompt/schema version, evidence-pack hash, output
 hash, validation result and generation time are persisted in an immutable
