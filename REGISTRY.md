@@ -3,19 +3,21 @@
 ## 2026-08-17 · K-line v2 controlled real-runtime handoff (Issue #775)
 
 Now: the merged Track 2 runtime is installed at the existing 08:20
-LaunchAgent and has completed a controlled real-data run on app SHA
-`46dd03399b32cd18b4c837aefbf05f25484f76c5`. The output is the approved North
+LaunchAgent and has completed a controlled real-data run on final app SHA
+`cb527b6c1310b7b1dafc8e4cf50c2558bc4c38e9`. The output is the approved North
 Star pipeline in executable form: complete OHLC daily data and relative
 relationships → LLM-authored interpretation → capital-migration map → one
 consistent world model → market-level trade recommendations. The run produced
-`防守`, 17 charts, 12 relative histories, 5 migration edges, 3 recommendations
+`防守`, 17 charts, 12 relative histories, 6 migration edges, 3 recommendations
 and exactly 2 falsifiers. Advice is allowed but remains model-generated and
 unreviewed; broker access, portfolio mutation, automatic execution and public
 redistribution remain false.
 
-The model receipt records two bounded attempts (`output_schema_invalid:root →
-accepted`) with the v3 prompt/compiler and a secret-free provider receipt. The
-context, model, report and delivery artifacts replay by their content hashes.
+The first post-merge run honestly published a same-context fallback after three
+bounded validation failures; it did not reuse stale advice. A second post-merge
+run was accepted in one model attempt with the v3 prompt/compiler and a
+secret-free provider receipt. The context, model, report and delivery artifacts
+replay by their content hashes.
 Desktop `latest.html`, `latest.md` and the dated 2026-08-17 aliases byte-match
 the immutable report artifacts. The independent Finance Daily Newsletter was
 not read or changed; its observed LaunchAgent plist hashes are recorded in
@@ -29,9 +31,9 @@ does not claim a fresh visual desktop/mobile pass; the existing local HTML is
 the handoff artifact for the remaining manual refresh check.
 
 Validation: 52 focused tests plus 6 subtests and all 209 Market Regime tests
-plus 59 subtests pass. The LaunchAgent has three recorded runs with latest exit
-code 0 and is idle after completion. The controlled run is not ordinary 08:20
-acceptance and does not prove product utility.
+plus 59 subtests pass. The final LaunchAgent readback has two recorded runs with
+latest exit code 0 and is idle after completion. The controlled run is not
+ordinary 08:20 acceptance and does not prove product utility.
 
 Next: let one ordinary unattended 08:20 Track 2 output arrive, then manually
 compare it with the independent Finance Daily Newsletter. Keep both tracks

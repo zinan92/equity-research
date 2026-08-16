@@ -1,67 +1,94 @@
 {
   "schema_version": "market-regime-kline-world-controlled-acceptance-v1",
-  "tracking_issue": 775,
-  "tested_at": "2026-08-16T17:05:36Z",
+  "tracking_issue": 777,
+  "tested_at": "2026-08-16T17:21:16Z",
   "source_kind": "real_local_evaluation",
   "controlled_run_not_ordinary_acceptance": true,
   "deployment": {
-    "app_sha": "46dd03399b32cd18b4c837aefbf05f25484f76c5",
+    "app_sha": "cb527b6c1310b7b1dafc8e4cf50c2558bc4c38e9",
     "rollback_sha": "330d966465a14deaec8dc551061987970a431740",
     "launch_agent": {
       "label": "com.park.market-regime.kline-newsletter",
       "schedule": "08:20 Asia/Shanghai",
-      "runs": 3,
+      "runs": 2,
       "last_exit_code": 0,
       "state_after_run": "not running",
       "plist_sha256": "e2bdebcc65a2b73af5ab6bf05d51896e1a2c87f0887fa0fcdd1e8211107e4f44"
     }
   },
+  "post_merge_run_history": [
+    {
+      "kind": "bounded_fallback",
+      "at": "2026-08-16T17:16:51.968987Z",
+      "generation_status": "interpretation_unavailable",
+      "failure_code": "output_citation_invalid",
+      "attempt_outcomes": [
+        "output_citation_invalid:world_model_cross_asset",
+        "output_schema_invalid:regime_leadership",
+        "output_citation_invalid:world_model_cross_asset"
+      ],
+      "delivery_id": "market-regime-kline-world-delivery:117d0a190a112617b2bd710a82667d18a355682441ea26e027fd99da8d568f45",
+      "report_id": "market-regime-kline-world-report:c95b58bb88b590db64484136bbe80d0673656808f53c4c49d63100fdff90c819",
+      "stale_advice_reused": false,
+      "superseded_by_successful_retry": true
+    },
+    {
+      "kind": "accepted_model",
+      "at": "2026-08-16T17:21:16.120949Z",
+      "generation_status": "model_generated_unreviewed",
+      "attempt_outcomes": [
+        "accepted"
+      ],
+      "delivery_id": "market-regime-kline-world-delivery:88af146dc3569f5ed57e4d7acad8eff3cce412fafb46d9a0f15a3754f6e837c6",
+      "report_id": "market-regime-kline-world-report:6c34e7fc0e89925b3eb4c695c0579591582fab4fe67d2b99df8f07834765a614"
+    }
+  ],
   "runtime": {
-    "delivery_id": "market-regime-kline-world-delivery:c1390a679370885bb92fac5e1ba65d28673986cbaf3f932db939aad2ad04e450",
-    "report_id": "market-regime-kline-world-report:322cbee3d1b3284054a2b439a49031b4657ef5652688c56006bf7841abf74bda",
+    "delivery_id": "market-regime-kline-world-delivery:88af146dc3569f5ed57e4d7acad8eff3cce412fafb46d9a0f15a3754f6e837c6",
+    "report_id": "market-regime-kline-world-report:6c34e7fc0e89925b3eb4c695c0579591582fab4fe67d2b99df8f07834765a614",
     "report_date": "2026-08-17",
-    "generated_at": "2026-08-16T16:52:53.105555Z",
+    "generated_at": "2026-08-16T17:17:24.752274Z",
     "posture": "defense",
     "generation_status": "model_generated_unreviewed",
     "chart_count": 17,
     "relationship_count": 12,
-    "flow_count": 5,
+    "flow_count": 6,
     "trade_count": 3,
     "falsifier_count": 2,
     "contains_investment_advice": true,
     "data_kind": "real",
-    "context_id": "market-regime-kline-world-context:08cd3285ca69aca750c60f4cafe37472f3f89cf73835953adf6302ced2a8fd47",
-    "world_model_id": "market-regime-kline-world-model:3710c445b5ef60a11eae746d06c363898b34e105d26cd8601db1c65258383e75",
+    "context_id": "market-regime-kline-world-context:c52480e152c79439030f0652b6e43850eefb8091b75c04dd4a5213ed71b9c258",
+    "world_model_id": "market-regime-kline-world-model:bcfe20587a2948fb1203308b79b98f461d599bc50664eedc953cffdf0049d1b8",
     "cross_market_close_skew_hours": 14.5
   },
   "model": {
+    "run_id": "world-model-20260816T172114Z-5d7fc4b40c9b",
     "provider": "DeepSeek",
     "model": "deepseek-v4-pro",
     "prompt_version": "market-regime-kline-world-model-prompt-v3",
     "compiler_version": "market-regime-kline-world-model-compiler-v3",
-    "attempt_count": 2,
+    "attempt_count": 1,
     "attempt_outcomes": [
-      "output_schema_invalid:root",
       "accepted"
     ],
     "provider_receipt": {
       "finish_reason": "stop",
       "thinking_type": "enabled",
-      "completion_tokens": 13836,
-      "prompt_tokens": 106095,
-      "total_tokens": 119931
+      "completion_tokens": 15134,
+      "prompt_tokens": 105963,
+      "total_tokens": 121097
     },
-    "artifact_sha256": "352496166bdfa4f478d658b7616ffcf9cdd9feae2dfe97b5ec3da9d9f794eedb",
-    "receipt_sha256": "bbef95d5ba0c1b9c03d2849a71a7bc756c6d1f8b2d705b80fb9c6113a1b1c458"
+    "artifact_sha256": "45a1a4d5bc1fba47d3bf65e5e2edc9387dc8fe9532f23467f4c4a2ea45ba9163",
+    "receipt_sha256": "f576ac0fa0c61c0e36e918f81db567e46c50a9ae1c451d09624bd810e22c9152"
   },
   "artifact_replay": {
-    "context_artifact_sha256": "04c63da6ba525deda40fd0af1d0933b4b294dbd9c572c036b8c39ce34a3c31bf",
-    "context_receipt_sha256": "e4d31ca9985551072c4a002a60b2d3a199870cdddab143770857003bf2cbb00f",
-    "report_artifact_sha256": "c80e65e45ee641e80a1ab99e15c10a79cd544f313a485d8d62a566d9e41fcb01",
-    "report_receipt_sha256": "ecaf446311d2f72b96dbf4194035e20e8da6a47c8f5299aa62568c141c412f88",
-    "delivery_receipt_sha256": "de89b98e5e16f6434f9a81779e668fe894910565b489dab9c24c10acc17f32c6",
-    "html_sha256": "5629aafa0755a48367222397118ab4f173c4a98f5b08146d38b1818ef81e6c31",
-    "markdown_sha256": "664875c65ee71c1224621be8cbcf579dd886ec93c629adcd1369066f664d722d",
+    "context_artifact_sha256": "de82906cd2fc80ff4af449f41511ebda2f4a8d29da62f68e87c6c2da287e43bb",
+    "context_receipt_sha256": "589b538289b9047ba13a13ec91c54c1adb8cd752638de33a1532e731e907f458",
+    "report_artifact_sha256": "beb5c9b46eced238a8ae1b5be811cb81941504bff08362cd2c4a922408a362fe",
+    "report_receipt_sha256": "5f8f26fd2e66d47c1fc42149def94c778183ac880671a260bba27d66445a989c",
+    "delivery_receipt_sha256": "90a274c8dd54526db662b5b90cd6cd750ab4d158dc3f44727aeb3e9fc53586f4",
+    "html_sha256": "b51562fe53abbc4e52e09609c69c5edd9cbda6941fa89e1757bfe41ca8526cb9",
+    "markdown_sha256": "a6f4e589b101e04d6bb6340722c83e7793ccd06ab0939a5669a1746e14585e52",
     "desktop_aliases_byte_match": true,
     "status_replay": "completed_last_success_and_no_failure"
   },
@@ -69,10 +96,10 @@
     "chart_canvases": 17,
     "relative_canvases": 12,
     "total_canvases": 29,
-    "flow_rows": 5,
+    "flow_rows": 6,
     "trade_rows": 3,
     "falsifier_rows": 2,
-    "evidence_affordances": 48,
+    "evidence_affordances": 56,
     "external_assets": 0,
     "mobile_media_query": true,
     "horizontal_overflow_guard": "overflow-x:hidden",
@@ -110,8 +137,8 @@
   "tests": {
     "focused": "52 passed, 6 subtests passed",
     "market_regime_suite": "209 passed, 757 deselected, 59 subtests passed",
-    "gitleaks": "pending final PR check",
-    "diff_check": "pending final PR check"
+    "gitleaks": "passed",
+    "diff_check": "passed"
   },
   "next_gate": "Wait for one ordinary unattended 08:20 Track 2 output, then manually compare it with the independent Finance Daily Newsletter."
 }
