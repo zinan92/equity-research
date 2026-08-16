@@ -10,42 +10,60 @@ user can enter a ticker and receive a concise decision summary plus a
 standardized research report whose claims remain tied to verifiable,
 point-in-time evidence.
 
-## Approved product North Star — Market Regime Daily v2
+## Approved product North Star — Cross-asset K-line World Model
 
-Within the Market Regime product, the reader-facing North Star is the
-**Macro World Model · pre-open 90-second judgment** experience represented by
-the approved 8898 discovery page. It is not a chart wall and it is not a set
-of co-equal labels. Before the A-share open, one local page should let the
-reader understand:
+Within the Market Regime product, the reader-facing North Star is an AI
+cross-asset tape reader delivered as the **Global Market K-line Daily**. Park's
+exact approved product pipeline is:
+
+> 完整 OHLC 日线与跨资产相对关系 → LLM 自主解读 → 资金迁移地图 →
+> consistent world model → 可执行交易建议。
+
+The approved 8898 white vertical discovery page remains the attention and
+visual baseline, but the product is not a chart wall, a deterministic label
+selector or a template-filled scorecard. Before the A-share open, one local
+page should let the reader understand:
 
 1. what global markets are primarily pricing;
-2. the single current market posture;
-3. the observable transmission chain behind that synthesis;
-4. which assets contradict the dominant story; and
-5. exactly two observable conditions that would falsify it.
+2. which assets are being repriced up and down relative to one another;
+3. where capital plausibly appears to be leaving and entering;
+4. the consistent world model that reconciles risk, posture, style and
+   leadership, including apparent contradictions;
+5. what market-level trading action follows; and
+6. which observable conditions would falsify the interpretation and advice.
 
-The approved reading order is fixed:
+The approved reading order is:
 
-`posture → synthesis → evidence chain → five-session cross-section →
-contradictions → two falsifiers → completed-daily charts and deeper evidence`.
+`world model → capital-migration map → transmission chain → actionable plan →
+cross-section → contradictions → two falsifiers → all canonical daily charts
+and deeper evidence`.
 
 The visual baseline is a white, narrow vertical research note: one dominant
 headline, clear Chinese serif hierarchy, separate posture/return color
 semantics, visible confidence and no mobile horizontal overflow. `进攻 / 等待 /
-防守 / 未知` describes market posture only; it never instructs a user to buy,
-sell, hedge, change a position or expect a return.
+防守 / 未知` remains a description of the tape. A separate advice section may
+recommend attack, wait or defend; prioritize, reduce or avoid assets and
+styles; and name observable entry, exit and invalidation conditions. Advice is
+an intended output. Automatic execution, broker mutation and live-money action
+are not.
 
-The daily page is an explanation of a frozen completed-daily cross-asset model.
-Deterministic code owns facts, units, confidence, time identity and evidence
-links. LLM output is downstream explanation only and must fall back honestly
-when unavailable. `/market-regime` is the future daily macro home;
-`/market-regime/live` remains the separate 15-minute reader and cannot rewrite
-the daily judgment.
+The daily page gives the LLM bounded, frozen completed-daily OHLC sequences and
+code-derived cross-asset relative relationships, not only point features or
+chart screenshots. Deterministic code owns source facts, units, time identity,
+evidence quality and evidence links. The LLM independently authors the world
+model, inferred migration map and advice while citing that frozen context.
+Observed repricing and inferred capital migration remain visibly distinct;
+price action alone is not presented as literal fund-flow measurement. Provider
+failure falls back honestly to evidence without stale interpretation or advice.
+`/market-regime` is the future daily macro home; `/market-regime/live` remains
+the separate 15-minute reader and cannot rewrite the daily judgment.
 
 The 8898 page, its scenario tabs and its example numbers are discovery
 references for hierarchy and visual language, not current market evidence or
-dated history. The executable details live in
-[`docs/market-regime/daily-v2-contract.md`](docs/market-regime/daily-v2-contract.md).
+dated history. The executable details for the approved next version live in
+[`docs/market-regime/kline-world-model-v2-contract.md`](docs/market-regime/kline-world-model-v2-contract.md).
+The earlier Daily v2 and K-line pilot contracts remain historical runtime
+baselines until the versioned replacement passes acceptance.
 
 ## Done looks like
 
@@ -75,12 +93,15 @@ report alone.
 
 ## Non-negotiables
 
-- AI-generated prose is never a source of fact; it may only explain frozen
-  evidence while retaining its identity.
+- AI-generated prose is never a source of fact. It may interpret frozen
+  evidence and make market-level trading recommendations, but observed facts,
+  inferred flows and advice must remain distinguishable and cited.
 - Unavailable, stale, fixture, cached, or conflicting inputs remain visibly
   unavailable; they cannot become investment conclusions.
 - Existing approved product and UX foundations are changed only through a new,
   recorded approval; do not replace them with a new framework.
+- Trading advice does not authorize automatic orders, broker access, portfolio
+  mutation or live-money execution.
 - Documentation work does not trigger data refresh, publication, payment,
   production deployment, or a scheduler change.
 
