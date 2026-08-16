@@ -4,6 +4,12 @@ Status: S0 approved baseline only. Parent tracking issue: #738. Story: #739.
 This contract authorizes later scoped stories; it does not change a route,
 provider, model, API, scheduler, launch agent or production page by itself.
 
+Historical note: Issue #759 supersedes this contract's enum-only/no-advice
+product destination for the next K-line Newsletter version. Its evidence,
+route and visual decisions remain reusable. The installed current runtime is
+still governed by this historical contract until the versioned replacement in
+`kline-world-model-v2-contract.md` passes deployment acceptance.
+
 ## User outcome and use moment
 
 Before the A-share open, Park can open one local page and understand within

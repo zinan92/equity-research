@@ -1,5 +1,10 @@
 # Market Regime K-line Daily Newsletter pilot
 
+Historical note: Issue #759 supersedes this pilot's enum-only/no-advice product
+destination for the next version. The current installed pilot remains unchanged
+until the versioned cross-asset world-model replacement passes acceptance. See
+`kline-world-model-v2-contract.md`.
+
 Tracking: [Issue #754](https://github.com/zinan92/equity-research/issues/754)
 
 ## Outcome

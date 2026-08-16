@@ -1,5 +1,27 @@
 # Decision Log
 
+## 2026-08-16 — Let the LLM read the cross-asset tape and recommend action
+
+- **Decision:** Replace the next K-line Newsletter's enum-selector/template
+  destination with Park's approved pipeline: `完整 OHLC 日线与跨资产相对关系 →
+  LLM 自主解读 → 资金迁移地图 → consistent world model → 可执行交易建议`.
+  The LLM may author cited interpretation and market-level trading advice.
+  Automatic orders, broker mutation and live-money execution remain separate.
+- **Why:** The product hypothesis is whether an LLM can interpret price shape
+  and relative repricing across global assets as one coherent capital-rotation
+  model. A model that sees only point features, selects enums and delegates all
+  prose to fixed templates cannot test that hypothesis, even when its data and
+  provenance engineering are correct.
+- **Evidence:** Park's explicit approval in the product task; parent Issue #758,
+  contract Issue #759 and
+  `docs/market-regime/kline-world-model-v2-contract.md`.
+- **Gotchas:** Price action supports an inference about rotation but is not
+  direct fund-flow measurement. Observed, inferred and recommended claims must
+  remain visibly distinct. Inputs used for style or advice cannot stay hidden
+  below a different 15-chart universe. Advice permission does not authorize
+  automatic execution, and the current installed pilot must remain untouched
+  until the versioned replacement passes runtime acceptance.
+
 ## 2026-08-16 — Keep the first K-line Newsletter experiment independent
 
 - **Decision:** Treat the existing Finance Daily Newsletter as Track 1 and do
