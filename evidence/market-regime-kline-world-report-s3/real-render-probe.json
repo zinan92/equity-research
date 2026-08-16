@@ -1,0 +1,52 @@
+{
+  "schema_version": "market-regime-kline-world-report-s3-probe-v1",
+  "observed_at": "2026-08-16T15:41:00Z",
+  "mode": "isolated_local_read_only_upstream",
+  "context_id": "market-regime-kline-world-context:8709bd91a7d05a84c423a4737065aeb7498fcfa44f0474f380c6996e8034a762",
+  "data_kind": "real",
+  "coverage": {
+    "series": 17,
+    "relationships": 12,
+    "evidence_quality": "high",
+    "directional_clarity": "high",
+    "directional_clarity_score": 0.845
+  },
+  "provider_attempts": [
+    {
+      "result": "interpretation_unavailable",
+      "failure_code": "provider_truncated",
+      "attempt_count": 1,
+      "world_model_id": "market-regime-kline-world-model:d31f34fd7455a9ace68df037feb8e8ec7ceb254425cfc2d8d9a74de941cb36bc",
+      "report_id": "market-regime-kline-world-report:ba71a82c3561b78041f992a55dccd1400f96775889cd2b0825e1580dc265f055"
+    },
+    {
+      "result": "interpretation_unavailable",
+      "failure_code": "output_semantic_invalid",
+      "attempt_count": 3,
+      "validation_feedback": [
+        "output_citation_invalid:regime_leadership",
+        "output_semantic_invalid:world_model.synthesis"
+      ],
+      "world_model_id": "market-regime-kline-world-model:1a8406bf1db4de484e031c40a7f93e2e42345670e34e05769014d2557eadc223",
+      "report_id": "market-regime-kline-world-report:39c10be1d5e03fb4f460ccd3db55f29e436ffe27da59ab9aab16e2f9f7ff161a"
+    }
+  ],
+  "renderer_result": {
+    "status": "passed_fail_closed_state",
+    "posture": "unknown",
+    "charts_rendered": 17,
+    "relationships_rendered": 12,
+    "flow_edges_rendered": 0,
+    "trade_recommendations_rendered": 0,
+    "stale_advice_reused": false
+  },
+  "acceptance": {
+    "fixture_success_states": "passed",
+    "real_unavailable_state": "passed",
+    "real_model_generated_page": "blocked_by_provider_output_reliability",
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "installed_runtime_changed": false,
+    "desktop_output_changed": false
+  }
+}
