@@ -5,7 +5,7 @@
   "source_kind": "real_local_evaluation",
   "controlled_run_not_ordinary_acceptance": true,
   "deployment": {
-    "app_sha": "cb527b6c1310b7b1dafc8e4cf50c2558bc4c38e9",
+    "app_sha": "2608accf18113212ef4ad5a4f472244a11cabe69",
     "rollback_sha": "330d966465a14deaec8dc551061987970a431740",
     "launch_agent": {
       "label": "com.park.market-regime.kline-newsletter",

@@ -4,7 +4,7 @@
 
 Now: the merged Track 2 runtime is installed at the existing 08:20
 LaunchAgent and has completed a controlled real-data run on final app SHA
-`cb527b6c1310b7b1dafc8e4cf50c2558bc4c38e9`. The output is the approved North
+`2608accf18113212ef4ad5a4f472244a11cabe69`. The output is the approved North
 Star pipeline in executable form: complete OHLC daily data and relative
 relationships → LLM-authored interpretation → capital-migration map → one
 consistent world model → market-level trade recommendations. The run produced
