@@ -1,5 +1,35 @@
 # REGISTRY
 
+## 2026-08-16 · K-line v2 LLM world model and advice (Issue #763)
+
+Now: S2 adds a new `market-regime-kline-world-model-v1` authority over the
+immutable S1 context.  Unlike the historical enum-only Daily Narrative, the
+provider authors the world model, regime explanation, capital-migration edges,
+transmission chain, contradictions, trade plan and falsifiers.  Code validates
+exact context citations, relative-leader direction, numeric claims, target and
+falsifier relevance, code-owned evidence quality/directional clarity, and the
+no-broker/no-auto-execution boundary.  Investment advice is explicitly allowed.
+
+An isolated real DeepSeek probe read the existing 17-series/12-relationship
+context and passed in one provider attempt with no retry: five cited migration
+edges, three actionable market-level recommendations and exactly two cited
+falsifiers.  The immutable temporary store replayed the same artifact ID:
+`market-regime-kline-world-model:083dabf736193006b181bc6b038d02c3f95ddadce54bcc4adf8e885a8efac835`
+over context `market-regime-kline-world-context:8709bd91a7d05a84c423a4737065aeb7498fcfa44f0474f380c6996e8034a762`.
+Evidence quality and directional clarity both rendered high; publication and
+automatic execution remained false.  No live runtime, Desktop output or
+LaunchAgent was changed by the probe.
+
+Validation: 12 focused S2 tests cover authored advice, citation/numeric/
+direction failures, exact flow endpoints, unsafe trading language, secret
+metadata, missing provider/timeout fallback, bounded semantic retry, immutable
+replay/tamper and context-advance race.  All 188 Market Regime tests pass.
+
+Next: S3 renders this real output through the approved white vertical North
+Star in three posture states.  Keep observed facts, inferred migration and
+recommended actions visually distinct; do not deploy or change the 08:20 job
+until the page and ordinary unattended run pass acceptance.
+
 ## 2026-08-16 · K-line v2 immutable OHLC world context (Issue #761)
 
 Now: the approved Cross-asset K-line World Model North Star is merged in PR
