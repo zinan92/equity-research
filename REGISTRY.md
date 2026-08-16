@@ -1,5 +1,44 @@
 # REGISTRY
 
+## 2026-08-16 · K-line v2 approved white World Report (Issue #765)
+
+Now: S3 adds a new `market-regime-kline-world-report-v1` authority over the
+exact S1 context and S2 world-model artifact.  The approved white vertical
+North Star is now executable rather than a discovery screenshot: one dominant
+attack/wait/defense posture, separate code-owned evidence quality and
+directional clarity, cited capital-migration map, observed/inferred
+transmission chain, explicit model-generated trade recommendations, all 17
+completed-daily series, all 12 relative-leadership histories, contradictions,
+exactly two falsifiers and 17 charts.  Advice is allowed; broker access,
+portfolio mutation, automatic execution and public redistribution remain
+false.
+
+The renderer and immutable report store are new/versioned and do not modify the
+installed legacy report, Desktop output, API or 08:20 LaunchAgent.  Attack,
+wait, defense and model-unavailable states pass focused replay, citation,
+projection-tamper and output-hash tests. Browser QA at exact normalized desktop
+and mobile dimensions has zero horizontal overflow, 17 painted main charts, 12
+painted relative charts, working evidence dialogs and zero console errors.
+Same-state source comparisons and the final `passed` review are in
+[`design-qa.md`](design-qa.md).
+
+Validation: 8 focused S3 tests and all 196 Market Regime tests pass. New-file
+gitleaks is clean; the repository-wide scan still reports the pre-existing
+redacted fixture finding in
+`evidence/market-regime-live-time-identity/browser-acceptance.json`.
+
+A read-only real-data probe verified that the renderer honestly serves the
+same 17/12 context in a model-unavailable state with no stale advice. It also
+exposed the next blocker: one DeepSeek call truncated, and a second call used
+all three attempts but still failed the bounded leadership/synthesis semantic
+contract. The safe record is
+[`evidence/market-regime-kline-world-report-s3/real-render-probe.json`](evidence/market-regime-kline-world-report-s3/real-render-probe.json).
+
+Next: fix S2 provider-output reliability in its own issue by making
+field-specific requirements and bounded retry feedback unambiguous, then obtain
+one real `model_generated_unreviewed` report before wiring S4 runtime,
+scheduler or Desktop installation.
+
 ## 2026-08-16 · K-line v2 LLM world model and advice (Issue #763)
 
 Now: S2 adds a new `market-regime-kline-world-model-v1` authority over the
