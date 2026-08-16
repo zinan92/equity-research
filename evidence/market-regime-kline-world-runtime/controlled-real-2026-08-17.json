@@ -1,0 +1,117 @@
+{
+  "schema_version": "market-regime-kline-world-controlled-acceptance-v1",
+  "tracking_issue": 775,
+  "tested_at": "2026-08-16T17:05:36Z",
+  "source_kind": "real_local_evaluation",
+  "controlled_run_not_ordinary_acceptance": true,
+  "deployment": {
+    "app_sha": "46dd03399b32cd18b4c837aefbf05f25484f76c5",
+    "rollback_sha": "330d966465a14deaec8dc551061987970a431740",
+    "launch_agent": {
+      "label": "com.park.market-regime.kline-newsletter",
+      "schedule": "08:20 Asia/Shanghai",
+      "runs": 3,
+      "last_exit_code": 0,
+      "state_after_run": "not running",
+      "plist_sha256": "e2bdebcc65a2b73af5ab6bf05d51896e1a2c87f0887fa0fcdd1e8211107e4f44"
+    }
+  },
+  "runtime": {
+    "delivery_id": "market-regime-kline-world-delivery:c1390a679370885bb92fac5e1ba65d28673986cbaf3f932db939aad2ad04e450",
+    "report_id": "market-regime-kline-world-report:322cbee3d1b3284054a2b439a49031b4657ef5652688c56006bf7841abf74bda",
+    "report_date": "2026-08-17",
+    "generated_at": "2026-08-16T16:52:53.105555Z",
+    "posture": "defense",
+    "generation_status": "model_generated_unreviewed",
+    "chart_count": 17,
+    "relationship_count": 12,
+    "flow_count": 5,
+    "trade_count": 3,
+    "falsifier_count": 2,
+    "contains_investment_advice": true,
+    "data_kind": "real",
+    "context_id": "market-regime-kline-world-context:08cd3285ca69aca750c60f4cafe37472f3f89cf73835953adf6302ced2a8fd47",
+    "world_model_id": "market-regime-kline-world-model:3710c445b5ef60a11eae746d06c363898b34e105d26cd8601db1c65258383e75",
+    "cross_market_close_skew_hours": 14.5
+  },
+  "model": {
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "prompt_version": "market-regime-kline-world-model-prompt-v3",
+    "compiler_version": "market-regime-kline-world-model-compiler-v3",
+    "attempt_count": 2,
+    "attempt_outcomes": [
+      "output_schema_invalid:root",
+      "accepted"
+    ],
+    "provider_receipt": {
+      "finish_reason": "stop",
+      "thinking_type": "enabled",
+      "completion_tokens": 13836,
+      "prompt_tokens": 106095,
+      "total_tokens": 119931
+    },
+    "artifact_sha256": "352496166bdfa4f478d658b7616ffcf9cdd9feae2dfe97b5ec3da9d9f794eedb",
+    "receipt_sha256": "bbef95d5ba0c1b9c03d2849a71a7bc756c6d1f8b2d705b80fb9c6113a1b1c458"
+  },
+  "artifact_replay": {
+    "context_artifact_sha256": "04c63da6ba525deda40fd0af1d0933b4b294dbd9c572c036b8c39ce34a3c31bf",
+    "context_receipt_sha256": "e4d31ca9985551072c4a002a60b2d3a199870cdddab143770857003bf2cbb00f",
+    "report_artifact_sha256": "c80e65e45ee641e80a1ab99e15c10a79cd544f313a485d8d62a566d9e41fcb01",
+    "report_receipt_sha256": "ecaf446311d2f72b96dbf4194035e20e8da6a47c8f5299aa62568c141c412f88",
+    "delivery_receipt_sha256": "de89b98e5e16f6434f9a81779e668fe894910565b489dab9c24c10acc17f32c6",
+    "html_sha256": "5629aafa0755a48367222397118ab4f173c4a98f5b08146d38b1818ef81e6c31",
+    "markdown_sha256": "664875c65ee71c1224621be8cbcf579dd886ec93c629adcd1369066f664d722d",
+    "desktop_aliases_byte_match": true,
+    "status_replay": "completed_last_success_and_no_failure"
+  },
+  "surface_static_checks": {
+    "chart_canvases": 17,
+    "relative_canvases": 12,
+    "total_canvases": 29,
+    "flow_rows": 5,
+    "trade_rows": 3,
+    "falsifier_rows": 2,
+    "evidence_affordances": 48,
+    "external_assets": 0,
+    "mobile_media_query": true,
+    "horizontal_overflow_guard": "overflow-x:hidden",
+    "dialog_open_close_handlers": true,
+    "track_1_input_marker": "finance_newsletter_input=false"
+  },
+  "browser_visual_check": {
+    "status": "blocked_by_local_file_refresh_policy",
+    "requested_viewports": [
+      "1280x900",
+      "390x844"
+    ],
+    "manual_follow_up": "Open latest.html in the Codex in-app browser and refresh once to inspect both viewports.",
+    "counted_as_visual_acceptance": false
+  },
+  "truth_boundary": {
+    "track": "kline_only",
+    "finance_newsletter_input": false,
+    "investment_advice_allowed": true,
+    "model_generated_unreviewed": true,
+    "local_evaluation_only": true,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "broker_access": false,
+    "portfolio_mutation": false
+  },
+  "finance_daily_newsletter": {
+    "untouched": true,
+    "plists_observed": {
+      "com.wendy.park-finance.plist": "0365f48033f8fbb83ca9c678360699d5c3301120750c38ec9ad368b7267fb299",
+      "com.wendy.park-intel-finance-newsletter.plist": "4bf65f705d798380bc87d07abad027f0858aee4b9e141c220d0e7ee442bf2918",
+      "com.wendy.park-newsletter.plist": "9d0420066b41b2e1f8ee9b2f609f379da4f610f7e79145ce4cd72d18869d3d34"
+    }
+  },
+  "tests": {
+    "focused": "52 passed, 6 subtests passed",
+    "market_regime_suite": "209 passed, 757 deselected, 59 subtests passed",
+    "gitleaks": "pending final PR check",
+    "diff_check": "pending final PR check"
+  },
+  "next_gate": "Wait for one ordinary unattended 08:20 Track 2 output, then manually compare it with the independent Finance Daily Newsletter."
+}

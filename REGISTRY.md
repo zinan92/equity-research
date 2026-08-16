@@ -1,5 +1,43 @@
 # REGISTRY
 
+## 2026-08-17 · K-line v2 controlled real-runtime handoff (Issue #775)
+
+Now: the merged Track 2 runtime is installed at the existing 08:20
+LaunchAgent and has completed a controlled real-data run on app SHA
+`46dd03399b32cd18b4c837aefbf05f25484f76c5`. The output is the approved North
+Star pipeline in executable form: complete OHLC daily data and relative
+relationships → LLM-authored interpretation → capital-migration map → one
+consistent world model → market-level trade recommendations. The run produced
+`防守`, 17 charts, 12 relative histories, 5 migration edges, 3 recommendations
+and exactly 2 falsifiers. Advice is allowed but remains model-generated and
+unreviewed; broker access, portfolio mutation, automatic execution and public
+redistribution remain false.
+
+The model receipt records two bounded attempts (`output_schema_invalid:root →
+accepted`) with the v3 prompt/compiler and a secret-free provider receipt. The
+context, model, report and delivery artifacts replay by their content hashes.
+Desktop `latest.html`, `latest.md` and the dated 2026-08-17 aliases byte-match
+the immutable report artifacts. The independent Finance Daily Newsletter was
+not read or changed; its observed LaunchAgent plist hashes are recorded in
+[`controlled-real-2026-08-17.json`](evidence/market-regime-kline-world-runtime/controlled-real-2026-08-17.json).
+
+Static surface checks find 17 main canvases, 12 relative canvases, 5 flow rows,
+3 trade rows, 2 falsifiers, 48 evidence affordances, no external assets and a
+mobile media rule with an overflow guard. The in-app browser refused to reload
+the local `file://` page under its URL policy, so this receipt deliberately
+does not claim a fresh visual desktop/mobile pass; the existing local HTML is
+the handoff artifact for the remaining manual refresh check.
+
+Validation: 52 focused tests plus 6 subtests and all 209 Market Regime tests
+plus 59 subtests pass. The LaunchAgent has three recorded runs with latest exit
+code 0 and is idle after completion. The controlled run is not ordinary 08:20
+acceptance and does not prove product utility.
+
+Next: let one ordinary unattended 08:20 Track 2 output arrive, then manually
+compare it with the independent Finance Daily Newsletter. Keep both tracks
+separate; only after several comparison days should we decide whether the
+K-line world model adds enough value to become a combined reader product.
+
 ## 2026-08-17 · K-line v2 real-provider reliability closure (Issue #767)
 
 Now: S2.1 keeps the strict S2 evidence and advice validator unchanged while
