@@ -1,5 +1,24 @@
 # Decision Log
 
+## 2026-08-17 — Validate only completed OHLC bars
+
+- **Decision:** Apply strict OHLC validation after the existing
+  close-plus-20-minute completion gate. Date, order, duplicate and future-bar
+  checks still run before that gate; every completed bar remains fully strict.
+- **Why:** Yahoo returned a still-forming 2026-08-16 Bitcoin row whose live
+  close briefly exceeded its lagging high. The raw response was valid and
+  preserved, but validating that unfinished row before discarding it prevented
+  the 08:20 Track 2 runtime from reaching its already-valid prior completed
+  history.
+- **Evidence:** Issue #771; preserved raw capture SHA-256
+  `f8d67e8227ac849a06bdc188bd6ce9f1dd257e549cf1f1471aba08824c85272b`;
+  focused regression proving the malformed row is dropped while unfinished and
+  rejected after completion.
+- **Gotchas:** “Unfinished” is determined only from the contracted exchange
+  timezone/session close plus 20 minutes, never from whether OHLC looks odd.
+  This does not permit malformed completed bars, alter raw bytes, or create a
+  fallback source.
+
 ## 2026-08-17 — Promote one verified World Report through the existing 08:20 job
 
 - **Decision:** Keep the single existing
