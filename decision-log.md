@@ -1,5 +1,23 @@
 # Decision Log
 
+## 2026-08-16 — Keep the first K-line Newsletter experiment independent
+
+- **Decision:** Treat the existing Finance Daily Newsletter as Track 1 and do
+  not change it.  Build Track 2 as a separate 08:20 completed-daily cross-asset
+  Newsletter, then let Park compare the two artifacts manually.
+- **Why:** Combining a long-running product with an unvalidated K-line
+  interpretation would remove the control and make it impossible to know
+  which layer created value.  A static local Newsletter is sufficient for the
+  first comparison; a Daily API is not required.
+- **Fixed first slice:** 15 visible observations: six equity indices, WTI,
+  gold, silver, Bitcoin, VIX, DXY, U.S. 2Y, U.S. 10Y, and 2s10s.  Bitcoin is a
+  frozen human-comparison supplement outside deterministic posture v1.
+- **Boundary:** Local evaluation only, no publication, no personalized advice,
+  no intraday or Live v1 changes, and no Finance Newsletter input.  Put/call
+  and other non-K-line additions wait for separate source/rights semantics.
+- **Evidence:** Issue #754 and
+  `evidence/market-regime-kline-newsletter/real-2026-08-16-acceptance.json`.
+
 ## 2026-08-13 · Market Regime Daily v2 is the product North Star (Issue #748)
 
 - Decision: promote the approved 8898 “宏观世界模型 · 开盘前 90 秒判断”

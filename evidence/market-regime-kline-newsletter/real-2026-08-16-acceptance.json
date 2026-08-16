@@ -1,0 +1,61 @@
+{
+  "schema_version": "market-regime-kline-newsletter-acceptance-v1",
+  "tracking_issue": 754,
+  "tested_at": "2026-08-16T07:27:33.813549Z",
+  "source_kind": "real_local_evaluation",
+  "report": {
+    "report_id": "market-regime-kline-newsletter:caf299f1cf806c1e503e80628bb5e9c0d728650b6616b14646c372dc33ae9fbb",
+    "report_date": "2026-08-16",
+    "posture": "defense",
+    "generation_status": "model_generated_unreviewed",
+    "confidence_score": 0.83,
+    "observation_count": 15,
+    "chart_count": 15,
+    "evidence_coverage": "16/16",
+    "cross_market_close_skew_hours": 14.5
+  },
+  "sources": {
+    "daily_run_id": "market-regime-20260816T033507Z-d945d54e0f45",
+    "macro_run_id": "market-regime-macro-20260816T072543Z-78ad459472d0",
+    "bitcoin_id": "market-regime-kline-bitcoin:497e85e654d650c6691f19b27b2630c9afb7c4d577c57b800e40487a3501c8d6",
+    "pack_id": "market-regime-daily-evidence:0c198ba2517df83eae6d615c709e46fc4233047817595ce075816d9cb1c4146f",
+    "narrative_id": "market-regime-daily-narrative:479dcbba79094c6b590a655ad341d2db42c32dc28b9cbd769c4c19fb6566a732"
+  },
+  "sessions": {
+    "completed_market_and_macro": "2026-08-14",
+    "bitcoin": "2026-08-15"
+  },
+  "browser": {
+    "desktop": {
+      "viewport": "1280x900",
+      "document_scroll_width": 1265,
+      "headline": "防守",
+      "canvas_count": 15,
+      "screenshot": "real-2026-08-16-desktop.png",
+      "sha256": "ac618083c43038a551f6d916c8442447ad0f4c33e797c17d0432d3814e0d2f0f"
+    },
+    "mobile": {
+      "viewport": "390x844",
+      "document_scroll_width": 375,
+      "headline": "防守",
+      "canvas_count": 15,
+      "chart_width": 335,
+      "screenshot": "real-2026-08-16-mobile.png",
+      "sha256": "685bbd8914556b72469fd0a2f93793ad7aa1fb46323a53110217d4254e9ab13b"
+    },
+    "console_warning_or_error_count": 0
+  },
+  "tests": {
+    "focused_and_upstream": "67 passed",
+    "live_model_attempt": "validated and published",
+    "live_fallback_attempt": "validated and published"
+  },
+  "truth_boundary": {
+    "finance_newsletter_input": false,
+    "local_evaluation_only": true,
+    "model_generated_unreviewed": true,
+    "investment_advice": false,
+    "publication_eligible": false,
+    "action_eligible": false
+  }
+}
