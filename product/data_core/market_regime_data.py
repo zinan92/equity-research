@@ -525,9 +525,12 @@ def normalize_capture(
         if all(empty_ohlc):
             dropped_empty.append(str(raw_row.get("date") or "unknown"))
             continue
-        bar = _validate_bar(spec, raw_row)
-        trade_date = bar["date"]
-        if date.fromisoformat(trade_date) > local_today:
+        trade_date = str(raw_row.get("date") or "")
+        try:
+            trade_day = date.fromisoformat(trade_date)
+        except ValueError as exc:
+            raise SourceCaptureError("daily bar date is invalid", capture=capture) from exc
+        if trade_day > local_today:
             raise SourceCaptureError(f"daily bar is dated in the future: {trade_date}", capture=capture)
         if trade_date in seen:
             raise SourceCaptureError(f"duplicate daily bar: {trade_date}", capture=capture)
@@ -535,10 +538,14 @@ def normalize_capture(
             raise SourceCaptureError(f"daily bars are not strictly ascending at {trade_date}", capture=capture)
         seen.add(trade_date)
         prior = trade_date
-        close_at = _parse_session_close(spec, date.fromisoformat(trade_date)).astimezone(timezone.utc)
+        close_at = _parse_session_close(spec, trade_day).astimezone(timezone.utc)
         if current < close_at + timedelta(minutes=20):
             dropped_unfinished.append(trade_date)
             continue
+        # Provider daily bars can be internally inconsistent while the current
+        # session is still forming (for example, a live close briefly above a
+        # lagging high). Completed sessions remain fully validated.
+        bar = _validate_bar(spec, raw_row)
         bars.append(bar)
     if len(bars) < spec.min_history:
         raise SourceCaptureError(

@@ -180,6 +180,52 @@ class MarketRegimeDataTest(unittest.TestCase):
         self.assertEqual(normalized["dropped_unfinished_sessions"], ["2026-08-06"])
         self.assertEqual(normalized["quality"], "fresh")
 
+    def test_unfinished_inverted_ohlc_is_dropped_but_completed_row_stays_strict(self) -> None:
+        spec = INSTRUMENT_BY_KEY["sp500"]
+        rows = [
+            {
+                "date": item,
+                "open": 100 + index,
+                "high": 102 + index,
+                "low": 99 + index,
+                "close": 101 + index,
+                "volume": 10_000,
+            }
+            for index, item in enumerate(completed_dates(210, end=date(2026, 8, 5)))
+        ]
+        rows.append(
+            {
+                "date": date(2026, 8, 6),
+                "open": 310,
+                "high": 312,
+                "low": 309,
+                "close": 313,
+                "volume": 11_000,
+            }
+        )
+        new_york = ZoneInfo("America/New_York")
+        body = yahoo_body(
+            "^GSPC",
+            rows=rows,
+            regular_market_time=datetime(2026, 8, 6, 14, 0, tzinfo=new_york),
+            scheduled_session_end=datetime(2026, 8, 6, 16, 0, tzinfo=new_york),
+        )
+        raw_hash = sha256(body).hexdigest()
+        before_close = normalize_capture(
+            spec,
+            capture(body),
+            now=datetime(2026, 8, 6, 18, 0, tzinfo=timezone.utc),
+        )
+        self.assertEqual(before_close["last_completed_session"], "2026-08-05")
+        self.assertEqual(before_close["dropped_unfinished_sessions"], ["2026-08-06"])
+        self.assertEqual(sha256(body).hexdigest(), raw_hash)
+        with self.assertRaisesRegex(SourceCaptureError, "OHLC range is inverted"):
+            normalize_capture(
+                spec,
+                capture(body),
+                now=datetime(2026, 8, 6, 21, 0, tzinfo=timezone.utc),
+            )
+
     def test_tencent_index_ohlc_is_normalized_without_fake_adjustment(self) -> None:
         spec = INSTRUMENT_BY_KEY["shanghai"]
         normalized = normalize_capture(
