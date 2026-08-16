@@ -1,5 +1,34 @@
 # REGISTRY
 
+## 2026-08-16 · Independent 08:20 K-line Daily Newsletter pilot (Issue #754)
+
+Now: Track 2 is a separate local comparison product.  It consumes the current
+verified Market Regime completed-daily snapshot, refreshes DXY and official
+Treasury 2Y/10Y/2s10s evidence, freezes Bitcoin as an explicit pilot
+supplement, compiles the existing 16-slot S3 pack and constrained S4
+narrative, and writes one dated Markdown/HTML Newsletter.  The already-running
+Finance Daily Newsletter remains Track 1 and is neither input nor dependency.
+
+The report fixes 15 visible observations and 15 charts.  Treasury rates and
+the curve retain percent-level/basis-point semantics and render as lines.  The
+approved white vertical hierarchy leads with one visually distinct
+`进攻 / 等待 / 防守 / 未知` market posture, followed by synthesis, cited
+transmission, five-session cross-section, contradictions, exactly two
+falsifiers, and the chart wall.  Bitcoin is visible for human comparison but
+does not silently alter canonical posture v1.
+
+The controlled real run produced a 15/15 `防守` report from 16/16 canonical
+evidence identities with a code-owned 0.83 confidence score and a validated
+`model_generated_unreviewed` explanation.  Desktop 1280 and mobile 390 had no
+horizontal overflow, all 15 canvases rendered, and the browser console had no
+warnings/errors.  Receipt and screenshots are in
+[`evidence/market-regime-kline-newsletter/real-2026-08-16-acceptance.json`](evidence/market-regime-kline-newsletter/real-2026-08-16-acceptance.json).
+
+Next: deploy the exact merged SHA to the dedicated local app worktree, install
+the single 08:20 LaunchAgent, and collect the first ordinary Monday-morning
+receipt.  Then compare this Track 2 artifact with Track 1 manually; do not
+merge the products or claim usefulness before the comparison log exists.
+
 ## 2026-08-13 · Market Regime Daily constrained narrative compiler (Issue #745)
 
 Now: S4 is merged in PR #746 at
