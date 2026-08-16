@@ -14,11 +14,10 @@ ROOT = Path(__file__).resolve().parents[1]
 PRODUCT = ROOT / "product"
 sys.path.insert(0, str(PRODUCT))
 
-from data_core.market_regime_kline_newsletter import (  # noqa: E402
+from data_core.market_regime_kline_world_runtime import (  # noqa: E402
     SCHEMA_VERSION,
-    KlineNewsletterError,
-    KlineNewsletterRuntime,
-    KlineNewsletterStore,
+    KlineWorldRuntime,
+    KlineWorldRuntimeError,
 )
 
 
@@ -53,19 +52,38 @@ def _defaults() -> tuple[Path, Path, Path, Path]:
 
 
 def _safe_summary(result: dict) -> dict:
-    pointer = result.get("pointer") or {}
-    report = result.get("report") or {}
+    delivery = result.get("delivery") or {}
+    status = result.get("status") or {}
+    success = status.get("last_success") or {}
     return {
         "schema_version": SCHEMA_VERSION,
         "state": "completed",
-        "report_id": pointer.get("report_id"),
-        "report_date": pointer.get("report_date"),
-        "posture": report.get("posture"),
-        "generation_status": report.get("generation_status"),
-        "chart_count": len(report.get("charts") or []),
-        "observation_count": len(report.get("cross_section") or []),
+        "delivery_id": success.get("delivery_id"),
+        "report_id": success.get("report_id"),
+        "report_date": success.get("report_date"),
+        "posture": success.get("posture"),
+        "generation_status": success.get("generation_status"),
+        "chart_count": success.get("chart_count"),
+        "relationship_count": success.get("relationship_count"),
+        "flow_count": success.get("flow_count"),
+        "trade_count": success.get("trade_count"),
+        "contains_investment_advice": (
+            delivery.get("truth_boundary") or {}
+        ).get("contains_investment_advice"),
         "publication_eligible": False,
-        "action_eligible": False,
+        "automatic_execution_eligible": False,
+    }
+
+
+def _safe_status(status: dict) -> dict:
+    success = status.get("last_success") or {}
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "state": status.get("state"),
+        "last_success": success or None,
+        "last_failure": status.get("last_failure"),
+        "publication_eligible": False,
+        "automatic_execution_eligible": False,
     }
 
 
@@ -81,11 +99,16 @@ def main() -> int:
     args = parser.parse_args()
     runtime_root = args.runtime_root.expanduser().resolve()
     output_root = args.output_root.expanduser().resolve()
-    store = KlineNewsletterStore(runtime_root, output_root)
+    runtime = KlineWorldRuntime(
+        daily_root=args.daily_root,
+        runtime_root=runtime_root,
+        output_root=output_root,
+        key_file=None if args.no_llm else args.key_file,
+    )
     if args.status:
         try:
-            pointer, report = store.latest()
-        except KlineNewsletterError as exc:
+            status = runtime.status()
+        except KlineWorldRuntimeError as exc:
             print(
                 json.dumps(
                     {
@@ -99,14 +122,8 @@ def main() -> int:
                     indent=2,
                 )
             )
-            return 2 if (runtime_root / "latest.json").exists() else 0
-        print(
-            json.dumps(
-                _safe_summary({"pointer": pointer, "report": report}),
-                ensure_ascii=False,
-                indent=2,
-            )
-        )
+            return 2 if (runtime_root / "world-status.json").exists() else 0
+        print(json.dumps(_safe_status(status), ensure_ascii=False, indent=2))
         return 0
 
     runtime_root.mkdir(parents=True, exist_ok=True)
@@ -126,15 +143,9 @@ def main() -> int:
                 )
             )
             return 75
-        runtime = KlineNewsletterRuntime(
-            daily_root=args.daily_root,
-            runtime_root=runtime_root,
-            output_root=output_root,
-            key_file=None if args.no_llm else args.key_file,
-        )
         try:
             result = runtime.run_once()
-        except KlineNewsletterError as exc:
+        except KlineWorldRuntimeError as exc:
             print(
                 json.dumps(
                     {
