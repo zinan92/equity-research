@@ -1,6 +1,7 @@
 # K-line World Model v1 · LLM interpretation and advice contract
 
-Tracking: Issue #763. Parent: #758. Predecessor: #761 / PR #762.
+Tracking: Issue #763, reliability addendum #767. Parent: #758. Predecessor:
+#761 / PR #762.
 
 ## Outcome
 
@@ -26,6 +27,12 @@ The request contains the exact bounded world-context projection:
 It contains no Finance Daily Newsletter input, storage paths, credentials or
 provider exceptions. The request is reconstructible from the context identity,
 prompt version and output schema and is bound by its canonical hash.
+
+To keep the complete history inside the provider context budget, repeated point
+objects are losslessly encoded as positional arrays. Every series and
+relationship declares its own `point_columns`; all 120 observations and every
+OHLC, rate or relative-index value remain present. The immutable S1 artifact is
+not rewritten or compacted.
 
 ## Model authority and output
 
@@ -104,10 +111,20 @@ produces a same-context `interpretation_unavailable` artifact. It contains the
 failure code and code-owned confidence, but no flow map, transmission chain,
 trade advice or falsifier. It never reuses older prose or recommendations.
 
-Schema/citation/numeric/semantic rejection may trigger at most two complete
-rewrites over the exact same frozen context. Only fixed, path-scoped validation
-codes enter the retry request; raw exceptions and prior prose do not. The
-receipt binds attempt count, feedback codes and the exact final request hash.
+All provider calls share one hard budget of three attempts over the exact same
+frozen context. Timeout or truncated transport may retry the unchanged request.
+Schema/citation/numeric/semantic rejection may trigger a complete rewrite; only
+fixed, path-scoped validation codes and code-owned correction hints enter that
+next request. Rejected prose, raw exceptions, storage paths and credentials do
+not. The v2 prompt explicitly requires a literal inference qualifier in the
+world synthesis and each flow rationale, and an exact citation for non-mixed
+leadership.
+
+The completion receipt binds the ordered outcome of every attempted provider
+call, the exact feedback codes actually supplied to later attempts, the final
+request hash and the final generation status. A successful receipt must end in
+`accepted`; an unavailable receipt must end in the same fixed failure category
+stored in the artifact. Missing-provider fallback has zero attempted calls.
 
 Artifacts and completion receipts are immutable and content addressed. The
 canonical state advances atomically only after full readback. If the context
