@@ -1,5 +1,28 @@
 # Decision Log
 
+## 2026-08-17 — Give the model exact validator-compatible joins
+
+- **Decision:** Preserve the strict S2 validator and the model's authorship,
+  but add a code-owned request catalog listing exact falsifier subject/trigger
+  IDs, trade-target supporting series IDs, valid rotation leaders and the
+  trade-to-falsifier evidence-link rule. Prompt v3 and retry feedback point to
+  those exact catalogs and prefer number-free prose where a number is not
+  essential.
+- **Why:** The first full runtime reached DeepSeek successfully three times but
+  produced three different join errors: a mismatched falsifier subject, an
+  uncited numeric contradiction and a trade target without its supporting
+  series citation. The facts and validator were correct; the model had to
+  reverse-engineer relational rules that code already knew.
+- **Evidence:** Issue #773; controlled receipt
+  `world-model-20260816T164828Z-62c033ee7e45` over context
+  `market-regime-kline-world-context:4c83daa9e7bdf3b31f44f8a69fdc3d7c141ab63347c20bf0000bc0bfcec8e46c`;
+  focused catalog and path-specific retry tests.
+- **Gotchas:** The catalog narrows syntax, not market judgment: it does not
+  choose posture, flows, causal explanation or trades. Failed provider prose is
+  still discarded rather than repaired. The model still has three attempts,
+  and an exhausted run must remain current-context `interpretation_unavailable`
+  with no advice.
+
 ## 2026-08-17 — Validate only completed OHLC bars
 
 - **Decision:** Apply strict OHLC validation after the existing

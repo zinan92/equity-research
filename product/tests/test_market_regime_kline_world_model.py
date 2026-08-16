@@ -276,6 +276,24 @@ class KlineWorldModelTests(unittest.TestCase):
             )
         self.assertIn("must literally contain", request["validator_rules"]["synthesis_inference_language"])
         self.assertIn("exact leadership series_id", request["validator_rules"]["regime_leadership_citation"])
+        catalog = request["validation_catalog"]
+        by_key = series_by_key(context)
+        self.assertEqual(
+            catalog["falsifier_subject_ids"]["volatility_breakout"],
+            [by_key["vix"]["series_id"]],
+        )
+        self.assertEqual(
+            set(catalog["trade_target_series_ids"]["precious_metals"]),
+            {by_key["gold"]["series_id"], by_key["silver"]["series_id"]},
+        )
+        self.assertEqual(catalog["trade_target_series_ids"]["cash"], [])
+        self.assertTrue(catalog["rotation_leaders"])
+        self.assertTrue(
+            all(
+                row["to_series_id"] == by_key[row["to_key"]]["series_id"]
+                for row in catalog["rotation_leaders"]
+            )
+        )
         output = validate_model_output(valid_output(context), context)
         self.assertEqual(output["trade_plan"][0]["action"], "rotate")
         self.assertIn("可能", output["world_model"]["synthesis"])
@@ -469,6 +487,57 @@ class KlineWorldModelTests(unittest.TestCase):
                     "accepted",
                 ],
             )
+
+    def test_real_failure_paths_receive_exact_catalog_feedback(self) -> None:
+        context = fixture_context()
+        falsifier_invalid = valid_output(context)
+        falsifier_invalid["falsifiers"][0]["trigger"] = "yield_breakout"
+        numeric_invalid = valid_output(context)
+        numeric_invalid["contradictions"][0]["statement"] = (
+            "当前矛盾包含不存在的 +999999% 数值。"
+        )
+        provider = SequenceProvider(
+            [falsifier_invalid, numeric_invalid, valid_output(context)]
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(
+                root / "context", allow_fixture=True
+            )
+            context_store.publish(context)
+            artifact = KlineWorldModelStore(
+                context_store, root / "model"
+            ).compile_latest(provider)
+            self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
+            self.assertIn(
+                "falsifier_subject_ids",
+                " ".join(
+                    provider.requests[1]["validation_feedback"]["field_hints"]
+                ),
+            )
+            final_hints = " ".join(
+                provider.requests[2]["validation_feedback"]["field_hints"]
+            )
+            self.assertIn("numeric literal", final_hints)
+
+        trade_invalid = valid_output(context)
+        trade_invalid["trade_plan"][0]["action"] = "buy"
+        trade_invalid["trade_plan"][0]["target"] = "vix"
+        provider = SequenceProvider([trade_invalid, valid_output(context)])
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(
+                root / "context", allow_fixture=True
+            )
+            context_store.publish(context)
+            artifact = KlineWorldModelStore(
+                context_store, root / "model"
+            ).compile_latest(provider)
+            self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
+            hints = " ".join(
+                provider.requests[1]["validation_feedback"]["field_hints"]
+            )
+            self.assertIn("trade_target_series_ids", hints)
 
     def test_timeout_exhaustion_records_three_attempts_without_feedback(self) -> None:
         context = fixture_context()
