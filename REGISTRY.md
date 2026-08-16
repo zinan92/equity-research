@@ -1,5 +1,19 @@
 # REGISTRY
 
+## 2026-08-16 · K-line Newsletter bounded narrative retry (Issue #756)
+
+Now: the pilot provider locally validates every structured DeepSeek response
+against the exact frozen request view before returning it to the canonical S4
+compiler.  A structurally invalid first or second response retries the
+identical prompt and evidence, up to three attempts.  The provider never
+repairs prose, changes evidence, relaxes citations, or promotes an invalid
+claim.  Three invalid attempts still flow unchanged into S4's existing
+deterministic `unknown` fallback.
+
+Next: deploy the exact merged SHA and kickstart the installed 08:20 job.  A
+validated model response may publish `model_generated_unreviewed`; otherwise
+the same-pack fallback remains the honest output.
+
 ## 2026-08-16 · Independent 08:20 K-line Daily Newsletter pilot (Issue #754)
 
 Now: Track 2 is a separate local comparison product.  It consumes the current

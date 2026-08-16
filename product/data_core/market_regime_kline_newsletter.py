@@ -25,7 +25,9 @@ from .market_regime_daily_evidence import (
 )
 from .market_regime_daily_narrative import (
     SYSTEM_PROMPT,
+    MarketRegimeDailyNarrativeError,
     MarketRegimeDailyNarrativeStore,
+    validate_model_output,
 )
 from .market_regime_data import (
     HttpCapture,
@@ -216,16 +218,44 @@ class PilotDeepSeekNarrativeProvider:
     ) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
         from deepseek_writer import call_structured_deepseek
 
-        return call_structured_deepseek(
-            system_prompt=PILOT_SYSTEM_PROMPT,
-            request_object=request,
-            key_file=self.key_file,
-            model=self.model,
-            max_tokens=5000,
-            reasoning_effort="high",
-            temperature=0.1,
-            thinking_type="disabled",
-        )
+        slots = request.get("evidence_slots") or []
+        validation_pack = {
+            "pack_id": request.get("pack_id"),
+            "slots": slots,
+            "evidence_index": {
+                str(slot.get("evidence_id")): str(slot.get("key"))
+                for slot in slots
+                if isinstance(slot, Mapping) and slot.get("evidence_id") and slot.get("key")
+            },
+            "agreement_inputs": request.get("agreement_inputs"),
+            "contradiction_candidates": request.get("contradiction_candidates"),
+        }
+        final_output: Mapping[str, Any] | None = None
+        final_receipt: Mapping[str, Any] | None = None
+        for attempt in range(3):
+            output, receipt = call_structured_deepseek(
+                system_prompt=PILOT_SYSTEM_PROMPT,
+                request_object=request,
+                key_file=self.key_file,
+                model=self.model,
+                max_tokens=5000,
+                reasoning_effort="high",
+                temperature=0.1,
+                thinking_type="disabled",
+            )
+            final_output, final_receipt = output, receipt
+            try:
+                validate_model_output(output, validation_pack)
+                return output, receipt
+            except MarketRegimeDailyNarrativeError:
+                if attempt == 2:
+                    break
+        if final_output is None or final_receipt is None:  # pragma: no cover
+            raise KlineNewsletterError("narrative_provider_no_attempt")
+        # Return the final invalid value unchanged.  The canonical S4 compiler
+        # owns the fallback and reason receipt; this provider never repairs or
+        # relaxes model semantics.
+        return final_output, final_receipt
 
 
 class BitcoinDailyStore:

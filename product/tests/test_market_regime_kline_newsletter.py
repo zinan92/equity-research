@@ -7,6 +7,7 @@ import plistlib
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 PRODUCT = Path(__file__).resolve().parents[1]
@@ -15,13 +16,19 @@ sys.path.insert(0, str(PRODUCT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from data_core.market_regime_daily_evidence import MarketRegimeDailyEvidenceStore  # noqa: E402
-from data_core.market_regime_daily_narrative import MarketRegimeDailyNarrativeStore  # noqa: E402
+from data_core.market_regime_daily_narrative import (  # noqa: E402
+    MarketRegimeDailyNarrativeError,
+    MarketRegimeDailyNarrativeStore,
+    build_narrative_request,
+    validate_model_output,
+)
 from data_core.market_regime_kline_newsletter import (  # noqa: E402
     BITCOIN_SCHEMA_VERSION,
     DISPLAY_ORDER,
     BitcoinDailyStore,
     KlineNewsletterError,
     KlineNewsletterStore,
+    PilotDeepSeekNarrativeProvider,
     build_report_payload,
     render_html,
     render_markdown,
@@ -83,6 +90,52 @@ def compiled_inputs(base: Path, *, provider: FakeProvider | None = None) -> tupl
 
 
 class KlineNewsletterTest(unittest.TestCase):
+    def test_pilot_provider_retries_only_invalid_identical_frozen_requests(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            daily_root, macro_root = base / "daily", base / "macro"
+            fixture_inputs(daily_root, macro_root)
+            store = MarketRegimeDailyEvidenceStore(
+                daily_root, macro_root, base / "evidence"
+            )
+            pack = store.compile_latest()
+            request = build_narrative_request(pack)
+            valid = valid_output(pack)
+            invalid = json.loads(json.dumps(valid))
+            invalid["posture_evidence_ids"] = []
+            provider = PilotDeepSeekNarrativeProvider(base / "unused-key")
+            receipt = {"request_id": "safe", "finish_reason": "stop"}
+
+            with patch(
+                "deepseek_writer.call_structured_deepseek",
+                side_effect=[(invalid, receipt), (valid, receipt)],
+            ) as mocked:
+                output, _ = provider.generate(request)
+            self.assertEqual(output, valid)
+            self.assertEqual(mocked.call_count, 2)
+            self.assertEqual(
+                mocked.call_args_list[0].kwargs["request_object"],
+                mocked.call_args_list[1].kwargs["request_object"],
+            )
+            self.assertEqual(mocked.call_args_list[0].kwargs["request_object"], request)
+
+            with patch(
+                "deepseek_writer.call_structured_deepseek",
+                return_value=(valid, receipt),
+            ) as mocked:
+                output, _ = provider.generate(request)
+            self.assertEqual(output, valid)
+            self.assertEqual(mocked.call_count, 1)
+
+            with patch(
+                "deepseek_writer.call_structured_deepseek",
+                return_value=(invalid, receipt),
+            ) as mocked:
+                output, _ = provider.generate(request)
+            self.assertEqual(mocked.call_count, 3)
+            with self.assertRaises(MarketRegimeDailyNarrativeError):
+                validate_model_output(output, pack)
+
     def test_bitcoin_freezes_completed_daily_bars_and_rejects_wrong_symbol(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
