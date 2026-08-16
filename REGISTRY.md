@@ -1,5 +1,34 @@
 # REGISTRY
 
+## 2026-08-16 · K-line v2 immutable OHLC world context (Issue #761)
+
+Now: the approved Cross-asset K-line World Model North Star is merged in PR
+#760.  S1 adds a separate `market-regime-kline-world-context-v1` authority
+without changing S3/S4 or the installed report.  It freezes all 16 canonical
+daily/macro decision inputs plus supplemental Bitcoin as 17 visible series,
+each with 120 completed daily OHLC/rate points, deterministic 5/20/60-session
+features and an explicit canonical/supplemental role.  Twelve fixed pair
+relationships bind aligned normalized relative-performance histories; their
+semantics explicitly do not claim literal fund flow.
+
+The context reloads exact immutable daily and macro artifacts from the frozen
+S3 pack identity instead of joining independently moving `latest` pointers.
+A read-only real-data probe succeeded even though current Daily latest had
+already advanced: 17/17 series had 120 points, 16 were canonical, Bitcoin was
+supplemental, 12 relationships compiled, and the bounded provider projection
+was 283,257 bytes.  Context ID:
+`market-regime-kline-world-context:8709bd91a7d05a84c423a4737065aeb7498fcfa44f0474f380c6996e8034a762`.
+
+Validation: 9 focused context tests and all 176 Market Regime tests pass. The
+context store binds artifacts, receipts, truth boundary and source identities,
+rejects fixture publication, restores prior last-good after failed final
+readback, and keeps advice allowed while automatic execution remains false.
+
+Next: implement S2 as a new LLM-authored world-model compiler over this exact
+projection.  It must produce observed/inferred/recommended claim classes,
+capital-migration edges and actionable advice with citations; do not mutate the
+current enum-only S4 runtime or installed 08:20 job in place.
+
 ## 2026-08-16 · K-line Newsletter bounded narrative retry (Issue #756)
 
 Now: the pilot provider locally validates every structured DeepSeek response
