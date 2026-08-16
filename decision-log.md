@@ -1,5 +1,33 @@
 # Decision Log
 
+## 2026-08-17 — Promote one verified World Report through the existing 08:20 job
+
+- **Decision:** Keep the single existing
+  `com.park.market-regime.kline-newsletter` LaunchAgent and replace only its
+  one-shot runner pipeline with the versioned S1 → S2 → S3 World Report chain.
+  The runtime verifies completed-daily inputs, refreshes Bitcoin and macro,
+  freezes 17 series and 12 relative histories, compiles the LLM world model,
+  replays the rendered report, then copies those exact HTML/Markdown bytes to
+  the Desktop aliases. Finance Daily Newsletter remains entirely independent.
+- **Why:** The approved product hypothesis cannot be tested by a mockup or by
+  manually opening a content-addressed artifact. Park needs one repeatable
+  morning Track 2 output on the same desk as Track 1, without creating a third
+  scheduler, an API dependency or a hidden fusion between the two products.
+- **Evidence:** Issue #769;
+  `docs/market-regime/kline-world-runtime-contract.md`; seven focused runtime
+  tests covering serial ordering, no-key fallback, exact alias replay,
+  rollback, secret-free failure status, read-only status and lock contention;
+  and the 207-test Market Regime suite.
+- **Gotchas:** A valid current-context model fallback is still a completed
+  report, but it must expose `interpretation_unavailable` and contain zero
+  migration edges, trade recommendations or falsifiers. Desktop aliases are a
+  convenience projection, not evidence; immutable report artifacts and hashes
+  remain authoritative. Atomic replacement is per file and caught failures
+  restore prior bytes, but this is not a cryptographic or perfect multi-file
+  crash transaction. A controlled post-merge run proves plumbing only; the
+  first ordinary 08:20 trigger and later manual Track 1 comparison are separate
+  acceptance evidence.
+
 ## 2026-08-16 — Let the LLM read the cross-asset tape and recommend action
 
 - **Decision:** Replace the next K-line Newsletter's enum-selector/template
