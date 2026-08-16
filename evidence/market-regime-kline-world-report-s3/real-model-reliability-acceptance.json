@@ -1,0 +1,73 @@
+{
+  "schema_version": "market-regime-kline-world-model-s21-acceptance-v1",
+  "observed_at": "2026-08-16T16:15:50.934357Z",
+  "report_date": "2026-08-17",
+  "mode": "isolated_local_read_only_upstream",
+  "source": {
+    "data_kind": "real",
+    "finance_newsletter_input": false,
+    "context_id": "market-regime-kline-world-context:8709bd91a7d05a84c423a4737065aeb7498fcfa44f0474f380c6996e8034a762",
+    "series_count": 17,
+    "bars_per_series": 120,
+    "relationship_count": 12,
+    "request_encoding": "lossless_point_columns_arrays"
+  },
+  "compiler": {
+    "compiler_version": "market-regime-kline-world-model-compiler-v2",
+    "prompt_version": "market-regime-kline-world-model-prompt-v2",
+    "request_hash": "fac3411e8a86f1bab0ab3f9d460db4b7f1b30e7d0c8489a2ccd6e1f107970a48",
+    "attempt_count": 2,
+    "attempt_outcomes": [
+      "provider_truncated",
+      "accepted"
+    ],
+    "validation_feedback": [],
+    "generation_status": "model_generated_unreviewed",
+    "failure_code": null,
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-pro",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 100984,
+      "completion_tokens": 14672,
+      "total_tokens": 115656
+    }
+  },
+  "result": {
+    "world_model_id": "market-regime-kline-world-model:721f928e79f2dca577036f6bcf6cc03f40a10421fb0c8ee7f27fefa48781366b",
+    "report_id": "market-regime-kline-world-report:7592d5e24b09fc7f75d6a659fe5f8b0b06f4bce74f8e5c57951c6842b590b71f",
+    "posture": "defense",
+    "headline": "贵金属领导、防御红利占优，风险偏好回升但结构性避险并存",
+    "flow_count": 4,
+    "trade_plan_count": 4,
+    "falsifier_count": 2,
+    "chart_count": 17,
+    "relative_history_count": 12
+  },
+  "browser_acceptance": {
+    "desktop": {
+      "viewport": "1280x900",
+      "document_scroll_width": 1265,
+      "horizontal_overflow": false,
+      "canvas_count": 29,
+      "console_warning_or_error_count": 0,
+      "screenshot": "real-model-desktop.png"
+    },
+    "mobile": {
+      "viewport": "390x844",
+      "document_scroll_width": 375,
+      "horizontal_overflow": false,
+      "canvas_count": 29,
+      "console_warning_or_error_count": 0,
+      "screenshot": "real-model-mobile.png"
+    }
+  },
+  "boundaries": {
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "installed_runtime_changed": false,
+    "desktop_output_changed": false,
+    "finance_daily_newsletter_changed": false
+  },
+  "acceptance": "passed"
+}

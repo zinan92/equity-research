@@ -1,5 +1,43 @@
 # REGISTRY
 
+## 2026-08-17 · K-line v2 real-provider reliability closure (Issue #767)
+
+Now: S2.1 keeps the strict S2 evidence and advice validator unchanged while
+making the real provider path reliable enough for the approved report. The
+complete 17-series × 120-session tape and all 12 relative histories are
+losslessly encoded as column-described point arrays before provider transport;
+no OHLC, volume, rate or relative-index observation is removed. The v2 prompt
+states the exact inference-language and leadership-citation requirements.
+
+Timeout, truncation and correctable output failures now share one hard
+three-attempt budget. Transport failures retry the unchanged frozen request;
+schema/citation/numeric/semantic failures add only fixed path codes and
+code-owned correction hints. The immutable completion receipt binds every
+attempt outcome, the feedback actually supplied, the final request hash and
+generation status. Replay rejects a coherently rehashed but semantically false
+attempt ledger. Missing or exhausted providers still publish the same-context
+empty fallback without stale advice.
+
+The isolated real acceptance used the unchanged S1 context
+`market-regime-kline-world-context:8709bd91a7d05a84c423a4737065aeb7498fcfa44f0474f380c6996e8034a762`.
+It completed in two attempts (`provider_truncated → accepted`) with 100,984
+prompt and 14,672 completion tokens, then rendered a real `防守` report with
+four cited migration edges, four trade recommendations, exactly two
+falsifiers, all 17 charts and all 12 relative histories. Desktop 1280 and
+mobile 390 checks had zero horizontal overflow and zero console warnings or
+errors. The safe receipt and screenshots are in
+[`evidence/market-regime-kline-world-report-s3/real-model-reliability-acceptance.json`](evidence/market-regime-kline-world-report-s3/real-model-reliability-acceptance.json).
+
+Validation: 16 focused S2 tests and all 200 Market Regime tests pass; Python
+compile and diff checks pass. Changed-content gitleaks is clean. The sole
+repository-wide finding remains the unrelated pre-existing redacted fixture in
+`evidence/market-regime-live-time-identity/browser-acceptance.json`.
+
+Next: implement S4 as a separate runtime/scheduler/Desktop story from the
+merged main SHA. Keep Finance Daily Newsletter independent, preserve the
+local-only/no-broker/no-auto-execution boundaries, and do not claim the Track 2
+judgment is useful until ordinary morning outputs are compared manually.
+
 ## 2026-08-16 · K-line v2 approved white World Report (Issue #765)
 
 Now: S3 adds a new `market-regime-kline-world-report-v1` authority over the

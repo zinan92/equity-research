@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from hashlib import sha256
 from pathlib import Path
 import json
 import tempfile
@@ -220,6 +221,27 @@ class RetryProvider(FakeProvider):
         }
 
 
+class SequenceProvider:
+    provider_name = "DeepSeek"
+    model = "fixture-model"
+
+    def __init__(self, steps: list[dict | BaseException]) -> None:
+        self.steps = steps
+        self.requests: list[dict] = []
+
+    def generate(self, request: dict) -> tuple[dict, dict]:
+        self.requests.append(deepcopy(request))
+        step = self.steps[min(len(self.requests) - 1, len(self.steps) - 1)]
+        if isinstance(step, BaseException):
+            raise step
+        return deepcopy(step), {
+            "request_id": f"sequence-{len(self.requests)}",
+            "model": self.model,
+            "finish_reason": "stop",
+            "usage": {},
+        }
+
+
 class KlineWorldModelTests(unittest.TestCase):
     def test_request_contains_full_context_and_success_accepts_authored_advice(self) -> None:
         context = fixture_context()
@@ -227,6 +249,33 @@ class KlineWorldModelTests(unittest.TestCase):
         self.assertEqual(len(request["context"]["series"]), 17)
         self.assertEqual(len(request["context"]["series"][0]["points"]), 120)
         self.assertEqual(len(request["context"]["relationships"]), 12)
+        self.assertEqual(
+            request["context"]["series"][0]["point_columns"],
+            ["date", "open", "high", "low", "close", "volume"],
+        )
+        self.assertIsInstance(request["context"]["series"][0]["points"][0], list)
+        self.assertIsInstance(context["llm_projection"]["series"][0]["points"][0], dict)
+        self.assertIn("No OHLC", request["point_encoding"])
+        for original, encoded in zip(
+            context["llm_projection"]["series"],
+            request["context"]["series"],
+            strict=True,
+        ):
+            self.assertEqual(
+                [dict(zip(encoded["point_columns"], point, strict=True)) for point in encoded["points"]],
+                original["points"],
+            )
+        for original, encoded in zip(
+            context["llm_projection"]["relationships"],
+            request["context"]["relationships"],
+            strict=True,
+        ):
+            self.assertEqual(
+                [dict(zip(encoded["point_columns"], point, strict=True)) for point in encoded["points"]],
+                original["points"],
+            )
+        self.assertIn("must literally contain", request["validator_rules"]["synthesis_inference_language"])
+        self.assertIn("exact leadership series_id", request["validator_rules"]["regime_leadership_citation"])
         output = validate_model_output(valid_output(context), context)
         self.assertEqual(output["trade_plan"][0]["action"], "rotate")
         self.assertIn("可能", output["world_model"]["synthesis"])
@@ -344,6 +393,126 @@ class KlineWorldModelTests(unittest.TestCase):
                 receipt["validation_feedback"],
                 ["output_semantic_invalid:world_model.headline"],
             )
+            self.assertEqual(
+                receipt["attempt_outcomes"],
+                ["output_semantic_invalid:world_model.headline", "accepted"],
+            )
+
+    def test_truncation_retries_same_frozen_request_and_can_recover(self) -> None:
+        context = fixture_context()
+        provider = SequenceProvider(
+            [
+                RuntimeError("DeepSeek structured response did not finish cleanly: length"),
+                valid_output(context),
+            ]
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(root / "context", allow_fixture=True)
+            context_store.publish(context)
+            store = KlineWorldModelStore(context_store, root / "model")
+            artifact = store.compile_latest(provider)
+            self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
+            self.assertEqual(len(provider.requests), 2)
+            self.assertEqual(provider.requests[0], provider.requests[1])
+            state = json.loads((root / "model/state.json").read_text(encoding="utf-8"))
+            receipt = json.loads(
+                (root / "model" / state["pointer"]["receipt"]["path"]).read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(receipt["attempt_outcomes"], ["provider_truncated", "accepted"])
+            self.assertEqual(receipt["validation_feedback"], [])
+
+    def test_two_path_scoped_corrections_recover_with_code_owned_hints(self) -> None:
+        context = fixture_context()
+        leadership_invalid = valid_output(context)
+        leadership_key = leadership_invalid["regime"]["leadership"]
+        leadership_invalid["regime"]["evidence_ids"] = [
+            reference
+            for reference in leadership_invalid["regime"]["evidence_ids"]
+            if series_by_key(context)[leadership_key]["series_id"] != reference
+        ]
+        synthesis_invalid = valid_output(context)
+        synthesis_invalid["world_model"]["synthesis"] = "跨资产资金轮动正在形成。"
+        provider = SequenceProvider(
+            [leadership_invalid, synthesis_invalid, valid_output(context)]
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(root / "context", allow_fixture=True)
+            context_store.publish(context)
+            store = KlineWorldModelStore(context_store, root / "model")
+            artifact = store.compile_latest(provider)
+            self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
+            self.assertEqual(len(provider.requests), 3)
+            final_feedback = provider.requests[2]["validation_feedback"]
+            self.assertEqual(
+                final_feedback["failed_codes"],
+                [
+                    "output_citation_invalid:regime_leadership",
+                    "output_semantic_invalid:world_model.synthesis",
+                ],
+            )
+            self.assertEqual(len(final_feedback["field_hints"]), 2)
+            state = json.loads((root / "model/state.json").read_text(encoding="utf-8"))
+            receipt = json.loads(
+                (root / "model" / state["pointer"]["receipt"]["path"]).read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(
+                receipt["attempt_outcomes"],
+                [
+                    "output_citation_invalid:regime_leadership",
+                    "output_semantic_invalid:world_model.synthesis",
+                    "accepted",
+                ],
+            )
+
+    def test_timeout_exhaustion_records_three_attempts_without_feedback(self) -> None:
+        context = fixture_context()
+        provider = SequenceProvider([TimeoutError("secret transport detail")])
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(root / "context", allow_fixture=True)
+            context_store.publish(context)
+            store = KlineWorldModelStore(context_store, root / "model")
+            artifact = store.compile_latest(provider)
+            self.assertEqual(artifact["failure_code"], "provider_timeout")
+            self.assertEqual(len(provider.requests), 3)
+            state = json.loads((root / "model/state.json").read_text(encoding="utf-8"))
+            receipt = json.loads(
+                (root / "model" / state["pointer"]["receipt"]["path"]).read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(receipt["attempt_outcomes"], ["provider_timeout"] * 3)
+            self.assertEqual(receipt["validation_feedback"], [])
+            self.assertNotIn("secret transport detail", json.dumps(receipt))
+
+    def test_coherently_rehashed_attempt_ledger_tamper_fails_replay(self) -> None:
+        context = fixture_context()
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(root / "context", allow_fixture=True)
+            context_store.publish(context)
+            store = KlineWorldModelStore(context_store, root / "model")
+            store.compile_latest(FakeProvider(valid_output(context)))
+            state_path = root / "model/state.json"
+            state = json.loads(state_path.read_text(encoding="utf-8"))
+            receipt_path = root / "model" / state["pointer"]["receipt"]["path"]
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            receipt["attempt_outcomes"] = ["provider_error"]
+            encoded = (
+                json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+                + "\n"
+            ).encode("utf-8")
+            receipt_path.write_bytes(encoded)
+            state["pointer"]["receipt"]["sha256"] = sha256(encoded).hexdigest()
+            state_path.write_text(json.dumps(state), encoding="utf-8")
+            with self.assertRaisesRegex(KlineWorldModelError, "attempt_receipt_invalid"):
+                store.latest()
 
     def test_no_provider_and_timeout_publish_same_context_unavailable_without_advice(self) -> None:
         context = fixture_context()
