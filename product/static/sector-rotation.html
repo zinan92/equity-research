@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Park Sector Rotation Radar：20 个同级板块的 K 线结构、资金流与轮动证据。">
+  <link rel="icon" href="data:,">
+  <title>Sector Rotation Radar · Park</title>
+  <link rel="stylesheet" href="sector-rotation.css">
+  <script src="sector-rotation.js" defer></script>
+</head>
+<body>
+  <div class="page-grid" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/sector-rotation.html" aria-label="Sector Rotation Radar 首页">
+      <span class="brand-mark">P</span>
+      <span>
+        <strong>SECTOR ROTATION</strong>
+        <small>20 PEER SECTORS · READ ONLY</small>
+      </span>
+    </a>
+    <div class="topbar-status">
+      <span class="status-dot" id="top-state-dot" data-state="fixture" aria-hidden="true"></span>
+      <span id="top-quality">FIXTURE · 只读原型</span>
+      <span class="topbar-divider" aria-hidden="true"></span>
+      <span>V1 PROTOTYPE</span>
+      <button class="icon-button" id="reset-button" type="button">重置筛选</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <div class="section-kicker">
+          <span>SECTOR ROTATION · K-LINE × FLOW</span>
+          <span class="hairline"></span>
+          <span>FIXTURE / NOT LIVE</span>
+        </div>
+        <h1 id="page-title">板块轮动</h1>
+        <p class="hero-deck">先看板块自身的 K 线结构，再看资金是否确认；轮动关系只从证据中长出来，不预设固定链条。</p>
+        <div class="truth-tags" aria-label="原型边界">
+          <span>20 PEER SECTORS</span>
+          <span>K-LINE + FUND FLOW</span>
+          <span>NO BROKER · NO LIVE</span>
+        </div>
+      </div>
+
+      <aside class="quality-console" aria-label="数据合同状态">
+        <span class="console-caption">READER CONTRACT</span>
+        <strong id="slot-count">20</strong>
+        <span class="console-label">LOGICAL SLOTS</span>
+        <dl>
+          <div><dt>宏观 handoff</dt><dd id="macro-handoff">等待输入</dd></div>
+          <div><dt>数据状态</dt><dd id="quality-state">FIXTURE</dd></div>
+          <div><dt>时间</dt><dd id="as-of">未接实时</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="boundary-banner" aria-label="原型边界说明">
+      <div class="boundary-icon">!</div>
+      <div>
+        <strong>这里验证的是阅读顺序，不是当前行情结论。</strong>
+        <p>卡片中的阶段、形态和资金状态均为 fixture，用来验证“总览 → 轮动关系 → 单板块证据抽屉”的信息架构。真实数据接入后，partial、stale、proxy-only 和 identity mismatch 必须继续显示为 unknown。</p>
+      </div>
+    </section>
+
+    <section class="signal-strip" aria-label="轮动总览指标">
+      <article class="signal-card">
+        <span class="signal-index">01</span>
+        <div><p>当前主线</p><h2 id="leader-count">—</h2></div>
+        <strong id="leader-label">等待证据</strong>
+      </article>
+      <article class="signal-card">
+        <span class="signal-index">02</span>
+        <div><p>改善中</p><h2 id="improving-count">—</h2></div>
+        <strong id="improving-label">等待证据</strong>
+      </article>
+      <article class="signal-card">
+        <span class="signal-index">03</span>
+        <div><p>需要确认</p><h2 id="unknown-count">—</h2></div>
+        <strong id="unknown-label">fail closed</strong>
+      </article>
+      <article class="signal-card">
+        <span class="signal-index">04</span>
+        <div><p>关系边</p><h2 id="edge-count">—</h2></div>
+        <strong>不固定链条</strong>
+      </article>
+    </section>
+
+    <section class="rotation-section" aria-labelledby="rotation-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">RELATIVE ROTATION · DERIVED FROM K-LINE + FLOW</span>
+          <h2 id="rotation-title">谁在领先，谁在接棒？</h2>
+        </div>
+        <span class="section-note">示例关系 · 不是资金的直接测量</span>
+      </div>
+      <div class="rotation-grid">
+        <article class="rotation-column" data-tone="leader">
+          <header><span>LEADING</span><strong>主线</strong><small>结构与资金同向</small></header>
+          <div class="rotation-list" id="leaders"></div>
+        </article>
+        <article class="rotation-column" data-tone="improving">
+          <header><span>IMPROVING</span><strong>接棒候选</strong><small>结构先改善，等待确认</small></header>
+          <div class="rotation-list" id="improving"></div>
+        </article>
+        <article class="rotation-column" data-tone="watch">
+          <header><span>WATCH</span><strong>转弱 / 未知</strong><small>不把缺失解释成退潮</small></header>
+          <div class="rotation-list" id="watching"></div>
+        </article>
+      </div>
+      <div class="rotation-footnote"><span aria-hidden="true">↳</span><span>示例路径可以是硬件 → 软件，也可以是多条并行路径；系统不会因为熟悉某条叙事而强行制造轮动边。</span></div>
+    </section>
+
+    <section class="universe-section" aria-labelledby="universe-title">
+      <div class="section-heading universe-heading">
+        <div>
+          <span class="section-kicker">FROZEN LOGICAL UNIVERSE · 20 PEERS</span>
+          <h2 id="universe-title">20 个板块的同一张桌子</h2>
+        </div>
+        <div class="filters" role="toolbar" aria-label="板块筛选">
+          <button class="filter-button active" type="button" data-filter="all">全部 <span>20</span></button>
+          <button class="filter-button" type="button" data-filter="attack">进攻 <span>—</span></button>
+          <button class="filter-button" type="button" data-filter="defense">防守 <span>—</span></button>
+          <button class="filter-button" type="button" data-filter="mixed">混合 <span>—</span></button>
+          <button class="filter-button" type="button" data-filter="unknown">需确认 <span>—</span></button>
+        </div>
+      </div>
+      <div class="legend-row" aria-label="卡片图例">
+        <span><i class="legend-dot" data-tone="leader"></i>领先</span>
+        <span><i class="legend-dot" data-tone="improving"></i>改善</span>
+        <span><i class="legend-dot" data-tone="weakening"></i>转弱</span>
+        <span><i class="legend-dot" data-tone="unknown"></i>unknown</span>
+        <span class="legend-spacer"></span>
+        <span>点击任意卡片打开证据抽屉</span>
+      </div>
+      <div class="sector-grid" id="sector-grid" aria-live="polite"></div>
+      <p class="empty-state" id="empty-state" hidden>当前筛选没有板块。</p>
+    </section>
+
+    <section class="contract-section" aria-labelledby="contract-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">EVIDENCE CONTRACT · FAIL CLOSED</span>
+          <h2 id="contract-title">读者看到的不是一个分数</h2>
+        </div>
+      </div>
+      <div class="contract-grid">
+        <article><span>01</span><strong>K 线结构</strong><p>双底、弧形底、平台、突破、加速或衰竭只是形态证据，不能直接写成买入。</p></article>
+        <article><span>02</span><strong>资金确认</strong><p>today / 5d / 10d 与日级资金流分开保存；窗口重叠，不直接相加。</p></article>
+        <article><span>03</span><strong>相对强弱</strong><p>从板块 K 线派生领先、改善、转弱；它不是第三类外部数据。</p></article>
+        <article><span>04</span><strong>数据质量</strong><p>身份不一致、过期、代理或缺失都会向下游传播为 unknown。</p></article>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="evidence-dialog" id="evidence-dialog" aria-labelledby="evidence-title">
+    <div class="dialog-head">
+      <div><span class="section-kicker" id="evidence-kicker">SECTOR EVIDENCE</span><h2 id="evidence-title">—</h2><p id="evidence-subtitle">—</p></div>
+      <button class="close-button" id="close-dialog" type="button" aria-label="关闭证据抽屉">×</button>
+    </div>
+    <div class="dialog-body">
+      <div class="evidence-summary" id="evidence-summary"></div>
+      <div class="evidence-chart-wrap">
+        <div class="chart-heading"><span>K-LINE SHAPE · FIXTURE</span><span id="chart-window">—</span></div>
+        <div id="evidence-chart" class="evidence-chart" aria-label="示例 K 线图"></div>
+      </div>
+      <div class="flow-evidence">
+        <div class="chart-heading"><span>FLOW CONFIRMATION</span><span id="flow-window">—</span></div>
+        <div class="flow-bars" id="flow-bars"></div>
+      </div>
+      <dl class="evidence-ledger" id="evidence-ledger"></dl>
+      <div class="evidence-note" id="evidence-note"></div>
+    </div>
+  </dialog>
+
+  <footer class="footer-boundary">
+    <strong>V1 prototype boundary</strong>
+    <span>仅验证板块层阅读顺序；不接 broker，不产生个股名单，不发送交易指令。</span>
+    <code>source=fixture · logical_universe=20 · data_contract=sector-data-v1 · relation_edges=derived_not_literal_fund_flow</code>
+  </footer>
+</body>
+</html>
