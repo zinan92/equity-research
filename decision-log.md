@@ -1,5 +1,30 @@
 # Decision Log
 
+## 2026-08-17 — Give autonomous validation repair one final attempt
+
+- **Decision:** Increase the World Model's hard provider budget from three to
+  four attempts and let the final request carry at most three accumulated,
+  path-scoped validation codes. Prompt/compiler v5 names the exact rules for
+  cross-asset world-model citations, Chinese direction-compatible transmission
+  prose, and trade-to-falsifier evidence intersection.
+- **Why:** A controlled standard run over the current A-share-close context
+  failed three different rules in sequence and stopped only after the third
+  rewrite exposed the final trade/falsifier join error. An earlier manual run
+  appeared successful by injecting an operator-authored output skeleton, but
+  its request could not replay in a fresh process and did not test autonomous
+  LLM interpretation.
+- **Evidence:** Issue #799; focused fourth-attempt success and exhaustion tests;
+  the isolated failed candidate receipt
+  `world-model-20260817T102411Z-714d20ad20dd` records the three distinct failure
+  paths without modifying the live pointer; the independently replayed standard
+  candidate `world-model-20260817T103925Z-f26f725bec52` was accepted on attempt
+  three after two code-owned validation repairs, again without modifying the
+  live pointer.
+- **Gotchas:** More attempts do not relax any validator and do not guarantee a
+  usable conclusion. A fourth failure remains same-context
+  `interpretation_unavailable` with no advice, and only an independently
+  replayable standard request may advance the current report.
+
 ## 2026-08-17 — Put the complete daily tape before the interpretation
 
 - **Decision:** Keep the posture hero unchanged, then reduce the World Report

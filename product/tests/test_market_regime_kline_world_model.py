@@ -266,6 +266,9 @@ class KlineWorldModelTests(unittest.TestCase):
         self.assertIn("不能使用 precious_metals、growth、defensive", SYSTEM_PROMPT)
         self.assertIn("每条 trade_plan.evidence_ids 必须与它所指向的 falsifier", SYSTEM_PROMPT)
         self.assertIn("恰好输出两个 falsifiers", SYSTEM_PROMPT)
+        self.assertIn("提交前逐项自检", SYSTEM_PROMPT)
+        self.assertIn("至少两个不同 series key", SYSTEM_PROMPT)
+        self.assertIn("不要在修复一项时破坏另一项", SYSTEM_PROMPT)
 
     def test_request_contains_full_context_and_success_accepts_authored_advice(self) -> None:
         context = fixture_context()
@@ -563,7 +566,70 @@ class KlineWorldModelTests(unittest.TestCase):
             )
             self.assertIn("trade_target_series_ids", hints)
 
-    def test_timeout_exhaustion_records_three_attempts_without_feedback(self) -> None:
+    def test_three_distinct_failures_recover_on_fourth_attempt_and_replay(self) -> None:
+        context = fixture_context()
+        by_key = series_by_key(context)
+        pairs = usable_pairs(context)
+
+        cross_asset_invalid = valid_output(context)
+        cross_asset_invalid["world_model"]["evidence_ids"] = [
+            pairs[0]["relationship_id"],
+            pairs[1]["relationship_id"],
+            by_key[pairs[0]["lhs"]]["series_id"],
+        ]
+
+        transmission_invalid = valid_output(context)
+        transmission_invalid["transmission_chain"][1]["statement"] = "English only"
+
+        trade_falsifier_invalid = valid_output(context)
+        trade_falsifier_invalid["trade_plan"][0]["falsifier_index"] = 1
+
+        provider = SequenceProvider(
+            [
+                cross_asset_invalid,
+                transmission_invalid,
+                trade_falsifier_invalid,
+                valid_output(context),
+            ]
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(
+                root / "context", allow_fixture=True
+            )
+            context_store.publish(context)
+            store = KlineWorldModelStore(context_store, root / "model")
+            artifact = store.compile_latest(provider)
+
+            self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
+            self.assertEqual(len(provider.requests), 4)
+            final_feedback = provider.requests[3]["validation_feedback"]
+            self.assertEqual(
+                final_feedback["failed_codes"],
+                [
+                    "output_citation_invalid:world_model_cross_asset",
+                    "output_semantic_invalid:transmission_chain.1.statement",
+                    "output_citation_invalid:trade_falsifier",
+                ],
+            )
+            final_hints = " ".join(final_feedback["field_hints"])
+            self.assertIn("two distinct series keys", final_hints)
+            self.assertIn("Simplified Chinese", final_hints)
+            self.assertIn("linked falsifier", final_hints)
+
+            state = json.loads((root / "model/state.json").read_text(encoding="utf-8"))
+            receipt = json.loads(
+                (root / "model" / state["pointer"]["receipt"]["path"]).read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(receipt["attempt_count"], 4)
+            self.assertEqual(receipt["attempt_outcomes"][-1], "accepted")
+            self.assertEqual(
+                store.latest(expected_context_id=context["context_id"]), artifact
+            )
+
+    def test_timeout_exhaustion_records_four_attempts_without_feedback(self) -> None:
         context = fixture_context()
         provider = SequenceProvider([TimeoutError("secret transport detail")])
         with tempfile.TemporaryDirectory() as temporary:
@@ -573,14 +639,14 @@ class KlineWorldModelTests(unittest.TestCase):
             store = KlineWorldModelStore(context_store, root / "model")
             artifact = store.compile_latest(provider)
             self.assertEqual(artifact["failure_code"], "provider_timeout")
-            self.assertEqual(len(provider.requests), 3)
+            self.assertEqual(len(provider.requests), 4)
             state = json.loads((root / "model/state.json").read_text(encoding="utf-8"))
             receipt = json.loads(
                 (root / "model" / state["pointer"]["receipt"]["path"]).read_text(
                     encoding="utf-8"
                 )
             )
-            self.assertEqual(receipt["attempt_outcomes"], ["provider_timeout"] * 3)
+            self.assertEqual(receipt["attempt_outcomes"], ["provider_timeout"] * 4)
             self.assertEqual(receipt["validation_feedback"], [])
             self.assertNotIn("secret transport detail", json.dumps(receipt))
 

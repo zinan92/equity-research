@@ -111,14 +111,18 @@ produces a same-context `interpretation_unavailable` artifact. It contains the
 failure code and code-owned confidence, but no flow map, transmission chain,
 trade advice or falsifier. It never reuses older prose or recommendations.
 
-All provider calls share one hard budget of three attempts over the exact same
+All provider calls share one hard budget of four attempts over the exact same
 frozen context. Timeout or truncated transport may retry the unchanged request.
 Schema/citation/numeric/semantic rejection may trigger a complete rewrite; only
 fixed, path-scoped validation codes and code-owned correction hints enter that
 next request. Rejected prose, raw exceptions, storage paths and credentials do
-not. The v2 prompt explicitly requires a literal inference qualifier in the
-world synthesis and each flow rationale, and an exact citation for non-mixed
-leadership.
+not. The v5 request explicitly requires a literal inference qualifier in the
+world synthesis and each flow rationale, an exact citation for non-mixed
+leadership, at least two distinct series keys in the world-model citation set,
+direction-compatible Chinese transmission prose, and one shared evidence ID
+between each trade and its linked falsifier. The fourth attempt is a final
+autonomous rewrite over accumulated validator codes; it never receives an
+operator-authored answer or a prior rejected output.
 
 The completion receipt binds the ordered outcome of every attempted provider
 call, the exact feedback codes actually supplied to later attempts, the final
