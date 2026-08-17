@@ -26,12 +26,15 @@ from .market_regime_macro_data import (
 )
 
 
-SCHEMA_VERSION = "market-regime-kline-world-context-v1"
+SCHEMA_VERSION = "market-regime-kline-world-context-v2"
+ALIGNED_TAPE_SCHEMA_VERSION = "market-regime-kline-aligned-tape-v1"
 CONTEXT_ID_PREFIX = "market-regime-kline-world-context:"
 SERIES_ID_PREFIX = "market-regime-kline-series:"
+SOURCE_SERIES_ID_PREFIX = "market-regime-kline-source-series:"
 RELATIONSHIP_ID_PREFIX = "market-regime-kline-relationship:"
 BITCOIN_ID_PREFIX = "market-regime-kline-bitcoin:"
-LOOKBACK = 120
+SOURCE_LOOKBACK = 520
+LOOKBACK = 300
 FEATURE_WINDOWS = (5, 20, 60)
 MAX_LLM_PROJECTION_BYTES = 750_000
 DAILY_RUN_RE = re.compile(r"^market-regime-[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$")
@@ -170,7 +173,7 @@ def _price_features(values: list[float]) -> dict[str, Any]:
         **returns,
         "distance_ma20_pct": round((values[-1] / ma20 - 1) * 100, 6),
         "distance_ma60_pct": round((values[-1] / ma60 - 1) * 100, 6),
-        "drawdown_120d_pct": round((values[-1] / peak - 1) * 100, 6),
+        "drawdown_300d_pct": round((values[-1] / peak - 1) * 100, 6),
         "realized_vol_20d_pct": round(realized, 6),
         "trend_60d": "up" if returns["return_60d_pct"] > 1 else "down" if returns["return_60d_pct"] < -1 else "flat",
     }
@@ -188,8 +191,8 @@ def _rate_features(values: list[float], *, level_unit: str) -> dict[str, Any]:
     low_distance = (values[-1] - min(values)) * scale
     return {
         **changes,
-        "distance_from_120d_high_bp": round(high_distance, 6),
-        "distance_from_120d_low_bp": round(low_distance, 6),
+        "distance_from_300d_high_bp": round(high_distance, 6),
+        "distance_from_300d_low_bp": round(low_distance, 6),
         "trend_60d": "up" if changes["change_60d_bp"] > 5 else "down" if changes["change_60d_bp"] < -5 else "flat",
     }
 
@@ -351,7 +354,7 @@ def _price_series(
     if not isinstance(bars, list) or len(bars) < LOOKBACK:
         raise KlineWorldContextError(f"series_history_too_short:{key}")
     selected: list[dict[str, Any]] = []
-    for raw in bars[-LOOKBACK:]:
+    for raw in bars[-SOURCE_LOOKBACK:]:
         if not isinstance(raw, dict):
             raise KlineWorldContextError(f"series_row_invalid:{key}")
         row = {
@@ -367,7 +370,9 @@ def _price_series(
             row["volume"] = _finite(raw.get("volume"), field=f"{key}.volume")
         selected.append(row)
     _validate_dates(selected, key=key)
-    values = [row["close"] for row in selected]
+    actual_session = str(item.get("last_completed_session") or selected[-1]["date"])
+    if actual_session != selected[-1]["date"]:
+        raise KlineWorldContextError(f"series_session_mismatch:{key}")
     core = {
         "key": key,
         "display_name": display_name,
@@ -375,17 +380,19 @@ def _price_series(
         "series_type": "ohlc",
         "level_unit": level_unit,
         "change_unit": "percent_return",
-        "session": str(item.get("last_completed_session") or selected[-1]["date"]),
+        "session": actual_session,
         "close_at": str(item.get("last_completed_close_at") or ""),
         "quality": str(item.get("quality") or "unavailable"),
         "evidence_id": evidence_id,
         "source_identity": dict(source_identity),
         "points": selected,
-        "features": _price_features(values),
     }
     if core["quality"] not in {"fresh", "partial", "stale"}:
         raise KlineWorldContextError(f"series_unavailable:{key}")
-    return {"series_id": f"{SERIES_ID_PREFIX}{key}:{_digest(core)}", **core}
+    return {
+        "source_series_id": f"{SOURCE_SERIES_ID_PREFIX}{key}:{_digest(core)}",
+        **core,
+    }
 
 
 def _rate_series(
@@ -404,13 +411,15 @@ def _rate_series(
         raise KlineWorldContextError(f"series_history_too_short:{key}")
     points = [
         {"date": str(raw.get("date") or ""), "value": _finite(raw.get("value"), field=f"{key}.value")}
-        for raw in observations[-LOOKBACK:]
+        for raw in observations[-SOURCE_LOOKBACK:]
         if isinstance(raw, dict)
     ]
-    if len(points) != LOOKBACK:
+    if len(points) < LOOKBACK:
         raise KlineWorldContextError(f"series_row_invalid:{key}")
     _validate_dates(points, key=key)
-    values = [row["value"] for row in points]
+    actual_session = str(item.get("last_completed_session") or points[-1]["date"])
+    if actual_session != points[-1]["date"]:
+        raise KlineWorldContextError(f"series_session_mismatch:{key}")
     core = {
         "key": key,
         "display_name": spec.display_name,
@@ -418,7 +427,7 @@ def _rate_series(
         "series_type": "rate_level",
         "level_unit": spec.level_unit,
         "change_unit": "basis_points",
-        "session": str(item.get("last_completed_session") or points[-1]["date"]),
+        "session": actual_session,
         "close_at": str(item.get("last_completed_close_at") or ""),
         "quality": str(item.get("quality") or "unavailable"),
         "evidence_id": evidence_id,
@@ -428,10 +437,80 @@ def _rate_series(
             "artifact_sha256": (item.get("artifact") or {}).get("sha256"),
         },
         "points": points,
-        "features": _rate_features(values, level_unit=spec.level_unit),
     }
     if core["quality"] not in {"fresh", "partial", "stale"}:
         raise KlineWorldContextError(f"series_unavailable:{key}")
+    return {
+        "source_series_id": f"{SOURCE_SERIES_ID_PREFIX}{key}:{_digest(core)}",
+        **core,
+    }
+
+
+def _common_as_of(series: Mapping[str, Mapping[str, Any]]) -> str:
+    date_sets = [
+        {str(row.get("date") or "") for row in item.get("points") or []}
+        for item in series.values()
+    ]
+    common = set.intersection(*date_sets) if date_sets else set()
+    common.discard("")
+    if not common:
+        raise KlineWorldContextError("context_alignment_unavailable")
+    as_of = max(common)
+    if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", as_of):
+        raise KlineWorldContextError("context_alignment_date_invalid")
+    return as_of
+
+
+def _aligned_series(item: Mapping[str, Any], *, as_of: str) -> dict[str, Any]:
+    key = str(item.get("key") or "")
+    eligible = [row for row in item.get("points") or [] if str(row.get("date") or "") <= as_of]
+    if len(eligible) < LOOKBACK:
+        raise KlineWorldContextError(f"aligned_history_too_short:{key}")
+    points = [dict(row) for row in eligible[-LOOKBACK:]]
+    _validate_dates(points, key=key)
+    actual_session = str(item.get("session") or "")
+    discarded = sum(
+        str(row.get("date") or "") > as_of for row in item.get("points") or []
+    )
+    source_quality = str(item.get("quality") or "unavailable")
+    quality = (
+        "stale"
+        if source_quality == "stale"
+        else "fresh"
+        if actual_session == as_of and source_quality == "fresh"
+        else "partial"
+    )
+    rate = item.get("series_type") == "rate_level"
+    values = [float(row["value"] if rate else row["close"]) for row in points]
+    core = {
+        "key": key,
+        "display_name": item.get("display_name"),
+        "role": item.get("role"),
+        "series_type": item.get("series_type"),
+        "level_unit": item.get("level_unit"),
+        "change_unit": item.get("change_unit"),
+        "session": as_of,
+        "close_at": item.get("close_at") if actual_session == as_of else "",
+        "actual_latest_session": actual_session,
+        "actual_latest_close_at": item.get("close_at"),
+        "actual_latest_equals_as_of": actual_session == as_of,
+        "alignment_status": "at_as_of" if actual_session == as_of else "ahead_of_as_of",
+        "discarded_post_as_of_sessions": discarded,
+        "source_history_sessions": len(item.get("points") or []),
+        "source_quality": source_quality,
+        "quality": quality,
+        "evidence_id": item.get("evidence_id"),
+        "source_identity": {
+            **dict(item.get("source_identity") or {}),
+            "source_series_id": item.get("source_series_id"),
+        },
+        "points": points,
+        "features": (
+            _rate_features(values, level_unit=str(item.get("level_unit") or ""))
+            if rate
+            else _price_features(values)
+        ),
+    }
     return {"series_id": f"{SERIES_ID_PREFIX}{key}:{_digest(core)}", **core}
 
 
@@ -534,10 +613,10 @@ def build_kline_world_context(
     }
     data_kind = "real" if source_kinds == {"real"} else "fixture" if allow_fixture and source_kinds.issubset({"real", "fixture"}) else "unknown"
 
-    by_key: dict[str, dict[str, Any]] = {}
+    source_by_key: dict[str, dict[str, Any]] = {}
     for key, spec in instrument_by_key.items():
         item = daily_items[key]
-        by_key[key] = _price_series(
+        source_by_key[key] = _price_series(
             item,
             key=key,
             display_name=spec.display_name,
@@ -551,7 +630,7 @@ def build_kline_world_context(
             allow_fixture=allow_fixture,
         )
     dxy = macro_items["dxy"]
-    by_key["dxy"] = _price_series(
+    source_by_key["dxy"] = _price_series(
         dxy,
         key="dxy",
         display_name=MACRO_FACTOR_BY_KEY["dxy"].display_name,
@@ -566,14 +645,14 @@ def build_kline_world_context(
         allow_fixture=allow_fixture,
     )
     for key in RATE_KEYS:
-        by_key[key] = _rate_series(
+        source_by_key[key] = _rate_series(
             macro_items[key],
             key=key,
             evidence_id=str(slots[key]["evidence_id"]),
             allow_fixture=allow_fixture,
         )
     bitcoin_instrument = bitcoin.get("instrument") or {}
-    by_key["bitcoin"] = _price_series(
+    source_by_key["bitcoin"] = _price_series(
         bitcoin,
         key="bitcoin",
         display_name=str(bitcoin_instrument.get("display_name") or "Bitcoin"),
@@ -584,6 +663,12 @@ def build_kline_world_context(
         allow_fixture=allow_fixture,
     )
 
+    as_of = _common_as_of(source_by_key)
+    by_key = {
+        key: _aligned_series(source_by_key[key], as_of=as_of)
+        for key in SERIES_ORDER
+    }
+    source_series = [source_by_key[key] for key in SERIES_ORDER]
     series = [by_key[key] for key in SERIES_ORDER]
     relationships = [_relationship(spec, by_key) for spec in PAIR_REGISTRY]
     qualities = [item["quality"] for item in series]
@@ -591,6 +676,14 @@ def build_kline_world_context(
         "schema_version": SCHEMA_VERSION,
         "compiler_version": SCHEMA_VERSION,
         "lookback": LOOKBACK,
+        "source_lookback": SOURCE_LOOKBACK,
+        "alignment": {
+            "schema_version": ALIGNED_TAPE_SCHEMA_VERSION,
+            "as_of": as_of,
+            "required_sessions_per_series": LOOKBACK,
+            "series_count": len(series),
+            "relationship_count": len(relationships),
+        },
         "inputs": {
             "daily_run_id": daily.get("run_id"),
             "macro_run_id": macro.get("run_id"),
@@ -599,11 +692,16 @@ def build_kline_world_context(
         },
         "data_kind": data_kind,
         "quality": "fresh" if all(value == "fresh" for value in qualities) else "partial",
-        "time": pack.get("time"),
+        "source_time": pack.get("time"),
+        "time": {
+            "as_of": as_of,
+            "semantics": "latest_exact_completed_session_shared_by_all_17_series",
+        },
         "coverage": {"accepted": len(series), "total": len(SERIES_ORDER), "ratio": 1.0},
         "agreement_inputs": pack.get("agreement_inputs"),
         "confidence_inputs": pack.get("confidence_inputs"),
         "contradiction_candidates": pack.get("contradiction_candidates"),
+        "source_series": source_series,
         "series": series,
         "relationships": relationships,
         "truth_boundary": _truth_boundary(),
@@ -631,6 +729,13 @@ def build_llm_projection(context: Mapping[str, Any]) -> dict[str, Any]:
                     "change_unit",
                     "session",
                     "close_at",
+                    "actual_latest_session",
+                    "actual_latest_close_at",
+                    "actual_latest_equals_as_of",
+                    "alignment_status",
+                    "discarded_post_as_of_sessions",
+                    "source_history_sessions",
+                    "source_quality",
                     "quality",
                     "evidence_id",
                     "points",
@@ -660,11 +765,9 @@ def build_llm_projection(context: Mapping[str, Any]) -> dict[str, Any]:
         "task": "Interpret the frozen completed-daily cross-asset tape as one capital-rotation world model.",
         "claim_classes": ["observed", "inferred", "recommended"],
         "time": context.get("time"),
+        "alignment": context.get("alignment"),
         "coverage": context.get("coverage"),
         "data_kind": context.get("data_kind"),
-        "agreement_inputs": context.get("agreement_inputs"),
-        "confidence_inputs": context.get("confidence_inputs"),
-        "contradiction_candidates": context.get("contradiction_candidates"),
         "series": series,
         "relationships": relationships,
         "truth_boundary": context.get("truth_boundary"),
@@ -690,6 +793,76 @@ def validate_kline_world_context(context: Mapping[str, Any]) -> dict[str, Any]:
         raise KlineWorldContextError("context_truth_boundary_mismatch")
     if core.get("data_kind") not in {"real", "fixture"}:
         raise KlineWorldContextError("context_data_kind_invalid")
+    alignment = core.get("alignment")
+    if (
+        not isinstance(alignment, dict)
+        or alignment.get("schema_version") != ALIGNED_TAPE_SCHEMA_VERSION
+        or alignment.get("required_sessions_per_series") != LOOKBACK
+        or alignment.get("series_count") != len(SERIES_ORDER)
+        or alignment.get("relationship_count") != len(PAIR_REGISTRY)
+    ):
+        raise KlineWorldContextError("context_alignment_invalid")
+    as_of = str(alignment.get("as_of") or "")
+    if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", as_of):
+        raise KlineWorldContextError("context_alignment_date_invalid")
+    source_series = core.get("source_series")
+    if not isinstance(source_series, list) or [item.get("key") for item in source_series if isinstance(item, dict)] != list(SERIES_ORDER):
+        raise KlineWorldContextError("context_source_series_order_mismatch")
+    source_by_key: dict[str, dict[str, Any]] = {}
+    for item in source_series:
+        if not isinstance(item, dict):
+            raise KlineWorldContextError("context_source_series_invalid")
+        key = str(item.get("key") or "")
+        item_core = {field: value for field, value in item.items() if field != "source_series_id"}
+        if item.get("source_series_id") != f"{SOURCE_SERIES_ID_PREFIX}{key}:{_digest(item_core)}":
+            raise KlineWorldContextError("context_source_series_identity_mismatch")
+        if not LOOKBACK <= len(item.get("points") or []) <= SOURCE_LOOKBACK:
+            raise KlineWorldContextError("context_source_series_lookback_mismatch")
+        points = item.get("points") or []
+        if any(not isinstance(row, dict) for row in points):
+            raise KlineWorldContextError("context_source_series_row_invalid")
+        _validate_dates(points, key=key)
+        if item.get("session") != points[-1].get("date"):
+            raise KlineWorldContextError("context_source_series_session_mismatch")
+        rate = key in RATE_KEYS
+        expected_fields = {"date", "value"} if rate else {"date", "open", "high", "low", "close"}
+        for row in points:
+            if not expected_fields.issubset(row) or set(row) - (expected_fields | ({"volume"} if not rate else set())):
+                raise KlineWorldContextError("context_source_series_row_invalid")
+            if rate:
+                _finite(row.get("value"), field=f"{key}.value")
+            else:
+                opened = _finite(row.get("open"), field=f"{key}.open")
+                high = _finite(row.get("high"), field=f"{key}.high")
+                low = _finite(row.get("low"), field=f"{key}.low")
+                closed = _finite(row.get("close"), field=f"{key}.close")
+                if low > min(opened, closed) or high < max(opened, closed):
+                    raise KlineWorldContextError("context_source_series_ohlc_invalid")
+                if row.get("volume") is not None:
+                    _finite(row.get("volume"), field=f"{key}.volume")
+        source_by_key[key] = item
+    derived_as_of = _common_as_of(source_by_key)
+    expected_alignment = {
+        "schema_version": ALIGNED_TAPE_SCHEMA_VERSION,
+        "as_of": derived_as_of,
+        "required_sessions_per_series": LOOKBACK,
+        "series_count": len(SERIES_ORDER),
+        "relationship_count": len(PAIR_REGISTRY),
+    }
+    if alignment != expected_alignment:
+        raise KlineWorldContextError("context_alignment_derivation_mismatch")
+    expected_by_key = {
+        key: _aligned_series(source_by_key[key], as_of=derived_as_of)
+        for key in SERIES_ORDER
+    }
+    expected_series = [expected_by_key[key] for key in SERIES_ORDER]
+    if core.get("series") != expected_series:
+        raise KlineWorldContextError("context_series_derivation_mismatch")
+    expected_relationships = [
+        _relationship(spec, expected_by_key) for spec in PAIR_REGISTRY
+    ]
+    if core.get("relationships") != expected_relationships:
+        raise KlineWorldContextError("context_relationship_derivation_mismatch")
     series = core.get("series")
     if not isinstance(series, list) or [item.get("key") for item in series if isinstance(item, dict)] != list(SERIES_ORDER):
         raise KlineWorldContextError("context_series_order_mismatch")
@@ -702,6 +875,10 @@ def validate_kline_world_context(context: Mapping[str, Any]) -> dict[str, Any]:
             raise KlineWorldContextError("context_series_identity_mismatch")
         if len(item.get("points") or []) != LOOKBACK:
             raise KlineWorldContextError("context_series_lookback_mismatch")
+        if item.get("session") != as_of or (item.get("points") or [])[-1].get("date") != as_of:
+            raise KlineWorldContextError("context_series_as_of_mismatch")
+        if item.get("actual_latest_equals_as_of") != (item.get("actual_latest_session") == as_of):
+            raise KlineWorldContextError("context_series_alignment_flag_mismatch")
         if key in CANONICAL_KEYS and not item.get("evidence_id"):
             raise KlineWorldContextError("context_canonical_evidence_missing")
         if key in SUPPLEMENTAL_KEYS and item.get("role") != "supplemental":

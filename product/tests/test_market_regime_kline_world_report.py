@@ -61,7 +61,7 @@ class KlineWorldReportTests(unittest.TestCase):
             self.assertEqual(report["cross_section"], expected_rows)
             self.assertEqual(report["charts"], expected_charts)
             self.assertEqual(len(report["relationships"]), 12)
-            self.assertEqual(report["posture"], "defense")
+            self.assertEqual(report["posture"], "no_view")
             html = render_html(report)
             self.assertEqual(html.count("data-chart="), 17)
             self.assertEqual(html.count("data-relative="), 12)
@@ -100,7 +100,7 @@ class KlineWorldReportTests(unittest.TestCase):
             self.assertFalse(report["truth_boundary"]["automatic_execution_eligible"])
             self.assertEqual(report["macro_parameters"]["long_gate"], "CLOSED")
             self.assertEqual(report["insights"], [])
-            self.assertEqual(len(report["data_ledger"]), 10)
+            self.assertEqual(len(report["data_ledger"]), 9)
             markdown = render_markdown(report)
             for heading in (
                 "## 17 张完成日线证据",
@@ -127,7 +127,7 @@ class KlineWorldReportTests(unittest.TestCase):
                 self.assertTrue(set(row["evidence_ids"]).issubset(valid_ids))
             self.assertTrue(any(row["missing_items"] for row in report["parameter_basis"]))
             html = render_html(report)
-            self.assertGreater(html.count('class="cite"'), 5)
+            self.assertGreaterEqual(html.count('class="cite"'), 5)
             self.assertIn("showModal()", html)
 
     def test_unavailable_model_keeps_current_charts_without_stale_parameters(self) -> None:

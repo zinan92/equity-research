@@ -3847,3 +3847,64 @@ pack.
 - Style contradictions describe a cross-market pair, not one instrument. They
   bind all four supporting evidence IDs; a missing member fails the candidate
   rather than inventing one representative asset.
+
+# 2026-08-17 · One AS_OF and measured macro controls replace mixed-date output
+
+## Decision
+
+Retain up to 520 verified source sessions, but expose only one 300-session tape
+ending on the latest exact date shared by all 17 markets. All LLM facts, report
+numbers, charts and relative relationships must consume that aligned tape.
+Preserve each source's actual latest date as metadata and disclose discarded
+post-AS_OF rows rather than mixing them into the report.
+
+Make the Shanghai 250-session percentile LONG_GATE, 14-price-series
+cross-market DISPERSION and two-decimal DATA_COVERAGE code-owned. Keep
+individual-equity dispersion separately missing. Every macro parameter records
+whether it is MEASURED, DEGRADED or DEFAULT_ON_MISSING_DATA with exact inputs,
+missing inputs and rule. Confidence below 0.5 produces NO VIEW and never
+rewrites the independent LONG_GATE measurement.
+
+## Why
+
+The 2026-08-17 acceptance report displayed values calculated at a shared date
+beside values calculated at newer local closes. Both numbers could be locally
+correct while the product contradicted itself. A single consumption surface
+removes that ambiguity. The longer history also turns the previously constant
+LONG_GATE and UNKNOWN dispersion fields into replayable measurements without
+pretending that price history reveals forward expectations.
+
+## Evidence
+
+- Issue #832 (the recorded holiday-safe replacement for closed #829) and the
+  byte-exact `product/prompts/ADDENDUM-01-macro-analyst.md`.
+- Context/model tests bind 17 exact 300-session aligned series, actual-latest
+  metadata, post-AS_OF exclusion, 250-session boundary behavior, the 14-series
+  population-standard-deviation estimator, 252-observation percentile buckets,
+  parameter provenance invariants and NO VIEW output.
+- `evidence/market-regime-kline-world-runtime/issue-832-one-asof-live-2026-08-18.json`
+  records a controlled real run: 17×300 aligned histories at AS_OF 2026-08-14,
+  explicit newer A-share/Bitcoin dates, one accepted Flash attempt using
+  255,380 tokens against a declared 1,000,000-token per-request budget, and a
+  validated model-generated NO VIEW report with seven parameter bases and ten
+  observations. Its byte-exact secret-free model receipt is tracked beside the
+  summary and matches the runtime receipt SHA-256.
+
+## Gotchas
+
+- `AS_OF` is a comparability boundary, not a claim that every source has no
+  newer close. Newer rows remain visible only as dated metadata until a later
+  report identity can include them consistently.
+- Cross-market dispersion answers whether major assets move together. It is not
+  a proxy for individual-stock dispersion and must not be presented as a stock
+  selection signal.
+- Daily returns are computed from each market's own prior local close before
+  intersecting return dates. Intersecting close dates first silently creates
+  multi-session returns around asymmetric holidays.
+- With every forward-looking expectation, positioning and event input missing,
+  risk budget is an explicitly non-informational 0.30 default. The model cannot
+  alter it, LONG_GATE, DISPERSION, DATA_COVERAGE or provenance rows.
+- A successful large-context run is not an ordinary unattended 08:20
+  acceptance. The provider model, canonical request byte sizes and exact token
+  usage remain part of the immutable receipt so a missing or over-budget usage
+  record cannot masquerade as success.

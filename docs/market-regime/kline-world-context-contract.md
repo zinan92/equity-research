@@ -1,13 +1,15 @@
-# K-line World Context v1 · OHLC and relative-tape contract
+# K-line World Context v2 · source history and one-AS_OF aligned-tape contract
 
-Tracking: Issue #761. Parent: #758. Approved predecessor: #759 / PR #760.
+Tracking: Issue #832. Supersedes closed Issue #829 and the history/date portions
+of Issue #761.
 
 ## Outcome
 
-Produce one immutable, replayable provider input containing the completed-daily
-market tape required by the Global Market K-line Daily v2 world model. This
-layer calculates facts and relationships only; it does not call an LLM, infer
-capital flows or recommend trades.
+Produce one immutable, replayable provider input with two explicitly separate
+surfaces: up to 520 source sessions retained for provenance/calibration, and one
+17-series tape of exactly 300 completed sessions aligned to the sole report
+`AS_OF`. This layer calculates facts and relationships only; it does not call
+an LLM, infer capital flows or recommend trades.
 
 ## Fixed universe and roles
 
@@ -25,17 +27,22 @@ The context contains exactly 17 series in registry order:
 The 16 existing daily/macro evidence slots remain canonical. Bitcoin is the one
 supplemental series. This contract does not change either upstream schema.
 
-## History and feature semantics
+## Source history, AS_OF and feature semantics
 
-- Price/index/commodity/ETF/Bitcoin/DXY series freeze the latest 120 accepted
-  completed-daily OHLC rows and retain volume when supplied.
-- US2Y and US10Y freeze 120 rate levels in percent. 2s10s freezes 120 spread
-  levels in basis points. Their 5/20/60-session changes are basis points, never
-  price returns.
+- Each accepted source retains up to the latest 520 completed sessions. Price,
+  index, commodity, ETF, Bitcoin and DXY rows preserve OHLC and optional volume;
+  US2Y/US10Y preserve percent levels and 2s10s preserves basis-point levels.
+- `AS_OF` is the latest exact session date present in all 17 source histories.
+  Every analytical series then discards rows after `AS_OF` and keeps exactly
+  its final 300 local sessions ending on `AS_OF`.
+- Each aligned series exposes its actual source latest date, whether that date
+  equals `AS_OF`, its alignment status and the number of discarded post-AS_OF
+  sessions. A source newer than `AS_OF` is not labelled fresh on the aligned
+  surface.
 - Price series expose deterministic 5/20/60-session returns, distance from
-  MA20/MA60, 120-session drawdown, 20-session realized volatility and a bounded
+  MA20/MA60, 300-session drawdown, 20-session realized volatility and a bounded
   60-session direction label.
-- Rate series expose 5/20/60-session bp changes, distance from the 120-session
+- Rate series expose 5/20/60-session bp changes, distance from the 300-session
   high/low in bp and a bounded 60-session direction label.
 
 All calculations are identity-bound. The later LLM may explain them but cannot
@@ -67,7 +74,8 @@ The context identity binds:
 
 - exact daily run, macro run, S3 pack and Bitcoin identities;
 - series registry/order, source artifact hashes, sessions, quality and units;
-- all 120 points and deterministic features;
+- all retained source points, the one-AS_OF rule, all aligned 300-session
+  points and deterministic features;
 - pair registry/order, aligned points and relationship features; and
 - the local-only, advice-allowed but no-auto-execution truth boundary.
 
@@ -86,10 +94,11 @@ context and preserve last-good.
 ## LLM projection
 
 The stored context exposes one exact size-bounded provider projection. It keeps
-the series/relationship identities, points, features, timing, deterministic
-dimensions, contradictions and truth boundary. It omits raw paths, source
-receipts and other storage metadata. It contains no Finance Daily Newsletter
-input or generated prose.
+all 300 aligned OHLC/rate rows per series, aligned relationships, code-derived
+features, actual-latest metadata, timing and the truth boundary. The retained
+520-session source surface, old S3 agreement/confidence/contradiction fields,
+raw paths and receipts do not enter the LLM request. It contains no Finance
+Daily Newsletter input or generated prose.
 
 ## Boundaries
 
