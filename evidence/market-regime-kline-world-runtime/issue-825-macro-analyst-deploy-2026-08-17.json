@@ -1,0 +1,96 @@
+{
+  "schema_version": "market-regime-kline-macro-analyst-deployment-v1",
+  "verified_at": "2026-08-17T12:28:02.379516Z",
+  "issue": 825,
+  "implementation": {
+    "source_issue": 819,
+    "source_pr": 824,
+    "merged_main_sha": "96072682f6ba88ae2066d00c2cef958ea44e2ba8",
+    "installed_sha": "96072682f6ba88ae2066d00c2cef958ea44e2ba8",
+    "installed_worktree_clean": true,
+    "source_prompt_sha256": "81b5d8bcf46c71dc1ebc124fb93949b4c7a10196dd326828c8fae21cb9f1d63d",
+    "effective_prompt_sha256": "a8c773b80c73f676fea9aedcb9c406912d172cf2643f8ab69b70df736764b74b"
+  },
+  "runtime": {
+    "state": "idle",
+    "last_failure": null,
+    "generation_status": "model_generated_unreviewed",
+    "context_id": "market-regime-kline-world-context:896abdced3c301935b36fb47f03feab944ac10c0f58d1cb57d65affd0a0f8367",
+    "world_model_id": "market-regime-kline-world-model:0c71cf40ce10a9b508c6e420db5ef2b1d320348b56109a6e6321b21a3c46eb41",
+    "report_id": "market-regime-kline-world-report:d1e0bac7040bbbddb5882f8e34f7bd5f0a39edb2e98006e4d7ece3b8942a49b7",
+    "delivery_id": "market-regime-kline-world-delivery:e7e454f6f68cc411694ecc02b950dcbb7eb036a7a74282abf7323c653bcc1306",
+    "renderer_version": "market-regime-kline-world-report-renderer-v5",
+    "report_date": "2026-08-17",
+    "posture": "defense",
+    "headline": "防守：前瞻数据缺失，方向清晰度不足，本日不提供方向观点",
+    "macro_parameters": {
+      "as_of": "2026-08-14",
+      "risk_budget": 0.3,
+      "long_gate": "CLOSED",
+      "dispersion": "UNKNOWN",
+      "sector_prior": [],
+      "blackout": [],
+      "confidence": 0.4,
+      "data_coverage": 0.321429
+    },
+    "chart_count": 17,
+    "relationship_count": 12,
+    "parameter_basis_count": 7,
+    "insight_count": 0,
+    "observation_count": 11,
+    "missing_data_count": 10,
+    "attempt_count": 4,
+    "attempt_outcomes": [
+      "output_numeric_invalid:observations.0.statement",
+      "output_schema_invalid:root",
+      "output_numeric_invalid:observations.0.statement",
+      "accepted"
+    ],
+    "stale_analysis_reused": false
+  },
+  "schedule": {
+    "launchd_label": "com.park.market-regime.kline-newsletter",
+    "hour": 8,
+    "minute": 20,
+    "matching_launchagent_count": 1,
+    "state_after_controlled_run": "not running"
+  },
+  "desktop_delivery": {
+    "latest_html": "~/Desktop/K线日报/latest.html",
+    "latest_html_sha256": "ffbd479b69ee593a4482bbe7c9b9576aa1943dcfd92c0c08fbb0df01aa343814",
+    "immutable_html_sha256": "ffbd479b69ee593a4482bbe7c9b9576aa1943dcfd92c0c08fbb0df01aa343814",
+    "latest_markdown": "~/Desktop/K线日报/latest.md",
+    "latest_markdown_sha256": "1912a35e397b73fd16ebde64e14abffca87f582c87e8df103ce1ad7431f10064",
+    "immutable_markdown_sha256": "1912a35e397b73fd16ebde64e14abffca87f582c87e8df103ce1ad7431f10064",
+    "preserved_prior_html": "~/Desktop/K线日报/archive/2026-08-17-before-macro-analyst-403708db.html",
+    "preserved_prior_html_sha256": "403708dbfc587f8678e2793bb325e86f72fdccb28299c8205a6990dfa92922c6",
+    "preserved_prior_markdown": "~/Desktop/K线日报/archive/2026-08-17-before-macro-analyst-2f25b018.md",
+    "preserved_prior_markdown_sha256": "2f25b0183f9a449edff4a4c98c4f84bd0daacd219c915c523e6dae1dfe20fce8"
+  },
+  "browser_acceptance": {
+    "desktop": {
+      "viewport_width": 1280,
+      "client_width": 1280,
+      "scroll_width": 1280,
+      "chart_count": 17,
+      "relationship_count": 12,
+      "screenshot": "issue-825-deployed-macro-analyst-desktop.png",
+      "sha256": "5d7740e99a08b586f5325e846049604fdda11f3a753fb5f42253cc40caf01ea0"
+    },
+    "mobile": {
+      "viewport_width": 390,
+      "client_width": 390,
+      "scroll_width": 390,
+      "chart_count": 17,
+      "relationship_count": 12,
+      "screenshot": "issue-825-deployed-macro-analyst-mobile.png",
+      "sha256": "39860133e956f3fd8dc9ea3a362e9ffdce6b111a91992792b704c0a9d8c0141b"
+    }
+  },
+  "truth_boundary": {
+    "finance_daily_newsletter_input": false,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "broker_access": false
+  }
+}
