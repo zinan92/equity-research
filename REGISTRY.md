@@ -1,5 +1,29 @@
 # REGISTRY
 
+## 2026-08-17 · Structural collector deployed with same-day fallback (Issue #787)
+
+Now: both the structural Market Regime collector and the K-line world
+newsletter runtime are installed at merged SHA
+`2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa`. After restarting
+`com.park.market-regime.scheduler`, the collector produced a fresh 12-series
+snapshot. Yahoo instruments selected `query2` and Tencent instruments selected
+their primary endpoint; each accepted one current same-day attempt. The
+collector will try the next same-day endpoint when the first fails and will
+not project a prior `latest-good` artifact into the current snapshot.
+
+The K-line runtime then consumed that new snapshot and published a same-context
+2026-08-17 report with 17 charts and 12 relative histories. The controlled
+invocation used `--no-llm`, so its explicit `interpretation_unavailable` state
+proves current-data collection and publication only, not LLM quality. The
+secret-free receipt is
+[`post-deploy-2026-08-17.json`](evidence/market-regime-kline-world-runtime/post-deploy-2026-08-17.json).
+Finance Daily Newsletter was not read or changed; publication and automatic
+execution remain disabled.
+
+Next: the next ordinary 08:20 run will attempt the LLM provider against this
+same-day source path. A provider timeout remains a separate issue from data
+freshness and must not be handled by stale-data fallback.
+
 ## 2026-08-17 · Same-day K-line source fallback (Issue #783 / PR #784)
 
 Now: main is at `2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa`. Track 2 now tries
