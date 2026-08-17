@@ -68,6 +68,20 @@ class KlineWorldReportTests(unittest.TestCase):
                 self.assertEqual(html.count("data-chart="), 17)
                 self.assertEqual(html.count("data-relative="), 12)
 
+    def test_candles_use_green_hollow_rising_and_red_filled_falling_bodies(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            context, model, _, _ = authorities(Path(temporary), posture="defense")
+            report = build_world_report(
+                context=context,
+                world_model=model,
+                generated_at=NOW,
+                allow_fixture=True,
+            )
+            html = render_html(report)
+            self.assertIn("if(cl>=o){c.strokeStyle=UP;c.strokeRect", html)
+            self.assertIn("else{c.fillStyle=DOWN;c.fillRect", html)
+            self.assertNotIn("c.fillStyle=color;c.lineWidth=1", html)
+
     def test_north_star_reading_order_and_advice_boundary_are_explicit(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             context, model, _, _ = authorities(Path(temporary), posture="defense")
