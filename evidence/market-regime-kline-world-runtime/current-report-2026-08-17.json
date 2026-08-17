@@ -1,0 +1,59 @@
+{
+  "schema_version": "market-regime-kline-world-runtime-evidence-v1",
+  "report_date": "2026-08-17",
+  "runtime_sha": "76c80735b1c9ba971c14bf5e6ffc26734dfab90e",
+  "report_id": "market-regime-kline-world-report:f9bab72b8122848c88e04c1636f181d54c81ec41d145c0d8634fc4a0df99132a",
+  "context_id": "market-regime-kline-world-context:68eae7eb8616f79262d4cacc141d90ca151102f8e6f45fd43dac3a05683a9572",
+  "world_model_id": "market-regime-kline-world-model:9f4d59788391dc4e9d4ecb912cd3c17aac960a8e4a335d2f47d5b2abad7ac9e0",
+  "delivery_id": "market-regime-kline-world-delivery:eea3a1fde261bbb85a40d78e57428576f1003c08521d64a741e5858aeaa0dc7b",
+  "publication": {
+    "status": "published_local_latest",
+    "generation_status": "model_generated_unreviewed",
+    "posture": "defense",
+    "chart_count": 17,
+    "relationship_count": 12,
+    "flow_count": 4,
+    "trade_count": 3,
+    "falsifier_count": 2,
+    "data_kind": "real",
+    "coverage": {"accepted": 17, "total": 17, "ratio": 1.0}
+  },
+  "source_identity": {
+    "daily_run_id": "market-regime-20260817T020101Z-0850007023dc",
+    "macro_run_id": "market-regime-macro-20260817T021723Z-9ecae25b3e0e",
+    "bitcoin_id": "market-regime-kline-bitcoin:8e9f42e8ac253dfee9695797930638cf8d598d48e987b2a62a85d5f044f7236e",
+    "pack_id": "market-regime-daily-evidence:fe8df2a57b65d66190e9d42aac9d105b50e77498ed4126fed2af3c2ad83621af",
+    "previous_day_data_projected_as_current": false,
+    "finance_daily_newsletter_input": false
+  },
+  "model_provenance": {
+    "fresh_current_day_generation": {
+      "provider": "DeepSeek",
+      "model": "deepseek-v4-pro",
+      "generated_at": "2026-08-17T02:18:21.229117Z",
+      "source_model_id": "market-regime-kline-world-model:665f4d9896aee27ec1b296320cd09ba85b3d6d025d5d7cfb0ee0dad4bcd2b28c",
+      "generation_status": "model_generated_unreviewed"
+    },
+    "publication_replay": {
+      "type": "same_context_replay",
+      "context_id": "market-regime-kline-world-context:68eae7eb8616f79262d4cacc141d90ca151102f8e6f45fd43dac3a05683a9572",
+      "reason": "rebound the accepted current-day model output after compiler v4 deployment; no data or model text changed",
+      "stale_data_used": false
+    }
+  },
+  "provider_boundary": {
+    "fresh_followup_attempt": "blocked",
+    "http_status": 402,
+    "error_code": "provider_insufficient_balance",
+    "raw_provider_payload_recorded": false,
+    "next_external_action": "fund or replace the DeepSeek provider before the next fresh unattended model generation"
+  },
+  "truth_boundary": {
+    "local_evaluation_only": true,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "broker_access": false,
+    "portfolio_mutation": false,
+    "market_advice_allowed": true
+  }
+}

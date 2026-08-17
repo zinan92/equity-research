@@ -1,5 +1,30 @@
 # REGISTRY
 
+## 2026-08-17 · Current-day K-line World Report published (Issue #791 / PR #792)
+
+Now: the Track 2 K-line runtime is deployed at merged SHA
+`76c80735b1c9ba971c14bf5e6ffc26734dfab90e` and the local Desktop aliases
+[`latest.html`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.html)
+and [`latest.md`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.md)
+serve a current-day 2026-08-17 report. It is `防守` with 17/17 accepted
+observations, 12 relative histories, 4 migration edges, 3 market-level
+recommendations and exactly 2 falsifiers. The context is bound to the fresh
+daily and macro run IDs and `data_kind=real`; no prior-day artifact was
+projected into the report. The secret-free receipt is
+[`current-report-2026-08-17.json`](evidence/market-regime-kline-world-runtime/current-report-2026-08-17.json).
+
+The model interpretation was accepted from a DeepSeek response generated on
+the same current-day context at 02:18 UTC, then replayed against that exact
+immutable context after the compiler v4 deployment. This is not a stale-data
+fallback and did not read or modify Finance Daily Newsletter. A later fresh
+provider attempt returned HTTP 402 (`provider_insufficient_balance`); the raw
+payload and credentials were not recorded. Until the DeepSeek account is
+funded or replaced, the next unattended fresh model generation remains an
+external blocker. Local publication and automatic execution remain disabled.
+
+Next: fund or replace the provider, run one ordinary unattended cycle, and
+compare this independent Track 2 output with Finance Daily Newsletter.
+
 ## 2026-08-17 · Structural collector deployed with same-day fallback (Issue #787)
 
 Now: both the structural Market Regime collector and the K-line world
