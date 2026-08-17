@@ -1,0 +1,148 @@
+{
+  "schema_version": "market-regime-kline-world-deployment-acceptance-v1",
+  "issue": 835,
+  "parent_issue": 828,
+  "pull_request": 834,
+  "observed_at": "2026-08-17T17:18:50.485310Z",
+  "acceptance_kind": "exact_main_controlled_real_run",
+  "ordinary_0820_trigger_observed": false,
+  "deployment": {
+    "merge_sha": "a39faa1be88fbc4b834c40bc121471d2d7fc3fe4",
+    "kline_app_sha": "a39faa1be88fbc4b834c40bc121471d2d7fc3fe4",
+    "shared_data_app_sha": "a39faa1be88fbc4b834c40bc121471d2d7fc3fe4",
+    "launch_agent": {
+      "label": "com.park.market-regime.kline-newsletter",
+      "hour": 8,
+      "minute": 20,
+      "timezone": "Asia/Shanghai",
+      "loaded": true,
+      "controlled_run_used_launchd": false
+    },
+    "shared_services_after_reload": {
+      "structural_scheduler": "running_idle",
+      "intraday_scheduler": "running_idle",
+      "web": "running_available"
+    },
+    "reload_note": "the management script hit launchctl bootstrap exit 5 immediately after bootout; the same validated plists were bootstrapped sequentially and all three services were read back healthy"
+  },
+  "source": {
+    "data_kind": "real",
+    "context_id": "market-regime-kline-world-context:cef3361cc7923af2375369e7aa5f869ce3f5cb9292178c8900ec401eedf0f22c",
+    "daily_run_id": "market-regime-20260817T171724Z-64175bf559b2",
+    "macro_run_id": "market-regime-macro-20260817T171801Z-598601058668",
+    "bitcoin_id": "market-regime-kline-bitcoin:f5754e635e4f031ab1d8af9716791b30791b951fc52339cb9f1caba998908b36",
+    "evidence_pack_id": "market-regime-daily-evidence:4fba7ed1c919bf27a1bd91620e7b1ca8d0d18b5846e89f97a75acdaa26848637",
+    "accepted_series": 17,
+    "fresh_series": 16,
+    "partial_series": 1,
+    "partial_keys": ["nikkei"],
+    "source_sessions_each": 520,
+    "aligned_sessions_each": 300,
+    "relationship_count": 12,
+    "as_of": "2026-08-14",
+    "cross_market_close_skew_hours": 72.5,
+    "ahead_of_as_of": [
+      {"key": "shanghai", "actual_latest": "2026-08-17", "discarded_rows": 1},
+      {"key": "star50", "actual_latest": "2026-08-17", "discarded_rows": 1},
+      {"key": "china_dividend", "actual_latest": "2026-08-17", "discarded_rows": 1},
+      {"key": "bitcoin", "actual_latest": "2026-08-16", "discarded_rows": 2}
+    ]
+  },
+  "model": {
+    "world_model_id": "market-regime-kline-world-model:5d27d2b881c30200aebabb6e9b524a93059014034a32fdd343eb4161fae48d57",
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-flash",
+    "generation_status": "model_generated_unreviewed",
+    "attempt_count": 1,
+    "attempt_outcomes": ["accepted"],
+    "request_bytes": 422286,
+    "context_budget_tokens": 1000000,
+    "usage": {
+      "prompt_tokens": 249380,
+      "completion_tokens": 5371,
+      "total_tokens": 254751
+    },
+    "prompt_hashes": {
+      "source": "81b5d8bcf46c71dc1ebc124fb93949b4c7a10196dd326828c8fae21cb9f1d63d",
+      "addendum": "ada0fdfe37d87b65877c4fcc62c7065c30b7f1b181ce4b000cd625db16fe9270",
+      "transport": "37136c4b4c108c8f1e14221e669098c6233b731e739ba568655e522ed3df78dc",
+      "effective": "7bda9dc1d2e572068ec83b8de965be4aab5f0f432bdd772cbd8a4e6ff3e713be"
+    }
+  },
+  "report": {
+    "report_id": "market-regime-kline-world-report:5a3b5aaf7d377b89cad449f8ffdb2c427ee3266190814d5f1ef095c9ecb57c3b",
+    "delivery_id": "market-regime-kline-world-delivery:70528cbad14e429e7839c833f61c34eda409fb943c4071c6c22ff3afe2da9407",
+    "schema_version": "market-regime-kline-world-report-v4",
+    "renderer_version": "market-regime-kline-world-report-renderer-v7",
+    "report_date": "2026-08-18",
+    "posture": "no_view",
+    "chart_count": 17,
+    "relationship_count": 12,
+    "parameter_count": 8,
+    "insight_count": 0,
+    "observation_count": 24,
+    "missing_data_count": 9,
+    "parameters": {
+      "AS_OF": {"value": "2026-08-14", "source": "MEASURED"},
+      "RISK_BUDGET": {"value": "0.30", "source": "DEFAULT_ON_MISSING_DATA"},
+      "LONG_GATE": {"value": "OPEN", "source": "MEASURED"},
+      "DISPERSION": {"value": "LOW", "source": "MEASURED"},
+      "SECTOR_PRIOR": {"value": "[]", "source": "DEFAULT_ON_MISSING_DATA"},
+      "BLACKOUT": {"value": "[]", "source": "DEFAULT_ON_MISSING_DATA"},
+      "CONFIDENCE": {"value": "0.40", "source": "DEGRADED"},
+      "DATA_COVERAGE": {"value": "0.39", "source": "MEASURED"}
+    },
+    "all_charts_end_at_as_of": true,
+    "all_relationships_end_at_as_of": true,
+    "no_post_as_of_values": true,
+    "html_markdown_parameter_parity": true
+  },
+  "delivery": {
+    "latest_html_sha256": "11d47ccc73e35fed53aaf0305c0af2e2fd44b648b40bcb96d3cd94c5f27fafbd",
+    "latest_markdown_sha256": "01aa5bfb9e90a572e930dacc85ca8230c53cf87b61e211e17522248a680f42b2",
+    "immutable_html": "history/2026-08-18/011759-5a3b5aaf7d377b89cad449f8ffdb2c427ee3266190814d5f1ef095c9ecb57c3b.html",
+    "immutable_markdown": "history/2026-08-18/011759-5a3b5aaf7d377b89cad449f8ffdb2c427ee3266190814d5f1ef095c9ecb57c3b.md",
+    "prior_html": {
+      "path": "2026-08-17-kline-daily.html",
+      "sha256": "ffbd479b69ee593a4482bbe7c9b9576aa1943dcfd92c0c08fbb0df01aa343814"
+    },
+    "prior_markdown": {
+      "path": "2026-08-17-kline-daily.md",
+      "sha256": "1912a35e397b73fd16ebde64e14abffca87f582c87e8df103ce1ad7431f10064"
+    }
+  },
+  "browser": {
+    "desktop_1280": {
+      "overflow_x": 0,
+      "chart_canvases": 17,
+      "relative_canvases": 12,
+      "parameter_records": 8,
+      "screenshot": "issue-835-final-desktop-1280.png"
+    },
+    "mobile_390": {
+      "overflow_x": 0,
+      "chart_canvases": 17,
+      "relative_canvases": 12,
+      "parameter_records": 8,
+      "screenshot": "issue-835-final-mobile-390.png"
+    },
+    "console_errors_or_warnings": []
+  },
+  "validation": {
+    "market_regime_tests": 255,
+    "market_regime_subtests": 64,
+    "focused_report_runtime_tests": 19,
+    "diff_check": "passed",
+    "staged_gitleaks": "passed"
+  },
+  "truth_boundary": {
+    "track": "kline_only",
+    "finance_newsletter_input": false,
+    "model_generated_unreviewed": true,
+    "local_evaluation_only": true,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "broker_access": false,
+    "portfolio_mutation": false
+  }
+}

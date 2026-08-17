@@ -1,5 +1,48 @@
 # REGISTRY
 
+## 2026-08-18 · One-AS_OF K-line Daily deployed (Issue #828 / PR #834)
+
+Now: both the shared Market Regime data app and the independent K-line Daily
+app are installed from exact merged `main` SHA
+`a39faa1be88fbc4b834c40bc121471d2d7fc3fe4`. The sole Track 2 LaunchAgent
+remains `com.park.market-regime.kline-newsletter` at 08:20 Asia/Shanghai; no
+second scheduler, API dependency, Finance Daily Newsletter input or broker
+connection was added.
+
+The current Desktop aliases
+[`latest.html`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.html)
+and [`latest.md`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.md)
+serve real report
+`market-regime-kline-world-report:5a3b5aaf7d377b89cad449f8ffdb2c427ee3266190814d5f1ef095c9ecb57c3b`.
+It is `无方向观点 / NO VIEW`, not an unavailable-model fallback: DeepSeek V4
+Flash generated and passed the frozen contract on its first attempt. The model
+used 249,380 prompt tokens and 254,751 total tokens inside the 1M-token budget.
+
+All 17 visible series contain exactly 300 aligned sessions and all 12 relative
+histories end at the one report-wide `AS_OF=2026-08-14`. The source inventory is
+16 fresh plus one explicit partial Nikkei series; newer A-share 2026-08-17 and
+Bitcoin 2026-08-16 rows are shown only as `ahead_of_as_of` metadata and were
+discarded from calculations. The eight shared HTML/Markdown parameters are
+`RISK_BUDGET=0.30` (`DEFAULT_ON_MISSING_DATA`), `LONG_GATE=OPEN`,
+`DISPERSION=LOW`, `SECTOR_PRIOR=[]`, `BLACKOUT=[]`, `CONFIDENCE=0.40`, and
+`DATA_COVERAGE=0.39`. Low confidence leaves insights empty; 24 cited
+observations and nine explicit data gaps remain visible.
+
+The prior Desktop edition is still byte-identical at
+`2026-08-17-kline-daily.html/.md`. This edition is additionally immutable at
+`history/2026-08-18/011759-5a3b5aaf7d377b89cad449f8ffdb2c427ee3266190814d5f1ef095c9ecb57c3b.*`.
+Validation: 255 Market Regime tests plus 64 subtests, 19 focused report/runtime
+tests, staged gitleaks and diff checks pass. Final 1280/390 browser replay has
+zero horizontal overflow, 17/12/8 visible surfaces, no post-AS_OF values and no
+console warnings. The secret-free receipt and screenshots are in
+[`issue-835-kline-deploy-2026-08-18.json`](evidence/market-regime-kline-world-runtime/issue-835-kline-deploy-2026-08-18.json).
+
+Next: let the next ordinary unattended 08:20 trigger run without operator help,
+then compare its posture, confidence, useful observations and disagreements
+with the independent Finance Daily Newsletter. This controlled run proves the
+exact-main pipeline and local delivery, not predictive value, the ordinary
+calendar trigger or public distribution rights.
+
 ## 2026-08-17 · Macro-analyst K-line Daily deployed (Issue #825 / PR #826)
 
 Now: the local K-line Daily app is installed from exact merged `main` SHA
