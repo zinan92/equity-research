@@ -242,14 +242,14 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(KlineWorldRuntimeError, "status_mismatch"):
                 runtime.status()
 
-    def test_phase_failure_preserves_last_good_and_persists_no_exception_detail(self) -> None:
+    def test_phase_failure_publishes_unavailable_surface_and_persists_no_exception_detail(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             base = Path(temporary)
             runtime = runtime_fixture(base, provider=DynamicProvider())
             first = runtime.run_once(now=NOW)
             watched = [
-                base / "output" / "latest.html",
-                base / "output" / "latest.md",
+                base / "output" / "2026-08-16-kline-daily.html",
+                base / "output" / "2026-08-16-kline-daily.md",
                 runtime.delivery_store.state_path,
             ]
             before = {path: path.read_bytes() for path in watched}
@@ -262,6 +262,16 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             with self.assertRaisesRegex(KlineWorldRuntimeError, "run_failed"):
                 runtime.run_once(now=NOW + timedelta(days=1))
             self.assertEqual({path: path.read_bytes() for path in watched}, before)
+            latest_html = (base / "output" / "latest.html").read_text(encoding="utf-8")
+            latest_markdown = (base / "output" / "latest.md").read_text(encoding="utf-8")
+            self.assertIn("今日数据不可用", latest_html)
+            self.assertIn("今日数据不可用", latest_markdown)
+            self.assertNotIn(first["status"]["last_success"]["report_id"], latest_html)
+            self.assertNotIn(first["status"]["last_success"]["report_id"], latest_markdown)
+            surface = json.loads(
+                runtime.delivery_store.surface_state_path.read_text(encoding="utf-8")
+            )
+            self.assertEqual(surface["state"], "unavailable")
             status = runtime.status()
             self.assertEqual(status["state"], "failed")
             self.assertEqual(

@@ -25,6 +25,11 @@ They remain `publication_eligible=false` and `action_eligible=false`.
 
 - Provider symbol: `DX-Y.NYB`.
 - Endpoint shape: Yahoo Finance chart JSON, daily interval, two-year range.
+- The collector tries the query2 endpoint first and query1 second for the same
+  `DX-Y.NYB` identity. A query1 success is a same-day endpoint retry, not a
+  substitution with a broad-dollar proxy or another index. The selected
+  endpoint and every failed/accepted attempt are retained in the source
+  receipt.
 - Only completed sessions are accepted. The existing OHLC normalizer enforces
   symbol, currency, timezone, ascending unique dates, finite OHLC, minimum
   history, future-session rejection and completed-session cutoff.
@@ -78,10 +83,11 @@ latest-good artifacts as `not_refreshed`, or explicitly `not_requested` and
 unavailable when no prior evidence exists. Such a subset snapshot is partial,
 never fresh.
 
-If a refresh fails, a verified prior factor is returned with
-`refresh_status=rejected` and the new failure receipt. With no last-good
-artifact the factor is explicitly `quality=unavailable`. A rejected attempt
-never overwrites or deletes last-good evidence.
+If all same-day DXY endpoints or all required Treasury captures fail, the
+current factor is explicitly `quality=unavailable` with `refresh_status=rejected`
+and the complete attempt receipt. A prior `latest-good` artifact is retained
+for historical recovery but is never copied into the current snapshot. A
+successful alternate endpoint remains a fresh accepted factor.
 
 ## Freshness and display
 
@@ -92,9 +98,9 @@ pack must retain each factor's own completed session and close time; it cannot
 claim all markets share one close date.
 
 Rates and the curve render as compact factor rows or sparklines, never
-candlesticks. Missing or rejected factors render an explicit unavailable or
-last-good-plus-failure state. No UI may silently coerce basis points into
-percent returns.
+candlesticks. Missing or rejected factors render an explicit unavailable state;
+no UI may silently coerce basis points into percent returns or present a
+last-good factor as today's value.
 
 ## Runtime interface
 

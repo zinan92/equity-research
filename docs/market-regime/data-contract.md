@@ -33,6 +33,14 @@ safe response headers, declared Content-Type, byte length, SHA-256, fetch time,
 and the runtime raw-capture path. Full raw bodies and run state stay under the
 gitignored runtime root.
 
+For Yahoo instruments the collector tries `query2.finance.yahoo.com` first and
+then `query1.finance.yahoo.com` for the same symbol, interval and completed
+session. These are endpoint retries for one unchanged instrument identity, not
+semantic proxy substitution. The accepted artifact records the selected
+endpoint and every rejected/accepted attempt. A non-Yahoo provider has only the
+candidate explicitly declared by its provider contract; it is never silently
+replaced by a different index or adjusted series.
+
 The normalizer requires strictly ascending, unique ISO dates; complete and
 finite OHLC; valid high/low containment; the expected response symbol and
 currency; at least 120 completed daily bars; and a completed local-market
@@ -53,15 +61,19 @@ Every accepted asset first writes an immutable normalized artifact. Its path
 and SHA-256 are bound into the immutable completion receipt. Only after that
 receipt exists does the product atomically advance `latest-good.json`; a crash
 can therefore leave an unreferenced artifact, but never an unreceipted good
-pointer. A rejected attempt never overwrites the pointer. The aggregate
-snapshot becomes `partial` when a current refresh fails, even if an older
-latest-good is available.
+pointer. A rejected attempt never overwrites the pointer. If all same-day
+candidates fail, the current snapshot contains an explicit
+`quality=unavailable` item with the attempt receipt and no normalized-artifact
+reference. The older `latest-good.json` remains historical recovery only and is
+never projected into that current snapshot. A successful alternate endpoint
+therefore keeps the current item accepted; only exhaustion produces an
+unavailable slot.
 
 Freshness uses provider session evidence, not elapsed wall time alone. Yahoo's
 `regularMarketTime` and current regular-session end, or Tencent's quote
 timestamp, must confirm whether a newer session should have completed. A
 completed expected session without a daily bar is `partial`; a provider that
-has been silent beyond the bounded fallback becomes `stale`.
+has been silent beyond the bounded source-retry window becomes `stale`.
 
 ## License gate
 

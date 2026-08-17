@@ -23,6 +23,8 @@ from data_core.market_regime_daily_narrative import (  # noqa: E402
     validate_model_output,
 )
 from data_core.market_regime_kline_newsletter import (  # noqa: E402
+    BTC_QUERY1_URL,
+    BTC_URL,
     BITCOIN_SCHEMA_VERSION,
     DISPLAY_ORDER,
     BitcoinDailyStore,
@@ -153,8 +155,42 @@ class KlineNewsletterTest(unittest.TestCase):
             store = BitcoinDailyStore(
                 Path(temporary), http_get=BitcoinTransport(bad_symbol=True)
             )
-            with self.assertRaisesRegex(KlineNewsletterError, "normalization_rejected"):
+            with self.assertRaisesRegex(KlineNewsletterError, "all_same_day_sources_rejected"):
                 store.refresh(now=datetime(2026, 8, 7, 1, 0, tzinfo=timezone.utc))
+
+    def test_bitcoin_primary_rejection_uses_same_day_alternate_endpoint(self) -> None:
+        primary = HttpCapture(
+            "GET",
+            BTC_URL,
+            BTC_URL,
+            429,
+            (("content-type", "text/html"),),
+            (),
+            (BTC_URL,),
+            b"<html>rate limited</html>",
+            "2026-08-07T01:00:00Z",
+        )
+        alternate = BitcoinTransport()(BTC_QUERY1_URL)
+
+        class FallbackTransport:
+            def __init__(self) -> None:
+                self.calls: list[str] = []
+
+            def __call__(self, url: str) -> HttpCapture:
+                self.calls.append(url)
+                return primary if url == BTC_URL else alternate
+
+        transport = FallbackTransport()
+        with tempfile.TemporaryDirectory() as temporary:
+            artifact = BitcoinDailyStore(temporary, http_get=transport).refresh(
+                now=datetime(2026, 8, 7, 1, 0, tzinfo=timezone.utc)
+            )
+            self.assertEqual(artifact["source_identity"]["selected_endpoint"], "query1")
+            self.assertEqual(
+                [item["accepted"] for item in artifact["source_identity"]["source_attempts"]],
+                [False, True],
+            )
+            self.assertEqual(transport.calls, [BTC_URL, BTC_QUERY1_URL])
 
     def test_report_has_exactly_fifteen_observations_charts_and_rate_units(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
