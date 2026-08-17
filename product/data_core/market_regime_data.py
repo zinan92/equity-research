@@ -33,6 +33,9 @@ DEPLOYMENT_MODES = frozenset({"local_prototype", "private_beta", "public"})
 YAHOO_CHART_URL = "https://query2.finance.yahoo.com/v8/finance/chart/"
 YAHOO_QUERY1_CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/"
 TENCENT_KLINE_URL = "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"
+SOURCE_HISTORY_FLOOR = 520
+YAHOO_HISTORY_RANGE = "3y"
+TENCENT_HISTORY_COUNT = 780
 YAHOO_TERMS_URL = "https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html"
 YAHOO_DEVELOPER_GUIDELINES_URL = "https://legal.yahoo.com/us/en/yahoo/guidelines/ydn/index.html"
 TENCENT_LEGAL_URL = "https://www.tencent.com/legal-statement/"
@@ -371,12 +374,22 @@ def instrument_registry_payload() -> dict[str, Any]:
     }
 
 
+def _yahoo_query_suffix(spec: InstrumentSpec) -> str:
+    symbol = quote(spec.provider_symbol, safe="^=")
+    return (
+        f"{symbol}?interval=1d&range={YAHOO_HISTORY_RANGE}"
+        "&events=div%2Csplits"
+    )
+
+
 def _provider_url(spec: InstrumentSpec) -> str:
     if spec.provider == "yahoo_chart":
-        symbol = quote(spec.provider_symbol, safe="^=")
-        return f"{YAHOO_CHART_URL}{symbol}?interval=1d&range=1y&events=div%2Csplits"
+        return f"{YAHOO_CHART_URL}{_yahoo_query_suffix(spec)}"
     if spec.provider == "tencent_kline":
-        return f"{TENCENT_KLINE_URL}?param={spec.provider_symbol},day,,,260,"
+        return (
+            f"{TENCENT_KLINE_URL}?param="
+            f"{spec.provider_symbol},day,,,{TENCENT_HISTORY_COUNT},"
+        )
     raise SourceCaptureError(f"unsupported provider: {spec.provider}")
 
 
@@ -386,8 +399,7 @@ def _provider_urls(spec: InstrumentSpec) -> tuple[tuple[str, str], ...]:
     primary = _provider_url(spec)
     if spec.provider != "yahoo_chart":
         return (("primary", primary),)
-    symbol = quote(spec.provider_symbol, safe="^=")
-    suffix = f"{symbol}?interval=1d&range=1y&events=div%2Csplits"
+    suffix = _yahoo_query_suffix(spec)
     return (
         ("query2", f"{YAHOO_CHART_URL}{suffix}"),
         ("query1", f"{YAHOO_QUERY1_CHART_URL}{suffix}"),
@@ -566,7 +578,12 @@ def normalize_capture(
     capture: HttpCapture,
     *,
     now: datetime | None = None,
+    history_floor: int | None = None,
 ) -> dict[str, Any]:
+    if history_floor is not None and (
+        isinstance(history_floor, bool) or not isinstance(history_floor, int) or history_floor < 1
+    ):
+        raise SourceCaptureError("history_floor must be a positive integer", capture=capture)
     current = (now or _utc_now()).astimezone(timezone.utc)
     if capture.error and capture.status_code is None:
         raise SourceCaptureError(f"source request failed: {capture.error}", capture=capture)
@@ -591,10 +608,13 @@ def normalize_capture(
     bars: list[dict[str, Any]] = []
     dropped_unfinished: list[str] = []
     dropped_empty: list[str] = []
+    dropped_incomplete: list[str] = []
     seen: set[str] = set()
     prior: str | None = None
-    local_today = current.astimezone(ZoneInfo(spec.exchange_timezone)).date()
-    for raw_row in raw_rows:
+    provider_zone = ZoneInfo(spec.exchange_timezone)
+    local_today = current.astimezone(provider_zone).date()
+    provider_local_date = parsed.provider_observed_at.astimezone(provider_zone).date()
+    for row_index, raw_row in enumerate(raw_rows):
         empty_ohlc = [raw_row.get(field) is None for field in ("open", "high", "low", "close")]
         if all(empty_ohlc):
             dropped_empty.append(str(raw_row.get("date") or "unknown"))
@@ -633,6 +653,17 @@ def normalize_capture(
             if current < session_end + timedelta(minutes=20):
                 dropped_unfinished.append(trade_date)
                 continue
+            if (
+                trade_day == provider_local_date
+                and row_index == len(raw_rows) - 1
+                and raw_row.get("volume") in (None, 0, 0.0, "0")
+            ):
+                # Some index feeds publish a zero-volume current-session row
+                # with only part of OHLC populated even after the scheduled
+                # close.  Preserve the newly captured valid history, but never
+                # synthesize the missing close or label the source fresh.
+                dropped_incomplete.append(trade_date)
+                continue
             raise SourceCaptureError(
                 f"daily bar has partial OHLC after session close: {trade_date}",
                 capture=capture,
@@ -647,15 +678,18 @@ def normalize_capture(
         # lagging high). Completed sessions remain fully validated.
         bar = _validate_bar(spec, raw_row)
         bars.append(bar)
-    if len(bars) < spec.min_history:
+    required_history = max(spec.min_history, history_floor or 0)
+    if len(bars) < required_history:
         raise SourceCaptureError(
-            f"completed daily history is too short: {len(bars)} < {spec.min_history}", capture=capture
+            (
+                "completed daily history is too short for "
+                f"{spec.key}: found={len(bars)} required={required_history}"
+            ),
+            capture=capture,
         )
     last_date = date.fromisoformat(bars[-1]["date"])
     last_close = _parse_session_close(spec, last_date).astimezone(timezone.utc)
     age_hours = max(0.0, (current - last_close).total_seconds() / 3600)
-    provider_zone = ZoneInfo(spec.exchange_timezone)
-    provider_local_date = parsed.provider_observed_at.astimezone(provider_zone).date()
     if provider_local_date < last_date:
         raise SourceCaptureError("provider observation predates the latest daily bar", capture=capture)
     provider_silence_hours = max(
@@ -700,6 +734,7 @@ def normalize_capture(
         "missing_expected_session": missing_expected_session,
         "dropped_unfinished_sessions": dropped_unfinished,
         "dropped_empty_provider_sessions": dropped_empty,
+        "dropped_incomplete_provider_sessions": dropped_incomplete,
         "source_quality_flags": ["provider_declares_text_html_for_json"] if tencent_mislabeled_json else [],
         "price_basis": spec.price_basis,
     }
@@ -866,7 +901,12 @@ class MarketRegimeDataStore:
                     raw_relative = f"raw/{run_id}/{key}-attempt-{attempt_index}{suffix}"
                     _write_raw_exclusive(self.root / raw_relative, capture.body)
                     wrote_raw = True
-                    normalized = normalize_capture(spec, capture, now=current)
+                    normalized = normalize_capture(
+                        spec,
+                        capture,
+                        now=current,
+                        history_floor=SOURCE_HISTORY_FLOOR,
+                    )
                     attempts.append(
                         {
                             "endpoint": endpoint,

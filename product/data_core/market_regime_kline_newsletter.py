@@ -33,6 +33,7 @@ from .market_regime_data import (
     HttpCapture,
     InstrumentSpec,
     MarketRegimeDataStore,
+    SOURCE_HISTORY_FLOOR,
     http_get_capture,
     license_decision,
     normalize_capture,
@@ -65,7 +66,7 @@ BTC_SPEC = InstrumentSpec(
 BTC_URL = (
     "https://query2.finance.yahoo.com/v8/finance/chart/"
     f"{quote(BTC_SPEC.provider_symbol, safe='^=')}"
-    "?interval=1d&range=2y&events=history&includeAdjustedClose=false"
+    "?interval=1d&range=3y&events=history&includeAdjustedClose=false"
 )
 BTC_QUERY1_URL = BTC_URL.replace("query2.finance.yahoo.com", "query1.finance.yahoo.com")
 
@@ -301,7 +302,12 @@ class BitcoinDailyStore:
                 raw_relative = f"raw/{raw_hash}{raw_suffix}"
                 _immutable_bytes(self.root / raw_relative, capture.body)
                 wrote_raw = True
-                normalized = normalize_capture(BTC_SPEC, capture, now=current)
+                normalized = normalize_capture(
+                    BTC_SPEC,
+                    capture,
+                    now=current,
+                    history_floor=SOURCE_HISTORY_FLOOR,
+                )
                 attempts.append(
                     {
                         "endpoint": endpoint,
@@ -364,6 +370,14 @@ class BitcoinDailyStore:
             "last_completed_session": normalized["last_completed_session"],
             "last_completed_close_at": normalized["last_completed_close_at"],
             "quality": normalized["quality"],
+            "missing_expected_session": normalized["missing_expected_session"],
+            "dropped_unfinished_sessions": normalized["dropped_unfinished_sessions"],
+            "dropped_empty_provider_sessions": normalized[
+                "dropped_empty_provider_sessions"
+            ],
+            "dropped_incomplete_provider_sessions": normalized[
+                "dropped_incomplete_provider_sessions"
+            ],
             "value": _finite(normalized["bars"][-1]["close"], field="bitcoin.value"),
             "change_5d": _change_5d(normalized["bars"]),
             "level_unit": BTC_SPEC.unit,

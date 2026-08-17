@@ -41,12 +41,22 @@ endpoint and every rejected/accepted attempt. A non-Yahoo provider has only the
 candidate explicitly declared by its provider contract; it is never silently
 replaced by a different index or adjusted series.
 
-The normalizer requires strictly ascending, unique ISO dates; complete and
-finite OHLC; valid high/low containment; the expected response symbol and
-currency; at least 120 completed daily bars; and a completed local-market
-session. An all-null Yahoo holiday row is dropped and counted. A partially
-null row is rejected. An in-progress current-session row is excluded and
-listed in `dropped_unfinished_sessions`.
+The reusable normalizer requires strictly ascending, unique ISO dates;
+complete and finite OHLC; valid high/low containment; the expected response
+symbol and currency; at least 120 completed daily bars; and a completed
+local-market session. The live authority applies the stronger Issue #830 floor
+of 520 accepted completed bars. Yahoo requests a three-year range and Tencent
+requests 780 rows, providing enough slack for a later 300-session common tape.
+
+An all-null Yahoo holiday row is dropped and counted. A partially null
+historical row is rejected. An in-progress current-session row is excluded and
+listed in `dropped_unfinished_sessions`. A provider may also expose a latest,
+zero-volume row with partial OHLC after the scheduled close. That malformed row
+is never accepted or repaired: it is dropped into
+`dropped_incomplete_provider_sessions`, its date is exposed as
+`missing_expected_session`, and the capture is at best `partial`. All complete
+history in that new raw capture remains eligible; no old latest-good artifact
+is projected as current.
 
 Tencent's K-line endpoint currently declares `text/html` while returning a
 JSON object. The exception is source-specific: it is accepted only for the

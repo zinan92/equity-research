@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 from datetime import date, datetime, time, timedelta, timezone
+from hashlib import sha256
 import json
 from pathlib import Path
 import subprocess
@@ -16,15 +18,19 @@ sys.path.insert(0, str(PRODUCT))
 from data_core.market_regime_data import (  # noqa: E402
     HttpCapture,
     LicenseGateError,
+    SOURCE_HISTORY_FLOOR,
     SourceCaptureError,
 )
 from data_core.market_regime_macro_data import (  # noqa: E402
     DXY_CHART_URL,
     DXY_QUERY1_CHART_URL,
+    DXY_SPEC,
+    MACRO_FACTORS,
     MACRO_FACTOR_BY_KEY,
     MIN_OBSERVATIONS,
     MarketRegimeMacroDataError,
     MarketRegimeMacroDataStore,
+    TreasuryHistoryTooShort,
     macro_registry_payload,
     normalize_dxy,
     parse_treasury_captures,
@@ -137,17 +143,50 @@ def treasury_capture(body: bytes, *, url: str = "https://home.treasury.gov/test.
 
 
 class FakeTransport:
-    def __init__(self, *, dxy: HttpCapture | None = None, treasury: HttpCapture | None = None) -> None:
-        self.dxy = dxy or capture(dxy_body(), url=DXY_CHART_URL)
-        self.treasury = treasury or treasury_capture(treasury_csv())
+    def __init__(
+        self,
+        *,
+        dxy: HttpCapture | None = None,
+        treasury: HttpCapture | None = None,
+        treasury_two_start: float = 4.0,
+        treasury_ten_start: float = 4.5,
+    ) -> None:
+        self.dxy = dxy or capture(dxy_body(count=540), url=DXY_CHART_URL)
+        self.treasury = treasury
+        self.treasury_two_start = treasury_two_start
+        self.treasury_ten_start = treasury_ten_start
         self.calls: list[str] = []
 
     def __call__(self, url: str) -> HttpCapture:
         self.calls.append(url)
-        return self.dxy if "finance.yahoo.com" in url else self.treasury
+        if "finance.yahoo.com" in url:
+            return self.dxy
+        if self.treasury is not None:
+            return self.treasury
+        year = next(
+            candidate for candidate in (2026, 2025, 2024, 2023) if f"/{candidate}/" in url
+        )
+        count = 180 if year == 2026 else 240
+        end = date(2026, 8, 5) if year == 2026 else date(year, 12, 31)
+        return treasury_capture(
+            treasury_csv(
+                count=count,
+                end=end,
+                two_start=self.treasury_two_start,
+                ten_start=self.treasury_ten_start,
+            ),
+            url=url,
+        )
 
 
 class MarketRegimeMacroDataTest(unittest.TestCase):
+    def test_live_store_urls_request_three_year_dxy_history(self) -> None:
+        self.assertIn("range=3y", DXY_CHART_URL)
+        self.assertEqual(
+            DXY_CHART_URL.replace("query2.finance.yahoo.com", "query1.finance.yahoo.com"),
+            DXY_QUERY1_CHART_URL,
+        )
+
     def test_registry_freezes_units_authority_and_publication_boundary(self) -> None:
         registry = macro_registry_payload()
         self.assertEqual(set(MACRO_FACTOR_BY_KEY), {"dxy", "us2y", "us10y", "us2s10s"})
@@ -157,11 +196,26 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
         self.assertEqual(registry["sources"]["treasury"]["authority_tier"], "official_government_source")
         self.assertFalse(registry["publication_eligible"])
         self.assertFalse(registry["action_eligible"])
+        identity_bytes = json.dumps(
+            {
+                "factors": [asdict(item) for item in MACRO_FACTORS],
+                "dxy": asdict(DXY_SPEC),
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+        self.assertEqual(
+            sha256(identity_bytes).hexdigest(),
+            "b9b0ae93bd371ae14de6622236b0805609b52cb569ce5ccf43dc46bccd1d2908",
+        )
 
     def test_dxy_normalizes_completed_daily_bars_and_percent_changes(self) -> None:
         normalized = normalize_dxy(capture(dxy_body(), url=DXY_CHART_URL), now=NOW)
         self.assertEqual(normalized["last_completed_session"], "2026-08-05")
         self.assertEqual(len(normalized["bars"]), 210)
+        self.assertEqual(normalized["bar_count"], 210)
+        self.assertEqual(normalized["last_completed_session"], normalized["bars"][-1]["date"])
         self.assertEqual(normalized["factor"]["key"], "dxy")
         self.assertGreater(normalized["changes"]["5d_pct"], 0)
         self.assertEqual(normalized["source"]["raw_bytes"], len(dxy_body()))
@@ -237,6 +291,146 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
         observations = parsed["us10y"]["observations"]
         self.assertEqual(len(observations), 160)
         self.assertLess(observations[0]["date"], observations[-1]["date"])
+
+    def test_store_accumulates_bounded_prior_years_until_history_floor(self) -> None:
+        bodies = {
+            "2026": treasury_capture(
+                treasury_csv(count=180, end=date(2026, 8, 5)),
+                url="https://home.treasury.gov/2026.csv",
+            ),
+            "2025": treasury_capture(
+                treasury_csv(count=240, end=date(2025, 12, 31)),
+                url="https://home.treasury.gov/2025.csv",
+            ),
+            "2024": treasury_capture(
+                treasury_csv(count=240, end=date(2024, 12, 31)),
+                url="https://home.treasury.gov/2024.csv",
+            ),
+        }
+
+        class AnnualTransport:
+            def __init__(self) -> None:
+                self.calls: list[str] = []
+
+            def __call__(self, url: str) -> HttpCapture:
+                self.calls.append(url)
+                return next(value for year, value in bodies.items() if f"/{year}/" in url)
+
+        transport = AnnualTransport()
+        with tempfile.TemporaryDirectory() as temp:
+            snapshot = MarketRegimeMacroDataStore(temp, http_get=transport).refresh(
+                now=NOW,
+                factor_keys=["us2y"],
+            )
+            factor = next(
+                item for item in snapshot["factors"] if item["factor"]["key"] == "us2y"
+            )
+            self.assertIn("factor_id", factor)
+            self.assertGreaterEqual(factor["observation_count"], SOURCE_HISTORY_FLOOR)
+            self.assertEqual(
+                factor["last_completed_session"], factor["observations"][-1]["date"]
+            )
+            self.assertEqual(len(factor["source_receipt"]["captures"]), 3)
+            self.assertTrue(any("/2026/" in url for url in transport.calls))
+            self.assertTrue(any("/2025/" in url for url in transport.calls))
+            self.assertTrue(any("/2024/" in url for url in transport.calls))
+
+    def test_store_does_not_hide_invalid_current_treasury_with_prior_years(self) -> None:
+        class InvalidCurrentTransport:
+            def __init__(self) -> None:
+                self.calls: list[str] = []
+
+            def __call__(self, url: str) -> HttpCapture:
+                self.calls.append(url)
+                return treasury_capture(
+                    b"Date,1 Yr\n08/05/2026,4.00\n",
+                    url=url,
+                )
+
+        transport = InvalidCurrentTransport()
+        with tempfile.TemporaryDirectory() as temp:
+            snapshot = MarketRegimeMacroDataStore(temp, http_get=transport).refresh(
+                now=NOW,
+                factor_keys=["us2y"],
+            )
+            factor = next(
+                item for item in snapshot["factors"] if item["factor"]["key"] == "us2y"
+            )
+            self.assertEqual(factor["refresh_status"], "rejected")
+            self.assertIn("columns are incomplete", factor["refresh_failure"]["reason"])
+            self.assertEqual(len(transport.calls), 1)
+
+    def test_store_rejects_rows_outside_the_requested_treasury_year(self) -> None:
+        smuggled = treasury_capture(
+            treasury_csv(count=540, end=date(2026, 8, 5)),
+            url="https://home.treasury.gov/2026.csv",
+        )
+        with self.assertRaisesRegex(
+            SourceCaptureError,
+            "row year mismatch: expected=2026 found=2025",
+        ):
+            parse_treasury_captures(
+                [smuggled],
+                now=NOW,
+                minimum_observations=SOURCE_HISTORY_FLOOR,
+                expected_years=[2026],
+            )
+
+        with tempfile.TemporaryDirectory() as temp:
+            transport = FakeTransport(treasury=smuggled)
+            snapshot = MarketRegimeMacroDataStore(temp, http_get=transport).refresh(
+                now=NOW,
+                factor_keys=["us2y"],
+            )
+            factor = next(
+                item for item in snapshot["factors"] if item["factor"]["key"] == "us2y"
+            )
+            self.assertEqual(factor["refresh_status"], "rejected")
+            self.assertIn("row year mismatch", factor["refresh_failure"]["reason"])
+            self.assertEqual(len(transport.calls), 1)
+
+    def test_prior_year_mismatch_rejects_and_receipts_every_fetched_raw(self) -> None:
+        class WrongPriorTransport:
+            def __init__(self) -> None:
+                self.calls: list[str] = []
+
+            def __call__(self, url: str) -> HttpCapture:
+                self.calls.append(url)
+                if "/2026/" in url:
+                    body = treasury_csv(count=180, end=date(2026, 8, 5))
+                else:
+                    body = treasury_csv(count=240, end=date(2024, 12, 31))
+                return treasury_capture(body, url=url)
+
+        transport = WrongPriorTransport()
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            snapshot = MarketRegimeMacroDataStore(root, http_get=transport).refresh(
+                now=NOW,
+                factor_keys=["us2y"],
+            )
+            factor = next(
+                item for item in snapshot["factors"] if item["factor"]["key"] == "us2y"
+            )
+            self.assertEqual(factor["refresh_status"], "rejected")
+            self.assertIn(
+                "expected=2025 found=2024",
+                factor["refresh_failure"]["reason"],
+            )
+            sources = factor["refresh_failure"]["sources"]
+            self.assertEqual(len(sources), 2)
+            self.assertTrue(all((root / item["raw_path"]).exists() for item in sources))
+            self.assertEqual(len(transport.calls), 2)
+
+    def test_treasury_history_error_is_typed_and_exact(self) -> None:
+        with self.assertRaises(TreasuryHistoryTooShort) as caught:
+            parse_treasury_captures(
+                [treasury_capture(treasury_csv(count=519))],
+                now=NOW,
+                minimum_observations=SOURCE_HISTORY_FLOOR,
+            )
+        self.assertEqual(caught.exception.found, 519)
+        self.assertEqual(caught.exception.required, SOURCE_HISTORY_FLOOR)
 
     def test_treasury_weekend_gap_is_fresh_and_old_source_is_stale(self) -> None:
         friday = treasury_capture(treasury_csv(end=date(2026, 8, 7)))
@@ -328,6 +522,59 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
             self.assertEqual(fallback["quality"], "unavailable")
             self.assertEqual(pointer_path.read_bytes(), pointer_before)
 
+    def test_short_dxy_refresh_keeps_old_pointer_historical_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            accepted_store = MarketRegimeMacroDataStore(root, http_get=FakeTransport())
+            accepted = accepted_store.refresh(now=NOW, factor_keys=["dxy"])
+            pointer = root / "factors" / "dxy" / "latest-good.json"
+            pointer_before = pointer.read_bytes()
+            short = capture(dxy_body(count=519), url=DXY_CHART_URL)
+            rejected = MarketRegimeMacroDataStore(
+                root,
+                http_get=FakeTransport(dxy=short),
+            ).refresh(now=NOW + timedelta(hours=1), factor_keys=["dxy"])
+            factor = next(
+                item for item in rejected["factors"] if item["factor"]["key"] == "dxy"
+            )
+            self.assertEqual(factor["refresh_status"], "rejected")
+            self.assertNotIn("factor_id", factor)
+            self.assertEqual(pointer.read_bytes(), pointer_before)
+            self.assertNotEqual(rejected["run_id"], accepted["run_id"])
+            self.assertEqual(accepted_store.latest()["run_id"], rejected["run_id"])
+
+    def test_four_year_519_treasury_refresh_keeps_old_pointer_historical_only(self) -> None:
+        counts = {2026: 20, 2025: 166, 2024: 166, 2023: 167}
+
+        class ShortAnnualTransport:
+            def __call__(self, url: str) -> HttpCapture:
+                year = next(year for year in counts if f"/{year}/" in url)
+                end = date(2026, 8, 5) if year == 2026 else date(year, 12, 31)
+                return treasury_capture(
+                    treasury_csv(count=counts[year], end=end),
+                    url=url,
+                )
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            accepted_store = MarketRegimeMacroDataStore(root, http_get=FakeTransport())
+            accepted = accepted_store.refresh(now=NOW, factor_keys=["us2y"])
+            pointer = root / "factors" / "us2y" / "latest-good.json"
+            pointer_before = pointer.read_bytes()
+            rejected = MarketRegimeMacroDataStore(
+                root,
+                http_get=ShortAnnualTransport(),
+            ).refresh(now=NOW + timedelta(hours=1), factor_keys=["us2y"])
+            factor = next(
+                item for item in rejected["factors"] if item["factor"]["key"] == "us2y"
+            )
+            self.assertEqual(factor["refresh_status"], "rejected")
+            self.assertIn("found=519 required=520", factor["refresh_failure"]["reason"])
+            self.assertEqual(len(factor["refresh_failure"]["sources"]), 4)
+            self.assertEqual(pointer.read_bytes(), pointer_before)
+            self.assertNotEqual(rejected["run_id"], accepted["run_id"])
+            self.assertEqual(accepted_store.latest()["run_id"], rejected["run_id"])
+
     def test_dxy_primary_rejection_uses_same_day_alternate_endpoint(self) -> None:
         primary = capture(
             b"<html>rate limited</html>",
@@ -335,7 +582,7 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
             status=429,
             content_type="text/html",
         )
-        alternate = capture(dxy_body(), url=DXY_QUERY1_CHART_URL)
+        alternate = capture(dxy_body(count=540), url=DXY_QUERY1_CHART_URL)
 
         class DxyFallbackTransport:
             def __init__(self) -> None:
@@ -404,9 +651,8 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
             first = MarketRegimeMacroDataStore(temp, http_get=FakeTransport()).refresh(now=NOW)
             first_by_key = {item["factor"]["key"]: item for item in first["factors"]}
             changed = FakeTransport(
-                treasury=treasury_capture(
-                    treasury_csv(two_start=4.1, ten_start=4.6)
-                )
+                treasury_two_start=4.1,
+                treasury_ten_start=4.6,
             )
             second = MarketRegimeMacroDataStore(temp, http_get=changed).refresh(
                 now=NOW + timedelta(hours=1), factor_keys=["us2y"]
