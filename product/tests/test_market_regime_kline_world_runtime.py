@@ -186,6 +186,10 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             self.assertEqual(result["status"], runtime.status())
             self.assertEqual(result["status"]["last_success"]["chart_count"], 17)
             self.assertEqual(result["status"]["last_success"]["relationship_count"], 12)
+            self.assertEqual(result["status"]["last_success"]["parameter_surface_count"], 8)
+            aliases = result["delivery"]["aliases"]
+            self.assertTrue(aliases["dated_html"]["path"].startswith("history/2026-08-16/082000-"))
+            self.assertTrue((base / "output" / aliases["dated_html"]["path"]).is_file())
 
     def test_no_key_delivers_current_context_without_flow_or_advice(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -198,6 +202,8 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             self.assertEqual(report["insights"], [])
             self.assertEqual(report["observations"], [])
             self.assertEqual(len(report["charts"]), 17)
+            self.assertEqual(len(report["parameter_surface"]), 1)
+            self.assertEqual(report["parameter_surface"][0]["parameter"], "AS_OF")
             self.assertFalse(report["truth_boundary"]["macro_parameters_present"])
             self.assertEqual(
                 result["status"]["last_success"]["generation_status"],
@@ -252,8 +258,8 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             runtime = runtime_fixture(base, provider=DynamicProvider())
             first = runtime.run_once(now=NOW)
             watched = [
-                base / "output" / "2026-08-16-kline-daily.html",
-                base / "output" / "2026-08-16-kline-daily.md",
+                base / "output" / first["delivery"]["aliases"]["dated_html"]["path"],
+                base / "output" / first["delivery"]["aliases"]["dated_markdown"]["path"],
                 runtime.delivery_store.state_path,
             ]
             before = {path: path.read_bytes() for path in watched}
@@ -287,6 +293,32 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             encoded = json.dumps(status, ensure_ascii=False)
             self.assertNotIn("credential", encoded)
             self.assertNotIn("/Users", encoded)
+
+    def test_same_day_runs_keep_distinct_immutable_history_editions(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            runtime = runtime_fixture(base, provider=DynamicProvider())
+            first = runtime.run_once(now=NOW)
+            first_html = first["delivery"]["aliases"]["dated_html"]
+            first_markdown = first["delivery"]["aliases"]["dated_markdown"]
+            first_html_bytes = (base / "output" / first_html["path"]).read_bytes()
+            first_markdown_bytes = (base / "output" / first_markdown["path"]).read_bytes()
+
+            second = runtime.run_once(now=NOW + timedelta(hours=1))
+            second_html = second["delivery"]["aliases"]["dated_html"]
+            second_markdown = second["delivery"]["aliases"]["dated_markdown"]
+            self.assertNotEqual(first_html["path"], second_html["path"])
+            self.assertNotEqual(first_markdown["path"], second_markdown["path"])
+            self.assertTrue(second_html["path"].startswith("history/2026-08-16/092000-"))
+            self.assertEqual((base / "output" / first_html["path"]).read_bytes(), first_html_bytes)
+            self.assertEqual(
+                (base / "output" / first_markdown["path"]).read_bytes(),
+                first_markdown_bytes,
+            )
+            self.assertEqual(
+                (base / "output" / "latest.html").read_bytes(),
+                (base / "output" / second_html["path"]).read_bytes(),
+            )
 
     def test_runner_lock_contention_exits_without_touching_daily_or_output(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

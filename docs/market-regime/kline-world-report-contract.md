@@ -1,80 +1,121 @@
-# K-line World Report v1 · approved white North Star surface
+# K-line World Report v4 · Addendum 01 parameter-first surface
 
-Tracking: Issue #765. Parent: #758. Predecessors: #761 and #763.
+Tracking: Issue #828. Parent: #827. Data/analysis predecessor: Issue #832
+(which supersedes the closed Issue #829). This contract supersedes the report
+surface and replay clauses from Issue #765; the approved warm-white visual
+grammar, hollow-green/filled-red candles, local-only rights boundary and
+no-automatic-execution boundary remain unchanged.
 
 ## Outcome
 
-Render the exact immutable K-line World Context and World Model artifacts as
-one local, replayable report whose reading order is the product promise:
+Render one local, replayable K-line Daily where every visible market value ends
+at one report-wide `AS_OF`, HTML and Markdown expose the same complete parameter
+record, and the low-confidence state cannot masquerade as a directional view.
 
-> completed OHLC and relative relationships → LLM interpretation → capital
-> migration map → consistent world model → actionable trade recommendations.
+The input-to-product chain remains:
 
-The approved white vertical prototype is the visual baseline. The report is a
-new versioned surface and does not replace the installed legacy newsletter in
-this story.
+> 17 completed OHLC/rate histories + 12 relative relationships → frozen
+> Addendum 01 request → LLM interpretation → code-owned parameter controls →
+> one inspectable local report.
 
 ## Information architecture
 
 The page contains, in order:
 
-1. exactly one dominant market posture and one authored synthesis;
-2. separate code-owned evidence-quality and directional-clarity measures;
-3. the cited capital-migration map;
-4. the observed/inferred transmission chain;
-5. the model-generated actionable trade plan;
-6. all 17 completed-daily series and all 12 relative-leadership relationships;
-7. material contradictions and exactly two falsifiers; and
-8. all 17 daily charts, with OHLC candles for price series and lines for rates.
+1. one posture hero; confidence below 0.5 is always `无方向观点 / NO VIEW`;
+2. all 17 completed-daily charts, with price OHLC candles and rate lines;
+3. one canonical eight-row macro parameter surface;
+4. gated insights plus cited observations;
+5. the complete missing-data ledger; and
+6. the 17-market cross-section plus all 12 relative-leadership histories.
 
-Attack, wait and defense are descriptions of the market posture. They use
-distinct green, amber and red accents on the same warm-white layout. Historical
-scenario controls from the discovery mockup do not ship as current data.
+The approved white vertical layout remains the North Star. The report does not
+reintroduce historical discovery tabs or fixture values as current data.
+
+## One-AS_OF truth contract
+
+`AS_OF` is the latest completed session shared by all 17 aligned series. Every
+number in prose, cards, tables, citations, charts and relative relationships
+ends on that date. Each market separately exposes `actual_latest_session`,
+`at_as_of | ahead_of_as_of`, and the number of post-AS_OF rows discarded. An
+ahead market is never simply labelled fresh, and its newer value never enters
+the report calculation or LLM-visible aligned tape.
+
+Every successful chart contains exactly 300 aligned sessions. The 12 relative
+histories are derived only from those aligned series. U.S. Treasury changes use
+basis points; the 2s10s spread is a rate relationship, not a price return.
+
+## Canonical parameter surface
+
+One identity-bound `parameter_surface` drives HTML and Markdown. It contains,
+in this exact order:
+
+1. `AS_OF`;
+2. `RISK_BUDGET`;
+3. `LONG_GATE`;
+4. `DISPERSION`;
+5. `SECTOR_PRIOR`;
+6. `BLACKOUT`;
+7. `CONFIDENCE`; and
+8. `DATA_COVERAGE`.
+
+Every row carries the exact value, `MEASURED | DEGRADED |
+DEFAULT_ON_MISSING_DATA` source, inputs, missing inputs, rule and plain-language
+statement. `DATA_COVERAGE` is stored and rendered to two decimals.
+`BLACKOUT=[]` means the event calendar is unknown, never that no events exist.
+When confidence is below 0.5, insights stay empty; a default risk budget remains
+supporting context and cannot become the headline.
 
 ## Evidence and language
 
-All numbers are projected from the exact S1 context. Every world-model claim,
-flow edge, chain entry, contradiction, recommendation and falsifier retains its
-validated reference IDs and opens a human-readable evidence view. Observed,
-inferred and recommended content have distinct visible labels. Relative price
-leadership is presented as evidence for possible capital migration, never as a
-claim that the system directly measured fund flows.
+All displayed facts and model-authored claims retain validated evidence IDs.
+Relative leadership is evidence about repricing, not direct proof of fund flow.
+The ledger is code-owned and keeps each unavailable input's exact
+“本期不回答什么问题” boundary. Missing forward-looking data is not synthesized from
+historical prices.
 
-The report may display explicit trading recommendations because the S2 contract
-allows them. Recommendations are model-generated and unreviewed. There is no
-personal portfolio context or percentage sizing, and no broker, order or
-portfolio mutation.
+The model may produce market-level interpretation and recommendations when its
+output passes the frozen contract. It receives no personal holdings and cannot
+place orders, access a broker or mutate a portfolio.
 
-## Failure and replay
+## Identity, history and replay
 
-A successful report is a deterministic projection of one exact context ID, one
-exact world-model ID, the renderer version and generation time. Its JSON, HTML,
-Markdown and completion receipt are immutable and content addressed before the
-atomic current pointer advances. Replay revalidates both upstream authorities,
-the report identity and every output hash.
+A report identity binds the exact context ID, world-model ID, report/renderer
+versions, generation time and canonical parameter surface. The completion
+receipt additionally binds immutable context and world-model artifact/receipt
+paths and hashes. `load(report_id)` replays those historical authorities even
+after either upstream latest pointer advances.
 
-If S2 is unavailable, the same-context report still shows all verified data and
-charts but contains no stale flow map, transmission chain, trade plan or
-falsifier. Fixture contexts are permitted only in explicitly configured visual
-and unit tests; the ordinary store rejects them.
+JSON, HTML and Markdown artifacts are immutable and content addressed. Multiple
+successful editions on one date use digest/time-bearing history aliases; they
+never overwrite one dated filename. `latest.html` and `latest.md` are atomic
+Desktop convenience aliases, not evidence authorities.
+
+## Failure semantics
+
+No stale report is relabelled as current. If current market data cannot produce
+a verified context, the runtime publishes an explicit data-unavailable surface
+without old values. If the current context is valid but the LLM is unavailable,
+the report is `interpretation_unavailable` and contains no old prose, flow map,
+insight or recommendation. Prior immutable editions remain loadable history.
 
 ## Truth and distribution boundary
 
-- `track=kline_only`; the Finance Daily Newsletter is not an input.
-- `investment_advice_allowed=true`.
+- `track=kline_only`; Finance Daily Newsletter is not an input or fallback.
+- `investment_advice_allowed=true` at the market level.
 - `automatic_execution_eligible=false`, `broker_access=false`, and
   `portfolio_mutation=false`.
-- `publication_eligible=false`; current provider rights remain local evaluation
-  only.
-- The visible boundary text says model-generated/unreviewed, local-only, and no
-  automatic execution. It does not claim that investment advice is forbidden.
+- `publication_eligible=false`; accepted sources remain local-evaluation-only.
+- Visible copy says model-generated/unreviewed and local-only.
 
 ## Acceptance
 
-- Desktop 753/1280 and mobile 390 have zero horizontal overflow.
-- Same-state reference/implementation comparisons end with no P0/P1/P2 visual
-  defects and `design-qa.md` status `passed`.
-- Focused tests cover attack, wait, defense, unavailable, exact upstream replay,
-  citation disclosure, coherent projection tamper and output-hash tamper.
-- This story does not change the API, scheduler, Desktop output or installed
-  LaunchAgent.
+- Desktop 1280 and mobile 390 have zero horizontal overflow.
+- Exactly 17 chart canvases, 12 relative canvases and eight parameter records
+  render from the same report identity.
+- HTML and Markdown parameter values/source/inputs/missing-inputs are identical.
+- Historical load survives upstream latest advancement; same-day histories are
+  unique and immutable.
+- Focused/upstream tests, identity replay, `git diff --check` and gitleaks pass.
+- The deployed exact-main run preserves the previous Desktop edition and emits
+  machine-readable parity, source, AS_OF and provider-usage evidence.

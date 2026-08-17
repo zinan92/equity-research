@@ -1,6 +1,31 @@
-# K-line World Runtime v1 Contract
+# K-line World Runtime v2 Contract
 
-Issue: #769; same-day source fallback: #783
+Issue: #769; same-day source fallback: #783; Addendum 01 surface/history:
+#828; one-AS_OF context/model predecessor: #832 (supersedes closed #829).
+
+## Issue #828 superseding addendum
+
+The serial 08:20 runtime, one LaunchAgent, source fallback order and stale-data
+failure rules below remain authoritative. Issue #828 additionally requires:
+
+- the report store to bind and replay immutable historical context/model
+  artifacts and receipts instead of consulting their current pointers;
+- one canonical eight-row parameter surface to drive both HTML and Markdown;
+- every visible market value to end at the context's single `AS_OF`, while each
+  market exposes its actual latest date and discarded post-AS_OF count;
+- every successful edition to contain 17 histories of exactly 300 aligned
+  sessions and 12 aligned relative histories;
+- multiple editions on one date to use distinct time/digest history paths, with
+  no overwrite of an earlier dated edition;
+- Desktop promotion to preserve the previous edition before atomically
+  replacing `latest.html` and `latest.md`; and
+- runtime status to expose the report ID and parameter-surface count without
+  recomputing analysis or reading Finance Daily Newsletter.
+
+The runtime schema is v3, the report schema is v4, and the renderer is v7.
+The controlled real run and browser acceptance must be performed from the exact
+merged `main` SHA. A controlled run proves delivery plumbing, not the product's
+predictive value or the later ordinary 08:20 trigger.
 
 ## Outcome
 

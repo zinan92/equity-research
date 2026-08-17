@@ -1,5 +1,39 @@
 # Decision Log
 
+## 2026-08-18 — Make Addendum 01 one report-wide, replayable surface
+
+- **Decision:** Use one context-wide `AS_OF` for every report value and project
+  one identity-bound eight-row `parameter_surface` into both HTML and Markdown.
+  Keep all 17 × 300 aligned histories and 12 relative histories visible; show
+  each market's actual latest date and discarded post-AS_OF count. Bind report
+  receipts to immutable context/model artifacts and receipts, and give every
+  same-day edition a time/digest history path.
+- **Why:** The earlier report could show two correct but incompatible dates,
+  omit parameter fields from Markdown and overwrite a same-day alias. That made
+  the product internally contradictory and destroyed the ability to replay the
+  exact edition a reader saw. A low-confidence model also cannot be allowed to
+  present “防守” while its body says no direction view.
+- **Evidence:** Issues #828 and #832. The controlled acceptance context is
+  `market-regime-kline-world-context:f3fc30d749685d06bf5101d903bb3413301fadc6ef4767f2c72eee90049455df`;
+  the DeepSeek V4 Flash model is
+  `market-regime-kline-world-model:e4ef5997f90a75c6d650af5c14689b983fa185b92c1acd04389e844baa0e0724`;
+  and report-v4 preview is
+  `market-regime-kline-world-report:7126524da46d8fe2cf8283e3b620d00ed75c4f49cf8e65e457763c585b3152aa`.
+  `AS_OF=2026-08-14`; readings are `RISK_BUDGET=0.30` default,
+  `LONG_GATE=OPEN`, `DISPERSION=LOW`, `SECTOR_PRIOR=[]`, `BLACKOUT=[]`,
+  `CONFIDENCE=0.40`, and `DATA_COVERAGE=0.39`. Source/addendum/transport
+  hashes are `81b5d8bc...f1d63d`, `ada0fdfe...e9270`, and
+  `37136c4b...f78dc`. One provider call used 249,345 prompt, 6,035
+  completion and 255,380 total tokens inside the 1M-token contract. Browser
+  replay rendered 17 charts, 12 relative histories and eight parameters at
+  1280/390 with zero horizontal overflow.
+- **Gotchas:** A newer A-share or Bitcoin close remains visible only as
+  `ahead_of_as_of` metadata and is excluded from every calculation. `[]` for
+  blackout means calendar unknown. A 0.30 default risk budget does not measure
+  the market. Historical price relationships still do not prove direct money
+  flow, local data rights still prohibit public redistribution, and this report
+  never authorizes automatic execution.
+
 ## 2026-08-17 — Retain enough source history for one 300-session aligned tape
 
 - **Decision:** Require every live daily price collector to accept at least 520
