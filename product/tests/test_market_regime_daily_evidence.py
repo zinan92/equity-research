@@ -154,12 +154,12 @@ def capture(
 
 
 def dxy_body() -> bytes:
-    dates = [END - timedelta(days=209 - index) for index in range(210)]
+    dates = [END - timedelta(days=539 - index) for index in range(540)]
     zone = ZoneInfo("America/New_York")
     timestamps = [
         int(datetime.combine(item, time(9, 30), tzinfo=zone).timestamp()) for item in dates
     ]
-    values = [100 + index / 10 for index in range(210)]
+    values = [100 + index / 10 for index in range(540)]
     return json.dumps(
         {
             "chart": {
@@ -200,8 +200,10 @@ def dxy_body() -> bytes:
     ).encode()
 
 
-def treasury_body() -> bytes:
-    dates = [END - timedelta(days=149 - index) for index in range(150)]
+def treasury_body(*, year: int) -> bytes:
+    count = 180 if year == 2026 else 240
+    end = END if year == 2026 else date(year, 12, 31)
+    dates = [end - timedelta(days=count - 1 - index) for index in range(count)]
     rows = [
         f"{item.strftime('%m/%d/%Y')},{4 + index / 100:.2f},{4.5 + index / 100:.2f}"
         for index, item in enumerate(dates)
@@ -214,7 +216,10 @@ class MacroTransport:
     def __call__(self, url: str) -> HttpCapture:
         if "finance.yahoo.com" in url:
             return capture(dxy_body(), url=DXY_CHART_URL, content_type="application/json")
-        return capture(treasury_body(), url=url, content_type="text/csv")
+        year = next(
+            candidate for candidate in (2026, 2025, 2024, 2023) if f"/{candidate}/" in url
+        )
+        return capture(treasury_body(year=year), url=url, content_type="text/csv")
 
 
 def fixture_inputs(root: Path, macro_root: Path) -> tuple[dict, dict, dict]:

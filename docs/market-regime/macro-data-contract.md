@@ -24,7 +24,7 @@ They remain `publication_eligible=false` and `action_eligible=false`.
 ### DXY
 
 - Provider symbol: `DX-Y.NYB`.
-- Endpoint shape: Yahoo Finance chart JSON, daily interval, two-year range.
+- Endpoint shape: Yahoo Finance chart JSON, daily interval, three-year range.
 - The collector tries the query2 endpoint first and query1 second for the same
   `DX-Y.NYB` identity. A query1 success is a same-day endpoint retry, not a
   substitution with a broad-dollar proxy or another index. The selected
@@ -41,17 +41,22 @@ They remain `publication_eligible=false` and `action_eligible=false`.
 
 - Authority page: `https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve`.
 - Capture endpoint: the official year-scoped Daily Treasury Par Yield Curve
-  Rates CSV. The collector starts with the current New York calendar year and
-  requests the previous year only when the accepted current-year history is
-  shorter than 120 observations.
+  Rates CSV. The collector starts with the current New York calendar year and,
+  only when otherwise-valid history remains below 520 unique observations,
+  adds at most three prior calendar years. A malformed current-year response is
+  rejected immediately and cannot be hidden by older captures.
 - Accepted response: HTTP 200, CSV content type, non-empty UTF-8 body and the
   exact `Date`, `2 Yr`, `10 Yr` columns. Every accepted value is finite and in
-  `[0, 30]` percent. Duplicate, unordered, future, missing and `N/A` rows fail
-  the capture.
+  `[0, 30]` percent. Every row year must equal the year encoded in the request
+  URL. Duplicate, unordered, future, wrong-year, missing and `N/A` rows fail the
+  capture.
 - Treasury publishes newest-first CSV rows. A wholly descending file is
   explicitly recorded as `descending_reordered`; a mixed order is rejected.
 - Yield levels stay in percent. A one-, five- or 20-session change is computed
   as `(latest yield - earlier yield) * 100` and labelled basis points.
+- The reusable parser retains its 120-observation default for focused parsing
+  and historical compatibility. The live macro store passes the stronger 520
+  floor explicitly; the two thresholds are not interchangeable.
 
 ### 2s10s derivation
 

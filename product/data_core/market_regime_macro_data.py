@@ -25,6 +25,7 @@ from .market_regime_data import (
     InstrumentSpec,
     LicenseDecision,
     MarketRegimeDataError,
+    SOURCE_HISTORY_FLOOR,
     SourceCaptureError,
     http_get_capture,
     license_decision,
@@ -46,7 +47,7 @@ TREASURY_CSV_TEMPLATE = (
 )
 DXY_CHART_URL = (
     "https://query2.finance.yahoo.com/v8/finance/chart/DX-Y.NYB"
-    "?interval=1d&range=2y&events=history&includeAdjustedClose=false"
+    "?interval=1d&range=3y&events=history&includeAdjustedClose=false"
 )
 DXY_QUERY1_CHART_URL = DXY_CHART_URL.replace(
     "query2.finance.yahoo.com", "query1.finance.yahoo.com"
@@ -55,6 +56,24 @@ DXY_QUERY1_CHART_URL = DXY_CHART_URL.replace(
 
 class MarketRegimeMacroDataError(MarketRegimeDataError):
     """Macro source, normalization or immutable-store contract failed."""
+
+
+class TreasuryHistoryTooShort(SourceCaptureError):
+    """Valid Treasury captures do not yet contain the required history."""
+
+    def __init__(
+        self,
+        *,
+        found: int,
+        required: int,
+        capture: HttpCapture,
+    ) -> None:
+        self.found = found
+        self.required = required
+        super().__init__(
+            f"Treasury history is too short: found={found} required={required}",
+            capture=capture,
+        )
 
 
 def dxy_source_urls() -> tuple[tuple[str, str], ...]:
@@ -324,15 +343,27 @@ def _change(values: list[float], periods: int) -> float:
     return values[-1] - values[-periods - 1]
 
 
-def normalize_dxy(capture: HttpCapture, *, now: datetime) -> dict[str, Any]:
-    normalized = normalize_capture(DXY_SPEC, capture, now=now)
+def normalize_dxy(
+    capture: HttpCapture,
+    *,
+    now: datetime,
+    history_floor: int | None = None,
+) -> dict[str, Any]:
+    normalized = normalize_capture(
+        DXY_SPEC,
+        capture,
+        now=now,
+        history_floor=history_floor,
+    )
     closes = [float(row["close"]) for row in normalized["bars"]]
     core = {
         "factor": asdict(MACRO_FACTOR_BY_KEY["dxy"]),
         "bars": normalized["bars"],
+        "bar_count": normalized["bar_count"],
         "last_completed_session": normalized["last_completed_session"],
         "last_completed_close_at": normalized["last_completed_close_at"],
         "quality": normalized["quality"],
+        "missing_expected_session": normalized["missing_expected_session"],
         "value": closes[-1],
         "changes": {
             "1d_pct": round((closes[-1] / closes[-2] - 1) * 100, 6),
@@ -341,6 +372,9 @@ def normalize_dxy(capture: HttpCapture, *, now: datetime) -> dict[str, Any]:
         },
         "dropped_unfinished_sessions": normalized["dropped_unfinished_sessions"],
         "dropped_empty_provider_sessions": normalized["dropped_empty_provider_sessions"],
+        "dropped_incomplete_provider_sessions": normalized[
+            "dropped_incomplete_provider_sessions"
+        ],
         "source": _capture_core(capture),
     }
     return core
@@ -360,16 +394,46 @@ def _parse_yield(value: Any, *, field: str, capture: HttpCapture) -> float:
 
 
 def parse_treasury_captures(
-    captures: Iterable[HttpCapture], *, now: datetime
+    captures: Iterable[HttpCapture],
+    *,
+    now: datetime,
+    minimum_observations: int = MIN_OBSERVATIONS,
+    expected_years: Iterable[int] | None = None,
 ) -> dict[str, dict[str, Any]]:
+    if (
+        isinstance(minimum_observations, bool)
+        or not isinstance(minimum_observations, int)
+        or minimum_observations < 1
+    ):
+        raise MarketRegimeMacroDataError(
+            "minimum_observations must be a positive integer"
+        )
     rows_by_date: dict[date, tuple[float, float, str]] = {}
     source_cores: list[dict[str, Any]] = []
     provider_orders: list[str] = []
     capture_list = list(captures)
     if not capture_list:
         raise MarketRegimeMacroDataError("Treasury capture is required")
+    expected_year_list = list(expected_years) if expected_years is not None else None
+    if expected_year_list is not None:
+        if len(expected_year_list) != len(capture_list):
+            raise MarketRegimeMacroDataError(
+                "Treasury expected_years must match capture count"
+            )
+        if any(
+            isinstance(year, bool) or not isinstance(year, int) or year < 1900
+            for year in expected_year_list
+        ):
+            raise MarketRegimeMacroDataError(
+                "Treasury expected_years must contain valid calendar years"
+            )
     local_today = now.astimezone(ZoneInfo("America/New_York")).date()
-    for capture in capture_list:
+    for capture_index, capture in enumerate(capture_list):
+        expected_year = (
+            expected_year_list[capture_index]
+            if expected_year_list is not None
+            else None
+        )
         if capture.status_code != 200:
             raise SourceCaptureError(
                 f"Treasury HTTP status is {capture.status_code}", capture=capture
@@ -399,6 +463,14 @@ def parse_treasury_captures(
                 raise SourceCaptureError(
                     f"Treasury row is dated in the future: {session.isoformat()}", capture=capture
                 )
+            if expected_year is not None and session.year != expected_year:
+                raise SourceCaptureError(
+                    (
+                        "Treasury row year mismatch: "
+                        f"expected={expected_year} found={session.year}"
+                    ),
+                    capture=capture,
+                )
             two = _parse_yield(raw.get("2 Yr"), field="2 Yr", capture=capture)
             ten = _parse_yield(raw.get("10 Yr"), field="10 Yr", capture=capture)
             if session in rows_by_date:
@@ -418,9 +490,10 @@ def parse_treasury_captures(
         source_cores.append(_capture_core(capture))
 
     ordered = sorted(rows_by_date.items())
-    if len(ordered) < MIN_OBSERVATIONS:
-        raise SourceCaptureError(
-            f"Treasury history is too short: {len(ordered)} < {MIN_OBSERVATIONS}",
+    if len(ordered) < minimum_observations:
+        raise TreasuryHistoryTooShort(
+            found=len(ordered),
+            required=minimum_observations,
             capture=capture_list[-1],
         )
     latest_date = ordered[-1][0]
@@ -601,7 +674,11 @@ class MarketRegimeMacroDataStore:
                     raw_relative = f"raw/{run_id}/dxy-attempt-{attempt_index}{suffix}"
                     _write_bytes_exclusive(self.root / raw_relative, capture.body)
                     wrote_raw = True
-                    normalized = normalize_dxy(capture, now=current)
+                    normalized = normalize_dxy(
+                        capture,
+                        now=current,
+                        history_floor=SOURCE_HISTORY_FLOOR,
+                    )
                     attempts.append(
                         {
                             "endpoint": endpoint,
@@ -672,52 +749,32 @@ class MarketRegimeMacroDataStore:
         rate_keys = [key for key in selected if key in {"us2y", "us10y", "us2s10s"}]
         if rate_keys:
             captures: list[HttpCapture] = []
+            capture_years: list[int] = []
             raw_paths: list[str | None] = []
+            parsed: dict[str, dict[str, Any]] = {}
             try:
                 current_year = current.astimezone(ZoneInfo("America/New_York")).year
-                first = self.http_get(_treasury_url(current_year))
-                captures.append(first)
-                path: str | None = f"raw/{run_id}/treasury-{current_year}.csv"
-                _write_bytes_exclusive(self.root / path, first.body)
-                raw_paths.append(path)
-                parsed = parse_treasury_captures(captures, now=current)
-            except SourceCaptureError as first_error:
-                if "history is too short" not in str(first_error):
-                    raise_error: Exception | None = first_error
-                else:
+                history_error: TreasuryHistoryTooShort | None = None
+                for year in range(current_year, current_year - 4, -1):
+                    capture = self.http_get(_treasury_url(year))
+                    captures.append(capture)
+                    capture_years.append(year)
+                    path = f"raw/{run_id}/treasury-{year}.csv"
+                    _write_bytes_exclusive(self.root / path, capture.body)
+                    raw_paths.append(path)
                     try:
-                        prior = self.http_get(_treasury_url(current_year - 1))
-                        captures.append(prior)
-                        path = f"raw/{run_id}/treasury-{current_year - 1}.csv"
-                        _write_bytes_exclusive(self.root / path, prior.body)
-                        raw_paths.append(path)
-                        parsed = parse_treasury_captures(captures, now=current)
-                        raise_error = None
-                    except Exception as exc:
-                        raise_error = exc
-                if raise_error is not None:
-                    parsed = {}
-                    for key in rate_keys:
-                        failure = {
-                            "key": key,
-                            "status": "rejected",
-                            "quality": "unavailable",
-                            "reason": str(raise_error),
-                            "sources": [
-                                _capture_receipt(
-                                    capture,
-                                    raw_path=(
-                                        raw_paths[index]
-                                        if index < len(raw_paths)
-                                        else None
-                                    )
-                                )
-                                for index, capture in enumerate(captures)
-                            ],
-                            "bounded_raw_excerpt": _bounded_excerpt(captures[-1].body) if captures else None,
-                        }
-                        results.append(failure)
-                        snapshot_factors.append(self._unavailable(key, failure))
+                        parsed = parse_treasury_captures(
+                            captures,
+                            now=current,
+                            minimum_observations=SOURCE_HISTORY_FLOOR,
+                            expected_years=capture_years,
+                        )
+                        history_error = None
+                        break
+                    except TreasuryHistoryTooShort as exc:
+                        history_error = exc
+                if history_error is not None:
+                    raise history_error
             except Exception as exc:
                 parsed = {}
                 for key in rate_keys:

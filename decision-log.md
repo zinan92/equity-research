@@ -1,5 +1,29 @@
 # Decision Log
 
+## 2026-08-17 — Retain enough source history for one 300-session aligned tape
+
+- **Decision:** Require every live daily price collector to accept at least 520
+  completed observations before it may advance current evidence. Yahoo requests
+  three years, Tencent requests 780 rows, and the official Treasury collector
+  adds at most three prior calendar years until it has 520 unique observations.
+  The reusable parser defaults remain 120 so fixture and parser identity do not
+  silently change; the stronger floor is imposed only by live stores.
+- **Why:** The macro-analyst addendum needs exactly 300 common completed sessions
+  plus a 252-reading dispersion window. A 300-row provider request is not enough
+  after cross-market holidays and alignment, while the previous 120–210 rows
+  made the 250-session Shanghai percentile structurally unknowable.
+- **Evidence:** Issue #830; 243 Market Regime tests; live captures of 730–780
+  completed rows for the 12 structural price series, 1,096 for Bitcoin, and 655
+  official Treasury observations. A live Nikkei capture included a zero-volume
+  2026-08-17 row without a close; the collector dropped that row, exposed
+  `missing_expected_session=2026-08-17`, retained 731 newly captured complete
+  rows through 2026-08-14, and labelled the source `partial`.
+- **Gotchas:** This is deeper retention, not permission to synthesize a bar,
+  substitute an index, reuse an old latest-good artifact as current, or upgrade
+  publication rights. Only a latest provider row that is incomplete and
+  zero-volume may be dropped after close; historical malformed rows and
+  non-zero-volume completed rows still fail closed.
+
 ## 2026-08-17 — Give autonomous validation repair one final attempt
 
 - **Decision:** Increase the World Model's hard provider budget from three to

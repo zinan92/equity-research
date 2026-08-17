@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 from datetime import date, datetime, time, timedelta, timezone
 from hashlib import sha256
 import json
@@ -22,11 +23,15 @@ from data_core.market_regime_data import (  # noqa: E402
     LOCAL_EVALUATION,
     MarketRegimeDataError,
     MarketRegimeDataStore,
+    SOURCE_HISTORY_FLOOR,
     SourceCaptureError,
+    TENCENT_HISTORY_COUNT,
+    YAHOO_HISTORY_RANGE,
     instrument_registry_payload,
     license_decision,
     normalize_capture,
     _provider_url,
+    _provider_urls,
 )
 
 
@@ -113,6 +118,110 @@ def capture(
 
 
 class MarketRegimeDataTest(unittest.TestCase):
+    def test_provider_queries_request_the_shared_long_history_window(self) -> None:
+        yahoo = INSTRUMENT_BY_KEY["sp500"]
+        yahoo_urls = _provider_urls(yahoo)
+        self.assertEqual([name for name, _ in yahoo_urls], ["query2", "query1"])
+        self.assertTrue(all(f"range={YAHOO_HISTORY_RANGE}" in url for _, url in yahoo_urls))
+        self.assertEqual(YAHOO_HISTORY_RANGE, "3y")
+        self.assertEqual(
+            yahoo_urls[0][1].replace("query2.finance.yahoo.com", "query1.finance.yahoo.com"),
+            yahoo_urls[1][1],
+        )
+        tencent_url = _provider_url(INSTRUMENT_BY_KEY["shanghai"])
+        self.assertIn(f",{TENCENT_HISTORY_COUNT},", tencent_url)
+        self.assertEqual(TENCENT_HISTORY_COUNT, 780)
+
+    def test_store_history_floor_accepts_520_and_rejects_519(self) -> None:
+        spec = INSTRUMENT_BY_KEY["sp500"]
+        accepted = normalize_capture(
+            spec,
+            capture(yahoo_body("^GSPC", count=SOURCE_HISTORY_FLOOR)),
+            now=NOW,
+            history_floor=SOURCE_HISTORY_FLOOR,
+        )
+        self.assertEqual(accepted["bar_count"], SOURCE_HISTORY_FLOOR)
+        self.assertEqual(
+            accepted["last_completed_session"], accepted["bars"][-1]["date"]
+        )
+        with self.assertRaisesRegex(
+            SourceCaptureError,
+            rf"{spec.key}: found={SOURCE_HISTORY_FLOOR - 1} required={SOURCE_HISTORY_FLOOR}",
+        ):
+            normalize_capture(
+                spec,
+                capture(yahoo_body("^GSPC", count=SOURCE_HISTORY_FLOOR - 1)),
+                now=NOW,
+                history_floor=SOURCE_HISTORY_FLOOR,
+            )
+
+    def test_latest_zero_volume_incomplete_row_is_dropped_and_disclosed(self) -> None:
+        spec = INSTRUMENT_BY_KEY["nikkei"]
+        rows = [
+            {
+                "date": item,
+                "open": 100 + index,
+                "high": 102 + index,
+                "low": 99 + index,
+                "close": 101 + index,
+                "volume": 10_000,
+            }
+            for index, item in enumerate(completed_dates(540, end=date(2026, 8, 14)))
+        ]
+        rows.append(
+            {
+                "date": date(2026, 8, 17),
+                "open": 650,
+                "high": 652,
+                "low": 649,
+                "close": None,
+                "volume": 0,
+            }
+        )
+        tokyo = ZoneInfo("Asia/Tokyo")
+        normalized = normalize_capture(
+            spec,
+            capture(
+                yahoo_body(
+                    "^N225",
+                    rows=rows,
+                    currency="JPY",
+                    timezone_name="Asia/Tokyo",
+                    regular_market_time=datetime(2026, 8, 17, 15, 25, tzinfo=tokyo),
+                    scheduled_session_end=datetime(2026, 8, 17, 15, 30, tzinfo=tokyo),
+                )
+            ),
+            now=datetime(2026, 8, 17, 7, 0, tzinfo=timezone.utc),
+            history_floor=SOURCE_HISTORY_FLOOR,
+        )
+        self.assertEqual(normalized["bar_count"], 540)
+        self.assertEqual(normalized["last_completed_session"], "2026-08-14")
+        self.assertEqual(normalized["missing_expected_session"], "2026-08-17")
+        self.assertEqual(normalized["dropped_incomplete_provider_sessions"], ["2026-08-17"])
+        self.assertEqual(normalized["quality"], "partial")
+
+        rows[-1]["volume"] = 1
+        with self.assertRaisesRegex(SourceCaptureError, "partial OHLC after session close"):
+            normalize_capture(
+                spec,
+                capture(
+                    yahoo_body(
+                        "^N225",
+                        rows=rows,
+                        currency="JPY",
+                        timezone_name="Asia/Tokyo",
+                        regular_market_time=datetime(
+                            2026, 8, 17, 15, 25, tzinfo=tokyo
+                        ),
+                        scheduled_session_end=datetime(
+                            2026, 8, 17, 15, 30, tzinfo=tokyo
+                        ),
+                    )
+                ),
+                now=datetime(2026, 8, 17, 7, 0, tzinfo=timezone.utc),
+                history_floor=SOURCE_HISTORY_FLOOR,
+            )
+
     def test_registry_freezes_nine_charts_and_three_visible_evidence_dependencies(self) -> None:
         registry = instrument_registry_payload()
         self.assertEqual((registry["primary_chart_count"], registry["evidence_probe_count"]), (9, 3))
@@ -123,6 +232,16 @@ class MarketRegimeDataTest(unittest.TestCase):
         self.assertEqual({item.currency for item in INSTRUMENTS}, {"USD", "CNY", "KRW", "JPY"})
         self.assertTrue(all(item.exchange_timezone and item.session_close for item in INSTRUMENTS))
         self.assertTrue(all(source["authority_tier"] == "supplementary_only" for source in registry["sources"].values()))
+        identity_bytes = json.dumps(
+            [asdict(item) for item in INSTRUMENTS],
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+        self.assertEqual(
+            sha256(identity_bytes).hexdigest(),
+            "425ac952d983a79f47164be960dc5502fa7e5a33c35c2c9d772c99866f07eae2",
+        )
 
     def test_license_gate_keeps_local_evaluation_unverified_and_private_beta_closed(self) -> None:
         local = license_decision(
@@ -370,7 +489,10 @@ class MarketRegimeDataTest(unittest.TestCase):
     def test_store_uses_same_day_yahoo_fallback_and_keeps_old_pointer_historical(self) -> None:
         primary_url = _provider_url(INSTRUMENT_BY_KEY["sp500"])
         alternate_url = primary_url.replace("query2.finance.yahoo.com", "query1.finance.yahoo.com")
-        valid = capture(yahoo_body("^GSPC"), headers=(("content-type", "application/json"), ("etag", "abc")))
+        valid = capture(
+            yahoo_body("^GSPC", count=540),
+            headers=(("content-type", "application/json"), ("etag", "abc")),
+        )
         failed = capture(b"<html>rate limited</html>", status=502, content_type="text/html")
         responses = {
             primary_url: iter((valid, failed)),
@@ -424,6 +546,32 @@ class MarketRegimeDataTest(unittest.TestCase):
             self.assertEqual(len(list((root / "runs").glob("*.json"))), 2)
             self.assertEqual(len(list((root / "run-events").glob("*/000-started.json"))), 2)
 
+    def test_short_structural_refresh_keeps_old_pointer_historical_only(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            accepted_store = MarketRegimeDataStore(
+                root,
+                http_get=lambda url: capture(yahoo_body("^GSPC", count=540)),
+            )
+            accepted = accepted_store.refresh(now=NOW, instrument_keys=["sp500"])
+            pointer = root / "instruments" / "sp500" / "latest-good.json"
+            pointer_before = pointer.read_bytes()
+
+            rejected = MarketRegimeDataStore(
+                root,
+                http_get=lambda url: capture(yahoo_body("^GSPC", count=519)),
+            ).refresh(
+                now=NOW + timedelta(hours=1),
+                instrument_keys=["sp500"],
+            )
+            item = rejected["instruments"][0]
+            self.assertEqual(item["refresh_status"], "rejected")
+            self.assertEqual(item["bar_count"], 0)
+            self.assertNotIn("normalized_artifact", item)
+            self.assertEqual(pointer.read_bytes(), pointer_before)
+            self.assertNotEqual(rejected["run_id"], accepted["run_id"])
+            self.assertEqual(accepted_store.latest()["run_id"], rejected["run_id"])
+
     def test_unknown_instrument_never_reaches_network(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             store = MarketRegimeDataStore(directory, http_get=lambda *args, **kwargs: self.fail("network called"))
@@ -450,7 +598,10 @@ class MarketRegimeDataTest(unittest.TestCase):
     def test_latest_detects_normalized_artifact_tampering(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            store = MarketRegimeDataStore(root, http_get=lambda url: capture(yahoo_body("^GSPC")))
+            store = MarketRegimeDataStore(
+                root,
+                http_get=lambda url: capture(yahoo_body("^GSPC", count=540)),
+            )
             snapshot = store.refresh(
                 now=NOW,
                 instrument_keys=["sp500"],

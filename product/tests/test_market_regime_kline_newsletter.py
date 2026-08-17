@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 from datetime import datetime, timezone
+from hashlib import sha256
 import json
 from pathlib import Path
 import plistlib
@@ -24,6 +26,7 @@ from data_core.market_regime_daily_narrative import (  # noqa: E402
 )
 from data_core.market_regime_kline_newsletter import (  # noqa: E402
     BTC_QUERY1_URL,
+    BTC_SPEC,
     BTC_URL,
     BITCOIN_SCHEMA_VERSION,
     DISPLAY_ORDER,
@@ -50,12 +53,13 @@ from manage_market_regime_kline_newsletter_launchd import LABEL, build_plist  # 
 
 
 class BitcoinTransport:
-    def __init__(self, *, bad_symbol: bool = False) -> None:
+    def __init__(self, *, bad_symbol: bool = False, count: int = 540) -> None:
         self.bad_symbol = bad_symbol
+        self.count = count
 
     def __call__(self, url: str) -> HttpCapture:
         symbol = "ETH-USD" if self.bad_symbol else "BTC-USD"
-        body = yahoo_body(symbol, count=210, timezone_name="UTC")
+        body = yahoo_body(symbol, count=self.count, timezone_name="UTC")
         return HttpCapture(
             "GET",
             url,
@@ -92,6 +96,18 @@ def compiled_inputs(base: Path, *, provider: FakeProvider | None = None) -> tupl
 
 
 class KlineNewsletterTest(unittest.TestCase):
+    def test_bitcoin_instrument_identity_is_frozen(self) -> None:
+        identity_bytes = json.dumps(
+            asdict(BTC_SPEC),
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+        self.assertEqual(
+            sha256(identity_bytes).hexdigest(),
+            "eb666b661fe57f9344a076d2f503b53cb59c70ef7cd5e05851ccf39ab580fb5d",
+        )
+
     def test_pilot_provider_retries_only_invalid_identical_frozen_requests(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             base = Path(temporary)
@@ -147,7 +163,10 @@ class KlineNewsletterTest(unittest.TestCase):
             )
             self.assertEqual(artifact["schema_version"], BITCOIN_SCHEMA_VERSION)
             self.assertEqual(artifact["instrument"]["key"], "bitcoin")
-            self.assertGreaterEqual(artifact["bar_count"], 200)
+            self.assertGreaterEqual(artifact["bar_count"], 520)
+            self.assertEqual(
+                artifact["last_completed_session"], artifact["bars"][-1]["date"]
+            )
             self.assertEqual(artifact["change_5d_unit"], "percent_return")
             self.assertEqual(store.latest()["bitcoin_id"], artifact["bitcoin_id"])
             self.assertEqual(artifact["data_kind"], "fixture")
@@ -191,6 +210,31 @@ class KlineNewsletterTest(unittest.TestCase):
                 [False, True],
             )
             self.assertEqual(transport.calls, [BTC_URL, BTC_QUERY1_URL])
+
+    def test_short_bitcoin_refresh_never_advances_latest_pointer(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            accepted_store = BitcoinDailyStore(root, http_get=BitcoinTransport())
+            accepted = accepted_store.refresh(
+                now=datetime(2026, 8, 7, 1, 0, tzinfo=timezone.utc)
+            )
+            pointer = root / "latest.json"
+            pointer_before = pointer.read_bytes()
+            short_store = BitcoinDailyStore(
+                root,
+                http_get=BitcoinTransport(count=519),
+            )
+            with self.assertRaisesRegex(
+                KlineNewsletterError,
+                "bitcoin_all_same_day_sources_rejected",
+            ):
+                short_store.refresh(
+                    now=datetime(2026, 8, 7, 2, 0, tzinfo=timezone.utc)
+                )
+            self.assertEqual(pointer.read_bytes(), pointer_before)
+            self.assertEqual(
+                accepted_store.latest()["bitcoin_id"], accepted["bitcoin_id"]
+            )
 
     def test_report_has_exactly_fifteen_observations_charts_and_rate_units(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
