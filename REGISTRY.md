@@ -1,6 +1,6 @@
 # REGISTRY
 
-## 2026-08-17 · Macro-analyst K-line Daily deployed (Issue #825 / PR pending)
+## 2026-08-17 · Macro-analyst K-line Daily deployed (Issue #825 / PR #826)
 
 Now: the local K-line Daily app is installed from exact merged `main` SHA
 `96072682f6ba88ae2066d00c2cef958ea44e2ba8` (Issue #819 / PR #824). The 17
