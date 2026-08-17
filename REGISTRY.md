@@ -1,5 +1,44 @@
 # REGISTRY
 
+## 2026-08-17 · Macro-analyst K-line Daily deployed (Issue #825 / PR #826)
+
+Now: the local K-line Daily app is installed from exact merged `main` SHA
+`96072682f6ba88ae2066d00c2cef958ea44e2ba8` (Issue #819 / PR #824). The 17
+completed-daily charts and 12 relative histories are unchanged. Every other
+analysis section now uses Park's byte-identical macro-analyst system prompt
+(`81b5d8bc...f1d63d`) and renders parameter-first output: `AS_OF`, risk budget,
+long gate, dispersion, sector prior, blackout, code-bounded confidence and data
+coverage, followed by validated observations and an explicit missing-data
+ledger.
+
+The current Desktop aliases
+[`latest.html`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.html)
+and [`latest.md`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.md)
+serve a real-data 2026-08-17 `防守` report. Its shared analysis date is
+2026-08-14, `RISK_BUDGET=0.30`, `LONG_GATE=CLOSED`, `DISPERSION=UNKNOWN`,
+`CONFIDENCE=0.40`, and `DATA_COVERAGE=0.321429`. Three rejected model attempts
+were followed by an accepted fourth attempt; invalid observation text was not
+published, old prose was not reused, and 11 current-context observations plus
+10 explicit data gaps remain. The prior Desktop report is recoverable as
+`~/Desktop/K线日报/archive/2026-08-17-before-macro-analyst-403708db.html` and
+`~/Desktop/K线日报/archive/2026-08-17-before-macro-analyst-2f25b018.md`.
+
+Validation: the rebased implementation passed 66 focused/upstream tests. The
+deployed app is clean at the exact main SHA, runtime is `idle` with
+`last_failure=null`, Desktop aliases byte-match immutable renderer-v5 artifacts,
+and Playwright at 1280/390 preserves 17/12 charts with zero horizontal overflow.
+The sole Track 2 LaunchAgent remains scheduled for 08:20. Evidence and screenshots
+are in
+[`issue-825-macro-analyst-deploy-2026-08-17.json`](evidence/market-regime-kline-world-runtime/issue-825-macro-analyst-deploy-2026-08-17.json).
+This remains local evaluation only: Finance Daily Newsletter is not an input,
+public redistribution is not licensed, and no broker or automatic execution is
+connected.
+
+Next: let the next ordinary unattended 08:20 run arrive, then manually compare
+its posture, confidence and useful disagreements with the independent Finance
+Daily Newsletter. Do not merge the two products until this Track 2 judgment has
+earned value through repeated comparison days.
+
 ## 2026-08-17 · Sector rotation read-only prototype (Issue #816 / PR #822)
 
 Now: merged SHA `424e6c43abfeb9758c754a4c1c8775c5a1e30901` adds the local-only
