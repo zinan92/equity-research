@@ -32,7 +32,7 @@ from .market_regime_kline_world_model import (
 
 
 SCHEMA_VERSION = "market-regime-kline-world-report-v1"
-RENDERER_VERSION = "market-regime-kline-world-report-renderer-v2"
+RENDERER_VERSION = "market-regime-kline-world-report-renderer-v3"
 REPORT_ID_PREFIX = "market-regime-kline-world-report:"
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 
@@ -432,39 +432,47 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         f"- 证据质量：{evidence_quality.get('level', '—')} / 覆盖率 {_fmt(evidence_quality.get('coverage_ratio'))}",
         f"- 方向清晰度：{clarity.get('level', '—')} / {_fmt(clarity.get('score'))}",
         "",
+        "## 17 张完成日线证据",
+        "",
+        "完整 OHLC 日线与利率曲线请查看 HTML 版本。",
+        "",
         "## 资金迁移地图",
         "",
     ]
     for row in report.get("flow_map") or []:
         lines.append(f"- {row.get('from_label')} → {row.get('to_label')}：{row.get('rationale')}")
-    lines.extend(["", "## 传导链", ""])
+    lines.extend(["", "## 世界模型如何传导，以及怎样交易？", "", "### 传导链", ""])
     for index, row in enumerate(report.get("transmission_chain") or [], 1):
         lines.append(f"{index}. [{CLAIM_ZH.get(str(row.get('claim_class')), row.get('claim_class'))}] {row.get('statement')}")
-    lines.extend(["", "## 可执行交易建议", ""])
+    lines.extend(["", "### 可执行交易建议", ""])
     for row in report.get("trade_plan") or []:
         lines.append(
             f"- **{row.get('action_label')} {row.get('target_label')}**（{row.get('horizon_label')}）："
-            f"{row.get('condition')}；{row.get('rationale')}。证伪条件 #{int(row.get('falsifier_index', 0)) + 1}"
+            f"{row.get('condition')}；{row.get('rationale')}。"
         )
-    lines.extend(["", "## 17 个市场观测", "", "| 市场 | 5日 | 20日 | 60日 |", "|---|---:|---:|---:|"])
+    lines.extend(
+        [
+            "",
+            "## 17 个市场与 12 组相对领导关系",
+            "",
+            "### 17 个市场观测",
+            "",
+            "| 市场 | 5日 | 20日 | 60日 |",
+            "|---|---:|---:|---:|",
+        ]
+    )
     for row in report.get("cross_section") or []:
         unit = str(row.get("change_unit") or "")
         lines.append(
             f"| {row.get('display_name')} | {_fmt(row.get('change_5d'), unit)} | "
             f"{_fmt(row.get('change_20d'), unit)} | {_fmt(row.get('change_60d'), unit)} |"
         )
-    lines.extend(["", "## 12 组相对领导关系", ""])
+    lines.extend(["", "### 12 组相对领导关系", ""])
     for row in report.get("relationships") or []:
         lines.append(
             f"- {row.get('lhs_label')} / {row.get('rhs_label')}：20日 {_fmt(row.get('change_20d'), 'percent_return')}，"
             f"领导端 {row.get('leader_label')}"
         )
-    lines.extend(["", "## 主线矛盾", ""])
-    for row in report.get("contradictions") or []:
-        lines.append(f"- {row.get('statement')}")
-    lines.extend(["", "## 两个证伪条件", ""])
-    for index, row in enumerate(report.get("falsifiers") or [], 1):
-        lines.append(f"{index}. {row.get('condition')}")
     if report.get("generation_status") != "model_generated_unreviewed":
         lines.extend(["", "本期 LLM 解释未通过验证；只展示同一上下文的冻结市场证据，不复用旧建议。"])
     lines.extend(
@@ -528,9 +536,7 @@ def render_html(report: Mapping[str, Any]) -> str:
         + escape(str(row.get("condition") or ""))
         + "</p></div><div><b>为什么</b><p>"
         + escape(str(row.get("rationale") or ""))
-        + "</p></div></div><footer><span>关联证伪 #"
-        + str(int(row.get("falsifier_index", 0)) + 1)
-        + '</span><div class="citations">'
+        + '</p></div></div><footer><div class="citations">'
         + _cite_html(row.get("citations") or [])
         + "</div></footer></article>"
         for index, row in enumerate(report.get("trade_plan") or [], 1)
@@ -566,26 +572,6 @@ def render_html(report: Mapping[str, Any]) -> str:
         + escape(_fmt(row.get("change_20d"), "percent_return"))
         + "</span></article>"
         for row in report.get("relationships") or []
-    )
-    contradiction_html = "".join(
-        '<article class="tension"><span>矛盾 '
-        + f"{index:02d}"
-        + "</span><p>"
-        + escape(str(row.get("statement") or ""))
-        + '</p><div class="citations">'
-        + _cite_html(row.get("citations") or [])
-        + "</div></article>"
-        for index, row in enumerate(report.get("contradictions") or [], 1)
-    )
-    falsifier_html = "".join(
-        '<article class="falsifier"><b>'
-        + f"{index:02d}"
-        + '</b><div><span>当它发生，当前世界模型失效</span><p>'
-        + escape(str(row.get("condition") or ""))
-        + '</p><div class="citations">'
-        + _cite_html(row.get("citations") or [])
-        + "</div></div></article>"
-        for index, row in enumerate(report.get("falsifiers") or [], 1)
     )
     chart_html = "".join(
         '<article class="chart-card"><header><div><span>'
@@ -628,32 +614,27 @@ html[data-posture="defense"]{{--accent:#d4473e;--accent-deep:#9e2c25;--accent-wa
 *{{box-sizing:border-box}}html,body{{margin:0;min-width:0;background:var(--canvas);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC",sans-serif}}body{{overflow-x:hidden}}button{{font:inherit}}main{{width:min(1060px,100%);margin:0 auto;background:var(--paper);min-height:100vh;border-left:1px solid var(--line);border-right:1px solid var(--line)}}
 .mast{{height:62px;padding:0 42px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:20px}}.brand{{font-size:12px;letter-spacing:.08em}}.brand span{{color:var(--faint);margin-left:10px}}.mast-meta{{display:flex;gap:8px;align-items:center}}.mast-meta span{{font-size:10px;color:var(--subtle);padding:5px 8px;border:1px solid var(--line);background:#fff}}
 .hero{{padding:48px 42px 44px 35px;border-bottom:1px solid var(--line);border-left:7px solid var(--accent-wash);display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:48px;align-items:end;background:var(--paper)}}.eyebrow{{font-size:10px;letter-spacing:.2em;color:var(--accent);font-weight:700}}.hero h1{{font-family:"Songti SC","STSong",Georgia,serif;font-size:clamp(86px,11vw,126px);font-weight:500;letter-spacing:-.09em;line-height:.82;margin:20px 0 13px;color:var(--accent)}}.hero-en{{font-size:10px;letter-spacing:.34em;color:var(--accent-deep);font-weight:700}}.headline{{font-family:"Songti SC","STSong",Georgia,serif;font-size:24px;line-height:1.45;margin:30px 0 8px;max-width:720px}}.synthesis{{font-size:14px;line-height:1.8;color:var(--subtle);margin:0;max-width:730px}}.confidence-panel{{border:1px solid var(--line);background:#fff;padding:18px 17px}}.confidence-panel>span{{display:block;font-size:9px;letter-spacing:.16em;color:var(--faint);margin-bottom:12px}}.confidence-metric{{padding:12px 0;border-top:1px solid var(--line)}}.confidence-metric:first-of-type{{border-top:0;padding-top:0}}.confidence-metric small{{display:block;font-size:10px;color:var(--subtle)}}.confidence-metric strong{{display:block;font-family:"Songti SC",Georgia,serif;font-size:30px;color:var(--accent);font-weight:500;margin-top:4px}}.confidence-panel p{{font-size:10px;color:var(--faint);line-height:1.5;margin:7px 0 0}}
-.unavailable{{margin:24px 42px 0;padding:18px;border:1px solid var(--accent);background:var(--accent-wash)}}.unavailable p{{margin:6px 0 0;font-size:13px;color:var(--subtle)}}section{{padding:42px;border-bottom:1px solid var(--line)}}.section-head{{display:flex;justify-content:space-between;align-items:baseline;gap:22px;margin-bottom:26px}}.section-title{{display:flex;gap:12px;align-items:center}}.section-title b{{font-family:Georgia,serif;font-size:12px;color:var(--accent);font-weight:500}}.section-title h2{{font-size:14px;margin:0}}.section-head>small{{font-size:10px;color:var(--faint);text-align:right}}
+.unavailable{{margin:24px 42px 0;padding:18px;border:1px solid var(--accent);background:var(--accent-wash)}}.unavailable p{{margin:6px 0 0;font-size:13px;color:var(--subtle)}}section{{padding:42px;border-bottom:1px solid var(--line)}}.section-head{{display:flex;justify-content:space-between;align-items:baseline;gap:22px;margin-bottom:26px}}.section-title{{display:flex;gap:12px;align-items:center}}.section-title b{{font-family:Georgia,serif;font-size:12px;color:var(--accent);font-weight:500}}.section-title h2{{font-size:14px;margin:0}}.section-head>small{{font-size:10px;color:var(--faint);text-align:right}}.subsection+.subsection{{margin-top:42px;padding-top:34px;border-top:1px solid var(--line)}}.subsection-head{{display:flex;justify-content:space-between;align-items:baseline;gap:18px;margin-bottom:20px}}.subsection-head h3{{font-size:12px;margin:0}}.subsection-head small{{font-size:9px;color:var(--faint);text-align:right}}
 .flows{{border-top:1px solid var(--line)}}.flow-row{{display:grid;grid-template-columns:135px 135px minmax(0,1fr);border-bottom:1px solid var(--line);padding:20px 0;gap:20px;align-items:start}}.flow-side small{{display:block;color:var(--faint);font-size:9px;letter-spacing:.12em;margin-bottom:7px}}.flow-side strong{{font-family:"Songti SC",Georgia,serif;font-size:21px;font-weight:500}}.destination strong{{color:var(--accent)}}.flow-copy{{border-left:1px solid var(--line);padding-left:20px}}.confidence-word{{font-size:9px;color:var(--accent);letter-spacing:.12em}}.flow-copy p{{font-size:13px;line-height:1.65;margin:7px 0 0}}
 .citations{{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}}.cite{{border:1px solid var(--line);background:#f7f7f3;color:var(--subtle);font-size:9px;padding:4px 6px;cursor:pointer;border-radius:0}}.cite:hover,.cite:focus-visible{{border-color:var(--accent);color:var(--accent-deep);outline:none}}
 .chain{{list-style:none;margin:0;padding:0;max-width:820px}}.chain li{{display:grid;grid-template-columns:34px minmax(0,1fr);gap:18px;padding:0 0 26px;position:relative}}.chain li:not(:last-child)::before{{content:"";position:absolute;top:22px;bottom:3px;left:15px;border-left:1px solid var(--line)}}.chain-index{{font-family:Georgia,serif;color:var(--accent);background:var(--paper);font-size:12px;padding-top:5px;z-index:1}}.claim{{display:inline-block;font-size:9px;letter-spacing:.1em;padding:3px 6px;background:var(--observed);color:#52615a}}.claim.inferred{{background:var(--inferred);color:#6b5479}}.chain p{{font-family:"Songti SC",Georgia,serif;font-size:21px;line-height:1.55;margin:7px 0 0}}
-.trade-plan{{border-top:2px solid var(--accent)}}.trade-row{{padding:22px 0;border-bottom:1px solid var(--line)}}.trade-row header{{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:baseline}}.trade-row header span{{font-size:9px;color:var(--accent);letter-spacing:.1em}}.trade-row header strong{{font-family:"Songti SC",Georgia,serif;font-size:22px;font-weight:500}}.trade-row header small{{color:var(--subtle);font-size:11px}}.trade-body{{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:17px 0 13px;padding-left:84px}}.trade-body b{{font-size:10px;color:var(--faint);font-weight:600}}.trade-body p{{font-size:13px;line-height:1.65;margin:5px 0 0}}.trade-row footer{{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding-left:84px}}.trade-row footer>span{{font-size:10px;color:var(--accent)}}.trade-row footer .citations{{margin-top:0;justify-content:flex-end}}
+.trade-plan{{border-top:2px solid var(--accent)}}.trade-row{{padding:22px 0;border-bottom:1px solid var(--line)}}.trade-row header{{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:baseline}}.trade-row header span{{font-size:9px;color:var(--accent);letter-spacing:.1em}}.trade-row header strong{{font-family:"Songti SC",Georgia,serif;font-size:22px;font-weight:500}}.trade-row header small{{color:var(--subtle);font-size:11px}}.trade-body{{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:17px 0 13px;padding-left:84px}}.trade-body b{{font-size:10px;color:var(--faint);font-weight:600}}.trade-body p{{font-size:13px;line-height:1.65;margin:5px 0 0}}.trade-row footer{{display:flex;justify-content:flex-end;gap:18px;align-items:flex-start;padding-left:84px}}.trade-row footer .citations{{margin-top:0;justify-content:flex-end}}
 .cross-head,.market-row{{display:grid;grid-template-columns:minmax(155px,1.6fr) repeat(3,minmax(70px,.7fr));gap:14px;align-items:center}}.cross-head{{font-size:9px;color:var(--faint);letter-spacing:.08em;padding:0 0 8px;border-bottom:1px solid var(--line)}}.cross-head span:not(:first-child){{text-align:right}}.market-row{{padding:10px 0;border-bottom:1px solid var(--line)}}.market-row>div{{min-width:0}}.market-row strong{{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.market-row small{{display:block;color:var(--faint);font-size:9px;margin-top:2px}}.number{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-align:right;font-variant-numeric:tabular-nums}}.positive{{color:var(--positive)}}.negative{{color:var(--negative)}}
 .relative-list{{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;border-top:1px solid var(--line)}}.relative-row{{display:grid;grid-template-columns:minmax(130px,1fr) 90px 58px;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}}.relative-row strong{{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.relative-row small{{display:block;font-size:9px;color:var(--faint);margin-top:3px}}.relative-row canvas{{width:90px;height:30px;display:block}}
-.tensions{{display:grid;grid-template-columns:1fr 1fr;gap:20px}}.tension{{border-top:2px solid var(--accent);padding:16px 0}}.tension>span{{font-size:9px;color:var(--accent);letter-spacing:.12em}}.tension p{{font-family:"Songti SC",Georgia,serif;font-size:18px;line-height:1.6;margin:8px 0 0}}.falsifiers{{display:grid;grid-template-columns:1fr 1fr;gap:20px}}.falsifier{{border:1px solid var(--line);padding:20px;display:grid;grid-template-columns:40px minmax(0,1fr);gap:13px}}.falsifier>b{{font-family:Georgia,serif;font-size:30px;color:var(--accent);font-weight:500}}.falsifier span{{font-size:9px;color:var(--faint);letter-spacing:.08em}}.falsifier p{{font-family:"Songti SC",Georgia,serif;font-size:17px;line-height:1.6;margin:8px 0 0}}
 .charts{{display:grid;grid-template-columns:1fr 1fr;gap:18px}}.chart-card{{border:1px solid var(--line);background:#fff;padding:15px;min-width:0}}.chart-card header{{display:flex;justify-content:space-between;gap:10px;align-items:baseline}}.chart-card header div{{display:flex;gap:9px;align-items:baseline;min-width:0}}.chart-card header span{{font-size:9px;color:var(--accent)}}.chart-card h3{{font-size:12px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.chart-card header small{{font-size:8px;color:var(--faint);white-space:nowrap}}.chart-card>canvas{{width:100%;height:165px;display:block;margin:10px 0}}.chart-card footer{{display:flex;gap:14px;color:var(--subtle);font-size:9px}}
 .boundary{{padding:30px 42px 42px;background:#f1efe8;border-bottom:7px solid var(--accent);font-size:10px;line-height:1.8;color:var(--subtle)}}.boundary strong{{color:var(--ink)}}.boundary code{{display:block;margin-top:9px;overflow-wrap:anywhere;word-break:break-all;color:var(--faint)}}
 dialog{{width:min(560px,calc(100% - 32px));border:1px solid var(--line);padding:0;background:var(--paper);color:var(--ink);box-shadow:0 22px 70px rgba(20,20,15,.22)}}dialog::backdrop{{background:rgba(20,22,19,.35)}}.evidence-dialog header{{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:18px;align-items:start}}.evidence-dialog h3{{font-family:"Songti SC",Georgia,serif;font-size:22px;margin:0}}.evidence-dialog button{{border:1px solid var(--line);background:#fff;padding:5px 9px;cursor:pointer}}.evidence-body{{padding:20px 22px}}.evidence-body dl{{display:grid;grid-template-columns:110px 1fr;gap:8px 14px;margin:0}}.evidence-body dt{{font-size:10px;color:var(--faint)}}.evidence-body dd{{font-size:12px;margin:0;overflow-wrap:anywhere}}
-@media(max-width:720px){{main{{border:0}}.mast{{height:auto;min-height:58px;padding:14px 20px;align-items:flex-start}}.brand{{white-space:nowrap}}.brand span{{display:none}}.mast-meta{{flex-wrap:wrap;justify-content:flex-end}}.mast-meta span{{font-size:8px;padding:4px 6px}}.hero{{padding:38px 20px 32px 14px;border-left-width:6px;grid-template-columns:1fr;gap:26px;background:var(--paper)}}.hero h1{{font-size:90px;margin-top:18px}}.headline{{font-size:21px;margin-top:25px}}.synthesis{{font-size:13px}}.confidence-panel{{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}}.confidence-panel>span{{grid-column:1/-1}}.confidence-metric:nth-of-type(2){{border-top:0;padding-top:0}}.confidence-panel p{{grid-column:1/-1}}.unavailable{{margin:18px 20px 0}}section{{padding:34px 20px}}.section-head{{align-items:flex-start}}.section-head>small{{max-width:140px}}.flow-row{{grid-template-columns:1fr 1fr;gap:13px;padding:18px 0}}.flow-copy{{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:13px 0 0}}.chain p{{font-size:19px}}.trade-row header{{grid-template-columns:62px minmax(0,1fr)}}.trade-row header small{{grid-column:2}}.trade-body{{grid-template-columns:1fr;padding-left:0;gap:13px}}.trade-row footer{{padding-left:0;display:block}}.trade-row footer .citations{{justify-content:flex-start;margin-top:9px}}.cross-head,.market-row{{grid-template-columns:minmax(115px,1.3fr) repeat(3,minmax(54px,.7fr));gap:7px}}.market-row strong{{font-size:11px}}.number{{font-size:9px}}.relative-list,.tensions,.falsifiers,.charts{{grid-template-columns:1fr}}.relative-row{{grid-template-columns:minmax(120px,1fr) 78px 52px}}.relative-row canvas{{width:78px}}.chart-card>canvas{{height:155px}}.boundary{{padding:26px 20px 34px}}}}
+@media(max-width:720px){{main{{border:0}}.mast{{height:auto;min-height:58px;padding:14px 20px;align-items:flex-start}}.brand{{white-space:nowrap}}.brand span{{display:none}}.mast-meta{{flex-wrap:wrap;justify-content:flex-end}}.mast-meta span{{font-size:8px;padding:4px 6px}}.hero{{padding:38px 20px 32px 14px;border-left-width:6px;grid-template-columns:1fr;gap:26px;background:var(--paper)}}.hero h1{{font-size:90px;margin-top:18px}}.headline{{font-size:21px;margin-top:25px}}.synthesis{{font-size:13px}}.confidence-panel{{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}}.confidence-panel>span{{grid-column:1/-1}}.confidence-metric:nth-of-type(2){{border-top:0;padding-top:0}}.confidence-panel p{{grid-column:1/-1}}.unavailable{{margin:18px 20px 0}}section{{padding:34px 20px}}.section-head,.subsection-head{{align-items:flex-start}}.section-head>small,.subsection-head>small{{max-width:140px}}.flow-row{{grid-template-columns:1fr 1fr;gap:13px;padding:18px 0}}.flow-copy{{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:13px 0 0}}.chain p{{font-size:19px}}.trade-row header{{grid-template-columns:62px minmax(0,1fr)}}.trade-row header small{{grid-column:2}}.trade-body{{grid-template-columns:1fr;padding-left:0;gap:13px}}.trade-row footer{{padding-left:0;display:block}}.trade-row footer .citations{{justify-content:flex-start;margin-top:9px}}.cross-head,.market-row{{grid-template-columns:minmax(115px,1.3fr) repeat(3,minmax(54px,.7fr));gap:7px}}.market-row strong{{font-size:11px}}.number{{font-size:9px}}.relative-list,.charts{{grid-template-columns:1fr}}.relative-row{{grid-template-columns:minmax(120px,1fr) 78px 52px}}.relative-row canvas{{width:78px}}.chart-card>canvas{{height:155px}}.boundary{{padding:26px 20px 34px}}}}
 @media print{{body{{background:#fff}}main{{width:100%;border:0}}.cite{{color:var(--subtle)}}dialog{{display:none}}}}
 </style></head>
 <body><main>
 <header class="mast"><div class="brand">K 线世界日报 <span>Capital Flow World Model</span></div><div class="mast-meta"><span>{escape(str(report.get("report_date") or ""))}</span><span>{escape(status_label)}</span><span>{escape(data_label)}</span></div></header>
 <div class="hero"><div><div class="eyebrow">今日市场姿态 / MARKET POSTURE</div><h1>{escape(str(report.get("posture_zh") or ""))}</h1><div class="hero-en">{escape(str(report.get("posture_en") or ""))}</div><p class="headline">{escape(str(world.get("headline") or ""))}</p><p class="synthesis">{escape(str(world.get("synthesis") or ""))}</p><div class="citations">{_cite_html(world.get("citations") or [])}</div></div><aside class="confidence-panel"><span>代码计算，不由模型改写</span><div class="confidence-metric"><small>证据质量</small><strong>{escape(CONFIDENCE_ZH.get(str(evidence_quality.get("level")), str(evidence_quality.get("level") or "—")))}</strong></div><div class="confidence-metric"><small>方向清晰度</small><strong>{escape(CONFIDENCE_ZH.get(str(clarity.get("level")), str(clarity.get("level") or "—")))}</strong></div><p>覆盖率 {_fmt(evidence_quality.get("coverage_ratio"))} · 清晰度 {_fmt(clarity.get("score"))}</p></aside></div>
 {unavailable}
-<section id="flow-map"><div class="section-head"><div class="section-title"><b>01</b><h2>资金可能正在从哪里，流向哪里？</h2></div><small>相对价格推断，不等于直接资金流测量</small></div><div class="flows">{flow_html}</div></section>
-<section id="transmission"><div class="section-head"><div class="section-title"><b>02</b><h2>这套世界模型是怎样传导的？</h2></div><small>已观察与模型推断分开标记</small></div><ol class="chain">{chain_html}</ol></section>
-<section id="trade-plan"><div class="section-head"><div class="section-title"><b>03</b><h2>在这个世界模型下，怎样交易？</h2></div><small>模型建议 · 未人工复核 · 不自动执行</small></div><div class="trade-plan">{trade_html}</div></section>
-<section id="cross-section"><div class="section-head"><div class="section-title"><b>04</b><h2>17 个市场现在分别在说什么？</h2></div><small>美债变化统一用 bp</small></div><div class="cross-head"><span>市场</span><span>5日</span><span>20日</span><span>60日</span></div><div>{cross_html}</div></section>
-<section id="relative-leadership"><div class="section-head"><div class="section-title"><b>05</b><h2>12 组相对领导关系</h2></div><small>标准化相对表现 · 20日领导端</small></div><div class="relative-list">{relationship_html}</div></section>
-<section id="contradictions"><div class="section-head"><div class="section-title"><b>06</b><h2>当前解释哪里不一致？</h2></div><small>矛盾决定了判断的边界</small></div><div class="tensions">{contradiction_html}</div></section>
-<section id="falsifiers"><div class="section-head"><div class="section-title"><b>07</b><h2>哪两件事会推翻当前世界模型？</h2></div><small>恰好两个 · 可观察 · 与建议联动</small></div><div class="falsifiers">{falsifier_html}</div></section>
-<section id="charts"><div class="section-head"><div class="section-title"><b>08</b><h2>17 张完成日线证据</h2></div><small>价格为 OHLC K 线；收益率与曲线为折线</small></div><div class="charts">{chart_html}</div></section>
+<section id="charts"><div class="section-head"><div class="section-title"><b>01</b><h2>17 张完成日线证据</h2></div><small>价格为 OHLC K 线；收益率与曲线为折线</small></div><div class="charts">{chart_html}</div></section>
+<section id="flow-map"><div class="section-head"><div class="section-title"><b>02</b><h2>资金可能正在从哪里，流向哪里？</h2></div><small>相对价格推断，不等于直接资金流测量</small></div><div class="flows">{flow_html}</div></section>
+<section id="model-and-trades"><div class="section-head"><div class="section-title"><b>03</b><h2>世界模型如何传导，以及怎样交易？</h2></div><small>推断与建议分层展示</small></div><div class="subsection" id="transmission"><div class="subsection-head"><h3>传导链</h3><small>已观察与模型推断分开标记</small></div><ol class="chain">{chain_html}</ol></div><div class="subsection" id="trade-plan"><div class="subsection-head"><h3>可执行交易建议</h3><small>模型建议 · 未人工复核 · 不自动执行</small></div><div class="trade-plan">{trade_html}</div></div></section>
+<section id="market-evidence"><div class="section-head"><div class="section-title"><b>04</b><h2>17 个市场与 12 组相对领导关系</h2></div><small>横截面与相对强弱放在一起看</small></div><div class="subsection" id="cross-section"><div class="subsection-head"><h3>17 个市场观测</h3><small>美债变化统一用 bp</small></div><div class="cross-head"><span>市场</span><span>5日</span><span>20日</span><span>60日</span></div><div>{cross_html}</div></div><div class="subsection" id="relative-leadership"><div class="subsection-head"><h3>12 组相对领导关系</h3><small>标准化相对表现 · 20日领导端</small></div><div class="relative-list">{relationship_html}</div></div></section>
 <footer class="boundary"><strong>研究边界：</strong>模型生成、未经人工复核；本页包含市场层面的交易建议。仅限 Park 本地评估，当前数据权利不支持公开分发。<br>系统不会自动执行交易，不读取经纪账户，不修改任何持仓。Finance Daily Newsletter 不是本页输入，两个 Track 只做人工对照。<code>{escape(str(report.get("report_id") or ""))}</code></footer>
 </main>
 <dialog id="evidence-dialog" class="evidence-dialog"><header><h3 id="evidence-title">证据</h3><button type="button" id="evidence-close">关闭</button></header><div class="evidence-body"><dl id="evidence-fields"></dl></div></dialog>

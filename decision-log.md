@@ -1,5 +1,26 @@
 # Decision Log
 
+## 2026-08-17 — Put the complete daily tape before the interpretation
+
+- **Decision:** Keep the posture hero unchanged, then reduce the World Report
+  from eight visible sections to four: all 17 completed-daily charts, capital
+  migration, the combined transmission-and-trade model, and the combined
+  cross-section-and-relative-leadership evidence. Do not render standalone
+  contradiction or falsifier sections, while retaining their structured data
+  in the immutable report for validation and future analysis.
+- **Why:** Park wants the reader to inspect the complete tape before reading the
+  model's interpretation, and to understand one continuous argument instead of
+  navigating eight equally weighted blocks. Combining adjacent explanation and
+  evidence layers makes the attention order explicit without recollecting data
+  or asking the LLM to rewrite the current judgment.
+- **Evidence:** Issue #797; nine focused World Report tests; browser replay of
+  the current real report at 1280 px and 390 px with four ordered sections,
+  17 chart canvases, 12 relative charts and zero horizontal overflow.
+- **Gotchas:** Removing a visible falsifier section also requires removing its
+  dangling ordinal from trade cards and Markdown. This is a presentation
+  change only: citations, `contradictions`, `falsifiers`, context identity,
+  world-model identity and the no-automatic-execution boundary remain intact.
+
 ## 2026-08-17 — Give the model exact validator-compatible joins
 
 - **Decision:** Preserve the strict S2 validator and the model's authorship,
