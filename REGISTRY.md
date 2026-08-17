@@ -1,6 +1,6 @@
 # REGISTRY
 
-## 2026-08-17 · K-line section hierarchy and replayable model deployed (Issue #809)
+## 2026-08-17 · K-line section hierarchy and replayable model deployed (Issue #809 / PR #813)
 
 Now: the local K-line Daily app is installed at merged SHA
 `6f7c6b0426a41bcdf82b43ed336eb86df811cb09`. The approved hero remains first,
