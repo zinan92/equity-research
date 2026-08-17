@@ -1,5 +1,22 @@
 # REGISTRY
 
+## 2026-08-17 · Hollow-green K-line renderer deployed (Issue #795 / PR #796)
+
+Now: merged SHA `6f3cc9467fe678d2fa4ab081615ac5817385aff4` is installed in
+the local K-line app. The World Report renderer is v2: rising candles use a
+green hollow body, falling candles use a red filled body, and both wicks keep
+their direction color. The current aliases
+[`latest.html`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.html)
+and [`latest.md`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.md)
+were regenerated from the unchanged current-day context and model artifacts;
+no market data was recollected and no LLM call was made during this visual
+deployment. The secret-free receipt is
+[`renderer-v2-2026-08-17.json`](evidence/market-regime-kline-world-runtime/renderer-v2-2026-08-17.json).
+
+Validation: 9 focused World Report tests pass, the generated HTML contains
+the hollow-green/fill-red branches, and the delivery readback succeeds. The
+report remains local-only and the Finance Daily Newsletter is unchanged.
+
 ## 2026-08-17 · Current-day K-line World Report published (Issue #791 / PR #792)
 
 Now: the Track 2 K-line runtime is deployed at merged SHA

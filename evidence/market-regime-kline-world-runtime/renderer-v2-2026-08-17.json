@@ -1,0 +1,37 @@
+{
+  "schema_version": "market-regime-kline-world-renderer-deployment-v1",
+  "deployment_date": "2026-08-17",
+  "merged_sha": "6f3cc9467fe678d2fa4ab081615ac5817385aff4",
+  "renderer_version": "market-regime-kline-world-report-renderer-v2",
+  "visual_contract": {
+    "rising_body": "green_hollow",
+    "falling_body": "red_filled",
+    "wicks": "direction_color",
+    "line_and_relative_charts_changed": false
+  },
+  "runtime": {
+    "report_id": "market-regime-kline-world-report:19f0a81f080a99d1157249a04daee8b655deb7e05d9bb17cedeccbdbb5edff2c",
+    "delivery_id": "market-regime-kline-world-delivery:9894f7f264c458af7ede86c179edc92561a550800c690fe76eea33ed88b4e31a",
+    "context_id": "market-regime-kline-world-context:68eae7eb8616f79262d4cacc141d90ca151102f8e6f45fd43dac3a05683a9572",
+    "world_model_id": "market-regime-kline-world-model:9f4d59788391dc4e9d4ecb912cd3c17aac960a8e4a335d2f47d5b2abad7ac9e0",
+    "data_kind": "real",
+    "data_or_model_changed": false,
+    "fresh_collection_or_llm_call_during_deployment": false,
+    "latest_html_sha256": "0a5929d82f5f404ed1cf8e859f4a9ded39e814575f2d101292e413a7dfec02eb",
+    "latest_markdown_sha256": "2eec5be79f8ac2311922462ea9eacfbc2b260dfb156f5d336623eccfb159818f"
+  },
+  "validation": {
+    "focused_renderer_tests": "9 passed",
+    "git_diff_check": "passed",
+    "gitleaks_changed_content": "passed",
+    "desktop_aliases": [
+      "/Users/wendy/Desktop/K线日报/latest.html",
+      "/Users/wendy/Desktop/K线日报/latest.md"
+    ]
+  },
+  "truth_boundary": {
+    "local_evaluation_only": true,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false
+  }
+}
