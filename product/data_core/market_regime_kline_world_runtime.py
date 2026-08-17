@@ -24,7 +24,7 @@ from .market_regime_kline_world_context import (
     build_kline_world_context,
     load_context_source_snapshots,
 )
-from .market_regime_kline_world_model import (
+from .market_regime_kline_macro_analysis import (
     DeepSeekWorldModelProvider,
     KlineWorldModelStore,
     WorldModelProvider,
@@ -33,7 +33,7 @@ from .market_regime_kline_world_report import KlineWorldReportStore
 from .market_regime_macro_data import MarketRegimeMacroDataStore
 
 
-SCHEMA_VERSION = "market-regime-kline-world-runtime-v1"
+SCHEMA_VERSION = "market-regime-kline-world-runtime-v2"
 DELIVERY_ID_PREFIX = "market-regime-kline-world-delivery:"
 SURFACE_ID_PREFIX = "market-regime-kline-world-surface:"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -171,7 +171,9 @@ def _truth_boundary(generation_status: str) -> dict[str, Any]:
         "track": "kline_only",
         "finance_newsletter_input": False,
         "local_evaluation_only": True,
-        "contains_investment_advice": success,
+        "model_generated_unreviewed": success,
+        "macro_parameters_present": success,
+        "individual_security_advice": False,
         "automatic_execution_eligible": False,
         "broker_access": False,
         "portfolio_mutation": False,
@@ -216,17 +218,29 @@ def _validate_report_summary(report: Mapping[str, Any], *, allow_fixture: bool) 
         raise KlineWorldRuntimeError("report_generation_status_invalid")
     chart_count = len(report.get("charts") or [])
     relationship_count = len(report.get("relationships") or [])
-    flow_count = len(report.get("flow_map") or [])
-    trade_count = len(report.get("trade_plan") or [])
-    falsifier_count = len(report.get("falsifiers") or [])
+    parameter_basis_count = len(report.get("parameter_basis") or [])
+    insight_count = len(report.get("insights") or [])
+    observation_count = len(report.get("observations") or [])
+    missing_data_count = len(report.get("data_ledger") or [])
     if chart_count != 17 or relationship_count != 12:
         raise KlineWorldRuntimeError("report_visible_input_count_invalid")
     if generation_status == "interpretation_unavailable" and any(
-        value != 0 for value in (flow_count, trade_count, falsifier_count)
+        value != 0
+        for value in (
+            parameter_basis_count,
+            insight_count,
+            observation_count,
+            missing_data_count,
+        )
     ):
         raise KlineWorldRuntimeError("fallback_contains_stale_interpretation")
-    if generation_status == "model_generated_unreviewed" and falsifier_count != 2:
-        raise KlineWorldRuntimeError("report_falsifier_count_invalid")
+    if generation_status == "model_generated_unreviewed" and (
+        parameter_basis_count != 7
+        or not 0 <= insight_count <= 3
+        or observation_count < 1
+        or not isinstance(report.get("macro_parameters"), Mapping)
+    ):
+        raise KlineWorldRuntimeError("report_macro_analysis_shape_invalid")
     boundary = report.get("truth_boundary") or {}
     expected_boundary = _truth_boundary(generation_status)
     for key, expected in expected_boundary.items():
@@ -243,9 +257,10 @@ def _validate_report_summary(report: Mapping[str, Any], *, allow_fixture: bool) 
         "posture": str(report.get("posture") or "unknown"),
         "chart_count": chart_count,
         "relationship_count": relationship_count,
-        "flow_count": flow_count,
-        "trade_count": trade_count,
-        "falsifier_count": falsifier_count,
+        "parameter_basis_count": parameter_basis_count,
+        "insight_count": insight_count,
+        "observation_count": observation_count,
+        "missing_data_count": missing_data_count,
         "truth_boundary": expected_boundary,
     }
 
@@ -262,9 +277,10 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
         "posture",
         "chart_count",
         "relationship_count",
-        "flow_count",
-        "trade_count",
-        "falsifier_count",
+        "parameter_basis_count",
+        "insight_count",
+        "observation_count",
+        "missing_data_count",
         "truth_boundary",
     }
     if set(core) != {"schema_version", *summary_keys, "source_report", "aliases"}:
@@ -287,9 +303,10 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
         for key in (
             "chart_count",
             "relationship_count",
-            "flow_count",
-            "trade_count",
-            "falsifier_count",
+            "parameter_basis_count",
+            "insight_count",
+            "observation_count",
+            "missing_data_count",
         )
     }
     if any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in counts.values()):
@@ -297,11 +314,21 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
     if counts["chart_count"] != 17 or counts["relationship_count"] != 12:
         raise KlineWorldRuntimeError("report_visible_input_count_invalid")
     if generation_status == "interpretation_unavailable" and any(
-        counts[key] != 0 for key in ("flow_count", "trade_count", "falsifier_count")
+        counts[key] != 0
+        for key in (
+            "parameter_basis_count",
+            "insight_count",
+            "observation_count",
+            "missing_data_count",
+        )
     ):
         raise KlineWorldRuntimeError("fallback_contains_stale_interpretation")
-    if generation_status == "model_generated_unreviewed" and counts["falsifier_count"] != 2:
-        raise KlineWorldRuntimeError("report_falsifier_count_invalid")
+    if generation_status == "model_generated_unreviewed" and (
+        counts["parameter_basis_count"] != 7
+        or not 0 <= counts["insight_count"] <= 3
+        or counts["observation_count"] < 1
+    ):
+        raise KlineWorldRuntimeError("report_macro_analysis_shape_invalid")
     expected_boundary = _truth_boundary(generation_status)
     if core.get("truth_boundary") != expected_boundary:
         raise KlineWorldRuntimeError("delivery_truth_boundary_mismatch")
@@ -689,8 +716,10 @@ class KlineWorldStatusStore:
                     "posture",
                     "chart_count",
                     "relationship_count",
-                    "flow_count",
-                    "trade_count",
+                    "parameter_basis_count",
+                    "insight_count",
+                    "observation_count",
+                    "missing_data_count",
                 )
             },
         }
@@ -759,8 +788,10 @@ class KlineWorldStatusStore:
                 "posture",
                 "chart_count",
                 "relationship_count",
-                "flow_count",
-                "trade_count",
+                "parameter_basis_count",
+                "insight_count",
+                "observation_count",
+                "missing_data_count",
             }
             if not isinstance(success, dict) or set(success) != required or not ISO_RE.fullmatch(str(success.get("at") or "")):
                 raise KlineWorldRuntimeError("runtime_success_status_invalid")

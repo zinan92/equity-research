@@ -65,11 +65,14 @@ def _safe_summary(result: dict) -> dict:
         "generation_status": success.get("generation_status"),
         "chart_count": success.get("chart_count"),
         "relationship_count": success.get("relationship_count"),
-        "flow_count": success.get("flow_count"),
-        "trade_count": success.get("trade_count"),
-        "contains_investment_advice": (
+        "parameter_basis_count": success.get("parameter_basis_count"),
+        "insight_count": success.get("insight_count"),
+        "observation_count": success.get("observation_count"),
+        "missing_data_count": success.get("missing_data_count"),
+        "macro_parameters_present": (
             delivery.get("truth_boundary") or {}
-        ).get("contains_investment_advice"),
+        ).get("macro_parameters_present"),
+        "individual_security_advice": False,
         "publication_eligible": False,
         "automatic_execution_eligible": False,
     }

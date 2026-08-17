@@ -1,4 +1,4 @@
-"""Versioned white vertical report for the K-line World Model.
+"""Versioned white vertical report for the K-line Macro Analyst.
 
 The renderer is intentionally separate from the installed pilot newsletter.
 It projects one exact S1 context and one exact S2 model artifact, renders every
@@ -24,40 +24,21 @@ from .market_regime_kline_world_context import (
     SERIES_ORDER,
     validate_kline_world_context,
 )
-from .market_regime_kline_world_model import (
+from .market_regime_kline_macro_analysis import (
     KlineWorldModelError,
     KlineWorldModelStore,
     validate_world_model_artifact,
 )
 
 
-SCHEMA_VERSION = "market-regime-kline-world-report-v1"
-RENDERER_VERSION = "market-regime-kline-world-report-renderer-v3"
+SCHEMA_VERSION = "market-regime-kline-world-report-v2"
+RENDERER_VERSION = "market-regime-kline-world-report-renderer-v5"
 REPORT_ID_PREFIX = "market-regime-kline-world-report:"
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 
 POSTURE_ZH = {"attack": "进攻", "wait": "等待", "defense": "防守", "unknown": "未知"}
 POSTURE_EN = {"attack": "ATTACK", "wait": "WAIT", "defense": "DEFENSE", "unknown": "UNKNOWN"}
-ACTION_ZH = {
-    "buy": "买入",
-    "add": "增加配置",
-    "reduce": "降低配置",
-    "avoid": "回避",
-    "hedge": "对冲",
-    "hold_cash": "持有现金",
-    "wait": "等待",
-    "rotate": "轮动至",
-}
-HORIZON_ZH = {"days": "数日", "weeks": "数周", "one_to_three_months": "1–3 个月"}
-TARGET_ZH = {
-    "cash": "现金",
-    "growth_style": "成长风格",
-    "dividend_style": "红利风格",
-    "precious_metals": "贵金属",
-    "energy": "能源",
-    "duration": "久期资产",
-}
-CLAIM_ZH = {"observed": "已观察", "inferred": "模型推断"}
+CLAIM_ZH = {"fact": "事实", "inference": "推断", "unknown": "未知"}
 CONFIDENCE_ZH = {"high": "高", "medium": "中", "low": "低"}
 
 
@@ -130,8 +111,8 @@ def _truth_boundary(generation_status: str) -> dict[str, Any]:
         "finance_newsletter_input": False,
         "local_evaluation_only": True,
         "model_generated_unreviewed": success,
-        "investment_advice_allowed": True,
-        "contains_investment_advice": success,
+        "macro_parameters_present": success,
+        "individual_security_advice": False,
         "automatic_execution_eligible": False,
         "broker_access": False,
         "portfolio_mutation": False,
@@ -289,8 +270,12 @@ def build_world_report(
     references = _reference_index(context_value)
     labels = {str(item["key"]): str(item["display_name"]) for item in context_value["series"]}
     output = model_value.get("output") or {}
-    regime_raw = output.get("regime") or {}
-    posture = str(regime_raw.get("posture") or "unknown")
+    macro_raw = output.get("macro_parameters") or {}
+    risk_budget = macro_raw.get("risk_budget")
+    if isinstance(risk_budget, (int, float)) and not isinstance(risk_budget, bool):
+        posture = "defense" if float(risk_budget) <= 0.4 else "wait" if float(risk_budget) <= 0.6 else "attack"
+    else:
+        posture = "unknown"
     if posture not in POSTURE_ZH:
         raise KlineWorldReportError("report_posture_invalid")
 
@@ -308,19 +293,32 @@ def build_world_report(
         _relationship_projection(item, labels)
         for item in context_value.get("relationships") or []
     ]
-    world_raw = output.get("world_model") or {}
-    world_view = {**world_raw, "citations": _citations(world_raw.get("evidence_ids") or [], references)}
-    regime_view = {**regime_raw, "citations": _citations(regime_raw.get("evidence_ids") or [], references)}
-    flow_map = _enriched_rows(output.get("flow_map") or [], references)
-    for row in flow_map:
-        row["from_label"] = labels.get(str(row.get("from_key")), str(row.get("from_key")))
-        row["to_label"] = labels.get(str(row.get("to_key")), str(row.get("to_key")))
-    trade_plan = _enriched_rows(output.get("trade_plan") or [], references)
-    for row in trade_plan:
-        target = str(row.get("target"))
-        row["action_label"] = ACTION_ZH.get(str(row.get("action")), str(row.get("action")))
-        row["target_label"] = labels.get(target, TARGET_ZH.get(target, target))
-        row["horizon_label"] = HORIZON_ZH.get(str(row.get("horizon")), str(row.get("horizon")))
+    world_view = {
+        "headline": output.get("headline"),
+        "synthesis": output.get("summary"),
+        "evidence_ids": output.get("evidence_ids") or [],
+        "citations": _citations(output.get("evidence_ids") or [], references),
+    }
+    parameter_basis = _enriched_rows(output.get("parameter_basis") or [], references)
+    inventory = {
+        str(row.get("data_id")): row
+        for row in (model_value.get("analysis_controls") or {}).get("data_inventory") or []
+        if isinstance(row, Mapping)
+    }
+    for row in parameter_basis:
+        row["missing_items"] = [
+            inventory[item]
+            for item in row.get("missing_data_ids") or []
+            if item in inventory
+        ]
+    observations = _enriched_rows(output.get("observations") or [], references)
+    for row in observations:
+        row["missing_items"] = [
+            inventory[item]
+            for item in row.get("missing_data_ids") or []
+            if item in inventory
+        ]
+    insights = _enriched_rows(output.get("insights") or [], references)
 
     generation_status = str(model_value.get("generation_status") or "interpretation_unavailable")
     core = {
@@ -336,18 +334,22 @@ def build_world_report(
         "posture": posture,
         "posture_zh": POSTURE_ZH[posture],
         "posture_en": POSTURE_EN[posture],
-        "confidence": model_value.get("code_owned_confidence"),
+        "confidence": {
+            "score": macro_raw.get("confidence"),
+            "cap": (model_value.get("analysis_controls") or {}).get("confidence_cap"),
+            "data_coverage": macro_raw.get("data_coverage"),
+        },
         "time": context_value.get("time"),
         "coverage": context_value.get("coverage"),
         "world_model": world_view,
-        "regime": regime_view,
-        "flow_map": flow_map,
-        "transmission_chain": _enriched_rows(output.get("transmission_chain") or [], references),
-        "trade_plan": trade_plan,
+        "macro_parameters": macro_raw,
+        "parameter_basis": parameter_basis,
+        "insights": insights,
+        "observations": observations,
+        "data_ledger": output.get("data_ledger") or [],
+        "analysis_controls": model_value.get("analysis_controls"),
         "cross_section": cross_section,
         "relationships": relationships,
-        "contradictions": _enriched_rows(output.get("contradictions") or [], references),
-        "falsifiers": _enriched_rows(output.get("falsifiers") or [], references),
         "charts": charts,
         "truth_boundary": _truth_boundary(generation_status),
     }
@@ -417,9 +419,8 @@ def _cite_html(citations: list[Mapping[str, Any]]) -> str:
 
 def render_markdown(report: Mapping[str, Any]) -> str:
     confidence = report.get("confidence") or {}
-    evidence_quality = confidence.get("evidence_quality") or {}
-    clarity = confidence.get("directional_clarity") or {}
     world = report.get("world_model") or {}
+    macro = report.get("macro_parameters") or {}
     lines = [
         f"# K 线世界日报｜{report.get('report_date')}",
         "",
@@ -429,27 +430,39 @@ def render_markdown(report: Mapping[str, Any]) -> str:
         "",
         str(world.get("synthesis") or ""),
         "",
-        f"- 证据质量：{evidence_quality.get('level', '—')} / 覆盖率 {_fmt(evidence_quality.get('coverage_ratio'))}",
-        f"- 方向清晰度：{clarity.get('level', '—')} / {_fmt(clarity.get('score'))}",
+        f"- RISK_BUDGET：{_fmt(macro.get('risk_budget'))}",
+        f"- LONG_GATE：{macro.get('long_gate', '—')}",
+        f"- DISPERSION：{macro.get('dispersion', '—')}",
+        f"- CONFIDENCE：{_fmt(confidence.get('score'))}（代码上限 {_fmt(confidence.get('cap'))}）",
+        f"- DATA_COVERAGE：{_fmt(confidence.get('data_coverage'))}",
         "",
         "## 17 张完成日线证据",
         "",
         "完整 OHLC 日线与利率曲线请查看 HTML 版本。",
         "",
-        "## 资金迁移地图",
+        "## 宏观参数及定量依据",
         "",
     ]
-    for row in report.get("flow_map") or []:
-        lines.append(f"- {row.get('from_label')} → {row.get('to_label')}：{row.get('rationale')}")
-    lines.extend(["", "## 世界模型如何传导，以及怎样交易？", "", "### 传导链", ""])
-    for index, row in enumerate(report.get("transmission_chain") or [], 1):
-        lines.append(f"{index}. [{CLAIM_ZH.get(str(row.get('claim_class')), row.get('claim_class'))}] {row.get('statement')}")
-    lines.extend(["", "### 可执行交易建议", ""])
-    for row in report.get("trade_plan") or []:
-        lines.append(
-            f"- **{row.get('action_label')} {row.get('target_label')}**（{row.get('horizon_label')}）："
-            f"{row.get('condition')}；{row.get('rationale')}。"
-        )
+    for row in report.get("parameter_basis") or []:
+        lines.append(f"- **{row.get('parameter')}**：{row.get('statement')}")
+    lines.extend(["", "## 洞察与观察", "", "### 洞察", ""])
+    if report.get("insights"):
+        for index, row in enumerate(report.get("insights") or [], 1):
+            falsifier = row.get("falsifier") or {}
+            lines.append(
+                f"{index}. **{row.get('conclusion')}**；证伪：{falsifier.get('metric')} "
+                f"{falsifier.get('operator')} {falsifier.get('threshold')} {falsifier.get('unit')}；"
+                f"复核 {row.get('review_date')}。"
+            )
+    else:
+        lines.append("- 本日不提供方向观点；洞察区按合同留空。")
+    lines.extend(["", "### 观察", ""])
+    for row in report.get("observations") or []:
+        claim = CLAIM_ZH.get(str(row.get("claim_type")), str(row.get("claim_type")))
+        lines.append(f"- [{claim}] {row.get('statement')}")
+    lines.extend(["", "## 数据台账", ""])
+    for row in report.get("data_ledger") or []:
+        lines.append(f"- {row.get('item')}：{row.get('status')}；{row.get('impact')}")
     lines.extend(
         [
             "",
@@ -474,13 +487,13 @@ def render_markdown(report: Mapping[str, Any]) -> str:
             f"领导端 {row.get('leader_label')}"
         )
     if report.get("generation_status") != "model_generated_unreviewed":
-        lines.extend(["", "本期 LLM 解释未通过验证；只展示同一上下文的冻结市场证据，不复用旧建议。"])
+        lines.extend(["", "本期 LLM 宏观分析未通过验证；只展示同一上下文的冻结市场证据，不复用旧参数或解释。"])
     lines.extend(
         [
             "",
             "---",
             "",
-            "模型生成、未经人工复核；包含市场层面的交易建议。仅限本地评估，不可公开分发。",
+            "模型生成、未经人工复核；宏观参数供后续研究层消费。仅限本地评估，不可公开分发。",
             "本系统不会自动执行交易，不读取经纪账户，不修改任何持仓。",
             "本日报不读取 Finance Daily Newsletter；两个 Track 仅供人工对照。",
             "",
@@ -493,53 +506,87 @@ def render_html(report: Mapping[str, Any]) -> str:
     posture = str(report.get("posture") or "unknown")
     world = report.get("world_model") or {}
     confidence = report.get("confidence") or {}
-    evidence_quality = confidence.get("evidence_quality") or {}
-    clarity = confidence.get("directional_clarity") or {}
-    flow_html = "".join(
-        '<article class="flow-row"><div class="flow-side"><small>离开 / FROM</small><strong>'
-        + escape(str(row.get("from_label") or ""))
-        + '</strong></div><div class="flow-side destination"><small>流向 / TO</small><strong>'
-        + escape(str(row.get("to_label") or ""))
-        + '</strong></div><div class="flow-copy"><span class="confidence-word">'
-        + escape(CONFIDENCE_ZH.get(str(row.get("confidence")), str(row.get("confidence"))))
-        + "置信</span><p>"
-        + escape(str(row.get("rationale") or ""))
-        + '</p><div class="citations">'
-        + _cite_html(row.get("citations") or [])
-        + "</div></div></article>"
-        for row in report.get("flow_map") or []
-    )
-    chain_html = "".join(
-        '<li><span class="chain-index">'
-        + f"{index:02d}"
-        + '</span><div><span class="claim '
-        + escape(str(row.get("claim_class") or ""))
-        + '">'
-        + escape(CLAIM_ZH.get(str(row.get("claim_class")), str(row.get("claim_class"))))
-        + "</span><p>"
+    macro = report.get("macro_parameters") or {}
+    def ratio_label(value: Any) -> str:
+        try:
+            return f"{float(value) * 100:.0f}%"
+        except (TypeError, ValueError):
+            return "—"
+    basis_html = "".join(
+        '<article class="basis-row"><span class="parameter-name">'
+        + escape(str(row.get("parameter") or ""))
+        + '</span><div><p>'
         + escape(str(row.get("statement") or ""))
         + '</p><div class="citations">'
         + _cite_html(row.get("citations") or [])
-        + "</div></div></li>"
-        for index, row in enumerate(report.get("transmission_chain") or [], 1)
+        + "".join(
+            '<span class="missing-chip">缺 · '
+            + escape(str(item.get("item") or item.get("data_id") or ""))
+            + "</span>"
+            for item in row.get("missing_items") or []
+        )
+        + "</div></div></article>"
+        for row in report.get("parameter_basis") or []
     )
-    trade_html = "".join(
-        '<article class="trade-row"><header><span>建议 '
+    observation_html = "".join(
+        '<li><span class="chain-index">'
+        + f"{index:02d}"
+        + '</span><div><span class="claim '
+        + escape(str(row.get("claim_type") or ""))
+        + '">'
+        + escape(CLAIM_ZH.get(str(row.get("claim_type")), str(row.get("claim_type"))))
+        + "</span><p>"
+        + escape(str(row.get("statement") or ""))
+        + ("<ol class=\"inference-steps\">" + "".join("<li>" + escape(str(step)) + "</li>" for step in row.get("inference_chain") or []) + "</ol>" if row.get("inference_chain") else "")
+        + '</p><div class="citations">'
+        + _cite_html(row.get("citations") or [])
+        + "".join(
+            '<span class="missing-chip">缺 · '
+            + escape(str(item.get("item") or item.get("data_id") or ""))
+            + "</span>"
+            for item in row.get("missing_items") or []
+        )
+        + "</div></div></li>"
+        for index, row in enumerate(report.get("observations") or [], 1)
+    )
+    insight_html = "".join(
+        '<article class="insight-row"><header><span>洞察 '
         + f"{index:02d}"
         + "</span><strong>"
-        + escape(str(row.get("action_label") or ""))
-        + " · "
-        + escape(str(row.get("target_label") or ""))
+        + escape(str(row.get("conclusion") or ""))
         + "</strong><small>"
-        + escape(str(row.get("horizon_label") or ""))
-        + '</small></header><div class="trade-body"><div><b>执行条件</b><p>'
-        + escape(str(row.get("condition") or ""))
-        + "</p></div><div><b>为什么</b><p>"
-        + escape(str(row.get("rationale") or ""))
-        + '</p></div></div><footer><div class="citations">'
+        + escape(str(row.get("affected_parameter") or ""))
+        + '</small></header><div class="trade-body"><div><b>为什么不是复述</b><p>'
+        + escape(str(row.get("why_not_restating") or ""))
+        + "</p></div><div><b>数值证伪门槛</b><p>"
+        + escape(
+            f"{(row.get('falsifier') or {}).get('metric', '—')} "
+            f"{(row.get('falsifier') or {}).get('operator', '—')} "
+            f"{(row.get('falsifier') or {}).get('threshold', '—')} "
+            f"{(row.get('falsifier') or {}).get('unit', '')}"
+        )
+        + '</p></div></div><footer><small>复核 '
+        + escape(str(row.get("review_date") or ""))
+        + '</small><div class="citations">'
         + _cite_html(row.get("citations") or [])
         + "</div></footer></article>"
-        for index, row in enumerate(report.get("trade_plan") or [], 1)
+        for index, row in enumerate(report.get("insights") or [], 1)
+    )
+    if not insight_html:
+        insight_html = '<div class="empty-insight"><strong>本日不提供方向观点</strong><p>CONFIDENCE 低于打开方向闸门的最低要求；洞察区按合同留空，不用观察冒充 insight。</p></div>'
+    ledger_html = "".join(
+        '<article class="ledger-row"><span class="ledger-status '
+        + escape(str(row.get("status") or ""))
+        + '">'
+        + escape("部分" if row.get("status") == "partial" else "缺失")
+        + '</span><div><strong>'
+        + escape(str(row.get("item") or ""))
+        + '</strong><p>'
+        + escape(str(row.get("question") or ""))
+        + '</p><small>'
+        + escape(str(row.get("impact") or ""))
+        + "</small></div></article>"
+        for row in report.get("data_ledger") or []
     )
     cross_html = "".join(
         '<div class="market-row"><div><strong>'
@@ -598,7 +645,7 @@ def render_html(report: Mapping[str, Any]) -> str:
     status_label = "模型生成 · 未人工复核" if report.get("generation_status") == "model_generated_unreviewed" else "模型解释不可用 · 仅展示证据"
     data_label = "VISUAL QA FIXTURE" if report.get("data_kind") == "fixture" else "LOCAL ONLY"
     unavailable = "" if report.get("generation_status") == "model_generated_unreviewed" else (
-        '<div class="unavailable"><strong>本期解释未通过验证</strong><p>冻结行情仍可查看；资金迁移地图与交易建议不会复用旧内容。</p></div>'
+        '<div class="unavailable"><strong>本期宏观分析未通过验证</strong><p>冻结行情仍可查看；宏观参数、洞察与观察不会复用旧内容。</p></div>'
     )
     embedded = _canonical_json(report).replace("</", "<\\/")
     return f'''<!doctype html>
@@ -619,23 +666,25 @@ html[data-posture="defense"]{{--accent:#d4473e;--accent-deep:#9e2c25;--accent-wa
 .citations{{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}}.cite{{border:1px solid var(--line);background:#f7f7f3;color:var(--subtle);font-size:9px;padding:4px 6px;cursor:pointer;border-radius:0}}.cite:hover,.cite:focus-visible{{border-color:var(--accent);color:var(--accent-deep);outline:none}}
 .chain{{list-style:none;margin:0;padding:0;max-width:820px}}.chain li{{display:grid;grid-template-columns:34px minmax(0,1fr);gap:18px;padding:0 0 26px;position:relative}}.chain li:not(:last-child)::before{{content:"";position:absolute;top:22px;bottom:3px;left:15px;border-left:1px solid var(--line)}}.chain-index{{font-family:Georgia,serif;color:var(--accent);background:var(--paper);font-size:12px;padding-top:5px;z-index:1}}.claim{{display:inline-block;font-size:9px;letter-spacing:.1em;padding:3px 6px;background:var(--observed);color:#52615a}}.claim.inferred{{background:var(--inferred);color:#6b5479}}.chain p{{font-family:"Songti SC",Georgia,serif;font-size:21px;line-height:1.55;margin:7px 0 0}}
 .trade-plan{{border-top:2px solid var(--accent)}}.trade-row{{padding:22px 0;border-bottom:1px solid var(--line)}}.trade-row header{{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:baseline}}.trade-row header span{{font-size:9px;color:var(--accent);letter-spacing:.1em}}.trade-row header strong{{font-family:"Songti SC",Georgia,serif;font-size:22px;font-weight:500}}.trade-row header small{{color:var(--subtle);font-size:11px}}.trade-body{{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:17px 0 13px;padding-left:84px}}.trade-body b{{font-size:10px;color:var(--faint);font-weight:600}}.trade-body p{{font-size:13px;line-height:1.65;margin:5px 0 0}}.trade-row footer{{display:flex;justify-content:flex-end;gap:18px;align-items:flex-start;padding-left:84px}}.trade-row footer .citations{{margin-top:0;justify-content:flex-end}}
+.parameter-board{{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-bottom:28px}}.parameter-card{{padding:18px;border-right:1px solid var(--line);min-width:0}}.parameter-card:last-child{{border-right:0}}.parameter-card small{{display:block;font-size:9px;color:var(--faint);letter-spacing:.08em}}.parameter-card strong{{display:block;font-family:"Songti SC",Georgia,serif;font-size:28px;font-weight:500;color:var(--accent);margin-top:8px;overflow-wrap:anywhere}}.parameter-card span{{display:block;font-size:9px;color:var(--subtle);margin-top:5px}}.basis-list{{border-top:1px solid var(--line);min-width:0}}.basis-row{{display:grid;grid-template-columns:145px minmax(0,1fr);gap:22px;padding:17px 0;border-bottom:1px solid var(--line);min-width:0}}.basis-row>*{{min-width:0}}.parameter-name{{font:10px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);letter-spacing:.04em}}.basis-row p{{font-size:13px;line-height:1.7;margin:0;overflow-wrap:anywhere;word-break:break-word}}.missing-chip{{display:inline-flex;border:1px solid #e9c7c3;background:#fff5f3;color:#9e2c25;font-size:9px;padding:4px 6px}}.insight-list{{border-top:2px solid var(--accent)}}.insight-row{{padding:22px 0;border-bottom:1px solid var(--line)}}.insight-row header{{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:14px;align-items:baseline}}.insight-row header span{{font-size:9px;color:var(--accent);letter-spacing:.1em}}.insight-row header strong{{font-family:"Songti SC",Georgia,serif;font-size:22px;font-weight:500}}.insight-row header small{{font-size:10px;color:var(--subtle)}}.insight-row footer{{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-left:84px}}.empty-insight{{border:1px solid var(--accent);background:var(--accent-wash);padding:20px}}.empty-insight strong{{font-family:"Songti SC",Georgia,serif;font-size:22px;font-weight:500}}.empty-insight p{{font-size:12px;line-height:1.65;color:var(--subtle);margin:7px 0 0}}.claim.fact{{background:var(--observed);color:#52615a}}.claim.inference{{background:var(--inferred);color:#6b5479}}.claim.unknown{{background:#f1efeb;color:#756f65}}.inference-steps{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:11px;color:var(--subtle);margin:10px 0 0;padding-left:18px}}.ledger-list{{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;border-top:1px solid var(--line)}}.ledger-row{{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}}.ledger-status{{font-size:9px;color:#9e2c25;border:1px solid #e9c7c3;height:max-content;text-align:center;padding:4px}}.ledger-status.partial{{color:#7e4d05;border-color:#ead3a3}}.ledger-row strong{{font-size:12px}}.ledger-row p{{font-size:11px;color:var(--subtle);line-height:1.55;margin:5px 0}}.ledger-row small{{font-size:9px;color:var(--faint);line-height:1.55}}
 .cross-head,.market-row{{display:grid;grid-template-columns:minmax(155px,1.6fr) repeat(3,minmax(70px,.7fr));gap:14px;align-items:center}}.cross-head{{font-size:9px;color:var(--faint);letter-spacing:.08em;padding:0 0 8px;border-bottom:1px solid var(--line)}}.cross-head span:not(:first-child){{text-align:right}}.market-row{{padding:10px 0;border-bottom:1px solid var(--line)}}.market-row>div{{min-width:0}}.market-row strong{{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.market-row small{{display:block;color:var(--faint);font-size:9px;margin-top:2px}}.number{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-align:right;font-variant-numeric:tabular-nums}}.positive{{color:var(--positive)}}.negative{{color:var(--negative)}}
 .relative-list{{display:grid;grid-template-columns:1fr 1fr;gap:0 30px;border-top:1px solid var(--line)}}.relative-row{{display:grid;grid-template-columns:minmax(130px,1fr) 90px 58px;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}}.relative-row strong{{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.relative-row small{{display:block;font-size:9px;color:var(--faint);margin-top:3px}}.relative-row canvas{{width:90px;height:30px;display:block}}
 .charts{{display:grid;grid-template-columns:1fr 1fr;gap:18px}}.chart-card{{border:1px solid var(--line);background:#fff;padding:15px;min-width:0}}.chart-card header{{display:flex;justify-content:space-between;gap:10px;align-items:baseline}}.chart-card header div{{display:flex;gap:9px;align-items:baseline;min-width:0}}.chart-card header span{{font-size:9px;color:var(--accent)}}.chart-card h3{{font-size:12px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.chart-card header small{{font-size:8px;color:var(--faint);white-space:nowrap}}.chart-card>canvas{{width:100%;height:165px;display:block;margin:10px 0}}.chart-card footer{{display:flex;gap:14px;color:var(--subtle);font-size:9px}}
 .boundary{{padding:30px 42px 42px;background:#f1efe8;border-bottom:7px solid var(--accent);font-size:10px;line-height:1.8;color:var(--subtle)}}.boundary strong{{color:var(--ink)}}.boundary code{{display:block;margin-top:9px;overflow-wrap:anywhere;word-break:break-all;color:var(--faint)}}
 dialog{{width:min(560px,calc(100% - 32px));border:1px solid var(--line);padding:0;background:var(--paper);color:var(--ink);box-shadow:0 22px 70px rgba(20,20,15,.22)}}dialog::backdrop{{background:rgba(20,22,19,.35)}}.evidence-dialog header{{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:18px;align-items:start}}.evidence-dialog h3{{font-family:"Songti SC",Georgia,serif;font-size:22px;margin:0}}.evidence-dialog button{{border:1px solid var(--line);background:#fff;padding:5px 9px;cursor:pointer}}.evidence-body{{padding:20px 22px}}.evidence-body dl{{display:grid;grid-template-columns:110px 1fr;gap:8px 14px;margin:0}}.evidence-body dt{{font-size:10px;color:var(--faint)}}.evidence-body dd{{font-size:12px;margin:0;overflow-wrap:anywhere}}
-@media(max-width:720px){{main{{border:0}}.mast{{height:auto;min-height:58px;padding:14px 20px;align-items:flex-start}}.brand{{white-space:nowrap}}.brand span{{display:none}}.mast-meta{{flex-wrap:wrap;justify-content:flex-end}}.mast-meta span{{font-size:8px;padding:4px 6px}}.hero{{padding:38px 20px 32px 14px;border-left-width:6px;grid-template-columns:1fr;gap:26px;background:var(--paper)}}.hero h1{{font-size:90px;margin-top:18px}}.headline{{font-size:21px;margin-top:25px}}.synthesis{{font-size:13px}}.confidence-panel{{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}}.confidence-panel>span{{grid-column:1/-1}}.confidence-metric:nth-of-type(2){{border-top:0;padding-top:0}}.confidence-panel p{{grid-column:1/-1}}.unavailable{{margin:18px 20px 0}}section{{padding:34px 20px}}.section-head,.subsection-head{{align-items:flex-start}}.section-head>small,.subsection-head>small{{max-width:140px}}.flow-row{{grid-template-columns:1fr 1fr;gap:13px;padding:18px 0}}.flow-copy{{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:13px 0 0}}.chain p{{font-size:19px}}.trade-row header{{grid-template-columns:62px minmax(0,1fr)}}.trade-row header small{{grid-column:2}}.trade-body{{grid-template-columns:1fr;padding-left:0;gap:13px}}.trade-row footer{{padding-left:0;display:block}}.trade-row footer .citations{{justify-content:flex-start;margin-top:9px}}.cross-head,.market-row{{grid-template-columns:minmax(115px,1.3fr) repeat(3,minmax(54px,.7fr));gap:7px}}.market-row strong{{font-size:11px}}.number{{font-size:9px}}.relative-list,.charts{{grid-template-columns:1fr}}.relative-row{{grid-template-columns:minmax(120px,1fr) 78px 52px}}.relative-row canvas{{width:78px}}.chart-card>canvas{{height:155px}}.boundary{{padding:26px 20px 34px}}}}
+@media(max-width:720px){{main{{border:0}}.mast{{height:auto;min-height:58px;padding:14px 20px;align-items:flex-start}}.brand{{white-space:nowrap}}.brand span{{display:none}}.mast-meta{{flex-wrap:wrap;justify-content:flex-end}}.mast-meta span{{font-size:8px;padding:4px 6px}}.hero{{padding:38px 20px 32px 14px;border-left-width:6px;grid-template-columns:1fr;gap:26px;background:var(--paper)}}.hero h1{{font-size:90px;margin-top:18px}}.headline{{font-size:21px;margin-top:25px}}.synthesis{{font-size:13px}}.confidence-panel{{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}}.confidence-panel>span{{grid-column:1/-1}}.confidence-metric:nth-of-type(2){{border-top:0;padding-top:0}}.confidence-panel p{{grid-column:1/-1}}.unavailable{{margin:18px 20px 0}}section{{padding:34px 20px}}.section-head,.subsection-head{{align-items:flex-start}}.section-head>small,.subsection-head>small{{max-width:140px}}.parameter-board{{grid-template-columns:1fr 1fr}}.parameter-card:nth-child(2){{border-right:0}}.parameter-card:nth-child(-n+2){{border-bottom:1px solid var(--line)}}.basis-row{{grid-template-columns:minmax(0,1fr);gap:7px}}.chain p{{font-size:19px}}.insight-row header{{grid-template-columns:62px minmax(0,1fr)}}.insight-row header small{{grid-column:2}}.trade-body{{grid-template-columns:1fr;padding-left:0;gap:13px}}.insight-row footer{{padding-left:0;display:block}}.ledger-list{{grid-template-columns:1fr}}.cross-head,.market-row{{grid-template-columns:minmax(115px,1.3fr) repeat(3,minmax(54px,.7fr));gap:7px}}.market-row strong{{font-size:11px}}.number{{font-size:9px}}.relative-list,.charts{{grid-template-columns:1fr}}.relative-row{{grid-template-columns:minmax(120px,1fr) 78px 52px}}.relative-row canvas{{width:78px}}.chart-card>canvas{{height:155px}}.boundary{{padding:26px 20px 34px}}}}
 @media print{{body{{background:#fff}}main{{width:100%;border:0}}.cite{{color:var(--subtle)}}dialog{{display:none}}}}
 </style></head>
 <body><main>
-<header class="mast"><div class="brand">K 线世界日报 <span>Capital Flow World Model</span></div><div class="mast-meta"><span>{escape(str(report.get("report_date") or ""))}</span><span>{escape(status_label)}</span><span>{escape(data_label)}</span></div></header>
-<div class="hero"><div><div class="eyebrow">今日市场姿态 / MARKET POSTURE</div><h1>{escape(str(report.get("posture_zh") or ""))}</h1><div class="hero-en">{escape(str(report.get("posture_en") or ""))}</div><p class="headline">{escape(str(world.get("headline") or ""))}</p><p class="synthesis">{escape(str(world.get("synthesis") or ""))}</p><div class="citations">{_cite_html(world.get("citations") or [])}</div></div><aside class="confidence-panel"><span>代码计算，不由模型改写</span><div class="confidence-metric"><small>证据质量</small><strong>{escape(CONFIDENCE_ZH.get(str(evidence_quality.get("level")), str(evidence_quality.get("level") or "—")))}</strong></div><div class="confidence-metric"><small>方向清晰度</small><strong>{escape(CONFIDENCE_ZH.get(str(clarity.get("level")), str(clarity.get("level") or "—")))}</strong></div><p>覆盖率 {_fmt(evidence_quality.get("coverage_ratio"))} · 清晰度 {_fmt(clarity.get("score"))}</p></aside></div>
+<header class="mast"><div class="brand">K 线世界日报 <span>Macro Analyst · Parameter First</span></div><div class="mast-meta"><span>{escape(str(report.get("report_date") or ""))}</span><span>{escape(status_label)}</span><span>{escape(data_label)}</span></div></header>
+<div class="hero"><div><div class="eyebrow">今日市场姿态 / MARKET POSTURE</div><h1>{escape(str(report.get("posture_zh") or ""))}</h1><div class="hero-en">{escape(str(report.get("posture_en") or ""))}</div><p class="headline">{escape(str(world.get("headline") or ""))}</p><p class="synthesis">{escape(str(world.get("synthesis") or ""))}</p><div class="citations">{_cite_html(world.get("citations") or [])}</div></div><aside class="confidence-panel"><span>宏观层参数 · 下游机器可读</span><div class="confidence-metric"><small>风险预算</small><strong>{escape(ratio_label(macro.get("risk_budget")))}</strong></div><div class="confidence-metric"><small>做多闸门</small><strong>{escape(str(macro.get("long_gate") or "—"))}</strong></div><p>置信度 {escape(ratio_label(confidence.get("score")))} · 数据覆盖 {escape(ratio_label(confidence.get("data_coverage")))}</p></aside></div>
 {unavailable}
 <section id="charts"><div class="section-head"><div class="section-title"><b>01</b><h2>17 张完成日线证据</h2></div><small>价格为 OHLC K 线；收益率与曲线为折线</small></div><div class="charts">{chart_html}</div></section>
-<section id="flow-map"><div class="section-head"><div class="section-title"><b>02</b><h2>资金可能正在从哪里，流向哪里？</h2></div><small>相对价格推断，不等于直接资金流测量</small></div><div class="flows">{flow_html}</div></section>
-<section id="model-and-trades"><div class="section-head"><div class="section-title"><b>03</b><h2>世界模型如何传导，以及怎样交易？</h2></div><small>推断与建议分层展示</small></div><div class="subsection" id="transmission"><div class="subsection-head"><h3>传导链</h3><small>已观察与模型推断分开标记</small></div><ol class="chain">{chain_html}</ol></div><div class="subsection" id="trade-plan"><div class="subsection-head"><h3>可执行交易建议</h3><small>模型建议 · 未人工复核 · 不自动执行</small></div><div class="trade-plan">{trade_html}</div></div></section>
-<section id="market-evidence"><div class="section-head"><div class="section-title"><b>04</b><h2>17 个市场与 12 组相对领导关系</h2></div><small>横截面与相对强弱放在一起看</small></div><div class="subsection" id="cross-section"><div class="subsection-head"><h3>17 个市场观测</h3><small>美债变化统一用 bp</small></div><div class="cross-head"><span>市场</span><span>5日</span><span>20日</span><span>60日</span></div><div>{cross_html}</div></div><div class="subsection" id="relative-leadership"><div class="subsection-head"><h3>12 组相对领导关系</h3><small>标准化相对表现 · 20日领导端</small></div><div class="relative-list">{relationship_html}</div></div></section>
-<footer class="boundary"><strong>研究边界：</strong>模型生成、未经人工复核；本页包含市场层面的交易建议。仅限 Park 本地评估，当前数据权利不支持公开分发。<br>系统不会自动执行交易，不读取经纪账户，不修改任何持仓。Finance Daily Newsletter 不是本页输入，两个 Track 只做人工对照。<code>{escape(str(report.get("report_id") or ""))}</code></footer>
+<section id="macro-parameters"><div class="section-head"><div class="section-title"><b>02</b><h2>宏观参数：下游今天能做什么？</h2></div><small>参数在前 · 解释只用于复核</small></div><div class="parameter-board"><div class="parameter-card"><small>AS_OF</small><strong>{escape(str(macro.get("as_of") or "—"))}</strong><span>共同基准日</span></div><div class="parameter-card"><small>RISK_BUDGET</small><strong>{escape(ratio_label(macro.get("risk_budget")))}</strong><span>正常风险预算比例</span></div><div class="parameter-card"><small>LONG_GATE</small><strong>{escape(str(macro.get("long_gate") or "—"))}</strong><span>做多候选闸门</span></div><div class="parameter-card"><small>DISPERSION</small><strong>{escape(str(macro.get("dispersion") or "—"))}</strong><span>横截面离散度</span></div></div><div class="basis-list">{basis_html}</div></section>
+<section id="insights-observations"><div class="section-head"><div class="section-title"><b>03</b><h2>哪些是洞察，哪些只是观察？</h2></div><small>洞察必须可证伪、改变行动</small></div><div class="subsection"><div class="subsection-head"><h3>洞察 / INSIGHTS</h3><small>0–3 条 · 宁缺毋滥</small></div><div class="insight-list">{insight_html}</div></div><div class="subsection"><div class="subsection-head"><h3>观察 / OBSERVATIONS</h3><small>事实、推断、未知分开标记</small></div><ol class="chain">{observation_html}</ol></div></section>
+<section id="data-ledger"><div class="section-head"><div class="section-title"><b>04</b><h2>哪些关键数据还没有拿到？</h2></div><small>缺口显式入账，不用历史价格假装预期</small></div><div class="ledger-list">{ledger_html}</div></section>
+<section id="market-evidence"><div class="section-head"><div class="section-title"><b>05</b><h2>17 个市场与 12 组相对领导关系</h2></div><small>横截面与相对强弱放在一起看</small></div><div class="subsection" id="cross-section"><div class="subsection-head"><h3>17 个市场观测</h3><small>美债变化统一用 bp</small></div><div class="cross-head"><span>市场</span><span>5日</span><span>20日</span><span>60日</span></div><div>{cross_html}</div></div><div class="subsection" id="relative-leadership"><div class="subsection-head"><h3>12 组相对领导关系</h3><small>标准化相对表现 · 20日领导端</small></div><div class="relative-list">{relationship_html}</div></div></section>
+<footer class="boundary"><strong>研究边界：</strong>模型生成、未经人工复核；本页输出宏观参数，最细只到板块，不输出个股、入场价、止损位或个人仓位。仅限 Park 本地评估，当前数据权利不支持公开分发。<br>系统不会自动执行交易，不读取经纪账户，不修改任何持仓。Finance Daily Newsletter 不是本页输入，两个 Track 只做人工对照。<code>{escape(str(report.get("report_id") or ""))}</code></footer>
 </main>
 <dialog id="evidence-dialog" class="evidence-dialog"><header><h3 id="evidence-title">证据</h3><button type="button" id="evidence-close">关闭</button></header><div class="evidence-body"><dl id="evidence-fields"></dl></div></dialog>
 <script id="report-data" type="application/json">{embedded}</script>
@@ -646,7 +695,7 @@ function fit(canvas){{const r=canvas.getBoundingClientRect(),d=Math.max(1,window
 function drawSeries(canvas,chart){{const[c,w,h]=fit(canvas),rows=(chart.points||[]).slice(-70),line=chart.chart_type==='line',values=rows.flatMap(r=>line?[Number(r.value)]:[Number(r.high),Number(r.low)]).filter(Number.isFinite);if(!values.length)return;let lo=Math.min(...values),hi=Math.max(...values);if(hi===lo){{hi+=1;lo-=1}}const p={{l:7,r:7,t:10,b:17}},y=v=>p.t+(hi-v)/(hi-lo)*(h-p.t-p.b),step=(w-p.l-p.r)/Math.max(rows.length,1);c.clearRect(0,0,w,h);c.strokeStyle=GRID;c.lineWidth=1;for(let i=0;i<4;i++){{const yy=p.t+i*(h-p.t-p.b)/3;c.beginPath();c.moveTo(p.l,yy);c.lineTo(w-p.r,yy);c.stroke()}}if(line){{c.strokeStyle=ACCENT;c.lineWidth=1.6;c.beginPath();rows.forEach((r,i)=>{{const x=p.l+(i+.5)*step,yy=y(Number(r.value));i?c.lineTo(x,yy):c.moveTo(x,yy)}});c.stroke()}}else{{rows.forEach((r,i)=>{{const o=Number(r.open),cl=Number(r.close),high=Number(r.high),low=Number(r.low),x=p.l+(i+.5)*step,color=cl>=o?UP:DOWN,width=Math.max(1.2,Math.min(5,step*.58)),top=Math.min(y(o),y(cl)),bodyHeight=Math.max(1,Math.abs(y(o)-y(cl)));c.strokeStyle=color;c.lineWidth=1;c.beginPath();c.moveTo(x,y(high));c.lineTo(x,y(low));c.stroke();if(cl>=o){{c.strokeStyle=UP;c.strokeRect(x-width/2,top,width,bodyHeight)}}else{{c.fillStyle=DOWN;c.fillRect(x-width/2,top,width,bodyHeight)}}}})}}c.fillStyle=TEXT;c.font='8px -apple-system,sans-serif';c.fillText(rows[0]?.date||'',p.l,h-3);c.textAlign='right';c.fillText(rows.at(-1)?.date||'',w-p.r,h-3);c.textAlign='left'}}
 function drawRelative(canvas,row){{const[c,w,h]=fit(canvas),points=(row.points||[]).slice(-45),values=points.map(x=>Number(x.relative_index)).filter(Number.isFinite);if(!values.length)return;let lo=Math.min(...values),hi=Math.max(...values);if(hi===lo){{hi+=1;lo-=1}}const x=i=>i/(Math.max(values.length-1,1))*w,y=v=>3+(hi-v)/(hi-lo)*(h-6);c.clearRect(0,0,w,h);c.strokeStyle=ACCENT;c.lineWidth=1.3;c.beginPath();values.forEach((v,i)=>i?c.lineTo(x(i),y(v)):c.moveTo(x(i),y(v)));c.stroke()}}
 function redraw(){{for(const canvas of document.querySelectorAll('canvas[data-chart]')){{const chart=REPORT.charts.find(x=>x.key===canvas.dataset.chart);if(chart)drawSeries(canvas,chart)}}for(const canvas of document.querySelectorAll('canvas[data-relative]')){{const row=REPORT.relationships.find(x=>x.key===canvas.dataset.relative);if(row)drawRelative(canvas,row)}}}}
-const evidence=new Map();for(const section of [REPORT.world_model,REPORT.regime,...REPORT.flow_map,...REPORT.transmission_chain,...REPORT.trade_plan,...REPORT.contradictions,...REPORT.falsifiers]){{for(const item of section?.citations||[])evidence.set(item.reference_id,item)}}
+const evidence=new Map();for(const section of [REPORT.world_model,...REPORT.parameter_basis,...REPORT.insights,...REPORT.observations]){{for(const item of section?.citations||[])evidence.set(item.reference_id,item)}}
 const dialog=document.getElementById('evidence-dialog'),fields=document.getElementById('evidence-fields'),title=document.getElementById('evidence-title');
 document.addEventListener('click',event=>{{const button=event.target.closest('[data-evidence]');if(!button)return;const item=evidence.get(button.dataset.evidence);if(!item)return;title.textContent=item.label||item.key||'证据';const rows=[['引用 ID',item.reference_id],['类型',item.kind],['完成日',item.session||'—'],['质量',item.quality||'—'],[item.metric_label||'指标',`${{item.metric_value??'—'}} ${{item.metric_unit==='basis_points'?'bp':item.metric_unit==='percent_return'?'%':''}}`],['20日领导端',item.leader||'—']];fields.replaceChildren(...rows.flatMap(([key,value])=>{{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=key;dd.textContent=String(value);return[dt,dd]}}));dialog.showModal()}});
 document.getElementById('evidence-close').addEventListener('click',()=>dialog.close());
