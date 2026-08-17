@@ -1,0 +1,72 @@
+{
+  "schema_version": "market-regime-kline-macro-analyst-acceptance-v1",
+  "issue": 819,
+  "result": "verified_local_real_data",
+  "source_prompt": {
+    "repository_path": "product/prompts/SYSTEM-PROMPT-macro-analyst.md",
+    "sha256": "81b5d8bcf46c71dc1ebc124fb93949b4c7a10196dd326828c8fae21cb9f1d63d",
+    "byte_identical_to_user_file": true
+  },
+  "real_provider_run": {
+    "at": "2026-08-17T12:17:22.142317Z",
+    "generation_status": "model_generated_unreviewed",
+    "attempt_count": 1,
+    "attempt_outcomes": [
+      "accepted"
+    ],
+    "delivery_id": "market-regime-kline-world-delivery:0608c7105b6f5596a1f0106286a2384bb647b71fe93295b4033d947520c2cda5",
+    "context_id": "market-regime-kline-world-context:622801f2872488e604305896f5a964937c1ba76e1142d26158ecbea24b510746",
+    "world_model_id": "market-regime-kline-world-model:6d27c84ff94d397895d38e6c662e7a7614eb301bb66ebe7fd012539cd4695ce5",
+    "posture": "defense",
+    "headline": "防守：前瞻数据缺失，方向清晰度不足，降低风险预算并关闭做多闸门",
+    "macro_parameters": {
+      "as_of": "2026-08-14",
+      "risk_budget": 0.3,
+      "long_gate": "CLOSED",
+      "dispersion": "UNKNOWN",
+      "sector_prior": [],
+      "blackout": [],
+      "confidence": 0.4,
+      "data_coverage": 0.321429
+    },
+    "chart_count": 17,
+    "relationship_count": 12,
+    "parameter_basis_count": 7,
+    "insight_count": 0,
+    "observation_count": 29,
+    "missing_data_count": 10,
+    "last_failure": null
+  },
+  "visual_replay": {
+    "renderer_version": "market-regime-kline-world-report-renderer-v5",
+    "report_id": "market-regime-kline-world-report:470321b3c83f4b0fba779e737743416ee1781862d34056961e39f4fe5cb50d28",
+    "desktop": {
+      "viewport": [1280, 900],
+      "client_width": 1280,
+      "scroll_width": 1280,
+      "chart_count": 17,
+      "relationship_count": 12,
+      "screenshot": "issue-819-macro-analyst-real-desktop.png",
+      "sha256": "d0b11d3b26402029f73400449f2031865e11ab98315e32d557a3609516a8e08f"
+    },
+    "mobile": {
+      "viewport": [390, 844],
+      "client_width": 390,
+      "scroll_width": 390,
+      "chart_count": 17,
+      "relationship_count": 12,
+      "screenshot": "issue-819-macro-analyst-real-mobile.png",
+      "sha256": "630dd47721a0f5ffde4dc234188d7c1818c23bda52380dde933eb853ca2da7a2"
+    }
+  },
+  "validation": {
+    "focused_and_upstream_tests": "66 passed",
+    "python_compile": "passed",
+    "diff_check": "passed",
+    "changed_path_secret_scan": "passed",
+    "candles": "up green hollow; down red filled",
+    "finance_daily_newsletter_input": false,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false
+  }
+}

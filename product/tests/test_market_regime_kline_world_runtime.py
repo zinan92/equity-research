@@ -32,7 +32,7 @@ from manage_market_regime_kline_newsletter_launchd import LABEL, build_plist  # 
 from product.tests.test_market_regime_daily_evidence import MacroTransport  # noqa: E402
 from product.tests.test_market_regime_kline_newsletter import BitcoinTransport  # noqa: E402
 from product.tests.test_market_regime_kline_world_context import inputs  # noqa: E402
-from product.tests.test_market_regime_kline_world_model import valid_output  # noqa: E402
+from product.tests.test_market_regime_kline_macro_analysis import valid_output  # noqa: E402
 
 
 NOW = datetime(2026, 8, 16, 0, 20, tzinfo=timezone.utc)
@@ -111,7 +111,7 @@ class DynamicProvider:
 
     def generate(self, request: dict) -> tuple[dict, dict]:
         self.requests.append(deepcopy(request))
-        return valid_output(request["context"]), {
+        return valid_output(request), {
             "request_id": "request-safe",
             "model": self.model,
             "finish_reason": "stop",
@@ -166,10 +166,13 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             self.assertEqual(report["generation_status"], "model_generated_unreviewed")
             self.assertEqual(len(report["charts"]), 17)
             self.assertEqual(len(report["relationships"]), 12)
-            self.assertGreaterEqual(len(report["flow_map"]), 1)
-            self.assertGreaterEqual(len(report["trade_plan"]), 1)
+            self.assertEqual(len(report["parameter_basis"]), 7)
+            self.assertEqual(report["insights"], [])
+            self.assertGreaterEqual(len(report["observations"]), 1)
+            self.assertGreaterEqual(len(report["data_ledger"]), 1)
             self.assertFalse(report["truth_boundary"]["finance_newsletter_input"])
-            self.assertTrue(report["truth_boundary"]["contains_investment_advice"])
+            self.assertTrue(report["truth_boundary"]["macro_parameters_present"])
+            self.assertFalse(report["truth_boundary"]["individual_security_advice"])
             self.assertFalse(report["truth_boundary"]["automatic_execution_eligible"])
             encoded_request = json.dumps(provider.requests, ensure_ascii=False)
             self.assertNotIn("Finance Daily Newsletter", encoded_request)
@@ -190,11 +193,12 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             result = runtime.run_once(now=NOW)
             report = result["report"]
             self.assertEqual(report["generation_status"], "interpretation_unavailable")
-            self.assertEqual(report["flow_map"], [])
-            self.assertEqual(report["trade_plan"], [])
-            self.assertEqual(report["falsifiers"], [])
+            self.assertEqual(report["macro_parameters"], {})
+            self.assertEqual(report["parameter_basis"], [])
+            self.assertEqual(report["insights"], [])
+            self.assertEqual(report["observations"], [])
             self.assertEqual(len(report["charts"]), 17)
-            self.assertFalse(report["truth_boundary"]["contains_investment_advice"])
+            self.assertFalse(report["truth_boundary"]["macro_parameters_present"])
             self.assertEqual(
                 result["status"]["last_success"]["generation_status"],
                 "interpretation_unavailable",
