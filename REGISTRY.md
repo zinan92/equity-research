@@ -1,5 +1,27 @@
 # REGISTRY
 
+## 2026-08-17 · Sector rotation read-only prototype (Issue #816 / PR #822)
+
+Now: merged SHA `424e6c43abfeb9758c754a4c1c8775c5a1e30901` adds the local-only
+sector rotation reader at [`product/static/sector-rotation.html`](product/static/sector-rotation.html).
+It freezes the approved 20 logical peer-sector slots and makes the intermediate
+macro-to-stock layer observable: K-line structure first, fund-flow confirmation
+second, and relative rotation as a derived relationship rather than a fixed
+chain. The page has attack/defense/mixed filters, a 20-card overview and an
+evidence drawer for the K-line × flow contract.
+
+All V1 market values are explicitly `FIXTURE / NOT LIVE`. The page has no
+provider calls, broker calls, orders, positions, scheduler or automatic-trading
+surface; partial, stale, proxy-only or identity-mismatched inputs remain
+`unknown`. Desktop and mobile evidence is recorded in
+[`docs/evidence/sector-rotation-v1/`](docs/evidence/sector-rotation-v1/), and
+13 focused/regression tests plus headless Chrome interaction checks passed.
+
+Next: finish the evidence-drawer/state-wording review in Decision #815, then
+open separate work for the provider adapter, historical flow snapshots and
+real-data acceptance. Do not promote the fixture cards into a current market
+judgment until those data and identity contracts are verified.
+
 ## 2026-08-17 · K-line section hierarchy and replayable model deployed (Issue #809 / PR #813)
 
 Now: the local K-line Daily app is installed at merged SHA
