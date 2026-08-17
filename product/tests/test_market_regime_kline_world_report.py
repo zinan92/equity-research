@@ -4,6 +4,7 @@ from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
 import json
+import re
 import tempfile
 import unittest
 
@@ -93,24 +94,47 @@ class KlineWorldReportTests(unittest.TestCase):
             )
             html = render_html(report)
             headings = [
-                "资金可能正在从哪里，流向哪里？",
-                "这套世界模型是怎样传导的？",
-                "在这个世界模型下，怎样交易？",
-                "17 个市场现在分别在说什么？",
-                "12 组相对领导关系",
-                "当前解释哪里不一致？",
-                "哪两件事会推翻当前世界模型？",
                 "17 张完成日线证据",
+                "资金可能正在从哪里，流向哪里？",
+                "世界模型如何传导，以及怎样交易？",
+                "17 个市场与 12 组相对领导关系",
             ]
             positions = [html.index(value) for value in headings]
             self.assertEqual(positions, sorted(positions))
+            self.assertEqual(
+                re.findall(r'<section id="([^"]+)">', html),
+                ["charts", "flow-map", "model-and-trades", "market-evidence"],
+            )
+            self.assertIn('<div class="subsection" id="transmission">', html)
+            self.assertIn('<div class="subsection" id="trade-plan">', html)
+            self.assertIn('<div class="subsection" id="cross-section">', html)
+            self.assertIn('<div class="subsection" id="relative-leadership">', html)
+            self.assertNotIn('<section id="contradictions">', html)
+            self.assertNotIn('<section id="falsifiers">', html)
+            self.assertNotIn("当前解释哪里不一致？", html)
+            self.assertNotIn("哪两件事会推翻当前世界模型？", html)
+            self.assertNotIn("关联证伪 #", html)
             self.assertIn("本页包含市场层面的交易建议", html)
             self.assertIn("系统不会自动执行交易", html)
             self.assertNotIn("不是投资建议", html)
             self.assertNotIn("禁止交易建议", html)
+            markdown = render_markdown(report)
+            markdown_headings = [
+                "## 17 张完成日线证据",
+                "## 资金迁移地图",
+                "## 世界模型如何传导，以及怎样交易？",
+                "## 17 个市场与 12 组相对领导关系",
+            ]
+            markdown_positions = [markdown.index(value) for value in markdown_headings]
+            self.assertEqual(markdown_positions, sorted(markdown_positions))
+            self.assertNotIn("## 主线矛盾", markdown)
+            self.assertNotIn("## 两个证伪条件", markdown)
+            self.assertNotIn("证伪条件 #", markdown)
             self.assertTrue(report["truth_boundary"]["contains_investment_advice"])
             self.assertFalse(report["truth_boundary"]["automatic_execution_eligible"])
             self.assertGreaterEqual(len(report["trade_plan"]), 1)
+            self.assertGreaterEqual(len(report["contradictions"]), 1)
+            self.assertEqual(len(report["falsifiers"]), 2)
 
     def test_every_model_object_discloses_resolvable_citations(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
