@@ -1,0 +1,89 @@
+{
+  "schema_version": "market-regime-kline-world-deployment-acceptance-v1",
+  "verified_at": "2026-08-17T10:46:20Z",
+  "issue": 809,
+  "implementation": {
+    "layout_issue": 797,
+    "layout_pr": 798,
+    "model_issue": 799,
+    "model_pr": 808,
+    "installed_sha": "6f7c6b0426a41bcdf82b43ed336eb86df811cb09"
+  },
+  "runtime": {
+    "state": "idle",
+    "last_failure": null,
+    "data_kind": "real",
+    "context_id": "market-regime-kline-world-context:02aec6a61910c214d6a6389213e9a24ab00c001f7324254de83b3d44e218dd99",
+    "world_model_id": "market-regime-kline-world-model:2e814dfac645f49b3ae90839b9f6d99a619a8b440f79f460ab5f719fe264dedd",
+    "report_id": "market-regime-kline-world-report:421899033d94f218f93db27a4e510aaab5323dbbf27660367eda3fb54a4dac58",
+    "delivery_id": "market-regime-kline-world-delivery:ccd72f0a16a698dc8dc0a299f26950553316c78987ed6564781662d471d2d92e",
+    "generated_at": "2026-08-17T10:44:19.934080Z",
+    "report_date": "2026-08-17",
+    "generation_status": "model_generated_unreviewed",
+    "posture": "defense",
+    "renderer_version": "market-regime-kline-world-report-renderer-v3",
+    "chart_count": 17,
+    "relationship_count": 12,
+    "flow_count": 3,
+    "trade_count": 2
+  },
+  "model_replay": {
+    "run_id": "world-model-20260817T103925Z-f26f725bec52",
+    "prompt_version": "market-regime-kline-world-model-prompt-v5",
+    "compiler_version": "market-regime-kline-world-model-compiler-v5",
+    "attempt_count": 3,
+    "attempt_outcomes": [
+      "output_semantic_invalid:transmission_chain.1.statement",
+      "output_citation_invalid:trade_plan.0",
+      "accepted"
+    ],
+    "fresh_process_replay": "passed",
+    "operator_authored_answer": false,
+    "stale_model_reused": false,
+    "fallback_used": false
+  },
+  "browser_acceptance": {
+    "section_order": [
+      "charts",
+      "flow-map",
+      "model-and-trades",
+      "market-evidence"
+    ],
+    "hero_position_preserved": true,
+    "hero_posture": "防守",
+    "desktop": {
+      "viewport_width": 1280,
+      "main_charts": 17,
+      "relative_charts": 12,
+      "horizontal_overflow_px": 0,
+      "visual_review": "passed",
+      "screenshot": "evidence/market-regime-kline-world-runtime/issue-809-deployed-section-hierarchy-desktop.png",
+      "screenshot_sha256": "c6bb488710b54953069d2fe5d2a6835c6816d61d542be6c977927f520f41bf40"
+    },
+    "mobile": {
+      "viewport_width": 390,
+      "main_charts": 17,
+      "relative_charts": 12,
+      "horizontal_overflow_px": 0,
+      "visual_review": "passed",
+      "screenshot": "evidence/market-regime-kline-world-runtime/issue-809-deployed-section-hierarchy-mobile.png",
+      "screenshot_sha256": "aefc8034e3d15e4a23bad0350e5a5681f15eac5ce2281cc1f1fb829293005a54"
+    }
+  },
+  "desktop_delivery": {
+    "latest_html": "~/Desktop/K线日报/latest.html",
+    "latest_html_sha256": "403708dbfc587f8678e2793bb325e86f72fdccb28299c8205a6990dfa92922c6",
+    "latest_markdown": "~/Desktop/K线日报/latest.md",
+    "latest_markdown_sha256": "2f25b0183f9a449edff4a4c98c4f84bd0daacd219c915c523e6dae1dfe20fce8",
+    "preserved_prior_html": "~/Desktop/K线日报/archive/2026-08-17-before-section-reorder-cc71e5181c1e.html",
+    "preserved_prior_html_sha256": "86610490c93d5769672f15a57be8f4c64d2410994c39598b8de07136ac5e81d4",
+    "preserved_prior_markdown": "~/Desktop/K线日报/archive/2026-08-17-before-section-reorder-cc71e5181c1e.md",
+    "preserved_prior_markdown_sha256": "f90791306d365b7d78762f5704f763a92d66933c55c1d2be125b08e06235b98b"
+  },
+  "truth_boundary": {
+    "finance_daily_newsletter_input": false,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "contains_market_level_investment_advice": true
+  }
+}
