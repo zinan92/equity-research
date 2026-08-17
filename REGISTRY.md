@@ -1,5 +1,37 @@
 # REGISTRY
 
+## 2026-08-17 · K-line section hierarchy and replayable model deployed (Issue #809)
+
+Now: the local K-line Daily app is installed at merged SHA
+`6f7c6b0426a41bcdf82b43ed336eb86df811cb09`. The approved hero remains first,
+followed by exactly four top-level sections: 17 completed daily charts; capital
+migration; transmission plus trade recommendations; and the combined market
+cross-section plus 12 relative-leadership histories. The former standalone
+contradiction and falsifier sections are no longer rendered, while those
+structured fields remain in the immutable report.
+
+The current Desktop aliases
+[`latest.html`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.html)
+and [`latest.md`](file:///Users/wendy/Desktop/K%E7%BA%BF%E6%97%A5%E6%8A%A5/latest.md)
+serve a real-data 2026-08-17 `防守` report. Its World Model v5 response was
+accepted on attempt three after two code-owned validation repairs and then
+replayed in a fresh process. No operator-authored answer, stale model or
+fallback was promoted. The pre-change Desktop report is preserved under
+`~/Desktop/K线日报/archive/2026-08-17-before-section-reorder-cc71e5181c1e.*`.
+
+Validation: 36 focused model/report/runtime tests pass. Desktop 1280 and mobile
+390 browser checks render all 17 main charts and 12 relative charts in the
+approved order with zero horizontal overflow. Runtime status is `idle`, the
+last failure is null, and all model/report/delivery identities replay. The
+secret-free receipt and screenshots are recorded in
+[`section-order-v3-model-v5-deploy-2026-08-17.json`](evidence/market-regime-kline-world-runtime/section-order-v3-model-v5-deploy-2026-08-17.json).
+The page remains local-only and never auto-executes a trade.
+
+Next: let the next ordinary 08:20 LaunchAgent run without operator help, then
+compare that Track 2 result manually with the independent Finance Daily
+Newsletter. Product usefulness remains an empirical comparison question, not
+something this controlled deployment proves.
+
 ## 2026-08-17 · Hollow-green K-line renderer deployed (Issue #795 / PR #796)
 
 Now: merged SHA `6f3cc9467fe678d2fa4ab081615ac5817385aff4` is installed in
