@@ -1,0 +1,48 @@
+{
+  "schema_version": "market-regime-kline-world-runtime-post-deploy-evidence-v1",
+  "observed_at": "2026-08-17T02:01:41.912385Z",
+  "merged_main_sha": "2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa",
+  "deployed_components": {
+    "structural_market_regime_app": {
+      "launchd_label": "com.park.market-regime.scheduler",
+      "sha": "2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa",
+      "state_after_restart": "running"
+    },
+    "kline_world_newsletter_app": {
+      "launchd_label": "com.park.market-regime.kline-newsletter",
+      "sha": "2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa",
+      "controlled_invocation": "no_llm"
+    }
+  },
+  "fresh_structural_snapshot": {
+    "run_id": "market-regime-20260817T020101Z-0850007023dc",
+    "quality": "fresh",
+    "instrument_count": 12,
+    "selected_endpoints": {
+      "yahoo_query2": 9,
+      "tencent_primary": 3
+    },
+    "all_instruments_have_one_accepted_same_day_attempt": true,
+    "old_latest_good_projected_as_current": false
+  },
+  "fresh_kline_report": {
+    "context_id": "market-regime-kline-world-context:670becb9bbb7f9e323bbbf4e06aeeb222eea4e7a4d96a796e20177b9ae900a01",
+    "world_model_id": "market-regime-kline-world-model:9c62388b708f8233982bd8781290fb15f30e738798765005fc9db0ffbe0f8c99",
+    "report_id": "market-regime-kline-world-report:ca4299e6177b86a832c796d400d8533e95f389c94d8d751b8cdd93006e0ee89e",
+    "delivery_id": "market-regime-kline-world-delivery:7c911f540f9216385769e2a615d7b74cccd79f34acfa289fb690731d8281da06",
+    "report_date": "2026-08-17",
+    "generation_status": "interpretation_unavailable",
+    "chart_count": 17,
+    "relationship_count": 12,
+    "flow_count": 0,
+    "trade_count": 0,
+    "same_day_data_reused": false
+  },
+  "boundary": {
+    "previous_day_data_as_current": false,
+    "finance_daily_newsletter_read": false,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "llm_interpretation_quality_proven": false
+  }
+}
