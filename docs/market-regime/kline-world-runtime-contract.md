@@ -1,6 +1,6 @@
 # K-line World Runtime v1 Contract
 
-Issue: #769
+Issue: #769; same-day source fallback: #783
 
 ## Outcome
 
@@ -21,9 +21,14 @@ read, modified or used as fallback content.
    Desktop promotion and safe status publication in that order.
 2. `com.park.market-regime.kline-newsletter` at 08:20 remains the only Track 2
    scheduler. No second LaunchAgent, API or intraday dependency is introduced.
-3. Desktop `latest.html`, `latest.md` and dated aliases contain the exact bytes
-   of the verified immutable S3 artifacts. Any failure before a successful
-   promotion preserves the prior last-good aliases and delivery state.
+3. Each refreshed factor exhausts its ordered same-day source/endpoint chain
+   before the runtime treats that factor as unavailable. A successful
+   alternate source produces a current accepted artifact and does not block the
+   report. Desktop `latest.html` and `latest.md` contain either the exact bytes
+   of the verified immutable S3 artifacts or an explicit current `今日数据不可用`
+   surface. Dated aliases contain only verified historical reports. A failed
+   run never labels a prior report as the current result and preserves the
+   prior immutable delivery/history state.
 4. A missing key or exhausted provider publishes only the current-context
    `interpretation_unavailable` report: zero flow edges, advice or stale prose.
    Success status exposes posture, generation state, 17 charts, 12 relative
@@ -58,7 +63,8 @@ read, modified or used as fallback content.
 
 - Reading Track 1 as an input or fallback.
 - Publishing fixtures, stale prose or an unverified report as current.
-- Overwriting last-good Desktop aliases from a failed promotion.
+- Overwriting dated historical aliases from a failed run, or leaving a prior
+  report under the current `latest` label after a source failure.
 - Persisting provider exceptions, paths or secrets in status or receipts.
 - Weakening any completed-daily, context, model or report validator.
 
@@ -68,12 +74,17 @@ The runtime is one-shot; recurrence belongs only to the existing LaunchAgent.
 It uses the existing `run.lock` so old and new invocations cannot overlap. A
 model-unavailable S2 artifact is a valid current-context result, but its status
 must remain `interpretation_unavailable` and its report must contain no flow or
-trade plan. Collection, evidence, context, report-replay or promotion failures
-leave the prior delivery available and update only a fixed-code failure status.
+trade plan. Collection first retries the configured same-day source chain. If a
+required factor still has no accepted current source, evidence/context/report
+failures produce the explicit data-free unavailable latest surface and a
+fixed-code failure status; prior dated artifacts and delivery receipts remain
+historical and are never relabelled as current.
 
 Desktop aliases are a local convenience projection, not a new evidence source.
-Immutable report artifacts are written first. Aliases are replaced atomically
-per file, delivery state advances last, and caught failures restore the exact
-prior alias and state bytes. This does not claim cryptographic authenticity or
-perfect multi-file crash transactions against an actor able to rewrite all
-local files.
+Immutable report artifacts are written first. A successful run atomically
+replaces the aliases and advances the served delivery state. A failed run
+atomically replaces only `latest.html`/`latest.md` with a data-free unavailable
+surface; dated aliases and the prior delivery receipt remain historical. The
+unavailable surface contains no charts, generated prose, advice or previous
+source values. This does not claim cryptographic authenticity or perfect
+multi-file crash transactions against an actor able to rewrite all local files.

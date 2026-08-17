@@ -26,6 +26,7 @@ from data_core.market_regime_data import (  # noqa: E402
     instrument_registry_payload,
     license_decision,
     normalize_capture,
+    _provider_url,
 )
 
 
@@ -366,14 +367,18 @@ class MarketRegimeDataTest(unittest.TestCase):
         self.assertEqual(normalized["quality"], "partial")
         self.assertEqual(normalized["missing_expected_session"], "2026-08-06")
 
-    def test_store_preserves_raw_receipts_and_does_not_overwrite_latest_good_on_failure(self) -> None:
+    def test_store_uses_same_day_yahoo_fallback_and_keeps_old_pointer_historical(self) -> None:
+        primary_url = _provider_url(INSTRUMENT_BY_KEY["sp500"])
+        alternate_url = primary_url.replace("query2.finance.yahoo.com", "query1.finance.yahoo.com")
         valid = capture(yahoo_body("^GSPC"), headers=(("content-type", "application/json"), ("etag", "abc")))
         failed = capture(b"<html>rate limited</html>", status=502, content_type="text/html")
-        responses = iter((valid, failed))
+        responses = {
+            primary_url: iter((valid, failed)),
+            alternate_url: iter((failed,)),
+        }
 
         def fake_get(url: str) -> HttpCapture:
-            del url
-            return next(responses)
+            return next(responses[url])
 
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -389,6 +394,7 @@ class MarketRegimeDataTest(unittest.TestCase):
             first_hash = sha256(latest_path.read_bytes()).hexdigest()
             self.assertEqual(first["quality"], "fresh")
             self.assertFalse(first["instruments"][0]["publication_eligible"])
+            self.assertEqual(first["instruments"][0]["source"]["selected_endpoint"], "query2")
             raw_path = root / first["instruments"][0]["source"]["raw_path"]
             self.assertEqual(sha256(raw_path.read_bytes()).hexdigest(), first["instruments"][0]["source"]["raw_sha256"])
             artifact = first["instruments"][0]["normalized_artifact"]
@@ -402,8 +408,14 @@ class MarketRegimeDataTest(unittest.TestCase):
                 private_preview=False,
             )
             self.assertEqual(sha256(latest_path.read_bytes()).hexdigest(), first_hash)
-            self.assertEqual(second["quality"], "partial")
-            self.assertEqual(second["instruments"][0]["refresh_status"], "rejected")
+            self.assertEqual(second["quality"], "unavailable")
+            rejected = second["instruments"][0]
+            self.assertEqual(rejected["refresh_status"], "rejected")
+            self.assertNotIn("normalized_artifact", rejected)
+            self.assertEqual(
+                [item["accepted"] for item in rejected["refresh_failure"]["source_attempts"]],
+                [False, False],
+            )
             receipt = json.loads((root / second["refresh_receipt"]).read_text())
             self.assertEqual(receipt["rejected_count"], 1)
             first_receipt = json.loads((root / first["refresh_receipt"]).read_text())

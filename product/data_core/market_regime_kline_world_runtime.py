@@ -7,12 +7,14 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from hashlib import sha256
+from html import escape as html_escape
 import json
 import os
 from pathlib import Path
 import re
 import tempfile
 from typing import Any, Callable, Mapping
+from zoneinfo import ZoneInfo
 
 from .market_regime_data import HttpCapture, MarketRegimeDataStore, http_get_capture
 from .market_regime_daily_evidence import MarketRegimeDailyEvidenceStore
@@ -33,6 +35,7 @@ from .market_regime_macro_data import MarketRegimeMacroDataStore
 
 SCHEMA_VERSION = "market-regime-kline-world-runtime-v1"
 DELIVERY_ID_PREFIX = "market-regime-kline-world-delivery:"
+SURFACE_ID_PREFIX = "market-regime-kline-world-surface:"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 SAFE_CODE_RE = re.compile(r"^[a-z0-9_:-]{1,80}$")
 ISO_RE = re.compile(
@@ -106,6 +109,60 @@ def _immutable_bytes(path: Path, encoded: bytes) -> str:
         handle.flush()
         os.fsync(handle.fileno())
     return digest
+
+
+def _unavailable_surface(
+    *, code: str, phase: str, at: datetime
+) -> tuple[dict[str, Any], bytes, bytes]:
+    """Build a current, data-free surface when this batch cannot be served."""
+    if not SAFE_CODE_RE.fullmatch(code):
+        code = "run_failed"
+    if phase not in PHASES:
+        phase = "track2_run"
+    occurred_at = _iso(at)
+    local_date = at.astimezone(ZoneInfo("Asia/Shanghai")).date().isoformat()
+    core = {
+        "schema_version": SCHEMA_VERSION,
+        "event": "unavailable",
+        "report_date": local_date,
+        "at": occurred_at,
+        "code": code,
+        "phase": phase,
+        "message": "本批次数据不完整，未使用历史数据替代。",
+        "truth_boundary": {
+            "track": "kline_only",
+            "current_data_available": False,
+            "historical_data_used_as_current": False,
+            "finance_newsletter_input": False,
+            "contains_investment_advice": False,
+            "automatic_execution_eligible": False,
+            "publication_eligible": False,
+        },
+    }
+    digest = _digest(core)
+    surface_id = f"{SURFACE_ID_PREFIX}{digest}"
+    core["surface_id"] = surface_id
+    encoded_core = _json_bytes(core)
+    title = f"K 线世界日报｜{local_date}"
+    safe_title = html_escape(title)
+    safe_message = html_escape(str(core["message"]))
+    safe_code = html_escape(code)
+    safe_phase = html_escape(phase)
+    html = f"""<!doctype html>
+<html lang=\"zh-CN\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>{safe_title}</title>
+<style>html,body{{margin:0;background:#f3f1eb;color:#151714;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",\"PingFang SC\",sans-serif}}main{{max-width:760px;min-height:100vh;margin:0 auto;padding:56px 28px;background:#fffefa;box-sizing:border-box}}h1{{font-size:14px;font-weight:600;letter-spacing:.08em;border-bottom:1px solid #e2e2dc;padding-bottom:18px}}h2{{font-size:42px;margin:82px 0 20px;color:#b4372f}}p{{font-size:17px;line-height:1.8}}.meta{{margin-top:40px;padding:16px;background:#fde7e4;color:#70413d;font:13px ui-monospace,SFMono-Regular,monospace;line-height:1.8}}.note{{margin-top:32px;color:#5f665f;font-size:14px}}</style></head>
+<body><main><h1>K 线世界日报 · Track 2</h1><h2>今日数据不可用</h2><p>{safe_message}</p><div class=\"meta\">code: {safe_code}<br>phase: {safe_phase}<br>at: {html_escape(occurred_at)}</div><p class=\"note\">历史日报仍保留在对应日期文件中；本页面不代表今天的市场判断。</p></main></body></html>
+""".encode("utf-8")
+    markdown = (
+        f"# {title}\n\n"
+        "## 今日数据不可用\n\n"
+        f"{core['message']}\n\n"
+        f"- code: `{code}`\n"
+        f"- phase: `{phase}`\n"
+        f"- at: `{occurred_at}`\n\n"
+        "历史日报仍保留在对应日期文件中；本页面不代表今天的市场判断。\n"
+    ).encode("utf-8")
+    return core, html, markdown
 
 
 def _truth_boundary(generation_status: str) -> dict[str, Any]:
@@ -271,6 +328,132 @@ class KlineWorldDeliveryStore:
     def state_path(self) -> Path:
         return self.root / "state.json"
 
+    @property
+    def surface_state_path(self) -> Path:
+        return self.root / "current-surface.json"
+
+    def _read_surface_state(self, *, required: bool = False) -> dict[str, Any] | None:
+        try:
+            state = json.loads(self.surface_state_path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            if required:
+                raise KlineWorldRuntimeError("surface_state_unavailable")
+            return None
+        except json.JSONDecodeError as exc:
+            raise KlineWorldRuntimeError("surface_state_invalid") from exc
+        if not isinstance(state, dict) or state.get("schema_version") != SCHEMA_VERSION:
+            raise KlineWorldRuntimeError("surface_state_invalid")
+        kind = state.get("state")
+        if kind == "served":
+            if set(state) != {"schema_version", "state", "delivery_id"}:
+                raise KlineWorldRuntimeError("surface_state_invalid")
+            delivery_id = str(state.get("delivery_id") or "")
+            if not delivery_id.startswith(DELIVERY_ID_PREFIX):
+                raise KlineWorldRuntimeError("surface_state_identity_invalid")
+            return state
+        if kind != "unavailable" or set(state) != {
+            "schema_version",
+            "state",
+            "surface_id",
+            "artifact",
+            "html",
+            "markdown",
+        }:
+            raise KlineWorldRuntimeError("surface_state_invalid")
+        surface_id = str(state.get("surface_id") or "")
+        if not surface_id.startswith(SURFACE_ID_PREFIX):
+            raise KlineWorldRuntimeError("surface_state_identity_invalid")
+        digest = surface_id.removeprefix(SURFACE_ID_PREFIX)
+        if not SHA256_RE.fullmatch(digest):
+            raise KlineWorldRuntimeError("surface_state_identity_invalid")
+        artifact_ref = _safe_ref(state.get("artifact"), field="unavailable_artifact")
+        if artifact_ref["path"] != f"unavailable/{digest}.json":
+            raise KlineWorldRuntimeError("surface_artifact_reference_invalid")
+        artifact_bytes = _read_ref(self.root, artifact_ref, field="unavailable_artifact")
+        try:
+            artifact = json.loads(artifact_bytes)
+        except json.JSONDecodeError as exc:
+            raise KlineWorldRuntimeError("surface_artifact_invalid") from exc
+        if not isinstance(artifact, dict) or artifact.get("surface_id") != surface_id:
+            raise KlineWorldRuntimeError("surface_artifact_identity_mismatch")
+        identity = {key: value for key, value in artifact.items() if key != "surface_id"}
+        if _digest(identity) != digest:
+            raise KlineWorldRuntimeError("surface_artifact_identity_mismatch")
+        if artifact.get("event") != "unavailable" or artifact.get("truth_boundary") != {
+            "track": "kline_only",
+            "current_data_available": False,
+            "historical_data_used_as_current": False,
+            "finance_newsletter_input": False,
+            "contains_investment_advice": False,
+            "automatic_execution_eligible": False,
+            "publication_eligible": False,
+        }:
+            raise KlineWorldRuntimeError("surface_artifact_boundary_invalid")
+        for field, suffix in (("html", ".html"), ("markdown", ".md")):
+            reference = _safe_ref(state.get(field), field=f"unavailable_{field}")
+            if reference["path"] != f"unavailable/{digest}{suffix}":
+                raise KlineWorldRuntimeError(f"surface_{field}_reference_invalid")
+            _read_ref(self.root, reference, field=f"unavailable_{field}")
+        return state
+
+    def publish_unavailable(
+        self, *, code: str, phase: str, at: datetime
+    ) -> dict[str, Any]:
+        """Replace only the current aliases with an explicit no-data surface."""
+        core, html, markdown = _unavailable_surface(code=code, phase=phase, at=at)
+        digest = str(core["surface_id"]).removeprefix(SURFACE_ID_PREFIX)
+        artifact_ref = {
+            "path": f"unavailable/{digest}.json",
+            "sha256": _immutable_bytes(self.root / f"unavailable/{digest}.json", _json_bytes(core)),
+        }
+        html_ref = {
+            "path": f"unavailable/{digest}.html",
+            "sha256": _immutable_bytes(self.root / f"unavailable/{digest}.html", html),
+        }
+        markdown_ref = {
+            "path": f"unavailable/{digest}.md",
+            "sha256": _immutable_bytes(
+                self.root / f"unavailable/{digest}.md", markdown
+            ),
+        }
+        surface_state = {
+            "schema_version": SCHEMA_VERSION,
+            "state": "unavailable",
+            "surface_id": core["surface_id"],
+            "artifact": artifact_ref,
+            "html": html_ref,
+            "markdown": markdown_ref,
+        }
+        prior_aliases = {
+            name: (self.output_root / name).read_bytes()
+            if (self.output_root / name).exists()
+            else None
+            for name in ("latest.html", "latest.md")
+        }
+        prior_surface = (
+            self.surface_state_path.read_bytes()
+            if self.surface_state_path.exists()
+            else None
+        )
+        try:
+            _atomic_bytes(self.output_root / "latest.html", html)
+            _atomic_bytes(self.output_root / "latest.md", markdown)
+            _atomic_json(self.surface_state_path, surface_state)
+            self._read_surface_state(required=True)
+        except Exception:
+            for name, prior in prior_aliases.items():
+                target = self.output_root / name
+                if prior is None:
+                    target.unlink(missing_ok=True)
+                else:
+                    _atomic_bytes(target, prior)
+            if prior_surface is None:
+                self.surface_state_path.unlink(missing_ok=True)
+            else:
+                _atomic_bytes(self.surface_state_path, prior_surface)
+            raise
+        return surface_state
+
     def promote(self) -> tuple[dict[str, Any], dict[str, Any]]:
         report_state, report = self.report_store.latest()
         summary = _validate_report_summary(report, allow_fixture=self.allow_fixture)
@@ -335,9 +518,20 @@ class KlineWorldDeliveryStore:
             for name in payloads
         }
         prior_state = self.state_path.read_bytes() if self.state_path.exists() else None
+        prior_surface = (
+            self.surface_state_path.read_bytes()
+            if self.surface_state_path.exists()
+            else None
+        )
+        surface_state = {
+            "schema_version": SCHEMA_VERSION,
+            "state": "served",
+            "delivery_id": delivery_id,
+        }
         try:
             for name, encoded in payloads.items():
                 _atomic_bytes(self.output_root / name, encoded)
+            _atomic_json(self.surface_state_path, surface_state)
             _atomic_json(self.state_path, state)
             replay_state, replay = self.latest()
             if replay_state != state or replay != core:
@@ -353,6 +547,10 @@ class KlineWorldDeliveryStore:
                 self.state_path.unlink(missing_ok=True)
             else:
                 _atomic_bytes(self.state_path, prior_state)
+            if prior_surface is None:
+                self.surface_state_path.unlink(missing_ok=True)
+            else:
+                _atomic_bytes(self.surface_state_path, prior_surface)
             raise
         return state, core
 
@@ -429,9 +627,30 @@ class KlineWorldDeliveryStore:
         source_summary = _validate_report_summary(report, allow_fixture=self.allow_fixture)
         if any(core.get(key) != value for key, value in source_summary.items()):
             raise KlineWorldRuntimeError("delivery_source_projection_mismatch")
+        surface = self._read_surface_state()
+        if surface is None or surface.get("state") == "served":
+            if surface is not None and surface.get("delivery_id") != delivery_id:
+                raise KlineWorldRuntimeError("surface_delivery_identity_mismatch")
+            latest_html, latest_markdown = source_html, source_markdown
+            current_aliases = True
+        else:
+            # A terminal source failure deliberately replaces only the current
+            # aliases.  The delivery receipt still describes the last served
+            # report, so validate its dated aliases and the immutable surface,
+            # but do not compare the old latest references to the unavailable
+            # bytes.
+            _read_ref(self.root, surface["html"], field="unavailable_html")
+            _read_ref(self.root, surface["markdown"], field="unavailable_markdown")
+            current_aliases = False
         expected_aliases = {
-            "latest_html": ("latest.html", source_html),
-            "latest_markdown": ("latest.md", source_markdown),
+            **(
+                {
+                    "latest_html": ("latest.html", source_html),
+                    "latest_markdown": ("latest.md", source_markdown),
+                }
+                if current_aliases
+                else {}
+            ),
             "dated_html": (f"{summary['report_date']}-kline-daily.html", source_html),
             "dated_markdown": (f"{summary['report_date']}-kline-daily.md", source_markdown),
         }
@@ -710,6 +929,10 @@ class KlineWorldRuntime:
             }
         except Exception as exc:
             code = _safe_failure_code(exc)
+            # Record the failure while the last successful delivery is still
+            # readable; the unavailable surface intentionally makes latest
+            # aliases non-report bytes and therefore cannot validate the prior
+            # delivery projection afterward.
             try:
                 self.status_store.record_failure(
                     code=code,
@@ -717,6 +940,16 @@ class KlineWorldRuntime:
                     at=datetime.now(timezone.utc) if now is None else current,
                 )
             except Exception:
+                pass
+            try:
+                self.delivery_store.publish_unavailable(
+                    code=code,
+                    phase=phase,
+                    at=datetime.now(timezone.utc) if now is None else current,
+                )
+            except Exception:
+                # Preserve the original fixed failure code; status still makes
+                # the unavailable run explicit even if alias replacement fails.
                 pass
             raise KlineWorldRuntimeError(code) from exc
 

@@ -47,8 +47,10 @@ canonical deterministic posture model v1.
 3. Provider absence, timeout, or invalid schema/citation produces a same-pack
    deterministic `unknown` fallback rather than stale or uncited prose.
 4. A successful run writes immutable payload/HTML/Markdown artifacts and only
-   then atomically advances `latest`; a failed run preserves last-good and
-   stores only fixed, secret-free status fields.
+   then atomically advances `latest`; a failed source attempt first exhausts
+   the configured same-day source chain. No prior data is promoted as current;
+   if every candidate fails, the run stores only fixed, secret-free
+   unavailable status fields.
 5. One LaunchAgent triggers the Track 2 one-shot runner at 08:20.  It does not
    modify or call the Finance Newsletter job.
 6. The white vertical North Star hierarchy works at desktop and 390 px with a

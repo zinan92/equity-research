@@ -67,6 +67,13 @@ BTC_URL = (
     f"{quote(BTC_SPEC.provider_symbol, safe='^=')}"
     "?interval=1d&range=2y&events=history&includeAdjustedClose=false"
 )
+BTC_QUERY1_URL = BTC_URL.replace("query2.finance.yahoo.com", "query1.finance.yahoo.com")
+
+
+def bitcoin_source_urls() -> tuple[tuple[str, str], ...]:
+    """Same-day Yahoo endpoints for the same BTC-USD instrument identity."""
+
+    return (("query2", BTC_URL), ("query1", BTC_QUERY1_URL))
 
 DISPLAY_ORDER = (
     "sp500",
@@ -259,7 +266,7 @@ class PilotDeepSeekNarrativeProvider:
 
 
 class BitcoinDailyStore:
-    """Freeze one completed-daily Bitcoin supplement with exact raw identity."""
+    """Freeze one completed-daily Bitcoin supplement with same-day retries."""
 
     def __init__(
         self,
@@ -279,21 +286,76 @@ class BitcoinDailyStore:
             deployment_mode="local_prototype",
             license_status="local_evaluation_only",
         )
-        capture = self.http_get(BTC_URL)
-        if not isinstance(capture, HttpCapture):
-            raise KlineNewsletterError("bitcoin_transport_invalid")
-        if not capture.body:
-            raise KlineNewsletterError("bitcoin_source_empty")
+        selected: tuple[HttpCapture, str, dict[str, Any], str, list[dict[str, Any]]] | None = None
+        attempts: list[dict[str, Any]] = []
+        for endpoint, url in bitcoin_source_urls():
+            capture: HttpCapture | None = None
+            wrote_raw = False
+            raw_relative = f"raw/{endpoint}-attempt.bin"
+            try:
+                capture = self.http_get(url)
+                if not isinstance(capture, HttpCapture):
+                    raise KlineNewsletterError("bitcoin_transport_invalid")
+                raw_hash = capture.raw_sha256 or sha256(b"").hexdigest()
+                raw_suffix = ".json" if capture.content_type == "application/json" else ".bin"
+                raw_relative = f"raw/{raw_hash}{raw_suffix}"
+                _immutable_bytes(self.root / raw_relative, capture.body)
+                wrote_raw = True
+                normalized = normalize_capture(BTC_SPEC, capture, now=current)
+                attempts.append(
+                    {
+                        "endpoint": endpoint,
+                        "accepted": True,
+                        "reason": None,
+                        **capture.receipt(raw_path=raw_relative),
+                    }
+                )
+                selected = (capture, raw_relative, normalized, endpoint, attempts)
+                break
+            except Exception as exc:
+                if isinstance(exc, Exception) and getattr(exc, "capture", None) is not None:
+                    capture = getattr(exc, "capture")
+                if capture is not None:
+                    if not wrote_raw:
+                        raw_hash = capture.raw_sha256 or sha256(b"").hexdigest()
+                        raw_suffix = ".json" if capture.content_type == "application/json" else ".bin"
+                        raw_relative = f"raw/{raw_hash}-{endpoint}{raw_suffix}"
+                        _immutable_bytes(self.root / raw_relative, capture.body)
+                    attempt_receipt = capture.receipt(raw_path=raw_relative)
+                    if not capture.body:
+                        attempt_receipt["raw_sha256"] = sha256(b"").hexdigest()
+                else:
+                    attempt_receipt = {
+                        "method": "GET",
+                        "requested_url": url,
+                        "final_url": url,
+                        "status_code": None,
+                        "content_type": None,
+                        "raw_sha256": None,
+                        "raw_bytes": 0,
+                        "raw_path": None,
+                        "fetched_at": _iso(current),
+                        "error": None,
+                    }
+                attempts.append(
+                    {
+                        "endpoint": endpoint,
+                        "accepted": False,
+                        "reason": " ".join(str(exc).split())[:240] or type(exc).__name__,
+                        "bounded_raw_excerpt": (
+                            " ".join(capture.body.decode("utf-8", errors="replace").split())[:400]
+                            if capture and capture.body
+                            else None
+                        ),
+                        **attempt_receipt,
+                    }
+                )
+        if selected is None:
+            raise KlineNewsletterError("bitcoin_all_same_day_sources_rejected")
+        capture, raw_relative, normalized, endpoint, attempts = selected
         raw_hash = capture.raw_sha256
         if not raw_hash:
             raise KlineNewsletterError("bitcoin_source_identity_missing")
-        raw_suffix = ".json" if capture.content_type == "application/json" else ".bin"
-        raw_relative = f"raw/{raw_hash}{raw_suffix}"
-        _immutable_bytes(self.root / raw_relative, capture.body)
-        try:
-            normalized = normalize_capture(BTC_SPEC, capture, now=current)
-        except Exception as exc:
-            raise KlineNewsletterError("bitcoin_normalization_rejected") from exc
         core = {
             "schema_version": BITCOIN_SCHEMA_VERSION,
             "instrument": asdict(BTC_SPEC),
@@ -310,6 +372,8 @@ class BitcoinDailyStore:
                 "raw_sha256": raw_hash,
                 "raw_bytes": len(capture.body),
                 "raw_path": raw_relative,
+                "selected_endpoint": endpoint,
+                "source_attempts": attempts,
             },
             "data_kind": "real" if self._live_transport else "fixture",
             "rights": rights.as_json(),

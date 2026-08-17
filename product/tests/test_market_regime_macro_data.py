@@ -20,6 +20,7 @@ from data_core.market_regime_data import (  # noqa: E402
 )
 from data_core.market_regime_macro_data import (  # noqa: E402
     DXY_CHART_URL,
+    DXY_QUERY1_CHART_URL,
     MACRO_FACTOR_BY_KEY,
     MIN_OBSERVATIONS,
     MarketRegimeMacroDataError,
@@ -190,6 +191,25 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
         with self.assertRaises(SourceCaptureError):
             normalize_dxy(capture(b"{not-json", url=DXY_CHART_URL), now=NOW)
 
+    def test_dxy_drops_partially_populated_current_session_before_provider_close(self) -> None:
+        payload = json.loads(dxy_body(end=date(2026, 8, 6)))
+        result = payload["chart"]["result"][0]
+        quote = result["indicators"]["quote"][0]
+        quote["close"][-1] = None
+        zone = ZoneInfo("America/New_York")
+        result["meta"]["regularMarketTime"] = int(
+            datetime(2026, 8, 6, 14, 0, tzinfo=zone).timestamp()
+        )
+        result["meta"]["currentTradingPeriod"]["regular"]["end"] = int(
+            datetime(2026, 8, 6, 17, 0, tzinfo=zone).timestamp()
+        )
+        normalized = normalize_dxy(
+            capture(json.dumps(payload).encode(), url=DXY_CHART_URL),
+            now=datetime(2026, 8, 6, 18, 0, tzinfo=timezone.utc),
+        )
+        self.assertEqual(normalized["last_completed_session"], "2026-08-05")
+        self.assertEqual(normalized["dropped_unfinished_sessions"], ["2026-08-06"])
+
     def test_treasury_reorders_descending_rows_and_derives_curve_same_date(self) -> None:
         parsed = parse_treasury_captures([treasury_capture(treasury_csv())], now=NOW)
         two = parsed["us2y"]
@@ -282,12 +302,10 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
                     second_temp, http_get=FakeTransport()
                 ).latest()
 
-    def test_failed_refresh_retains_last_good_and_records_bounded_evidence(self) -> None:
+    def test_failed_refresh_never_projects_last_good_into_current_snapshot(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             store = MarketRegimeMacroDataStore(temp, http_get=FakeTransport())
             accepted = store.refresh(now=NOW, factor_keys=["us2y"])
-            accepted_by_key = {item["factor"]["key"]: item for item in accepted["factors"]}
-            accepted_id = accepted_by_key["us2y"]["factor_id"]
             pointer_path = Path(temp) / "factors" / "us2y" / "latest-good.json"
             pointer_before = pointer_path.read_bytes()
             failed_transport = FakeTransport(
@@ -304,11 +322,47 @@ class MarketRegimeMacroDataTest(unittest.TestCase):
             factor = next(
                 item for item in fallback["factors"] if item["factor"]["key"] == "us2y"
             )
-            self.assertEqual(factor["factor_id"], accepted_id)
             self.assertEqual(factor["refresh_status"], "rejected")
+            self.assertNotIn("factor_id", factor)
             self.assertIn("Access Denied", factor["refresh_failure"]["bounded_raw_excerpt"])
-            self.assertEqual(fallback["quality"], "partial")
+            self.assertEqual(fallback["quality"], "unavailable")
             self.assertEqual(pointer_path.read_bytes(), pointer_before)
+
+    def test_dxy_primary_rejection_uses_same_day_alternate_endpoint(self) -> None:
+        primary = capture(
+            b"<html>rate limited</html>",
+            url=DXY_CHART_URL,
+            status=429,
+            content_type="text/html",
+        )
+        alternate = capture(dxy_body(), url=DXY_QUERY1_CHART_URL)
+
+        class DxyFallbackTransport:
+            def __init__(self) -> None:
+                self.calls: list[str] = []
+
+            def __call__(self, url: str) -> HttpCapture:
+                self.calls.append(url)
+                if "query2.finance.yahoo.com" in url:
+                    return primary
+                if "query1.finance.yahoo.com" in url:
+                    return alternate
+                return treasury_capture(treasury_csv())
+
+        transport = DxyFallbackTransport()
+        with tempfile.TemporaryDirectory() as temp:
+            snapshot = MarketRegimeMacroDataStore(temp, http_get=transport).refresh(
+                now=NOW, factor_keys=["dxy"]
+            )
+            factor = snapshot["factors"][0]
+            self.assertEqual(factor["factor"]["key"], "dxy")
+            self.assertEqual(factor["quality"], "fresh")
+            self.assertEqual(factor["source_receipt"]["selected_endpoint"], "query1")
+            self.assertEqual(
+                [item["accepted"] for item in factor["source_receipt"]["source_attempts"]],
+                [False, True],
+            )
+            self.assertEqual(transport.calls, [DXY_CHART_URL, DXY_QUERY1_CHART_URL])
 
     def test_zero_byte_attempt_is_stored_and_hashed_even_when_rejected(self) -> None:
         empty = capture(b"", url=DXY_CHART_URL, error=None)

@@ -48,10 +48,19 @@ DXY_CHART_URL = (
     "https://query2.finance.yahoo.com/v8/finance/chart/DX-Y.NYB"
     "?interval=1d&range=2y&events=history&includeAdjustedClose=false"
 )
+DXY_QUERY1_CHART_URL = DXY_CHART_URL.replace(
+    "query2.finance.yahoo.com", "query1.finance.yahoo.com"
+)
 
 
 class MarketRegimeMacroDataError(MarketRegimeDataError):
     """Macro source, normalization or immutable-store contract failed."""
+
+
+def dxy_source_urls() -> tuple[tuple[str, str], ...]:
+    """Same-day DXY candidates; both retain the exact DX-Y.NYB identity."""
+
+    return (("query2", DXY_CHART_URL), ("query1", DXY_QUERY1_CHART_URL))
 
 
 @dataclass(frozen=True)
@@ -144,6 +153,8 @@ def macro_registry_payload() -> dict[str, Any]:
                 "provider_symbol": "DX-Y.NYB",
                 "authority_tier": "supplementary_only",
                 "license_scope": "local_evaluation_only",
+                "endpoint": DXY_CHART_URL,
+                "fallback_endpoints": [DXY_QUERY1_CHART_URL],
             },
             "treasury": {
                 "provider": "us_treasury_daily_par_yield_curve",
@@ -214,6 +225,11 @@ def _bounded_excerpt(body: bytes, limit: int = 400) -> str | None:
         return None
     text = " ".join(body[: limit * 4].decode("utf-8", errors="replace").split())
     return text[:limit] or None
+
+
+def _source_failure(exc: Exception) -> str:
+    text = " ".join(str(exc).replace("\r", " ").replace("\n", " ").split())
+    return text[:240] or type(exc).__name__
 
 
 def _write_bytes_exclusive(path: Path, encoded: bytes) -> str:
@@ -486,32 +502,24 @@ def _frozen_factor(
 
 
 class MarketRegimeMacroDataStore:
-    """Serial macro collector with immutable raw evidence and latest-good pointers."""
+    """Serial macro collector with same-day source retries and immutable evidence."""
 
     def __init__(self, root: Path | str, *, http_get=http_get_capture) -> None:
         self.root = Path(root).expanduser().resolve()
         self.http_get = http_get
         self._live_transport = http_get is http_get_capture
 
-    def _fallback(self, key: str, failure: Mapping[str, Any]) -> dict[str, Any]:
-        pointer = _read_json(self.root / "factors" / key / "latest-good.json")
-        if pointer is None:
-            return {
-                "schema_version": SCHEMA_VERSION,
-                "factor": asdict(MACRO_FACTOR_BY_KEY[key]),
-                "quality": "unavailable",
-                "refresh_status": "rejected",
-                "refresh_failure": dict(failure),
-                "publication_eligible": False,
-                "action_eligible": False,
-            }
-        reference = pointer.get("artifact") or {}
-        artifact = _read_artifact(self.root, reference)
+    def _unavailable(self, key: str, failure: Mapping[str, Any]) -> dict[str, Any]:
+        """Represent a failed current refresh without projecting old evidence."""
+
         return {
-            **artifact,
-            "artifact": reference,
+            "schema_version": SCHEMA_VERSION,
+            "factor": asdict(MACRO_FACTOR_BY_KEY[key]),
+            "quality": "unavailable",
             "refresh_status": "rejected",
             "refresh_failure": dict(failure),
+            "publication_eligible": False,
+            "action_eligible": False,
         }
 
     def _not_refreshed(self, key: str) -> dict[str, Any]:
@@ -581,33 +589,85 @@ class MarketRegimeMacroDataStore:
         accepted_receipts: dict[str, dict[str, Any]] = {}
 
         if "dxy" in selected:
-            capture: HttpCapture | None = None
-            raw_relative: str | None = None
-            try:
-                capture = self.http_get(DXY_CHART_URL)
-                raw_relative = f"raw/{run_id}/dxy.json"
-                _write_bytes_exclusive(self.root / raw_relative, capture.body)
-                accepted_cores["dxy"] = normalize_dxy(capture, now=current)
+            selected_dxy: tuple[HttpCapture, str, dict[str, Any], str, list[dict[str, Any]]] | None = None
+            attempts: list[dict[str, Any]] = []
+            for attempt_index, (endpoint, url) in enumerate(dxy_source_urls()):
+                capture: HttpCapture | None = None
+                wrote_raw = False
+                raw_relative = f"raw/{run_id}/dxy-attempt-{attempt_index}.bin"
+                try:
+                    capture = self.http_get(url)
+                    suffix = ".json" if capture.content_type == "application/json" else ".bin"
+                    raw_relative = f"raw/{run_id}/dxy-attempt-{attempt_index}{suffix}"
+                    _write_bytes_exclusive(self.root / raw_relative, capture.body)
+                    wrote_raw = True
+                    normalized = normalize_dxy(capture, now=current)
+                    attempts.append(
+                        {
+                            "endpoint": endpoint,
+                            "accepted": True,
+                            "reason": None,
+                            **_capture_receipt(capture, raw_path=raw_relative),
+                        }
+                    )
+                    selected_dxy = (capture, raw_relative, normalized, endpoint, attempts)
+                    break
+                except Exception as exc:
+                    if isinstance(exc, SourceCaptureError) and exc.capture is not None:
+                        capture = exc.capture
+                    if capture is not None:
+                        if not wrote_raw:
+                            _write_bytes_exclusive(self.root / raw_relative, capture.body)
+                        attempt_receipt = _capture_receipt(capture, raw_path=raw_relative)
+                    else:
+                        attempt_receipt = {
+                            "method": "GET",
+                            "requested_url": url,
+                            "final_url": url,
+                            "status_code": None,
+                            "content_type": None,
+                            "raw_sha256": sha256(b"").hexdigest(),
+                            "raw_bytes": 0,
+                            "raw_path": None,
+                            "fetched_at": _iso(_utc_now()),
+                            "error": None,
+                        }
+                    attempts.append(
+                        {
+                            "endpoint": endpoint,
+                            "accepted": False,
+                            "reason": _source_failure(exc),
+                            "bounded_raw_excerpt": _bounded_excerpt(capture.body) if capture else None,
+                            **attempt_receipt,
+                        }
+                    )
+            if selected_dxy is not None:
+                capture, raw_relative, normalized, endpoint, attempts = selected_dxy
+                accepted_cores["dxy"] = normalized
                 accepted_receipts["dxy"] = {
-                    "captures": [_capture_receipt(capture, raw_path=raw_relative)]
+                    "captures": [_capture_receipt(capture, raw_path=raw_relative)],
+                    "selected_endpoint": endpoint,
+                    "source_attempts": attempts,
                 }
-            except Exception as exc:
-                if isinstance(exc, SourceCaptureError) and exc.capture is not None:
-                    capture = exc.capture
+            else:
                 failure = {
                     "key": "dxy",
                     "status": "rejected",
                     "quality": "unavailable",
-                    "reason": str(exc),
-                    "source": (
-                        _capture_receipt(capture, raw_path=raw_relative)
-                        if capture
-                        else None
+                    "reason": "all_same_day_sources_rejected",
+                    "source_attempts": attempts,
+                    "source": attempts[-1] if attempts else None,
+                    "bounded_raw_excerpt": next(
+                        (
+                            item.get("bounded_raw_excerpt")
+                            for item in reversed(attempts)
+                            if item.get("bounded_raw_excerpt")
+                        ),
+                        None,
                     ),
-                    "bounded_raw_excerpt": _bounded_excerpt(capture.body) if capture else None,
                 }
                 results.append(failure)
-                snapshot_factors.append(self._fallback("dxy", failure))
+                snapshot_factors.append(self._unavailable("dxy", failure))
 
         rate_keys = [key for key in selected if key in {"us2y", "us10y", "us2s10s"}]
         if rate_keys:
@@ -657,7 +717,7 @@ class MarketRegimeMacroDataStore:
                             "bounded_raw_excerpt": _bounded_excerpt(captures[-1].body) if captures else None,
                         }
                         results.append(failure)
-                        snapshot_factors.append(self._fallback(key, failure))
+                        snapshot_factors.append(self._unavailable(key, failure))
             except Exception as exc:
                 parsed = {}
                 for key in rate_keys:
@@ -680,7 +740,7 @@ class MarketRegimeMacroDataStore:
                         "bounded_raw_excerpt": _bounded_excerpt(captures[-1].body) if captures else None,
                     }
                     results.append(failure)
-                    snapshot_factors.append(self._fallback(key, failure))
+                    snapshot_factors.append(self._unavailable(key, failure))
             for key in rate_keys:
                 if key in parsed:
                     accepted_cores[key] = parsed[key]

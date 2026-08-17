@@ -31,6 +31,7 @@ LICENSE_STATUSES = frozenset({LOCAL_EVALUATION, COMMERCIAL_RIGHTS_APPROVED, DISA
 DEPLOYMENT_MODES = frozenset({"local_prototype", "private_beta", "public"})
 
 YAHOO_CHART_URL = "https://query2.finance.yahoo.com/v8/finance/chart/"
+YAHOO_QUERY1_CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/"
 TENCENT_KLINE_URL = "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get"
 YAHOO_TERMS_URL = "https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html"
 YAHOO_DEVELOPER_GUIDELINES_URL = "https://legal.yahoo.com/us/en/yahoo/guidelines/ydn/index.html"
@@ -220,6 +221,59 @@ def http_get_capture(url: str, *, timeout: float = 20.0) -> HttpCapture:
     """Issue one raw GET and preserve response identity without cookie headers."""
 
     fetched_at = _iso_utc(_utc_now())
+    # Yahoo frequently rate-limits the plain urllib fingerprint while serving
+    # the same completed daily response to a browser-shaped request.  Keep the
+    # transport optional and scoped to Yahoo so the authority remains a simple
+    # raw GET for every other provider.  The selected endpoint and all failed
+    # attempts are still recorded by the caller.
+    if "finance.yahoo.com" in url:
+        try:
+            from curl_cffi import requests as curl_requests
+        except ImportError:
+            curl_requests = None
+        if curl_requests is not None:
+            try:
+                response = curl_requests.get(
+                    url,
+                    impersonate="chrome",
+                    headers={
+                        "Accept": "application/json",
+                        "User-Agent": "ParkMarketRegimeLocalPrototype/1.0",
+                    },
+                    timeout=timeout,
+                    allow_redirects=True,
+                )
+                safe, dropped = _safe_headers(response.headers)
+                history = [str(getattr(item, "url", "") or "") for item in response.history]
+                chain = tuple([url, *[item for item in history if item]])
+                final_url = str(response.url or url)
+                if chain[-1] != final_url:
+                    chain = (*chain, final_url)
+                return HttpCapture(
+                    "GET",
+                    url,
+                    final_url,
+                    int(response.status_code),
+                    safe,
+                    dropped,
+                    chain,
+                    bytes(response.content),
+                    fetched_at,
+                    None,
+                )
+            except Exception as exc:
+                return HttpCapture(
+                    "GET",
+                    url,
+                    url,
+                    None,
+                    (),
+                    (),
+                    (url,),
+                    b"",
+                    fetched_at,
+                    f"{type(exc).__name__}: {str(exc)[:240]}",
+                )
     redirect_handler = _CaptureRedirectHandler()
     opener = build_opener(redirect_handler)
     request = Request(
@@ -304,6 +358,7 @@ def instrument_registry_payload() -> dict[str, Any]:
                 "authority_tier": "supplementary_only",
                 "license_status": "unverified_for_commercial_redistribution",
                 "endpoint": YAHOO_CHART_URL,
+                "fallback_endpoints": [YAHOO_QUERY1_CHART_URL],
                 "terms": [YAHOO_TERMS_URL, YAHOO_DEVELOPER_GUIDELINES_URL],
             },
             "tencent_kline": {
@@ -323,6 +378,25 @@ def _provider_url(spec: InstrumentSpec) -> str:
     if spec.provider == "tencent_kline":
         return f"{TENCENT_KLINE_URL}?param={spec.provider_symbol},day,,,260,"
     raise SourceCaptureError(f"unsupported provider: {spec.provider}")
+
+
+def _provider_urls(spec: InstrumentSpec) -> tuple[tuple[str, str], ...]:
+    """Return same-day candidates in priority order without changing identity."""
+
+    primary = _provider_url(spec)
+    if spec.provider != "yahoo_chart":
+        return (("primary", primary),)
+    symbol = quote(spec.provider_symbol, safe="^=")
+    suffix = f"{symbol}?interval=1d&range=1y&events=div%2Csplits"
+    return (
+        ("query2", f"{YAHOO_CHART_URL}{suffix}"),
+        ("query1", f"{YAHOO_QUERY1_CHART_URL}{suffix}"),
+    )
+
+
+def _source_failure(exc: Exception) -> str:
+    text = " ".join(str(exc).replace("\r", " ").replace("\n", " ").split())
+    return text[:240] or type(exc).__name__
 
 
 def _parse_session_close(spec: InstrumentSpec, trade_date: date) -> datetime:
@@ -536,12 +610,38 @@ def normalize_capture(
             raise SourceCaptureError(f"duplicate daily bar: {trade_date}", capture=capture)
         if prior is not None and trade_date <= prior:
             raise SourceCaptureError(f"daily bars are not strictly ascending at {trade_date}", capture=capture)
-        seen.add(trade_date)
-        prior = trade_date
         close_at = _parse_session_close(spec, trade_day).astimezone(timezone.utc)
+        if any(value is None for value in (raw_row.get("open"), raw_row.get("high"), raw_row.get("low"), raw_row.get("close"))):
+            # Yahoo can expose a partially populated row while an overnight or
+            # Sunday session is forming. Drop it only while the provider-
+            # declared session is still open; a partial historical or post-
+            # close row remains a hard source rejection.
+            scheduled_end = parsed.scheduled_session_end
+            scheduled_local_date = (
+                scheduled_end.astimezone(ZoneInfo(spec.exchange_timezone)).date()
+                if scheduled_end is not None
+                else None
+            )
+            session_end = close_at
+            if (
+                scheduled_end is not None
+                and scheduled_local_date is not None
+                and trade_day >= local_today
+                and scheduled_local_date >= trade_day
+            ):
+                session_end = scheduled_end
+            if current < session_end + timedelta(minutes=20):
+                dropped_unfinished.append(trade_date)
+                continue
+            raise SourceCaptureError(
+                f"daily bar has partial OHLC after session close: {trade_date}",
+                capture=capture,
+            )
         if current < close_at + timedelta(minutes=20):
             dropped_unfinished.append(trade_date)
             continue
+        seen.add(trade_date)
+        prior = trade_date
         # Provider daily bars can be internally inconsistent while the current
         # session is still forming (for example, a live close briefly above a
         # lagging high). Completed sessions remain fully validated.
@@ -754,16 +854,67 @@ class MarketRegimeDataStore:
         pending_latest_pointers: list[tuple[str, dict[str, Any]]] = []
         for key in selected_keys:
             spec = INSTRUMENT_BY_KEY[key]
-            capture: HttpCapture | None = None
-            raw_relative: str | None = None
-            try:
-                capture = self.http_get(_provider_url(spec))
-                if capture.body:
+            selected: tuple[HttpCapture, str, dict[str, Any], str, list[dict[str, Any]]] | None = None
+            attempts: list[dict[str, Any]] = []
+            for attempt_index, (endpoint, url) in enumerate(_provider_urls(spec)):
+                capture: HttpCapture | None = None
+                wrote_raw = False
+                raw_relative = f"raw/{run_id}/{key}-attempt-{attempt_index}.bin"
+                try:
+                    capture = self.http_get(url)
                     suffix = ".json" if capture.content_type == "application/json" else ".bin"
-                    raw_relative = f"raw/{run_id}/{key}{suffix}"
+                    raw_relative = f"raw/{run_id}/{key}-attempt-{attempt_index}{suffix}"
                     _write_raw_exclusive(self.root / raw_relative, capture.body)
-                normalized = normalize_capture(spec, capture, now=current)
+                    wrote_raw = True
+                    normalized = normalize_capture(spec, capture, now=current)
+                    attempts.append(
+                        {
+                            "endpoint": endpoint,
+                            "accepted": True,
+                            "reason": None,
+                            **capture.receipt(raw_path=raw_relative),
+                        }
+                    )
+                    selected = (capture, raw_relative, normalized, endpoint, attempts)
+                    break
+                except Exception as exc:
+                    if isinstance(exc, SourceCaptureError) and exc.capture is not None:
+                        capture = exc.capture
+                    if capture is not None:
+                        if not wrote_raw:
+                            _write_raw_exclusive(self.root / raw_relative, capture.body)
+                        attempt_receipt = capture.receipt(raw_path=raw_relative)
+                        if not capture.body:
+                            attempt_receipt["raw_sha256"] = sha256(b"").hexdigest()
+                    else:
+                        attempt_receipt = {
+                            "method": "GET",
+                            "requested_url": url,
+                            "final_url": url,
+                            "status_code": None,
+                            "content_type": None,
+                            "raw_sha256": None,
+                            "raw_bytes": 0,
+                            "raw_path": None,
+                            "fetched_at": _iso_utc(_utc_now()),
+                            "error": None,
+                        }
+                    attempts.append(
+                        {
+                            "endpoint": endpoint,
+                            "accepted": False,
+                            "reason": _source_failure(exc),
+                            "bounded_raw_excerpt": (
+                                _bounded_excerpt(capture.body) if capture else None
+                            ),
+                            **attempt_receipt,
+                        }
+                    )
+            if selected is not None:
+                capture, raw_relative, normalized, endpoint, attempts = selected
                 source_receipt = capture.receipt(raw_path=raw_relative)
+                source_receipt["selected_endpoint"] = endpoint
+                source_receipt["source_attempts"] = attempts
                 frozen_artifact = {
                     **normalized,
                     "run_id": run_id,
@@ -801,48 +952,39 @@ class MarketRegimeDataStore:
                 snapshot_items.append(
                     {**frozen_artifact, "normalized_artifact": artifact_reference}
                 )
-            except Exception as exc:
-                if not isinstance(exc, (MarketRegimeDataError, ValueError, OSError)):
-                    exc = MarketRegimeDataError(f"unexpected {type(exc).__name__}: {exc}")
-                if isinstance(exc, SourceCaptureError) and exc.capture is not None:
-                    capture = exc.capture
-                source_receipt = capture.receipt(raw_path=raw_relative) if capture else None
-                failure = {
-                    "key": key,
-                    "status": "rejected",
+                continue
+            failure = {
+                "key": key,
+                "status": "rejected",
+                "quality": "unavailable",
+                "reason": "all_same_day_sources_rejected",
+                "source_attempts": attempts,
+                "source": attempts[-1] if attempts else None,
+                "bounded_raw_excerpt": next(
+                    (
+                        item.get("bounded_raw_excerpt")
+                        for item in reversed(attempts)
+                        if item.get("bounded_raw_excerpt")
+                    ),
+                    None,
+                ),
+            }
+            results.append(failure)
+            # Keep latest-good as historical recovery only.  It is never
+            # projected into this current snapshot after all same-day sources
+            # fail; the evidence pack will mark this slot unavailable.
+            snapshot_items.append(
+                {
+                    "schema_version": SCHEMA_VERSION,
+                    "instrument": asdict(spec),
+                    "bars": [],
+                    "bar_count": 0,
                     "quality": "unavailable",
-                    "reason": str(exc),
-                    "source": source_receipt,
-                    "bounded_raw_excerpt": _bounded_excerpt(capture.body) if capture else None,
+                    "refresh_status": "rejected",
+                    "refresh_failure": failure,
+                    "publication_eligible": False,
                 }
-                results.append(failure)
-                latest_pointer = _read_json(
-                    self.root / "instruments" / key / "latest-good.json"
-                )
-                if latest_pointer is not None:
-                    reference = latest_pointer.get("normalized_artifact") or {}
-                    latest = _read_bound_artifact(self.root, reference)
-                    snapshot_items.append(
-                        {
-                            **latest,
-                            "normalized_artifact": reference,
-                            "refresh_status": "rejected",
-                            "refresh_failure": failure,
-                        }
-                    )
-                else:
-                    snapshot_items.append(
-                        {
-                            "schema_version": SCHEMA_VERSION,
-                            "instrument": asdict(spec),
-                            "bars": [],
-                            "bar_count": 0,
-                            "quality": "unavailable",
-                            "refresh_status": "rejected",
-                            "refresh_failure": failure,
-                            "publication_eligible": False,
-                        }
-                    )
+            )
         completed_at = _iso_utc(_utc_now())
         receipt = {
             "schema_version": SCHEMA_VERSION,
