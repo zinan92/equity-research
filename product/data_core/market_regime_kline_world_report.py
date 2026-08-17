@@ -19,6 +19,7 @@ import os
 import tempfile
 
 from .market_regime_kline_world_context import (
+    LOOKBACK,
     KlineWorldContextError,
     KlineWorldContextStore,
     SERIES_ORDER,
@@ -31,13 +32,13 @@ from .market_regime_kline_macro_analysis import (
 )
 
 
-SCHEMA_VERSION = "market-regime-kline-world-report-v2"
-RENDERER_VERSION = "market-regime-kline-world-report-renderer-v5"
+SCHEMA_VERSION = "market-regime-kline-world-report-v3"
+RENDERER_VERSION = "market-regime-kline-world-report-renderer-v6"
 REPORT_ID_PREFIX = "market-regime-kline-world-report:"
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 
-POSTURE_ZH = {"attack": "进攻", "wait": "等待", "defense": "防守", "unknown": "未知"}
-POSTURE_EN = {"attack": "ATTACK", "wait": "WAIT", "defense": "DEFENSE", "unknown": "UNKNOWN"}
+POSTURE_ZH = {"attack": "进攻", "wait": "等待", "defense": "防守", "no_view": "无方向观点", "unknown": "未知"}
+POSTURE_EN = {"attack": "ATTACK", "wait": "WAIT", "defense": "DEFENSE", "no_view": "NO VIEW", "unknown": "UNKNOWN"}
 CLAIM_ZH = {"fact": "事实", "inference": "推断", "unknown": "未知"}
 CONFIDENCE_ZH = {"high": "高", "medium": "中", "low": "低"}
 
@@ -197,7 +198,7 @@ def _enriched_rows(rows: Any, references: Mapping[str, Mapping[str, Any]]) -> li
 
 def _series_projection(item: Mapping[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     points = item.get("points") or []
-    if not isinstance(points, list) or len(points) != 120:
+    if not isinstance(points, list) or len(points) != LOOKBACK:
         raise KlineWorldReportError("report_series_history_invalid")
     rate = item.get("series_type") == "rate_level"
     current_field = "value" if rate else "close"
@@ -213,6 +214,10 @@ def _series_projection(item: Mapping[str, Any]) -> tuple[dict[str, Any], dict[st
         "level_unit": item.get("level_unit"),
         "change_unit": unit,
         "session": item.get("session"),
+        "actual_latest_session": item.get("actual_latest_session"),
+        "actual_latest_equals_as_of": item.get("actual_latest_equals_as_of"),
+        "alignment_status": item.get("alignment_status"),
+        "discarded_post_as_of_sessions": item.get("discarded_post_as_of_sessions"),
         "close_at": item.get("close_at"),
         "quality": item.get("quality"),
         "series_id": item.get("series_id"),
@@ -272,7 +277,10 @@ def build_world_report(
     output = model_value.get("output") or {}
     macro_raw = output.get("macro_parameters") or {}
     risk_budget = macro_raw.get("risk_budget")
-    if isinstance(risk_budget, (int, float)) and not isinstance(risk_budget, bool):
+    confidence_value = macro_raw.get("confidence")
+    if isinstance(confidence_value, (int, float)) and not isinstance(confidence_value, bool) and float(confidence_value) < 0.5:
+        posture = "no_view"
+    elif isinstance(risk_budget, (int, float)) and not isinstance(risk_budget, bool):
         posture = "defense" if float(risk_budget) <= 0.4 else "wait" if float(risk_budget) <= 0.6 else "attack"
     else:
         posture = "unknown"

@@ -1,0 +1,105 @@
+{
+  "schema_version": "market-regime-kline-issue-832-live-acceptance-v1",
+  "issue": 832,
+  "observed_at": "2026-08-18T00:33:45+08:00",
+  "run_kind": "controlled_real_isolated",
+  "status": "accepted",
+  "source": {
+    "data_kind": "real",
+    "series_count": 17,
+    "relationship_count": 12,
+    "source_sessions_per_series": 520,
+    "aligned_sessions_per_series": 300,
+    "as_of": "2026-08-14",
+    "actual_latest_equals_as_of_count": 13,
+    "actual_latest_ahead_of_as_of": {
+      "shanghai": {
+        "actual_latest_session": "2026-08-17",
+        "discarded_post_as_of_sessions": 1
+      },
+      "star50": {
+        "actual_latest_session": "2026-08-17",
+        "discarded_post_as_of_sessions": 1
+      },
+      "china_dividend": {
+        "actual_latest_session": "2026-08-17",
+        "discarded_post_as_of_sessions": 1
+      },
+      "bitcoin": {
+        "actual_latest_session": "2026-08-16",
+        "discarded_post_as_of_sessions": 2
+      }
+    },
+    "post_as_of_values_entered_calculations": false
+  },
+  "provider": {
+    "name": "DeepSeek",
+    "model": "deepseek-v4-flash",
+    "context_budget_tokens_per_request": 1000000,
+    "base_request_bytes": 422286,
+    "final_attempt_request_bytes": 422286,
+    "attempt_count": 1,
+    "attempt_outcomes": [
+      "accepted"
+    ],
+    "recorded_usage_totals": {
+      "attempt_receipt_count": 1,
+      "usage_receipt_count": 1,
+      "prompt_tokens": 249345,
+      "completion_tokens": 6035,
+      "total_tokens": 255380
+    }
+  },
+  "result": {
+    "generation_status": "model_generated_unreviewed",
+    "headline": "无方向观点 / NO VIEW",
+    "summary": "本日不提供方向观点。报告仅基于历史价格，不包含市场预期信息，不能回答什么已被 price in。",
+    "risk_budget": 0.3,
+    "risk_budget_source": "DEFAULT_ON_MISSING_DATA",
+    "long_gate": "OPEN",
+    "shanghai_250d_percentile_pct": 40.8,
+    "dispersion": "LOW",
+    "cross_market_dispersion_pct": 1.067591,
+    "dispersion_252d_percentile_pct": 11.11,
+    "confidence": 0.4,
+    "data_coverage": 0.39,
+    "parameter_basis_count": 7,
+    "insight_count": 0,
+    "observation_count": 10,
+    "missing_data_count": 9
+  },
+  "identity": {
+    "context_id": "market-regime-kline-world-context:f3fc30d749685d06bf5101d903bb3413301fadc6ef4767f2c72eee90049455df",
+    "context_artifact_sha256": "93debd5445b1d57dd5f7f3e5a9ed0a24803cc0be0ca622b529aa79a658372a5e",
+    "context_receipt_sha256": "68f9cf4a76f448c06ba292eb880fb373012c4bbbe7d859075187b9f6c96d736a",
+    "world_model_id": "market-regime-kline-world-model:e4ef5997f90a75c6d650af5c14689b983fa185b92c1acd04389e844baa0e0724",
+    "model_run_id": "world-model-20260817T163345Z-f249081ffe01",
+    "model_artifact_sha256": "1d94de9764f1f98a6a6711037e9f53c57310c3e9c275ccb3fc8dd550ceffb9cb",
+    "model_receipt_sha256": "930dc1ad7b902b694fe775068d2dae365a6de017094cbe5ad57b6aa672fa7e76",
+    "base_request_hash": "4e2248fb4e28f64ea3daca466e7096345564de821e055bf3d7718586cc78ca33",
+    "attempt_request_hash": "4e2248fb4e28f64ea3daca466e7096345564de821e055bf3d7718586cc78ca33",
+    "output_hash": "31fcfaa06f0caac33888039b46c746daec232a83225b9a557765d0e0dba4a871",
+    "report_id": "market-regime-kline-world-report:bacfcee27d6f8653aa2ed4e156ae2345bb5f49f1c82d94246b37f94d727059b2",
+    "report_artifact_sha256": "d44a9153fbc51d756431313d4f0f8e5de116c9fb59aa786555c12a2644ef7ed4",
+    "report_receipt_sha256": "804b76870853fce287fe7a8703ac5c71c39e0b859732ab64429070f31b34010e",
+    "html_sha256": "fc747e0c624b393e91f09816c50d8d266fd5645dc2d05f375e622b1fba9708f4",
+    "markdown_sha256": "d4ada6934a18ef84f191505532b186c1114090eb0e34fc1bf9ed51aa0e32b9a2",
+    "delivery_id": "market-regime-kline-world-delivery:68eafa89068b219b3da39eb40d9200821e31994a9c59d6bdd3ee97b58e206694",
+    "delivery_receipt_sha256": "553a611d29ad2068547fa6158e5ed7222c29fc8690987813ff05e56c16ed5fb9",
+    "tracked_model_receipt": "evidence/market-regime-kline-world-runtime/issue-832-model-receipt-2026-08-18.json"
+  },
+  "verification": {
+    "focused_tests": "35 passed, 8 subtests passed",
+    "market_regime_tests": "252 passed, 64 subtests passed",
+    "provider_usage_present_for_every_attempt": true,
+    "each_attempt_within_declared_context_budget": true,
+    "current_context_only": true,
+    "finance_newsletter_input": false,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false
+  },
+  "limitations": [
+    "This was a controlled isolated run, not an ordinary unattended 08:20 scheduler acceptance.",
+    "Visible HTML and Markdown actual-latest/parity acceptance belongs to Issue #828."
+  ]
+}

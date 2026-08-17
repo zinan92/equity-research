@@ -274,7 +274,7 @@ class KlineWorldModelTests(unittest.TestCase):
         context = fixture_context()
         request = build_world_model_request(context)
         self.assertEqual(len(request["context"]["series"]), 17)
-        self.assertEqual(len(request["context"]["series"][0]["points"]), 120)
+        self.assertEqual(len(request["context"]["series"][0]["points"]), 300)
         self.assertEqual(len(request["context"]["relationships"]), 12)
         self.assertEqual(
             request["context"]["series"][0]["point_columns"],

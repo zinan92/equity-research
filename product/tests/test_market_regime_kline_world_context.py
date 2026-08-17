@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import asdict
 from datetime import date, timedelta
 from hashlib import sha256
@@ -25,9 +26,13 @@ from data_core.market_regime_kline_world_context import (  # noqa: E402
     LOOKBACK,
     MAX_LLM_PROJECTION_BYTES,
     PAIR_REGISTRY,
+    SERIES_ID_PREFIX,
     SERIES_ORDER,
+    SOURCE_SERIES_ID_PREFIX,
     KlineWorldContextError,
     KlineWorldContextStore,
+    _digest,
+    build_llm_projection,
     build_kline_world_context,
     build_kline_world_context_from_roots,
     load_context_source_snapshots,
@@ -39,7 +44,7 @@ from data_core.market_regime_macro_data import MACRO_FACTOR_BY_KEY  # noqa: E402
 END = date(2026, 8, 14)
 
 
-def bars(*, offset: float, count: int = 130, missing_index: int | None = None) -> list[dict]:
+def bars(*, offset: float, count: int = 540, missing_index: int | None = None) -> list[dict]:
     rows = []
     for index in range(count):
         if index == missing_index:
@@ -58,7 +63,7 @@ def bars(*, offset: float, count: int = 130, missing_index: int | None = None) -
     return rows
 
 
-def observations(*, offset: float, count: int = 130, step: float = 0.01) -> list[dict]:
+def observations(*, offset: float, count: int = 540, step: float = 0.01) -> list[dict]:
     return [
         {
             "date": (END - timedelta(days=count - index - 1)).isoformat(),
@@ -71,7 +76,7 @@ def observations(*, offset: float, count: int = 130, step: float = 0.01) -> list
 def inputs(*, data_kind: str = "fixture", short_key: str | None = None) -> tuple[dict, dict, dict, dict]:
     daily_items = []
     for index, spec in enumerate(INSTRUMENTS):
-        item_bars = bars(offset=100 + index * 10, count=119 if short_key == spec.key else 130)
+        item_bars = bars(offset=100 + index * 10, count=299 if short_key == spec.key else 540)
         daily_items.append(
             {
                 "schema_version": DAILY_SCHEMA_VERSION,
@@ -202,6 +207,13 @@ def canonical_bytes(value: dict) -> bytes:
     ).encode()
 
 
+def rebound_context(core: dict) -> dict:
+    context_id = CONTEXT_ID_PREFIX + _digest(core)
+    value = {"context_id": context_id, "identity_core": core, **core}
+    value["llm_projection"] = build_llm_projection(value)
+    return value
+
+
 def write_bound_sources(base: Path) -> tuple[Path, Path, dict, dict]:
     daily, macro, pack, bitcoin = inputs(data_kind="real")
     daily_run = "market-regime-20260816T073524Z-95b305f4475d"
@@ -270,9 +282,13 @@ class KlineWorldContextTest(unittest.TestCase):
         self.assertTrue(context["context_id"].startswith(CONTEXT_ID_PREFIX))
         self.assertEqual([item["key"] for item in context["series"]], list(SERIES_ORDER))
         self.assertEqual(len(context["series"]), 17)
+        self.assertEqual(len(context["source_series"]), 17)
         self.assertEqual(len(context["relationships"]), len(PAIR_REGISTRY))
         for item in context["series"]:
             self.assertEqual(len(item["points"]), LOOKBACK)
+            self.assertEqual(item["points"][-1]["date"], context["alignment"]["as_of"])
+        for item in context["source_series"]:
+            self.assertEqual(len(item["points"]), 520)
         roles = {item["key"]: item["role"] for item in context["series"]}
         self.assertEqual(roles["bitcoin"], "supplemental")
         self.assertTrue(all(roles[key] == "canonical" for key in SERIES_ORDER if key != "bitcoin"))
@@ -288,6 +304,55 @@ class KlineWorldContextTest(unittest.TestCase):
         self.assertAlmostEqual(series["us2s10s"]["features"]["change_5d_bp"], 5.0)
         self.assertIn("return_20d_pct", series["sp500"]["features"])
         self.assertNotIn("return_20d_pct", series["us10y"]["features"])
+
+    def test_one_as_of_discards_newer_market_rows_from_every_consumer_surface(self) -> None:
+        daily, macro, pack, bitcoin = inputs()
+        shanghai = next(
+            item
+            for item in daily["instruments"]
+            if item["instrument"]["key"] == "shanghai"
+        )
+        previous = shanghai["bars"][-1]
+        shanghai["bars"].append(
+            {
+                "date": "2026-08-17",
+                "open": previous["close"] + 9.5,
+                "high": previous["close"] + 11.0,
+                "low": previous["close"] + 9.0,
+                "close": previous["close"] + 10.0,
+                "volume": 999999,
+            }
+        )
+        shanghai["bar_count"] = len(shanghai["bars"])
+        shanghai["last_completed_session"] = "2026-08-17"
+        context = build_kline_world_context(
+            daily=daily,
+            macro=macro,
+            pack=pack,
+            bitcoin=bitcoin,
+            allow_fixture=True,
+        )
+        self.assertEqual(context["alignment"]["as_of"], "2026-08-14")
+        aligned = {row["key"]: row for row in context["series"]}
+        self.assertEqual(aligned["shanghai"]["actual_latest_session"], "2026-08-17")
+        self.assertFalse(aligned["shanghai"]["actual_latest_equals_as_of"])
+        self.assertEqual(aligned["shanghai"]["alignment_status"], "ahead_of_as_of")
+        self.assertEqual(aligned["shanghai"]["discarded_post_as_of_sessions"], 1)
+        self.assertEqual(aligned["shanghai"]["quality"], "partial")
+        self.assertTrue(
+            all(row["points"][-1]["date"] == "2026-08-14" for row in context["series"])
+        )
+        projected_shanghai = next(
+            row for row in context["llm_projection"]["series"] if row["key"] == "shanghai"
+        )
+        self.assertEqual(projected_shanghai["actual_latest_session"], "2026-08-17")
+        self.assertNotIn("2026-08-17", [row["date"] for row in projected_shanghai["points"]])
+        self.assertTrue(
+            all(
+                (row["points"] or [{}])[-1].get("date") == "2026-08-14"
+                for row in context["relationships"]
+            )
+        )
 
     def test_relationships_align_common_dates_and_bind_both_series(self) -> None:
         daily, macro, pack, bitcoin = inputs()
@@ -353,6 +418,9 @@ class KlineWorldContextTest(unittest.TestCase):
         self.assertEqual(projection["context_id"], context["context_id"])
         self.assertEqual(len(projection["series"]), 17)
         self.assertNotIn("source_identity", encoded)
+        self.assertNotIn("agreement_inputs", projection)
+        self.assertNotIn("confidence_inputs", projection)
+        self.assertNotIn("contradiction_candidates", projection)
         self.assertNotIn("normalized/", encoded)
         self.assertNotIn("Finance Daily Newsletter", encoded)
         self.assertFalse(projection["truth_boundary"]["finance_newsletter_input"])
@@ -408,6 +476,43 @@ class KlineWorldContextTest(unittest.TestCase):
             artifact_path.write_text(json.dumps(artifact), encoding="utf-8")
             with self.assertRaisesRegex(KlineWorldContextError, "artifact_hash_mismatch"):
                 store.latest()
+
+    def test_validator_rederives_alignment_and_rejects_coherently_rebound_post_as_of_row(self) -> None:
+        context = context_fixture()
+        core = deepcopy(context["identity_core"])
+        series = core["series"][0]
+        series["points"][123]["date"] = "2099-01-01"
+        series_core = {
+            field: value for field, value in series.items() if field != "series_id"
+        }
+        series["series_id"] = (
+            f"{SERIES_ID_PREFIX}{series['key']}:{_digest(series_core)}"
+        )
+        rebound = rebound_context(core)
+        with self.assertRaisesRegex(
+            KlineWorldContextError, "context_series_derivation_mismatch"
+        ):
+            validate_kline_world_context(rebound)
+
+    def test_validator_rederives_aligned_tape_from_identity_bound_source_series(self) -> None:
+        context = context_fixture()
+        core = deepcopy(context["identity_core"])
+        source = core["source_series"][0]
+        source["points"][-1]["close"] *= 2
+        source["points"][-1]["high"] = source["points"][-1]["close"] + 1
+        source_core = {
+            field: value
+            for field, value in source.items()
+            if field != "source_series_id"
+        }
+        source["source_series_id"] = (
+            f"{SOURCE_SERIES_ID_PREFIX}{source['key']}:{_digest(source_core)}"
+        )
+        rebound = rebound_context(core)
+        with self.assertRaisesRegex(
+            KlineWorldContextError, "context_series_derivation_mismatch"
+        ):
+            validate_kline_world_context(rebound)
 
 
 if __name__ == "__main__":
