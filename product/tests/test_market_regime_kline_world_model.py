@@ -6,6 +6,7 @@ from pathlib import Path
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 PRODUCT = Path(__file__).resolve().parents[1]
@@ -18,8 +19,10 @@ from data_core.market_regime_kline_world_context import (  # noqa: E402
     build_kline_world_context,
 )
 from data_core.market_regime_kline_world_model import (  # noqa: E402
+    DeepSeekWorldModelProvider,
     KlineWorldModelError,
     KlineWorldModelStore,
+    SYSTEM_PROMPT,
     build_world_model_request,
     validate_model_output,
 )
@@ -243,6 +246,27 @@ class SequenceProvider:
 
 
 class KlineWorldModelTests(unittest.TestCase):
+    def test_normal_provider_uses_bounded_non_thinking_structured_call(self) -> None:
+        captured: dict = {}
+
+        def fake_call(**kwargs):
+            captured.update(kwargs)
+            return {}, {"finish_reason": "stop"}
+
+        provider = DeepSeekWorldModelProvider(Path("/tmp/test-deepseek-key"))
+        with patch("deepseek_writer.call_structured_deepseek", side_effect=fake_call):
+            result = provider.generate({"frozen": True})
+
+        self.assertEqual(result, ({}, {"finish_reason": "stop"}))
+        self.assertEqual(captured["max_tokens"], 10000)
+        self.assertEqual(captured["reasoning_effort"], "low")
+        self.assertEqual(captured["thinking_type"], "disabled")
+
+    def test_prompt_names_exact_leadership_and_trade_falsifier_links(self) -> None:
+        self.assertIn("不能使用 precious_metals、growth、defensive", SYSTEM_PROMPT)
+        self.assertIn("每条 trade_plan.evidence_ids 必须与它所指向的 falsifier", SYSTEM_PROMPT)
+        self.assertIn("恰好输出两个 falsifiers", SYSTEM_PROMPT)
+
     def test_request_contains_full_context_and_success_accepts_authored_advice(self) -> None:
         context = fixture_context()
         request = build_world_model_request(context)
