@@ -1,0 +1,58 @@
+{
+  "schema_version": "market-regime-kline-world-runtime-controlled-evidence-v1",
+  "issue": 783,
+  "pull_request": 784,
+  "merged_main_sha": "2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa",
+  "observed_at": "2026-08-17T01:55:33.948201Z",
+  "scope": "same_day_source_fallback_and_current_data_proof",
+  "source_policy": {
+    "meaning_of_fallback": "try another source or endpoint for the same completed session",
+    "stale_previous_data_as_current": false,
+    "all_current_sources_fail": "publish explicit interpretation_unavailable or data-unavailable state"
+  },
+  "real_current_data": {
+    "daily_structural_run_id": "market-regime-20260816T233652Z-04106386396f",
+    "daily_quality": "fresh",
+    "daily_instrument_count": 12,
+    "macro_run_id": "market-regime-macro-20260817T015531Z-2eae671485f8",
+    "macro_quality": "fresh",
+    "macro_factors": ["dxy", "us2y", "us10y", "us2s10s"],
+    "dxy_last_completed_session": "2026-08-16",
+    "dxy_selected_endpoint": "query2",
+    "dxy_source_attempts": [
+      {
+        "endpoint": "query2",
+        "accepted": true,
+        "status_code": 200,
+        "content_type": "application/json"
+      }
+    ],
+    "dxy_dropped_unfinished_sessions": ["2026-08-16"]
+  },
+  "same_context_report": {
+    "context_id": "market-regime-kline-world-context:c3997dcb6c2373788ca124939ad9740cbb8269e66cff9e4e63a4a625b80cce9c",
+    "world_model_id": "market-regime-kline-world-model:953f205031e296860d201acc6c85c84c21968fa7e38eda3883751c2df8b9e6c6",
+    "report_id": "market-regime-kline-world-report:6b58c9ec31f5bba91b21eb6fe2eca4292a740e6ac5309e388ce0a232fc0c0079",
+    "delivery_id": "market-regime-kline-world-delivery:d27fe326c114e8ead1429d4b1a87ea381eb679d7cdbea1e21414240bad7bda9f",
+    "report_date": "2026-08-17",
+    "generation_status": "interpretation_unavailable",
+    "failure_code": "provider_missing",
+    "posture": "unknown",
+    "chart_count": 17,
+    "relationship_count": 12,
+    "flow_count": 0,
+    "trade_count": 0
+  },
+  "provider_verification": {
+    "llm_success_proven": false,
+    "controlled_run_mode": "no_llm",
+    "reason": "the DeepSeek transport remained in an SSL read beyond its bounded wait; the process was terminated and a current-data-only run was completed",
+    "next_check": "ordinary scheduled 08:20 run with the LLM provider"
+  },
+  "publication": {
+    "publication_eligible": false,
+    "automatic_execution_eligible": false,
+    "finance_daily_newsletter_read": false,
+    "local_only": true
+  }
+}

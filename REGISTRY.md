@@ -1,5 +1,32 @@
 # REGISTRY
 
+## 2026-08-17 · Same-day K-line source fallback (Issue #783 / PR #784)
+
+Now: main is at `2f5cc10555ea9c6c30fc2ec46d1d6b9afacc62fa`. Track 2 now tries
+the ordered same-day source/endpoint chain (for example Yahoo `query2` then
+`query1`) before declaring a series unavailable. An unfinished provider row is
+dropped rather than treated as a completed close. A previous successful run is
+never projected into the current report; if every current source fails, the
+runtime publishes an explicit unavailable/interpretation-unavailable state.
+
+Validation: the full `product/tests` suite passes (`938` tests, one skipped).
+The real local run captured 12 fresh daily instruments plus fresh DXY,
+Treasury 2Y, Treasury 10Y and derived 2s10s. DXY selected Yahoo `query2`,
+HTTP 200, with the unfinished `2026-08-16` row removed. The secret-free
+controlled receipt is
+[`controlled-real-2026-08-17-source-fallback.json`](evidence/market-regime-kline-world-runtime/controlled-real-2026-08-17-source-fallback.json).
+
+The controlled report used `--no-llm` after the DeepSeek transport remained in
+an SSL read beyond its bounded wait. It proves current-data collection and
+publication, not LLM interpretation quality: the report is explicitly
+`interpretation_unavailable`, with no trades or stale advice. Finance Daily
+Newsletter was not read or changed, and this remains local-only.
+
+Next: let the ordinary 08:20 LaunchAgent run with the LLM provider, then
+compare this independent Track 2 output with Finance Daily Newsletter. A
+provider transport timeout is a separate reliability issue, not a reason to
+reintroduce stale-data fallback.
+
 ## 2026-08-17 · K-line v2 controlled real-runtime handoff (Issue #775)
 
 Now: the merged Track 2 runtime is installed at the existing 08:20
