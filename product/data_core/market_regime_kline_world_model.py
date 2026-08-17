@@ -30,8 +30,10 @@ from .market_regime_kline_world_context import (
 
 
 SCHEMA_VERSION = "market-regime-kline-world-model-v1"
-COMPILER_VERSION = "market-regime-kline-world-model-compiler-v4"
-PROMPT_VERSION = "market-regime-kline-world-model-prompt-v4"
+COMPILER_VERSION = "market-regime-kline-world-model-compiler-v5"
+PROMPT_VERSION = "market-regime-kline-world-model-prompt-v5"
+MAX_ATTEMPTS = 4
+MAX_VALIDATION_FEEDBACK = MAX_ATTEMPTS - 1
 MODEL_ID_PREFIX = "market-regime-kline-world-model:"
 
 POSTURES = frozenset({"attack", "wait", "defense"})
@@ -280,7 +282,14 @@ SYSTEM_PROMPT = """你是 Global Market K-line Daily 的跨资产主理人。你
 12. falsifier 的 subject_id 必须逐字复制 validation_catalog.falsifier_subject_ids 对应 trigger 下的一个 ID，并把同一个 ID 放进该 falsifier.evidence_ids。
 13. 每条 trade_plan 的 target 必须引用 validation_catalog.trade_target_series_ids[target] 中至少一个 series_id；cash 仍须引用至少两个市场证据。rotate 只能选择 validation_catalog.rotation_leaders 中的 to_key，并引用该 relationship_id 与 to_series_id。
 14. 每条 trade_plan.evidence_ids 必须与它所指向的 falsifier.evidence_ids 至少共享一个 ID；最简单做法是直接引用该 falsifier 的 subject_id。
-15. 恰好输出两个 falsifiers；每个 falsifier 的 subject_id 必须是 validation_catalog 中的完整 series_id 或 relationship_id，并把同一个完整 ID 放进该 falsifier.evidence_ids。每个 trade_plan.falsifier_index 必须是 0 或 1，并且该 trade_plan.evidence_ids 至少共享一个完整 ID。contradictions 也只能引用当前 context 中的完整 ID。"""
+15. 恰好输出两个 falsifiers；每个 falsifier 的 subject_id 必须是 validation_catalog 中的完整 series_id 或 relationship_id，并把同一个完整 ID 放进该 falsifier.evidence_ids。每个 trade_plan.falsifier_index 必须是 0 或 1，并且该 trade_plan.evidence_ids 至少共享一个完整 ID。contradictions 也只能引用当前 context 中的完整 ID。
+
+提交前逐项自检：
+- world_model.evidence_ids 至少包含一个 relationship_id，并包含属于至少两个不同 series key 的 series_id；同一序列的多个 ID 不能充当两个市场。
+- regime.evidence_ids 至少三个；leadership 不是 mixed 时，必须包含该领导序列的 series_id。
+- 每条 flow 必须复制允许的关系与方向：引用 exact relationship_id，加端点 series_id，to_key 等于该关系的 leader_20d。
+- transmission_chain 每条 subject_id 与 evidence_ids 必须对应；observed 使用代码方向，inferred 使用限定词且不要伪装成确定方向。
+- 每条 trade_plan 必须与 falsifiers[falsifier_index] 至少共享一个完整证据 ID。返回前检查所有五项，不要在修复一项时破坏另一项。"""
 PROMPT_HASH = sha256(SYSTEM_PROMPT.encode("utf-8")).hexdigest()
 
 
@@ -768,6 +777,10 @@ def build_world_model_request(context: Mapping[str, Any]) -> dict[str, Any]:
         "validator_rules": {
             "language": "All prose must be Simplified Chinese.",
             "chain_length": "3 to 5 items only.",
+            "world_model_cross_asset": (
+                "Cite at least one relationship_id and series IDs from at least "
+                "two distinct series keys in world_model.evidence_ids."
+            ),
             "flow_citations": "Cite the exact relationship_id and at least one endpoint series/evidence ID.",
             "synthesis_inference_language": (
                 "world_model.synthesis must literally contain one of: "
@@ -779,6 +792,11 @@ def build_world_model_request(context: Mapping[str, Any]) -> dict[str, Any]:
             ),
             "numeric_thresholds": "Do not invent a new threshold; use sign, trend or relationship reversal when the threshold is absent from context.",
             "falsifier_index": "Use a JSON integer and ensure the trade shares evidence with that falsifier.",
+            "transmission_statement": (
+                "Every statement must be Simplified Chinese. Inferred statements "
+                "must include an allowed inference qualifier; observed statements "
+                "must use wording compatible with their code-owned direction."
+            ),
             "falsifier_subject": (
                 "Copy subject_id from validation_catalog.falsifier_subject_ids[trigger] "
                 "and include the same ID in that falsifier's evidence_ids."
@@ -790,6 +808,10 @@ def build_world_model_request(context: Mapping[str, Any]) -> dict[str, Any]:
             "rotation": (
                 "For action=rotate, copy one validation_catalog.rotation_leaders row "
                 "and cite its relationship_id and to_series_id."
+            ),
+            "trade_falsifier_link": (
+                "Every trade_plan.evidence_ids must share at least one exact ID with "
+                "falsifiers[trade_plan.falsifier_index].evidence_ids."
             ),
             "free_text_numbers": (
                 "Prefer no numeric literals, especially in contradictions."
@@ -808,7 +830,13 @@ def _request_with_feedback(
         raise KlineWorldModelError("validation_feedback_invalid")
     field_hints = []
     for code in feedback:
-        if code == "output_semantic_invalid:world_model.synthesis":
+        if code == "output_citation_invalid:world_model_cross_asset":
+            hint = (
+                "world_model.evidence_ids must include at least one exact "
+                "relationship_id and series IDs belonging to at least two distinct "
+                "series keys. Do not satisfy this with two IDs for the same series."
+            )
+        elif code == "output_semantic_invalid:world_model.synthesis":
             hint = (
                 "world_model.synthesis must literally include one allowed qualifier: "
                 "可能|似乎|倾向|迹象|推断|暗示|更像."
@@ -835,6 +863,20 @@ def _request_with_feedback(
                 "validation_catalog.trade_target_series_ids[target]. For rotate, "
                 "copy one rotation_leaders row and cite its relationship_id and "
                 "to_series_id. Also share one ID with the linked falsifier."
+            )
+        elif code.startswith("output_semantic_invalid:transmission_chain.") and code.endswith(
+            ".statement"
+        ):
+            hint = (
+                "The named transmission statement must be Simplified Chinese. If its "
+                "claim_class is inferred, include an allowed qualifier such as 可能 or "
+                "暗示; if observed, use wording compatible with its code-owned direction."
+            )
+        elif code == "output_citation_invalid:trade_falsifier":
+            hint = (
+                "For every trade row, copy at least one exact ID from the linked "
+                "falsifier's evidence_ids into trade_plan.evidence_ids, using "
+                "falsifiers[trade_plan.falsifier_index] as the linked falsifier."
             )
         elif code.startswith("output_numeric_invalid"):
             hint = (
@@ -1323,7 +1365,7 @@ class KlineWorldModelStore:
             if provider is None:
                 raise KlineWorldModelError("provider_missing")
             output: dict[str, Any] | None = None
-            for attempt in range(3):
+            for attempt in range(MAX_ATTEMPTS):
                 attempt_count += 1
                 try:
                     safe_receipt = {}
@@ -1345,11 +1387,11 @@ class KlineWorldModelStore:
                     if not ATTEMPT_OUTCOME_RE.fullmatch(outcome):
                         outcome = "provider_error"
                     attempt_outcomes.append(outcome)
-                    if attempt < 2 and code.startswith("output_"):
+                    if attempt < MAX_ATTEMPTS - 1 and code.startswith("output_"):
                         validation_feedback.append(outcome if VALIDATION_FEEDBACK_RE.fullmatch(outcome) else code)
                         attempt_request = _request_with_feedback(request, validation_feedback)
                         continue
-                    if attempt < 2 and code in {"provider_timeout", "provider_truncated"}:
+                    if attempt < MAX_ATTEMPTS - 1 and code in {"provider_timeout", "provider_truncated"}:
                         continue
                     raise
             if output is None:
@@ -1485,7 +1527,7 @@ class KlineWorldModelStore:
         if (
             isinstance(attempt_count, bool)
             or not isinstance(attempt_count, int)
-            or not 0 <= attempt_count <= 3
+            or not 0 <= attempt_count <= MAX_ATTEMPTS
             or not isinstance(outcomes, list)
             or len(outcomes) != attempt_count
             or any(
@@ -1494,7 +1536,7 @@ class KlineWorldModelStore:
                 for outcome in outcomes
             )
             or not isinstance(feedback, list)
-            or len(feedback) > 2
+            or len(feedback) > MAX_VALIDATION_FEEDBACK
             or any(
                 not isinstance(code, str)
                 or not VALIDATION_FEEDBACK_RE.fullmatch(code)
