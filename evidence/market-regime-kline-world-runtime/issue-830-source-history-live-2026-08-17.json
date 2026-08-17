@@ -1,0 +1,53 @@
+{
+  "schema_version": "market-regime-source-history-live-acceptance-v1",
+  "issue": 830,
+  "measured_at": "2026-08-17T15:17:40Z",
+  "implementation_commit": "81273a4691c3026ece147dbf29dd7766270adf6c",
+  "capture_mode": "live providers into isolated temporary runtime roots",
+  "production_runtime_mutated": false,
+  "history_floor": 520,
+  "sources": [
+    {"key": "sp500", "status": "accepted", "count": 751, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "nasdaq", "status": "accepted", "count": 751, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "shanghai", "status": "accepted", "count": 780, "session": "2026-08-17", "quality": "fresh"},
+    {"key": "star50", "status": "accepted", "count": 780, "session": "2026-08-17", "quality": "fresh"},
+    {"key": "wti", "status": "accepted", "count": 753, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "gold", "status": "accepted", "count": 753, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "silver", "status": "accepted", "count": 753, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "kospi", "status": "accepted", "count": 730, "session": "2026-08-14", "quality": "fresh"},
+    {
+      "key": "nikkei",
+      "status": "accepted",
+      "count": 731,
+      "session": "2026-08-14",
+      "quality": "partial",
+      "missing_expected_session": "2026-08-17",
+      "dropped_incomplete_provider_sessions": ["2026-08-17"]
+    },
+    {"key": "vix", "status": "accepted", "count": 752, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "china_dividend", "status": "accepted", "count": 780, "session": "2026-08-17", "quality": "fresh"},
+    {"key": "us_dividend", "status": "accepted", "count": 751, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "dxy", "status": "accepted", "count": 753, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "us2y", "status": "accepted", "count": 655, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "us10y", "status": "accepted", "count": 655, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "us2s10s", "status": "accepted", "count": 655, "session": "2026-08-14", "quality": "fresh"},
+    {"key": "bitcoin", "status": "accepted", "count": 1096, "session": "2026-08-16", "quality": "fresh"}
+  ],
+  "checks": {
+    "accepted_sources": "17/17",
+    "minimum_observation_count": 655,
+    "market_regime_tests": "243/243 passed",
+    "python_compile": "passed",
+    "git_diff_check": "passed",
+    "gitleaks_scope": "git diff",
+    "gitleaks_result": "no leaks found"
+  },
+  "boundaries": {
+    "instrument_identity_changed": false,
+    "publication_eligible": false,
+    "rights_upgraded": false,
+    "scheduler_cadence_changed": false,
+    "old_latest_good_projected_as_current": false,
+    "synthetic_bars_created": false
+  }
+}
