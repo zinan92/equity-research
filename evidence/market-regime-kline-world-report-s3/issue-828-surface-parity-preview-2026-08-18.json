@@ -1,0 +1,81 @@
+{
+  "acceptance_kind": "controlled_pre_deploy_surface_replay",
+  "issue": 828,
+  "generated_at": "2026-08-18T01:00:00Z",
+  "deployment_claim": false,
+  "source": {
+    "context_id": "market-regime-kline-world-context:f3fc30d749685d06bf5101d903bb3413301fadc6ef4767f2c72eee90049455df",
+    "world_model_id": "market-regime-kline-world-model:e4ef5997f90a75c6d650af5c14689b983fa185b92c1acd04389e844baa0e0724",
+    "report_id": "market-regime-kline-world-report:7126524da46d8fe2cf8283e3b620d00ed75c4f49cf8e65e457763c585b3152aa",
+    "as_of": "2026-08-14",
+    "series_count": 17,
+    "history_sessions_each": 300,
+    "relationship_count": 12,
+    "provider": "DeepSeek",
+    "model": "deepseek-v4-flash",
+    "provider_attempts": 1,
+    "usage": {
+      "prompt_tokens": 249345,
+      "completion_tokens": 6035,
+      "total_tokens": 255380,
+      "context_budget_tokens": 1000000
+    },
+    "prompt_hashes": {
+      "source": "81b5d8bcf46c71dc1ebc124fb93949b4c7a10196dd326828c8fae21cb9f1d63d",
+      "addendum": "ada0fdfe37d87b65877c4fcc62c7065c30b7f1b181ce4b000cd625db16fe9270",
+      "transport": "37136c4b4c108c8f1e14221e669098c6233b731e739ba568655e522ed3df78dc"
+    }
+  },
+  "surface": {
+    "posture": "no_view",
+    "parameter_count": 8,
+    "parameters": {
+      "AS_OF": {"value": "2026-08-14", "source": "MEASURED"},
+      "RISK_BUDGET": {"value": "0.30", "source": "DEFAULT_ON_MISSING_DATA"},
+      "LONG_GATE": {"value": "OPEN", "source": "MEASURED"},
+      "DISPERSION": {"value": "LOW", "source": "MEASURED"},
+      "SECTOR_PRIOR": {"value": "[]", "source": "DEFAULT_ON_MISSING_DATA"},
+      "BLACKOUT": {"value": "[]", "source": "DEFAULT_ON_MISSING_DATA"},
+      "CONFIDENCE": {"value": "0.40", "source": "DEGRADED"},
+      "DATA_COVERAGE": {"value": "0.39", "source": "MEASURED"}
+    },
+    "ahead_of_as_of": [
+      {"key": "shanghai", "actual_latest": "2026-08-17", "discarded_rows": 1},
+      {"key": "star50", "actual_latest": "2026-08-17", "discarded_rows": 1},
+      {"key": "china_dividend", "actual_latest": "2026-08-17", "discarded_rows": 1},
+      {"key": "bitcoin", "actual_latest": "2026-08-16", "discarded_rows": 2}
+    ],
+    "all_charts_end_at_as_of": true,
+    "no_post_as_of_chart_value": true,
+    "no_post_as_of_relationship_value": true,
+    "html_markdown_parameter_parity": true
+  },
+  "browser": {
+    "desktop_1280": {
+      "overflow_x": 0,
+      "chart_canvases": 17,
+      "relative_canvases": 12,
+      "parameter_records": 8,
+      "screenshots": [
+        "issue-828-desktop-1280.png",
+        "issue-828-desktop-evidence-1280.png"
+      ]
+    },
+    "mobile_390": {
+      "overflow_x": 0,
+      "chart_canvases": 17,
+      "relative_canvases": 12,
+      "parameter_records": 8,
+      "screenshots": [
+        "issue-828-mobile-390.png",
+        "issue-828-mobile-evidence-390.png"
+      ]
+    },
+    "console_errors_or_warnings": []
+  },
+  "rights": {
+    "local_evaluation_only": true,
+    "publication_eligible": false,
+    "automatic_execution_eligible": false
+  }
+}

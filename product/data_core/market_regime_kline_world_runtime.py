@@ -33,7 +33,7 @@ from .market_regime_kline_world_report import KlineWorldReportStore
 from .market_regime_macro_data import MarketRegimeMacroDataStore
 
 
-SCHEMA_VERSION = "market-regime-kline-world-runtime-v2"
+SCHEMA_VERSION = "market-regime-kline-world-runtime-v3"
 DELIVERY_ID_PREFIX = "market-regime-kline-world-delivery:"
 SURFACE_ID_PREFIX = "market-regime-kline-world-surface:"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -219,6 +219,7 @@ def _validate_report_summary(report: Mapping[str, Any], *, allow_fixture: bool) 
     chart_count = len(report.get("charts") or [])
     relationship_count = len(report.get("relationships") or [])
     parameter_basis_count = len(report.get("parameter_basis") or [])
+    parameter_surface_count = len(report.get("parameter_surface") or [])
     insight_count = len(report.get("insights") or [])
     observation_count = len(report.get("observations") or [])
     missing_data_count = len(report.get("data_ledger") or [])
@@ -234,8 +235,11 @@ def _validate_report_summary(report: Mapping[str, Any], *, allow_fixture: bool) 
         )
     ):
         raise KlineWorldRuntimeError("fallback_contains_stale_interpretation")
+    if generation_status == "interpretation_unavailable" and parameter_surface_count != 1:
+        raise KlineWorldRuntimeError("fallback_parameter_surface_invalid")
     if generation_status == "model_generated_unreviewed" and (
         parameter_basis_count != 7
+        or parameter_surface_count != 8
         or not 0 <= insight_count <= 3
         or observation_count < 1
         or not isinstance(report.get("macro_parameters"), Mapping)
@@ -257,6 +261,7 @@ def _validate_report_summary(report: Mapping[str, Any], *, allow_fixture: bool) 
         "posture": str(report.get("posture") or "unknown"),
         "chart_count": chart_count,
         "relationship_count": relationship_count,
+        "parameter_surface_count": parameter_surface_count,
         "parameter_basis_count": parameter_basis_count,
         "insight_count": insight_count,
         "observation_count": observation_count,
@@ -277,6 +282,7 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
         "posture",
         "chart_count",
         "relationship_count",
+        "parameter_surface_count",
         "parameter_basis_count",
         "insight_count",
         "observation_count",
@@ -303,6 +309,7 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
         for key in (
             "chart_count",
             "relationship_count",
+            "parameter_surface_count",
             "parameter_basis_count",
             "insight_count",
             "observation_count",
@@ -323,8 +330,11 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
         )
     ):
         raise KlineWorldRuntimeError("fallback_contains_stale_interpretation")
+    if generation_status == "interpretation_unavailable" and counts["parameter_surface_count"] != 1:
+        raise KlineWorldRuntimeError("fallback_parameter_surface_invalid")
     if generation_status == "model_generated_unreviewed" and (
         counts["parameter_basis_count"] != 7
+        or counts["parameter_surface_count"] != 8
         or not 0 <= counts["insight_count"] <= 3
         or counts["observation_count"] < 1
     ):
@@ -333,6 +343,25 @@ def _validate_delivery_summary(core: Mapping[str, Any], *, allow_fixture: bool) 
     if core.get("truth_boundary") != expected_boundary:
         raise KlineWorldRuntimeError("delivery_truth_boundary_mismatch")
     return {key: core.get(key) for key in summary_keys}
+
+
+def _history_base(summary: Mapping[str, Any]) -> str:
+    try:
+        generated = datetime.fromisoformat(
+            str(summary.get("generated_at") or "").replace("Z", "+00:00")
+        ).astimezone(ZoneInfo("Asia/Shanghai"))
+    except ValueError as exc:
+        raise KlineWorldRuntimeError("delivery_generated_at_invalid") from exc
+    report_id = str(summary.get("report_id") or "")
+    if ":" not in report_id:
+        raise KlineWorldRuntimeError("delivery_source_identity_invalid")
+    digest = report_id.rsplit(":", 1)[-1]
+    if not SHA256_RE.fullmatch(digest):
+        raise KlineWorldRuntimeError("delivery_source_identity_invalid")
+    report_date = str(summary.get("report_date") or "")
+    if generated.date().isoformat() != report_date:
+        raise KlineWorldRuntimeError("delivery_report_date_mismatch")
+    return f"history/{report_date}/{generated.strftime('%H%M%S')}-{digest}"
 
 
 class KlineWorldDeliveryStore:
@@ -496,7 +525,7 @@ class KlineWorldDeliveryStore:
         _read_ref(
             self.report_store.root, receipt_ref, field="source_report_receipt"
         )
-        dated_base = f"{summary['report_date']}-kline-daily"
+        dated_base = _history_base(summary)
         aliases = {
             "latest_html": {"path": "latest.html", "sha256": sha256(html).hexdigest()},
             "latest_markdown": {"path": "latest.md", "sha256": sha256(markdown).hexdigest()},
@@ -532,9 +561,8 @@ class KlineWorldDeliveryStore:
             "receipt": receipt_ref_out,
         }
 
-        payloads = {
-            "latest.html": html,
-            "latest.md": markdown,
+        current_payloads = {"latest.html": html, "latest.md": markdown}
+        archive_payloads = {
             f"{dated_base}.html": html,
             f"{dated_base}.md": markdown,
         }
@@ -542,7 +570,7 @@ class KlineWorldDeliveryStore:
             name: (self.output_root / name).read_bytes()
             if (self.output_root / name).exists()
             else None
-            for name in payloads
+            for name in current_payloads
         }
         prior_state = self.state_path.read_bytes() if self.state_path.exists() else None
         prior_surface = (
@@ -556,7 +584,9 @@ class KlineWorldDeliveryStore:
             "delivery_id": delivery_id,
         }
         try:
-            for name, encoded in payloads.items():
+            for name, encoded in archive_payloads.items():
+                _immutable_bytes(self.output_root / name, encoded)
+            for name, encoded in current_payloads.items():
                 _atomic_bytes(self.output_root / name, encoded)
             _atomic_json(self.surface_state_path, surface_state)
             _atomic_json(self.state_path, state)
@@ -678,8 +708,8 @@ class KlineWorldDeliveryStore:
                 if current_aliases
                 else {}
             ),
-            "dated_html": (f"{summary['report_date']}-kline-daily.html", source_html),
-            "dated_markdown": (f"{summary['report_date']}-kline-daily.md", source_markdown),
+            "dated_html": (f"{_history_base(summary)}.html", source_html),
+            "dated_markdown": (f"{_history_base(summary)}.md", source_markdown),
         }
         for key, (expected_path, source_bytes) in expected_aliases.items():
             reference = _safe_ref(aliases.get(key), field=f"delivery_{key}")
@@ -716,6 +746,7 @@ class KlineWorldStatusStore:
                     "posture",
                     "chart_count",
                     "relationship_count",
+                    "parameter_surface_count",
                     "parameter_basis_count",
                     "insight_count",
                     "observation_count",
@@ -788,6 +819,7 @@ class KlineWorldStatusStore:
                 "posture",
                 "chart_count",
                 "relationship_count",
+                "parameter_surface_count",
                 "parameter_basis_count",
                 "insight_count",
                 "observation_count",

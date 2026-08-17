@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import tempfile
 import unittest
@@ -16,6 +16,7 @@ from data_core.market_regime_kline_macro_analysis import KlineWorldModelStore  #
 from data_core.market_regime_kline_world_context import (  # noqa: E402
     KlineWorldContextStore,
     SERIES_ORDER,
+    build_kline_world_context,
 )
 from data_core.market_regime_kline_world_report import (  # noqa: E402
     KlineWorldReportError,
@@ -32,6 +33,7 @@ from product.tests.test_market_regime_kline_macro_analysis import (  # noqa: E40
     fixture_context,
     valid_output,
 )
+from product.tests.test_market_regime_kline_world_context import inputs  # noqa: E402
 
 
 NOW = datetime(2026, 8, 16, 0, 20, tzinfo=timezone.utc)
@@ -62,6 +64,19 @@ class KlineWorldReportTests(unittest.TestCase):
             self.assertEqual(report["charts"], expected_charts)
             self.assertEqual(len(report["relationships"]), 12)
             self.assertEqual(report["posture"], "no_view")
+            self.assertEqual(
+                [row["parameter"] for row in report["parameter_surface"]],
+                [
+                    "AS_OF",
+                    "RISK_BUDGET",
+                    "LONG_GATE",
+                    "DISPERSION",
+                    "SECTOR_PRIOR",
+                    "BLACKOUT",
+                    "CONFIDENCE",
+                    "DATA_COVERAGE",
+                ],
+            )
             html = render_html(report)
             self.assertEqual(html.count("data-chart="), 17)
             self.assertEqual(html.count("data-relative="), 12)
@@ -82,7 +97,7 @@ class KlineWorldReportTests(unittest.TestCase):
             html = render_html(report)
             headings = [
                 "17 张完成日线证据",
-                "宏观参数：下游今天能做什么？",
+                "宏观参数：同一份可回放记录",
                 "哪些是洞察，哪些只是观察？",
                 "哪些关键数据还没有拿到？",
                 "17 个市场与 12 组相对领导关系",
@@ -104,12 +119,69 @@ class KlineWorldReportTests(unittest.TestCase):
             markdown = render_markdown(report)
             for heading in (
                 "## 17 张完成日线证据",
-                "## 宏观参数及定量依据",
+                "## 宏观参数：同一份可回放记录",
                 "## 洞察与观察",
                 "## 数据台账",
                 "## 17 个市场与 12 组相对领导关系",
             ):
                 self.assertIn(heading, markdown)
+
+    def test_one_parameter_surface_and_actual_dates_are_visible_in_both_formats(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            daily, macro, pack, bitcoin = inputs()
+            shanghai = next(
+                item
+                for item in daily["instruments"]
+                if item["instrument"]["key"] == "shanghai"
+            )
+            prior = shanghai["bars"][-1]
+            shanghai["bars"].append(
+                {
+                    "date": "2026-08-17",
+                    "open": prior["close"] + 9.5,
+                    "high": prior["close"] + 11.0,
+                    "low": prior["close"] + 9.0,
+                    "close": prior["close"] + 10.0,
+                    "volume": 999999,
+                }
+            )
+            shanghai["bar_count"] = len(shanghai["bars"])
+            shanghai["last_completed_session"] = "2026-08-17"
+            context = build_kline_world_context(
+                daily=daily,
+                macro=macro,
+                pack=pack,
+                bitcoin=bitcoin,
+                allow_fixture=True,
+            )
+            root = Path(temporary)
+            context_store = KlineWorldContextStore(root / "context", allow_fixture=True)
+            context_store.publish(context)
+            model_store = KlineWorldModelStore(context_store, root / "model")
+            model = model_store.compile_latest(FakeProvider(valid_output(context)))
+            report = build_world_report(
+                context=context,
+                world_model=model,
+                generated_at=NOW,
+                allow_fixture=True,
+            )
+            html, markdown = render_html(report), render_markdown(report)
+            self.assertEqual(len(report["parameter_surface"]), 8)
+            for row in report["parameter_surface"]:
+                self.assertIn(f'data-parameter-record="{row["parameter"]}"', html)
+                self.assertIn(str(row["source"]), html)
+                self.assertIn(str(row["rule"]), html)
+                self.assertIn(f"| {row['parameter']} |", markdown)
+                self.assertIn(str(row["source"]), markdown)
+                self.assertIn(str(row["rule"]), markdown)
+            self.assertIn("实际最新 2026-08-17 · ahead_of_as_of · 丢弃 1 行", html)
+            self.assertIn("| 上证指数 | 2026-08-14 | 2026-08-17 | ahead_of_as_of | 1 |", markdown)
+            self.assertTrue(
+                all(
+                    chart["points"][-1]["date"] == report["parameter_surface"][0]["value"]
+                    for chart in report["charts"]
+                )
+            )
 
     def test_analysis_citations_are_resolvable_and_missing_ids_are_disclosed(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -160,6 +232,50 @@ class KlineWorldReportTests(unittest.TestCase):
             markdown = (root / "output" / state["markdown"]["path"]).read_text(encoding="utf-8")
             self.assertEqual(html, render_html(replay))
             self.assertEqual(markdown, render_markdown(replay))
+
+    def test_historical_report_load_survives_context_and_model_advance(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            first_context = fixture_context()
+            context_store = KlineWorldContextStore(root / "context", allow_fixture=True)
+            context_store.publish(first_context)
+            model_store = KlineWorldModelStore(context_store, root / "model")
+            model_store.compile_latest(FakeProvider(valid_output(first_context)))
+            store = KlineWorldReportStore(
+                context_store,
+                model_store,
+                root / "report",
+                root / "output",
+                allow_fixture=True,
+            )
+            first_state = store.compile_latest(generated_at=NOW)
+            first_bytes = (root / "output" / first_state["html"]["path"]).read_bytes()
+
+            daily, macro, pack, bitcoin = inputs()
+            sp500 = next(
+                item for item in daily["instruments"] if item["instrument"]["key"] == "sp500"
+            )
+            sp500["bars"][-1]["close"] += 0.1
+            sp500["bars"][-1]["high"] += 0.1
+            second_context = build_kline_world_context(
+                daily=daily,
+                macro=macro,
+                pack=pack,
+                bitcoin=bitcoin,
+                allow_fixture=True,
+            )
+            context_store.publish(second_context)
+            model_store.compile_latest(FakeProvider(valid_output(second_context)))
+            second_state = store.compile_latest(generated_at=NOW + timedelta(hours=1))
+            self.assertNotEqual(first_state["report_id"], second_state["report_id"])
+
+            replay_state, replay = store.load(first_state["report_id"])
+            self.assertEqual(replay_state, first_state)
+            self.assertEqual(replay["context_id"], first_context["context_id"])
+            self.assertEqual(
+                (root / "output" / replay_state["html"]["path"]).read_bytes(),
+                first_bytes,
+            )
 
     def test_coherently_rebound_report_projection_cannot_disagree_with_model(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
