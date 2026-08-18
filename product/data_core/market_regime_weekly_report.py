@@ -11,6 +11,7 @@ from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DI
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v1"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v2"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
@@ -102,6 +103,7 @@ def build_weekly_report(
         })
     core = {
         "schema_version": SCHEMA_VERSION,
+        "renderer_version": RENDERER_VERSION,
         "week_end": source_snapshot.get("week_end"),
         "cutoff_at": source_snapshot.get("cutoff_at"),
         "source_status": source_snapshot.get("status"),
@@ -162,7 +164,7 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
             nav_parts.append(f'<button data-asset-nav="{_escape(key)}">{_escape(card["display_name"])}</button>')
             analysis = card["analysis"]
             rows = []
-            for tf, label in (("weekly", "WEEKLY"), ("daily", "DAILY"), ("four_hour", "4H CONTEXT")):
+            for tf, label in (("weekly", "周线"), ("daily", "日线"), ("four_hour", "4小时")):
                 slot = next((item for item in card["chart_slots"] if item["timeframe"] == tf), None)
                 if slot is None:
                     continue
