@@ -17,7 +17,7 @@
       "structure": "17-asset navigation rail; one complete asset card visible at a time",
       "desktop_1280": {"overflow_x": 0, "asset_cards_in_dom": 17, "charts_in_dom": 39, "nav_items": 17, "visible_panes": 1},
       "mobile_390": {"overflow_x": 0, "charts_in_dom": 39, "nav_items": 17, "visible_panes": 1},
-      "screenshots": ["variant-b-desktop-1280.png"]
+      "screenshots": ["variant-b-desktop-1280.png", "variant-b-mobile-390.png"]
     },
     "C": {
       "name": "三周期时间轴",
@@ -37,5 +37,6 @@
     "production_scheduler_touched": false
   },
   "park_verdict": "variant_B_selected",
+  "prototype_receipt": "folding_required",
   "park_verdict_reason": "资产工作台让每个市场的周线、日线与 Context 周期保持完整，同时把 39-slot 总密度转换成可控的逐资产研究路径。"
 }

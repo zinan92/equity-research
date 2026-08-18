@@ -1,5 +1,25 @@
 # Decision Log
 
+## 2026-08-18 — Select Variant B for Weekly Macro K-line prototype
+
+- **Decision:** Keep all 17 assets and 39 timeframe slots in the prototype, but
+  use the asset-workbench layout as the reader path: grouped asset navigation
+  on the left, one complete asset card on the right, and ranking only after the
+  full wall has been inspected.
+- **Why:** The full vertical page preserves context but makes 39 charts hard to
+  navigate. Variant B keeps weekly, daily and available 4H analysis together for
+  each asset without filtering any asset before review.
+- **Evidence:** Issue #839 / PR #840; local URL
+  `http://127.0.0.1:8902/weekly-macro-kline-prototype.html?prototype=1&variant=B`;
+  browser readback shows 17 navigation items, 39 chart canvases, one active
+  asset pane and zero horizontal overflow at desktop/mobile widths. The
+  machine receipt is
+  `evidence/weekly-macro-kline-prototype/issue-839-browser-evidence.json`.
+- **Gotchas:** This is a throwaway fixture prototype, not a production report.
+  The selected receipt is `folding_required`, not permission to hide assets in
+  the eventual v1. Production data, model validation, scheduler migration and
+  15m/30m execution remain separate stories.
+
 ## 2026-08-18 — Make Addendum 01 one report-wide, replayable surface
 
 - **Decision:** Use one context-wide `AS_OF` for every report value and project
