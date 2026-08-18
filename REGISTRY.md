@@ -1,5 +1,19 @@
 # REGISTRY
 
+## 2026-08-18 · Weekly isolated asset compiler merged (Issue #842 / PR #847)
+
+Now: merged SHA `d3d0eebc9c015f3c56f14374a00389e01fc14d49` adds the isolated
+per-asset Weekly compiler at
+[`market_regime_weekly_asset_analysis.py`](product/data_core/market_regime_weekly_asset_analysis.py).
+Each asset request receives only its own weekly/daily/optional-4H evidence;
+unknown citations and registry mismatches fail closed, and the 17-slot vector
+preserves validated versus analysis-unavailable states. No ranking, report
+surface, scheduler or Daily mutation is live. Next: Issue #843 consumes this
+typed vector for late ordering.
+
+Validation: 64 focused/upstream tests and 19 subtests pass; gitleaks and diff
+checks pass. The current deployed product remains the Daily K-line report.
+
 ## 2026-08-18 · Weekly source authority merged (Issue #841 / PR #846)
 
 Now: merged SHA `6f76c88b18a44c14c9b947057e2f79a076c66470` adds the isolated
