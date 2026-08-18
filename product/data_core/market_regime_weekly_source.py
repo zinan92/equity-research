@@ -96,6 +96,13 @@ def _validate_key(key: str) -> dict[str, Any]:
     return CANONICAL_REGISTRY[key]
 
 
+def _validate_metadata(series: Mapping[str, Any], registry: Mapping[str, Any], *, key: str) -> None:
+    for field in ("canonical_symbol", "series_kind", "timezone", "unit", "price_basis"):
+        supplied = series.get(field)
+        if supplied is not None and str(supplied) != str(registry.get(field)):
+            raise WeeklySourceHistoryError(f"weekly_registry_mismatch:{key}:{field}")
+
+
 def aggregate_weekly_series(
     series: Mapping[str, Any],
     *,
@@ -110,6 +117,7 @@ def aggregate_weekly_series(
         raise WeeklySourceHistoryError("week_end_must_be_friday")
     key = str(series.get("key") or "")
     registry = _validate_key(key)
+    _validate_metadata(series, registry, key=key)
     kind = str(series.get("series_kind") or registry["series_kind"])
     if kind not in {"price", "rate_level"}:
         raise WeeklySourceHistoryError(f"weekly_series_kind_invalid:{key}")
@@ -184,6 +192,7 @@ def aggregate_4h_series(
     registry = _validate_key(key)
     if key not in CONTEXT_4H_KEYS:
         raise WeeklySourceHistoryError(f"context_4h_not_allowed:{key}")
+    _validate_metadata(series, registry, key=key)
     if cutoff_at.tzinfo is None:
         raise WeeklySourceHistoryError("four_hour_cutoff_requires_timezone")
     zone = ZoneInfo(str(series.get("timezone") or registry["timezone"]))
@@ -326,11 +335,17 @@ def build_weekly_source_snapshot_from_authorities(
                 {"date": row.get("date"), "value": row.get("value")}
                 for row in points or []
             ]
+        level_unit = "index points" if key == "dxy" else ("basis points" if key == "us2s10s" else factor.get("level_unit", "percent"))
+        price_basis = (
+            "provider_unadjusted_index_level"
+            if key == "dxy"
+            else ("derived_same_date_official_treasury" if key == "us2s10s" else "official_treasury_par_yield")
+        )
         series[key] = {
             "series_kind": "price" if key == "dxy" else "rate_level",
             "timezone": "America/New_York",
-            "unit": factor.get("level_unit", "index points"),
-            "price_basis": "provider_unadjusted_index_level" if key == "dxy" else factor.get("factor", {}).get("kind", "official_treasury_par_yield"),
+            "unit": level_unit,
+            "price_basis": price_basis,
             "quality": factor.get("quality"),
             "data_kind": factor.get("data_kind", macro_snapshot.get("data_kind", "real")),
             "source_identity": {
@@ -433,7 +448,7 @@ class WeeklySourceHistoryStore:
             raise WeeklySourceHistoryError("weekly_snapshot_schema_invalid")
         identity_core = {
             key: snapshot.get(key)
-            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality")
+            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs")
         }
         snapshot_id = f"market-regime-weekly-source:{_digest(identity_core)}"
         artifact = {"snapshot_id": snapshot_id, "identity_core": identity_core, **identity_core}
@@ -504,4 +519,4 @@ class WeeklySourceHistoryStore:
             raise WeeklySourceHistoryError("weekly_identity_mismatch")
         if receipt != {"schema_version": SCHEMA_VERSION, "event": "completed", "snapshot_id": snapshot_id, "artifact": artifact_ref}:
             raise WeeklySourceHistoryError("weekly_receipt_identity_mismatch")
-        return {**state, **{key: artifact.get(key) for key in ("week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality")}}
+        return {**state, **{key: artifact.get(key) for key in ("week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs")}}

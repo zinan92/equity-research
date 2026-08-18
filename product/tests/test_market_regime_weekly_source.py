@@ -71,6 +71,14 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         self.assertEqual(result["points"], [{"date": "2026-08-14", "value": 4.42}])
         self.assertNotIn("open", result["points"][0])
 
+    def test_registry_metadata_mismatch_fails_closed(self) -> None:
+        with self.assertRaisesRegex(WeeklySourceHistoryError, "weekly_registry_mismatch:gold:timezone"):
+            aggregate_weekly_series(
+                {"key": "gold", "series_kind": "price", "timezone": "Asia/Shanghai", "points": []},
+                week_end=date(2026, 8, 14),
+                week_count=1,
+            )
+
     def test_four_hour_anchor_requires_four_consecutive_completed_hours(self) -> None:
         zone = ZoneInfo("America/New_York")
         start = datetime(2026, 8, 13, 18, tzinfo=zone)
