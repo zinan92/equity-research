@@ -36,5 +36,6 @@
     "running_daily_touched": false,
     "production_scheduler_touched": false
   },
-  "park_verdict": "pending_variant_choice"
+  "park_verdict": "variant_B_selected",
+  "park_verdict_reason": "资产工作台让每个市场的周线、日线与 Context 周期保持完整，同时把 39-slot 总密度转换成可控的逐资产研究路径。"
 }
