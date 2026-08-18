@@ -40,6 +40,12 @@ WEEKLY_KEYS = (
 )
 CONTEXT_4H_KEYS = ("dxy", "bitcoin", "wti", "gold", "silver")
 RATE_KEYS = ("us2y", "us10y", "us2s10s")
+DISPLAY_NAMES = {
+    "dxy": "美元指数", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
+    "sp500": "S&P 500", "nasdaq": "Nasdaq Composite", "us_dividend": "美股红利 ETF", "vix": "VIX", "bitcoin": "Bitcoin",
+    "shanghai": "上证指数", "star50": "科创 50", "china_dividend": "上证红利", "nikkei": "Nikkei 225", "kospi": "KOSPI",
+    "wti": "WTI 原油", "gold": "黄金", "silver": "白银",
+}
 
 
 class WeeklySourceHistoryError(ValueError):
@@ -159,6 +165,7 @@ def aggregate_weekly_series(
             }
         )
     status = "complete" if not missing else ("short_history" if output else "unavailable")
+    display_points = [dict(raw) for session, raw in sorted(by_date.items()) if session <= week_end]
     return {
         "key": key,
         "canonical_symbol": registry["canonical_symbol"],
@@ -172,6 +179,7 @@ def aggregate_weekly_series(
         "weekly_bin_count": len(output),
         "missing_week_ends": missing,
         "points": output,
+        "daily_points": display_points,
         "actual_first_session": output[0]["date"] if output else None,
         "actual_last_session": output[-1]["date"] if output else None,
         "quality": str(series.get("quality") or "unknown"),

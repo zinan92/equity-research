@@ -51,6 +51,7 @@ class WeeklySourceAggregationTest(unittest.TestCase):
             "low": 97,
             "close": 109,
         }])
+        self.assertEqual(result["daily_points"][-1]["date"], "2026-08-14")
 
     def test_weekly_rate_uses_last_level_and_never_emits_ohlc(self) -> None:
         result = aggregate_weekly_series(

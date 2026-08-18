@@ -1,5 +1,23 @@
 # Decision Log
 
+## 2026-08-18 — Render Weekly v1 through selected Variant B
+
+- **Decision:** Use the selected asset-workbench reader: grouped 17-asset
+  navigation, one complete asset card at a time, and ranking after the full
+  wall. The report preserves 39 fixed chart slots and places every timeframe's
+  prose immediately beside its chart.
+- **Why:** The prototype showed that a full vertical 39-chart page is useful for
+  completeness but hard to navigate. Variant B keeps all assets available while
+  turning attention into an explicit asset-by-asset path.
+- **Evidence:** Issue #844; focused Weekly report/source/ranking/compiler/data
+  suite (`75 passed, 19 subtests passed`). HTML/Markdown/JSON are projected from
+  one report identity; no scheduler, Daily alias or provider call is in this
+  slice.
+- **Gotchas:** This is a reader renderer, not the Monday runtime migration.
+  Degraded slots remain visible as unavailable placeholders. Local-only,
+  model-generated/unreviewed and no-automatic-execution disclosures remain
+  immutable for v1.
+
 ## 2026-08-18 — Keep ranking downstream of all 17 asset analyses
 
 - **Decision:** Stage B reads only the ordered terminal vector from Stage A and
