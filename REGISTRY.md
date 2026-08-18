@@ -1,5 +1,19 @@
 # REGISTRY
 
+## 2026-08-18 · Weekly Variant B report surface merged (Issue #844)
+
+Now: the Weekly report projection and selected Variant B asset-workbench
+renderer are implemented on the current development branch. It reads one
+validated source snapshot, 17 isolated asset analyses and the late ranking
+artifact, renders 39 fixed chart slots and keeps unavailable slots visible.
+The Monday runtime is not installed; the current Daily product and 08:20
+LaunchAgent remain authoritative.
+
+Validation: 75 relevant tests and 19 subtests pass, `git diff --check` and
+gitleaks pass. Next: Issue #845 wires the report into a separate Monday runtime
+and performs controlled/ordinary-trigger acceptance before any Daily cadence
+migration.
+
 ## 2026-08-18 · Weekly isolated asset compiler merged (Issue #842 / PR #847)
 
 Now: merged SHA `d3d0eebc9c015f3c56f14374a00389e01fc14d49` adds the isolated
