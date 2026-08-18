@@ -1,5 +1,21 @@
 # REGISTRY
 
+## 2026-08-18 · Weekly source authority merged (Issue #841 / PR #846)
+
+Now: merged SHA `6f76c88b18a44c14c9b947057e2f79a076c66470` adds the isolated
+Weekly source-history seam at
+[`market_regime_weekly_source.py`](product/data_core/market_regime_weekly_source.py).
+It freezes the 17-key identity registry, derives price weekly OHLC and rate
+weekly levels/spreads, and exposes honest session-anchored 4H aggregation for
+DXY, Bitcoin, WTI, gold and silver. It projects existing validated Daily/Macro/
+Bitcoin authorities without touching the deployed Daily context or scheduler.
+
+Validation: 57 relevant tests and 19 subtests pass, including registry
+metadata, short-history, incomplete 4H bucket, immutable artifact/receipt and
+path/hash tamper behavior. No Weekly runtime or LLM call is live yet; the
+current product remains the deployed Daily. Next: Issue #842 adds one isolated
+per-asset analysis compiler before any ranking or page migration.
+
 ## 2026-08-18 · One-AS_OF K-line Daily deployed (Issue #828 / PR #834)
 
 Now: both the shared Market Regime data app and the independent K-line Daily

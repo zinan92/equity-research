@@ -1,5 +1,23 @@
 # Decision Log
 
+## 2026-08-18 — Keep Weekly asset analysis isolated before ranking
+
+- **Decision:** Give each of the 17 Weekly assets its own frozen request and
+  validator. The request contains only that asset's weekly/daily/optional-4H
+  evidence; a typed 17-slot terminal vector is the only input to the later
+  ranking story.
+- **Why:** Cross-asset context must be a later experiment, not an accidental
+  influence on whether one asset's K-line analysis is useful. Typed unavailable
+  slots let one failed asset remain visible without converting missing evidence
+  into `wait` or `avoid`.
+- **Evidence:** Issue #842; focused isolated compiler tests and the upstream
+  data/macro/source suite are green in the implementation branch. The current
+  slice does not call a provider, modify Daily, or publish a Weekly report.
+- **Gotchas:** The provider boundary is injected and the output is
+  `model_generated_unreviewed`; all qualitative and numeric statements require
+  same-request evidence IDs. Ranking, cross-asset relationships and 15m/30m
+  execution remain later stories.
+
 ## 2026-08-18 — Add the Weekly source-history aggregation seam
 
 - **Decision:** Keep the deployed Daily context untouched and add a separate
