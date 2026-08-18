@@ -1,0 +1,410 @@
+"""Weekly source-history and honest multi-timeframe aggregation primitives.
+
+This first slice deliberately consumes already captured rows. Collection and
+runtime promotion are separate stories; the public seams here are deterministic
+aggregation and a typed source snapshot.
+"""
+
+from __future__ import annotations
+
+from datetime import date, datetime, time, timedelta, timezone
+import json
+import os
+from pathlib import Path
+import tempfile
+from typing import Any, Mapping
+from zoneinfo import ZoneInfo
+
+
+SCHEMA_VERSION = "market-regime-weekly-source-history-v1"
+REGISTRY_VERSION = "market-regime-weekly-registry-v1"
+
+WEEKLY_KEYS = (
+    "dxy",
+    "us2y",
+    "us10y",
+    "us2s10s",
+    "sp500",
+    "nasdaq",
+    "us_dividend",
+    "vix",
+    "bitcoin",
+    "shanghai",
+    "star50",
+    "china_dividend",
+    "nikkei",
+    "kospi",
+    "wti",
+    "gold",
+    "silver",
+)
+CONTEXT_4H_KEYS = ("dxy", "bitcoin", "wti", "gold", "silver")
+RATE_KEYS = ("us2y", "us10y", "us2s10s")
+
+
+class WeeklySourceHistoryError(ValueError):
+    """The weekly source or timeframe aggregation contract failed closed."""
+
+
+CANONICAL_REGISTRY: dict[str, dict[str, Any]] = {
+    "dxy": {"canonical_symbol": "DX-Y.NYB", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level", "anchor_hour": 20},
+    "us2y": {"canonical_symbol": "Treasury:2 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
+    "us10y": {"canonical_symbol": "Treasury:10 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
+    "us2s10s": {"canonical_symbol": "Treasury:10 Yr-Treasury:2 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "basis points", "price_basis": "derived_same_date_official_treasury"},
+    "sp500": {"canonical_symbol": "^GSPC", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "nasdaq": {"canonical_symbol": "^IXIC", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "us_dividend": {"canonical_symbol": "SCHD", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price"},
+    "vix": {"canonical_symbol": "^VIX", "series_kind": "price", "timezone": "America/Chicago", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "bitcoin": {"canonical_symbol": "BTC-USD", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_unadjusted_trade_price", "anchor_hour": 0},
+    "shanghai": {"canonical_symbol": "000001.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "star50": {"canonical_symbol": "000688.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "china_dividend": {"canonical_symbol": "000015.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "nikkei": {"canonical_symbol": "^N225", "series_kind": "price", "timezone": "Asia/Tokyo", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "kospi": {"canonical_symbol": "^KS11", "series_kind": "price", "timezone": "Asia/Seoul", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
+    "wti": {"canonical_symbol": "CL=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/barrel", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18},
+    "gold": {"canonical_symbol": "GC=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18},
+    "silver": {"canonical_symbol": "SI=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18},
+}
+
+
+def _parse_date(value: Any) -> date:
+    try:
+        return date.fromisoformat(str(value))
+    except (TypeError, ValueError) as exc:
+        raise WeeklySourceHistoryError("weekly_point_date_invalid") from exc
+
+
+def _parse_timestamp(value: Any) -> datetime:
+    try:
+        if isinstance(value, (int, float)):
+            return datetime.fromtimestamp(float(value), timezone.utc)
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise WeeklySourceHistoryError("four_hour_timestamp_invalid") from exc
+    if parsed.tzinfo is None:
+        raise WeeklySourceHistoryError("four_hour_timestamp_requires_timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def _week_start(week_end: date, weeks_back: int) -> date:
+    return week_end - timedelta(days=week_end.weekday() + 7 * weeks_back)
+
+
+def _validate_key(key: str) -> dict[str, Any]:
+    if key not in CANONICAL_REGISTRY:
+        raise WeeklySourceHistoryError(f"unknown_weekly_key:{key}")
+    return CANONICAL_REGISTRY[key]
+
+
+def aggregate_weekly_series(
+    series: Mapping[str, Any],
+    *,
+    week_end: date,
+    week_count: int = 156,
+) -> dict[str, Any]:
+    """Aggregate normalized daily rows into completed weekly bins."""
+
+    if week_count <= 0:
+        raise WeeklySourceHistoryError("weekly_count_invalid")
+    if week_end.weekday() != 4:
+        raise WeeklySourceHistoryError("week_end_must_be_friday")
+    key = str(series.get("key") or "")
+    registry = _validate_key(key)
+    kind = str(series.get("series_kind") or registry["series_kind"])
+    if kind not in {"price", "rate_level"}:
+        raise WeeklySourceHistoryError(f"weekly_series_kind_invalid:{key}")
+    points = list(series.get("points") or [])
+    by_date: dict[date, Mapping[str, Any]] = {}
+    for raw in points:
+        session = _parse_date(raw.get("date"))
+        if session > week_end or session.weekday() >= 5:
+            continue
+        if session in by_date:
+            raise WeeklySourceHistoryError(f"weekly_duplicate_session:{key}:{session.isoformat()}")
+        by_date[session] = raw
+
+    output: list[dict[str, Any]] = []
+    missing: list[str] = []
+    for weeks_back in range(week_count - 1, -1, -1):
+        start = _week_start(week_end, weeks_back)
+        end = start + timedelta(days=4)
+        rows = [raw for session, raw in sorted(by_date.items()) if start <= session <= end]
+        if not rows:
+            missing.append(end.isoformat())
+            continue
+        last_session = max(_parse_date(raw.get("date")) for raw in rows)
+        if kind == "rate_level":
+            if any(raw.get("value") is None for raw in rows):
+                raise WeeklySourceHistoryError(f"weekly_rate_value_missing:{key}")
+            output.append({"date": last_session.isoformat(), "value": float(rows[-1]["value"])})
+            continue
+        required = ("open", "high", "low", "close")
+        if any(any(raw.get(field) is None for field in required) for raw in rows):
+            raise WeeklySourceHistoryError(f"weekly_ohlc_missing:{key}")
+        output.append(
+            {
+                "date": last_session.isoformat(),
+                "open": float(rows[0]["open"]),
+                "high": max(float(raw["high"]) for raw in rows),
+                "low": min(float(raw["low"]) for raw in rows),
+                "close": float(rows[-1]["close"]),
+            }
+        )
+    status = "complete" if not missing else ("short_history" if output else "unavailable")
+    return {
+        "key": key,
+        "canonical_symbol": registry["canonical_symbol"],
+        "series_kind": kind,
+        "timezone": str(series.get("timezone") or registry["timezone"]),
+        "unit": str(series.get("unit") or registry["unit"]),
+        "price_basis": str(series.get("price_basis") or registry["price_basis"]),
+        "status": status,
+        "week_end": week_end.isoformat(),
+        "required_weekly_bins": week_count,
+        "weekly_bin_count": len(output),
+        "missing_week_ends": missing,
+        "points": output,
+        "actual_first_session": output[0]["date"] if output else None,
+        "actual_last_session": output[-1]["date"] if output else None,
+        "quality": str(series.get("quality") or "unknown"),
+        "data_kind": str(series.get("data_kind") or "fixture"),
+        "source_identity": series.get("source_identity"),
+        "rights": series.get("rights"),
+    }
+
+
+def aggregate_4h_series(
+    series: Mapping[str, Any],
+    *,
+    cutoff_at: datetime,
+) -> dict[str, Any]:
+    """Aggregate complete hourly rows into fixed, session-anchored 4H bars."""
+
+    key = str(series.get("key") or "")
+    registry = _validate_key(key)
+    if key not in CONTEXT_4H_KEYS:
+        raise WeeklySourceHistoryError(f"context_4h_not_allowed:{key}")
+    if cutoff_at.tzinfo is None:
+        raise WeeklySourceHistoryError("four_hour_cutoff_requires_timezone")
+    zone = ZoneInfo(str(series.get("timezone") or registry["timezone"]))
+    anchor_hour = int(series.get("anchor_hour", registry.get("anchor_hour", 0)))
+    if not 0 <= anchor_hour < 24:
+        raise WeeklySourceHistoryError("four_hour_anchor_invalid")
+    cutoff_utc = cutoff_at.astimezone(timezone.utc)
+    grouped: dict[datetime, list[tuple[datetime, Mapping[str, Any]]]] = {}
+    for raw in series.get("points") or []:
+        stamp = _parse_timestamp(raw.get("timestamp"))
+        if stamp + timedelta(hours=1) > cutoff_utc:
+            continue
+        local = stamp.astimezone(zone)
+        session_date = local.date() if local.hour >= anchor_hour else local.date() - timedelta(days=1)
+        anchor = datetime.combine(session_date, time(anchor_hour), tzinfo=zone)
+        elapsed_hours = int((local - anchor).total_seconds() // 3600)
+        bucket = anchor + timedelta(hours=(elapsed_hours // 4) * 4)
+        grouped.setdefault(bucket, []).append((stamp, raw))
+
+    output: list[dict[str, Any]] = []
+    dropped: list[str] = []
+    for bucket, rows in sorted(grouped.items()):
+        rows.sort(key=lambda item: item[0])
+        stamps = [stamp for stamp, _ in rows]
+        if len(rows) != 4 or any(right - left != timedelta(hours=1) for left, right in zip(stamps, stamps[1:])):
+            dropped.append(bucket.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"))
+            continue
+        values = [raw for _, raw in rows]
+        required = ("open", "high", "low", "close")
+        if any(any(raw.get(field) is None for field in required) for raw in values):
+            raise WeeklySourceHistoryError(f"four_hour_ohlc_missing:{key}")
+        output.append(
+            {
+                "start_at": bucket.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+                "duration_hours": 4,
+                "open": float(values[0]["open"]),
+                "high": max(float(raw["high"]) for raw in values),
+                "low": min(float(raw["low"]) for raw in values),
+                "close": float(values[-1]["close"]),
+            }
+        )
+    return {
+        "key": key,
+        "canonical_symbol": registry["canonical_symbol"],
+        "timezone": zone.key,
+        "anchor_hour": anchor_hour,
+        "status": "complete" if output else "unavailable",
+        "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z"),
+        "points": output,
+        "dropped_incomplete_buckets": dropped,
+    }
+
+
+def build_weekly_source_snapshot(
+    series_by_key: Mapping[str, Mapping[str, Any]],
+    *,
+    week_end: date,
+    cutoff_at: datetime | None = None,
+    week_count: int = 156,
+    require_all: bool = False,
+) -> dict[str, Any]:
+    """Build the typed timeframe snapshot consumed by later compiler stories."""
+
+    unknown = sorted(set(series_by_key) - set(WEEKLY_KEYS))
+    if unknown:
+        raise WeeklySourceHistoryError(f"unknown_weekly_key:{unknown[0]}")
+    missing = [key for key in WEEKLY_KEYS if key not in series_by_key]
+    if require_all and missing:
+        raise WeeklySourceHistoryError(f"weekly_series_missing:{missing[0]}")
+    result: dict[str, Any] = {}
+    for key, source in series_by_key.items():
+        enriched = {**source, "key": key}
+        weekly = aggregate_weekly_series(enriched, week_end=week_end, week_count=week_count)
+        if key in CONTEXT_4H_KEYS and enriched.get("hourly_points") is not None:
+            cutoff = cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)
+            weekly["context_4h"] = aggregate_4h_series(
+                {**enriched, "points": enriched.get("hourly_points")}, cutoff_at=cutoff
+            )
+        result[key] = weekly
+    statuses = [item["status"] for item in result.values()]
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "registry_version": REGISTRY_VERSION,
+        "week_end": week_end.isoformat(),
+        "cutoff_at": (cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)).astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "status": "complete" if not missing and all(status == "complete" for status in statuses) else "partial",
+        "missing_series": missing,
+        "series": result,
+    }
+
+
+def _canonical_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def _json_bytes(value: Mapping[str, Any]) -> bytes:
+    return (_canonical_json(value) + "\n").encode("utf-8")
+
+
+def _digest(value: Mapping[str, Any]) -> str:
+    import hashlib
+
+    return hashlib.sha256(_json_bytes(value)).hexdigest()
+
+
+def _write_immutable(path: Path, encoded: bytes) -> str:
+    import hashlib
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(encoded).hexdigest()
+    if path.exists():
+        if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+            raise WeeklySourceHistoryError("immutable_artifact_conflict")
+        return digest
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.link(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    return digest
+
+
+def _write_atomic(path: Path, encoded: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+class WeeklySourceHistoryStore:
+    """Immutable Weekly source snapshot store; no network or LLM side effects."""
+
+    def __init__(self, root: Path | str) -> None:
+        self.root = Path(root).expanduser().resolve()
+
+    def publish(self, snapshot: Mapping[str, Any]) -> dict[str, Any]:
+        if snapshot.get("schema_version") != SCHEMA_VERSION:
+            raise WeeklySourceHistoryError("weekly_snapshot_schema_invalid")
+        identity_core = {
+            key: snapshot.get(key)
+            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality")
+        }
+        snapshot_id = f"market-regime-weekly-source:{_digest(identity_core)}"
+        artifact = {"snapshot_id": snapshot_id, "identity_core": identity_core, **identity_core}
+        digest = snapshot_id.split(":", 1)[1]
+        artifact_path = f"artifacts/{digest}.json"
+        receipt_path = f"receipts/{digest}.json"
+        artifact_ref = {"path": artifact_path, "sha256": _write_immutable(self.root / artifact_path, _json_bytes(artifact))}
+        receipt = {
+            "schema_version": SCHEMA_VERSION,
+            "event": "completed",
+            "snapshot_id": snapshot_id,
+            "artifact": artifact_ref,
+        }
+        receipt_ref = {"path": receipt_path, "sha256": _write_immutable(self.root / receipt_path, _json_bytes(receipt))}
+        state = {
+            "schema_version": SCHEMA_VERSION,
+            "snapshot_id": snapshot_id,
+            "artifact": artifact_ref,
+            "receipt": receipt_ref,
+        }
+        _write_atomic(self.root / "latest.json", _json_bytes(state))
+        self.latest()
+        return state
+
+    def latest(self) -> dict[str, Any]:
+        try:
+            state = json.loads((self.root / "latest.json").read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError) as exc:
+            raise WeeklySourceHistoryError("weekly_latest_unavailable") from exc
+        required = {"schema_version", "snapshot_id", "artifact", "receipt"}
+        if not isinstance(state, dict) or set(state) != required or state["schema_version"] != SCHEMA_VERSION:
+            raise WeeklySourceHistoryError("weekly_latest_invalid")
+        snapshot_id = str(state["snapshot_id"] or "")
+        digest = snapshot_id.removeprefix("market-regime-weekly-source:")
+        if len(digest) != 64:
+            raise WeeklySourceHistoryError("weekly_identity_invalid")
+        artifact_ref = state["artifact"]
+        receipt_ref = state["receipt"]
+        if not isinstance(artifact_ref, dict) or not isinstance(receipt_ref, dict):
+            raise WeeklySourceHistoryError("weekly_reference_invalid")
+        artifact_relative = str(artifact_ref.get("path") or "")
+        receipt_relative = str(receipt_ref.get("path") or "")
+        artifact_path = (self.root / artifact_relative).resolve()
+        receipt_path = (self.root / receipt_relative).resolve()
+        if self.root not in artifact_path.parents or self.root not in receipt_path.parents:
+            raise WeeklySourceHistoryError("weekly_reference_path_escape")
+        if artifact_relative != f"artifacts/{digest}.json" or receipt_relative != f"receipts/{digest}.json":
+            raise WeeklySourceHistoryError("weekly_reference_path_invalid")
+        try:
+            artifact_bytes = artifact_path.read_bytes()
+            receipt_bytes = receipt_path.read_bytes()
+        except FileNotFoundError as exc:
+            raise WeeklySourceHistoryError("weekly_artifact_unavailable") from exc
+        import hashlib
+
+        if hashlib.sha256(artifact_bytes).hexdigest() != artifact_ref.get("sha256"):
+            raise WeeklySourceHistoryError("artifact_hash_mismatch")
+        if hashlib.sha256(receipt_bytes).hexdigest() != receipt_ref.get("sha256"):
+            raise WeeklySourceHistoryError("receipt_hash_mismatch")
+        try:
+            artifact = json.loads(artifact_bytes)
+            receipt = json.loads(receipt_bytes)
+        except json.JSONDecodeError as exc:
+            raise WeeklySourceHistoryError("weekly_artifact_json_invalid") from exc
+        if not isinstance(artifact, dict) or artifact.get("snapshot_id") != snapshot_id:
+            raise WeeklySourceHistoryError("weekly_artifact_identity_invalid")
+        if artifact.get("identity_core") is not None and snapshot_id != f"market-regime-weekly-source:{_digest(artifact['identity_core'])}":
+            raise WeeklySourceHistoryError("weekly_identity_mismatch")
+        if receipt != {"schema_version": SCHEMA_VERSION, "event": "completed", "snapshot_id": snapshot_id, "artifact": artifact_ref}:
+            raise WeeklySourceHistoryError("weekly_receipt_identity_mismatch")
+        return {**state, **{key: artifact.get(key) for key in ("week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality")}}

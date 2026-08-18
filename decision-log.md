@@ -1,5 +1,24 @@
 # Decision Log
 
+## 2026-08-18 — Add the Weekly source-history aggregation seam
+
+- **Decision:** Keep the deployed Daily context untouched and add a separate
+  deterministic Weekly source-history seam. It binds the 17-series registry,
+  derives price weekly OHLC and rate weekly levels/spreads, and admits only
+  complete session-anchored 4H buckets for DXY, Bitcoin, WTI, gold and silver.
+- **Why:** Weekly v1 needs three years of weekly position while the Daily
+  context intentionally retains a shorter aligned tape. A literal 4H chart is
+  also not honest for A-share cash sessions or official daily Treasury yields.
+- **Evidence:** Issue #841; nine focused tests and the relevant daily/macro
+  upstream suite (`55 passed, 19 subtests passed`). The public seam exposes
+  short-history, incomplete-bucket, rate-line and path/hash failure states;
+  no live collector, Daily runtime or scheduler was changed in this slice.
+- **Gotchas:** This is a source/aggregation authority, not yet a production
+  Weekly report. Intraday Yahoo-style rights remain local-evaluation-only and
+  cannot unlock public redistribution. Continuous-future roll boundaries and
+  missing maintenance-hour buckets remain explicit metadata; they are never
+  silently compressed or back-adjusted.
+
 ## 2026-08-18 — Make Addendum 01 one report-wide, replayable surface
 
 - **Decision:** Use one context-wide `AS_OF` for every report value and project
