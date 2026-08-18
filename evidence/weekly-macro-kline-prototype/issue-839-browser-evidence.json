@@ -1,0 +1,40 @@
+{
+  "schema_version": "weekly-macro-kline-prototype-browser-evidence-v1",
+  "issue": 839,
+  "prototype_question": "Can 17 assets and 39 honest timeframe slots be read without redundancy or Ops leakage?",
+  "prototype_status": "fixture_not_live",
+  "url": "http://127.0.0.1:8902/weekly-macro-kline-prototype.html",
+  "variants": {
+    "A": {
+      "name": "纵向研究稿",
+      "structure": "four chapters; every asset fully expanded",
+      "desktop_1280": {"overflow_x": 0, "asset_cards": 17, "charts": 39, "summaries": 17},
+      "mobile_390": {"overflow_x": 0, "asset_cards": 17, "charts": 39},
+      "screenshots": ["variant-a-desktop-1280.png", "variant-a-mobile-390.png"]
+    },
+    "B": {
+      "name": "资产工作台",
+      "structure": "17-asset navigation rail; one complete asset card visible at a time",
+      "desktop_1280": {"overflow_x": 0, "asset_cards_in_dom": 17, "charts_in_dom": 39, "nav_items": 17, "visible_panes": 1},
+      "mobile_390": {"overflow_x": 0, "charts_in_dom": 39, "nav_items": 17, "visible_panes": 1},
+      "screenshots": ["variant-b-desktop-1280.png"]
+    },
+    "C": {
+      "name": "三周期时间轴",
+      "structure": "weekly band, daily band, then 4H context band",
+      "desktop_1280": {"overflow_x": 0, "asset_slots": 39, "charts": 39, "bands": 3},
+      "mobile_390": {"overflow_x": 0, "asset_slots": 39, "charts": 39},
+      "screenshots": ["variant-c-desktop-1280.png", "variant-c-mobile-390.png"]
+    }
+  },
+  "shared_checks": {
+    "prototype_marker_visible": true,
+    "ops_fields_visible": false,
+    "all_assets_before_ranking": true,
+    "ranking_sections": 1,
+    "console_warnings_or_errors": [],
+    "running_daily_touched": false,
+    "production_scheduler_touched": false
+  },
+  "park_verdict": "pending_variant_choice"
+}
