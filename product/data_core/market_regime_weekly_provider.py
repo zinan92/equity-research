@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 from typing import Any, Mapping
 
 
@@ -24,6 +25,15 @@ RANKING_SYSTEM_PROMPT = """你是宏观 K 线周报的末尾排序编辑。输�
 """
 
 
+ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC"})
+
+
+def _has_forbidden_english(value: Mapping[str, Any]) -> bool:
+    texts = [str(item.get("text", "")) for item in value.values() if isinstance(item, Mapping) and isinstance(item.get("text"), str)]
+    words = re.findall(r"[A-Za-z]{4,}", " ".join(texts))
+    return any(word not in ALLOWED_LATIN_WORDS for word in words)
+
+
 class DeepSeekWeeklyAssetProvider:
     provider_name = "DeepSeek"
 
@@ -36,6 +46,7 @@ class DeepSeekWeeklyAssetProvider:
 
         no_four_hour = "four_hour" not in (request.get("timeframes") or {})
         prompt = ASSET_SYSTEM_PROMPT
+        prompt += "\n所有 text 字段必须使用简体中文；只能保留资产官方符号或名称 Nasdaq、Bitcoin、Nikkei、KOSPI、SCHD、OHLC，不能写英文句子。"
         if no_four_hour:
             prompt += "\n本次请求没有 four_hour。输出 JSON 中绝对不能有 four_hour 字段，任何文字也不能出现 4H、4小时或小时级走势；只讨论周线和日线。"
         output: Mapping[str, Any] = {}
@@ -50,12 +61,12 @@ class DeepSeekWeeklyAssetProvider:
                 temperature=0.1,
                 thinking_type="disabled",
             )
-            if not no_four_hour:
+            if not no_four_hour and not _has_forbidden_english(output):
                 return output
             text = " ".join(str(value) for value in output.values() if isinstance(value, str) or isinstance(value, Mapping))
-            if not any(token in text.lower() for token in ("4h", "4小时", "小时")):
+            if (not no_four_hour or not any(token in text.lower() for token in ("4h", "4小时", "小时"))) and not _has_forbidden_english(output):
                 break
-            prompt += "\n上一次输出违反了时间周期边界。请重写，不得提及任何小时或 4H。"
+            prompt += "\n上一次输出违反了语言或时间周期边界。请重写：所有 text 必须为简体中文，不得写英文句子；若请求没有 four_hour，也不得提及任何小时或 4H。"
         # The request is authoritative: cash/rate assets have no 4H field.
         if no_four_hour and isinstance(output, dict):
             output = {key: value for key, value in output.items() if key != "four_hour"}
