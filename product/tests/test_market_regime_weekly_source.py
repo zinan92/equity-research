@@ -18,6 +18,7 @@ from data_core.market_regime_weekly_source import (  # noqa: E402
     aggregate_4h_series,
     aggregate_weekly_series,
     build_weekly_source_snapshot,
+    build_weekly_source_snapshot_from_authorities,
 )
 
 
@@ -193,6 +194,33 @@ class WeeklySourceAggregationTest(unittest.TestCase):
             latest_path.write_text(json.dumps(state), encoding="utf-8")
             with self.assertRaisesRegex(WeeklySourceHistoryError, "weekly_reference_path"):
                 store.latest()
+
+    def test_authority_adapter_preserves_upstream_identity(self) -> None:
+        snapshot = build_weekly_source_snapshot_from_authorities(
+            daily_snapshot={
+                "run_id": "daily-run",
+                "instruments": [
+                    {
+                        "instrument": {"key": "gold", "exchange_timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted"},
+                        "bars": [{"date": "2026-08-14", "open": 100, "high": 101, "low": 99, "close": 100}],
+                        "quality": "fresh",
+                        "data_kind": "real",
+                        "run_id": "daily-run",
+                        "normalized_artifact": {"path": "normalized/daily-run/gold.json", "sha256": "a" * 64},
+                        "publication_eligible": False,
+                    }
+                ],
+            },
+            macro_snapshot={"run_id": "macro-run", "factors": []},
+            bitcoin_artifact={"bitcoin_id": "bitcoin-id", "bars": []},
+            week_end=date(2026, 8, 14),
+            week_count=1,
+            require_all=False,
+        )
+        gold = snapshot["series"]["gold"]
+        self.assertEqual(gold["source_identity"]["run_id"], "daily-run")
+        self.assertEqual(gold["data_kind"], "real")
+        self.assertEqual(gold["rights"]["publication_eligible"], False)
 
 
 if __name__ == "__main__":

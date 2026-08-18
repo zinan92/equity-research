@@ -275,6 +275,103 @@ def build_weekly_source_snapshot(
     }
 
 
+def build_weekly_source_snapshot_from_authorities(
+    *,
+    daily_snapshot: Mapping[str, Any],
+    macro_snapshot: Mapping[str, Any],
+    bitcoin_artifact: Mapping[str, Any],
+    week_end: date,
+    cutoff_at: datetime | None = None,
+    week_count: int = 156,
+    require_all: bool = True,
+) -> dict[str, Any]:
+    """Project existing validated authorities into the Weekly source seam."""
+
+    series: dict[str, dict[str, Any]] = {}
+    for item in daily_snapshot.get("instruments") or []:
+        instrument = item.get("instrument") if isinstance(item, Mapping) else None
+        if not isinstance(instrument, Mapping):
+            raise WeeklySourceHistoryError("daily_authority_instrument_missing")
+        key = str(instrument.get("key") or "")
+        if key not in WEEKLY_KEYS:
+            raise WeeklySourceHistoryError(f"unknown_weekly_key:{key}")
+        series[key] = {
+            "series_kind": "price",
+            "timezone": instrument.get("exchange_timezone"),
+            "unit": instrument.get("unit"),
+            "price_basis": instrument.get("price_basis"),
+            "quality": item.get("quality"),
+            "data_kind": item.get("data_kind", daily_snapshot.get("data_kind", "real")),
+            "source_identity": {
+                "run_id": item.get("run_id", daily_snapshot.get("run_id")),
+                "artifact": item.get("normalized_artifact"),
+            },
+            "rights": {
+                "publication_eligible": item.get("publication_eligible", False),
+            },
+            "points": list(item.get("bars") or []),
+        }
+    for factor in macro_snapshot.get("factors") or []:
+        spec = factor.get("factor") if isinstance(factor, Mapping) else None
+        if not isinstance(spec, Mapping):
+            raise WeeklySourceHistoryError("macro_authority_factor_missing")
+        key = str(spec.get("key") or "")
+        if key not in RATE_KEYS and key != "dxy":
+            continue
+        points = factor.get("bars") if key == "dxy" else factor.get("observations")
+        if key == "dxy":
+            normalized = list(points or [])
+        else:
+            normalized = [
+                {"date": row.get("date"), "value": row.get("value")}
+                for row in points or []
+            ]
+        series[key] = {
+            "series_kind": "price" if key == "dxy" else "rate_level",
+            "timezone": "America/New_York",
+            "unit": factor.get("level_unit", "index points"),
+            "price_basis": "provider_unadjusted_index_level" if key == "dxy" else factor.get("factor", {}).get("kind", "official_treasury_par_yield"),
+            "quality": factor.get("quality"),
+            "data_kind": factor.get("data_kind", macro_snapshot.get("data_kind", "real")),
+            "source_identity": {
+                "run_id": factor.get("run_id", macro_snapshot.get("run_id")),
+                "factor_id": factor.get("factor_id"),
+                "artifact": factor.get("artifact"),
+            },
+            "rights": {
+                "publication_eligible": factor.get("publication_eligible", False),
+            },
+            "points": normalized,
+        }
+    if isinstance(bitcoin_artifact, Mapping):
+        series["bitcoin"] = {
+            "series_kind": "price",
+            "timezone": "UTC",
+            "unit": "USD/coin",
+            "price_basis": "provider_unadjusted_trade_price",
+            "quality": bitcoin_artifact.get("quality"),
+            "data_kind": bitcoin_artifact.get("data_kind", "real"),
+            "source_identity": {"bitcoin_id": bitcoin_artifact.get("bitcoin_id")},
+            "rights": {
+                "publication_eligible": bitcoin_artifact.get("publication_eligible", False),
+            },
+            "points": list(bitcoin_artifact.get("bars") or []),
+        }
+    snapshot = build_weekly_source_snapshot(
+        series,
+        week_end=week_end,
+        cutoff_at=cutoff_at,
+        week_count=week_count,
+        require_all=require_all,
+    )
+    snapshot["authority_inputs"] = {
+        "daily_run_id": daily_snapshot.get("run_id"),
+        "macro_run_id": macro_snapshot.get("run_id"),
+        "bitcoin_id": bitcoin_artifact.get("bitcoin_id"),
+    }
+    return snapshot
+
+
 def _canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
 
