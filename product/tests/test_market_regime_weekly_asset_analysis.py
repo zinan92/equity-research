@@ -64,6 +64,12 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         self.assertEqual(validated["opportunity_state"], "participate")
         self.assertEqual(validated["asset_key"], "gold")
 
+    def test_input_registry_mismatch_fails_closed(self) -> None:
+        snapshot = asset_snapshot()
+        snapshot["canonical_symbol"] = "FAKE"
+        with self.assertRaisesRegex(WeeklyAssetAnalysisError, "asset_registry_mismatch:gold:canonical_symbol"):
+            build_asset_analysis_request(snapshot)
+
     def test_unknown_evidence_id_fails_closed(self) -> None:
         request = build_asset_analysis_request(asset_snapshot())
         output = valid_output(request)
@@ -83,6 +89,8 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         self.assertTrue(artifact["analysis_id"].startswith("market-regime-weekly-asset-analysis:"))
         self.assertEqual(artifact["request_asset_key"], "gold")
         self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
+        self.assertEqual(artifact["receipt"]["request_hash"], artifact["identity_core"]["request_hash"])
+        self.assertEqual(artifact["receipt"]["output_hash"], artifact["output_hash"])
 
     def test_terminal_vector_keeps_unavailable_slots_and_order(self) -> None:
         request = build_asset_analysis_request(asset_snapshot(with_4h=False))

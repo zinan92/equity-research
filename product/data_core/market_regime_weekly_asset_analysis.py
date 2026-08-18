@@ -34,6 +34,10 @@ def build_asset_analysis_request(asset_snapshot: Mapping[str, Any]) -> dict[str,
     registry = CANONICAL_REGISTRY.get(key)
     if registry is None:
         raise WeeklyAssetAnalysisError(f"unknown_asset_key:{key}")
+    for field in ("canonical_symbol", "series_kind", "price_basis"):
+        supplied = asset_snapshot.get(field)
+        if supplied is not None and str(supplied) != str(registry[field]):
+            raise WeeklyAssetAnalysisError(f"asset_registry_mismatch:{key}:{field}")
     timeframes: dict[str, dict[str, Any]] = {}
     for source_key, request_key in (("weekly", "weekly"), ("daily", "daily"), ("four_hour", "four_hour")):
         frame = asset_snapshot.get(source_key)
@@ -158,9 +162,19 @@ def compile_asset_analysis(
         "generation_status": output["generation_status"],
         "output": output,
     }
+    output_hash = _digest(output)
+    receipt = {
+        "schema_version": SCHEMA_VERSION,
+        "event": "completed",
+        "asset_key": key,
+        "request_hash": request_hash,
+        "output_hash": output_hash,
+    }
     return {
         "analysis_id": f"{ANALYSIS_ID_PREFIX}{_digest(core)}",
         "identity_core": core,
+        "receipt": receipt,
+        "output_hash": output_hash,
         "request_asset_key": key,
         **output,
     }
@@ -174,6 +188,9 @@ def build_terminal_vector(analyses: Mapping[str, Mapping[str, Any]]) -> list[dic
         artifact = analyses.get(key)
         if not isinstance(artifact, Mapping) or artifact.get("generation_status") != "model_generated_unreviewed":
             vector.append({"asset_key": key, "status": "analysis_unavailable", "reason_code": (artifact or {}).get("failure_code", "analysis_missing")})
+            continue
+        if not isinstance(artifact.get("analysis_id"), str) or not artifact["analysis_id"].startswith(ANALYSIS_ID_PREFIX):
+            vector.append({"asset_key": key, "status": "analysis_unavailable", "reason_code": "analysis_identity_invalid"})
             continue
         vector.append({
             "asset_key": key,
