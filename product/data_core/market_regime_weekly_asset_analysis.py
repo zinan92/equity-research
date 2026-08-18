@@ -125,6 +125,13 @@ def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any
     result["invalidation"] = _validate_statement(output.get("invalidation"), known_ids=known_ids, field="invalidation")
     result["opportunity_state"] = opportunity
     result["rationale"] = _validate_statement(output.get("rationale"), known_ids=known_ids, field="rationale")
+    if "four_hour" not in timeframes:
+        all_text = " ".join(
+            str(result.get(field, {}).get("text", ""))
+            for field in ("weekly", "daily", "synthesis", "confirmation", "invalidation", "rationale")
+        )
+        if any(token in all_text.lower() for token in ("4h", "4小时", "小时")):
+            raise WeeklyAssetAnalysisError("analysis_forbidden_timeframe")
     return result
 
 

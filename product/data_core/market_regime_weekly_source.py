@@ -301,6 +301,7 @@ def build_weekly_source_snapshot_from_authorities(
     cutoff_at: datetime | None = None,
     week_count: int = 156,
     require_all: bool = True,
+    hourly_points_by_key: Mapping[str, list[Mapping[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     """Project existing validated authorities into the Weekly source seam."""
 
@@ -387,6 +388,21 @@ def build_weekly_source_snapshot_from_authorities(
         week_count=week_count,
         require_all=require_all,
     )
+    if hourly_points_by_key:
+        # The source authority owns the raw hourly capture; aggregation remains
+        # in the same deterministic path as other 4H context bars.
+        for key, points in hourly_points_by_key.items():
+            if key not in snapshot.get("series", {}) or key not in CONTEXT_4H_KEYS:
+                continue
+            enriched = {
+                **series[key],
+                "key": key,
+                "points": list(points),
+            }
+            snapshot["series"][key]["context_4h"] = aggregate_4h_series(
+                enriched,
+                cutoff_at=cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc),
+            )
     snapshot["authority_inputs"] = {
         "daily_run_id": daily_snapshot.get("run_id"),
         "macro_run_id": macro_snapshot.get("run_id"),
