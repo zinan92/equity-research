@@ -12,7 +12,7 @@ the existing Finance Daily Newsletter, Daily K-line report and LaunchAgent are
 unchanged.
 
 Real-data acceptance: `WEEK_END=2026-08-14`, report
-`market-regime-weekly-report:9d4cf45890be77425e006b5c9b8d1f59c4d51a3c834bcdc0dd056c4898e9ea37`,
+`market-regime-weekly-report:0e7d2135098403f4a0320db30e1e3778f7fd542b7a2985f151950d5f0f969af3`,
 17/17 asset analyses, 39/39 chart slots and ranking generated; all reader
 analysis text is simplified Chinese; local output is
 `~/Desktop/宏观K线周报/latest.html` and the verified pointer is under
