@@ -1,5 +1,20 @@
 # Decision Log
 
+## 2026-08-18 — Keep ranking downstream of all 17 asset analyses
+
+- **Decision:** Stage B reads only the ordered terminal vector from Stage A and
+  outputs important changes plus a complete `participate | wait | avoid`
+  ordering for validated assets. Unavailable slots remain unavailable.
+- **Why:** The product must not filter a market before its weekly, daily and
+  available Context periods have been inspected. Separating the compiler also
+  lets us measure single-asset usefulness before adding cross-asset relations.
+- **Evidence:** Issue #843; the current branch contains the strict request and
+  validator seam, with 70 relevant tests and 19 subtests passing. No provider,
+  report page or scheduler is called by this slice.
+- **Gotchas:** A ranking result is model-generated/unreviewed and must cite
+  Stage A analysis IDs plus their evidence IDs. It cannot convert missing data
+  into `wait` or `avoid`, claim direct fund flow, or create execution orders.
+
 ## 2026-08-18 — Keep Weekly asset analysis isolated before ranking
 
 - **Decision:** Give each of the 17 Weekly assets its own frozen request and
