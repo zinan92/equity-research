@@ -74,6 +74,7 @@ def asset_output(request: dict) -> dict:
     key = request["asset_key"]
     frames = request["timeframes"]
     first = {tf: values["evidence_ids"][0] for tf, values in frames.items()}
+    mechanism_id = request["mechanism"]["mechanism_ids"][0]
     result = {
         "asset_key": key,
         "generation_status": "model_generated_unreviewed",
@@ -85,6 +86,7 @@ def asset_output(request: dict) -> dict:
         "invalidation": {"text": "失效条件", "evidence_ids": [first["daily"]]},
         "opportunity_state": "wait",
         "rationale": {"text": "依据", "evidence_ids": [first["weekly"]]},
+        "theoretical_implication": {"text": "通常由宏观驱动与风险偏好共同影响；但该传导并非始终稳定。", "evidence_ids": [mechanism_id], "claim_type": "theoretical_mechanism"},
     }
     if "four_hour" in frames:
         result["four_hour"] = {"text": "4小时分析", "evidence_ids": [first["four_hour"]]}
