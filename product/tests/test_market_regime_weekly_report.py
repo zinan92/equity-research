@@ -14,6 +14,7 @@ from data_core.market_regime_weekly_report import (  # noqa: E402
     render_weekly_html,
     render_weekly_markdown,
 )
+from data_core.market_regime_weekly_features import FEATURE_SCHEMA_VERSION  # noqa: E402
 from data_core.market_regime_weekly_source import WEEKLY_KEYS  # noqa: E402
 
 
@@ -59,6 +60,15 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(report["cards"][0]["asset_key"], "dxy")
         self.assertEqual(report["cards"][-1]["asset_key"], "silver")
 
+    def test_chart_slots_bind_indicator_feature_context_and_axes(self) -> None:
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
+        slot = report["chart_slots"][0]
+        self.assertEqual(slot["feature"]["schema_version"], FEATURE_SCHEMA_VERSION)
+        self.assertEqual(slot["feature"]["parameters"]["ema_span"], 50)
+        self.assertEqual(slot["x_labels"][0]["label"], "2026-08-14")
+        self.assertEqual(slot["y_labels"][0]["value"], 99.0)
+        self.assertIn("macd_histogram", slot["points"][0])
+
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         html = render_weekly_html(report)
@@ -68,6 +78,9 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertNotIn("missing_inputs", html)
         self.assertLess(html.index("data-asset-nav"), html.index("本周机会排序"))
         self.assertIn("模型生成、未经人工复核", html)
+        self.assertIn("drawLine('ema50'", html)
+        self.assertIn("macd_histogram", html)
+        self.assertIn("data-timeframes=", html)
 
     def test_markdown_keeps_the_same_asset_count_and_disclosure(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
