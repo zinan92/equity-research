@@ -1,5 +1,28 @@
 # REGISTRY
 
+## 2026-08-20 · Weekly standard-kline renderer integrated (Issues #866/#875)
+
+Now: main includes the Weekly chart seam at merged SHA
+`6f4df9f3a10a891f7cb7f6551214428665ef5a72`. Real validated CandleResponses
+are projected into pinned `zinan92/standard-kline@07acafa7` payloads. Price
+assets use the approved green hollow-up / red filled-down candlestick mode;
+Treasury rate levels and curve spreads use semantic `LineSeries` mode with
+their units, price basis, source identity, freshness and trust state intact.
+The reader embeds the pinned standard-kline source and its pinned
+`lightweight-charts@5.2.0` standalone peer, so it does not depend on a CDN or
+an unstated local browser package. Missing peer libraries remain visibly
+blocked rather than becoming a false-ready chart.
+
+Validation: Weekly-focused suite 94/94; the dedicated browser acceptance
+covers price and rate charts at 1280px and 390px, asserts real chart/series
+instances, zero horizontal overflow and zero console errors. The paired
+standard-kline repository PR #5 is merged at
+`07acafa79e72af10d17b5a10b7bb11625fd709c2`; its Node suite is 28/28 and its
+browser suite is 2/2. Daily, Finance Daily Newsletter, scheduler, broker and
+publication boundaries remain unchanged.
+
+Next: Issue #867 adds immutable chart snapshot artifacts and receipts.
+
 ## 2026-08-20 · Weekly datafeed source coverage merged (Issue #865 / PR #872)
 
 Now: merged SHA `1ebd047d566f05cf8e74be608f3e9df18bc967ea` wires the Weekly
