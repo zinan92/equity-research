@@ -13,6 +13,7 @@ sys.path.insert(0, str(PRODUCT))
 from data_core.market_regime_weekly_asset_analysis import (  # noqa: E402
     build_asset_analysis_request,
 )
+from data_core.market_regime_weekly_contract import build_weekly_candle_responses  # noqa: E402
 from data_core.market_regime_weekly_ranking import build_ranking_request  # noqa: E402
 from data_core.market_regime_weekly_report import build_weekly_report  # noqa: E402
 from data_core.market_regime_weekly_runtime import (  # noqa: E402
@@ -111,7 +112,7 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             runtime = WeeklyMacroRuntime(
-                source_loader=lambda **_: source_fixture(),
+                source_loader=lambda **_: source_fixture(data_kind="real"),
                 asset_provider=lambda request: asset_output(request),
                 ranking_provider=lambda request: ranking_output(request),
                 runtime_root=root / "runtime",
@@ -124,8 +125,13 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             self.assertEqual(report["week_end"], "2026-08-14")
             self.assertEqual(len(report["cards"]), 17)
             self.assertEqual(len(report["chart_slots"]), 39)
+            responses = build_weekly_candle_responses(result["source"])
+            self.assertEqual(len(responses), 39)
+            self.assertEqual(responses["gold:weekly"]["status"], "ready")
             gold_analysis = result["analyses"]["gold"]
             self.assertTrue(any(str(item).startswith("feature:") for item in gold_analysis["position"]["evidence_ids"]))
+            self.assertTrue(any(str(item).startswith("candle-response:") for item in gold_analysis["weekly"]["evidence_ids"]))
+            self.assertEqual(len(result["candle_responses"]), 39)
             self.assertEqual(phases, ["source", "asset_analysis", "ranking", "report", "publish"])
             replayed = WeeklyReportStore(root / "runtime", root / "output").latest()
             self.assertEqual(replayed["report_id"], report["report_id"])
@@ -151,6 +157,22 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
             self.assertEqual(gold["analysis_status"], "analysis_unavailable")
             self.assertEqual(len(report["chart_slots"]), 39)
+
+    def test_one_stale_candle_response_is_typed_and_does_not_block_other_assets(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            source = source_fixture(data_kind="real")
+            source["series"]["gold"]["quality"] = "stale"
+            runtime = WeeklyMacroRuntime(
+                source_loader=lambda **_: source,
+                asset_provider=lambda request: asset_output(request),
+                ranking_provider=lambda request: ranking_output(request),
+                runtime_root=Path(temporary) / "runtime",
+                output_root=Path(temporary) / "output",
+            )
+            result = runtime.run_once(now=datetime(2026, 8, 17, tzinfo=timezone.utc))
+            self.assertEqual(result["candle_responses"]["gold:weekly"]["status"], "unavailable")
+            self.assertEqual(next(card for card in result["report"]["cards"] if card["asset_key"] == "gold")["analysis_status"], "analysis_unavailable")
+            self.assertEqual(next(card for card in result["report"]["cards"] if card["asset_key"] == "sp500")["analysis_status"], "validated")
 
     def test_malformed_feature_for_one_asset_is_typed_and_does_not_abort_cycle(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

@@ -22,6 +22,10 @@ from .market_regime_weekly_asset_analysis import (
     build_asset_analysis_request,
     compile_asset_analysis,
 )
+from .market_regime_weekly_contract import (
+    WeeklyCandleContractError,
+    build_weekly_candle_responses,
+)
 from .market_regime_weekly_features import build_timeframe_features
 from .market_regime_weekly_ranking import (
     SCHEMA_VERSION as RANKING_SCHEMA_VERSION,
@@ -222,20 +226,84 @@ def _evidence_id(source_id: str, key: str, timeframe: str) -> str:
     return f"{source_id}:{key}:{timeframe}"
 
 
-def _asset_snapshot(source: Mapping[str, Any], key: str) -> dict[str, Any] | None:
+def _asset_snapshot(
+    source: Mapping[str, Any],
+    key: str,
+    *,
+    candle_responses: Mapping[str, Mapping[str, Any]] | None = None,
+) -> dict[str, Any] | None:
     series = source.get("series", {}).get(key)
     if not isinstance(series, Mapping):
-        return None
-    # Charts retain the full captured history, while each isolated LLM call
-    # receives a bounded recent context so one asset cannot monopolize the
-    # provider request.  The bound is explicit and does not alter evidence.
-    weekly = list(series.get("points") or [])[-156:]
-    daily = list(series.get("daily_points") or [])[-300:]
-    if not weekly or not daily or series.get("status") == "unavailable":
         return None
     source_id = str(source.get("snapshot_id") or f"source:{_digest(source)}")
     source_identity = series.get("source_identity")
     cutoff_at = source.get("cutoff_at")
+
+    if candle_responses is not None:
+        response_frames: dict[str, Mapping[str, Any]] = {}
+        for timeframe in ("weekly", "daily", "four_hour"):
+            response = candle_responses.get(f"{key}:{timeframe}")
+            if isinstance(response, Mapping) and response.get("status") == "ready":
+                response_frames[timeframe] = response
+        if "weekly" not in response_frames or "daily" not in response_frames:
+            return None
+
+        def response_frame(timeframe: str) -> dict[str, Any] | None:
+            response = response_frames.get(timeframe)
+            if response is None:
+                return None
+            points = list(response.get("bars") or [])
+            if not points:
+                return None
+            response_id = f"candle-response:{_digest(response)}"
+            feature = build_timeframe_features(
+                {
+                    "key": key,
+                    "series_kind": response.get("series_kind"),
+                    "unit": response.get("unit"),
+                    "source_identity": response.get("source_identity"),
+                    "points": points,
+                },
+                timeframe=timeframe,
+                cutoff_at=cutoff_at,
+            )
+            return {
+                "points": points,
+                "status": response.get("status"),
+                "unit": response.get("unit"),
+                "evidence_ids": [f"{response_id}:{key}:{timeframe}", f"feature:{feature['feature_identity']}"],
+                "features": feature,
+            }
+
+        weekly_frame = response_frame("weekly")
+        daily_frame = response_frame("daily")
+        if weekly_frame is None or daily_frame is None:
+            return None
+        result: dict[str, Any] = {
+            "key": key,
+            "canonical_symbol": response_frames["weekly"].get("canonical_symbol"),
+            "series_kind": response_frames["weekly"].get("series_kind"),
+            "price_basis": response_frames["weekly"].get("price_basis"),
+            "week_end": source.get("week_end"),
+            "source_identity": response_frames["weekly"].get("source_identity"),
+            "cutoff_at": cutoff_at,
+            "weekly": weekly_frame,
+            "daily": daily_frame,
+        }
+        four_hour_frame = response_frame("four_hour")
+        if four_hour_frame is not None:
+            result["four_hour"] = four_hour_frame
+        return result
+
+    # Fixture-only compatibility path. Real runs must use validated
+    # CandleResponses above; this path keeps existing fixture tests explicit.
+    # Charts retain the full captured history, while each isolated LLM call
+    # receives a bounded recent context so one asset cannot monopolize the
+    # provider request. The bound is explicit and does not alter evidence.
+    weekly = list(series.get("points") or [])[-156:]
+    daily = list(series.get("daily_points") or [])[-300:]
+    if not weekly or not daily or series.get("status") == "unavailable":
+        return None
 
     def timeframe_frame(timeframe: str, points: list[Mapping[str, Any]], *, identity: Mapping[str, Any] | None = None) -> dict[str, Any]:
         feature = build_timeframe_features(
@@ -324,13 +392,22 @@ class WeeklyMacroRuntime:
                     raise WeeklyRuntimeError("fixture_source_not_publishable")
             source_state = self.source_store.publish(raw_source)
             source = self.source_store.latest()
+            try:
+                candle_responses = build_weekly_candle_responses(source)
+            except WeeklyCandleContractError as exc:
+                raise WeeklyRuntimeError("candle_contract_invalid") from exc
+            use_candle_responses = not (self.allow_fixture and raw_source.get("data_kind") == "fixture")
 
             phase = "asset_analysis"
             self._phase(phase)
             analyses: dict[str, dict[str, Any]] = {}
             for key in WEEKLY_KEYS:
                 try:
-                    snapshot = _asset_snapshot(source, key)
+                    snapshot = _asset_snapshot(
+                        source,
+                        key,
+                        candle_responses=candle_responses if use_candle_responses else None,
+                    )
                 except Exception:
                     analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
                     continue
@@ -366,7 +443,7 @@ class WeeklyMacroRuntime:
                 raise WeeklyRuntimeError("report_replay_identity_mismatch")
             success = {"at": current.isoformat().replace("+00:00", "Z"), "week_end": frozen_week_end.isoformat(), "report_id": pointer["report_id"], "source_id": source_state.get("snapshot_id"), "generation_status": "completed"}
             status = self._status(state="idle", success=success)
-            return {"source": source, "analyses": analyses, "ranking": ranking, "report": report, "pointer": pointer, "status": status}
+            return {"source": source, "candle_responses": candle_responses, "analyses": analyses, "ranking": ranking, "report": report, "pointer": pointer, "status": status}
         except Exception as exc:
             failure = {"at": current.isoformat().replace("+00:00", "Z"), "code": _failure_code(exc, "weekly_run_failed"), "phase": phase}
             self._status(state="failed", failure=failure)
