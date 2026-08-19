@@ -19,6 +19,23 @@
   never imply bond-price direction. Position, structure, theoretical meaning
   and odds remain later tickets (#853–#856).
 
+## 2026-08-19 — Make Position and Structure code-owned dimensions
+
+- **Decision:** Derive Position from the current close's inclusive percentile
+  in the declared timeframe window (low below 30%, middle through 70%, high
+  above 70%). Derive Structure from price/EMA50, MACD zero-axis and histogram
+  direction across weekly, daily and approved 4H frames. Expose a typed state,
+  bias, timeframe breakdown and evidence IDs in every compiled asset artifact.
+- **Why:** A reader should not have to infer “high/low” or “trend continuation/
+  reversal” from model prose. Keeping these dimensions deterministic lets the
+  later theoretical and odds layers explain the same state without changing it.
+- **Evidence:** Issue #853; focused Position/Structure, source, asset-analysis,
+  report and runtime tests cover high/unknown/mixed/continuation states,
+  unavailable frames and Summary rendering.
+- **Gotchas:** Structure disagreement is `mixed`, not an averaged direction.
+  Position is descriptive, not a forecast; no odds, position sizing or
+  execution action is introduced in this slice.
+
 ## 2026-08-18 — Render Weekly v1 through selected Variant B
 
 - **Decision:** Use the selected asset-workbench reader: grouped 17-asset

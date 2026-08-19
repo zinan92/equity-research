@@ -69,6 +69,17 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(slot["y_labels"][0]["value"], 99.0)
         self.assertIn("macd_histogram", slot["points"][0])
 
+    def test_summary_renders_position_and_structure_when_compiled(self) -> None:
+        analyses = analyses_fixture()
+        analyses["gold"]["position"] = {"state": "high", "text": "位置：高位。", "evidence_ids": ["e:gold:w"]}
+        analyses["gold"]["structure"] = {"state": "continuation", "bias": "bullish", "text": "结构：趋势延续。", "evidence_ids": ["e:gold:w"]}
+        report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
+        html = render_weekly_html(report)
+        markdown = render_weekly_markdown(report)
+        self.assertIn("summary-dimensions", html)
+        self.assertIn("位置：高位。", html)
+        self.assertIn("**位置**：位置：高位。", markdown)
+
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         html = render_weekly_html(report)

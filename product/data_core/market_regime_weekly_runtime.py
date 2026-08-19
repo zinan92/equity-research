@@ -22,6 +22,7 @@ from .market_regime_weekly_asset_analysis import (
     build_asset_analysis_request,
     compile_asset_analysis,
 )
+from .market_regime_weekly_features import build_timeframe_features
 from .market_regime_weekly_ranking import (
     SCHEMA_VERSION as RANKING_SCHEMA_VERSION,
     build_ranking_request,
@@ -233,18 +234,43 @@ def _asset_snapshot(source: Mapping[str, Any], key: str) -> dict[str, Any] | Non
     if not weekly or not daily or series.get("status") == "unavailable":
         return None
     source_id = str(source.get("snapshot_id") or f"source:{_digest(source)}")
+    source_identity = series.get("source_identity")
+    cutoff_at = source.get("cutoff_at")
+
+    def timeframe_frame(timeframe: str, points: list[Mapping[str, Any]], *, identity: Mapping[str, Any] | None = None) -> dict[str, Any]:
+        feature = build_timeframe_features(
+            {
+                "key": key,
+                "series_kind": series.get("series_kind"),
+                "unit": series.get("unit"),
+                "source_identity": identity or source_identity,
+                "points": points,
+            },
+            timeframe=timeframe,
+            cutoff_at=cutoff_at,
+        )
+        return {
+            "points": points,
+            "status": series.get("status", "complete"),
+            "unit": series.get("unit"),
+            "evidence_ids": [_evidence_id(source_id, key, timeframe)],
+            "features": feature,
+        }
+
     result: dict[str, Any] = {
         "key": key,
         "canonical_symbol": series.get("canonical_symbol"),
         "series_kind": series.get("series_kind"),
         "price_basis": series.get("price_basis"),
         "week_end": source.get("week_end"),
-        "weekly": {"points": weekly, "status": series.get("status", "complete"), "unit": series.get("unit"), "evidence_ids": [_evidence_id(source_id, key, "weekly")]},
-        "daily": {"points": daily, "status": series.get("status", "complete"), "unit": series.get("unit"), "evidence_ids": [_evidence_id(source_id, key, "daily")]},
+        "source_identity": source_identity,
+        "cutoff_at": cutoff_at,
+        "weekly": timeframe_frame("weekly", weekly),
+        "daily": timeframe_frame("daily", daily),
     }
     context = series.get("context_4h")
     if key in CONTEXT_4H_KEYS and isinstance(context, Mapping) and context.get("status") == "complete" and context.get("points"):
-        result["four_hour"] = {"points": list(context.get("points") or [])[-120:], "status": "complete", "unit": series.get("unit"), "evidence_ids": [_evidence_id(source_id, key, "four_hour")]}
+        result["four_hour"] = timeframe_frame("four_hour", list(context.get("points") or [])[-120:], identity=context.get("source_identity") or source_identity)
     return result
 
 

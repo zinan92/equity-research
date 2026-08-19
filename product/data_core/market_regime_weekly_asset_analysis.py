@@ -8,6 +8,7 @@ import re
 from typing import Any, Callable, Mapping
 
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, WEEKLY_KEYS
+from .market_regime_weekly_position_structure import build_position_structure
 
 
 SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v1"
@@ -59,6 +60,7 @@ def build_asset_analysis_request(asset_snapshot: Mapping[str, Any]) -> dict[str,
             "evidence_ids": evidence_ids,
             "status": frame.get("status", "complete"),
             "unit": frame.get("unit", registry["unit"]),
+            "features": frame.get("features"),
         }
     return {
         "schema_version": SCHEMA_VERSION,
@@ -173,6 +175,8 @@ def compile_asset_analysis(
             "generation_status": "analysis_unavailable",
             "failure_code": "provider_error",
         }
+    derived = build_position_structure(request)
+    output = {**output, **derived}
     core = {
         "schema_version": SCHEMA_VERSION,
         "asset_key": key,
