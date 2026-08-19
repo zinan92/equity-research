@@ -39,7 +39,8 @@ def analyses_fixture() -> dict:
             **({"four_hour": {"text": f"{key} 4h", "evidence_ids": [f"e:{key}:4h"]}} if key in {"dxy", "bitcoin", "wti", "gold", "silver"} else {}),
             "synthesis": {"text": f"{key} synthesis", "evidence_ids": [f"e:{key}:w"]},
             "position": {"state": "middle", "percentile": 0.5, "window": 1, "sample_count": 1, "text": "位置：中位。", "evidence_ids": [f"e:{key}:w"]},
-            "structure": {"state": "mixed", "bias": "mixed", "text": "结构：混合。", "evidence_ids": [f"e:{key}:w"]},
+            "structure": {"state": "mixed", "bias": "mixed", "text": "结构：混合。", "evidence_ids": [f"e:{key}:w", f"feature:fixture:{key}"], "timeframes": {"daily": {"evidence_ids": [f"e:{key}:d", f"feature:fixture:{key}"]}}},
+            "odds": {"schema_version": "market-regime-weekly-odds-v1", "formula_version": "entry-close-boundary-v1", "state": "not_ready", "direction": "none", "timeframe": "daily", "evidence_ids": [f"e:{key}:d", f"feature:fixture:{key}"], "reason_code": "direction_unavailable", "text": "赔率尚未形成：多周期没有单一方向。"},
             "agreement": "mixed",
             "confirmation": {"text": "confirm", "evidence_ids": [f"e:{key}:w"]},
             "invalidation": {"text": "invalidate", "evidence_ids": [f"e:{key}:d"]},
@@ -75,14 +76,16 @@ class WeeklyReportTest(unittest.TestCase):
     def test_summary_renders_position_and_structure_when_compiled(self) -> None:
         analyses = analyses_fixture()
         analyses["gold"]["position"] = {"state": "high", "text": "位置：高位。", "evidence_ids": ["e:gold:w"]}
-        analyses["gold"]["structure"] = {"state": "continuation", "bias": "bullish", "text": "结构：趋势延续。", "evidence_ids": ["e:gold:w"]}
+        analyses["gold"]["structure"] = {"state": "continuation", "bias": "bullish", "text": "结构：趋势延续。", "evidence_ids": ["e:gold:w", "feature:fixture:gold"], "timeframes": {"daily": {"evidence_ids": ["e:gold:d", "feature:fixture:gold"]}}}
         report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
         html = render_weekly_html(report)
         markdown = render_weekly_markdown(report)
         self.assertIn("summary-dimensions", html)
+        self.assertIn("赔率尚未形成", html)
         self.assertIn("位置：高位。", html)
         self.assertIn("这意味着什么 · 机制解释", html)
         self.assertIn("**位置**：位置：高位。", markdown)
+        self.assertIn("**赔率**：赔率尚未形成", markdown)
         self.assertIn("**这意味着什么（机制解释）**：通常由宏观驱动", markdown)
 
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
@@ -138,6 +141,13 @@ class WeeklyReportTest(unittest.TestCase):
     def test_missing_analysis_identity_is_not_published_as_validated(self) -> None:
         analyses = analyses_fixture()
         analyses["gold"].pop("analysis_id")
+        report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
+        gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
+        self.assertEqual(gold["analysis_status"], "analysis_unavailable")
+
+    def test_odds_timeframe_must_match_its_structure_evidence(self) -> None:
+        analyses = analyses_fixture()
+        analyses["gold"]["odds"]["timeframe"] = "weekly"
         report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
         gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
         self.assertEqual(gold["analysis_status"], "analysis_unavailable")

@@ -4073,3 +4073,23 @@ The mechanism layer is static interpretation only: it does not add live
 correlation, news, money-flow data, return forecasts, personal sizing, orders,
 broker access or automatic execution. The Daily report and Finance Daily
 Newsletter remain unchanged and separate.
+
+# 2026-08-19 · Weekly odds are deterministic market setups
+
+## Decision
+
+Derive odds after Position/Structure from the latest verified daily (then
+weekly) feature window. The current close is the entry reference and trigger;
+the latest 20 points provide observed support and resistance. Risk is the
+entry-to-stop distance, reward is the entry-to-target distance, and R is
+`reward / risk`. R >= 2 is favorable, 1–2 is marginal, and below 1 is
+unfavorable. Missing direction, history or valid ordering produces
+`not_ready` with no R number.
+
+## Boundary
+
+This is a market-level research setup, not personalized sizing or an order.
+Levels are code-derived from verified feature points and the formula/version,
+with source evidence IDs carried into the immutable analysis output. No model
+selected price, stale fallback, holdings, broker or automatic execution is
+allowed.
