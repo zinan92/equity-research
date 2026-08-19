@@ -29,8 +29,8 @@ def _values(frame: Mapping[str, Any]) -> list[float]:
 
 
 def _position_for_frame(frame: Mapping[str, Any], evidence_ids: list[str]) -> dict[str, Any]:
-    values = _values(frame)
     features = frame.get("features") or {}
+    values = _values({"points": features.get("points") or []})
     sample_count = len(values)
     window = int(features.get("source_point_count") or sample_count)
     if features.get("status") in {"short_history", "unavailable"}:
@@ -70,8 +70,13 @@ def _structure_for_frame(frame: Mapping[str, Any], evidence_ids: list[str]) -> d
     if len(points) < 2:
         return {"state": "unknown", "bias": "unknown", "timeframe": frame.get("timeframe"), "evidence_ids": list(evidence_ids), "text": "结构：证据不足。"}
     last, previous = points[-1], points[-2]
-    close = float(last.get("close", last.get("value")))
-    prev_close = float(previous.get("close", previous.get("value")))
+    try:
+        close = float(last.get("close", last.get("value")))
+        prev_close = float(previous.get("close", previous.get("value")))
+    except (TypeError, ValueError) as exc:
+        raise WeeklyPositionStructureError("feature_point_invalid") from exc
+    if close != close or prev_close != prev_close:
+        raise WeeklyPositionStructureError("feature_point_invalid")
     current_orientation = _orientation(close, last.get("ema50"), last.get("macd"))
     previous_orientation = _orientation(prev_close, previous.get("ema50"), previous.get("macd"))
     if current_orientation == "unknown":
@@ -109,11 +114,12 @@ def build_position_structure(request: Mapping[str, Any]) -> dict[str, Any]:
         frame = {**raw, "timeframe": timeframe}
         evidence_ids = [str(item) for item in raw.get("evidence_ids") or []]
         features = raw.get("features")
-        if isinstance(features, Mapping):
-            feature_identity = str(features.get("feature_identity") or "")
-            feature_evidence_id = f"feature:{feature_identity}" if feature_identity else ""
-            if not feature_evidence_id or feature_evidence_id not in evidence_ids:
-                raise WeeklyPositionStructureError(f"feature_evidence_missing:{timeframe}")
+        if not isinstance(features, Mapping):
+            raise WeeklyPositionStructureError(f"feature_payload_missing:{timeframe}")
+        feature_identity = str(features.get("feature_identity") or "")
+        feature_evidence_id = f"feature:{feature_identity}" if feature_identity else ""
+        if not feature_evidence_id or feature_evidence_id not in evidence_ids:
+            raise WeeklyPositionStructureError(f"feature_evidence_missing:{timeframe}")
         position_by_timeframe[str(timeframe)] = _position_for_frame(frame, evidence_ids)
         structure_by_timeframe[str(timeframe)] = _structure_for_frame(frame, evidence_ids)
 
