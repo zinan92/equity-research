@@ -198,6 +198,24 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             self.assertIn("当前多周期分析不可用", gold["analysis"]["synthesis"]["text"])
             self.assertEqual(len(report["chart_slots"]), 39)
 
+    def test_missing_asset_provider_still_publishes_deterministic_dimensions(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            runtime = WeeklyMacroRuntime(
+                source_loader=lambda **_: source_fixture(),
+                asset_provider=None,
+                ranking_provider=lambda request: ranking_output(request),
+                runtime_root=Path(temporary) / "runtime",
+                output_root=Path(temporary) / "output",
+                allow_fixture=True,
+            )
+            report = runtime.run_once(now=datetime(2026, 8, 17, tzinfo=timezone.utc))["report"]
+            gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
+            self.assertEqual(gold["analysis_status"], "analysis_unavailable")
+            self.assertEqual(gold["analysis"]["deterministic_status"], "validated")
+            self.assertIn("position", gold["analysis"])
+            self.assertIn("structure", gold["analysis"])
+            self.assertIn("odds", gold["analysis"])
+
     def test_one_stale_candle_response_is_typed_and_does_not_block_other_assets(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             source = source_fixture(data_kind="real")

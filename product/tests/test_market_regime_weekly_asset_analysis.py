@@ -138,6 +138,15 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         self.assertIn("odds", artifact)
         self.assertTrue(artifact["analysis_id"].startswith("market-regime-weekly-asset-analysis:"))
 
+    def test_missing_provider_keeps_code_owned_dimensions(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        artifact = compile_asset_analysis(request, None)
+        self.assertEqual(artifact["failure_code"], "provider_unavailable")
+        self.assertEqual(artifact["deterministic_status"], "validated")
+        self.assertIn("position", artifact)
+        self.assertIn("structure", artifact)
+        self.assertIn("odds", artifact)
+
     def test_malformed_derived_feature_returns_typed_unavailable(self) -> None:
         request = build_asset_analysis_request(asset_snapshot())
         bad_point = dict(request["timeframes"]["daily"]["features"]["points"][0])

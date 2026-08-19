@@ -167,7 +167,7 @@ def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any
 
 def compile_asset_analysis(
     request: Mapping[str, Any],
-    provider: Callable[[Mapping[str, Any]], Mapping[str, Any]],
+    provider: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None,
 ) -> dict[str, Any]:
     """Call an injected provider and return a typed terminal artifact."""
 
@@ -216,6 +216,8 @@ def compile_asset_analysis(
             **output,
         }
 
+    if provider is None:
+        return terminal_failure("provider_unavailable")
     try:
         raw = provider(request)
         output = validate_asset_analysis(raw, request)
