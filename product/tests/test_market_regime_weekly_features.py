@@ -35,7 +35,7 @@ class WeeklyFeaturesTest(unittest.TestCase):
             for index in range(60)
         ]
         result = build_timeframe_features(
-            {"key": "gold", "series_kind": "price", "points": points},
+            {"key": "gold", "series_kind": "price", "source_identity": {"provider": "fixture"}, "points": points},
             timeframe="daily",
         )
         self.assertEqual(result["schema_version"], FEATURE_SCHEMA_VERSION)
@@ -49,7 +49,7 @@ class WeeklyFeaturesTest(unittest.TestCase):
 
     def test_short_history_is_explicit_and_does_not_pad_ema50(self) -> None:
         result = build_timeframe_features(
-            {"key": "sp500", "series_kind": "price", "points": price_points(10)},
+            {"key": "sp500", "series_kind": "price", "source_identity": {"provider": "fixture"}, "points": price_points(10)},
             timeframe="weekly",
         )
         self.assertEqual(result["status"], "short_history")
@@ -60,7 +60,7 @@ class WeeklyFeaturesTest(unittest.TestCase):
     def test_rate_series_uses_value_and_preserves_line_semantics(self) -> None:
         points = [{"date": f"2026-01-{index + 1:02d}", "value": 4.0} for index in range(60)]
         result = build_timeframe_features(
-            {"key": "us10y", "series_kind": "rate_level", "points": points},
+            {"key": "us10y", "series_kind": "rate_level", "source_identity": {"provider": "fixture"}, "points": points},
             timeframe="daily",
         )
         self.assertEqual(result["chart_kind"], "line")
@@ -71,7 +71,7 @@ class WeeklyFeaturesTest(unittest.TestCase):
         points = price_points(60)
         points.append({"date": "2027-01-01", "open": 999, "high": 1000, "low": 998, "close": 999})
         result = build_timeframe_features(
-            {"key": "gold", "series_kind": "price", "points": points},
+            {"key": "gold", "series_kind": "price", "source_identity": {"provider": "fixture"}, "points": points},
             timeframe="daily",
             cutoff_at=datetime(2026, 12, 31, 23, 59, 59, tzinfo=timezone.utc),
         )
@@ -84,7 +84,7 @@ class WeeklyFeaturesTest(unittest.TestCase):
         self.assertEqual(result["current"]["value"], 159.0)
 
     def test_feature_identity_changes_when_source_changes(self) -> None:
-        base = {"key": "gold", "series_kind": "price", "points": price_points(60)}
+        base = {"key": "gold", "series_kind": "price", "source_identity": {"provider": "fixture"}, "points": price_points(60)}
         first = build_timeframe_features(base, timeframe="daily")
         changed = price_points(60)
         changed[-1] = {**changed[-1], "close": 999}
@@ -104,6 +104,16 @@ class WeeklyFeaturesTest(unittest.TestCase):
             cutoff_at=datetime(2026, 3, 1, 23, 59, 58, tzinfo=timezone.utc),
         )
         self.assertNotEqual(first["feature_identity"], second["feature_identity"])
+
+    def test_missing_provenance_or_timezone_cutoff_fails_closed(self) -> None:
+        with self.assertRaisesRegex(ValueError, "feature_source_identity_missing"):
+            build_timeframe_features({"key": "gold", "series_kind": "price", "points": price_points(60)}, timeframe="daily")
+        with self.assertRaisesRegex(ValueError, "feature_cutoff_requires_timezone"):
+            build_timeframe_features(
+                {"key": "gold", "series_kind": "price", "source_identity": {"provider": "fixture"}, "points": price_points(60)},
+                timeframe="daily",
+                cutoff_at="2026-03-01T23:59:59",
+            )
 
 
 if __name__ == "__main__":

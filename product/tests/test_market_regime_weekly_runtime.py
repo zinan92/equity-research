@@ -51,6 +51,7 @@ def source_fixture(*, data_kind: str = "fixture") -> dict:
             "daily_points": daily,
             "quality": "fresh",
             "data_kind": data_kind,
+            "source_identity": {"provider": "fixture", "key": key},
             "context_4h": {"status": "complete", "points": [{"start_at": "2026-08-14T00:00:00Z", "open": 100 + index, "high": 101 + index, "low": 99 + index, "close": 100.5 + index, "duration_hours": 4}]}
             if key in CONTEXT_4H_KEYS
             else None,

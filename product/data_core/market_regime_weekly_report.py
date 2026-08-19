@@ -38,6 +38,21 @@ def _escape(value: Any) -> str:
     return html.escape(str(value), quote=True)
 
 
+UNIT_LABELS = {
+    "index points": "指数点",
+    "percent": "%",
+    "basis points": "基点",
+    "USD/share": "美元/份",
+    "USD/coin": "美元/枚",
+    "USD/barrel": "美元/桶",
+    "USD/troy ounce": "美元/金衡盎司",
+}
+
+
+def _unit_label(value: Any) -> str:
+    return UNIT_LABELS.get(str(value or ""), str(value or ""))
+
+
 def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_at: Any = None) -> dict[str, Any]:
     if timeframe == "weekly":
         points = series.get("points") or []
@@ -55,6 +70,7 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_a
         "asset_key": key,
         "timeframe": timeframe,
         "kind": feature.get("chart_kind", "line" if series.get("series_kind") == "rate_level" else "price"),
+        "unit": series.get("unit"),
         "status": feature.get("status", "unavailable"),
         "points": feature.get("points", []),
         "feature": feature,
@@ -185,7 +201,7 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
                 if not text:
                     text = "当前分析不可用；图表仍保留，等待新的完整证据。"
                 rows.append(
-                    f'<article class="timeframe"><div><b>{label}</b><canvas data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"></canvas><small class="chart-legend">EMA50 · MACD(12,26,9)</small></div><p>{_escape(text)}</p></article>'
+                    f'<article class="timeframe"><div><b>{label}</b><canvas data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"></canvas><small class="chart-legend">EMA50 · MACD(12,26,9){(" · 单位：" + _escape(_unit_label(slot.get("unit")))) if slot.get("unit") else ""}</small></div><p>{_escape(text)}</p></article>'
                 )
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             summary = (synthesis or {}).get("text") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。"
