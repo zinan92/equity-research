@@ -38,9 +38,9 @@ ASSET_TICKERS = {
     "china_dividend": "000015.SH",
     "nikkei": "^N225",
     "kospi": "^KS11",
-    "wti": "WTI",
-    "gold": "GOLD",
-    "silver": "SILVER",
+    "wti": "CL=F",
+    "gold": "GC=F",
+    "silver": "SI=F",
 }
 
 
@@ -79,7 +79,7 @@ class WeeklyDatafeedClient:
     def __init__(self, *, base_url: str = "http://127.0.0.1:8100", timeout: float = 45.0, opener: Callable[..., Any] | None = None) -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
-        self.opener = opener or urlopen
+        self.opener = opener or (lambda request, timeout: urlopen(request, timeout=timeout))
 
     def fetch(
         self,

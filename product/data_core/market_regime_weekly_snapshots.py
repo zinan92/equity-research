@@ -63,6 +63,7 @@ def _snapshot_core(slot: Mapping[str, Any], report: Mapping[str, Any]) -> dict[s
         "cutoff_at": payload.get("cutoff_at") or report.get("cutoff_at"),
         "renderer": payload.get("renderer"),
         "renderer_version": payload.get("renderer_version"),
+        "reader_renderer_version": report.get("renderer_version"),
         "renderer_options": payload.get("renderer_options"),
         "viewport": dict(SNAPSHOT_VIEWPORT),
     }

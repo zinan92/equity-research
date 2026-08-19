@@ -74,6 +74,8 @@ class WeeklyDatafeedTest(unittest.TestCase):
             self.assertTrue(request["ticker"])
         with self.assertRaisesRegex(ValueError, "timeframe_not_allowed"):
             datafeed_request_for_asset("us2y", "four_hour")
+        self.assertEqual(datafeed_request_for_asset("gold", "weekly")["ticker"], "GC=F")
+        self.assertEqual(datafeed_request_for_asset("wti", "weekly")["ticker"], "CL=F")
 
     def test_client_sends_strict_no_fallback_policy_and_maps_response(self) -> None:
         calls: list[str] = []
@@ -90,6 +92,26 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(query["fallback_policy"], ["none"])
         self.assertEqual(query["cache_policy"], ["bypass"])
         self.assertEqual(query["quality"], ["strict"])
+
+    def test_default_urlopen_receives_timeout_as_a_keyword(self) -> None:
+        calls = []
+
+        class Response(FakeResponse):
+            pass
+
+        def fake_urlopen(request, **kwargs):
+            calls.append(kwargs)
+            return Response(candle_response("sp500", ticker="^GSPC"))
+
+        import data_core.market_regime_weekly_datafeed as module
+        original = module.urlopen
+        module.urlopen = fake_urlopen
+        try:
+            result = WeeklyDatafeedClient(base_url="http://datafeed.test", timeout=7).fetch("sp500", "daily")
+        finally:
+            module.urlopen = original
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(calls, [{"timeout": 7}])
 
     def test_http_failure_is_typed_without_fallback(self) -> None:
         def opener(_request, _timeout):
