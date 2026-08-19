@@ -139,7 +139,7 @@ def build_timeframe_features(
         if cutoff_utc is not None and _timestamp(_label(raw)) > cutoff_utc:
             continue
         row = dict(raw)
-        if series.get("series_kind") == "rate_level":
+        if series.get("series_kind") in {"rate_level", "spread"}:
             value = _number(raw.get("value"), field="value")
         else:
             for field in ("open", "high", "low"):
@@ -197,7 +197,7 @@ def build_timeframe_features(
     chart_values = [
         value
         for row, value in zip(points, values)
-        for value in ([float(row["low"]), float(row["high"])] if series.get("series_kind") != "rate_level" else [value])
+        for value in ([float(row["low"]), float(row["high"])] if series.get("series_kind") not in {"rate_level", "spread"} else [value])
     ]
     x_labels, y_labels = _axis_labels(feature_points, chart_values)
     current = feature_points[-1]
@@ -213,7 +213,7 @@ def build_timeframe_features(
         "status": "complete" if len(points) >= FEATURE_PARAMETERS["ema_span"] else "short_history",
         "warmup_required": FEATURE_PARAMETERS["ema_span"],
         "source_point_count": len(points),
-        "chart_kind": "line" if series.get("series_kind") == "rate_level" else "price",
+        "chart_kind": "line" if series.get("series_kind") in {"rate_level", "spread"} else "price",
         "points": feature_points,
         "x_labels": x_labels,
         "y_labels": y_labels,
