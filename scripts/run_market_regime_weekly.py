@@ -23,6 +23,7 @@ from data_core.market_regime_weekly_provider import (  # noqa: E402
     DeepSeekWeeklyRankingProvider,
 )
 from data_core.market_regime_weekly_runtime import WeeklyMacroRuntime, WeeklyRuntimeError  # noqa: E402
+from data_core.market_regime_weekly_snapshots import PlaywrightWeeklyChartSnapshotPort  # noqa: E402
 
 
 def _parse_datetime(value: str | None) -> datetime | None:
@@ -68,6 +69,7 @@ def main() -> int:
         ranking_provider=DeepSeekWeeklyRankingProvider(args.key_file, model=args.model),
         runtime_root=args.runtime_root,
         output_root=args.output_root,
+        chart_snapshot_port=PlaywrightWeeklyChartSnapshotPort(runtime_root=args.runtime_root, output_root=args.output_root),
     )
     try:
         result = runtime.run_once(now=now, week_end=week_end)
@@ -82,6 +84,7 @@ def main() -> int:
         "html": str(args.output_root / "latest.html"),
         "markdown": str(args.output_root / "latest.md"),
         "chart_slots": len(report.get("chart_slots") or []),
+        "chart_snapshots": sum(1 for slot in report.get("chart_slots") or [] if isinstance(slot, dict) and isinstance(slot.get("snapshot"), dict)),
         "assets": len(report.get("cards") or []),
         "analysis_unavailable": sum(card.get("analysis_status") != "validated" for card in report.get("cards") or []),
         "ranking_status": (report.get("ranking") or {}).get("generation_status"),

@@ -7,6 +7,8 @@ standard-kline package without reinterpreting Weekly source semantics.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from typing import Any, Mapping
 
 from .market_regime_weekly_contract import WeeklyCandleContractError, validate_weekly_candle_response
@@ -28,6 +30,14 @@ STANDARD_KLINE_OPTIONS: dict[str, Any] = {
         "macd": {"fastPeriod": 12, "slowPeriod": 26, "signalPeriod": 9},
     },
 }
+
+
+def _canonical(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def _digest(value: Any) -> str:
+    return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
 
 
 def _render_mode(series_kind: Any) -> str:
@@ -70,6 +80,7 @@ def build_standard_kline_payload(response: Mapping[str, Any]) -> dict[str, Any]:
         "price_basis": validated["price_basis"],
         "semantic_role": validated["semantic_role"],
         "timeframe": validated["timeframe"],
+        "cutoff_at": validated.get("cutoff_at"),
         "provider": validated.get("provider", ""),
         "source_mode": validated.get("source_mode", ""),
         "quality_flags": list(validated.get("quality_flags") or []),
@@ -82,6 +93,7 @@ def build_standard_kline_payload(response: Mapping[str, Any]) -> dict[str, Any]:
         "access_issues": list(validated.get("access_issues") or []),
         "reject_reason": validated.get("reject_reason"),
         "source_identity": dict(validated.get("source_identity") or {}),
+        "candle_response_hash": _digest(validated),
         "candles": bars,
         "renderer": STANDARD_KLINE_RENDERER,
         "renderer_version": STANDARD_KLINE_VERSION,
