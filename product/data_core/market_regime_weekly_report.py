@@ -15,6 +15,7 @@ from .market_regime_weekly_odds import WeeklyOddsError, validate_odds
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
 from .market_regime_weekly_contract import WeeklyCandleContractError
 from .market_regime_weekly_standard_kline import build_standard_kline_payload, standard_kline_options_for_response
+from .market_regime_weekly_position_structure import POSITION_STATES, STRUCTURE_STATES
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v7"
@@ -95,6 +96,30 @@ def _status_label(value: Any) -> str:
 
 def _ranking_status_label(value: Any) -> str:
     return {"participate": "参与", "wait": "等待", "avoid": "回避", "unavailable": "不可用"}.get(str(value), str(value))
+
+
+def _deterministic_dimensions(analysis: Mapping[str, Any] | None) -> tuple[bool, Mapping[str, Any] | None, Mapping[str, Any] | None, Mapping[str, Any] | None]:
+    if not isinstance(analysis, Mapping):
+        return False, None, None, None
+    position = analysis.get("position")
+    structure = analysis.get("structure")
+    odds = analysis.get("odds")
+    if not isinstance(position, Mapping) or not isinstance(structure, Mapping) or not isinstance(odds, Mapping):
+        return False, None, None, None
+    if position.get("state") not in POSITION_STATES or structure.get("state") not in STRUCTURE_STATES:
+        return False, None, None, None
+    if not isinstance(position.get("evidence_ids"), list) or not isinstance(structure.get("evidence_ids"), list):
+        return False, None, None, None
+    try:
+        timeframe = odds.get("timeframe")
+        timeframe_structure = structure.get("timeframes", {}).get(timeframe) if isinstance(structure.get("timeframes"), Mapping) else None
+        timeframe_evidence = timeframe_structure.get("evidence_ids", []) if isinstance(timeframe_structure, Mapping) else []
+        allowed_evidence_ids = {str(item) for item in timeframe_evidence if isinstance(item, str)}
+        allowed_feature_ids = {str(item) for item in allowed_evidence_ids if item.startswith("feature:")}
+        validate_odds(odds, allowed_feature_ids=allowed_feature_ids, allowed_evidence_ids=allowed_evidence_ids)
+    except WeeklyOddsError:
+        return False, None, None, None
+    return True, position, structure, odds
 
 
 def _chart_slot(
@@ -192,7 +217,6 @@ def build_weekly_report(
             raise WeeklyReportError(f"source_asset_identity_invalid:{key}")
         analysis = analyses.get(key)
         theory_valid = False
-        odds_valid = False
         analysis_identity_valid = (
             isinstance(analysis, Mapping)
             and isinstance(analysis.get("analysis_id"), str)
@@ -207,29 +231,49 @@ def build_weekly_report(
                 theory_valid = True
             except ValueError:
                 theory_valid = False
-            try:
-                odds_value = analysis.get("odds")
-                structure_value = analysis.get("structure")
-                odds_timeframe = odds_value.get("timeframe") if isinstance(odds_value, Mapping) else None
-                timeframe_structure = structure_value.get("timeframes", {}).get(odds_timeframe) if isinstance(structure_value, Mapping) and isinstance(structure_value.get("timeframes"), Mapping) else None
-                timeframe_evidence = timeframe_structure.get("evidence_ids", []) if isinstance(timeframe_structure, Mapping) else []
-                allowed_evidence_ids = {str(item) for item in timeframe_evidence if isinstance(item, str)}
-                allowed_feature_ids = {str(item) for item in allowed_evidence_ids if item.startswith("feature:")}
-                validate_odds(odds_value, allowed_feature_ids=allowed_feature_ids, allowed_evidence_ids=allowed_evidence_ids)
-                odds_valid = True
-            except WeeklyOddsError:
-                odds_valid = False
-        if (
-            not isinstance(analysis, Mapping)
-            or analysis.get("generation_status") != "model_generated_unreviewed"
-            or not isinstance(analysis.get("position"), Mapping)
-            or not isinstance(analysis.get("structure"), Mapping)
-            or not theory_valid
-            or not odds_valid
-            or not analysis_identity_valid
-        ):
+        deterministic_valid, deterministic_position, deterministic_structure, deterministic_odds = _deterministic_dimensions(analysis)
+        narrative_valid = (
+            isinstance(analysis, Mapping)
+            and analysis.get("generation_status") == "model_generated_unreviewed"
+            and analysis_identity_valid
+            and theory_valid
+        )
+        failure_code = (analysis or {}).get("failure_code", "analysis_missing")
+        if deterministic_valid:
+            analysis_status = "validated" if narrative_valid else "analysis_unavailable"
+            unavailable_synthesis = {"text": "当前多周期分析不可用。", "evidence_ids": []}
+            unavailable_theory = {"text": "当前机制解释不可用。", "evidence_ids": [], "claim_type": "unavailable"}
+            synthesis = analysis.get("synthesis") if narrative_valid else unavailable_synthesis
+            theory = analysis.get("theoretical_implication") if narrative_valid else unavailable_theory
+            analysis_view = {
+                "status": analysis_status,
+                "failure_code": failure_code if not narrative_valid else None,
+                "analysis_id": analysis.get("analysis_id") if isinstance(analysis, Mapping) else None,
+                "deterministic_status": "validated",
+                "weekly": analysis.get("weekly") if narrative_valid else None,
+                "daily": analysis.get("daily") if narrative_valid else None,
+                "four_hour": analysis.get("four_hour") if narrative_valid else None,
+                "position": deterministic_position,
+                "structure": deterministic_structure,
+                "odds": deterministic_odds,
+                "synthesis": synthesis,
+                "agreement": analysis.get("agreement") if narrative_valid else None,
+                "confirmation": analysis.get("confirmation") if narrative_valid else None,
+                "invalidation": analysis.get("invalidation") if narrative_valid else None,
+                "opportunity_state": analysis.get("opportunity_state") if narrative_valid else None,
+                "rationale": analysis.get("rationale") if narrative_valid else None,
+                "theoretical_implication": theory,
+                "summary": {
+                    "order": ["position", "structure", "odds", "synthesis", "theoretical_implication"],
+                    "position": deterministic_position,
+                    "structure": deterministic_structure,
+                    "odds": deterministic_odds,
+                    "synthesis": synthesis,
+                    "theoretical_implication": theory,
+                },
+            }
+        else:
             analysis_status = "analysis_unavailable"
-            failure_code = (analysis or {}).get("failure_code", "analysis_missing")
             if isinstance(analysis, Mapping) and analysis.get("generation_status") == "model_generated_unreviewed" and failure_code == "analysis_missing":
                 failure_code = "position_structure_missing"
             unavailable_position = {"state": "unavailable", "text": "位置：当前不可用。", "evidence_ids": []}
@@ -252,33 +296,6 @@ def build_weekly_report(
                     "odds": unavailable_odds,
                     "synthesis": unavailable_synthesis,
                     "theoretical_implication": unavailable_theory,
-                },
-            }
-        else:
-            analysis_status = "validated"
-            analysis_view = {
-                "status": analysis_status,
-                "analysis_id": analysis.get("analysis_id"),
-                "weekly": analysis.get("weekly"),
-                "daily": analysis.get("daily"),
-                "four_hour": analysis.get("four_hour"),
-                "position": analysis.get("position"),
-                "structure": analysis.get("structure"),
-                "odds": analysis.get("odds"),
-                "synthesis": analysis.get("synthesis"),
-                "agreement": analysis.get("agreement"),
-                "confirmation": analysis.get("confirmation"),
-                "invalidation": analysis.get("invalidation"),
-                "opportunity_state": analysis.get("opportunity_state"),
-                "rationale": analysis.get("rationale"),
-                "theoretical_implication": analysis.get("theoretical_implication"),
-                "summary": {
-                    "order": ["position", "structure", "odds", "synthesis", "theoretical_implication"],
-                    "position": analysis.get("position"),
-                    "structure": analysis.get("structure"),
-                    "odds": analysis.get("odds"),
-                    "synthesis": analysis.get("synthesis"),
-                    "theoretical_implication": analysis.get("theoretical_implication"),
                 },
             }
         timeframes = ["weekly", "daily"] + (["four_hour"] if key in CONTEXT_4H_KEYS else [])

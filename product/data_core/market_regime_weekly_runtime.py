@@ -488,7 +488,7 @@ class WeeklyMacroRuntime:
                     analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
                     continue
                 if self.asset_provider is None:
-                    analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "provider_unavailable"}
+                    analyses[key] = compile_asset_analysis(request, None)
                 else:
                     analyses[key] = compile_asset_analysis(request, self.asset_provider)
 
