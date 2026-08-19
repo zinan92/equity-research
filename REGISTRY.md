@@ -1,5 +1,58 @@
 # REGISTRY
 
+## 2026-08-20 · Weekly real-data acceptance and local cutover merged (Issue #869 / PR #879)
+
+Now: merged SHA `ed79cd143261b7a8cc769830dfee073b520875ee` is the verified local
+Weekly release. The isolated datafeed PR #8 adds FRED weekly level aggregation;
+the Weekly adapter uses canonical Yahoo futures tickers and the correct default
+HTTP timeout. A real run for `WEEK_END=2026-08-14` produced 17 assets, 39
+chart slots, 39 immutable PNG snapshots and 39 receipts from strict
+`cache_policy=bypass / quality=strict / fallback_policy=none` captures. The
+source is explicitly `data_kind=real`, `status=partial`; Shanghai, STAR 50 and
+China dividend are typed unavailable because their source was unavailable.
+The follow-up datafeed PR #9 (`c3aebedab5b6b2e64fdb9e981506c792aa26f118`)
+also makes the FRED adapter exclude an incomplete current ISO week.
+
+The canonical local reader is now
+[`latest.html`](file:///Users/wendy/Desktop/宏观K线周报/latest.html) and
+[`latest.md`](file:///Users/wendy/Desktop/宏观K线周报/latest.md). The prior
+edition is preserved at
+`/Users/wendy/Desktop/宏观K线周报/pre-867-20260820-022844/`. Report pointer
+readback matches the report identity; browser acceptance navigated all 17
+assets at 1280px and 390px with 39 charts mounted per pass, real chart/LineSeries
+instances, zero overflow and zero console errors. Full evidence is in
+[`issue-869-real-2026-08-20.json`](evidence/market-regime-weekly/issue-869-real-2026-08-20.json).
+
+Validation: Weekly 101/101, datafeed 75/75, standard-kline Node 28/28 and
+browser 2/2. Daily K-line, Finance Daily Newsletter, scheduler, broker,
+publication rights and automatic execution remain unchanged.
+
+## 2026-08-20 · Deterministic Summary decoupled from LLM prose (Issue #868 / PR #878)
+
+Now: merged SHA `fdae96208b614e189a060fb25f9c88324df83c16` computes Position,
+Structure and Odds from frozen evidence before the LLM call. Provider missing,
+timeout, schema, citation or language failure retains those code-owned fields
+with an analysis identity and typed failure; only multi-period prose and the
+mechanism explanation become unavailable. The five Summary blocks remain in
+the fixed order `位置 → 结构 → 赔率 → 多周期结论 → 这意味着什么`.
+
+Validation: Weekly 100/100, including provider-none and provider-error
+failure injection plus HTML/Markdown parity. No Daily or Newsletter boundary
+changed.
+
+## 2026-08-20 · Immutable chart snapshots merged (Issue #867 / PR #877)
+
+Now: merged SHA `3341213e3d579b8212dc6776043beaf33c8d45d4` adds content-addressed
+PNG snapshots and receipts bound to the exact CandleResponse hash, source
+identity, cutoff, standard-kline renderer/options, report renderer version,
+viewport and image hash. Runtime requires a complete snapshot set for every
+eligible slot; Store readback verifies both top-level and card projections,
+slot identity, paths, hashes and receipt bindings. Browser/console/chart
+failures are fail-closed before a snapshot is accepted.
+
+Validation: Weekly 97/97 before the final provider-none additions, and the
+real release above confirms 39/39 snapshots + receipts and immutable readback.
+
 ## 2026-08-20 · Weekly standard-kline renderer integrated (Issues #866/#875)
 
 Now: main includes the Weekly chart seam at merged SHA
