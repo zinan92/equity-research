@@ -16,6 +16,7 @@ from data_core.market_regime_weekly_report import (  # noqa: E402
 )
 from data_core.market_regime_weekly_features import FEATURE_SCHEMA_VERSION  # noqa: E402
 from data_core.market_regime_weekly_source import WEEKLY_KEYS  # noqa: E402
+from data_core.market_regime_weekly_contract import CANDLE_RESPONSE_SCHEMA_VERSION, WEEKLY_CANDLE_CONTRACT_VERSION, WEEKLY_ASSET_REGISTRY  # noqa: E402
 
 
 def source_fixture() -> dict:
@@ -56,6 +57,46 @@ def ranking_fixture() -> dict:
     return {"ranking_id": "ranking:fixture", "generation_status": "model_generated_unreviewed", "important_changes": [], "ordered_assets": [{"asset_key": key, "status": "wait", "rank": index + 1, "text": "wait", "evidence_ids": [f"analysis:{key}"]} for index, key in enumerate(WEEKLY_KEYS)]}
 
 
+def candle_response_fixture(asset_key: str, *, series_kind: str | None = None) -> dict:
+    spec = WEEKLY_ASSET_REGISTRY[asset_key]
+    kind = series_kind or spec["series_kind"]
+    value = 4.2 if kind in {"rate_level", "spread"} else 100.0
+    row = {"timestamp": "2026-08-14T00:00:00Z", "open": value, "high": value, "low": value, "close": value, "volume": 0}
+    if kind in {"rate_level", "spread"}:
+        row["value"] = value
+    return {
+        "schema_version": CANDLE_RESPONSE_SCHEMA_VERSION,
+        "weekly_contract_version": WEEKLY_CANDLE_CONTRACT_VERSION,
+        "asset_key": asset_key,
+        "canonical_symbol": spec["canonical_symbol"],
+        "asset_class": spec["asset_class"],
+        "series_kind": kind,
+        "semantic_role": spec["semantic_role"],
+        "timeframe": "weekly",
+        "unit": spec["unit"],
+        "price_basis": spec["price_basis"],
+        "status": "ready",
+        "provider": "test_provider",
+        "source_mode": "test_source",
+        "requested_source": "test_source",
+        "selected_source": "test_source",
+        "cache_policy": "bypass",
+        "quality_policy": "strict",
+        "fallback_policy": "none",
+        "quality_flags": [],
+        "is_synthetic": False,
+        "served_from": "upstream",
+        "fresh": True,
+        "latest_timestamp": row["timestamp"],
+        "age_seconds": 0,
+        "max_age_seconds": 90,
+        "execution_venue": False,
+        "source_identity": {"provider": "test_provider", "run_id": f"run-{asset_key}"},
+        "access_issues": [],
+        "bars": [row],
+    }
+
+
 class WeeklyReportTest(unittest.TestCase):
     def test_build_produces_fixed_b_workbench_slots(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
@@ -72,6 +113,29 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(slot["x_labels"][0]["label"], "08-14")
         self.assertEqual(slot["y_labels"][0]["value"], 99.0)
         self.assertIn("macd_histogram", slot["points"][0])
+
+    def test_real_candle_responses_are_projected_for_standard_kline(self) -> None:
+        responses = {
+            "gold:weekly": candle_response_fixture("gold"),
+            "us2y:weekly": candle_response_fixture("us2y", series_kind="rate_level"),
+        }
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture(), candle_responses=responses)
+        gold = next(slot for slot in report["chart_slots"] if slot["slot_id"] == "gold:weekly")
+        us2y = next(slot for slot in report["chart_slots"] if slot["slot_id"] == "us2y:weekly")
+        self.assertEqual(gold["standard_kline"]["render_mode"], "candles")
+        self.assertEqual(gold["standard_kline"]["renderer"].split("@")[0], "zinan92/standard-kline")
+        self.assertEqual(us2y["standard_kline"]["render_mode"], "line")
+        self.assertEqual(us2y["standard_kline"]["unit"], "percent")
+        self.assertEqual(us2y["renderer_options"]["renderMode"], "line")
+
+    def test_invalid_candle_response_does_not_fall_back_to_custom_chart(self) -> None:
+        with self.assertRaisesRegex(WeeklyReportError, "standard_kline_response_invalid:gold:weekly"):
+            build_weekly_report(
+                source_fixture(),
+                analyses_fixture(),
+                ranking_fixture(),
+                candle_responses={"gold:weekly": {"status": "ready", "bars": []}},
+            )
 
     def test_summary_renders_position_and_structure_when_compiled(self) -> None:
         analyses = analyses_fixture()
@@ -97,7 +161,10 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertNotIn("missing_inputs", html)
         self.assertLess(html.index("data-asset-nav"), html.index("本周机会排序"))
         self.assertIn("模型生成、未经人工复核", html)
-        self.assertIn("drawLine('ema50'", html)
+        self.assertIn("StandardKline.StandardKlineChart", html)
+        self.assertIn("setDatafeedResponse", html)
+        self.assertIn("standard-kline-mount", html)
+        self.assertNotIn("drawLine('ema50'", html)
         self.assertIn("macd_histogram", html)
         self.assertIn("data-timeframes=", html)
         self.assertIn('data-summary-order="位置,结构,赔率,多周期结论,机制解释"', html)
