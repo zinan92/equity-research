@@ -17,7 +17,7 @@ import sys
 PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
-from data_core.market_regime_weekly_live_source import load_live_weekly_source_snapshot  # noqa: E402
+from data_core.market_regime_weekly_datafeed import WeeklyDatafeedClient, load_datafeed_weekly_source_snapshot  # noqa: E402
 from data_core.market_regime_weekly_provider import (  # noqa: E402
     DeepSeekWeeklyAssetProvider,
     DeepSeekWeeklyRankingProvider,
@@ -44,9 +44,7 @@ def main() -> int:
     app_support = home / "Library" / "Application Support"
     parser.add_argument("--now", help="UTC-aware ISO timestamp; live run normally omits this")
     parser.add_argument("--week-end", help="completed Friday YYYY-MM-DD; defaults to previous Friday")
-    parser.add_argument("--daily-root", type=Path, default=app_support / "ParkMarketRegime" / "runtime")
-    parser.add_argument("--macro-root", type=Path, default=app_support / "ParkKlineNewsletter" / "runtime" / "macro")
-    parser.add_argument("--bitcoin-root", type=Path, default=app_support / "ParkKlineNewsletter" / "runtime" / "bitcoin")
+    parser.add_argument("--datafeed-url", default="http://127.0.0.1:8100")
     parser.add_argument("--runtime-root", type=Path, default=app_support / "ParkWeeklyMacroKline" / "runtime")
     parser.add_argument("--output-root", type=Path, default=home / "Desktop" / "宏观K线周报")
     parser.add_argument("--key-file", type=Path, default=home / "park-hands" / "_secrets" / "deepseek-key")
@@ -58,12 +56,11 @@ def main() -> int:
         print(json.dumps({"status": "blocked", "code": "deepseek_key_missing"}, ensure_ascii=False))
         return 2
 
-    source_loader = lambda *, week_end, cutoff_at: load_live_weekly_source_snapshot(
-        daily_root=args.daily_root,
-        macro_root=args.macro_root,
-        bitcoin_root=args.bitcoin_root,
-        week_end=week_end,
-        cutoff_at=cutoff_at,
+    datafeed_client = WeeklyDatafeedClient(base_url=args.datafeed_url)
+    source_loader = lambda *, week_end, cutoff_at: load_datafeed_weekly_source_snapshot(
+        datafeed_client,
+        week_end=week_end.isoformat(),
+        cutoff_at=cutoff_at.isoformat().replace("+00:00", "Z"),
     )
     runtime = WeeklyMacroRuntime(
         source_loader=source_loader,

@@ -56,7 +56,7 @@ CANONICAL_REGISTRY: dict[str, dict[str, Any]] = {
     "dxy": {"canonical_symbol": "DX-Y.NYB", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level", "anchor_hour": 20},
     "us2y": {"canonical_symbol": "Treasury:2 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
     "us10y": {"canonical_symbol": "Treasury:10 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
-    "us2s10s": {"canonical_symbol": "Treasury:10 Yr-Treasury:2 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "basis points", "price_basis": "derived_same_date_official_treasury"},
+    "us2s10s": {"canonical_symbol": "Treasury:10 Yr-Treasury:2 Yr", "series_kind": "spread", "timezone": "America/New_York", "unit": "basis points", "price_basis": "derived_same_date_official_treasury"},
     "sp500": {"canonical_symbol": "^GSPC", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "nasdaq": {"canonical_symbol": "^IXIC", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "us_dividend": {"canonical_symbol": "SCHD", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price"},
@@ -136,7 +136,7 @@ def aggregate_weekly_series(
     registry = _validate_key(key)
     _validate_metadata(series, registry, key=key)
     kind = str(series.get("series_kind") or registry["series_kind"])
-    if kind not in {"price", "rate_level"}:
+    if kind not in {"price", "rate_level", "spread"}:
         raise WeeklySourceHistoryError(f"weekly_series_kind_invalid:{key}")
     points = list(series.get("points") or [])
     by_date: dict[date, Mapping[str, Any]] = {}
@@ -158,7 +158,7 @@ def aggregate_weekly_series(
             missing.append(end.isoformat())
             continue
         last_session = max(_parse_date(raw.get("date")) for raw in rows)
-        if kind == "rate_level":
+        if kind in {"rate_level", "spread"}:
             if any(raw.get("value") is None for raw in rows):
                 raise WeeklySourceHistoryError(f"weekly_rate_value_missing:{key}")
             output.append({"date": last_session.isoformat(), "value": float(rows[-1]["value"])})
@@ -262,6 +262,9 @@ def aggregate_4h_series(
         "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z"),
         "points": output,
         "dropped_incomplete_buckets": dropped,
+        "source_identity": series.get("source_identity"),
+        "quality": series.get("quality"),
+        "data_kind": series.get("data_kind"),
     }
 
 
@@ -288,7 +291,14 @@ def build_weekly_source_snapshot(
         if key in CONTEXT_4H_KEYS and enriched.get("hourly_points") is not None:
             cutoff = cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)
             weekly["context_4h"] = aggregate_4h_series(
-                {**enriched, "points": enriched.get("hourly_points")}, cutoff_at=cutoff
+                {
+                    **enriched,
+                    "points": enriched.get("hourly_points"),
+                    "source_identity": enriched.get("hourly_source_identity") or enriched.get("source_identity"),
+                    "quality": enriched.get("hourly_quality", enriched.get("quality")),
+                    "data_kind": enriched.get("hourly_data_kind", enriched.get("data_kind")),
+                },
+                cutoff_at=cutoff,
             )
         result[key] = weekly
     statuses = [item["status"] for item in result.values()]
@@ -360,7 +370,7 @@ def build_weekly_source_snapshot_from_authorities(
             else ("derived_same_date_official_treasury" if key == "us2s10s" else "official_treasury_par_yield")
         )
         series[key] = {
-            "series_kind": "price" if key == "dxy" else "rate_level",
+            "series_kind": "price" if key == "dxy" else ("spread" if key == "us2s10s" else "rate_level"),
             "timezone": "America/New_York",
             "unit": level_unit,
             "price_basis": price_basis,

@@ -22,7 +22,7 @@ def source_fixture() -> dict:
     series = {}
     for index, key in enumerate(WEEKLY_KEYS):
         point = {"date": "2026-08-14", "open": 100 + index, "high": 101 + index, "low": 99 + index, "close": 100.5 + index}
-        item = {"key": key, "series_kind": "rate_level" if key in {"us2y", "us10y", "us2s10s"} else "price", "status": "complete", "weekly_bin_count": 1, "points": [{"date": "2026-08-14", "value": 4.2}] if key in {"us2y", "us10y", "us2s10s"} else [point], "quality": "fresh", "data_kind": "fixture", "canonical_symbol": key, "unit": "basis points" if key == "us2s10s" else "index points", "source_identity": {"provider": "fixture", "key": key}}
+        item = {"key": key, "series_kind": "spread" if key == "us2s10s" else ("rate_level" if key in {"us2y", "us10y"} else "price"), "status": "complete", "weekly_bin_count": 1, "points": [{"date": "2026-08-14", "value": 4.2}] if key in {"us2y", "us10y", "us2s10s"} else [point], "quality": "fresh", "data_kind": "fixture", "canonical_symbol": key, "unit": "basis points" if key == "us2s10s" else "index points", "source_identity": {"provider": "fixture", "key": key}}
         item["context_4h"] = {"status": "complete", "points": [{"start_at": "2026-08-14T00:00:00Z", **point, "duration_hours": 4}]} if key in {"dxy", "bitcoin", "wti", "gold", "silver"} else None
         series[key] = item
     return {"schema_version": "market-regime-weekly-source-history-v1", "registry_version": "market-regime-weekly-registry-v1", "week_end": "2026-08-14", "cutoff_at": "2026-08-14T23:59:59Z", "status": "complete", "missing_series": [], "data_kind": "fixture", "quality": "fresh", "series": series}
