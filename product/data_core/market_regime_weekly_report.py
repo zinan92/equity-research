@@ -12,6 +12,7 @@ from .market_regime_weekly_asset_analysis import ANALYSIS_ID_PREFIX
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 from .market_regime_weekly_odds import WeeklyOddsError, validate_odds
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
+from .market_regime_weekly_contract import WeeklyCandleContractError
 from .market_regime_weekly_standard_kline import build_standard_kline_payload, standard_kline_options_for_response
 
 
@@ -95,10 +96,8 @@ def _chart_slot(
                 "source_identity": candle_response.get("source_identity"),
                 "points": points,
             }
-        except Exception:
-            standard_kline = None
-            points = []
-            feature_source = {"key": key, "series_kind": series.get("series_kind"), "unit": series.get("unit"), "source_identity": series.get("source_identity"), "points": []}
+        except WeeklyCandleContractError as exc:
+            raise WeeklyReportError(f"standard_kline_response_invalid:{key}:{timeframe}:{exc}") from exc
     else:
         if timeframe == "weekly":
             points = series.get("points") or []

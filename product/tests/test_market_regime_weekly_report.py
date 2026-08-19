@@ -128,6 +128,15 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(us2y["standard_kline"]["unit"], "percent")
         self.assertEqual(us2y["renderer_options"]["renderMode"], "line")
 
+    def test_invalid_candle_response_does_not_fall_back_to_custom_chart(self) -> None:
+        with self.assertRaisesRegex(WeeklyReportError, "standard_kline_response_invalid:gold:weekly"):
+            build_weekly_report(
+                source_fixture(),
+                analyses_fixture(),
+                ranking_fixture(),
+                candle_responses={"gold:weekly": {"status": "ready", "bars": []}},
+            )
+
     def test_summary_renders_position_and_structure_when_compiled(self) -> None:
         analyses = analyses_fixture()
         analyses["gold"]["position"] = {"state": "high", "text": "位置：高位。", "evidence_ids": ["e:gold:w"]}
