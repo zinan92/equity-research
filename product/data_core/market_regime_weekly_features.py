@@ -59,6 +59,16 @@ def _number(value: Any, *, field: str) -> float:
     return number
 
 
+def _has_provenance(value: Mapping[str, Any]) -> bool:
+    for key in ("run_id", "artifact", "factor_id", "bitcoin_id", "provider", "normalized_sha256", "raw_sha256"):
+        item = value.get(key)
+        if isinstance(item, str) and item.strip():
+            return True
+        if isinstance(item, Mapping) and any(isinstance(child, str) and child.strip() for child in item.values()):
+            return True
+    return False
+
+
 def _ema(values: list[float], span: int) -> list[float | None]:
     result: list[float | None] = [None] * len(values)
     if len(values) < span:
@@ -110,7 +120,7 @@ def build_timeframe_features(
     if not key or timeframe not in {"weekly", "daily", "four_hour"}:
         raise WeeklyFeatureError("feature_identity_invalid")
     source_identity = series.get("source_identity")
-    if not isinstance(source_identity, Mapping) or not source_identity:
+    if not isinstance(source_identity, Mapping) or not _has_provenance(source_identity):
         raise WeeklyFeatureError("feature_source_identity_missing")
     raw_points = list(series.get("points") or [])
     if isinstance(cutoff_at, str):
@@ -132,6 +142,8 @@ def build_timeframe_features(
         if series.get("series_kind") == "rate_level":
             value = _number(raw.get("value"), field="value")
         else:
+            for field in ("open", "high", "low"):
+                _number(raw.get(field), field=field)
             value = _number(raw.get("close"), field="close")
         row["_feature_value"] = value
         points.append(row)

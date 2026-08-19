@@ -115,6 +115,14 @@ class WeeklyFeaturesTest(unittest.TestCase):
                 cutoff_at="2026-03-01T23:59:59",
             )
 
+    def test_null_provenance_and_nonfinite_ohlc_fail_closed(self) -> None:
+        with self.assertRaisesRegex(ValueError, "feature_source_identity_missing"):
+            build_timeframe_features({"key": "gold", "series_kind": "price", "source_identity": {"run_id": None}, "points": price_points(60)}, timeframe="daily")
+        bad = price_points(60)
+        bad[-1]["high"] = float("nan")
+        with self.assertRaisesRegex(ValueError, "feature_number_invalid:high"):
+            build_timeframe_features({"key": "gold", "series_kind": "price", "source_identity": {"provider": "fixture"}, "points": bad}, timeframe="daily")
+
 
 if __name__ == "__main__":
     unittest.main()
