@@ -308,6 +308,10 @@ def build_weekly_source_snapshot(
                     "actual_first_session": external["actual_first_session"],
                     "actual_last_session": external["actual_last_session"],
                     "weekly_source_identity": enriched.get("weekly_source_identity"),
+                    "weekly_quality": enriched.get("weekly_quality", enriched.get("quality")),
+                    "weekly_quality_flags": enriched.get("weekly_quality_flags", []),
+                    "weekly_fresh": enriched.get("weekly_fresh"),
+                    "weekly_data_kind": enriched.get("weekly_data_kind", enriched.get("data_kind")),
                 })
         if key in CONTEXT_4H_KEYS and enriched.get("hourly_points") is not None:
             cutoff = cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)

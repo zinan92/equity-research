@@ -204,6 +204,15 @@ def _bar_for_source(response: Mapping[str, Any], series_kind: str) -> list[dict[
     return bars
 
 
+def _quality_for_source(response: Mapping[str, Any]) -> str:
+    fresh = response.get("fresh")
+    if fresh is True:
+        return "fresh"
+    if fresh is False:
+        return "stale"
+    return "unknown"
+
+
 def load_datafeed_weekly_source_snapshot(
     client: WeeklyDatafeedClient,
     *,
@@ -230,11 +239,15 @@ def load_datafeed_weekly_source_snapshot(
             "price_basis": spec["price_basis"],
             "status": "complete" if daily.get("status") == "ready" else "unavailable",
             "daily_status": daily.get("status"),
-            "quality": "fresh" if daily.get("fresh") is not False else "stale",
+            "quality": _quality_for_source(daily),
             "data_kind": "real",
             "source_identity": dict(source_identity),
             "weekly_source_identity": dict(weekly.get("source_identity") or {}),
             "weekly_status": weekly.get("status"),
+            "weekly_quality": _quality_for_source(weekly),
+            "weekly_quality_flags": list(weekly.get("quality_flags") or []),
+            "weekly_fresh": weekly.get("fresh"),
+            "weekly_data_kind": "real",
             "points": _bar_for_source(daily, spec["series_kind"]),
         }
         weekly_points_by_key[asset_key] = _bar_for_source(weekly, spec["series_kind"]) if weekly.get("status") == "ready" else None

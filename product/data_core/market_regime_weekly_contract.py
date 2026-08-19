@@ -275,7 +275,16 @@ def build_candle_response_from_weekly_series(
         series_status = str(context.get("status") or "unavailable") if isinstance(context, Mapping) else "unavailable"
     identity_source = series
     if timeframe == "weekly" and isinstance(series.get("weekly_source_identity"), Mapping):
-        identity_source = {"source_identity": series["weekly_source_identity"]}
+        # A weekly response must carry the provenance and quality of the
+        # upstream 1W request.  The legacy series still owns the daily
+        # identity, so do not let it silently relabel the weekly bars.
+        identity_source = {
+            "source_identity": series["weekly_source_identity"],
+            "quality": series.get("weekly_quality", series.get("quality")),
+            "quality_flags": series.get("weekly_quality_flags", []),
+            "data_kind": series.get("weekly_data_kind", series.get("data_kind")),
+            "fresh": series.get("weekly_fresh"),
+        }
     if timeframe == "four_hour" and isinstance(series.get("context_4h"), Mapping):
         identity_source = series["context_4h"]
     identity = identity_source.get("source_identity") if isinstance(identity_source.get("source_identity"), Mapping) else None
@@ -319,7 +328,10 @@ def build_candle_response_from_weekly_series(
     quality = quality_source.get("quality", series.get("quality"))
     if isinstance(quality, str) and quality.strip() and quality not in quality_flags:
         quality_flags.append(quality)
-    fresh = True if quality == "fresh" else (False if quality in {"stale", "unavailable"} else None)
+    fresh_override = quality_source.get("fresh")
+    fresh = fresh_override if isinstance(fresh_override, bool) else (
+        True if quality == "fresh" else (False if quality in {"stale", "unavailable"} else None)
+    )
     latest_timestamp = bars[-1]["timestamp"]
     response = {
         "schema_version": CANDLE_RESPONSE_SCHEMA_VERSION,

@@ -156,6 +156,29 @@ class WeeklyCandleContractTest(unittest.TestCase):
         self.assertIn("fresh", response["quality_flags"])
         self.assertTrue(response["fresh"])
 
+    def test_weekly_uses_weekly_source_identity_and_quality(self) -> None:
+        source = {
+            "cutoff_at": "2026-08-14T23:59:59Z",
+            "series": {
+                "gold": {
+                    "status": "complete",
+                    "data_kind": "real",
+                    "quality": "stale",
+                    "source_identity": {"run_id": "daily-run"},
+                    "weekly_source_identity": {"run_id": "weekly-run"},
+                    "weekly_quality": "fresh",
+                    "weekly_quality_flags": ["weekly_source"],
+                    "weekly_fresh": True,
+                    "weekly_data_kind": "real",
+                    "points": [{"date": "2026-08-14", "open": 100, "high": 102, "low": 99, "close": 101}],
+                }
+            },
+        }
+        response = build_candle_response_from_weekly_series(source, "gold", "weekly")
+        self.assertEqual(response["source_identity"]["run_id"], "weekly-run")
+        self.assertIn("weekly_source", response["quality_flags"])
+        self.assertTrue(response["fresh"])
+
     def test_unknown_source_data_kind_is_blocked(self) -> None:
         source = {
             "series": {
