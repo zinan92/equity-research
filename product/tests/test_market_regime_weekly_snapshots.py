@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 import tempfile
 import unittest
 
@@ -58,6 +59,30 @@ class WeeklyChartSnapshotTest(unittest.TestCase):
             asset_path.write_bytes(b"tampered")
             with self.assertRaisesRegex(WeeklyRuntimeError, "weekly_chart_snapshot_hash_mismatch"):
                 store.latest()
+
+    def test_store_rejects_missing_or_cross_slot_snapshot_refs(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="weekly-snapshot-binding-") as temporary:
+            root = Path(temporary)
+            responses = {
+                "gold:weekly": candle_response_fixture("gold"),
+                "us2y:weekly": candle_response_fixture("us2y", series_kind="rate_level"),
+            }
+            report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture(), candle_responses=responses)
+            port = PlaywrightWeeklyChartSnapshotPort(runtime_root=root / "runtime", output_root=root / "output")
+            snapshots = port(report=report, candle_responses=responses)
+            store = WeeklyReportStore(root / "runtime", root / "output")
+            partial = attach_chart_snapshots(report, {"gold:weekly": snapshots["gold:weekly"]})
+            with self.assertRaisesRegex(WeeklyRuntimeError, "weekly_chart_snapshot_missing"):
+                store.publish(partial)
+            rebound = attach_chart_snapshots(report, {"us2y:weekly": snapshots["gold:weekly"]})
+            with self.assertRaisesRegex(WeeklyRuntimeError, "weekly_chart_snapshot_slot_binding_invalid"):
+                store.publish(rebound)
+            updated = attach_chart_snapshots(report, snapshots)
+            projection_tamper = json.loads(json.dumps(updated))
+            card_slot = next(slot for card in projection_tamper["cards"] for slot in card["chart_slots"] if slot["slot_id"] == "gold:weekly")
+            card_slot.pop("snapshot", None)
+            with self.assertRaisesRegex(WeeklyRuntimeError, "weekly_chart_snapshot_slot_projection_invalid"):
+                store.publish(projection_tamper)
 
 
 if __name__ == "__main__":

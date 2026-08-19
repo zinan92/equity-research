@@ -106,6 +106,9 @@ class PlaywrightWeeklyChartSnapshotPort:
                     raise WeeklyChartSnapshotError("chromium_unavailable") from exc
                 try:
                     page = browser.new_page(viewport=SNAPSHOT_VIEWPORT)
+                    browser_errors: list[str] = []
+                    page.on("pageerror", lambda error: browser_errors.append(str(error)))
+                    page.on("console", lambda message: browser_errors.append(message.text) if message.type == "error" else None)
                     page.goto(html_path.as_uri(), wait_until="load")
                     page.wait_for_timeout(150)
                     slots_by_asset: dict[str, list[Mapping[str, Any]]] = {}
@@ -119,6 +122,26 @@ class PlaywrightWeeklyChartSnapshotPort:
                             mount = page.locator(f'[data-chart="{slot_id}"]')
                             if mount.count() != 1:
                                 raise WeeklyChartSnapshotError(f"snapshot_mount_missing:{slot_id}")
+                            page.wait_for_timeout(50)
+                            render_state = mount.evaluate("""node => {
+                              const chart = node._standardKline;
+                              const payload = chart?.current?.meta || {};
+                              return {
+                                chart: Boolean(chart?.chart),
+                                candleSeries: Boolean(chart?.candleSeries),
+                                lineSeries: Boolean(chart?.lineSeries),
+                                overlay: node.querySelector('[data-standard-kline-overlay]')?.dataset.state || '',
+                                status: payload.status || '',
+                                mode: payload.render_mode || '',
+                              };
+                            }""")
+                            expected_mode = str((slot.get("standard_kline") or {}).get("render_mode") or "candles")
+                            if not render_state["chart"]:
+                                raise WeeklyChartSnapshotError(f"snapshot_chart_missing:{slot_id}")
+                            if render_state["status"] == "ready" and ((expected_mode == "line" and not render_state["lineSeries"]) or (expected_mode != "line" and not render_state["candleSeries"])):
+                                raise WeeklyChartSnapshotError(f"snapshot_series_missing:{slot_id}")
+                            if render_state["status"] != "ready" and render_state["overlay"] == "ready":
+                                raise WeeklyChartSnapshotError(f"snapshot_unavailable_overlay_missing:{slot_id}")
                             image_bytes = mount.screenshot(type="png")
                             core = _snapshot_core(slot, report)
                             snapshot_digest = _digest(core)
@@ -147,6 +170,8 @@ class PlaywrightWeeklyChartSnapshotPort:
                                 "renderer_options": core["renderer_options"],
                             }
                     page.close()
+                    if browser_errors:
+                        raise WeeklyChartSnapshotError("snapshot_browser_error")
                 finally:
                     browser.close()
         expected = {str(slot.get("slot_id")) for slot in slots}

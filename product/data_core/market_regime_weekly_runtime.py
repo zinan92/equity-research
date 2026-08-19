@@ -40,7 +40,7 @@ from .market_regime_weekly_report import (
     render_weekly_html,
     render_weekly_markdown,
 )
-from .market_regime_weekly_snapshots import SNAPSHOT_SCHEMA_VERSION, WeeklyChartSnapshotError
+from .market_regime_weekly_snapshots import SNAPSHOT_ID_PREFIX, SNAPSHOT_SCHEMA_VERSION, WeeklyChartSnapshotError, _snapshot_core
 from .market_regime_weekly_source import (
     CONTEXT_4H_KEYS,
     SCHEMA_VERSION as SOURCE_SCHEMA_VERSION,
@@ -127,8 +127,26 @@ class WeeklyReportStore:
         self.output_root = Path(output_root).expanduser().resolve()
 
     def _validate_snapshot_refs(self, report: Mapping[str, Any]) -> None:
-        for slot in report.get("chart_slots") or []:
-            if not isinstance(slot, Mapping) or not isinstance(slot.get("snapshot"), Mapping):
+        top_slots = {str(slot.get("slot_id")): slot for slot in report.get("chart_slots") or [] if isinstance(slot, Mapping) and slot.get("slot_id")}
+        card_slots = {
+            str(slot.get("slot_id")): slot
+            for card in report.get("cards") or []
+            if isinstance(card, Mapping)
+            for slot in card.get("chart_slots") or []
+            if isinstance(slot, Mapping) and slot.get("slot_id")
+        }
+        if set(top_slots) != set(card_slots):
+            raise WeeklyRuntimeError("weekly_chart_snapshot_slot_projection_invalid")
+        for slot_id in top_slots:
+            if _canonical(top_slots[slot_id].get("snapshot")) != _canonical(card_slots[slot_id].get("snapshot")):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_slot_projection_invalid")
+        for slot in top_slots.values():
+            if not isinstance(slot, Mapping):
+                continue
+            requires_snapshot = isinstance(slot.get("standard_kline"), Mapping)
+            if requires_snapshot and not isinstance(slot.get("snapshot"), Mapping):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_missing")
+            if not isinstance(slot.get("snapshot"), Mapping):
                 continue
             snapshot = slot["snapshot"]
             snapshot_id = str(snapshot.get("snapshot_id") or "")
@@ -154,6 +172,14 @@ class WeeklyReportStore:
                 raise WeeklyRuntimeError("weekly_chart_snapshot_hash_mismatch")
             if not isinstance(receipt, dict) or receipt.get("snapshot_id") != snapshot_id or receipt.get("asset") != dict(asset):
                 raise WeeklyRuntimeError("weekly_chart_snapshot_receipt_invalid")
+            if receipt.get("slot_id") != slot.get("slot_id") or receipt.get("asset_key") != slot.get("asset_key") or receipt.get("timeframe") != slot.get("timeframe"):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_slot_binding_invalid")
+            expected_core = _snapshot_core(slot, report)
+            if snapshot_id != f"{SNAPSHOT_ID_PREFIX}{_digest(expected_core)}":
+                raise WeeklyRuntimeError("weekly_chart_snapshot_identity_invalid")
+            for field, expected in expected_core.items():
+                if receipt.get(field) != expected:
+                    raise WeeklyRuntimeError("weekly_chart_snapshot_receipt_binding_invalid")
             for field in ("candle_response_hash", "source_identity", "cutoff_at", "renderer", "renderer_version", "renderer_options"):
                 if field in snapshot and receipt.get(field) != snapshot.get(field):
                     raise WeeklyRuntimeError("weekly_chart_snapshot_receipt_binding_invalid")

@@ -23,7 +23,7 @@ from data_core.market_regime_weekly_runtime import (  # noqa: E402
     WeeklyMacroRuntime,
     WeeklyReportStore,
 )
-from data_core.market_regime_weekly_snapshots import SNAPSHOT_SCHEMA_VERSION  # noqa: E402
+from data_core.market_regime_weekly_snapshots import SNAPSHOT_SCHEMA_VERSION, SNAPSHOT_ID_PREFIX, SNAPSHOT_VIEWPORT, _snapshot_core  # noqa: E402
 from data_core.market_regime_weekly_source import (  # noqa: E402
     CANONICAL_REGISTRY,
     CONTEXT_4H_KEYS,
@@ -117,14 +117,15 @@ def snapshot_stub(report: dict, runtime_root: Path, output_root: Path) -> dict:
     result = {}
     for slot in report["chart_slots"]:
         slot_id = slot["slot_id"]
-        token = digest({"slot_id": slot_id, "report": report["report_id"]})
-        snapshot_id = f"market-regime-weekly-chart-snapshot:{token}"
+        core = _snapshot_core(slot, report)
+        token = digest(core)
+        snapshot_id = f"{SNAPSHOT_ID_PREFIX}{token}"
         asset = {"path": f"snapshots/{token}.png", "sha256": hashlib.sha256(slot_id.encode()).hexdigest()}
         asset_path = output_root / asset["path"]
         asset_path.parent.mkdir(parents=True, exist_ok=True)
         asset_path.write_bytes(slot_id.encode())
         asset["sha256"] = hashlib.sha256(asset_path.read_bytes()).hexdigest()
-        unsigned = {"schema_version": SNAPSHOT_SCHEMA_VERSION, "snapshot_id": snapshot_id, "asset": asset}
+        unsigned = {**core, "snapshot_id": snapshot_id, "asset": asset}
         receipt = {**unsigned, "receipt_hash": digest(unsigned)}
         receipt_path = runtime_root / "chart_snapshots" / "receipts" / f"{token}.json"
         receipt_path.parent.mkdir(parents=True, exist_ok=True)
