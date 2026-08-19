@@ -102,6 +102,13 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         with self.assertRaisesRegex(WeeklyAssetAnalysisError, "theory_claim_type_invalid"):
             validate_asset_analysis(output, request)
 
+    def test_model_cannot_supply_odds_levels(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        output = valid_output(request)
+        output["odds"] = {"direction": "long", "entry_reference": 1}
+        with self.assertRaisesRegex(WeeklyAssetAnalysisError, "analysis_odds_must_be_code_owned"):
+            validate_asset_analysis(output, request)
+
     def test_missing_4h_is_a_valid_absence_not_daily_substitution(self) -> None:
         request = build_asset_analysis_request(asset_snapshot(with_4h=False))
         output = valid_output(request)
@@ -117,6 +124,8 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
         self.assertEqual(artifact["receipt"]["request_hash"], artifact["identity_core"]["request_hash"])
         self.assertEqual(artifact["receipt"]["output_hash"], artifact["output_hash"])
+        self.assertIn("odds", artifact)
+        self.assertEqual(artifact["odds"]["schema_version"], "market-regime-weekly-odds-v1")
 
     def test_malformed_derived_feature_returns_typed_unavailable(self) -> None:
         request = build_asset_analysis_request(asset_snapshot())

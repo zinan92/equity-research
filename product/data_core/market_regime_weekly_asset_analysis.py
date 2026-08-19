@@ -10,9 +10,10 @@ from typing import Any, Callable, Mapping
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, WEEKLY_KEYS
 from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
+from .market_regime_weekly_odds import WeeklyOddsError, build_odds, validate_odds
 
 
-SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v3"
+SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v4"
 ANALYSIS_ID_PREFIX = "market-regime-weekly-asset-analysis:"
 AGREEMENT_STATES = frozenset({"aligned_bullish", "aligned_bearish", "mixed", "neutral"})
 OPPORTUNITY_STATES = frozenset({"participate", "wait", "avoid"})
@@ -113,6 +114,8 @@ def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any
         return {"asset_key": key, "generation_status": status, "failure_code": output["failure_code"]}
     if status != "model_generated_unreviewed":
         raise WeeklyAssetAnalysisError("analysis_generation_status_invalid")
+    if output.get("odds") is not None:
+        raise WeeklyAssetAnalysisError("analysis_odds_must_be_code_owned")
     timeframes = request.get("timeframes")
     if not isinstance(timeframes, Mapping):
         raise WeeklyAssetAnalysisError("analysis_request_timeframes_invalid")
@@ -199,7 +202,26 @@ def compile_asset_analysis(
             "generation_status": "analysis_unavailable",
             "failure_code": "derived_feature_invalid",
         }
-    output = {**output, **derived}
+    try:
+        odds = build_odds(request, derived["structure"])
+        selected_frame = request.get("timeframes", {}).get(odds.get("timeframe")) if isinstance(request.get("timeframes"), Mapping) else None
+        selected_features = selected_frame.get("features") if isinstance(selected_frame, Mapping) else None
+        feature_identity = str(selected_features.get("feature_identity") or "") if isinstance(selected_features, Mapping) else ""
+        allowed_evidence_ids = {str(item) for item in selected_frame.get("evidence_ids") or []} if isinstance(selected_frame, Mapping) else set()
+        odds = validate_odds(
+            odds,
+            allowed_feature_ids={f"feature:{feature_identity}"} if feature_identity else set(),
+            allowed_evidence_ids=allowed_evidence_ids,
+        )
+    except WeeklyOddsError:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "asset_key": key,
+            "request_hash": request_hash,
+            "generation_status": "analysis_unavailable",
+            "failure_code": "derived_odds_invalid",
+        }
+    output = {**output, **derived, "odds": odds}
     core = {
         "schema_version": SCHEMA_VERSION,
         "asset_key": key,

@@ -10,11 +10,12 @@ from typing import Any, Mapping
 from .market_regime_weekly_features import FEATURE_PARAMETERS, FEATURE_SCHEMA_VERSION, WeeklyFeatureError, build_timeframe_features
 from .market_regime_weekly_asset_analysis import ANALYSIS_ID_PREFIX
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
+from .market_regime_weekly_odds import WeeklyOddsError, validate_odds
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
 
 
-SCHEMA_VERSION = "market-regime-weekly-report-v4"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v10"
+SCHEMA_VERSION = "market-regime-weekly-report-v5"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v11"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
@@ -53,6 +54,16 @@ UNIT_LABELS = {
 
 def _unit_label(value: Any) -> str:
     return UNIT_LABELS.get(str(value or ""), str(value or ""))
+
+
+def _odds_reader_text(value: Mapping[str, Any] | None) -> str:
+    if not isinstance(value, Mapping):
+        return "赔率尚未形成。"
+    text = str(value.get("text") or "赔率尚未形成。")
+    if value.get("state") == "not_ready":
+        return text
+    direction = {"long": "做多", "short": "做空"}.get(str(value.get("direction")), str(value.get("direction")))
+    return f"{text} 触发/入场参考 {value.get('entry_reference')}，止损 {value.get('stop')}，目标 {value.get('target')}（{direction}）。"
 
 
 def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_at: Any = None) -> dict[str, Any]:
@@ -124,6 +135,7 @@ def build_weekly_report(
             raise WeeklyReportError(f"source_asset_identity_invalid:{key}")
         analysis = analyses.get(key)
         theory_valid = False
+        odds_valid = False
         analysis_identity_valid = (
             isinstance(analysis, Mapping)
             and isinstance(analysis.get("analysis_id"), str)
@@ -138,12 +150,25 @@ def build_weekly_report(
                 theory_valid = True
             except ValueError:
                 theory_valid = False
+            try:
+                odds_value = analysis.get("odds")
+                structure_value = analysis.get("structure")
+                odds_timeframe = odds_value.get("timeframe") if isinstance(odds_value, Mapping) else None
+                timeframe_structure = structure_value.get("timeframes", {}).get(odds_timeframe) if isinstance(structure_value, Mapping) and isinstance(structure_value.get("timeframes"), Mapping) else None
+                timeframe_evidence = timeframe_structure.get("evidence_ids", []) if isinstance(timeframe_structure, Mapping) else []
+                allowed_evidence_ids = {str(item) for item in timeframe_evidence if isinstance(item, str)}
+                allowed_feature_ids = {str(item) for item in allowed_evidence_ids if item.startswith("feature:")}
+                validate_odds(odds_value, allowed_feature_ids=allowed_feature_ids, allowed_evidence_ids=allowed_evidence_ids)
+                odds_valid = True
+            except WeeklyOddsError:
+                odds_valid = False
         if (
             not isinstance(analysis, Mapping)
             or analysis.get("generation_status") != "model_generated_unreviewed"
             or not isinstance(analysis.get("position"), Mapping)
             or not isinstance(analysis.get("structure"), Mapping)
             or not theory_valid
+            or not odds_valid
             or not analysis_identity_valid
         ):
             analysis_status = "analysis_unavailable"
@@ -161,6 +186,7 @@ def build_weekly_report(
                 "four_hour": analysis.get("four_hour"),
                 "position": analysis.get("position"),
                 "structure": analysis.get("structure"),
+                "odds": analysis.get("odds"),
                 "synthesis": analysis.get("synthesis"),
                 "agreement": analysis.get("agreement"),
                 "confirmation": analysis.get("confirmation"),
@@ -223,6 +249,8 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
             structure = analysis.get("structure") if isinstance(analysis, Mapping) else None
             if isinstance(position, Mapping) or isinstance(structure, Mapping):
                 lines.extend([f"**位置**：{(position or {}).get('text', '不可用。') if isinstance(position, Mapping) else '不可用。'}", f"**结构**：{(structure or {}).get('text', '不可用。') if isinstance(structure, Mapping) else '不可用。'}", ""])
+            odds = analysis.get("odds") if isinstance(analysis, Mapping) else None
+            lines.extend([f"**赔率**：{_odds_reader_text(odds)}", ""])
             for tf, label in (("weekly", "周线"), ("daily", "日线"), ("four_hour", "4小时")):
                 statement = analysis.get(tf) if isinstance(analysis, Mapping) else None
                 if statement:
@@ -272,8 +300,10 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
                 position_text = (position or {}).get("text", "位置：不可用。") if isinstance(position, Mapping) else "位置：不可用。"
                 structure_text = (structure or {}).get("text", "结构：不可用。") if isinstance(structure, Mapping) else "结构：不可用。"
                 dimensions = f'<div class="summary-dimensions"><div><b>位置</b><p>{_escape(position_text)}</p></div><div><b>结构</b><p>{_escape(structure_text)}</p></div></div>'
+            odds = analysis.get("odds") if isinstance(analysis, Mapping) else None
+            odds_block = f'<div class="odds-summary" style="grid-column:1/-1;padding:14px 16px;background:#fff8ed;border-bottom:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">赔率</b><p style="font-size:15px;line-height:1.6;margin:5px 0;color:#544932">{_escape(_odds_reader_text(odds))}</p></div>'
             pane_parts.append(
-                f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(str(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
+                f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(str(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}{odds_block}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
             )
     ranking_rows = "".join(f'<li><strong>{_escape(str(row.get("asset_key")))}</strong> · {_escape(str(row.get("status")))}</li>' for row in (report.get("ranking") or {}).get("ordered_assets") or [])
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>
