@@ -1,5 +1,24 @@
 # Decision Log
 
+## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
+
+- **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
+  every Weekly chart slot, together with five x-axis labels, y-axis levels,
+  current/high/low annotations and explicit rate/spread units. Keep price
+  charts as hollow-green/up and filled-red/down candles; keep rates and
+  spreads as line charts.
+- **Why:** A reader should be able to inspect trend, momentum, divergence and
+  price position from the Weekly card itself, without allowing the LLM to
+  invent indicators or labels. The feature identity must bind parameters,
+  source identity and report cutoff for replay.
+- **Evidence:** Issue #852; the focused feature/source/report/runtime tests are
+  green, and a controlled real source replay produced feature payloads for all
+  39 Weekly chart slots.
+- **Gotchas:** EMA50 is not MACD's zero axis. The MACD zero axis represents
+  EMA12 minus EMA26. Official rate units remain yield/spread semantics and
+  never imply bond-price direction. Position, structure, theoretical meaning
+  and odds remain later tickets (#853–#856).
+
 ## 2026-08-18 — Render Weekly v1 through selected Variant B
 
 - **Decision:** Use the selected asset-workbench reader: grouped 17-asset
