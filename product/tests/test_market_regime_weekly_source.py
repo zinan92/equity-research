@@ -215,6 +215,7 @@ class WeeklySourceAggregationTest(unittest.TestCase):
                         "quality": "fresh",
                         "data_kind": "real",
                         "run_id": "daily-run",
+                        "source_identity": {"provider": "yahoo_chart", "symbol": "GC=F", "interval": "1d", "normalized_sha256": "b" * 64},
                         "normalized_artifact": {"path": "normalized/daily-run/gold.json", "sha256": "a" * 64},
                         "publication_eligible": False,
                     }
@@ -228,6 +229,8 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         )
         gold = snapshot["series"]["gold"]
         self.assertEqual(gold["source_identity"]["run_id"], "daily-run")
+        self.assertEqual(gold["source_identity"]["provider"], "yahoo_chart")
+        self.assertEqual(gold["source_identity"]["normalized_sha256"], "b" * 64)
         self.assertEqual(gold["data_kind"], "real")
         self.assertEqual(gold["rights"]["publication_eligible"], False)
 

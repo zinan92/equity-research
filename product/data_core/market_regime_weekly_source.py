@@ -109,6 +109,15 @@ def _validate_metadata(series: Mapping[str, Any], registry: Mapping[str, Any], *
             raise WeeklySourceHistoryError(f"weekly_registry_mismatch:{key}:{field}")
 
 
+def _merge_source_identity(item: Mapping[str, Any], *extra_keys: str) -> dict[str, Any]:
+    identity = dict(item.get("source_identity") or {}) if isinstance(item.get("source_identity"), Mapping) else {}
+    for key in extra_keys:
+        value = item.get(key)
+        if value is not None:
+            identity[key] = value
+    return identity
+
+
 def aggregate_weekly_series(
     series: Mapping[str, Any],
     *,
@@ -302,6 +311,7 @@ def build_weekly_source_snapshot_from_authorities(
     week_count: int = 156,
     require_all: bool = True,
     hourly_points_by_key: Mapping[str, list[Mapping[str, Any]]] | None = None,
+    hourly_source_identity_by_key: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Project existing validated authorities into the Weekly source seam."""
 
@@ -320,10 +330,7 @@ def build_weekly_source_snapshot_from_authorities(
             "price_basis": instrument.get("price_basis"),
             "quality": item.get("quality"),
             "data_kind": item.get("data_kind", daily_snapshot.get("data_kind", "real")),
-            "source_identity": {
-                "run_id": item.get("run_id", daily_snapshot.get("run_id")),
-                "artifact": item.get("normalized_artifact"),
-            },
+            "source_identity": _merge_source_identity(item, "run_id", "normalized_artifact"),
             "rights": {
                 "publication_eligible": item.get("publication_eligible", False),
             },
@@ -357,11 +364,7 @@ def build_weekly_source_snapshot_from_authorities(
             "price_basis": price_basis,
             "quality": factor.get("quality"),
             "data_kind": factor.get("data_kind", macro_snapshot.get("data_kind", "real")),
-            "source_identity": {
-                "run_id": factor.get("run_id", macro_snapshot.get("run_id")),
-                "factor_id": factor.get("factor_id"),
-                "artifact": factor.get("artifact"),
-            },
+            "source_identity": _merge_source_identity(factor, "run_id", "factor_id", "artifact"),
             "rights": {
                 "publication_eligible": factor.get("publication_eligible", False),
             },
@@ -375,7 +378,7 @@ def build_weekly_source_snapshot_from_authorities(
             "price_basis": "provider_unadjusted_trade_price",
             "quality": bitcoin_artifact.get("quality"),
             "data_kind": bitcoin_artifact.get("data_kind", "real"),
-            "source_identity": {"bitcoin_id": bitcoin_artifact.get("bitcoin_id")},
+            "source_identity": _merge_source_identity(bitcoin_artifact, "bitcoin_id"),
             "rights": {
                 "publication_eligible": bitcoin_artifact.get("publication_eligible", False),
             },
@@ -403,6 +406,9 @@ def build_weekly_source_snapshot_from_authorities(
                 enriched,
                 cutoff_at=cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc),
             )
+            hourly_identity = (hourly_source_identity_by_key or {}).get(key)
+            if isinstance(hourly_identity, Mapping) and hourly_identity:
+                snapshot["series"][key]["context_4h"]["source_identity"] = dict(hourly_identity)
     snapshot["authority_inputs"] = {
         "daily_run_id": daily_snapshot.get("run_id"),
         "macro_run_id": macro_snapshot.get("run_id"),

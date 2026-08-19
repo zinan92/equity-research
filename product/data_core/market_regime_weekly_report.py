@@ -60,8 +60,13 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_a
         points = series.get("daily_points") or []
     else:
         points = (series.get("context_4h") or {}).get("points") or []
+    feature_source = {**series, "key": key, "points": points}
+    if timeframe == "four_hour" and isinstance(series.get("context_4h"), Mapping):
+        context_identity = series["context_4h"].get("source_identity")
+        if isinstance(context_identity, Mapping) and context_identity:
+            feature_source["source_identity"] = context_identity
     feature = build_timeframe_features(
-        {**series, "key": key, "points": points},
+        feature_source,
         timeframe=timeframe,
         cutoff_at=cutoff_at,
     )

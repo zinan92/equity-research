@@ -217,9 +217,11 @@ def load_live_weekly_source_snapshot(
     macro = MarketRegimeMacroDataStore(macro_root).latest()
     bitcoin = _fill_missing_bitcoin(BitcoinDailyStore(bitcoin_root).latest())
     hourly: dict[str, list[dict[str, Any]]] = {}
+    hourly_identity: dict[str, dict[str, Any]] = {}
     for key in CONTEXT_4H_KEYS:
         try:
-            hourly[key], _ = _download(YF_CONTEXT_SYMBOLS[key], interval="1h", period="60d")
+            hourly[key], provider = _download(YF_CONTEXT_SYMBOLS[key], interval="1h", period="60d")
+            hourly_identity[key] = _identity(YF_CONTEXT_SYMBOLS[key], "1h", hourly[key], provider)
         except WeeklyLiveSourceError:
             # A context timeframe can be unavailable without making the
             # completed weekly/daily source stale or inventing a substitute.
@@ -233,6 +235,7 @@ def load_live_weekly_source_snapshot(
         week_count=156,
         require_all=True,
         hourly_points_by_key=hourly,
+        hourly_source_identity_by_key=hourly_identity,
     )
     snapshot["data_kind"] = "real"
     snapshot["source_policy"] = {
