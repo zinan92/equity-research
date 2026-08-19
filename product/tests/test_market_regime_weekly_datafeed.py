@@ -10,7 +10,7 @@ import unittest
 PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
-from data_core.market_regime_weekly_contract import WEEKLY_ASSET_REGISTRY  # noqa: E402
+from data_core.market_regime_weekly_contract import WEEKLY_ASSET_REGISTRY, build_weekly_candle_responses  # noqa: E402
 from data_core.market_regime_weekly_datafeed import (  # noqa: E402
     WeeklyDatafeedClient,
     datafeed_request_for_asset,
@@ -125,6 +125,16 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["status"], "unavailable")
         self.assertIn("datafeed_contract", result["reject_reason"])
 
+    def test_wrong_upstream_semantic_identity_is_not_relabelled(self) -> None:
+        def opener(_request, _timeout):
+            payload = candle_response("sp500", ticker="^GSPC")
+            payload.update({"canonical_symbol": "WRONG", "unit": "bogus", "semantic_role": "wrong"})
+            return FakeResponse(payload)
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("sp500", "daily")
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIn("datafeed_contract", result["reject_reason"])
+
     def test_source_loader_preserves_all_39_slots_and_partial_states(self) -> None:
         calls: list[tuple[str, str]] = []
         class FakeClient:
@@ -144,6 +154,9 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(snapshot["series"]["gold"]["daily_status"], "unavailable")
         self.assertEqual(snapshot["series"]["gold"]["status"], "short_history")
         self.assertEqual(snapshot["series"]["gold"]["points"], [{"date": "2026-08-14", "open": 100.0, "high": 102.0, "low": 99.0, "close": 101.0}])
+        responses = build_weekly_candle_responses(snapshot)
+        self.assertEqual(responses["gold:daily"]["status"], "unavailable")
+        self.assertEqual(responses["gold:weekly"]["status"], "unavailable")
         self.assertEqual(snapshot["data_kind"], "real")
         self.assertTrue(all((key, "weekly") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "daily") in calls for key in WEEKLY_ASSET_REGISTRY))
@@ -163,6 +176,9 @@ class WeeklyDatafeedTest(unittest.TestCase):
         snapshot = load_datafeed_weekly_source_snapshot(WeeklyFailureClient(), week_end="2026-08-14", cutoff_at="2026-08-14T23:59:59Z")
         self.assertEqual(snapshot["series"]["gold"]["status"], "unavailable")
         self.assertEqual(snapshot["series"]["gold"]["points"], [])
+        responses = build_weekly_candle_responses(snapshot)
+        self.assertEqual(responses["gold:daily"]["status"], "ready")
+        self.assertEqual(responses["gold:weekly"]["status"], "unavailable")
 
 
 if __name__ == "__main__":

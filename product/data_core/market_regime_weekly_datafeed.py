@@ -135,6 +135,14 @@ class WeeklyDatafeedClient:
             raise WeeklyCandleContractError("datafeed_source_mismatch")
         if payload.get("cache_policy") != "bypass" or payload.get("quality_policy") != "strict" or payload.get("fallback_policy") != "none":
             raise WeeklyCandleContractError("datafeed_policy_mismatch")
+        # If the upstream envelope carries semantic identity, it is
+        # authoritative input to validate, never a field we silently
+        # relabel from the local request registry.  Older datafeed responses
+        # may omit these optional fields, in which case the request mapping
+        # remains the explicit local source of truth.
+        for field in ("canonical_symbol", "series_kind", "unit", "price_basis", "semantic_role"):
+            if field in payload and payload.get(field) != request_spec[field]:
+                raise WeeklyCandleContractError(f"datafeed_{field}_mismatch")
         reject_reason = payload.get("reject_reason")
         candles = payload.get("candles")
         status = "ready" if not reject_reason and isinstance(candles, list) and candles else "unavailable"

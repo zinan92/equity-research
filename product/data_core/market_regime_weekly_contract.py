@@ -268,7 +268,13 @@ def build_candle_response_from_weekly_series(
         series_status = str(series.get("status") or "unavailable")
     elif timeframe == "daily":
         points = list(series.get("daily_points") or [])
-        series_status = str(series.get("status") or "unavailable")
+        daily_status = series.get("daily_status")
+        if daily_status == "ready":
+            series_status = "complete" if points else "unavailable"
+        elif daily_status in {"complete", "short_history"}:
+            series_status = str(daily_status) if points else "unavailable"
+        else:
+            series_status = str(series.get("status") or "unavailable")
     else:
         context = series.get("context_4h")
         points = list(context.get("points") or []) if isinstance(context, Mapping) else []
