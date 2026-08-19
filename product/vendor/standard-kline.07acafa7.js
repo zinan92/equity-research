@@ -703,6 +703,7 @@
       this.candleTheme = this.options.candleTheme;
       this.renderMode = normalizeRenderMode(this.options.renderMode || this.options.series_kind || this.options.seriesKind);
       this.chart = null;
+      this.libraryAvailable = false;
       this.candleSeries = null;
       this.lineSeries = null;
       this.volumeSeries = null;
@@ -807,6 +808,7 @@
     _initChart(){
       const lwc = root.LightweightCharts;
       if(!lwc?.createChart){
+        this.libraryAvailable = false;
         this._setOverlay("empty", "CHART LIBRARY MISSING", "window.LightweightCharts is not loaded (peer dependency).");
         return;
       }
@@ -824,6 +826,7 @@
         handleScale:{axisPressedMouseMove:true, mouseWheel:true, pinch:true},
         localization:{priceFormatter:price => formatPrice(price,2)},
       });
+      this.libraryAvailable = true;
       this._patchTimeScale();
       this._createPrimarySeries();
       this.chart.subscribeCrosshairMove?.(this._boundCrosshairMove);
@@ -1470,6 +1473,10 @@
 
     _refreshOverlay(){
       if(this.loading) return;
+      if(!this.chart || this.libraryAvailable === false){
+        this._setOverlay("empty", "CHART LIBRARY MISSING", "window.LightweightCharts is not loaded (peer dependency).");
+        return;
+      }
       const points = this.renderMode === "line" ? (this.current.line || []) : (this.current.candles || []);
       if(!points.length){
         this._setOverlay("empty", "NO KLINE DATA", describeEmptyMeta(this.current.meta));

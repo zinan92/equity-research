@@ -49,11 +49,13 @@ def main() -> None:
                     page.wait_for_timeout(250)
                     assert page.locator('[data-pane="gold"] [data-standard-kline="true"]').count() == 1
                     assert page.locator('[data-pane="gold"] [data-standard-kline-overlay]').get_attribute("data-state") == "ready"
+                    assert page.evaluate("Boolean(window.LightweightCharts) && Boolean(document.querySelector('[data-chart=\"gold:weekly\"]')._standardKline.chart)")
                     page.locator('[data-asset-nav="us2y"]').click()
                     page.wait_for_timeout(250)
                     assert page.locator('[data-pane="us2y"] [data-standard-kline="true"]').count() == 1
                     assert page.locator('[data-pane="us2y"] [data-standard-kline-overlay]').get_attribute("data-state") == "ready"
                     assert page.locator('[data-pane="us2y"] [data-source]').count() == 1
+                    assert page.evaluate("Boolean(window.LightweightCharts) && Boolean(document.querySelector('[data-chart=\"us2y:weekly\"]')._standardKline.lineSeries)")
                     overflow = page.evaluate("({body: document.body.scrollWidth, viewport: window.innerWidth})")
                     assert overflow["body"] <= overflow["viewport"], overflow
                     assert not errors, errors
