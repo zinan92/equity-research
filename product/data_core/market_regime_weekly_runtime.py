@@ -434,7 +434,12 @@ class WeeklyMacroRuntime:
 
             phase = "report"
             self._phase(phase)
-            report = build_weekly_report(source, analyses, ranking)
+            report = build_weekly_report(
+                source,
+                analyses,
+                ranking,
+                candle_responses=candle_responses if use_candle_responses else None,
+            )
             phase = "publish"
             self._phase(phase)
             pointer = self.report_store.publish(report)

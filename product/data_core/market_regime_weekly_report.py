@@ -12,6 +12,7 @@ from .market_regime_weekly_asset_analysis import ANALYSIS_ID_PREFIX
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 from .market_regime_weekly_odds import WeeklyOddsError, validate_odds
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
+from .market_regime_weekly_standard_kline import build_standard_kline_payload, standard_kline_options_for_response
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v6"
@@ -74,14 +75,38 @@ def _ranking_status_label(value: Any) -> str:
     return {"participate": "参与", "wait": "等待", "avoid": "回避", "unavailable": "不可用"}.get(str(value), str(value))
 
 
-def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_at: Any = None) -> dict[str, Any]:
-    if timeframe == "weekly":
-        points = series.get("points") or []
-    elif timeframe == "daily":
-        points = series.get("daily_points") or []
+def _chart_slot(
+    key: str,
+    timeframe: str,
+    series: Mapping[str, Any],
+    *,
+    candle_response: Mapping[str, Any] | None = None,
+    cutoff_at: Any = None,
+) -> dict[str, Any]:
+    standard_kline = None
+    if isinstance(candle_response, Mapping):
+        try:
+            standard_kline = build_standard_kline_payload(candle_response)
+            points = list(candle_response.get("bars") or [])
+            feature_source = {
+                "key": key,
+                "series_kind": candle_response.get("series_kind"),
+                "unit": candle_response.get("unit"),
+                "source_identity": candle_response.get("source_identity"),
+                "points": points,
+            }
+        except Exception:
+            standard_kline = None
+            points = []
+            feature_source = {"key": key, "series_kind": series.get("series_kind"), "unit": series.get("unit"), "source_identity": series.get("source_identity"), "points": []}
     else:
-        points = (series.get("context_4h") or {}).get("points") or []
-    feature_source = {**series, "key": key, "points": points}
+        if timeframe == "weekly":
+            points = series.get("points") or []
+        elif timeframe == "daily":
+            points = series.get("daily_points") or []
+        else:
+            points = (series.get("context_4h") or {}).get("points") or []
+        feature_source = {**series, "key": key, "points": points}
     if timeframe == "four_hour" and isinstance(series.get("context_4h"), Mapping):
         context_identity = series["context_4h"].get("source_identity")
         if isinstance(context_identity, Mapping) and context_identity:
@@ -98,7 +123,7 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_a
             "key": key,
             "timeframe": timeframe,
             "parameters": dict(FEATURE_PARAMETERS),
-            "unit": series.get("unit"),
+            "unit": (candle_response or series).get("unit"),
             "status": "unavailable",
             "failure_code": str(exc),
             "source_point_count": 0,
@@ -112,8 +137,8 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_a
         "slot_id": f"{key}:{timeframe}",
         "asset_key": key,
         "timeframe": timeframe,
-        "kind": feature.get("chart_kind", "line" if series.get("series_kind") == "rate_level" else "price"),
-        "unit": series.get("unit"),
+        "kind": feature.get("chart_kind", "line" if (candle_response or series).get("series_kind") in {"rate_level", "spread"} else "price"),
+        "unit": (candle_response or series).get("unit"),
         "status": feature.get("status", "unavailable"),
         "points": feature.get("points", []),
         "feature": feature,
@@ -122,6 +147,9 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_a
         "current": feature.get("current"),
         "high": feature.get("high"),
         "low": feature.get("low"),
+        "standard_kline": standard_kline,
+        "renderer": standard_kline.get("renderer") if isinstance(standard_kline, Mapping) else None,
+        "renderer_options": standard_kline.get("renderer_options") if isinstance(standard_kline, Mapping) else standard_kline_options_for_response({"series_kind": (candle_response or series).get("series_kind")}),
     }
 
 
@@ -129,6 +157,7 @@ def build_weekly_report(
     source_snapshot: Mapping[str, Any],
     analyses: Mapping[str, Mapping[str, Any]],
     ranking: Mapping[str, Any],
+    candle_responses: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     if source_snapshot.get("schema_version") != SOURCE_SCHEMA:
         raise WeeklyReportError("source_schema_invalid")
@@ -233,7 +262,16 @@ def build_weekly_report(
                 },
             }
         timeframes = ["weekly", "daily"] + (["four_hour"] if key in CONTEXT_4H_KEYS else [])
-        slots = [_chart_slot(key, tf, series, cutoff_at=source_snapshot.get("cutoff_at")) for tf in timeframes]
+        slots = [
+            _chart_slot(
+                key,
+                tf,
+                series,
+                candle_response=(candle_responses or {}).get(f"{key}:{tf}"),
+                cutoff_at=source_snapshot.get("cutoff_at"),
+            )
+            for tf in timeframes
+        ]
         chart_slots.extend(slots)
         cards.append({
             "asset_key": key,
