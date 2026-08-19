@@ -11,8 +11,8 @@ from .market_regime_weekly_features import build_timeframe_features
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
 
 
-SCHEMA_VERSION = "market-regime-weekly-report-v2"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v8"
+SCHEMA_VERSION = "market-regime-weekly-report-v3"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v9"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
