@@ -1,5 +1,27 @@
 # REGISTRY
 
+## 2026-08-20 · Weekly datafeed source coverage merged (Issue #865 / PR #872)
+
+Now: merged SHA `1ebd047d566f05cf8e74be608f3e9df18bc967ea` wires the Weekly
+track to the dedicated datafeed boundary. Every registered asset requests an
+explicit daily `1d` and weekly `1w` response; only DXY, Bitcoin, WTI, gold and
+silver request the approved `4h` context. The adapter validates ticker, asset
+class, semantic identity, source, cache/quality/fallback policy and cutoff
+before projecting a typed CandleResponse. Weekly bars and their provenance,
+quality and freshness remain independent from daily bars; an unavailable 1W
+response never falls back to daily aggregation or downgrades a usable 1D
+response. Per-slot failures remain typed unavailable responses, preserving all
+39 slots. The upstream datafeed coverage work is merged at
+[`zinan92/datafeed` PR #7](https://github.com/zinan92/datafeed/pull/7), SHA
+`baea7a77e47d1b9dba35b0e282f3c0bb59ed20f8`.
+
+Validation: Weekly-focused suite 92/92 and datafeed suite 74/74 pass;
+malformed, stale, semantic-mismatch, no-fallback, source-identity,
+timeframe-isolation and per-slot tests are included. Daily, Finance Daily
+Newsletter, scheduler, broker and publication boundaries remain unchanged.
+
+Next: Issue #866 reuses the standard-kline renderer for Weekly chart snapshots.
+
 ## 2026-08-19 · Weekly CandleResponse contract merged (Issue #864 / PR #870)
 
 Now: merged SHA `9fee3a8cb977b249de056e2f1f02f09e623fd1d5` adds the canonical
