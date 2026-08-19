@@ -1,5 +1,24 @@
 # REGISTRY
 
+## 2026-08-19 · Weekly CandleResponse contract merged (Issue #864 / PR #870)
+
+Now: merged SHA `9fee3a8cb977b249de056e2f1f02f09e623fd1d5` adds the canonical
+Weekly CandleResponse contract and 17-asset registry. The contract aligns its
+base envelope with datafeed `kline-candles-v1`, adds a Weekly contract version,
+preserves provider/source/cache/quality/freshness/trust fields, distinguishes
+price, rate-level and spread semantics, and freezes daily/weekly plus the five
+approved 4H context assets. The current Weekly runtime validates and consumes
+39 typed responses before asset analysis; each response digest enters analysis
+evidence. A single stale or malformed asset becomes unavailable without
+blocking the other assets. Daily, Finance Daily Newsletter, scheduler, broker
+and publication boundaries remain unchanged.
+
+Validation: 81 Weekly contract/runtime tests pass, including 17-asset/39-slot
+bridge, 4H context identity, stale/freshness, unknown data kind, synthetic,
+cutoff, malformed OHLC, spread semantics and per-asset failure isolation.
+Next: implement [#865](https://github.com/zinan92/equity-research/issues/865),
+the actual datafeed source coverage and exact mappings.
+
 ## 2026-08-19 · Weekly interpretation layer complete (Issues #852–#856)
 
 Now: the Weekly Macro K-line track is merged at main SHA
