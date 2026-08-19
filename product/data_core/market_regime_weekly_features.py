@@ -41,6 +41,14 @@ def _label(point: Mapping[str, Any]) -> str:
     return str(point.get("date") or point.get("start_at") or point.get("timestamp") or "")
 
 
+def _display_label(value: str) -> str:
+    if "T" in value:
+        return _timestamp(value).strftime("%m-%d %H")
+    if len(value) >= 10 and value[4] == "-" and value[7] == "-":
+        return value[5:]
+    return value
+
+
 def _number(value: Any, *, field: str) -> float:
     try:
         number = float(value)
@@ -80,7 +88,7 @@ def _axis_labels(points: list[Mapping[str, Any]], values: list[float]) -> tuple[
         if not label or label in seen:
             continue
         seen.add(label)
-        x_labels.append({"index": index, "label": label})
+        x_labels.append({"index": index, "label": _display_label(label)})
     low, high = min(values), max(values)
     if low == high:
         ticks = [low]

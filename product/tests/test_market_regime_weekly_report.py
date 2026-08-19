@@ -65,7 +65,7 @@ class WeeklyReportTest(unittest.TestCase):
         slot = report["chart_slots"][0]
         self.assertEqual(slot["feature"]["schema_version"], FEATURE_SCHEMA_VERSION)
         self.assertEqual(slot["feature"]["parameters"]["ema_span"], 50)
-        self.assertEqual(slot["x_labels"][0]["label"], "2026-08-14")
+        self.assertEqual(slot["x_labels"][0]["label"], "08-14")
         self.assertEqual(slot["y_labels"][0]["value"], 99.0)
         self.assertIn("macd_histogram", slot["points"][0])
 
