@@ -234,6 +234,28 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         self.assertEqual(gold["data_kind"], "real")
         self.assertEqual(gold["rights"]["publication_eligible"], False)
 
+    def test_authority_adapter_keeps_parent_run_when_child_identity_is_missing(self) -> None:
+        snapshot = build_weekly_source_snapshot_from_authorities(
+            daily_snapshot={
+                "run_id": "daily-parent",
+                "instruments": [{
+                    "instrument": {"key": "gold", "exchange_timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted"},
+                    "bars": [{"date": "2026-08-14", "open": 100, "high": 101, "low": 99, "close": 100}],
+                    "quality": "fresh", "data_kind": "real", "publication_eligible": False,
+                }],
+            },
+            macro_snapshot={
+                "run_id": "macro-parent",
+                "factors": [{"factor": {"key": "us2y"}, "observations": [{"date": "2026-08-14", "value": 4.2}], "quality": "fresh", "data_kind": "real"}],
+            },
+            bitcoin_artifact={"bitcoin_id": "bitcoin-id", "bars": []},
+            week_end=date(2026, 8, 14),
+            week_count=1,
+            require_all=False,
+        )
+        self.assertEqual(snapshot["series"]["gold"]["source_identity"]["run_id"], "daily-parent")
+        self.assertEqual(snapshot["series"]["us2y"]["source_identity"]["run_id"], "macro-parent")
+
 
 if __name__ == "__main__":
     unittest.main()

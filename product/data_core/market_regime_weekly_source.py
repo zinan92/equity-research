@@ -109,12 +109,14 @@ def _validate_metadata(series: Mapping[str, Any], registry: Mapping[str, Any], *
             raise WeeklySourceHistoryError(f"weekly_registry_mismatch:{key}:{field}")
 
 
-def _merge_source_identity(item: Mapping[str, Any], *extra_keys: str) -> dict[str, Any]:
+def _merge_source_identity(item: Mapping[str, Any], *extra_keys: str, fallback_run_id: Any = None) -> dict[str, Any]:
     identity = dict(item.get("source_identity") or {}) if isinstance(item.get("source_identity"), Mapping) else {}
     for key in extra_keys:
         value = item.get(key)
         if value is not None:
             identity[key] = value
+    if "run_id" not in identity and fallback_run_id:
+        identity["run_id"] = fallback_run_id
     return identity
 
 
@@ -330,7 +332,7 @@ def build_weekly_source_snapshot_from_authorities(
             "price_basis": instrument.get("price_basis"),
             "quality": item.get("quality"),
             "data_kind": item.get("data_kind", daily_snapshot.get("data_kind", "real")),
-            "source_identity": _merge_source_identity(item, "run_id", "normalized_artifact"),
+            "source_identity": _merge_source_identity(item, "run_id", "normalized_artifact", fallback_run_id=daily_snapshot.get("run_id")),
             "rights": {
                 "publication_eligible": item.get("publication_eligible", False),
             },
@@ -364,7 +366,7 @@ def build_weekly_source_snapshot_from_authorities(
             "price_basis": price_basis,
             "quality": factor.get("quality"),
             "data_kind": factor.get("data_kind", macro_snapshot.get("data_kind", "real")),
-            "source_identity": _merge_source_identity(factor, "run_id", "factor_id", "artifact"),
+            "source_identity": _merge_source_identity(factor, "run_id", "factor_id", "artifact", fallback_run_id=macro_snapshot.get("run_id")),
             "rights": {
                 "publication_eligible": factor.get("publication_eligible", False),
             },
