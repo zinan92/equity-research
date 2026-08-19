@@ -102,7 +102,12 @@ def build_timeframe_features(
     if not key or timeframe not in {"weekly", "daily", "four_hour"}:
         raise WeeklyFeatureError("feature_identity_invalid")
     raw_points = list(series.get("points") or [])
-    cutoff_utc = cutoff_at.astimezone(timezone.utc) if cutoff_at is not None else None
+    if isinstance(cutoff_at, str):
+        parsed_cutoff = datetime.fromisoformat(cutoff_at.replace("Z", "+00:00"))
+        cutoff_utc = parsed_cutoff.astimezone(timezone.utc)
+    else:
+        cutoff_utc = cutoff_at.astimezone(timezone.utc) if cutoff_at is not None else None
+    source_identity = series.get("source_identity")
     points: list[dict[str, Any]] = []
     for raw in raw_points:
         if not isinstance(raw, Mapping):
@@ -122,6 +127,8 @@ def build_timeframe_features(
             "key": key,
             "timeframe": timeframe,
             "parameters": dict(FEATURE_PARAMETERS),
+            "source_identity": source_identity,
+            "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z") if cutoff_utc else None,
             "status": "unavailable",
             "warmup_required": FEATURE_PARAMETERS["ema_span"],
             "source_point_count": 0,
@@ -129,7 +136,7 @@ def build_timeframe_features(
             "x_labels": [],
             "y_labels": [],
             "current": None,
-            "feature_identity": _digest({"key": key, "timeframe": timeframe, "points": []}),
+            "feature_identity": _digest({"key": key, "timeframe": timeframe, "parameters": FEATURE_PARAMETERS, "source_identity": source_identity, "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z") if cutoff_utc else None, "points": []}),
         }
 
     values = [float(row["_feature_value"]) for row in points]
@@ -173,6 +180,8 @@ def build_timeframe_features(
         "key": key,
         "timeframe": timeframe,
         "parameters": dict(FEATURE_PARAMETERS),
+        "source_identity": source_identity,
+        "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z") if cutoff_utc else None,
         "status": "complete" if len(points) >= FEATURE_PARAMETERS["ema_span"] else "short_history",
         "warmup_required": FEATURE_PARAMETERS["ema_span"],
         "source_point_count": len(points),
@@ -183,5 +192,5 @@ def build_timeframe_features(
         "current": {"label": _label(current), "value": _round(current_value)},
         "high": {"value": _round(max(chart_values))},
         "low": {"value": _round(min(chart_values))},
-        "feature_identity": _digest({"key": key, "timeframe": timeframe, "parameters": FEATURE_PARAMETERS, "points": feature_points}),
+        "feature_identity": _digest({"key": key, "timeframe": timeframe, "parameters": FEATURE_PARAMETERS, "source_identity": source_identity, "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z") if cutoff_utc else None, "points": feature_points}),
     }

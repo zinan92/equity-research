@@ -91,6 +91,20 @@ class WeeklyFeaturesTest(unittest.TestCase):
         second = build_timeframe_features({**base, "points": changed}, timeframe="daily")
         self.assertNotEqual(first["feature_identity"], second["feature_identity"])
 
+    def test_feature_identity_binds_source_identity_and_cutoff(self) -> None:
+        points = price_points(60)
+        first = build_timeframe_features(
+            {"key": "gold", "series_kind": "price", "source_identity": {"run_id": "a"}, "points": points},
+            timeframe="daily",
+            cutoff_at=datetime(2026, 3, 1, 23, 59, 59, tzinfo=timezone.utc),
+        )
+        second = build_timeframe_features(
+            {"key": "gold", "series_kind": "price", "source_identity": {"run_id": "b"}, "points": points},
+            timeframe="daily",
+            cutoff_at=datetime(2026, 3, 1, 23, 59, 58, tzinfo=timezone.utc),
+        )
+        self.assertNotEqual(first["feature_identity"], second["feature_identity"])
+
 
 if __name__ == "__main__":
     unittest.main()

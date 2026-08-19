@@ -38,7 +38,7 @@ def _escape(value: Any) -> str:
     return html.escape(str(value), quote=True)
 
 
-def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any]) -> dict[str, Any]:
+def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_at: Any = None) -> dict[str, Any]:
     if timeframe == "weekly":
         points = series.get("points") or []
     elif timeframe == "daily":
@@ -48,6 +48,7 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any]) -> dict[str
     feature = build_timeframe_features(
         {**series, "key": key, "points": points},
         timeframe=timeframe,
+        cutoff_at=cutoff_at,
     )
     return {
         "slot_id": f"{key}:{timeframe}",
@@ -101,7 +102,7 @@ def build_weekly_report(
                 "rationale": analysis.get("rationale"),
             }
         timeframes = ["weekly", "daily"] + (["four_hour"] if key in CONTEXT_4H_KEYS else [])
-        slots = [_chart_slot(key, tf, series) for tf in timeframes]
+        slots = [_chart_slot(key, tf, series, cutoff_at=source_snapshot.get("cutoff_at")) for tf in timeframes]
         chart_slots.extend(slots)
         cards.append({
             "asset_key": key,
