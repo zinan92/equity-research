@@ -195,6 +195,7 @@ def aggregate_weekly_series(
         "actual_last_session": output[-1]["date"] if output else None,
         "quality": str(series.get("quality") or "unknown"),
         "data_kind": str(series.get("data_kind") or "fixture"),
+        "daily_status": series.get("daily_status"),
         "source_identity": series.get("source_identity"),
         "rights": series.get("rights"),
     }
@@ -275,6 +276,7 @@ def build_weekly_source_snapshot(
     cutoff_at: datetime | None = None,
     week_count: int = 156,
     require_all: bool = False,
+    weekly_points_by_key: Mapping[str, list[Mapping[str, Any]] | None] | None = None,
 ) -> dict[str, Any]:
     """Build the typed timeframe snapshot consumed by later compiler stories."""
 
@@ -288,6 +290,25 @@ def build_weekly_source_snapshot(
     for key, source in series_by_key.items():
         enriched = {**source, "key": key}
         weekly = aggregate_weekly_series(enriched, week_end=week_end, week_count=week_count)
+        if weekly_points_by_key is not None and key in weekly_points_by_key:
+            external_points = weekly_points_by_key[key]
+            if not external_points:
+                weekly.update({"status": "unavailable", "points": [], "weekly_bin_count": 0, "missing_week_ends": [], "weekly_source_identity": enriched.get("weekly_source_identity")})
+            else:
+                external = aggregate_weekly_series(
+                    {**enriched, "points": external_points},
+                    week_end=week_end,
+                    week_count=week_count,
+                )
+                weekly.update({
+                    "status": external["status"],
+                    "points": external["points"],
+                    "weekly_bin_count": external["weekly_bin_count"],
+                    "missing_week_ends": external["missing_week_ends"],
+                    "actual_first_session": external["actual_first_session"],
+                    "actual_last_session": external["actual_last_session"],
+                    "weekly_source_identity": enriched.get("weekly_source_identity"),
+                })
         if key in CONTEXT_4H_KEYS and enriched.get("hourly_points") is not None:
             cutoff = cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)
             weekly["context_4h"] = aggregate_4h_series(

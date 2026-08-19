@@ -215,6 +215,7 @@ def load_datafeed_weekly_source_snapshot(
     end = (date.fromisoformat(week_end) + timedelta(days=1)).isoformat()
     start = (date.fromisoformat(week_end) - timedelta(days=900)).isoformat()
     series: dict[str, dict[str, Any]] = {}
+    weekly_points_by_key: dict[str, list[Mapping[str, Any]] | None] = {}
     for asset_key, spec in WEEKLY_ASSET_REGISTRY.items():
         daily = client.fetch(asset_key, "daily", start=start, end=end, limit=1000)
         weekly = client.fetch(asset_key, "weekly", start=(date.fromisoformat(week_end) - timedelta(days=365 * 4)).isoformat(), end=end, limit=300)
@@ -228,6 +229,7 @@ def load_datafeed_weekly_source_snapshot(
             "unit": spec["unit"],
             "price_basis": spec["price_basis"],
             "status": "complete" if daily.get("status") == "ready" else "unavailable",
+            "daily_status": daily.get("status"),
             "quality": "fresh" if daily.get("fresh") is not False else "stale",
             "data_kind": "real",
             "source_identity": dict(source_identity),
@@ -235,6 +237,7 @@ def load_datafeed_weekly_source_snapshot(
             "weekly_status": weekly.get("status"),
             "points": _bar_for_source(daily, spec["series_kind"]),
         }
+        weekly_points_by_key[asset_key] = _bar_for_source(weekly, spec["series_kind"]) if weekly.get("status") == "ready" else None
         if isinstance(weekly.get("source_identity"), Mapping) and weekly["source_identity"].get("response_sha256"):
             item["source_identity"]["weekly_response_sha256"] = weekly["source_identity"]["response_sha256"]
         if "four_hour" in spec["allowed_timeframes"]:
@@ -254,6 +257,7 @@ def load_datafeed_weekly_source_snapshot(
         cutoff_at=datetime.fromisoformat(cutoff_at.replace("Z", "+00:00")),
         week_count=156,
         require_all=True,
+        weekly_points_by_key=weekly_points_by_key,
     )
     snapshot["data_kind"] = "real"
     snapshot["source_policy"] = {"datafeed": True, "cache_policy": "bypass", "quality": "strict", "fallback_policy": "none"}

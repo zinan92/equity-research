@@ -274,6 +274,8 @@ def build_candle_response_from_weekly_series(
         points = list(context.get("points") or []) if isinstance(context, Mapping) else []
         series_status = str(context.get("status") or "unavailable") if isinstance(context, Mapping) else "unavailable"
     identity_source = series
+    if timeframe == "weekly" and isinstance(series.get("weekly_source_identity"), Mapping):
+        identity_source = {"source_identity": series["weekly_source_identity"]}
     if timeframe == "four_hour" and isinstance(series.get("context_4h"), Mapping):
         identity_source = series["context_4h"]
     identity = identity_source.get("source_identity") if isinstance(identity_source.get("source_identity"), Mapping) else None

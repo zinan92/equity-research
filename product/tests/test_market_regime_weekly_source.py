@@ -112,6 +112,29 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         self.assertEqual(result["points"][0]["open"], 100)
         self.assertEqual(result["points"][0]["close"], 106)
 
+    def test_four_hour_context_preserves_its_own_source_identity(self) -> None:
+        start = datetime(2026, 8, 13, 18, tzinfo=timezone.utc)
+        hourly = [
+            {"timestamp": int((start + timedelta(hours=i)).timestamp()), "open": 100 + i, "high": 105 + i, "low": 98 + i, "close": 103 + i}
+            for i in range(4)
+        ]
+        snapshot = build_weekly_source_snapshot(
+            {
+                "gold": {
+                    "series_kind": "price",
+                    "timezone": "America/New_York",
+                    "points": [{"date": "2026-08-14", "open": 100, "high": 101, "low": 99, "close": 100}],
+                    "hourly_points": hourly,
+                    "source_identity": {"run_id": "daily"},
+                    "hourly_source_identity": {"run_id": "hourly"},
+                }
+            },
+            week_end=date(2026, 8, 14),
+            cutoff_at=datetime(2026, 8, 14, 23, 59, 59, tzinfo=timezone.utc),
+            week_count=1,
+        )
+        self.assertEqual(snapshot["series"]["gold"]["context_4h"]["source_identity"]["run_id"], "hourly")
+
     def test_short_history_is_explicit_and_never_padded(self) -> None:
         snapshot = build_weekly_source_snapshot(
             {

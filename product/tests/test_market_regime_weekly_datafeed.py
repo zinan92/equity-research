@@ -141,11 +141,28 @@ class WeeklyDatafeedTest(unittest.TestCase):
 
         snapshot = load_datafeed_weekly_source_snapshot(FakeClient(), week_end="2026-08-14", cutoff_at="2026-08-14T23:59:59Z")
         self.assertEqual(set(snapshot["series"]), set(WEEKLY_ASSET_REGISTRY))
-        self.assertEqual(snapshot["series"]["gold"]["status"], "unavailable")
+        self.assertEqual(snapshot["series"]["gold"]["daily_status"], "unavailable")
+        self.assertEqual(snapshot["series"]["gold"]["status"], "short_history")
+        self.assertEqual(snapshot["series"]["gold"]["points"], [{"date": "2026-08-14", "open": 100.0, "high": 102.0, "low": 99.0, "close": 101.0}])
         self.assertEqual(snapshot["data_kind"], "real")
         self.assertTrue(all((key, "weekly") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "daily") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "four_hour") in calls for key in ("dxy", "bitcoin", "wti", "gold", "silver")))
+
+    def test_weekly_unavailable_does_not_fall_back_to_daily_aggregation(self) -> None:
+        class WeeklyFailureClient:
+            def fetch(self, asset_key, timeframe, **_kwargs):
+                spec = WEEKLY_ASSET_REGISTRY[asset_key]
+                if asset_key == "gold" and timeframe == "weekly":
+                    return {"status": "unavailable", "reject_reason": "upstream_error"}
+                row = {"timestamp": "2026-08-14T00:00:00+00:00", "open": 100, "high": 102, "low": 99, "close": 101, "volume": 0}
+                if spec["series_kind"] != "price":
+                    row["open"] = row["high"] = row["low"] = row["close"] = row["value"] = 4.2
+                return {"status": "ready", "series_kind": spec["series_kind"], "unit": spec["unit"], "price_basis": spec["price_basis"], "canonical_symbol": spec["canonical_symbol"], "source_identity": {"provider": "test", "run_id": "r"}, "bars": [row]}
+
+        snapshot = load_datafeed_weekly_source_snapshot(WeeklyFailureClient(), week_end="2026-08-14", cutoff_at="2026-08-14T23:59:59Z")
+        self.assertEqual(snapshot["series"]["gold"]["status"], "unavailable")
+        self.assertEqual(snapshot["series"]["gold"]["points"], [])
 
 
 if __name__ == "__main__":
