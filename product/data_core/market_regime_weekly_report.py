@@ -8,11 +8,13 @@ import hashlib
 from typing import Any, Mapping
 
 from .market_regime_weekly_features import FEATURE_PARAMETERS, FEATURE_SCHEMA_VERSION, WeeklyFeatureError, build_timeframe_features
+from .market_regime_weekly_asset_analysis import ANALYSIS_ID_PREFIX
+from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
 
 
-SCHEMA_VERSION = "market-regime-weekly-report-v3"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v9"
+SCHEMA_VERSION = "market-regime-weekly-report-v4"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v10"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
@@ -121,11 +123,28 @@ def build_weekly_report(
         if not isinstance(series, Mapping) or series.get("key", key) != key:
             raise WeeklyReportError(f"source_asset_identity_invalid:{key}")
         analysis = analyses.get(key)
+        theory_valid = False
+        analysis_identity_valid = (
+            isinstance(analysis, Mapping)
+            and isinstance(analysis.get("analysis_id"), str)
+            and analysis["analysis_id"].startswith(ANALYSIS_ID_PREFIX)
+        )
+        if isinstance(analysis, Mapping):
+            try:
+                validate_theoretical_statement(
+                    analysis.get("theoretical_implication"),
+                    set(mechanism_for_asset(key)["mechanism_ids"]),
+                )
+                theory_valid = True
+            except ValueError:
+                theory_valid = False
         if (
             not isinstance(analysis, Mapping)
             or analysis.get("generation_status") != "model_generated_unreviewed"
             or not isinstance(analysis.get("position"), Mapping)
             or not isinstance(analysis.get("structure"), Mapping)
+            or not theory_valid
+            or not analysis_identity_valid
         ):
             analysis_status = "analysis_unavailable"
             failure_code = (analysis or {}).get("failure_code", "analysis_missing")
@@ -148,6 +167,7 @@ def build_weekly_report(
                 "invalidation": analysis.get("invalidation"),
                 "opportunity_state": analysis.get("opportunity_state"),
                 "rationale": analysis.get("rationale"),
+                "theoretical_implication": analysis.get("theoretical_implication"),
             }
         timeframes = ["weekly", "daily"] + (["four_hour"] if key in CONTEXT_4H_KEYS else [])
         slots = [_chart_slot(key, tf, series, cutoff_at=source_snapshot.get("cutoff_at")) for tf in timeframes]
@@ -211,6 +231,8 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
                     lines.extend(["**4H**：当前 Context 不可用。", ""])
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             lines.extend([f"**多周期结论**：{(synthesis or {}).get('text', '当前分析不可用。')}", ""])
+            implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
+            lines.extend([f"**这意味着什么（机制解释）**：{(implication or {}).get('text', '当前机制解释不可用。')}", ""])
     lines.extend(["## 本周机会排序", ""])
     for row in (report.get("ranking") or {}).get("ordered_assets") or []:
         lines.append(f"- {row.get('asset_key')}：{row.get('status')}")
@@ -241,6 +263,8 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
                 )
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             summary = (synthesis or {}).get("text") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。"
+            implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
+            implication_text = (implication or {}).get("text") if isinstance(implication, Mapping) else "当前机制解释不可用。"
             position = analysis.get("position") if isinstance(analysis, Mapping) else None
             structure = analysis.get("structure") if isinstance(analysis, Mapping) else None
             dimensions = ""
@@ -249,7 +273,7 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
                 structure_text = (structure or {}).get("text", "结构：不可用。") if isinstance(structure, Mapping) else "结构：不可用。"
                 dimensions = f'<div class="summary-dimensions"><div><b>位置</b><p>{_escape(position_text)}</p></div><div><b>结构</b><p>{_escape(structure_text)}</p></div></div>'
             pane_parts.append(
-                f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(str(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div></section>'
+                f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(str(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
             )
     ranking_rows = "".join(f'<li><strong>{_escape(str(row.get("asset_key")))}</strong> · {_escape(str(row.get("status")))}</li>' for row in (report.get("ranking") or {}).get("ordered_assets") or [])
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>

@@ -9,9 +9,10 @@ from typing import Any, Callable, Mapping
 
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, WEEKLY_KEYS
 from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
+from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 
 
-SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v2"
+SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v3"
 ANALYSIS_ID_PREFIX = "market-regime-weekly-asset-analysis:"
 AGREEMENT_STATES = frozenset({"aligned_bullish", "aligned_bearish", "mixed", "neutral"})
 OPPORTUNITY_STATES = frozenset({"participate", "wait", "avoid"})
@@ -70,6 +71,7 @@ def build_asset_analysis_request(asset_snapshot: Mapping[str, Any]) -> dict[str,
         "price_basis": registry["price_basis"],
         "week_end": str(asset_snapshot.get("week_end") or ""),
         "timeframes": timeframes,
+        "mechanism": mechanism_for_asset(key),
         "truth_boundary": {
             "local_evaluation_only": True,
             "model_generated_unreviewed": True,
@@ -115,6 +117,12 @@ def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any
     if not isinstance(timeframes, Mapping):
         raise WeeklyAssetAnalysisError("analysis_request_timeframes_invalid")
     known_ids = {item for frame in timeframes.values() for item in frame.get("evidence_ids", [])}
+    mechanism = request.get("mechanism")
+    if not isinstance(mechanism, Mapping) or mechanism.get("asset_key") != key:
+        raise WeeklyAssetAnalysisError("analysis_mechanism_invalid")
+    mechanism_ids = {str(item) for item in mechanism.get("mechanism_ids") or []}
+    if not mechanism_ids:
+        raise WeeklyAssetAnalysisError("analysis_mechanism_ids_missing")
     result: dict[str, Any] = {"asset_key": key, "generation_status": status}
     result["weekly"] = _validate_statement(output.get("weekly"), known_ids=known_ids, field="weekly")
     result["daily"] = _validate_statement(output.get("daily"), known_ids=known_ids, field="daily")
@@ -134,10 +142,16 @@ def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any
     result["invalidation"] = _validate_statement(output.get("invalidation"), known_ids=known_ids, field="invalidation")
     result["opportunity_state"] = opportunity
     result["rationale"] = _validate_statement(output.get("rationale"), known_ids=known_ids, field="rationale")
+    try:
+        result["theoretical_implication"] = validate_theoretical_statement(
+            output.get("theoretical_implication"), mechanism_ids
+        )
+    except ValueError as exc:
+        raise WeeklyAssetAnalysisError(str(exc)) from exc
     if "four_hour" not in timeframes:
         all_text = " ".join(
             str(result.get(field, {}).get("text", ""))
-            for field in ("weekly", "daily", "synthesis", "confirmation", "invalidation", "rationale")
+            for field in ("weekly", "daily", "synthesis", "confirmation", "invalidation", "rationale", "theoretical_implication")
         )
         if any(token in all_text.lower() for token in ("4h", "4小时", "小时")):
             raise WeeklyAssetAnalysisError("analysis_forbidden_timeframe")

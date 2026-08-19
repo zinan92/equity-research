@@ -46,6 +46,7 @@ def asset_snapshot(*, with_4h: bool = True) -> dict:
 
 def valid_output(request: dict) -> dict:
     citations = [item for tf in request["timeframes"].values() for item in tf["evidence_ids"]]
+    mechanism_id = request["mechanism"]["mechanism_ids"][0]
     result = {
         "asset_key": "gold",
         "generation_status": "model_generated_unreviewed",
@@ -57,6 +58,7 @@ def valid_output(request: dict) -> dict:
         "invalidation": {"text": "完整周期收盘跌破近期低点。", "evidence_ids": citations[:1]},
         "opportunity_state": "participate",
         "rationale": {"text": "结构清晰，等待确认。", "evidence_ids": citations[:2]},
+        "theoretical_implication": {"text": "通常由实际利率、美元与避险需求共同驱动；但危机初期现金需求也可能令该机制暂时失效。", "evidence_ids": [mechanism_id], "claim_type": "theoretical_mechanism"},
     }
     if "four_hour" in request["timeframes"]:
         result["four_hour"] = {"text": "4H 回踩后仍守住结构。", "evidence_ids": ["gold:4h:1"]}
@@ -87,6 +89,17 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         output = valid_output(request)
         output["daily"]["evidence_ids"] = ["not-in-request"]
         with self.assertRaisesRegex(WeeklyAssetAnalysisError, "evidence_id_unknown"):
+            validate_asset_analysis(output, request)
+
+    def test_theory_requires_mechanism_citation_and_claim_type(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        output = valid_output(request)
+        output["theoretical_implication"]["evidence_ids"] = ["gold:weekly:1"]
+        with self.assertRaisesRegex(WeeklyAssetAnalysisError, "mechanism_evidence_required"):
+            validate_asset_analysis(output, request)
+        output = valid_output(request)
+        output["theoretical_implication"]["claim_type"] = "observed_fact"
+        with self.assertRaisesRegex(WeeklyAssetAnalysisError, "theory_claim_type_invalid"):
             validate_asset_analysis(output, request)
 
     def test_missing_4h_is_a_valid_absence_not_daily_substitution(self) -> None:

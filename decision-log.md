@@ -4048,3 +4048,28 @@ pretending that price history reveals forward expectations.
   acceptance. The provider model, canonical request byte sizes and exact token
   usage remain part of the immutable receipt so a missing or over-budget usage
   record cannot masquerade as success.
+
+# 2026-08-19 · Weekly asset cards add static mechanism explanations
+
+## Decision
+
+Keep current K-line observations and theoretical meaning as separate typed
+fields. Each asset request receives only its own versioned role/mechanism
+catalog; the model's `theoretical_implication` must cite a catalog mechanism ID
+and use `claim_type=theoretical_mechanism`. Current timeframe statements remain
+bound to timeframe evidence IDs, and the report renders the mechanism block
+after the multi-period conclusion.
+
+## Why
+
+The reader needs to understand what a dollar, Treasury yield, index, commodity
+or crypto asset represents without confusing generic transmission knowledge
+with a claim that this week's bars prove live cross-asset causality. A per-asset
+catalog keeps the explanation isolated, replayable and explicitly qualified.
+
+## Boundary
+
+The mechanism layer is static interpretation only: it does not add live
+correlation, news, money-flow data, return forecasts, personal sizing, orders,
+broker access or automatic execution. The Daily report and Finance Daily
+Newsletter remain unchanged and separate.

@@ -31,7 +31,7 @@ def source_fixture() -> dict:
 def analyses_fixture() -> dict:
     return {
         key: {
-            "analysis_id": f"analysis:{key}",
+            "analysis_id": f"market-regime-weekly-asset-analysis:fixture:{key}",
             "asset_key": key,
             "generation_status": "model_generated_unreviewed",
             "weekly": {"text": f"{key} weekly", "evidence_ids": [f"e:{key}:w"]},
@@ -45,6 +45,7 @@ def analyses_fixture() -> dict:
             "invalidation": {"text": "invalidate", "evidence_ids": [f"e:{key}:d"]},
             "opportunity_state": "wait",
             "rationale": {"text": "rationale", "evidence_ids": [f"e:{key}:w"]},
+            "theoretical_implication": {"text": "通常由宏观驱动；但该传导并非始终稳定。", "evidence_ids": [f"mechanism:{key}:drivers"], "claim_type": "theoretical_mechanism"},
         }
         for key in WEEKLY_KEYS
     }
@@ -80,7 +81,9 @@ class WeeklyReportTest(unittest.TestCase):
         markdown = render_weekly_markdown(report)
         self.assertIn("summary-dimensions", html)
         self.assertIn("位置：高位。", html)
+        self.assertIn("这意味着什么 · 机制解释", html)
         self.assertIn("**位置**：位置：高位。", markdown)
+        self.assertIn("**这意味着什么（机制解释）**：通常由宏观驱动", markdown)
 
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
@@ -120,6 +123,24 @@ class WeeklyReportTest(unittest.TestCase):
         gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
         self.assertEqual(gold["analysis_status"], "analysis_unavailable")
         self.assertEqual(gold["analysis"]["failure_code"], "position_structure_missing")
+
+    def test_malformed_theory_is_not_published_as_validated(self) -> None:
+        analyses = analyses_fixture()
+        analyses["gold"]["theoretical_implication"] = {
+            "text": "当前美元一定会上涨。",
+            "evidence_ids": ["mechanism:gold:drivers"],
+            "claim_type": "theoretical_mechanism",
+        }
+        report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
+        gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
+        self.assertEqual(gold["analysis_status"], "analysis_unavailable")
+
+    def test_missing_analysis_identity_is_not_published_as_validated(self) -> None:
+        analyses = analyses_fixture()
+        analyses["gold"].pop("analysis_id")
+        report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
+        gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
+        self.assertEqual(gold["analysis_status"], "analysis_unavailable")
 
     def test_unknown_source_key_fails_closed(self) -> None:
         source = source_fixture()
