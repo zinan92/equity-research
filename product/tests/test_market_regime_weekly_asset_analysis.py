@@ -9,12 +9,14 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_weekly_asset_analysis import (  # noqa: E402
+    SCHEMA_VERSION,
     WeeklyAssetAnalysisError,
     build_asset_analysis_request,
     build_terminal_vector,
     compile_asset_analysis,
     validate_asset_analysis,
 )
+from data_core.market_regime_weekly_features import build_timeframe_features  # noqa: E402
 
 
 def asset_snapshot(*, with_4h: bool = True) -> dict:
@@ -24,11 +26,21 @@ def asset_snapshot(*, with_4h: bool = True) -> dict:
         "series_kind": "price",
         "week_end": "2026-08-14",
         "data_kind": "fixture",
+        "source_identity": {"provider": "fixture", "key": "gold"},
         "weekly": {"points": [{"date": "2026-08-14", "open": 100, "high": 110, "low": 98, "close": 108}], "evidence_ids": ["gold:weekly:1"]},
         "daily": {"points": [{"date": "2026-08-14", "open": 106, "high": 109, "low": 104, "close": 108}], "evidence_ids": ["gold:daily:1"]},
     }
     if with_4h:
         result["four_hour"] = {"points": [{"start_at": "2026-08-14T00:00:00Z", "open": 107, "high": 109, "low": 106, "close": 108}], "evidence_ids": ["gold:4h:1"]}
+    for timeframe in ("weekly", "daily", "four_hour"):
+        if timeframe not in result:
+            continue
+        feature = build_timeframe_features(
+            {"key": "gold", "series_kind": "price", "source_identity": result["source_identity"], "points": result[timeframe]["points"]},
+            timeframe=timeframe,
+        )
+        result[timeframe]["features"] = feature
+        result[timeframe]["evidence_ids"].append(f"feature:{feature['feature_identity']}")
     return result
 
 
@@ -87,10 +99,20 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         request = build_asset_analysis_request(asset_snapshot())
         artifact = compile_asset_analysis(request, lambda _: valid_output(request))
         self.assertTrue(artifact["analysis_id"].startswith("market-regime-weekly-asset-analysis:"))
+        self.assertEqual(artifact["identity_core"]["schema_version"], SCHEMA_VERSION)
         self.assertEqual(artifact["request_asset_key"], "gold")
         self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
         self.assertEqual(artifact["receipt"]["request_hash"], artifact["identity_core"]["request_hash"])
         self.assertEqual(artifact["receipt"]["output_hash"], artifact["output_hash"])
+
+    def test_malformed_derived_feature_returns_typed_unavailable(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        bad_point = dict(request["timeframes"]["daily"]["features"]["points"][0])
+        bad_point["close"] = "bad"
+        request["timeframes"]["daily"]["features"]["points"].append(bad_point)
+        artifact = compile_asset_analysis(request, lambda _: valid_output(request))
+        self.assertEqual(artifact["generation_status"], "analysis_unavailable")
+        self.assertEqual(artifact["failure_code"], "derived_feature_invalid")
 
     def test_terminal_vector_keeps_unavailable_slots_and_order(self) -> None:
         request = build_asset_analysis_request(asset_snapshot(with_4h=False))

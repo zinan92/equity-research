@@ -77,9 +77,9 @@ def asset_output(request: dict) -> dict:
     result = {
         "asset_key": key,
         "generation_status": "model_generated_unreviewed",
-        "weekly": {"text": f"{key} 周线真实分析", "evidence_ids": [first["weekly"]]},
-        "daily": {"text": f"{key} 日线真实分析", "evidence_ids": [first["daily"]]},
-        "synthesis": {"text": f"{key} 多周期结论", "evidence_ids": [first["weekly"]]},
+        "weekly": {"text": "周线真实分析", "evidence_ids": [first["weekly"]]},
+        "daily": {"text": "日线真实分析", "evidence_ids": [first["daily"]]},
+        "synthesis": {"text": "多周期结论", "evidence_ids": [first["weekly"]]},
         "agreement": "mixed",
         "confirmation": {"text": "确认条件", "evidence_ids": [first["weekly"]]},
         "invalidation": {"text": "失效条件", "evidence_ids": [first["daily"]]},
@@ -87,7 +87,7 @@ def asset_output(request: dict) -> dict:
         "rationale": {"text": "依据", "evidence_ids": [first["weekly"]]},
     }
     if "four_hour" in frames:
-        result["four_hour"] = {"text": f"{key} 4H 分析", "evidence_ids": [first["four_hour"]]}
+        result["four_hour"] = {"text": "4小时分析", "evidence_ids": [first["four_hour"]]}
     return result
 
 
@@ -122,6 +122,8 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             self.assertEqual(report["week_end"], "2026-08-14")
             self.assertEqual(len(report["cards"]), 17)
             self.assertEqual(len(report["chart_slots"]), 39)
+            gold_analysis = result["analyses"]["gold"]
+            self.assertTrue(any(str(item).startswith("feature:") for item in gold_analysis["position"]["evidence_ids"]))
             self.assertEqual(phases, ["source", "asset_analysis", "ranking", "report", "publish"])
             replayed = WeeklyReportStore(root / "runtime", root / "output").latest()
             self.assertEqual(replayed["report_id"], report["report_id"])
@@ -147,6 +149,23 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
             self.assertEqual(gold["analysis_status"], "analysis_unavailable")
             self.assertEqual(len(report["chart_slots"]), 39)
+
+    def test_malformed_feature_for_one_asset_is_typed_and_does_not_abort_cycle(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            source = source_fixture()
+            source["series"]["gold"]["source_identity"] = {"run_id": None}
+            runtime = WeeklyMacroRuntime(
+                source_loader=lambda **_: source,
+                asset_provider=lambda request: asset_output(request),
+                ranking_provider=lambda request: ranking_output(request),
+                runtime_root=Path(temporary) / "runtime",
+                output_root=Path(temporary) / "output",
+                allow_fixture=True,
+            )
+            result = runtime.run_once(now=datetime(2026, 8, 17, tzinfo=timezone.utc))
+            self.assertEqual(result["analyses"]["gold"]["generation_status"], "analysis_unavailable")
+            self.assertEqual(result["analyses"]["gold"]["failure_code"], "source_feature_invalid")
+            self.assertEqual(len(result["report"]["chart_slots"]), 39)
 
     def test_fixture_source_is_rejected_in_real_mode(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
