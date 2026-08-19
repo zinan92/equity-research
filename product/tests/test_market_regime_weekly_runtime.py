@@ -191,6 +191,11 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             report = runtime.run_once(now=datetime(2026, 8, 17, tzinfo=timezone.utc))["report"]
             gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
             self.assertEqual(gold["analysis_status"], "analysis_unavailable")
+            self.assertIn("state", gold["analysis"]["position"])
+            self.assertIn("state", gold["analysis"]["structure"])
+            self.assertEqual(gold["analysis"]["deterministic_status"], "validated")
+            self.assertEqual(gold["analysis"]["summary"]["order"], ["position", "structure", "odds", "synthesis", "theoretical_implication"])
+            self.assertIn("当前多周期分析不可用", gold["analysis"]["synthesis"]["text"])
             self.assertEqual(len(report["chart_slots"]), 39)
 
     def test_one_stale_candle_response_is_typed_and_does_not_block_other_assets(self) -> None:

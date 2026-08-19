@@ -174,35 +174,7 @@ def compile_asset_analysis(
     key = str(request.get("asset_key") or "")
     request_hash = _digest(request)
     try:
-        raw = provider(request)
-        output = validate_asset_analysis(raw, request)
-    except (WeeklyAssetAnalysisError, WeeklyPositionStructureError):
-        return {
-            "schema_version": SCHEMA_VERSION,
-            "asset_key": key,
-            "request_hash": request_hash,
-            "generation_status": "analysis_unavailable",
-            "failure_code": "output_schema_invalid",
-        }
-    except Exception:
-        return {
-            "schema_version": SCHEMA_VERSION,
-            "asset_key": key,
-            "request_hash": request_hash,
-            "generation_status": "analysis_unavailable",
-            "failure_code": "provider_error",
-        }
-    try:
         derived = build_position_structure(request)
-    except WeeklyPositionStructureError:
-        return {
-            "schema_version": SCHEMA_VERSION,
-            "asset_key": key,
-            "request_hash": request_hash,
-            "generation_status": "analysis_unavailable",
-            "failure_code": "derived_feature_invalid",
-        }
-    try:
         odds = build_odds(request, derived["structure"])
         selected_frame = request.get("timeframes", {}).get(odds.get("timeframe")) if isinstance(request.get("timeframes"), Mapping) else None
         selected_features = selected_frame.get("features") if isinstance(selected_frame, Mapping) else None
@@ -213,15 +185,45 @@ def compile_asset_analysis(
             allowed_feature_ids={f"feature:{feature_identity}"} if feature_identity else set(),
             allowed_evidence_ids=allowed_evidence_ids,
         )
-    except WeeklyOddsError:
+        deterministic = {**derived, "odds": odds}
+    except (WeeklyPositionStructureError, WeeklyOddsError):
         return {
             "schema_version": SCHEMA_VERSION,
             "asset_key": key,
             "request_hash": request_hash,
             "generation_status": "analysis_unavailable",
-            "failure_code": "derived_odds_invalid",
+            "failure_code": "derived_feature_invalid",
         }
-    output = {**output, **derived, "odds": odds}
+
+    def terminal_failure(failure_code: str) -> dict[str, Any]:
+        output = {
+            "schema_version": SCHEMA_VERSION,
+            "asset_key": key,
+            "request_hash": request_hash,
+            "generation_status": "analysis_unavailable",
+            "failure_code": failure_code,
+            "deterministic_status": "validated",
+            **deterministic,
+        }
+        core = {"schema_version": SCHEMA_VERSION, "asset_key": key, "request_hash": request_hash, "generation_status": output["generation_status"], "output": output}
+        output_hash = _digest(output)
+        return {
+            "analysis_id": f"{ANALYSIS_ID_PREFIX}{_digest(core)}",
+            "identity_core": core,
+            "receipt": {"schema_version": SCHEMA_VERSION, "event": "completed", "asset_key": key, "request_hash": request_hash, "output_hash": output_hash},
+            "output_hash": output_hash,
+            "request_asset_key": key,
+            **output,
+        }
+
+    try:
+        raw = provider(request)
+        output = validate_asset_analysis(raw, request)
+    except (WeeklyAssetAnalysisError, WeeklyPositionStructureError):
+        return terminal_failure("output_schema_invalid")
+    except Exception:
+        return terminal_failure("provider_error")
+    output = {**output, "deterministic_status": "validated", **deterministic}
     core = {
         "schema_version": SCHEMA_VERSION,
         "asset_key": key,
