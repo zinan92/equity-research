@@ -1,0 +1,73 @@
+{
+  "schema_version": "market-regime-weekly-real-acceptance-v1",
+  "issue": 869,
+  "observed_at": "2026-08-20T02:57:04+08:00",
+  "week_end": "2026-08-14",
+  "datafeed": {
+    "repository": "zinan92/datafeed",
+    "merged_pr": 8,
+    "merged_sha": "1c465a4869356c7d2ff3ecb9ae621736cb68bb79",
+    "base_url": "http://127.0.0.1:8101",
+    "policy": {
+      "cache_policy": "bypass",
+      "quality": "strict",
+      "fallback_policy": "none"
+    },
+    "source_snapshot_id": "market-regime-weekly-source:e83a7192fbdbced5aba3ccc06d9178ec3cc3feff4194e14c05aab70b0be4c97d",
+    "source_artifact_sha256": "a48f3dcf66ec14eef0f85d4e369867cd5aa11b281305a73525ee4a60ea0d9758",
+    "data_kind": "real",
+    "status": "partial",
+    "assets": 17,
+    "unavailable_assets": ["shanghai", "star50", "china_dividend"]
+  },
+  "report": {
+    "schema_version": "market-regime-weekly-report-v7",
+    "report_id": "market-regime-weekly-report:3d517e21dc5e677a9a4d33a249f4c76294e578a1bee7f6c0d26b2b3a22bb91dc",
+    "assets": 17,
+    "chart_slots": 39,
+    "chart_snapshots": 39,
+    "validated_analysis_cards": 7,
+    "analysis_unavailable_cards": 10,
+    "ranking_status": "model_generated_unreviewed",
+    "runtime_pointer_artifact_sha256": "5e0b1f4eaae3a1a6e2ad58c4b3f7145f15e63761bc4f943aa2a9214acc7e262a",
+    "latest_html_sha256": "ab6ae73df14c342d3721ea7ab09d0c515c569231420726d0f3ce8c382f0ca347",
+    "latest_markdown_sha256": "2326ea1301e10dd14a492d60122988963395b199b5e2aa3c1158772161a736cb",
+    "pointer_readback": true,
+    "snapshot_receipts": 39,
+    "summary_order": ["position", "structure", "odds", "synthesis", "theoretical_implication"],
+    "publication_eligible": false,
+    "action_eligible": false
+  },
+  "browser_acceptance": {
+    "viewports": [1280, 390],
+    "assets_navigated": 17,
+    "charts_mounted_per_pass": 39,
+    "real_chart_instances": true,
+    "rate_line_series": true,
+    "horizontal_overflow": false,
+    "console_errors": 0
+  },
+  "standard_kline": {
+    "repository": "zinan92/standard-kline",
+    "merged_pr": 5,
+    "merged_sha": "07acafa79e72af10d17b5a10b7bb11625fd709c2",
+    "lightweight_charts": "5.2.0"
+  },
+  "local_output": {
+    "html": "/Users/wendy/Desktop/宏观K线周报/latest.html",
+    "markdown": "/Users/wendy/Desktop/宏观K线周报/latest.md",
+    "previous_output_backup": "/Users/wendy/Desktop/宏观K线周报/pre-867-20260820-022844"
+  },
+  "boundaries": {
+    "finance_daily_newsletter_read": false,
+    "daily_kline_changed": false,
+    "scheduler_changed": false,
+    "broker_access": false,
+    "automatic_execution": false,
+    "publication_eligible": false
+  },
+  "full_baseline": {
+    "status": "recorded_with_unrelated_environment_failure",
+    "note": "The repository baseline previously recorded 1,057 tests with one unrelated missing external Desktop SYSTEM-PROMPT-macro-analyst.md fixture; the focused Weekly/datafeed/standard-kline gates above are green."
+  }
+}
