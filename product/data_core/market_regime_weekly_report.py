@@ -17,8 +17,8 @@ from .market_regime_weekly_contract import WeeklyCandleContractError
 from .market_regime_weekly_standard_kline import build_standard_kline_payload, standard_kline_options_for_response
 
 
-SCHEMA_VERSION = "market-regime-weekly-report-v6"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v12"
+SCHEMA_VERSION = "market-regime-weekly-report-v7"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v13"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
@@ -325,6 +325,36 @@ def build_weekly_report(
     return {"report_id": report_id, "identity_core": core, **core}
 
 
+def attach_chart_snapshots(
+    report: Mapping[str, Any],
+    snapshots: Mapping[str, Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Attach immutable snapshot references and recompute the report identity."""
+
+    if not isinstance(report, Mapping) or not isinstance(report.get("identity_core"), Mapping):
+        raise WeeklyReportError("chart_snapshot_report_invalid")
+    result = json.loads(_canonical(report))
+    core = result["identity_core"]
+    known = {str(slot.get("slot_id")) for slot in core.get("chart_slots") or [] if isinstance(slot, Mapping)}
+    unknown = sorted(set(str(key) for key in snapshots) - known)
+    if unknown:
+        raise WeeklyReportError(f"chart_snapshot_slot_unknown:{unknown[0]}")
+    for slot in core.get("chart_slots") or []:
+        if isinstance(slot, Mapping) and slot.get("slot_id") in snapshots:
+            slot["snapshot"] = json.loads(_canonical(snapshots[slot["slot_id"]]))
+    for card in core.get("cards") or []:
+        if not isinstance(card, Mapping):
+            continue
+        for slot in card.get("chart_slots") or []:
+            if isinstance(slot, Mapping) and slot.get("slot_id") in snapshots:
+                slot["snapshot"] = json.loads(_canonical(snapshots[slot["slot_id"]]))
+    for key in ("schema_version", "renderer_version", "week_end", "cutoff_at", "source_status", "cards", "chart_slots", "ranking", "truth_boundary"):
+        result[key] = core[key]
+    result["identity_core"] = core
+    result["report_id"] = f"{REPORT_ID_PREFIX}{_digest(core)}"
+    return result
+
+
 def render_weekly_markdown(report: Mapping[str, Any]) -> str:
     lines = [
         f"# 宏观 K 线周报｜{report.get('week_end')}",
@@ -352,6 +382,10 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
                     lines.extend([f"**{label}**：{statement.get('text')}", ""])
                 elif tf == "four_hour" and key in CONTEXT_4H_KEYS:
                     lines.extend(["**4小时**：当前4小时上下文不可用。", ""])
+                slot = next((item for item in card.get("chart_slots", []) if item.get("timeframe") == tf), None)
+                snapshot = slot.get("snapshot") if isinstance(slot, Mapping) else None
+                if isinstance(snapshot, Mapping) and snapshot.get("snapshot_id"):
+                    lines.extend([f"图表快照：`{snapshot.get('snapshot_id')}`", ""])
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             lines.extend([f"**多周期结论**：{(synthesis or {}).get('text', '当前分析不可用。')}", ""])
             implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
@@ -410,8 +444,11 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
                 text = (statement or {}).get("text") if isinstance(statement, Mapping) else None
                 if not text:
                     text = "当前分析不可用；图表仍保留，等待新的完整证据。"
+                snapshot = slot.get("snapshot") if isinstance(slot, Mapping) else None
+                snapshot_id = _escape(snapshot.get("snapshot_id")) if isinstance(snapshot, Mapping) and snapshot.get("snapshot_id") else ""
+                snapshot_attr = f' data-snapshot-id="{snapshot_id}"' if snapshot_id else ""
                 rows.append(
-                    f'<article class="timeframe"><div><b>{label}</b><div class="standard-kline-mount" data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"></div><small class="chart-legend">EMA50 · MACD(12,26,9){(" · 单位：" + _escape(_unit_label(slot.get("unit")))) if slot.get("unit") else ""}</small></div><p>{_escape(text)}</p></article>'
+                    f'<article class="timeframe"><div><b>{label}</b><div class="standard-kline-mount" data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"{snapshot_attr}></div><small class="chart-legend">EMA50 · MACD(12,26,9){(" · 单位：" + _escape(_unit_label(slot.get("unit")))) if slot.get("unit") else ""}{(" · 快照 " + snapshot_id) if snapshot_id else ""}</small></div><p>{_escape(text)}</p></article>'
                 )
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             summary = (synthesis or {}).get("text") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。"

@@ -35,10 +35,12 @@ from .market_regime_weekly_ranking import (
 from .market_regime_weekly_report import (
     REPORT_ID_PREFIX,
     SCHEMA_VERSION as REPORT_SCHEMA_VERSION,
+    attach_chart_snapshots,
     build_weekly_report,
     render_weekly_html,
     render_weekly_markdown,
 )
+from .market_regime_weekly_snapshots import SNAPSHOT_SCHEMA_VERSION, WeeklyChartSnapshotError
 from .market_regime_weekly_source import (
     CONTEXT_4H_KEYS,
     SCHEMA_VERSION as SOURCE_SCHEMA_VERSION,
@@ -124,6 +126,42 @@ class WeeklyReportStore:
         self.runtime_root = Path(runtime_root).expanduser().resolve()
         self.output_root = Path(output_root).expanduser().resolve()
 
+    def _validate_snapshot_refs(self, report: Mapping[str, Any]) -> None:
+        for slot in report.get("chart_slots") or []:
+            if not isinstance(slot, Mapping) or not isinstance(slot.get("snapshot"), Mapping):
+                continue
+            snapshot = slot["snapshot"]
+            snapshot_id = str(snapshot.get("snapshot_id") or "")
+            asset = snapshot.get("asset")
+            receipt_ref = snapshot.get("receipt")
+            if snapshot.get("schema_version") != SNAPSHOT_SCHEMA_VERSION or not snapshot_id.startswith("market-regime-weekly-chart-snapshot:") or len(snapshot_id.rsplit(":", 1)[-1]) != 64 or not isinstance(asset, Mapping) or not isinstance(receipt_ref, Mapping):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_reference_invalid")
+            asset_path = str(asset.get("path") or "")
+            receipt_path = str(receipt_ref.get("path") or "")
+            if not asset_path.startswith("snapshots/") or "/" not in receipt_path or not receipt_path.startswith("chart_snapshots/receipts/"):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_path_invalid")
+            asset_target = (self.output_root / asset_path).resolve()
+            receipt_target = (self.runtime_root / receipt_path).resolve()
+            if self.output_root not in asset_target.parents or self.runtime_root not in receipt_target.parents:
+                raise WeeklyRuntimeError("weekly_chart_snapshot_path_escape")
+            try:
+                asset_bytes = asset_target.read_bytes()
+                receipt_bytes = receipt_target.read_bytes()
+                receipt = json.loads(receipt_bytes)
+            except (FileNotFoundError, json.JSONDecodeError) as exc:
+                raise WeeklyRuntimeError("weekly_chart_snapshot_unavailable") from exc
+            if hashlib.sha256(asset_bytes).hexdigest() != asset.get("sha256") or hashlib.sha256(receipt_bytes).hexdigest() != receipt_ref.get("sha256"):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_hash_mismatch")
+            if not isinstance(receipt, dict) or receipt.get("snapshot_id") != snapshot_id or receipt.get("asset") != dict(asset):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_receipt_invalid")
+            for field in ("candle_response_hash", "source_identity", "cutoff_at", "renderer", "renderer_version", "renderer_options"):
+                if field in snapshot and receipt.get(field) != snapshot.get(field):
+                    raise WeeklyRuntimeError("weekly_chart_snapshot_receipt_binding_invalid")
+            receipt_hash = receipt.get("receipt_hash")
+            unsigned_receipt = {key: value for key, value in receipt.items() if key != "receipt_hash"}
+            if receipt_hash != _digest(unsigned_receipt):
+                raise WeeklyRuntimeError("weekly_chart_snapshot_receipt_hash_invalid")
+
     def publish(self, report: Mapping[str, Any]) -> dict[str, Any]:
         report_id = str(report.get("report_id") or "")
         core = report.get("identity_core")
@@ -134,6 +172,7 @@ class WeeklyReportStore:
             raise WeeklyRuntimeError("report_identity_mismatch")
         if not isinstance(boundary, Mapping) or boundary.get("publication_eligible") is not False:
             raise WeeklyRuntimeError("report_publication_boundary_invalid")
+        self._validate_snapshot_refs(report)
 
         digest = report_id.removeprefix(REPORT_ID_PREFIX)
         artifact_relative = f"reports/artifacts/{digest}.json"
@@ -217,6 +256,7 @@ class WeeklyReportStore:
         expected_receipt = {"schema_version": RUNTIME_SCHEMA_VERSION, "event": "completed", "report_id": report_id, "artifact": {"path": artifact_relative, "sha256": pointer["artifact"]["sha256"]}}
         if receipt != expected_receipt:
             raise WeeklyRuntimeError("weekly_report_receipt_identity_mismatch")
+        self._validate_snapshot_refs(report)
         if not html_bytes or not markdown_bytes:
             raise WeeklyRuntimeError("weekly_report_output_empty")
         return report
@@ -355,6 +395,7 @@ class WeeklyMacroRuntime:
         output_root: Path | str,
         allow_fixture: bool = False,
         phase_observer: Callable[[str], None] | None = None,
+        chart_snapshot_port: Callable[..., Mapping[str, Mapping[str, Any]]] | None = None,
     ) -> None:
         self.source_loader = source_loader
         self.asset_provider = asset_provider
@@ -363,6 +404,7 @@ class WeeklyMacroRuntime:
         self.output_root = Path(output_root).expanduser().resolve()
         self.allow_fixture = allow_fixture
         self.phase_observer = phase_observer
+        self.chart_snapshot_port = chart_snapshot_port
         self.source_store = WeeklySourceHistoryStore(self.runtime_root / "source")
         self.report_store = WeeklyReportStore(self.runtime_root, self.output_root)
 
@@ -440,6 +482,28 @@ class WeeklyMacroRuntime:
                 ranking,
                 candle_responses=candle_responses if use_candle_responses else None,
             )
+            if use_candle_responses:
+                if self.chart_snapshot_port is None:
+                    raise WeeklyRuntimeError("chart_snapshot_port_unavailable")
+                try:
+                    snapshots = self.chart_snapshot_port(
+                        report=report,
+                        candle_responses=candle_responses,
+                    )
+                    expected_snapshot_slots = {
+                        str(slot.get("slot_id"))
+                        for slot in report.get("chart_slots") or []
+                        if isinstance(slot, Mapping) and isinstance(slot.get("standard_kline"), Mapping)
+                    }
+                    if set(snapshots or {}) != expected_snapshot_slots:
+                        raise WeeklyRuntimeError("chart_snapshot_slot_set_incomplete")
+                    report = attach_chart_snapshots(report, snapshots or {})
+                except WeeklyRuntimeError:
+                    raise
+                except WeeklyChartSnapshotError as exc:
+                    raise WeeklyRuntimeError(str(exc)) from exc
+                except Exception as exc:
+                    raise WeeklyRuntimeError("chart_snapshot_failed") from exc
             phase = "publish"
             self._phase(phase)
             pointer = self.report_store.publish(report)
