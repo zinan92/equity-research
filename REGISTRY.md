@@ -1,5 +1,28 @@
 # REGISTRY
 
+## 2026-08-18 · Weekly real-data one-shot runtime (Issue #845)
+
+Now: a separate manual Weekly runtime reads the validated Daily/Macro/Bitcoin
+authorities, fills only missing same-window series from Yahoo client-normalized
+captures, aggregates 17 weekly/daily series plus five approved 4H context
+series, calls one isolated DeepSeek analysis per asset, performs ranking only
+after the 17 slots, and publishes an immutable Variant B HTML/Markdown pair.
+No stale fallback is used; unavailable source/model states remain typed, and
+the existing Finance Daily Newsletter, Daily K-line report and LaunchAgent are
+unchanged.
+
+Real-data acceptance: `WEEK_END=2026-08-14`, report
+`market-regime-weekly-report:38a44b287e29bfc05a1ee9efe049b4b4509ba378436bd1421adcc96041f39e3d`,
+17/17 asset analyses, 39/39 chart slots and ranking generated; all reader
+analysis text is simplified Chinese; local output is
+`~/Desktop/宏观K线周报/latest.html` and the verified pointer is under
+`~/Library/Application Support/ParkWeeklyMacroKline/runtime/latest.json`.
+The output remains local-evaluation-only and automatic execution is disabled.
+
+Validation: 287 Market Regime tests and 32 Weekly-focused/upstream tests pass;
+changed files pass `git diff --check` and individual-file gitleaks. Next:
+separate scheduler migration after Park reviews the real report.
+
 ## 2026-08-18 · Weekly Variant B report surface merged (Issue #844)
 
 Now: the Weekly report projection and selected Variant B asset-workbench

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from typing import Any, Callable, Mapping
 
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, WEEKLY_KEYS
@@ -13,6 +14,7 @@ SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v1"
 ANALYSIS_ID_PREFIX = "market-regime-weekly-asset-analysis:"
 AGREEMENT_STATES = frozenset({"aligned_bullish", "aligned_bearish", "mixed", "neutral"})
 OPPORTUNITY_STATES = frozenset({"participate", "wait", "avoid"})
+ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC"})
 
 
 class WeeklyAssetAnalysisError(ValueError):
@@ -87,6 +89,11 @@ def _validate_statement(value: Any, *, known_ids: set[str], field: str) -> dict[
     return {"text": value["text"], "evidence_ids": list(ids)}
 
 
+def _has_forbidden_english(text: str) -> bool:
+    words = re.findall(r"[A-Za-z]{4,}", text)
+    return any(word not in ALLOWED_LATIN_WORDS for word in words)
+
+
 def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any]) -> dict[str, Any]:
     """Validate one provider response against its isolated request."""
 
@@ -125,6 +132,17 @@ def validate_asset_analysis(output: Mapping[str, Any], request: Mapping[str, Any
     result["invalidation"] = _validate_statement(output.get("invalidation"), known_ids=known_ids, field="invalidation")
     result["opportunity_state"] = opportunity
     result["rationale"] = _validate_statement(output.get("rationale"), known_ids=known_ids, field="rationale")
+    if "four_hour" not in timeframes:
+        all_text = " ".join(
+            str(result.get(field, {}).get("text", ""))
+            for field in ("weekly", "daily", "synthesis", "confirmation", "invalidation", "rationale")
+        )
+        if any(token in all_text.lower() for token in ("4h", "4小时", "小时")):
+            raise WeeklyAssetAnalysisError("analysis_forbidden_timeframe")
+    if any(_has_forbidden_english(str(result.get(field, {}).get("text", ""))) for field in ("weekly", "daily", "synthesis", "confirmation", "invalidation", "rationale") if isinstance(result.get(field), Mapping)):
+        raise WeeklyAssetAnalysisError("analysis_language_not_chinese")
+    if isinstance(result.get("four_hour"), Mapping) and _has_forbidden_english(str(result["four_hour"].get("text", ""))):
+        raise WeeklyAssetAnalysisError("analysis_language_not_chinese")
     return result
 
 
