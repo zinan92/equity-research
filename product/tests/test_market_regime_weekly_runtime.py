@@ -32,7 +32,7 @@ def source_fixture(*, data_kind: str = "fixture") -> dict:
     series = {}
     for index, key in enumerate(WEEKLY_KEYS):
         registry = CANONICAL_REGISTRY[key]
-        is_rate = registry["series_kind"] == "rate_level"
+        is_rate = registry["series_kind"] in {"rate_level", "spread"}
         weekly = (
             [{"date": "2026-08-14", "value": 4.2 + index / 100}]
             if is_rate

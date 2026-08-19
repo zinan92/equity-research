@@ -30,20 +30,20 @@ class WeeklyCandleContractError(ValueError):
 
 
 _DATAFEED_METADATA = {
-    "dxy": ("index", "datafeed:yahoo_finance", "dxy_index_not_broad_dollar"),
-    "us2y": ("macro", "datafeed:treasury_official", "treasury_yield_not_bond_price"),
-    "us10y": ("macro", "datafeed:treasury_official", "treasury_yield_not_bond_price"),
-    "us2s10s": ("macro", "datafeed:treasury_official", "treasury_curve_spread_not_bond_price"),
-    "sp500": ("index", "datafeed:yahoo_finance", "price_index"),
-    "nasdaq": ("index", "datafeed:yahoo_finance", "price_index"),
-    "us_dividend": ("etf", "datafeed:yahoo_finance", "price_etf"),
-    "vix": ("index", "datafeed:yahoo_finance", "price_index"),
+    "dxy": ("index", "datafeed:yahoo_finance_index", "dxy_index_not_broad_dollar"),
+    "us2y": ("macro", "datafeed:fred_public_csv_macro", "treasury_yield_not_bond_price"),
+    "us10y": ("macro", "datafeed:fred_public_csv_macro", "treasury_yield_not_bond_price"),
+    "us2s10s": ("macro", "datafeed:fred_public_csv_macro", "treasury_curve_spread_not_bond_price"),
+    "sp500": ("index", "datafeed:yahoo_finance_index", "price_index"),
+    "nasdaq": ("index", "datafeed:yahoo_finance_index", "price_index"),
+    "us_dividend": ("etf", "datafeed:yahoo_finance_etf", "price_etf"),
+    "vix": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "bitcoin": ("crypto", "datafeed:binance_spot_public", "price_crypto"),
     "shanghai": ("index", "datafeed:tushare_pro", "price_index"),
     "star50": ("index", "datafeed:tushare_pro", "price_index"),
     "china_dividend": ("index", "datafeed:tushare_pro", "price_index"),
-    "nikkei": ("index", "datafeed:yahoo_finance", "price_index"),
-    "kospi": ("index", "datafeed:yahoo_finance", "price_index"),
+    "nikkei": ("index", "datafeed:yahoo_finance_index", "price_index"),
+    "kospi": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "wti": ("commodity", "datafeed:yahoo_finance_futures", "price_continuous_future"),
     "gold": ("commodity", "datafeed:yahoo_finance_futures", "price_continuous_future"),
     "silver": ("commodity", "datafeed:yahoo_finance_futures", "price_continuous_future"),
@@ -268,12 +268,29 @@ def build_candle_response_from_weekly_series(
         series_status = str(series.get("status") or "unavailable")
     elif timeframe == "daily":
         points = list(series.get("daily_points") or [])
-        series_status = str(series.get("status") or "unavailable")
+        daily_status = series.get("daily_status")
+        if daily_status == "ready":
+            series_status = "complete" if points else "unavailable"
+        elif daily_status in {"complete", "short_history"}:
+            series_status = str(daily_status) if points else "unavailable"
+        else:
+            series_status = str(series.get("status") or "unavailable")
     else:
         context = series.get("context_4h")
         points = list(context.get("points") or []) if isinstance(context, Mapping) else []
         series_status = str(context.get("status") or "unavailable") if isinstance(context, Mapping) else "unavailable"
     identity_source = series
+    if timeframe == "weekly" and isinstance(series.get("weekly_source_identity"), Mapping):
+        # A weekly response must carry the provenance and quality of the
+        # upstream 1W request.  The legacy series still owns the daily
+        # identity, so do not let it silently relabel the weekly bars.
+        identity_source = {
+            "source_identity": series["weekly_source_identity"],
+            "quality": series.get("weekly_quality", series.get("quality")),
+            "quality_flags": series.get("weekly_quality_flags", []),
+            "data_kind": series.get("weekly_data_kind", series.get("data_kind")),
+            "fresh": series.get("weekly_fresh"),
+        }
     if timeframe == "four_hour" and isinstance(series.get("context_4h"), Mapping):
         identity_source = series["context_4h"]
     identity = identity_source.get("source_identity") if isinstance(identity_source.get("source_identity"), Mapping) else None
@@ -317,7 +334,10 @@ def build_candle_response_from_weekly_series(
     quality = quality_source.get("quality", series.get("quality"))
     if isinstance(quality, str) and quality.strip() and quality not in quality_flags:
         quality_flags.append(quality)
-    fresh = True if quality == "fresh" else (False if quality in {"stale", "unavailable"} else None)
+    fresh_override = quality_source.get("fresh")
+    fresh = fresh_override if isinstance(fresh_override, bool) else (
+        True if quality == "fresh" else (False if quality in {"stale", "unavailable"} else None)
+    )
     latest_timestamp = bars[-1]["timestamp"]
     response = {
         "schema_version": CANDLE_RESPONSE_SCHEMA_VERSION,
