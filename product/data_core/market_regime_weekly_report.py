@@ -7,7 +7,7 @@ import json
 import hashlib
 from typing import Any, Mapping
 
-from .market_regime_weekly_features import build_timeframe_features
+from .market_regime_weekly_features import FEATURE_PARAMETERS, FEATURE_SCHEMA_VERSION, WeeklyFeatureError, build_timeframe_features
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DISPLAY_NAMES, SCHEMA_VERSION as SOURCE_SCHEMA, WEEKLY_KEYS
 
 
@@ -65,11 +65,28 @@ def _chart_slot(key: str, timeframe: str, series: Mapping[str, Any], *, cutoff_a
         context_identity = series["context_4h"].get("source_identity")
         if isinstance(context_identity, Mapping) and context_identity:
             feature_source["source_identity"] = context_identity
-    feature = build_timeframe_features(
-        feature_source,
-        timeframe=timeframe,
-        cutoff_at=cutoff_at,
-    )
+    try:
+        feature = build_timeframe_features(
+            feature_source,
+            timeframe=timeframe,
+            cutoff_at=cutoff_at,
+        )
+    except WeeklyFeatureError as exc:
+        feature = {
+            "schema_version": FEATURE_SCHEMA_VERSION,
+            "key": key,
+            "timeframe": timeframe,
+            "parameters": dict(FEATURE_PARAMETERS),
+            "unit": series.get("unit"),
+            "status": "unavailable",
+            "failure_code": str(exc),
+            "source_point_count": 0,
+            "points": [],
+            "x_labels": [],
+            "y_labels": [],
+            "current": None,
+            "feature_identity": _digest({"key": key, "timeframe": timeframe, "failure_code": str(exc)}),
+        }
     return {
         "slot_id": f"{key}:{timeframe}",
         "asset_key": key,

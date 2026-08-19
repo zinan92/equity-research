@@ -253,7 +253,7 @@ def _asset_snapshot(source: Mapping[str, Any], key: str) -> dict[str, Any] | Non
             "points": points,
             "status": series.get("status", "complete"),
             "unit": series.get("unit"),
-            "evidence_ids": [_evidence_id(source_id, key, timeframe)],
+            "evidence_ids": [_evidence_id(source_id, key, timeframe), f"feature:{feature['feature_identity']}"],
             "features": feature,
         }
 
@@ -329,11 +329,19 @@ class WeeklyMacroRuntime:
             self._phase(phase)
             analyses: dict[str, dict[str, Any]] = {}
             for key in WEEKLY_KEYS:
-                snapshot = _asset_snapshot(source, key)
+                try:
+                    snapshot = _asset_snapshot(source, key)
+                except Exception:
+                    analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
+                    continue
                 if snapshot is None:
                     analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_unavailable"}
                     continue
-                request = build_asset_analysis_request(snapshot)
+                try:
+                    request = build_asset_analysis_request(snapshot)
+                except Exception:
+                    analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
+                    continue
                 if self.asset_provider is None:
                     analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "provider_unavailable"}
                 else:

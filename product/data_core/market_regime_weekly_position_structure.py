@@ -6,7 +6,7 @@ from typing import Any, Mapping
 
 
 SCHEMA_VERSION = "market-regime-weekly-position-structure-v1"
-POSITION_STATES = frozenset({"low", "middle", "high", "unknown"})
+POSITION_STATES = frozenset({"low", "middle", "high", "unavailable", "unknown"})
 STRUCTURE_STATES = frozenset({"continuation", "weakening", "reversal", "range", "mixed", "unknown"})
 TIMEFRAME_LABELS = {"weekly": "周线", "daily": "日线", "four_hour": "4小时"}
 
@@ -30,8 +30,14 @@ def _values(frame: Mapping[str, Any]) -> list[float]:
 
 def _position_for_frame(frame: Mapping[str, Any], evidence_ids: list[str]) -> dict[str, Any]:
     values = _values(frame)
+    features = frame.get("features") or {}
+    sample_count = len(values)
+    window = int(features.get("source_point_count") or sample_count)
+    if features.get("status") in {"short_history", "unavailable"}:
+        timeframe = TIMEFRAME_LABELS.get(str(frame.get("timeframe")), str(frame.get("timeframe") or "当前周期"))
+        return {"state": "unavailable", "percentile": None, "timeframe": frame.get("timeframe"), "window": window, "sample_count": sample_count, "evidence_ids": list(evidence_ids), "text": f"位置：{timeframe}历史不足，无法判断。"}
     if not values:
-        return {"state": "unknown", "percentile": None, "timeframe": frame.get("timeframe"), "evidence_ids": list(evidence_ids), "text": "位置：不可用。"}
+        return {"state": "unknown", "percentile": None, "timeframe": frame.get("timeframe"), "window": window, "sample_count": sample_count, "evidence_ids": list(evidence_ids), "text": "位置：不可用。"}
     current = values[-1]
     percentile = sum(value <= current for value in values) / len(values)
     state = "high" if percentile > 0.7 else ("low" if percentile < 0.3 else "middle")
@@ -41,6 +47,8 @@ def _position_for_frame(frame: Mapping[str, Any], evidence_ids: list[str]) -> di
         "state": state,
         "percentile": round(percentile, 6),
         "timeframe": frame.get("timeframe"),
+        "window": window,
+        "sample_count": sample_count,
         "evidence_ids": list(evidence_ids),
         "text": f"位置：{timeframe}处于{label}，当前收盘位于该周期样本的约{percentile:.0%}分位。",
     }
@@ -100,12 +108,19 @@ def build_position_structure(request: Mapping[str, Any]) -> dict[str, Any]:
             continue
         frame = {**raw, "timeframe": timeframe}
         evidence_ids = [str(item) for item in raw.get("evidence_ids") or []]
+        features = raw.get("features")
+        if isinstance(features, Mapping):
+            feature_identity = str(features.get("feature_identity") or "")
+            feature_evidence_id = f"feature:{feature_identity}" if feature_identity else ""
+            if not feature_evidence_id or feature_evidence_id not in evidence_ids:
+                raise WeeklyPositionStructureError(f"feature_evidence_missing:{timeframe}")
         position_by_timeframe[str(timeframe)] = _position_for_frame(frame, evidence_ids)
         structure_by_timeframe[str(timeframe)] = _structure_for_frame(frame, evidence_ids)
 
-    position_source = position_by_timeframe.get("weekly") or position_by_timeframe.get("daily") or next(iter(position_by_timeframe.values()), None)
+    usable_positions = [row for row in (position_by_timeframe.get("weekly"), position_by_timeframe.get("daily"), position_by_timeframe.get("four_hour")) if isinstance(row, Mapping) and row.get("state") not in {"unavailable", "unknown"}]
+    position_source = usable_positions[0] if usable_positions else next(iter(position_by_timeframe.values()), None)
     if position_source is None:
-        position = {"state": "unknown", "percentile": None, "timeframe": None, "evidence_ids": [], "timeframes": {}, "text": "位置：不可用。"}
+        position = {"state": "unknown", "percentile": None, "timeframe": None, "window": 0, "sample_count": 0, "evidence_ids": [], "timeframes": {}, "text": "位置：不可用。"}
     else:
         position = {**position_source, "timeframes": position_by_timeframe}
 

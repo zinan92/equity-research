@@ -8,10 +8,10 @@ import re
 from typing import Any, Callable, Mapping
 
 from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, WEEKLY_KEYS
-from .market_regime_weekly_position_structure import build_position_structure
+from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
 
 
-SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v1"
+SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v2"
 ANALYSIS_ID_PREFIX = "market-regime-weekly-asset-analysis:"
 AGREEMENT_STATES = frozenset({"aligned_bullish", "aligned_bearish", "mixed", "neutral"})
 OPPORTUNITY_STATES = frozenset({"participate", "wait", "avoid"})
@@ -159,7 +159,7 @@ def compile_asset_analysis(
     try:
         raw = provider(request)
         output = validate_asset_analysis(raw, request)
-    except WeeklyAssetAnalysisError:
+    except (WeeklyAssetAnalysisError, WeeklyPositionStructureError):
         return {
             "schema_version": SCHEMA_VERSION,
             "asset_key": key,
@@ -175,7 +175,16 @@ def compile_asset_analysis(
             "generation_status": "analysis_unavailable",
             "failure_code": "provider_error",
         }
-    derived = build_position_structure(request)
+    try:
+        derived = build_position_structure(request)
+    except WeeklyPositionStructureError:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "asset_key": key,
+            "request_hash": request_hash,
+            "generation_status": "analysis_unavailable",
+            "failure_code": "derived_feature_invalid",
+        }
     output = {**output, **derived}
     core = {
         "schema_version": SCHEMA_VERSION,

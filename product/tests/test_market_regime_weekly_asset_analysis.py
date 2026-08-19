@@ -9,6 +9,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_weekly_asset_analysis import (  # noqa: E402
+    SCHEMA_VERSION,
     WeeklyAssetAnalysisError,
     build_asset_analysis_request,
     build_terminal_vector,
@@ -87,6 +88,7 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         request = build_asset_analysis_request(asset_snapshot())
         artifact = compile_asset_analysis(request, lambda _: valid_output(request))
         self.assertTrue(artifact["analysis_id"].startswith("market-regime-weekly-asset-analysis:"))
+        self.assertEqual(artifact["identity_core"]["schema_version"], SCHEMA_VERSION)
         self.assertEqual(artifact["request_asset_key"], "gold")
         self.assertEqual(artifact["generation_status"], "model_generated_unreviewed")
         self.assertEqual(artifact["receipt"]["request_hash"], artifact["identity_core"]["request_hash"])

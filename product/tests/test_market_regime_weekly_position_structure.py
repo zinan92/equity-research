@@ -33,7 +33,7 @@ def frame(key: str, values: list[dict[str, float | str]], timeframe: str, eviden
         {"key": key, "series_kind": "price", "source_identity": {"provider": "fixture", "key": key}, "points": values},
         timeframe=timeframe,
     )
-    return {"points": values, "features": feature, "evidence_ids": [evidence], "unit": "index points", "status": "complete"}
+    return {"points": values, "features": feature, "evidence_ids": [evidence, f"feature:{feature['feature_identity']}"], "unit": "index points", "status": "complete"}
 
 
 class WeeklyPositionStructureTest(unittest.TestCase):
@@ -42,6 +42,8 @@ class WeeklyPositionStructureTest(unittest.TestCase):
         result = build_position_structure(request)
         self.assertEqual(result["position"]["state"], "high")
         self.assertGreater(result["position"]["percentile"], 0.9)
+        self.assertEqual(result["position"]["window"], 60)
+        self.assertEqual(result["position"]["sample_count"], 60)
         self.assertIn("gold:w", result["position"]["evidence_ids"])
 
     def test_structure_identifies_bullish_continuation(self) -> None:
@@ -55,13 +57,25 @@ class WeeklyPositionStructureTest(unittest.TestCase):
         result = build_position_structure(request)
         self.assertEqual(result["structure"]["state"], "mixed")
         self.assertEqual(result["structure"]["bias"], "mixed")
-        self.assertEqual(set(result["structure"]["evidence_ids"]), {"gold:w", "gold:d"})
+        self.assertEqual(len(result["structure"]["evidence_ids"]), 4)
 
     def test_missing_timeframes_are_unknown_not_inferred(self) -> None:
         result = build_position_structure({"asset_key": "gold", "timeframes": {}})
         self.assertEqual(result["position"]["state"], "unknown")
         self.assertEqual(result["structure"]["state"], "unknown")
         self.assertEqual(result["position"]["evidence_ids"], [])
+
+    def test_short_history_is_unavailable_not_high(self) -> None:
+        request = {"asset_key": "gold", "timeframes": {"weekly": frame("gold", points(start=100, step=1, count=10), "weekly", "gold:w")}}
+        result = build_position_structure(request)
+        self.assertEqual(result["position"]["state"], "unavailable")
+        self.assertIsNone(result["position"]["percentile"])
+
+    def test_feature_payload_without_feature_evidence_fails_closed(self) -> None:
+        raw = frame("gold", points(start=100, step=1), "weekly", "gold:w")
+        raw["evidence_ids"] = ["gold:w"]
+        with self.assertRaisesRegex(ValueError, "feature_evidence_missing"):
+            build_position_structure({"asset_key": "gold", "timeframes": {"weekly": raw}})
 
 
 if __name__ == "__main__":
