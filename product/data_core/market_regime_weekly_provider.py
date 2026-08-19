@@ -29,7 +29,7 @@ RANKING_SYSTEM_PROMPT = """你是宏观 K 线周报的末尾排序编辑。输�
 """
 
 
-ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC"})
+ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF"})
 
 
 def _has_forbidden_english(value: Mapping[str, Any]) -> bool:

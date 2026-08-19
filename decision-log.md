@@ -4093,3 +4093,35 @@ Levels are code-derived from verified feature points and the formula/version,
 with source evidence IDs carried into the immutable analysis output. No model
 selected price, stale fallback, holdings, broker or automatic execution is
 allowed.
+
+# 2026-08-19 · Integrated Weekly acceptance remains honest under partial model output
+
+## Evidence
+
+The controlled real-data run for #856 produced 17 cards and 39 chart slots,
+with 10 validated asset analyses and 7 typed `analysis_unavailable` cards. The
+source snapshot was `partial` because six registered series were short-history
+for the frozen window; all five optional same-window 4H contexts were complete,
+and no previous-week values were substituted. The ranking provider also failed
+its schema gate and remained `ranking_unavailable`. The immutable
+report artifact, completion receipt, HTML/Markdown outputs and `latest` pointer
+all passed hash and identity read-back. After a reader-label fix, the final
+reader artifact was deterministically re-rendered from that immutable real
+source/model chain and passed a second read-back; no provider result or source
+value changed. Full hashes and local output paths are recorded in
+`evidence/market-regime-weekly/issue-856-real-2026-08-19.md`.
+
+Weekly tests passed 71/71, and 307 Market Regime tests passed when excluding
+the unrelated external-prompt fixture. Full discovery ran 1,057 tests with one
+environment error because `/Users/wendy/Desktop/K线日报/SYSTEM-PROMPT-macro-analyst.md`
+is absent; that path is outside this repository and was not created or changed
+by the Weekly work.
+
+## Decision
+
+Keep partial model coverage visible rather than turning the edition into a
+false complete report. The product's reader surface is usable for validated
+cards, while the acceptance record explicitly says which explanations and
+ranking are unavailable. A later provider retry may produce a new content
+identity; it must not mutate this accepted artifact or reuse it as current
+without a fresh run.

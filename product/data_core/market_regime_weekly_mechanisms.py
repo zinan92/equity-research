@@ -45,8 +45,8 @@ def mechanism_for_asset(key: str) -> dict[str, Any]:
 
 _APPROVED_SYMBOLS = frozenset({"DXY", "VIX", "WTI", "Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "MACD", "EMA", "ETF", "OHLC", "S", "P"})
 _QUALIFIER_TOKENS = ("通常", "一般", "往往", "可能", "常见", "若", "当", "取决于", "未必", "不一定")
-_COUNTER_CASE_TOKENS = ("但", "不过", "反例", "未必", "不一定", "取决于", "区别在于", "若")
-_FORBIDDEN_THEORY_RE = re.compile(r"实时|当前|本周|今天|眼下|正在|已经|本报告|本期|现价|收盘|最新|最近|(?<!不)一定|必然|必定|肯定|必将|毫无例外|预测准确率|保证收益")
+_COUNTER_CASE_TOKENS = ("但", "不过", "然而", "反例", "未必", "不一定", "取决于", "区别在于", "若", "并非绝对", "不是绝对")
+_FORBIDDEN_THEORY_RE = re.compile(r"实时|当前(?:价格|收盘|走势|市场|黄金|美元|白银|油价|指数|资产)|当前.{0,8}(?:上涨|下跌|走强|走弱|位于|收于|高于|低于|是|为)|本周|今天|眼下|正在|已经|本报告|本期|现价|收盘|最新|最近|(?<!不)一定|必然|必定|肯定|必将|毫无例外|预测准确率|保证收益")
 
 
 def _validate_theory_text(text: str) -> None:
