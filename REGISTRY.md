@@ -1,5 +1,44 @@
 # REGISTRY
 
+## 2026-08-19 · Weekly interpretation layer complete (Issues #852–#856)
+
+Now: the Weekly Macro K-line track is merged at main SHA
+`118561981787f23b6099ef79af96b849de82aee8`. Each of the 17 asset cards keeps
+the approved chart-above-text layout and exposes one reader Summary in the
+fixed order `位置 → 结构 → 赔率 → 多周期结论 → 这意味着什么`. Charts retain
+EMA50, MACD(12,26,9), five x-axis labels and y-axis/current-high-low context.
+
+Position and Structure are deterministic and feature-bound. Odds are a
+code-owned market setup derived from verified daily/weekly boundaries with an
+explicit trigger, entry reference, stop, target and R formula; missing or
+invalid inputs remain `赔率尚未形成` and never reuse stale data. The theoretical
+block uses a versioned per-asset mechanism catalog, requires mechanism
+citations and rejects current-price, numeric, real-time or certainty claims.
+
+Controlled real-data acceptance (WEEK_END 2026-08-14) produced 17 cards and 39
+chart slots: 10 asset explanations validated and 7 typed unavailable; six
+registered series were short-history, all five 4H contexts were complete, and
+ranking remained explicitly unavailable rather than fabricated. The final
+immutable reader replay and browser receipt are recorded in
+[`issue-856-real-2026-08-19.md`](evidence/market-regime-weekly/issue-856-real-2026-08-19.md)
+and
+[`issue-856-browser-qa-2026-08-19.json`](evidence/market-regime-weekly/issue-856-browser-qa-2026-08-19.json).
+The canonical local reader aliases are
+[`latest.html`](file:///Users/wendy/Desktop/宏观K线周报/latest.html) and
+[`latest.md`](file:///Users/wendy/Desktop/宏观K线周报/latest.md).
+
+Validation: Weekly 71/71; Market Regime 307/307 when excluding the unrelated
+external prompt fixture whose hard-coded Desktop file is absent. Full discovery
+ran 1,057 tests with that one environment error documented in the acceptance
+record. Daily K-line, Finance Daily Newsletter, scheduler, broker state and
+publication rights remain unchanged; no automatic execution or member
+distribution was added.
+
+Next: let the next ordinary Weekly run produce a fresh real report, then
+compare validated cards and unavailable reasons with Finance Daily Newsletter.
+Do not merge the two tracks or treat this controlled run as predictive-value
+evidence.
+
 ## 2026-08-18 · Weekly real-data one-shot runtime (Issue #845)
 
 Now: a separate manual Weekly runtime reads the validated Daily/Macro/Bitcoin
