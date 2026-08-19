@@ -121,9 +121,17 @@ def build_weekly_report(
         if not isinstance(series, Mapping) or series.get("key", key) != key:
             raise WeeklyReportError(f"source_asset_identity_invalid:{key}")
         analysis = analyses.get(key)
-        if not isinstance(analysis, Mapping) or analysis.get("generation_status") != "model_generated_unreviewed":
+        if (
+            not isinstance(analysis, Mapping)
+            or analysis.get("generation_status") != "model_generated_unreviewed"
+            or not isinstance(analysis.get("position"), Mapping)
+            or not isinstance(analysis.get("structure"), Mapping)
+        ):
             analysis_status = "analysis_unavailable"
-            analysis_view: dict[str, Any] = {"status": analysis_status, "failure_code": (analysis or {}).get("failure_code", "analysis_missing")}
+            failure_code = (analysis or {}).get("failure_code", "analysis_missing")
+            if isinstance(analysis, Mapping) and analysis.get("generation_status") == "model_generated_unreviewed" and failure_code == "analysis_missing":
+                failure_code = "position_structure_missing"
+            analysis_view: dict[str, Any] = {"status": analysis_status, "failure_code": failure_code}
         else:
             analysis_status = "validated"
             analysis_view = {

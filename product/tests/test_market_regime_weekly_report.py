@@ -38,6 +38,8 @@ def analyses_fixture() -> dict:
             "daily": {"text": f"{key} daily", "evidence_ids": [f"e:{key}:d"]},
             **({"four_hour": {"text": f"{key} 4h", "evidence_ids": [f"e:{key}:4h"]}} if key in {"dxy", "bitcoin", "wti", "gold", "silver"} else {}),
             "synthesis": {"text": f"{key} synthesis", "evidence_ids": [f"e:{key}:w"]},
+            "position": {"state": "middle", "percentile": 0.5, "window": 1, "sample_count": 1, "text": "位置：中位。", "evidence_ids": [f"e:{key}:w"]},
+            "structure": {"state": "mixed", "bias": "mixed", "text": "结构：混合。", "evidence_ids": [f"e:{key}:w"]},
             "agreement": "mixed",
             "confirmation": {"text": "confirm", "evidence_ids": [f"e:{key}:w"]},
             "invalidation": {"text": "invalidate", "evidence_ids": [f"e:{key}:d"]},
@@ -109,6 +111,15 @@ class WeeklyReportTest(unittest.TestCase):
         gold = next(item for item in report["cards"] if item["asset_key"] == "gold")
         self.assertEqual(gold["analysis_status"], "analysis_unavailable")
         self.assertEqual(len(report["chart_slots"]), 39)
+
+    def test_validated_analysis_without_position_structure_is_not_published_as_validated(self) -> None:
+        analyses = analyses_fixture()
+        analyses["gold"].pop("position")
+        analyses["gold"].pop("structure")
+        report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
+        gold = next(card for card in report["cards"] if card["asset_key"] == "gold")
+        self.assertEqual(gold["analysis_status"], "analysis_unavailable")
+        self.assertEqual(gold["analysis"]["failure_code"], "position_structure_missing")
 
     def test_unknown_source_key_fails_closed(self) -> None:
         source = source_fixture()
