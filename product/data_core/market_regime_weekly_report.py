@@ -11,7 +11,7 @@ from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DI
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v1"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v4"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v5"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
