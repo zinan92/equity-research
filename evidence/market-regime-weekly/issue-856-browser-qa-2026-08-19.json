@@ -1,0 +1,31 @@
+{
+  "url": "http://127.0.0.1:8906/latest.html",
+  "artifact_output": "/Users/wendy/Desktop/weekly-real-acceptance-5/latest.html",
+  "desktop": {
+    "viewport": {"width": 1280, "height": 900},
+    "inner_width": 1280,
+    "document_scroll_width": 1265,
+    "chart_count": 39,
+    "asset_pane_count": 17,
+    "summary_marker_count": 17,
+    "summary_order": "位置,结构,赔率,多周期结论,机制解释",
+    "english_reader_markers": false,
+    "console_errors": []
+  },
+  "mobile": {
+    "viewport": {"width": 390, "height": 844},
+    "inner_width": 390,
+    "document_scroll_width": 375,
+    "body_scroll_width": 375,
+    "chart_count": 39,
+    "asset_pane_count": 17,
+    "summary_marker_count": 17,
+    "summary_order": "位置,结构,赔率,多周期结论,机制解释",
+    "english_reader_markers": false,
+    "console_errors": []
+  },
+  "notes": [
+    "The 375px document width is the browser's intentional scrollbar/content viewport; there is no horizontal page overflow.",
+    "The final page was checked after the deterministic post-render replay recorded in issue-856-real-2026-08-19.md."
+  ]
+}

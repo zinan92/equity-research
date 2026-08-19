@@ -100,14 +100,20 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn("drawLine('ema50'", html)
         self.assertIn("macd_histogram", html)
         self.assertIn("data-timeframes=", html)
+        self.assertIn('data-summary-order="位置,结构,赔率,多周期结论,机制解释"', html)
+        self.assertNotIn(">validated<", html)
+        self.assertNotIn("· wait</li>", html)
+        self.assertNotIn("WEEK_END", html)
         self.assertIn("单位：基点", html)
 
     def test_markdown_keeps_the_same_asset_count_and_disclosure(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         markdown = render_weekly_markdown(report)
         self.assertEqual(markdown.count("### "), 17)
-        self.assertIn("WEEK_END：2026-08-14", markdown)
+        self.assertIn("周末日期：2026-08-14", markdown)
+        self.assertNotIn("Context", markdown)
         self.assertIn("本周机会排序", markdown)
+        self.assertIn("美元指数：等待", markdown)
         self.assertIn("本地评估", markdown)
 
     def test_missing_analysis_keeps_card_but_marks_unavailable(self) -> None:
@@ -116,6 +122,7 @@ class WeeklyReportTest(unittest.TestCase):
         report = build_weekly_report(source_fixture(), analyses, ranking_fixture())
         gold = next(item for item in report["cards"] if item["asset_key"] == "gold")
         self.assertEqual(gold["analysis_status"], "analysis_unavailable")
+        self.assertEqual(gold["analysis"]["summary"]["order"], ["position", "structure", "odds", "synthesis", "theoretical_implication"])
         self.assertEqual(len(report["chart_slots"]), 39)
 
     def test_validated_analysis_without_position_structure_is_not_published_as_validated(self) -> None:

@@ -67,6 +67,12 @@ class WeeklyMechanismTest(unittest.TestCase):
                     {mechanism_id},
                 )
 
+    def test_static_current_environment_qualification_is_allowed(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        mechanism_id = request["mechanism"]["mechanism_ids"][0]
+        value = {"text": "当前环境下，黄金通常受实际利率与避险需求驱动，但现金需求可能使传导暂时失效。", "evidence_ids": [mechanism_id], "claim_type": "theoretical_mechanism"}
+        self.assertEqual(validate_theoretical_statement(value, {mechanism_id}), value)
+
 
 if __name__ == "__main__":
     unittest.main()

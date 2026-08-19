@@ -17,7 +17,7 @@ SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v4"
 ANALYSIS_ID_PREFIX = "market-regime-weekly-asset-analysis:"
 AGREEMENT_STATES = frozenset({"aligned_bullish", "aligned_bearish", "mixed", "neutral"})
 OPPORTUNITY_STATES = frozenset({"participate", "wait", "avoid"})
-ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC"})
+ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF"})
 
 
 class WeeklyAssetAnalysisError(ValueError):
