@@ -1,32 +1,33 @@
 # REGISTRY
 
-## 2026-08-20 · Typed datafeed 4H/1D/1W contract and Yahoo source-health fix merged (Issues #881/#19)
+## 2026-08-20 · Typed datafeed 4H/1D/1W contract and explicit A-share fallback merged (Issues #881/#19/#21/#885)
 
-Now: Weekly `main` is merged at SHA `72c39f39ba72b8366e1db9635452d26b2e24c1f9`.
+Now: Weekly `main` is merged at SHA `cb0b19d796b5cdebf81997863547bd35ac137e33`.
 The adapter consumes datafeed `main` at SHA
-`c54f98aedcf432f695d9b702f9e60b5cd6d2cd88`, which includes the typed
+`5cd7472036dec95e4eaf5e8f1e0b71b7b4c65eb0`, which includes the typed
 timeframe contract (PR #15), Tencent A-share index source (PR #16), official
 Treasury level source (PR #17), the phase-1 health matrix (PR #18), and the
-bounded Yahoo default-history fix (PR #20). The 17-asset registry now requests
-daily and weekly candles for every asset, with 4H only for DXY, Bitcoin, WTI,
-gold and silver. Native 4H bars pass through; 1H-to-4H and 1D-to-1W transforms
-retain raw timeframe, origin, aggregation, source identity and failure
-metadata. Weekly requests remain strict:
-`cache_policy=bypass / quality=strict / fallback_policy=none`.
+bounded Yahoo default-history fix (PR #20) and explicit Sina A-share fallback
+(PR #22). The 17-asset registry now requests daily and weekly candles for every
+asset, with 4H only for DXY, Bitcoin, WTI, gold and silver. Native 4H bars pass
+through; 1H-to-4H and 1D-to-1W transforms retain raw timeframe, origin,
+aggregation, source identity and failure metadata. Weekly requests remain
+strict: `cache_policy=bypass / quality=strict`; A-share indices additionally
+declare `fallback_policy=explicit / fallback_sources=sina_index`, while all
+other assets remain `fallback_policy=none`.
 
-Validation: Weekly focused contract/source/datafeed tests 51/51; datafeed
-tests 123/123. The isolated post-fix matrix recorded `38 ready / 1 unavailable /
-0 blocked`; the canonical launchd-managed 8100 matrix recorded `38 ready / 0
-unavailable / 1 blocked`, with `health_contract_issues=[]` and
-`database_unchanged=true`. The canonical health envelope is bound to
-`build_sha=c54f98aedcf432f695d9b702f9e60b5cd6d2cd88`, runtime root
+Validation: Weekly focused contract/source/datafeed tests 53/53; datafeed
+tests 131/131. Real canonical 8100 HTTP requests returned all three A-share
+indices at daily and weekly timeframes. Healthy Tencent responses preserve
+`attempted_sources=[tencent_kline]`; observed live Tencent failures selected
+Sina with `selection_reason=explicit_fallback` and
+`attempted_sources=[tencent_kline,sina_index]`. The canonical health envelope is
+bound to `build_sha=5cd7472036dec95e4eaf5e8f1e0b71b7b4c65eb0`, runtime root
 `/Users/wendy/datafeed-runtime`, registry `weekly-macro-phase1-source-registry-v1`,
 and port 8100. Native Bitcoin 4H passed through with `raw_timeframe=4h`; DXY,
 WTI, gold and silver 4H retained explicit 1H-to-4H aggregation metadata. The
 bounded Yahoo window restored real 1D/1W candles for SCHD, WTI, gold and silver
-without dropping malformed rows. No fallback was used. The one canonical
-blocked cell preserves Tencent source identity and its upstream MySQL failure;
-it is not presented as ready.
+without dropping malformed rows. No cached or undeclared source was used.
 
 Deployment: launchd label `com.wendy.datafeed` now runs the clean detached
 runtime at `/Users/wendy/datafeed-runtime` on `127.0.0.1:8100`. The original
@@ -34,11 +35,11 @@ dirty worktree `/Users/wendy/datafeed` and database path were preserved; plist
 snapshots are retained at
 `/Users/wendy/Library/LaunchAgents/com.wendy.datafeed.plist.pre-cutover-20260820`
 and
-`/Users/wendy/Library/LaunchAgents/com.wendy.datafeed.plist.pre-issue19-20260820`.
+`/Users/wendy/Library/LaunchAgents/com.wendy.datafeed.plist.pre-issue21-20260820`.
 
-Next: keep the intermittent Tencent upstream block visible and retry through
-the normal next observation; do not add silent fallback or downgrade strict
-`cache_policy=bypass / quality=strict / fallback_policy=none` semantics.
+Next: keep the ordered fallback chain visible in each response and add another
+named source only through the same explicit contract. Do not add silent source
+switching or downgrade strict `cache_policy=bypass / quality=strict` semantics.
 
 ## 2026-08-20 · Weekly real-data acceptance and local cutover merged (Issue #869 / PR #879)
 
