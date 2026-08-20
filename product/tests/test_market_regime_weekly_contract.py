@@ -23,6 +23,7 @@ from data_core.market_regime_weekly_contract import (  # noqa: E402
 
 def ready_response(*, asset_key: str = "sp500", timeframe: str = "daily") -> dict:
     spec = WEEKLY_ASSET_REGISTRY[asset_key]
+    primary_source = spec["source_id"].removeprefix("datafeed:")
     return {
         "schema_version": CANDLE_RESPONSE_SCHEMA_VERSION,
         "weekly_contract_version": WEEKLY_CANDLE_CONTRACT_VERSION,
@@ -36,12 +37,15 @@ def ready_response(*, asset_key: str = "sp500", timeframe: str = "daily") -> dic
         "price_basis": spec["price_basis"],
         "status": "ready",
         "provider": "yahoo_finance",
-        "source_mode": spec["source_id"].removeprefix("datafeed:"),
-        "requested_source": spec["source_id"].removeprefix("datafeed:"),
-        "selected_source": spec["source_id"].removeprefix("datafeed:"),
+        "source_mode": primary_source,
+        "requested_source": primary_source,
+        "selected_source": primary_source,
+        "selection_reason": "requested_or_default",
+        "attempted_sources": [primary_source],
         "cache_policy": "bypass",
         "quality_policy": "strict",
-        "fallback_policy": "none",
+        "fallback_policy": spec.get("fallback_policy", "none"),
+        "fallback_sources": list(spec.get("fallback_sources", [])),
         "quality_flags": ["research_only"],
         "is_synthetic": False,
         "served_from": "upstream",
@@ -77,6 +81,26 @@ class WeeklyCandleContractTest(unittest.TestCase):
         self.assertEqual(validated["fallback_policy"], "none")
         self.assertEqual(validated["source_identity"]["run_id"], "run-1")
         self.assertEqual(len(validated["bars"]), 2)
+
+    def test_a_share_contract_declares_explicit_fallback_chain(self) -> None:
+        response = ready_response(asset_key="shanghai")
+        validated = validate_weekly_candle_response(response)
+
+        self.assertEqual(validated["fallback_policy"], "explicit")
+        self.assertEqual(validated["fallback_sources"], ["sina_index"])
+        self.assertEqual(validated["attempted_sources"], ["tencent_kline"])
+
+        fallback = dict(response)
+        fallback.update(
+            {
+                "source_mode": "sina_index",
+                "selected_source": "sina_index",
+                "selection_reason": "explicit_fallback",
+                "attempted_sources": ["tencent_kline", "sina_index"],
+                "source_identity": {"provider": "sina_finance", "provider_symbol": "sh000001"},
+            }
+        )
+        self.assertEqual(validate_weekly_candle_response(fallback)["selected_source"], "sina_index")
 
     def test_rate_and_spread_semantics_are_distinct(self) -> None:
         rate = ready_response(asset_key="us2y")

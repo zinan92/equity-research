@@ -48,6 +48,11 @@ _DATAFEED_METADATA = {
     "gold": ("commodity", "datafeed:yahoo_finance_futures", "price_continuous_future"),
     "silver": ("commodity", "datafeed:yahoo_finance_futures", "price_continuous_future"),
 }
+_A_SHARE_EXPLICIT_FALLBACKS = {
+    "shanghai": ("sina_index",),
+    "star50": ("sina_index",),
+    "china_dividend": ("sina_index",),
+}
 
 
 WEEKLY_ASSET_REGISTRY: dict[str, dict[str, Any]] = {}
@@ -56,6 +61,8 @@ for _key, _legacy in SOURCE_REGISTRY.items():
     _entry["asset_class"], _entry["source_id"], _entry["semantic_role"] = _DATAFEED_METADATA[_key]
     _entry["series_kind"] = "spread" if _key == "us2s10s" else _legacy["series_kind"]
     _entry["allowed_timeframes"] = WEEKLY_TIMEFRAMES + (("four_hour",) if _key in CONTEXT_4H_KEYS else ())
+    _entry["fallback_sources"] = list(_A_SHARE_EXPLICIT_FALLBACKS.get(_key, ()))
+    _entry["fallback_policy"] = "explicit" if _entry["fallback_sources"] else "none"
     WEEKLY_ASSET_REGISTRY[_key] = _entry
 
 
@@ -144,8 +151,11 @@ def validate_weekly_candle_response(response: Mapping[str, Any]) -> dict[str, An
         raise WeeklyCandleContractError("cache_policy_invalid")
     if result.get("quality_policy") != "strict":
         raise WeeklyCandleContractError("quality_policy_invalid")
-    if result.get("fallback_policy") != "none":
+    if result.get("fallback_policy") != spec.get("fallback_policy", "none"):
         raise WeeklyCandleContractError("fallback_policy_invalid")
+    fallback_sources = result.get("fallback_sources", [])
+    if not isinstance(fallback_sources, list) or fallback_sources != spec.get("fallback_sources", []):
+        raise WeeklyCandleContractError("fallback_sources_invalid")
     if type(result.get("is_synthetic")) is not bool:
         raise WeeklyCandleContractError("synthetic_flag_invalid")
     if status == "ready" and result["is_synthetic"]:
@@ -166,9 +176,22 @@ def validate_weekly_candle_response(response: Mapping[str, Any]) -> dict[str, An
             raise WeeklyCandleContractError("cached_ready_forbidden")
         expected_source = spec["source_id"].removeprefix("datafeed:")
         if result.get("source_mode") != "weekly_authority":
-            for field in ("source_mode", "requested_source", "selected_source"):
-                if result.get(field) != expected_source:
-                    raise WeeklyCandleContractError(f"source_{field}_mismatch")
+            allowed_sources = [expected_source, *spec.get("fallback_sources", [])]
+            if result.get("requested_source") != expected_source:
+                raise WeeklyCandleContractError("source_requested_source_mismatch")
+            if result.get("selected_source") not in allowed_sources:
+                raise WeeklyCandleContractError("source_selected_source_mismatch")
+            if result.get("source_mode") != result.get("selected_source"):
+                raise WeeklyCandleContractError("source_mode_selected_source_mismatch")
+            attempted_sources = result.get("attempted_sources")
+            if not isinstance(attempted_sources, list) or not all(isinstance(item, str) for item in attempted_sources):
+                raise WeeklyCandleContractError("attempted_sources_invalid")
+            selected_index = allowed_sources.index(result["selected_source"])
+            if attempted_sources != allowed_sources[: selected_index + 1]:
+                raise WeeklyCandleContractError("attempted_sources_mismatch")
+            selection_reason = _non_empty_string(result.get("selection_reason"), field="selection_reason")
+            if selected_index > 0 and selection_reason != "explicit_fallback":
+                raise WeeklyCandleContractError("fallback_selection_reason_invalid")
     elif source_identity is not None and not isinstance(source_identity, Mapping):
         raise WeeklyCandleContractError("source_identity_invalid")
     if result.get("execution_venue") is not False:
@@ -226,7 +249,8 @@ def build_unavailable_candle_response(asset_key: str, timeframe: str, reason: st
         "selected_source": "",
         "cache_policy": "bypass",
         "quality_policy": "strict",
-        "fallback_policy": "none",
+        "fallback_policy": spec.get("fallback_policy", "none"),
+        "fallback_sources": list(spec.get("fallback_sources", [])),
         "quality_flags": [],
         "is_synthetic": False,
         "served_from": "",
@@ -388,9 +412,12 @@ def build_candle_response_from_weekly_series(
         "source_mode": source_mode,
         "requested_source": source_mode,
         "selected_source": source_mode,
+        "selection_reason": str(identity.get("selection_reason") or "requested_or_default"),
+        "attempted_sources": list(identity.get("attempted_sources") or [source_mode]),
         "cache_policy": "bypass",
         "quality_policy": "strict",
-        "fallback_policy": "none",
+        "fallback_policy": spec.get("fallback_policy", "none"),
+        "fallback_sources": list(spec.get("fallback_sources", [])),
         "quality_flags": [str(item) for item in quality_flags if isinstance(item, str) and item.strip()],
         "is_synthetic": False,
         "served_from": "upstream",

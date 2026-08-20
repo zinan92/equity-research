@@ -43,6 +43,11 @@ ASSET_TICKERS = {
     "gold": "GC=F",
     "silver": "SI=F",
 }
+EXPLICIT_FALLBACK_SOURCES = {
+    "shanghai": ("sina_index",),
+    "star50": ("sina_index",),
+    "china_dividend": ("sina_index",),
+}
 
 
 def _digest(value: Any) -> str:
@@ -55,6 +60,7 @@ def datafeed_request_for_asset(asset_key: str, timeframe: str) -> dict[str, Any]
         raise ValueError("asset_key_unknown")
     if timeframe not in spec["allowed_timeframes"]:
         raise ValueError("timeframe_not_allowed")
+    fallback_sources = list(EXPLICIT_FALLBACK_SOURCES.get(asset_key, ()))
     return {
         "asset_key": asset_key,
         "asset_class": spec["asset_class"],
@@ -67,6 +73,8 @@ def datafeed_request_for_asset(asset_key: str, timeframe: str) -> dict[str, Any]
         "unit": spec["unit"],
         "price_basis": spec["price_basis"],
         "semantic_role": spec["semantic_role"],
+        "fallback_policy": "explicit" if fallback_sources else "none",
+        "fallback_sources": fallback_sources,
     }
 
 
@@ -83,11 +91,13 @@ def _unavailable(
         {
             "requested_source": spec["source_id"].removeprefix("datafeed:"),
             "source_mode": spec["source_id"].removeprefix("datafeed:"),
+            "fallback_policy": spec.get("fallback_policy", "none"),
+            "fallback_sources": list(spec.get("fallback_sources", [])),
         }
     )
     detail = payload.get("detail") if isinstance(payload, Mapping) else payload
     metadata = detail if isinstance(detail, Mapping) else payload if isinstance(payload, Mapping) else {}
-    for field in ("provider", "provider_symbol", "selected_source", "raw_timeframe", "timeframe_origin", "served_from"):
+    for field in ("provider", "source_mode", "provider_symbol", "selected_source", "selection_reason", "raw_timeframe", "timeframe_origin", "served_from"):
         value = metadata.get(field)
         if isinstance(value, str) and value.strip():
             response[field] = value
@@ -208,7 +218,7 @@ def _validate_public_4h_metadata(
 
 
 class WeeklyDatafeedClient:
-    """A no-fallback datafeed HTTP client returning Weekly contract envelopes."""
+    """A strict datafeed client with only declared A-share fallback sources."""
 
     def __init__(self, *, base_url: str = "http://127.0.0.1:8100", timeout: float = 45.0, opener: Callable[..., Any] | None = None) -> None:
         self.base_url = base_url.rstrip("/")
@@ -225,18 +235,19 @@ class WeeklyDatafeedClient:
         limit: int = 600,
     ) -> dict[str, Any]:
         request_spec = datafeed_request_for_asset(asset_key, timeframe)
-        query = {
-            "timeframe": request_spec["timeframe"],
-            "source": request_spec["api_source"],
-            "cache_policy": "bypass",
-            "quality": "strict",
-            "fallback_policy": "none",
-            "limit": str(limit),
-        }
+        query: list[tuple[str, str]] = [
+            ("timeframe", request_spec["timeframe"]),
+            ("source", request_spec["api_source"]),
+            ("cache_policy", "bypass"),
+            ("quality", "strict"),
+            ("fallback_policy", request_spec["fallback_policy"]),
+            ("limit", str(limit)),
+        ]
+        query.extend(("fallback_sources", source) for source in request_spec["fallback_sources"])
         if start:
-            query["start"] = start
+            query.append(("start", start))
         if end:
-            query["end"] = end
+            query.append(("end", end))
         url = f"{self.base_url}/api/candles/{request_spec['asset_class']}/{request_spec['ticker']}?{urlencode(query)}"
         request = Request(url, headers={"Accept": "application/json"}, method="GET")
         try:
@@ -275,10 +286,21 @@ class WeeklyDatafeedClient:
             raise WeeklyCandleContractError("datafeed_asset_class_mismatch")
         if payload.get("timeframe") != request_spec["timeframe"]:
             raise WeeklyCandleContractError("datafeed_timeframe_mismatch")
-        if payload.get("requested_source") != request_spec["api_source"] or payload.get("selected_source") != request_spec["api_source"]:
+        allowed_sources = [request_spec["api_source"], *request_spec["fallback_sources"]]
+        requested_source = payload.get("requested_source")
+        selected_source = payload.get("selected_source")
+        if requested_source != request_spec["api_source"] or selected_source not in allowed_sources:
             raise WeeklyCandleContractError("datafeed_source_mismatch")
-        if payload.get("cache_policy") != "bypass" or payload.get("quality_policy") != "strict" or payload.get("fallback_policy") != "none":
+        if payload.get("cache_policy") != "bypass" or payload.get("quality_policy") != "strict" or payload.get("fallback_policy") != request_spec["fallback_policy"]:
             raise WeeklyCandleContractError("datafeed_policy_mismatch")
+        attempted_sources = payload.get("attempted_sources")
+        if not isinstance(attempted_sources, list) or not all(isinstance(item, str) for item in attempted_sources):
+            raise WeeklyCandleContractError("datafeed_attempted_sources_invalid")
+        selected_index = allowed_sources.index(selected_source)
+        if attempted_sources != allowed_sources[: selected_index + 1]:
+            raise WeeklyCandleContractError("datafeed_attempted_sources_mismatch")
+        if selected_index > 0 and payload.get("selection_reason") != "explicit_fallback":
+            raise WeeklyCandleContractError("datafeed_fallback_reason_missing")
         if payload.get("data_kind") in {"cached", "fixture"}:
             raise WeeklyCandleContractError("data_kind_not_publishable")
         # If the upstream envelope carries semantic identity, it is
@@ -328,9 +350,12 @@ class WeeklyDatafeedClient:
             "source_mode": payload.get("source_mode", request_spec["api_source"]),
             "requested_source": payload.get("requested_source", request_spec["api_source"]),
             "selected_source": payload.get("selected_source", request_spec["api_source"]),
+            "selection_reason": payload.get("selection_reason", "requested_or_default"),
+            "attempted_sources": list(payload.get("attempted_sources") or [request_spec["api_source"]]),
             "cache_policy": payload.get("cache_policy", "bypass"),
             "quality_policy": payload.get("quality_policy", "strict"),
-            "fallback_policy": payload.get("fallback_policy", "none"),
+            "fallback_policy": payload.get("fallback_policy", request_spec["fallback_policy"]),
+            "fallback_sources": list(request_spec["fallback_sources"]),
             "quality_flags": list(payload.get("quality_flags") or []),
             "is_synthetic": bool(payload.get("is_synthetic", False)),
             "served_from": payload.get("served_from", "upstream"),
@@ -454,5 +479,11 @@ def load_datafeed_weekly_source_snapshot(
         weekly_points_by_key=weekly_points_by_key,
     )
     snapshot["data_kind"] = "real"
-    snapshot["source_policy"] = {"datafeed": True, "cache_policy": "bypass", "quality": "strict", "fallback_policy": "none"}
+    snapshot["source_policy"] = {
+        "datafeed": True,
+        "cache_policy": "bypass",
+        "quality": "strict",
+        "fallback_policy": "explicit_for_declared_a_share_indices",
+        "fallback_sources": dict(EXPLICIT_FALLBACK_SOURCES),
+    }
     return snapshot
