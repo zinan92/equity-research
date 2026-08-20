@@ -12,6 +12,7 @@ sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_weekly_contract import WEEKLY_ASSET_REGISTRY, build_weekly_candle_responses  # noqa: E402
 from data_core.market_regime_weekly_datafeed import (  # noqa: E402
+    EXPECTED_PROVIDER_SYMBOLS,
     WeeklyDatafeedClient,
     datafeed_request_for_asset,
     load_datafeed_weekly_source_snapshot,
@@ -27,6 +28,7 @@ def candle_response(asset_key: str, *, ticker: str, timeframe: str = "1d") -> di
         row["open"] = row["high"] = row["low"] = row["close"] = 4.2
     return {
         "ticker": ticker,
+        "provider_symbol": EXPECTED_PROVIDER_SYMBOLS.get(asset_key, ticker),
         "asset_class": spec["asset_class"],
         "timeframe": timeframe,
         "schema_version": "kline-candles-v1",
