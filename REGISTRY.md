@@ -1,14 +1,15 @@
 # REGISTRY
 
-## 2026-08-20 · Typed datafeed 4H/1D/1W contract and explicit A-share fallback merged (Issues #881/#19/#21/#885)
+## 2026-08-20 · Typed datafeed 4H/1D/1W contract, explicit A-share fallback, and 39-cell acceptance (Issues #881/#19/#21/#885/#888)
 
-Now: Weekly `main` is merged at SHA `cb0b19d796b5cdebf81997863547bd35ac137e33`.
+Now: Weekly `main` is merged at SHA `82b9c676a3bbc2ccd3c655ac096a115db9bf58ea`.
 The adapter consumes datafeed `main` at SHA
 `5cd7472036dec95e4eaf5e8f1e0b71b7b4c65eb0`, which includes the typed
 timeframe contract (PR #15), Tencent A-share index source (PR #16), official
 Treasury level source (PR #17), the phase-1 health matrix (PR #18), and the
 bounded Yahoo default-history fix (PR #20) and explicit Sina A-share fallback
-(PR #22). The 17-asset registry now requests daily and weekly candles for every
+(PR #22). The Weekly client accepts canonical Treasury provider symbols in PR
+#889. The 17-asset registry now requests daily and weekly candles for every
 asset, with 4H only for DXY, Bitcoin, WTI, gold and silver. Native 4H bars pass
 through; 1H-to-4H and 1D-to-1W transforms retain raw timeframe, origin,
 aggregation, source identity and failure metadata. Weekly requests remain
@@ -17,8 +18,10 @@ declare `fallback_policy=explicit / fallback_sources=sina_index`, while all
 other assets remain `fallback_policy=none`.
 
 Validation: Weekly focused contract/source/datafeed tests 53/53; datafeed
-tests 131/131. Real canonical 8100 HTTP requests returned all three A-share
-indices at daily and weekly timeframes. Healthy Tencent responses preserve
+tests 131/131. A full current-cutoff Weekly client run (`end=2026-08-21`,
+including observations through 2026-08-20) returned `39/39 ready`. Real
+canonical 8100 HTTP requests returned all three A-share indices at daily and
+weekly timeframes. Healthy Tencent responses preserve
 `attempted_sources=[tencent_kline]`; observed live Tencent failures selected
 Sina with `selection_reason=explicit_fallback` and
 `attempted_sources=[tencent_kline,sina_index]`. The canonical health envelope is
