@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
 from typing import Any, Callable, Mapping
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from zoneinfo import ZoneInfo
 from urllib.error import HTTPError, URLError
 
 from .market_regime_weekly_contract import (
@@ -33,9 +34,9 @@ ASSET_TICKERS = {
     "us_dividend": "SCHD",
     "vix": "^VIX",
     "bitcoin": "BTC",
-    "shanghai": "000001.SH",
-    "star50": "000688.SH",
-    "china_dividend": "000015.SH",
+    "shanghai": "sh000001",
+    "star50": "sh000688",
+    "china_dividend": "sh000015",
     "nikkei": "^N225",
     "kospi": "^KS11",
     "wti": "CL=F",
@@ -69,8 +70,141 @@ def datafeed_request_for_asset(asset_key: str, timeframe: str) -> dict[str, Any]
     }
 
 
-def _unavailable(asset_key: str, timeframe: str, reason: str) -> dict[str, Any]:
-    return build_unavailable_candle_response(asset_key, timeframe, reason[:180])
+def _unavailable(
+    asset_key: str,
+    timeframe: str,
+    reason: str,
+    *,
+    payload: Any = None,
+) -> dict[str, Any]:
+    response = build_unavailable_candle_response(asset_key, timeframe, reason[:180])
+    spec = WEEKLY_ASSET_REGISTRY[asset_key]
+    response.update(
+        {
+            "requested_source": spec["source_id"].removeprefix("datafeed:"),
+            "source_mode": spec["source_id"].removeprefix("datafeed:"),
+        }
+    )
+    detail = payload.get("detail") if isinstance(payload, Mapping) else payload
+    metadata = detail if isinstance(detail, Mapping) else payload if isinstance(payload, Mapping) else {}
+    for field in ("provider", "provider_symbol", "selected_source", "raw_timeframe", "timeframe_origin", "served_from"):
+        value = metadata.get(field)
+        if isinstance(value, str) and value.strip():
+            response[field] = value
+    attempted = metadata.get("attempted_sources")
+    if isinstance(attempted, list) and all(isinstance(item, str) and item.strip() for item in attempted):
+        response["attempted_sources"] = attempted
+    aggregation = metadata.get("aggregation")
+    if isinstance(aggregation, Mapping):
+        response["aggregation"] = dict(aggregation)
+    source_identity = metadata.get("source_identity")
+    if isinstance(source_identity, Mapping):
+        response["source_identity"] = {
+            **dict(response.get("source_identity") or {}),
+            **dict(source_identity),
+        }
+    if metadata.get("reject_reason"):
+        response["upstream_reject_reason"] = str(metadata["reject_reason"])
+    access_issues = metadata.get("access_issues")
+    if isinstance(access_issues, list) and all(isinstance(item, str) and item.strip() for item in access_issues):
+        response["access_issues"] = list(access_issues)
+    quality_flags = metadata.get("quality_flags")
+    if isinstance(quality_flags, list) and all(isinstance(item, str) and item.strip() for item in quality_flags):
+        response["quality_flags"] = list(quality_flags)
+    response["source_identity"] = {
+        **dict(response.get("source_identity") or {}),
+        **(
+            {"provider": response["provider"]}
+            if isinstance(response.get("provider"), str) and response["provider"]
+            else {}
+        ),
+        **(
+            {"provider_symbol": response["provider_symbol"]}
+            if isinstance(response.get("provider_symbol"), str) and response["provider_symbol"]
+            else {}
+        ),
+        "response_sha256": _digest({"payload": payload, "reason": reason}),
+    }
+    return validate_weekly_candle_response(response)
+
+
+def _parse_public_timestamp(value: Any) -> datetime:
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeeklyCandleContractError("four_hour_timestamp_invalid") from exc
+    if parsed.tzinfo is None:
+        raise WeeklyCandleContractError("four_hour_timestamp_requires_timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def _validate_public_4h_metadata(
+    asset_key: str,
+    payload: Mapping[str, Any],
+    candles: list[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Validate the typed public 4H seam before it reaches Weekly aggregation."""
+
+    raw_timeframe = payload.get("raw_timeframe")
+    origin = payload.get("timeframe_origin")
+    aggregation = payload.get("aggregation")
+    if raw_timeframe not in {"1h", "4h"}:
+        raise WeeklyCandleContractError("four_hour_raw_timeframe_invalid")
+    if origin not in {"native", "aggregated"} or not isinstance(aggregation, Mapping):
+        raise WeeklyCandleContractError("four_hour_transform_metadata_invalid")
+    if raw_timeframe == "4h":
+        if (
+            origin != "native"
+            or aggregation.get("kind") != "none"
+            or aggregation.get("rule") != "native_passthrough"
+        ):
+            raise WeeklyCandleContractError("four_hour_native_metadata_invalid")
+    else:
+        if (
+            origin != "aggregated"
+            or aggregation.get("kind") != "ohlc_resample"
+            or aggregation.get("rule") != "fixed_4h"
+            or aggregation.get("input_timeframe") != "1h"
+        ):
+            raise WeeklyCandleContractError("four_hour_aggregation_metadata_invalid")
+    registry = WEEKLY_ASSET_REGISTRY[asset_key]
+    expected_zone_name = str(registry.get("four_hour_bucket_timezone") or registry["timezone"])
+    expected_anchor_hour = int(registry.get("four_hour_anchor_hour", registry.get("anchor_hour", 0)))
+    expected_anchor_minute = int(registry.get("four_hour_anchor_minute", 0))
+    if raw_timeframe == "1h" and any(
+        field not in aggregation for field in ("bucket_timezone", "anchor_hour", "anchor_minute")
+    ):
+        raise WeeklyCandleContractError("four_hour_anchor_metadata_missing")
+    try:
+        anchor_hour = int(aggregation.get("anchor_hour", expected_anchor_hour))
+        anchor_minute = int(aggregation.get("anchor_minute", expected_anchor_minute))
+        zone = ZoneInfo(str(aggregation.get("bucket_timezone") or expected_zone_name))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeeklyCandleContractError("four_hour_anchor_invalid") from exc
+    if not 0 <= anchor_hour < 24 or not 0 <= anchor_minute < 60:
+        raise WeeklyCandleContractError("four_hour_anchor_invalid")
+    if (
+        zone.key != expected_zone_name
+        or anchor_hour != expected_anchor_hour
+        or anchor_minute != expected_anchor_minute
+    ):
+        raise WeeklyCandleContractError("four_hour_registry_anchor_mismatch")
+    previous: datetime | None = None
+    for row in candles:
+        if not isinstance(row, Mapping):
+            raise WeeklyCandleContractError("four_hour_candle_invalid")
+        stamp = _parse_public_timestamp(row.get("timestamp"))
+        local = stamp.astimezone(zone)
+        if local.minute != anchor_minute or (local.hour - anchor_hour) % 4 != 0:
+            raise WeeklyCandleContractError("four_hour_timestamp_not_on_anchor")
+        if previous is not None and stamp <= previous:
+            raise WeeklyCandleContractError("four_hour_bars_not_strictly_ordered")
+        previous = stamp
+    return {
+        "raw_timeframe": raw_timeframe,
+        "timeframe_origin": origin,
+        "aggregation": dict(aggregation),
+    }
 
 
 class WeeklyDatafeedClient:
@@ -115,11 +249,21 @@ class WeeklyDatafeedClient:
             detail = payload.get("detail") if isinstance(payload, Mapping) else payload
             if isinstance(detail, Mapping):
                 detail = detail.get("reject_reason") or detail.get("error") or detail.get("detail")
-            return _unavailable(asset_key, timeframe, f"datafeed_http:{status}:{detail or 'error'}")
+            return _unavailable(
+                asset_key,
+                timeframe,
+                f"datafeed_http:{status}:{detail or 'error'}",
+                payload=payload,
+            )
         try:
             return self._convert_response(asset_key, timeframe, payload)
         except (WeeklyCandleContractError, TypeError, ValueError) as exc:
-            return _unavailable(asset_key, timeframe, f"datafeed_contract:{str(exc)}")
+            return _unavailable(
+                asset_key,
+                timeframe,
+                f"datafeed_contract:{str(exc)}",
+                payload=payload,
+            )
 
     def _convert_response(self, asset_key: str, timeframe: str, payload: Mapping[str, Any]) -> dict[str, Any]:
         request_spec = datafeed_request_for_asset(asset_key, timeframe)
@@ -135,6 +279,8 @@ class WeeklyDatafeedClient:
             raise WeeklyCandleContractError("datafeed_source_mismatch")
         if payload.get("cache_policy") != "bypass" or payload.get("quality_policy") != "strict" or payload.get("fallback_policy") != "none":
             raise WeeklyCandleContractError("datafeed_policy_mismatch")
+        if payload.get("data_kind") in {"cached", "fixture"}:
+            raise WeeklyCandleContractError("data_kind_not_publishable")
         # If the upstream envelope carries semantic identity, it is
         # authoritative input to validate, never a field we silently
         # relabel from the local request registry.  Older datafeed responses
@@ -146,6 +292,9 @@ class WeeklyDatafeedClient:
         reject_reason = payload.get("reject_reason")
         candles = payload.get("candles")
         status = "ready" if not reject_reason and isinstance(candles, list) and candles else "unavailable"
+        four_hour_metadata = None
+        if request_spec["timeframe"] == "4h" and status == "ready":
+            four_hour_metadata = _validate_public_4h_metadata(asset_key, payload, candles)
         bars: list[dict[str, Any]] = []
         for candle in candles or []:
             if not isinstance(candle, Mapping):
@@ -158,6 +307,8 @@ class WeeklyDatafeedClient:
                 "close": candle.get("close"),
                 "volume": candle.get("volume", 0),
             }
+            if request_spec["timeframe"] == "4h":
+                bar["duration_hours"] = 4
             if request_spec["series_kind"] in {"rate_level", "spread"}:
                 bar["value"] = candle.get("close")
             bars.append(bar)
@@ -191,12 +342,21 @@ class WeeklyDatafeedClient:
             "reject_reason": reject_reason or None,
             "access_issues": list(payload.get("access_issues") or []),
             "source_identity": {
+                **(
+                    dict(payload.get("source_identity"))
+                    if isinstance(payload.get("source_identity"), Mapping)
+                    else {}
+                ),
                 "provider": payload.get("provider", ""),
                 "source_mode": payload.get("source_mode", request_spec["api_source"]),
+                "provider_symbol": payload.get("provider_symbol", request_spec["ticker"]),
                 "response_sha256": _digest(payload),
             },
+            "data_kind": "real",
             "bars": bars if status == "ready" else [],
         }
+        if request_spec["timeframe"] == "4h" and four_hour_metadata:
+            response.update(four_hour_metadata)
         return validate_weekly_candle_response(response)
 
 
@@ -213,6 +373,8 @@ def _bar_for_source(response: Mapping[str, Any], series_kind: str) -> list[dict[
 
 
 def _quality_for_source(response: Mapping[str, Any]) -> str:
+    if response.get("status") != "ready":
+        return "unavailable"
     fresh = response.get("fresh")
     if fresh is True:
         return "fresh"
@@ -238,6 +400,7 @@ def load_datafeed_weekly_source_snapshot(
         weekly = client.fetch(asset_key, "weekly", start=(date.fromisoformat(week_end) - timedelta(days=365 * 4)).isoformat(), end=end, limit=300)
         source_identity = daily.get("source_identity") if isinstance(daily.get("source_identity"), Mapping) else {}
         legacy_kind = spec["series_kind"]
+        daily_data_kind = daily.get("data_kind") or "real"
         item: dict[str, Any] = {
             "key": asset_key,
             "canonical_symbol": spec["canonical_symbol"],
@@ -247,15 +410,19 @@ def load_datafeed_weekly_source_snapshot(
             "price_basis": spec["price_basis"],
             "status": "complete" if daily.get("status") == "ready" else "unavailable",
             "daily_status": daily.get("status"),
+            "daily_reject_reason": daily.get("reject_reason"),
+            "daily_access_issues": list(daily.get("access_issues") or []),
             "quality": _quality_for_source(daily),
-            "data_kind": "real",
+            "data_kind": daily_data_kind,
             "source_identity": dict(source_identity),
             "weekly_source_identity": dict(weekly.get("source_identity") or {}),
             "weekly_status": weekly.get("status"),
+            "weekly_reject_reason": weekly.get("reject_reason"),
+            "weekly_access_issues": list(weekly.get("access_issues") or []),
             "weekly_quality": _quality_for_source(weekly),
             "weekly_quality_flags": list(weekly.get("quality_flags") or []),
             "weekly_fresh": weekly.get("fresh"),
-            "weekly_data_kind": "real",
+            "weekly_data_kind": weekly.get("data_kind") or daily_data_kind,
             "points": _bar_for_source(daily, spec["series_kind"]),
         }
         weekly_points_by_key[asset_key] = _bar_for_source(weekly, spec["series_kind"]) if weekly.get("status") == "ready" else None
@@ -264,12 +431,18 @@ def load_datafeed_weekly_source_snapshot(
         if "four_hour" in spec["allowed_timeframes"]:
             hourly = client.fetch(asset_key, "four_hour", start=(date.fromisoformat(week_end) - timedelta(days=60)).isoformat(), end=end, limit=1000)
             item["hourly_points"] = [
-                {"timestamp": row["timestamp"], "open": row["open"], "high": row["high"], "low": row["low"], "close": row["close"]}
+                {"timestamp": row["timestamp"], "open": row["open"], "high": row["high"], "low": row["low"], "close": row["close"], "volume": row.get("volume", 0)}
                 for row in hourly.get("bars") or []
             ]
+            item["hourly_raw_timeframe"] = hourly.get("raw_timeframe")
+            item["hourly_timeframe_origin"] = hourly.get("timeframe_origin")
+            item["hourly_aggregation"] = dict(hourly.get("aggregation") or {})
+            item["hourly_status"] = hourly.get("status")
             item["hourly_source_identity"] = dict(hourly.get("source_identity") or {})
-            item["hourly_quality"] = "fresh" if hourly.get("fresh") is not False else "stale"
-            item["hourly_data_kind"] = "real"
+            item["hourly_reject_reason"] = hourly.get("reject_reason")
+            item["hourly_access_issues"] = list(hourly.get("access_issues") or [])
+            item["hourly_quality"] = _quality_for_source(hourly)
+            item["hourly_data_kind"] = hourly.get("data_kind") or item["data_kind"]
             item["source_identity"] = {**item["source_identity"], "hourly_response_sha256": hourly.get("source_identity", {}).get("response_sha256")}
         series[asset_key] = item
     snapshot = build_weekly_source_snapshot(

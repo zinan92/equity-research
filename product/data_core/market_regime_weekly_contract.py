@@ -31,17 +31,17 @@ class WeeklyCandleContractError(ValueError):
 
 _DATAFEED_METADATA = {
     "dxy": ("index", "datafeed:yahoo_finance_index", "dxy_index_not_broad_dollar"),
-    "us2y": ("macro", "datafeed:fred_public_csv_macro", "treasury_yield_not_bond_price"),
-    "us10y": ("macro", "datafeed:fred_public_csv_macro", "treasury_yield_not_bond_price"),
-    "us2s10s": ("macro", "datafeed:fred_public_csv_macro", "treasury_curve_spread_not_bond_price"),
+    "us2y": ("macro", "datafeed:treasury_official_csv", "treasury_yield_not_bond_price"),
+    "us10y": ("macro", "datafeed:treasury_official_csv", "treasury_yield_not_bond_price"),
+    "us2s10s": ("macro", "datafeed:treasury_official_csv_derived", "treasury_curve_spread_not_bond_price"),
     "sp500": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "nasdaq": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "us_dividend": ("etf", "datafeed:yahoo_finance_etf", "price_etf"),
     "vix": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "bitcoin": ("crypto", "datafeed:binance_spot_public", "price_crypto"),
-    "shanghai": ("index", "datafeed:tushare_pro", "price_index"),
-    "star50": ("index", "datafeed:tushare_pro", "price_index"),
-    "china_dividend": ("index", "datafeed:tushare_pro", "price_index"),
+    "shanghai": ("index", "datafeed:tencent_kline", "price_index"),
+    "star50": ("index", "datafeed:tencent_kline", "price_index"),
+    "china_dividend": ("index", "datafeed:tencent_kline", "price_index"),
     "nikkei": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "kospi": ("index", "datafeed:yahoo_finance_index", "price_index"),
     "wti": ("commodity", "datafeed:yahoo_finance_futures", "price_continuous_future"),
@@ -140,9 +140,9 @@ def validate_weekly_candle_response(response: Mapping[str, Any]) -> dict[str, An
     status = _non_empty_string(result.get("status"), field="status")
     if status not in _STATUSES:
         raise WeeklyCandleContractError("status_invalid")
-    if result.get("cache_policy") not in _CACHE_POLICIES:
+    if result.get("cache_policy") != "bypass":
         raise WeeklyCandleContractError("cache_policy_invalid")
-    if result.get("quality_policy") not in _QUALITY_POLICIES:
+    if result.get("quality_policy") != "strict":
         raise WeeklyCandleContractError("quality_policy_invalid")
     if result.get("fallback_policy") != "none":
         raise WeeklyCandleContractError("fallback_policy_invalid")
@@ -162,6 +162,13 @@ def validate_weekly_candle_response(response: Mapping[str, Any]) -> dict[str, An
             raise WeeklyCandleContractError("source_identity_missing")
         for field in ("provider", "source_mode", "requested_source", "selected_source", "served_from"):
             _non_empty_string(result.get(field), field=field)
+        if result.get("served_from") != "upstream":
+            raise WeeklyCandleContractError("cached_ready_forbidden")
+        expected_source = spec["source_id"].removeprefix("datafeed:")
+        if result.get("source_mode") != "weekly_authority":
+            for field in ("source_mode", "requested_source", "selected_source"):
+                if result.get(field) != expected_source:
+                    raise WeeklyCandleContractError(f"source_{field}_mismatch")
     elif source_identity is not None and not isinstance(source_identity, Mapping):
         raise WeeklyCandleContractError("source_identity_invalid")
     if result.get("execution_venue") is not False:
@@ -290,6 +297,8 @@ def build_candle_response_from_weekly_series(
             "quality_flags": series.get("weekly_quality_flags", []),
             "data_kind": series.get("weekly_data_kind", series.get("data_kind")),
             "fresh": series.get("weekly_fresh"),
+            "reject_reason": series.get("weekly_reject_reason"),
+            "access_issues": list(series.get("weekly_access_issues") or []),
         }
     if timeframe == "four_hour" and isinstance(series.get("context_4h"), Mapping):
         identity_source = series["context_4h"]
@@ -301,8 +310,36 @@ def build_candle_response_from_weekly_series(
         blocked = build_unavailable_candle_response(asset_key, timeframe, "data_kind_unknown")
         blocked.update({"status": "blocked"})
         return validate_weekly_candle_response(blocked)
+    if data_kind == "cached":
+        blocked = build_unavailable_candle_response(asset_key, timeframe, "cached_source_forbidden")
+        blocked.update({"source_identity": dict(identity), "served_from": "cache"})
+        return validate_weekly_candle_response(blocked)
     if series_status != "complete" or not points:
-        return build_unavailable_candle_response(asset_key, timeframe, f"source_{series_status}")
+        failure_reason = (
+            identity_source.get("reject_reason")
+            or series.get(f"{timeframe}_reject_reason")
+            or series.get("reject_reason")
+            or f"source_{series_status}"
+        )
+        failure_issues = list(
+            identity_source.get("access_issues")
+            or series.get(f"{timeframe}_access_issues")
+            or series.get("access_issues")
+            or []
+        )
+        unavailable = build_unavailable_candle_response(asset_key, timeframe, str(failure_reason))
+        unavailable.update(
+            {
+                "provider": _source_identity_provider(identity) if identity else "",
+                "source_mode": str(identity.get("source_mode") or "weekly_authority"),
+                "requested_source": str(identity.get("source_mode") or "weekly_authority"),
+                "selected_source": str(identity.get("source_mode") or "weekly_authority"),
+                "served_from": "upstream",
+                "source_identity": dict(identity),
+                "access_issues": failure_issues or [str(failure_reason)],
+            }
+        )
+        return validate_weekly_candle_response(unavailable)
     if data_kind == "fixture":
         blocked = build_unavailable_candle_response(asset_key, timeframe, "fixture_source_not_publishable")
         blocked.update({"status": "blocked", "is_synthetic": True})
@@ -324,7 +361,7 @@ def build_candle_response_from_weekly_series(
                 "close": point.get("close"),
                 "volume": point.get("volume", 0),
             })
-    source_mode = "weekly_authority"
+    source_mode = str(identity.get("source_mode") or identity.get("source_id") or "weekly_authority")
     quality_source = identity_source
     quality_flags = quality_source.get("quality_flags", series.get("quality_flags", []))
     if not isinstance(quality_flags, list):
@@ -351,12 +388,12 @@ def build_candle_response_from_weekly_series(
         "source_mode": source_mode,
         "requested_source": source_mode,
         "selected_source": source_mode,
-        "cache_policy": "require",
-        "quality_policy": "standard",
+        "cache_policy": "bypass",
+        "quality_policy": "strict",
         "fallback_policy": "none",
         "quality_flags": [str(item) for item in quality_flags if isinstance(item, str) and item.strip()],
         "is_synthetic": False,
-        "served_from": "cache",
+        "served_from": "upstream",
         "fresh": fresh,
         "latest_timestamp": latest_timestamp,
         "age_seconds": None,
@@ -381,9 +418,22 @@ def build_weekly_candle_responses(source_snapshot: Mapping[str, Any]) -> dict[st
             try:
                 responses[response_key] = build_candle_response_from_weekly_series(source_snapshot, asset_key, timeframe)
             except WeeklyCandleContractError as exc:
-                responses[response_key] = build_unavailable_candle_response(
-                    asset_key,
-                    timeframe,
-                    f"candle_contract_invalid:{str(exc)}",
+                series = source_snapshot.get("series", {}).get(asset_key, {})
+                context = series.get("context_4h") if timeframe == "four_hour" else None
+                identity_source = context if isinstance(context, Mapping) else series
+                identity = identity_source.get("source_identity") if isinstance(identity_source.get("source_identity"), Mapping) else {}
+                reason = str(identity_source.get("reject_reason") or f"candle_contract_invalid:{str(exc)}")
+                blocked = build_unavailable_candle_response(asset_key, timeframe, reason)
+                blocked.update(
+                    {
+                        "provider": _source_identity_provider(identity) if identity else "",
+                        "source_mode": str(identity.get("source_mode") or "weekly_authority"),
+                        "requested_source": str(identity.get("source_mode") or "weekly_authority"),
+                        "selected_source": str(identity.get("source_mode") or "weekly_authority"),
+                        "served_from": str(identity_source.get("served_from") or "upstream"),
+                        "source_identity": dict(identity),
+                        "access_issues": list(identity_source.get("access_issues") or [reason]),
+                    }
                 )
+                responses[response_key] = validate_weekly_candle_response(blocked)
     return responses

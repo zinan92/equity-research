@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, time, timedelta, timezone
 import json
+import math
 import os
 from pathlib import Path
 import tempfile
@@ -53,7 +54,7 @@ class WeeklySourceHistoryError(ValueError):
 
 
 CANONICAL_REGISTRY: dict[str, dict[str, Any]] = {
-    "dxy": {"canonical_symbol": "DX-Y.NYB", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level", "anchor_hour": 20},
+    "dxy": {"canonical_symbol": "DX-Y.NYB", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level", "anchor_hour": 20, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
     "us2y": {"canonical_symbol": "Treasury:2 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
     "us10y": {"canonical_symbol": "Treasury:10 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
     "us2s10s": {"canonical_symbol": "Treasury:10 Yr-Treasury:2 Yr", "series_kind": "spread", "timezone": "America/New_York", "unit": "basis points", "price_basis": "derived_same_date_official_treasury"},
@@ -67,16 +68,16 @@ CANONICAL_REGISTRY: dict[str, dict[str, Any]] = {
     "china_dividend": {"canonical_symbol": "000015.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "nikkei": {"canonical_symbol": "^N225", "series_kind": "price", "timezone": "Asia/Tokyo", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "kospi": {"canonical_symbol": "^KS11", "series_kind": "price", "timezone": "Asia/Seoul", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
-    "wti": {"canonical_symbol": "CL=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/barrel", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18},
-    "gold": {"canonical_symbol": "GC=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18},
-    "silver": {"canonical_symbol": "SI=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18},
+    "wti": {"canonical_symbol": "CL=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/barrel", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "gold": {"canonical_symbol": "GC=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "silver": {"canonical_symbol": "SI=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
 }
 
 
 def _parse_date(value: Any) -> date:
     try:
         return date.fromisoformat(str(value))
-    except (TypeError, ValueError) as exc:
+    except (KeyError, TypeError, ValueError) as exc:
         raise WeeklySourceHistoryError("weekly_point_date_invalid") from exc
 
 
@@ -141,8 +142,14 @@ def aggregate_weekly_series(
     points = list(series.get("points") or [])
     by_date: dict[date, Mapping[str, Any]] = {}
     for raw in points:
+        if not isinstance(raw, Mapping):
+            raise WeeklySourceHistoryError(f"weekly_point_invalid:{key}")
         session = _parse_date(raw.get("date"))
         if session > week_end or session.weekday() >= 5:
+            continue
+        target_iso = week_end.isocalendar()
+        session_iso = session.isocalendar()
+        if week_end >= date.today() and (session_iso.year, session_iso.week) == (target_iso.year, target_iso.week):
             continue
         if session in by_date:
             raise WeeklySourceHistoryError(f"weekly_duplicate_session:{key}:{session.isoformat()}")
@@ -163,18 +170,17 @@ def aggregate_weekly_series(
                 raise WeeklySourceHistoryError(f"weekly_rate_value_missing:{key}")
             output.append({"date": last_session.isoformat(), "value": float(rows[-1]["value"])})
             continue
-        required = ("open", "high", "low", "close")
-        if any(any(raw.get(field) is None for field in required) for raw in rows):
-            raise WeeklySourceHistoryError(f"weekly_ohlc_missing:{key}")
-        output.append(
-            {
-                "date": last_session.isoformat(),
-                "open": float(rows[0]["open"]),
-                "high": max(float(raw["high"]) for raw in rows),
-                "low": min(float(raw["low"]) for raw in rows),
-                "close": float(rows[-1]["close"]),
-            }
-        )
+        _ = [_validated_ohlcv(raw, f"weekly:{key}") for raw in rows]
+        item = {
+            "date": last_session.isoformat(),
+            "open": float(rows[0]["open"]),
+            "high": max(float(raw["high"]) for raw in rows),
+            "low": min(float(raw["low"]) for raw in rows),
+            "close": float(rows[-1]["close"]),
+        }
+        if any("volume" in raw for raw in rows):
+            item["volume"] = sum(float(raw.get("volume", 0)) for raw in rows)
+        output.append(item)
     status = "complete" if not missing else ("short_history" if output else "unavailable")
     display_points = [dict(raw) for session, raw in sorted(by_date.items()) if session <= week_end]
     return {
@@ -197,6 +203,8 @@ def aggregate_weekly_series(
         "data_kind": str(series.get("data_kind") or "fixture"),
         "daily_status": series.get("daily_status"),
         "source_identity": series.get("source_identity"),
+        "reject_reason": series.get("reject_reason") or series.get("daily_reject_reason"),
+        "access_issues": list(series.get("access_issues") or series.get("daily_access_issues") or []),
         "rights": series.get("rights"),
     }
 
@@ -215,16 +223,23 @@ def aggregate_4h_series(
     _validate_metadata(series, registry, key=key)
     if cutoff_at.tzinfo is None:
         raise WeeklySourceHistoryError("four_hour_cutoff_requires_timezone")
-    zone = ZoneInfo(str(series.get("timezone") or registry["timezone"]))
-    anchor_hour = int(series.get("anchor_hour", registry.get("anchor_hour", 0)))
+    try:
+        zone = ZoneInfo(str(series.get("timezone") or registry["timezone"]))
+        anchor_hour = int(series.get("anchor_hour", registry.get("anchor_hour", 0)))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeeklySourceHistoryError("four_hour_anchor_invalid") from exc
     if not 0 <= anchor_hour < 24:
         raise WeeklySourceHistoryError("four_hour_anchor_invalid")
     cutoff_utc = cutoff_at.astimezone(timezone.utc)
     grouped: dict[datetime, list[tuple[datetime, Mapping[str, Any]]]] = {}
     for raw in series.get("points") or []:
+        if not isinstance(raw, Mapping):
+            raise WeeklySourceHistoryError("four_hour_raw_row_invalid")
         stamp = _parse_timestamp(raw.get("timestamp"))
         if stamp + timedelta(hours=1) > cutoff_utc:
             continue
+        if stamp.minute != 0 or stamp.second != 0 or stamp.microsecond != 0:
+            raise WeeklySourceHistoryError("four_hour_raw_timestamp_not_on_hour")
         local = stamp.astimezone(zone)
         session_date = local.date() if local.hour >= anchor_hour else local.date() - timedelta(days=1)
         anchor = datetime.combine(session_date, time(anchor_hour), tzinfo=zone)
@@ -241,19 +256,18 @@ def aggregate_4h_series(
             dropped.append(bucket.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"))
             continue
         values = [raw for _, raw in rows]
-        required = ("open", "high", "low", "close")
-        if any(any(raw.get(field) is None for field in required) for raw in values):
-            raise WeeklySourceHistoryError(f"four_hour_ohlc_missing:{key}")
-        output.append(
-            {
-                "start_at": bucket.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-                "duration_hours": 4,
-                "open": float(values[0]["open"]),
-                "high": max(float(raw["high"]) for raw in values),
-                "low": min(float(raw["low"]) for raw in values),
-                "close": float(values[-1]["close"]),
-            }
-        )
+        validated = [_validated_ohlcv(raw, f"four_hour:{key}") for raw in values]
+        item = {
+            "start_at": bucket.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "duration_hours": 4,
+            "open": validated[0][0],
+            "high": max(item[1] for item in validated),
+            "low": min(item[2] for item in validated),
+            "close": validated[-1][3],
+        }
+        if any("volume" in raw for raw in values):
+            item["volume"] = sum(float(raw.get("volume", 0)) for raw in values)
+        output.append(item)
     return {
         "key": key,
         "canonical_symbol": registry["canonical_symbol"],
@@ -266,6 +280,181 @@ def aggregate_4h_series(
         "source_identity": series.get("source_identity"),
         "quality": series.get("quality"),
         "data_kind": series.get("data_kind"),
+        "reject_reason": series.get("reject_reason"),
+        "access_issues": list(series.get("access_issues") or []),
+    }
+
+
+def _validated_ohlcv(raw: Mapping[str, Any], context: str) -> tuple[float, float, float, float, float]:
+    try:
+        values = (
+            float(raw["open"]),
+            float(raw["high"]),
+            float(raw["low"]),
+            float(raw["close"]),
+            float(raw.get("volume", 0)),
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeeklySourceHistoryError(f"{context}_ohlc_invalid") from exc
+    if not all(math.isfinite(value) for value in values):
+        raise WeeklySourceHistoryError(f"{context}_ohlc_non_finite")
+    open_value, high_value, low_value, close_value, volume = values
+    if high_value < max(open_value, close_value) or low_value > min(open_value, close_value):
+        raise WeeklySourceHistoryError(f"{context}_ohlc_invariant")
+    if volume < 0:
+        raise WeeklySourceHistoryError(f"{context}_volume_negative")
+    return values
+
+
+def build_public_4h_context(
+    series: Mapping[str, Any],
+    *,
+    cutoff_at: datetime,
+) -> dict[str, Any]:
+    """Pass through public 4H bars after validating their typed transform.
+
+    ``aggregate_4h_series`` is intentionally reserved for raw hourly authority
+    inputs.  A datafeed response already labelled ``4h`` must never be fed
+    through that hourly bucketizer a second time.
+    """
+
+    key = str(series.get("key") or "")
+    registry = _validate_key(key)
+    if key not in CONTEXT_4H_KEYS:
+        raise WeeklySourceHistoryError(f"context_4h_not_allowed:{key}")
+    if cutoff_at.tzinfo is None:
+        raise WeeklySourceHistoryError("four_hour_cutoff_requires_timezone")
+    raw_timeframe = str(series.get("raw_timeframe") or "")
+    origin = str(series.get("timeframe_origin") or "")
+    aggregation = series.get("aggregation")
+    if raw_timeframe not in {"1h", "4h"} or origin not in {"native", "aggregated"} or not isinstance(aggregation, Mapping):
+        raise WeeklySourceHistoryError("four_hour_transform_metadata_invalid")
+    if raw_timeframe == "4h":
+        if (
+            origin != "native"
+            or aggregation.get("kind") != "none"
+            or aggregation.get("rule") != "native_passthrough"
+        ):
+            raise WeeklySourceHistoryError("four_hour_native_metadata_invalid")
+    elif (
+        origin != "aggregated"
+        or aggregation.get("kind") != "ohlc_resample"
+        or aggregation.get("rule") != "fixed_4h"
+        or aggregation.get("input_timeframe") != "1h"
+    ):
+        raise WeeklySourceHistoryError("four_hour_aggregation_metadata_invalid")
+
+    expected_zone_name = str(registry.get("four_hour_bucket_timezone") or registry["timezone"])
+    expected_anchor_hour = int(registry.get("four_hour_anchor_hour", registry.get("anchor_hour", 0)))
+    expected_anchor_minute = int(registry.get("four_hour_anchor_minute", 0))
+    if raw_timeframe == "1h" and any(
+        field not in aggregation for field in ("bucket_timezone", "anchor_hour", "anchor_minute")
+    ):
+        raise WeeklySourceHistoryError("four_hour_anchor_metadata_missing")
+    try:
+        anchor_hour = int(aggregation.get("anchor_hour", expected_anchor_hour))
+        anchor_minute = int(aggregation.get("anchor_minute", expected_anchor_minute))
+        bucket_zone = ZoneInfo(str(aggregation.get("bucket_timezone") or expected_zone_name))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeeklySourceHistoryError("four_hour_anchor_invalid") from exc
+    if not 0 <= anchor_hour < 24 or not 0 <= anchor_minute < 60:
+        raise WeeklySourceHistoryError("four_hour_anchor_invalid")
+    if (
+        bucket_zone.key != expected_zone_name
+        or anchor_hour != expected_anchor_hour
+        or anchor_minute != expected_anchor_minute
+    ):
+        raise WeeklySourceHistoryError("four_hour_registry_anchor_mismatch")
+
+    cutoff_utc = cutoff_at.astimezone(timezone.utc)
+    points: list[dict[str, Any]] = []
+    previous: datetime | None = None
+    for raw in series.get("points") or []:
+        if not isinstance(raw, Mapping):
+            raise WeeklySourceHistoryError("four_hour_public_bar_invalid")
+        stamp = _parse_timestamp(raw.get("timestamp") or raw.get("start_at"))
+        if stamp + timedelta(hours=4) > cutoff_utc:
+            continue
+        local = stamp.astimezone(bucket_zone)
+        if local.minute != anchor_minute or (local.hour - anchor_hour) % 4 != 0:
+            raise WeeklySourceHistoryError("four_hour_timestamp_not_on_anchor")
+        if previous is not None and stamp <= previous:
+            raise WeeklySourceHistoryError("four_hour_public_bars_not_strictly_ordered")
+        previous = stamp
+        try:
+            open_value = float(raw["open"])
+            high_value = float(raw["high"])
+            low_value = float(raw["low"])
+            close_value = float(raw["close"])
+            volume = float(raw.get("volume", 0))
+        except (KeyError, TypeError, ValueError) as exc:
+            raise WeeklySourceHistoryError("four_hour_public_ohlc_invalid") from exc
+        if high_value < max(open_value, close_value) or low_value > min(open_value, close_value):
+            raise WeeklySourceHistoryError("four_hour_public_ohlc_invariant")
+        if volume < 0:
+            raise WeeklySourceHistoryError("four_hour_public_volume_negative")
+        if not all(math.isfinite(value) for value in (open_value, high_value, low_value, close_value, volume)):
+            raise WeeklySourceHistoryError("four_hour_public_ohlc_non_finite")
+        points.append(
+            {
+                "start_at": stamp.isoformat().replace("+00:00", "Z"),
+                "duration_hours": 4,
+                "open": open_value,
+                "high": high_value,
+                "low": low_value,
+                "close": close_value,
+                "volume": volume,
+            }
+        )
+
+    return {
+        "key": key,
+        "canonical_symbol": registry["canonical_symbol"],
+        "timezone": str(series.get("timezone") or registry["timezone"]),
+        "anchor_hour": aggregation.get("anchor_hour", registry.get("anchor_hour", 0)),
+        "anchor_minute": aggregation.get("anchor_minute", 0),
+        "status": "complete" if points else "unavailable",
+        "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z"),
+        "points": points,
+        "dropped_incomplete_buckets": list(aggregation.get("dropped_incomplete_buckets") or []),
+        "source_identity": series.get("source_identity"),
+        "quality": series.get("quality"),
+        "data_kind": series.get("data_kind"),
+        "reject_reason": series.get("reject_reason"),
+        "access_issues": list(series.get("access_issues") or []),
+        "raw_timeframe": raw_timeframe,
+        "timeframe_origin": origin,
+        "aggregation": dict(aggregation),
+    }
+
+
+def _unavailable_4h_context(
+    series: Mapping[str, Any],
+    *,
+    cutoff_at: datetime,
+    reason: str,
+) -> dict[str, Any]:
+    key = str(series.get("key") or "")
+    registry = _validate_key(key)
+    cutoff_utc = cutoff_at.astimezone(timezone.utc)
+    return {
+        "key": key,
+        "canonical_symbol": registry["canonical_symbol"],
+        "timezone": str(series.get("timezone") or registry["timezone"]),
+        "anchor_hour": registry.get("four_hour_anchor_hour", registry.get("anchor_hour", 0)),
+        "anchor_minute": registry.get("four_hour_anchor_minute", 0),
+        "status": "unavailable",
+        "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z"),
+        "points": [],
+        "dropped_incomplete_buckets": [],
+        "source_identity": series.get("source_identity"),
+        "quality": "unavailable",
+        "data_kind": series.get("data_kind"),
+        "raw_timeframe": series.get("raw_timeframe"),
+        "timeframe_origin": series.get("timeframe_origin"),
+        "aggregation": dict(series.get("aggregation") or {}),
+        "reject_reason": reason,
+        "access_issues": [reason],
     }
 
 
@@ -289,11 +478,34 @@ def build_weekly_source_snapshot(
     result: dict[str, Any] = {}
     for key, source in series_by_key.items():
         enriched = {**source, "key": key}
-        weekly = aggregate_weekly_series(enriched, week_end=week_end, week_count=week_count)
+        try:
+            weekly = aggregate_weekly_series(enriched, week_end=week_end, week_count=week_count)
+        except (KeyError, TypeError, ValueError, WeeklySourceHistoryError) as error:
+            registry = _validate_key(key)
+            weekly = aggregate_weekly_series(
+                {
+                    "key": key,
+                    "series_kind": registry["series_kind"],
+                    "timezone": registry["timezone"],
+                    "unit": registry["unit"],
+                    "price_basis": registry["price_basis"],
+                    "points": [],
+                    "data_kind": source.get("data_kind"),
+                    "source_identity": source.get("source_identity"),
+                },
+                week_end=week_end,
+                week_count=week_count,
+            )
+            weekly["reject_reason"] = str(error)
+            weekly["access_issues"] = [str(error)]
         if weekly_points_by_key is not None and key in weekly_points_by_key:
             external_points = weekly_points_by_key[key]
             if not external_points:
                 weekly.update({"status": "unavailable", "points": [], "weekly_bin_count": 0, "missing_week_ends": [], "weekly_source_identity": enriched.get("weekly_source_identity")})
+                weekly.update({
+                    "reject_reason": enriched.get("weekly_reject_reason"),
+                    "access_issues": list(enriched.get("weekly_access_issues") or []),
+                })
             else:
                 external = aggregate_weekly_series(
                     {**enriched, "points": external_points},
@@ -315,16 +527,39 @@ def build_weekly_source_snapshot(
                 })
         if key in CONTEXT_4H_KEYS and enriched.get("hourly_points") is not None:
             cutoff = cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)
-            weekly["context_4h"] = aggregate_4h_series(
-                {
-                    **enriched,
-                    "points": enriched.get("hourly_points"),
-                    "source_identity": enriched.get("hourly_source_identity") or enriched.get("source_identity"),
-                    "quality": enriched.get("hourly_quality", enriched.get("quality")),
-                    "data_kind": enriched.get("hourly_data_kind", enriched.get("data_kind")),
-                },
-                cutoff_at=cutoff,
-            )
+            hourly_input = {
+                **enriched,
+                "points": enriched.get("hourly_points"),
+                "source_identity": enriched.get("hourly_source_identity") or enriched.get("source_identity"),
+                "quality": enriched.get("hourly_quality", enriched.get("quality")),
+                "data_kind": enriched.get("hourly_data_kind", enriched.get("data_kind")),
+                "reject_reason": enriched.get("hourly_reject_reason"),
+                "access_issues": list(enriched.get("hourly_access_issues") or []),
+            }
+            try:
+                if enriched.get("hourly_status") == "ready" and enriched.get("hourly_raw_timeframe") is None:
+                    raise WeeklySourceHistoryError("four_hour_transform_metadata_missing")
+                if enriched.get("hourly_raw_timeframe") is not None:
+                    weekly["context_4h"] = build_public_4h_context(
+                        {
+                            **hourly_input,
+                            "raw_timeframe": enriched.get("hourly_raw_timeframe"),
+                            "timeframe_origin": enriched.get("hourly_timeframe_origin"),
+                            "aggregation": enriched.get("hourly_aggregation"),
+                        },
+                        cutoff_at=cutoff,
+                    )
+                else:
+                    weekly["context_4h"] = aggregate_4h_series(
+                        hourly_input,
+                        cutoff_at=cutoff,
+                    )
+            except (KeyError, WeeklySourceHistoryError) as error:
+                weekly["context_4h"] = _unavailable_4h_context(
+                    hourly_input,
+                    cutoff_at=cutoff,
+                    reason=str(error),
+                )
         result[key] = weekly
     statuses = [item["status"] for item in result.values()]
     return {
