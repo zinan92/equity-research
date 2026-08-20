@@ -43,6 +43,11 @@ ASSET_TICKERS = {
     "gold": "GC=F",
     "silver": "SI=F",
 }
+EXPECTED_PROVIDER_SYMBOLS = {
+    "us2y": "2 Yr",
+    "us10y": "10 Yr",
+    "us2s10s": "10 Yr-2 Yr",
+}
 EXPLICIT_FALLBACK_SOURCES = {
     "shanghai": ("sina_index",),
     "star50": ("sina_index",),
@@ -280,8 +285,11 @@ class WeeklyDatafeedClient:
         request_spec = datafeed_request_for_asset(asset_key, timeframe)
         if not isinstance(payload, Mapping):
             raise WeeklyCandleContractError("datafeed_payload_invalid")
-        if payload.get("ticker") != request_spec["ticker"]:
+        expected_provider_symbol = EXPECTED_PROVIDER_SYMBOLS.get(asset_key, request_spec["ticker"])
+        if payload.get("ticker") not in {request_spec["ticker"], expected_provider_symbol}:
             raise WeeklyCandleContractError("datafeed_ticker_mismatch")
+        if asset_key in EXPECTED_PROVIDER_SYMBOLS and payload.get("provider_symbol") != expected_provider_symbol:
+            raise WeeklyCandleContractError("datafeed_provider_symbol_mismatch")
         if payload.get("asset_class") != request_spec["asset_class"]:
             raise WeeklyCandleContractError("datafeed_asset_class_mismatch")
         if payload.get("timeframe") != request_spec["timeframe"]:
@@ -347,6 +355,7 @@ class WeeklyDatafeedClient:
             "price_basis": request_spec["price_basis"],
             "status": status,
             "provider": payload.get("provider", ""),
+            "provider_symbol": payload.get("provider_symbol", expected_provider_symbol),
             "source_mode": payload.get("source_mode", request_spec["api_source"]),
             "requested_source": payload.get("requested_source", request_spec["api_source"]),
             "selected_source": payload.get("selected_source", request_spec["api_source"]),
