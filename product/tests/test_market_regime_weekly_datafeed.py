@@ -20,6 +20,7 @@ from data_core.market_regime_weekly_datafeed import (  # noqa: E402
 
 def candle_response(asset_key: str, *, ticker: str, timeframe: str = "1d") -> dict:
     spec = WEEKLY_ASSET_REGISTRY[asset_key]
+    primary_source = spec["source_id"].removeprefix("datafeed:")
     price = spec["series_kind"] == "price"
     row = {"timestamp": "2026-08-14T00:00:00+00:00", "open": 100, "high": 102, "low": 99, "close": 101, "volume": 10}
     if not price:
@@ -30,12 +31,15 @@ def candle_response(asset_key: str, *, ticker: str, timeframe: str = "1d") -> di
         "timeframe": timeframe,
         "schema_version": "kline-candles-v1",
         "provider": "test_provider",
-        "source_mode": spec["source_id"].removeprefix("datafeed:"),
-        "requested_source": spec["source_id"].removeprefix("datafeed:"),
-        "selected_source": spec["source_id"].removeprefix("datafeed:"),
+        "source_mode": primary_source,
+        "requested_source": primary_source,
+        "selected_source": primary_source,
+        "selection_reason": "requested_or_default",
+        "attempted_sources": [primary_source],
         "cache_policy": "bypass",
         "quality_policy": "strict",
-        "fallback_policy": "none",
+        "fallback_policy": spec.get("fallback_policy", "none"),
+        "fallback_sources": list(spec.get("fallback_sources", [])),
         "quality_flags": ["research_only"],
         "is_synthetic": False,
         "served_from": "upstream",
@@ -100,6 +104,10 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(datafeed_request_for_asset("wti", "weekly")["ticker"], "CL=F")
         self.assertEqual(datafeed_request_for_asset("shanghai", "daily")["source_id"], "datafeed:tencent_kline")
         self.assertEqual(datafeed_request_for_asset("shanghai", "daily")["ticker"], "sh000001")
+        self.assertEqual(datafeed_request_for_asset("shanghai", "daily")["fallback_policy"], "explicit")
+        self.assertEqual(datafeed_request_for_asset("shanghai", "daily")["fallback_sources"], ["sina_index"])
+        self.assertEqual(datafeed_request_for_asset("sp500", "daily")["fallback_policy"], "none")
+        self.assertEqual(datafeed_request_for_asset("sp500", "daily")["fallback_sources"], [])
         self.assertEqual(datafeed_request_for_asset("us2y", "daily")["source_id"], "datafeed:treasury_official_csv")
         self.assertEqual(datafeed_request_for_asset("us2s10s", "daily")["source_id"], "datafeed:treasury_official_csv_derived")
 
@@ -118,6 +126,32 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(query["fallback_policy"], ["none"])
         self.assertEqual(query["cache_policy"], ["bypass"])
         self.assertEqual(query["quality"], ["strict"])
+
+    def test_client_sends_declared_a_share_fallback(self) -> None:
+        calls: list[str] = []
+
+        def opener(request, timeout):
+            calls.append(request.full_url)
+            payload = candle_response("shanghai", ticker="sh000001")
+            payload.update(
+                {
+                    "provider": "sina_finance",
+                    "source_mode": "sina_index",
+                    "selected_source": "sina_index",
+                    "selection_reason": "explicit_fallback",
+                    "attempted_sources": ["tencent_kline", "sina_index"],
+                    "source_identity": {"provider": "sina_finance", "provider_symbol": "sh000001"},
+                }
+            )
+            return FakeResponse(payload)
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("shanghai", "daily")
+        query = parse_qs(urlparse(calls[0]).query)
+        self.assertEqual(query["fallback_policy"], ["explicit"])
+        self.assertEqual(query["fallback_sources"], ["sina_index"])
+        self.assertEqual(result["selected_source"], "sina_index")
+        self.assertEqual(result["selection_reason"], "explicit_fallback")
+        self.assertEqual(result["attempted_sources"], ["tencent_kline", "sina_index"])
 
     def test_default_urlopen_receives_timeout_as_a_keyword(self) -> None:
         calls = []
