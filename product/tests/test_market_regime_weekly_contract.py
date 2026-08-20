@@ -36,9 +36,9 @@ def ready_response(*, asset_key: str = "sp500", timeframe: str = "daily") -> dic
         "price_basis": spec["price_basis"],
         "status": "ready",
         "provider": "yahoo_finance",
-        "source_mode": "yahoo_finance",
-        "requested_source": "yahoo_finance",
-        "selected_source": "yahoo_finance",
+        "source_mode": spec["source_id"].removeprefix("datafeed:"),
+        "requested_source": spec["source_id"].removeprefix("datafeed:"),
+        "selected_source": spec["source_id"].removeprefix("datafeed:"),
         "cache_policy": "bypass",
         "quality_policy": "strict",
         "fallback_policy": "none",
@@ -193,6 +193,51 @@ class WeeklyCandleContractTest(unittest.TestCase):
         response = build_candle_response_from_weekly_series(source, "gold", "weekly")
         self.assertEqual(response["status"], "blocked")
         self.assertEqual(response["reject_reason"], "data_kind_unknown")
+
+    def test_source_failure_reason_and_identity_survive_weekly_bridge(self) -> None:
+        response = build_candle_response_from_weekly_series(
+            {
+                "series": {
+                    "gold": {
+                        "daily_status": "unavailable",
+                        "daily_reject_reason": "datafeed_http:502:upstream_error",
+                        "daily_access_issues": ["Yahoo unavailable"],
+                        "data_kind": "real",
+                        "source_identity": {
+                            "provider": "yahoo_finance",
+                            "provider_symbol": "GC=F",
+                            "response_sha256": "a" * 64,
+                        },
+                        "points": [],
+                    }
+                }
+            },
+            "gold",
+            "daily",
+        )
+        self.assertEqual(response["status"], "unavailable")
+        self.assertEqual(response["reject_reason"], "datafeed_http:502:upstream_error")
+        self.assertEqual(response["source_identity"]["provider_symbol"], "GC=F")
+        self.assertEqual(response["source_identity"]["response_sha256"], "a" * 64)
+        self.assertEqual(response["access_issues"], ["Yahoo unavailable"])
+
+    def test_cached_source_cannot_be_promoted_to_ready(self) -> None:
+        response = build_candle_response_from_weekly_series(
+            {
+                "series": {
+                    "gold": {
+                        "status": "complete",
+                        "data_kind": "cached",
+                        "source_identity": {"provider": "yahoo_finance", "provider_symbol": "GC=F"},
+                        "points": [{"date": "2026-08-14", "open": 100, "high": 101, "low": 99, "close": 100}],
+                    }
+                }
+            },
+            "gold",
+            "weekly",
+        )
+        self.assertEqual(response["status"], "unavailable")
+        self.assertEqual(response["reject_reason"], "cached_source_forbidden")
 
     def test_current_weekly_source_bridge_has_39_typed_responses(self) -> None:
         from product.tests.test_market_regime_weekly_runtime import source_fixture

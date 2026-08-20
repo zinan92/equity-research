@@ -50,6 +50,28 @@ def candle_response(asset_key: str, *, ticker: str, timeframe: str = "1d") -> di
     }
 
 
+def four_hour_response(
+    asset_key: str,
+    *,
+    ticker: str,
+    raw_timeframe: str,
+    timeframe_origin: str,
+    aggregation: dict,
+) -> dict:
+    payload = candle_response(asset_key, ticker=ticker, timeframe="4h")
+    payload["raw_timeframe"] = raw_timeframe
+    payload["timeframe_origin"] = timeframe_origin
+    payload["aggregation"] = aggregation
+    payload["candles"] = [
+        {"timestamp": "2026-08-14T16:00:00+00:00", "open": 100, "high": 104, "low": 99, "close": 103, "volume": 10},
+        {"timestamp": "2026-08-14T20:00:00+00:00", "open": 103, "high": 106, "low": 102, "close": 105, "volume": 10},
+    ]
+    payload["latest_timestamp"] = payload["candles"][-1]["timestamp"]
+    payload["provider_symbol"] = ticker
+    payload["source_identity"] = {"provider": "test_provider", "provider_symbol": ticker, "interval": raw_timeframe}
+    return payload
+
+
 class FakeResponse:
     def __init__(self, payload: dict, status: int = 200):
         self.payload = payload
@@ -76,6 +98,10 @@ class WeeklyDatafeedTest(unittest.TestCase):
             datafeed_request_for_asset("us2y", "four_hour")
         self.assertEqual(datafeed_request_for_asset("gold", "weekly")["ticker"], "GC=F")
         self.assertEqual(datafeed_request_for_asset("wti", "weekly")["ticker"], "CL=F")
+        self.assertEqual(datafeed_request_for_asset("shanghai", "daily")["source_id"], "datafeed:tencent_kline")
+        self.assertEqual(datafeed_request_for_asset("shanghai", "daily")["ticker"], "sh000001")
+        self.assertEqual(datafeed_request_for_asset("us2y", "daily")["source_id"], "datafeed:treasury_official_csv")
+        self.assertEqual(datafeed_request_for_asset("us2s10s", "daily")["source_id"], "datafeed:treasury_official_csv_derived")
 
     def test_client_sends_strict_no_fallback_policy_and_maps_response(self) -> None:
         calls: list[str] = []
@@ -123,6 +149,32 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertIn("upstream_error", result["reject_reason"])
         self.assertEqual(result["bars"], [])
 
+    def test_http_failure_preserves_source_identity_and_provider_symbol(self) -> None:
+        def opener(_request, _timeout):
+            return FakeResponse(
+                {
+                    "detail": {
+                        "error": "upstream_error",
+                        "reject_reason": "upstream_error",
+                        "provider": "tencent_finance",
+                        "provider_symbol": "sh000001",
+                        "selected_source": "tencent_kline",
+                        "attempted_sources": ["tencent_kline"],
+                        "source_identity": {"source_id": "tencent_kline", "provider_symbol": "sh000001"},
+                        "raw_timeframe": "1d",
+                    }
+                },
+                status=502,
+            )
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("shanghai", "daily")
+        self.assertEqual(result["status"], "unavailable")
+        self.assertEqual(result["provider"], "tencent_finance")
+        self.assertEqual(result["provider_symbol"], "sh000001")
+        self.assertEqual(result["selected_source"], "tencent_kline")
+        self.assertEqual(result["source_identity"]["provider_symbol"], "sh000001")
+        self.assertTrue(result["source_identity"]["response_sha256"])
+
     def test_malformed_success_payload_is_typed_unavailable(self) -> None:
         def opener(_request, _timeout):
             return FakeResponse({"unexpected": []})
@@ -157,6 +209,100 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["status"], "unavailable")
         self.assertIn("datafeed_contract", result["reject_reason"])
 
+    def test_native_4h_response_is_passed_through_with_typed_metadata(self) -> None:
+        def opener(_request, _timeout):
+            return FakeResponse(
+                four_hour_response(
+                    "bitcoin",
+                    ticker="BTC",
+                    raw_timeframe="4h",
+                    timeframe_origin="native",
+                    aggregation={"kind": "none", "rule": "native_passthrough"},
+                )
+            )
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("bitcoin", "four_hour")
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(result["raw_timeframe"], "4h")
+        self.assertEqual(result["timeframe_origin"], "native")
+        self.assertEqual(result["aggregation"]["rule"], "native_passthrough")
+        self.assertEqual(len(result["bars"]), 2)
+        self.assertEqual(result["source_identity"]["provider_symbol"], "BTC")
+
+    def test_aggregated_4h_response_requires_and_preserves_1h_metadata(self) -> None:
+        def opener(_request, _timeout):
+            return FakeResponse(
+                four_hour_response(
+                    "gold",
+                    ticker="GC=F",
+                    raw_timeframe="1h",
+                    timeframe_origin="aggregated",
+                    aggregation={
+                        "kind": "ohlc_resample",
+                        "rule": "fixed_4h",
+                        "input_timeframe": "1h",
+                        "bucket_timezone": "UTC",
+                        "anchor_hour": 0,
+                        "anchor_minute": 0,
+                    },
+                )
+            )
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("gold", "four_hour")
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(result["raw_timeframe"], "1h")
+        self.assertEqual(result["timeframe_origin"], "aggregated")
+        self.assertEqual(result["aggregation"]["rule"], "fixed_4h")
+
+    def test_invalid_4h_metadata_is_unavailable_not_silently_relabelled(self) -> None:
+        def opener(_request, _timeout):
+            return FakeResponse(
+                four_hour_response(
+                    "bitcoin",
+                    ticker="BTC",
+                    raw_timeframe="1h",
+                    timeframe_origin="native",
+                    aggregation={"kind": "none", "rule": "native_passthrough"},
+                )
+            )
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("bitcoin", "four_hour")
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIn("datafeed_contract", result["reject_reason"])
+
+    def test_cached_4h_response_is_not_promoted_to_ready(self) -> None:
+        def opener(_request, _timeout):
+            payload = four_hour_response(
+                "bitcoin",
+                ticker="BTC",
+                raw_timeframe="4h",
+                timeframe_origin="native",
+                aggregation={"kind": "none", "rule": "native_passthrough"},
+            )
+            payload["served_from"] = "cache"
+            payload["data_kind"] = "cached"
+            return FakeResponse(payload)
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("bitcoin", "four_hour")
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIn("datafeed_contract", result["reject_reason"])
+
+    def test_4h_bar_must_respect_declared_anchor(self) -> None:
+        def opener(_request, _timeout):
+            payload = four_hour_response(
+                "bitcoin",
+                ticker="BTC",
+                raw_timeframe="4h",
+                timeframe_origin="native",
+                aggregation={"kind": "none", "rule": "native_passthrough"},
+            )
+            payload["candles"][0]["timestamp"] = "2026-08-14T18:30:00+00:00"
+            return FakeResponse(payload)
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("bitcoin", "four_hour")
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIn("datafeed_contract", result["reject_reason"])
+
     def test_source_loader_preserves_all_39_slots_and_partial_states(self) -> None:
         calls: list[tuple[str, str]] = []
         class FakeClient:
@@ -175,7 +321,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(set(snapshot["series"]), set(WEEKLY_ASSET_REGISTRY))
         self.assertEqual(snapshot["series"]["gold"]["daily_status"], "unavailable")
         self.assertEqual(snapshot["series"]["gold"]["status"], "short_history")
-        self.assertEqual(snapshot["series"]["gold"]["points"], [{"date": "2026-08-14", "open": 100.0, "high": 102.0, "low": 99.0, "close": 101.0}])
+        self.assertEqual(snapshot["series"]["gold"]["points"], [{"date": "2026-08-14", "open": 100.0, "high": 102.0, "low": 99.0, "close": 101.0, "volume": 0.0}])
         responses = build_weekly_candle_responses(snapshot)
         self.assertEqual(responses["gold:daily"]["status"], "unavailable")
         self.assertEqual(responses["gold:weekly"]["status"], "unavailable")
@@ -183,6 +329,52 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertTrue(all((key, "weekly") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "daily") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "four_hour") in calls for key in ("dxy", "bitcoin", "wti", "gold", "silver")))
+
+    def test_native_btc_4h_survives_fetch_loader_snapshot_without_double_aggregation(self) -> None:
+        class NativeClient:
+            def fetch(self, asset_key, timeframe, **_kwargs):
+                spec = WEEKLY_ASSET_REGISTRY[asset_key]
+                identity = {"provider": "binance_spot", "source_mode": "binance_spot_public", "provider_symbol": "BTCUSDT" if asset_key == "bitcoin" else asset_key}
+                if timeframe == "four_hour":
+                    return {
+                        "status": "ready",
+                        "source_identity": identity,
+                        "raw_timeframe": "4h",
+                        "timeframe_origin": "native",
+                        "aggregation": {"kind": "none", "rule": "native_passthrough"},
+                        "bars": [
+                            {"timestamp": "2026-08-14T16:00:00+00:00", "open": 100, "high": 104, "low": 99, "close": 103, "volume": 10},
+                            {"timestamp": "2026-08-14T20:00:00+00:00", "open": 103, "high": 106, "low": 102, "close": 105, "volume": 10},
+                        ],
+                    }
+                row = {"timestamp": "2026-08-14", "open": 100, "high": 102, "low": 99, "close": 101, "volume": 0}
+                if spec["series_kind"] != "price":
+                    row["open"] = row["high"] = row["low"] = row["close"] = row["value"] = 4.2
+                return {
+                    "status": "ready",
+                    "series_kind": spec["series_kind"],
+                    "unit": spec["unit"],
+                    "price_basis": spec["price_basis"],
+                    "source_identity": identity,
+                    "bars": [row],
+                }
+
+        snapshot = load_datafeed_weekly_source_snapshot(
+            NativeClient(),
+            week_end="2026-08-14",
+            cutoff_at="2026-08-15T03:00:00Z",
+        )
+        context = snapshot["series"]["bitcoin"]["context_4h"]
+        self.assertEqual(context["status"], "complete")
+        self.assertEqual(len(context["points"]), 2)
+        self.assertEqual(context["source_identity"]["provider_symbol"], "BTCUSDT")
+        self.assertEqual(context["points"][0]["volume"], 10.0)
+        response = build_weekly_candle_responses(snapshot)["bitcoin:four_hour"]
+        self.assertEqual(response["status"], "ready")
+        self.assertEqual(response["cache_policy"], "bypass")
+        self.assertEqual(response["quality_policy"], "strict")
+        self.assertEqual(response["served_from"], "upstream")
+        self.assertEqual(response["source_identity"]["provider_symbol"], "BTCUSDT")
 
     def test_weekly_unavailable_does_not_fall_back_to_daily_aggregation(self) -> None:
         class WeeklyFailureClient:
