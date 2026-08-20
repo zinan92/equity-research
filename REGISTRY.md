@@ -1,5 +1,42 @@
 # REGISTRY
 
+## 2026-08-20 · Typed datafeed 4H/1D/1W contract merged (Issue #881 / PR #882)
+
+Now: Weekly `main` is merged at SHA `db41a57f2a74a257010ace1abcc6a6bf32dfc9d0`.
+The adapter consumes datafeed `main` at SHA
+`a2d8d17adff5d806e3f942f4598310db611e4564`, which includes the typed
+timeframe contract (PR #15), Tencent A-share index source (PR #16), official
+Treasury level source (PR #17), and the phase-1 health matrix (PR #18). The
+17-asset registry now requests daily and weekly candles for every asset, with
+4H only for DXY, Bitcoin, WTI, gold and silver. Native 4H bars pass through;
+1H-to-4H and 1D-to-1W transforms retain raw timeframe, origin, aggregation,
+source identity and failure metadata. Weekly requests remain strict:
+`cache_policy=bypass / quality=strict / fallback_policy=none`.
+
+Validation: Weekly focused contract/source/datafeed tests 51/51; datafeed
+tests 121/121. The isolated runtime matrix and the canonical launchd-managed
+8100 matrix each recorded 39 cells with `30 ready / 9 blocked / 0 unavailable`,
+`health_contract_issues=[]`, and `database_unchanged=true`. The canonical
+health envelope is bound to `build_sha=a2d8d17adff5d806e3f942f4598310db611e4564`,
+runtime root `/Users/wendy/datafeed-runtime`, registry
+`weekly-macro-phase1-source-registry-v1`, and port 8100. Native Bitcoin 4H
+passed through with `raw_timeframe=4h`; DXY, WTI, gold and silver 4H retained
+explicit 1H-to-4H aggregation metadata. No fallback was used. The nine
+blocked cells preserve their source identities and upstream failure reasons;
+they are not presented as ready.
+
+Deployment: launchd label `com.wendy.datafeed` now runs the clean detached
+runtime at `/Users/wendy/datafeed-runtime` on `127.0.0.1:8100`. The original
+dirty worktree `/Users/wendy/datafeed` and database path were preserved; plist
+snapshots are retained at
+`/Users/wendy/Library/LaunchAgents/com.wendy.datafeed.plist.pre-cutover-20260820`
+and
+`/Users/wendy/Library/LaunchAgents/com.wendy.datafeed.plist.pre-pythonpath-20260820`.
+
+Next: keep blocked statuses visible and investigate upstream reliability in a
+separate source-health change. Do not add silent fallback or downgrade strict
+`cache_policy=bypass / quality=strict / fallback_policy=none` semantics.
+
 ## 2026-08-20 · Weekly real-data acceptance and local cutover merged (Issue #869 / PR #879)
 
 Now: merged SHA `ed79cd143261b7a8cc769830dfee073b520875ee` is the verified local
