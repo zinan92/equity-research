@@ -14,12 +14,15 @@
   number, source selection and interpretation remains tied to one immutable
   evidence chain. Interactive rendering, raw registry keys and partial ranking
   claims were causing avoidable product confusion.
-- **Evidence:** Issues #891–#907; merged PRs #897–#901, #903, #905 and #908;
-  135 focused Weekly tests pass; the full repository baseline ran 1121 tests
+- **Evidence:** Issues #891–#912; merged PRs #897–#901, #903, #905, #908,
+  #909 and #911; 136 focused Weekly tests pass; the full repository baseline
+  ran 1122 tests
   with one unrelated missing Desktop prompt error and one skipped test. The
   final real report is
   `market-regime-weekly-report:ee92b7cb1791c53b162603c2e48f306e3867253321ea8ff69ab1cd70fdcc57e3`
-  with 17 assets, 39 snapshots, source snapshot identity and static-reader
+  with source snapshot
+  `market-regime-weekly-source:bb189469537c1a92ac2652f596eb4b91c53f04fac2be50053089b85423d82a30`,
+  17 assets, 39 snapshots, source artifact/receipt readback and static-reader
   browser acceptance at 1280px/390px.
 - **Gotchas:** The final source snapshot is partial only because canonical
   datafeed issue `zinan92/datafeed#25` cannot provide valid Bitcoin daily/4H
