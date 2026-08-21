@@ -32,6 +32,39 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         )
         self.assertTrue(set(CONTEXT_4H_KEYS).issubset(WEEKLY_KEYS))
 
+    def test_canonical_ready_weekly_response_accepts_exchange_holiday_gap(self) -> None:
+        source = {
+            "shanghai": {
+                "key": "shanghai",
+                "canonical_symbol": "000001.SH",
+                "series_kind": "price",
+                "timezone": "Asia/Shanghai",
+                "unit": "index points",
+                "price_basis": "provider_unadjusted_index_level",
+                "quality": "fresh",
+                "data_kind": "real",
+                "points": [{"date": "2026-08-10", "open": 100, "high": 101, "low": 99, "close": 100}],
+                "weekly_status": "ready",
+                "weekly_source_identity": {"provider": "tencent_finance", "source_mode": "tencent_kline"},
+                "weekly_data_kind": "real",
+            }
+        }
+        weekly_points = [
+            {"date": "2026-07-31", "open": 98, "high": 100, "low": 97, "close": 99},
+            {"date": "2026-08-14", "open": 99, "high": 102, "low": 98, "close": 101},
+        ]
+        snapshot = build_weekly_source_snapshot(
+            source,
+            week_end=date(2026, 8, 14),
+            week_count=3,
+            weekly_points_by_key={"shanghai": weekly_points},
+        )
+        series = snapshot["series"]["shanghai"]
+        self.assertEqual(series["status"], "complete")
+        self.assertEqual(series["weekly_bin_count"], 2)
+        self.assertEqual(series["weekly_gap_count"], 1)
+        self.assertEqual(series["missing_week_ends"], ["2026-08-07"])
+
     def test_weekly_price_ohlc_uses_first_open_extremes_and_last_close(self) -> None:
         points = [
             {"date": "2026-08-10", "open": 100, "high": 105, "low": 98, "close": 103},

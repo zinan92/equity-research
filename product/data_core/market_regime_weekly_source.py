@@ -518,7 +518,7 @@ def build_weekly_source_snapshot(
         if weekly_points_by_key is not None and key in weekly_points_by_key:
             external_points = weekly_points_by_key[key]
             if not external_points:
-                weekly.update({"status": "unavailable", "points": [], "weekly_bin_count": 0, "missing_week_ends": [], "weekly_source_identity": enriched.get("weekly_source_identity")})
+                weekly.update({"status": "unavailable", "points": [], "weekly_bin_count": 0, "missing_week_ends": [], "weekly_gap_count": 0, "weekly_source_identity": enriched.get("weekly_source_identity")})
                 weekly.update({
                     "reject_reason": enriched.get("weekly_reject_reason"),
                     "access_issues": list(enriched.get("weekly_access_issues") or []),
@@ -530,10 +530,16 @@ def build_weekly_source_snapshot(
                     week_count=week_count,
                 )
                 weekly.update({
-                    "status": external["status"],
+                    # The canonical datafeed's ready 1W response is already
+                    # exchange-calendar aware. A full-market holiday week is
+                    # not a missing provider response, so preserve the
+                    # authoritative ready status while retaining the gap
+                    # metadata for audit/display.
+                    "status": "complete" if enriched.get("weekly_status") == "ready" else external["status"],
                     "points": external["points"],
                     "weekly_bin_count": external["weekly_bin_count"],
                     "missing_week_ends": external["missing_week_ends"],
+                    "weekly_gap_count": len(external["missing_week_ends"]),
                     "actual_first_session": external["actual_first_session"],
                     "actual_last_session": external["actual_last_session"],
                     "weekly_source_identity": enriched.get("weekly_source_identity"),
@@ -579,12 +585,20 @@ def build_weekly_source_snapshot(
                 )
         result[key] = weekly
     statuses = [item["status"] for item in result.values()]
+    daily_incomplete = any(
+        item.get("daily_status") not in {None, "ready", "complete", "short_history"}
+        for item in result.values()
+    )
+    context_incomplete = any(
+        isinstance(item.get("context_4h"), Mapping) and item["context_4h"].get("status") != "complete"
+        for item in result.values()
+    )
     return {
         "schema_version": SCHEMA_VERSION,
         "registry_version": REGISTRY_VERSION,
         "week_end": week_end.isoformat(),
         "cutoff_at": (cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)).astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "status": "complete" if not missing and all(status == "complete" for status in statuses) else "partial",
+        "status": "complete" if not missing and all(status == "complete" for status in statuses) and not daily_incomplete and not context_incomplete else "partial",
         "missing_series": missing,
         "series": result,
     }

@@ -259,7 +259,23 @@ class WeeklyDatafeedClient:
             with self.opener(request, self.timeout) as response:
                 status = int(getattr(response, "status", getattr(response, "status_code", 200)))
                 payload = json.loads(response.read().decode("utf-8"))
-        except (HTTPError, URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as exc:
+        except HTTPError as exc:
+            payload: Any = {}
+            try:
+                payload = json.loads(exc.read().decode("utf-8"))
+            except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
+                payload = {}
+            detail = payload.get("detail") if isinstance(payload, Mapping) else payload
+            if isinstance(detail, Mapping):
+                detail = detail.get("reject_reason") or detail.get("error") or detail.get("detail")
+            reason = str(detail or exc.reason or "http_error")
+            return _unavailable(
+                asset_key,
+                timeframe,
+                f"datafeed_http:{getattr(exc, 'code', 'error')}:{reason}",
+                payload=payload,
+            )
+        except (URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as exc:
             return _unavailable(asset_key, timeframe, f"datafeed_transport:{type(exc).__name__}")
         if status < 200 or status >= 300:
             detail = payload.get("detail") if isinstance(payload, Mapping) else payload
