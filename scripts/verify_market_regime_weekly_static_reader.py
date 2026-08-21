@@ -9,6 +9,11 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
+def _require(condition: bool, detail: object) -> None:
+    if not condition:
+        raise RuntimeError(f"static_reader_assertion:{detail}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify the static Weekly HTML reader")
     parser.add_argument(
@@ -32,20 +37,23 @@ def main() -> int:
                 page.goto(html_path.as_uri(), wait_until="load")
                 page.wait_for_timeout(100)
                 image_count = page.locator("img").count()
-                assert image_count == 39, (width, image_count)
-                assert page.locator("[data-asset-nav]").count() == 17
-                assert page.locator("[data-chart]").count() == 0
-                assert not page.locator("script").count()
-                assert page.locator("text=本周机会排序").count() + page.locator("text=本周机会清单").count() == 1
+                _require(image_count == 39, (width, image_count))
+                _require(page.locator("[data-asset-nav]").count() == 17, (width, "asset_nav_count"))
+                _require(page.locator("[data-chart]").count() == 0, (width, "interactive_chart_mount"))
+                _require(not page.locator("script").count(), (width, "script_present"))
+                _require(
+                    page.locator("text=本周机会排序").count() + page.locator("text=本周机会清单").count() == 1,
+                    (width, "opportunity_title"),
+                )
                 page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 page.wait_for_timeout(150)
                 images_loaded = page.evaluate(
                     "Array.from(document.images).every(image => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0)"
                 )
-                assert images_loaded, (width, "snapshot image not loaded")
+                _require(images_loaded, (width, "snapshot image not loaded"))
                 overflow = page.evaluate("({body: document.body.scrollWidth, viewport: window.innerWidth})")
-                assert overflow["body"] <= overflow["viewport"], (width, overflow)
-                assert not errors, (width, errors)
+                _require(overflow["body"] <= overflow["viewport"], (width, overflow))
+                _require(not errors, (width, errors))
                 page.close()
         finally:
             browser.close()
