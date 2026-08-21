@@ -108,6 +108,19 @@
   1440px/390px with 16/17 validated assets, 17 mini charts, no console errors
   and working asset detail navigation.
 
+## 2026-08-21 — Render crisp live asset-detail charts from report points
+
+- **Decision:** Use bounded real chart points from the Weekly API to render
+  detail OHLC, EMA50 and MACD canvases at 2x backing resolution. Remove
+  screenshot toolbar chrome and the EMA50 text label; keep the EMA50 line and
+  MACD signal/histogram visible.
+- **Why:** The detail view should focus attention on price structure and
+  momentum, not on renderer controls or a label that repeats the section
+  context.
+- **Evidence:** Issue #942 / PR #943; live acceptance passes with three detail
+  canvases per asset, 2x backing resolution, no console errors and no
+  horizontal overflow at 1440px/390px. Bitcoin remains explicitly unavailable.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
