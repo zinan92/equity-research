@@ -127,6 +127,7 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                     "unit": slot.get("unit"),
                     "kind": kind,
                     "mini_points": mini_points,
+                    "chart_points": points[-80:],
                     "latest_value": latest,
                     "change": change,
                     "change_pct": (change / previous * 100) if kind == "price" and change is not None and previous else None,

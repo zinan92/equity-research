@@ -59,6 +59,41 @@ function paintMiniCharts() {
   document.querySelectorAll("canvas.mini-chart").forEach((canvas) => drawMiniChart(canvas, JSON.parse(canvas.dataset.points || "[]")));
 }
 
+function drawDetailChart(canvas, points) {
+  const rect = canvas.getBoundingClientRect(); const ratio = Math.max(2, window.devicePixelRatio || 1);
+  const width = Math.max(80, rect.width); const height = Math.max(160, rect.height);
+  canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
+  const ctx = canvas.getContext("2d"); ctx.scale(ratio, ratio); ctx.clearRect(0, 0, width, height);
+  if (!Array.isArray(points) || points.length < 2) return;
+  const priceHeight = height * .64; const macdTop = height * .69; const macdHeight = height * .25;
+  const values = points.flatMap((p) => [Number(p.low), Number(p.high)]).filter(Number.isFinite);
+  if (!values.length) return;
+  const min = Math.min(...values); const max = Math.max(...values); const span = max - min || 1;
+  const xPad = 8; const step = (width - xPad * 2) / points.length; const y = (value) => priceHeight - 6 - ((value - min) / span) * (priceHeight - 14);
+  ctx.strokeStyle = "#d9e2e8"; ctx.lineWidth = 1; [0.25, 0.5, 0.75].forEach((fraction) => { const yy = 6 + priceHeight * fraction; ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(width, yy); ctx.stroke(); });
+  const bodyWidth = Math.max(2, step * .55);
+  points.forEach((point, index) => {
+    const open = Number(point.open); const close = Number(point.close); const high = Number(point.high); const low = Number(point.low);
+    if (![open, close, high, low].every(Number.isFinite)) return;
+    const x = xPad + step * index + step / 2; const up = close >= open; const top = y(Math.max(open, close)); const bottom = y(Math.min(open, close));
+    ctx.strokeStyle = up ? "#078b62" : "#d73f3f"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y(high)); ctx.lineTo(x, y(low)); ctx.stroke();
+    const bodyHeight = Math.max(1.5, bottom - top); if (up) { ctx.fillStyle = "#fff"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); ctx.strokeRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); } else { ctx.fillStyle = "#d73f3f"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); }
+  });
+  const ema = points.filter((point) => Number.isFinite(Number(point.ema50)));
+  if (ema.length > 1) { ctx.strokeStyle = "#3b6ec8"; ctx.lineWidth = 2; ctx.beginPath(); ema.forEach((point, index) => { const pointIndex = points.indexOf(point); const x = xPad + step * pointIndex + step / 2; const yy = y(Number(point.ema50)); if (index === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy); }); ctx.stroke(); }
+  ctx.strokeStyle = "#d9e2e8"; ctx.beginPath(); ctx.moveTo(0, macdTop); ctx.lineTo(width, macdTop); ctx.stroke();
+  const macdValues = points.flatMap((point) => [Number(point.macd), Number(point.macd_signal), Number(point.macd_histogram)]).filter(Number.isFinite);
+  if (!macdValues.length) return;
+  const macdAbs = Math.max(...macdValues.map((value) => Math.abs(value)), .001); const my = (value) => macdTop + macdHeight / 2 - (value / macdAbs) * (macdHeight / 2 - 4); const zero = my(0);
+  ctx.strokeStyle = "#c9d3da"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, zero); ctx.lineTo(width, zero); ctx.stroke();
+  points.forEach((point, index) => { const value = Number(point.macd_histogram); if (!Number.isFinite(value)) return; const x = xPad + step * index + step / 2; const barTop = Math.min(zero, my(value)); const barHeight = Math.max(1, Math.abs(my(value) - zero)); ctx.fillStyle = value >= 0 ? "#53b996" : "#e77a7a"; ctx.fillRect(x - Math.max(1, bodyWidth / 2), barTop, Math.max(2, bodyWidth), barHeight); });
+  for (const [field, color] of [["macd", "#3b6ec8"], ["macd_signal", "#ef8b4f"]]) { const series = points.filter((point) => Number.isFinite(Number(point[field]))); if (series.length < 2) continue; ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath(); series.forEach((point, index) => { const pointIndex = points.indexOf(point); const x = xPad + step * pointIndex + step / 2; const yy = my(Number(point[field])); if (index === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy); }); ctx.stroke(); }
+}
+
+function paintDetailCharts() {
+  document.querySelectorAll("canvas.detail-chart").forEach((canvas) => drawDetailChart(canvas, JSON.parse(canvas.dataset.points || "[]")));
+}
+
 function renderSummary(report) {
   document.querySelector("#as-of").textContent = `数据截止 ${report.week_end}`;
   document.querySelector("#coverage").textContent = `分析覆盖 ${report.analysis_validated}/${report.assets.length}`;
@@ -97,7 +132,7 @@ function renderGroups(report) {
 function renderPeriod(asset, timeframe) {
   const slot = asset.slots[timeframe];
   if (!slot) return "";
-  return `<article class="period"><header><div><b>${TIMEFRAME_LABELS[timeframe]}</b><small>${esc(short(slot.text || "当前该周期分析不可用。", 34))}</small></div><span>EMA50 · MACD</span></header><div class="period-chart"><img src="${esc(slot.image_url)}" alt="${esc(asset.display_name)} ${TIMEFRAME_LABELS[timeframe]}" loading="lazy"></div><p>${esc(slot.text || "当前该周期分析不可用。")}</p></article>`;
+  return `<article class="period"><header><div><b>${TIMEFRAME_LABELS[timeframe]}</b><small>${esc(short(slot.text || "当前该周期分析不可用。", 34))}</small></div><span>趋势 · 动量</span></header><div class="period-chart"><canvas class="detail-chart" data-points="${esc(JSON.stringify(slot.chart_points || []))}" aria-label="${esc(asset.display_name)} ${TIMEFRAME_LABELS[timeframe]} OHLC 与 MACD"></canvas></div><p>${esc(slot.text || "当前该周期分析不可用。")}</p></article>`;
 }
 
 function showDetail(report, key) {
@@ -107,6 +142,7 @@ function showDetail(report, key) {
   detail.hidden = false;
   detail.innerHTML = `<header class="detail-header"><div><small>宏观 K 线周报 · 单资产工作台</small><h2>${esc(asset.display_name)} <em>(${esc(key.toUpperCase())})</em></h2><p>截至 ${esc(report.week_end)}（周五收盘） · ${esc(asset.status_label)}</p></div><button class="back-button" type="button" id="back-to-overview">返回市场全景</button></header><section class="metric-strip"><div><small>位置</small><strong>${esc(asset.position)}</strong></div><div><small>结构</small><strong>${esc(asset.structure)}</strong></div><div><small>赔率</small><strong>${esc(asset.odds)}</strong></div><div><small>来源状态</small><strong>${esc(asset.status_label)}</strong></div></section><section class="period-grid">${["weekly", "daily", "four_hour"].map((timeframe) => renderPeriod(asset, timeframe)).join("")}</section><section class="interpretation"><article><small>多周期结论</small><h3>先把三个周期放在一起看</h3><p>${esc(asset.synthesis || "当前多周期分析不可用。")}</p><strong>工作判断：先看关键位，再决定是否扩大方向。</strong></article><article><small>这意味着什么 · 机制解释</small><h3>把 K 线翻译成市场语言</h3><p>${esc(asset.theoretical_implication || "当前机制解释不可用。")}</p><span class="evidence-note">证据绑定：${esc(report.source_snapshot_id)} · 截止 ${esc(report.week_end)}</span></article></section><div class="detail-footer">数据来自最新不可变 Weekly report；缺失状态不会被旧数据或隐式 fallback 替代。</div>`;
   document.querySelector("#back-to-overview").addEventListener("click", () => { detail.hidden = true; document.querySelector("#overview").scrollIntoView({ behavior: "smooth" }); });
+  requestAnimationFrame(() => requestAnimationFrame(paintDetailCharts));
   detail.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
