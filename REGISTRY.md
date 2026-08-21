@@ -1,6 +1,6 @@
 # REGISTRY
 
-## 2026-08-21 · Weekly canonical datafeed integration and static reader (Issues #891/#892/#893/#894/#895/#896/#902/#907/#910/#912/#914 / PRs #897–#901, #903, #905, #908, #909, #911, #913)
+## 2026-08-21 · Weekly canonical datafeed integration and static reader (Issues #891/#892/#893/#894/#895/#896/#902/#907/#910/#912/#914/#916 / PRs #897–#901, #903, #905, #908, #909, #911, #913, #915)
 
 Now: `main` includes the canonical Weekly integration at the latest merged
 SHA. The Weekly seam is `canonical datafeed CandleResponse → immutable

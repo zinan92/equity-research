@@ -14,8 +14,8 @@
   number, source selection and interpretation remains tied to one immutable
   evidence chain. Interactive rendering, raw registry keys and partial ranking
   claims were causing avoidable product confusion.
-- **Evidence:** Issues #891–#912; merged PRs #897–#901, #903, #905, #908,
-  #909 and #911; 136 focused Weekly tests pass; the full repository baseline
+- **Evidence:** Issues #891–#916; merged PRs #897–#901, #903, #905, #908,
+  #909, #911, #913 and #915; 136 focused Weekly tests pass; the full repository baseline
   ran 1122 tests
   with one unrelated missing Desktop prompt error and one skipped test. The
   final real report is
