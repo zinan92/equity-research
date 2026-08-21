@@ -301,6 +301,10 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["selected_source"], "tencent_kline")
         self.assertEqual(result["source_identity"]["provider_symbol"], "sh000001")
         self.assertTrue(result["source_identity"]["response_sha256"])
+        self.assertEqual(result["request_evidence"]["url"], "http://datafeed.test/api/candles/index/sh000001?timeframe=1d&source=tencent_kline&cache_policy=bypass&quality=strict&fallback_policy=explicit&limit=600&fallback_sources=sina_index")
+        self.assertEqual(result["request_evidence"]["method"], "GET")
+        self.assertEqual(result["request_evidence"]["status"], 502)
+        self.assertEqual(result["source_identity"]["request_evidence"], result["request_evidence"])
 
     def test_http_error_preserves_safe_upstream_rejection_metadata(self) -> None:
         payload = {
@@ -330,6 +334,9 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["provider"], "binance_spot")
         self.assertEqual(result["source_identity"]["provider_symbol"], "BTCUSDT")
         self.assertEqual(result["access_issues"], ["binance_spot_public: rate_limited"])
+        self.assertEqual(result["request_evidence"]["method"], "GET")
+        self.assertEqual(result["request_evidence"]["status"], 429)
+        self.assertRegex(result["request_evidence"]["response_body_sha256"], r"^[0-9a-f]{64}$")
 
     def test_malformed_success_payload_is_typed_unavailable(self) -> None:
         def opener(_request, _timeout):
