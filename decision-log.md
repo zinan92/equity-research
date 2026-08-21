@@ -33,6 +33,22 @@
   rewritten. Finance Daily Newsletter, Daily runtime, publication eligibility,
   broker access and automatic execution remain unchanged.
 
+## 2026-08-21 — Stop valid Weekly mechanism prose from becoming unavailable
+
+- **Decision:** Keep fail-closed validation, but distinguish negated certainty
+  (such as `不必然` / `并非必然`) from an unqualified certainty claim, and allow
+  digits only when they are part of the requested asset label (such as
+  `标普500`, `科创50`, `日经225`, `2年期` or `10年期`). Numeric observations,
+  prices, yields and percentages remain rejected.
+- **Why:** The prior validator rejected valid theoretical mechanism prose and
+  converted otherwise source-available assets into `output_schema_invalid`.
+- **Evidence:** Issue #920 / PR #921; real-provider replays for the seven
+  previously failing source-available assets all passed; the regenerated real
+  report is
+  `market-regime-weekly-report:391edcb81070729d2bf8a0dbe7f2e1a430c44726ad9c4f0e5a1da14acf017928`
+  with 16 validated assets and only Bitcoin source-unavailable. Focused Weekly
+  suite: 137/137.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
