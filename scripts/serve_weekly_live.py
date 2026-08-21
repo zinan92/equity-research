@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import math
 from pathlib import Path
 import mimetypes
 from urllib.parse import unquote, urlparse
@@ -25,6 +26,43 @@ ODDS = {"favorable": "有利", "unfavorable": "不利", "not_ready": "未形成"
 
 def _read_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _number(value: object) -> float | None:
+    try:
+        parsed = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return None
+    return parsed if math.isfinite(parsed) else None
+
+
+def _last_candle(points: list[dict], kind: str) -> dict[str, str]:
+    if not points:
+        return {"label": "不可用", "tone": "unavailable"}
+    last = points[-1]
+    open_value = _number(last.get("open")); close_value = _number(last.get("close"))
+    high_value = _number(last.get("high")); low_value = _number(last.get("low"))
+    if open_value is None or close_value is None:
+        return {"label": "不可用", "tone": "unavailable"}
+    if kind != "price":
+        if close_value > open_value: return {"label": "上行", "tone": "up"}
+        if close_value < open_value: return {"label": "下行", "tone": "down"}
+        return {"label": "横盘", "tone": "flat"}
+    span = max((high_value or close_value) - (low_value or close_value), 0.0)
+    body = abs(close_value - open_value)
+    prefix = "阳" if close_value > open_value else "阴" if close_value < open_value else "十字"
+    size = "大" if span and body / span >= .67 else "中" if span and body / span >= .34 else "小"
+    return {"label": prefix if prefix == "十字" else size + prefix, "tone": "up" if close_value > open_value else "down" if close_value < open_value else "flat"}
+
+
+def _trend_marker(structure: dict) -> dict[str, str]:
+    state = str(structure.get("state") or "")
+    bias = str(structure.get("bias") or "")
+    if state == "continuation" and bias == "bullish": return {"marker": "↗", "label": "走强", "tone": "up"}
+    if state in {"continuation", "weakening"} and bias == "bearish": return {"marker": "↘", "label": "走弱", "tone": "down"}
+    if state == "weakening": return {"marker": "↘", "label": "走弱", "tone": "down"}
+    if state == "reversal": return {"marker": "↗" if bias == "bullish" else "↘", "label": "反转", "tone": "up" if bias == "bullish" else "down"}
+    return {"marker": "→", "label": "分歧", "tone": "flat"}
 
 
 class WeeklyLiveHandler(BaseHTTPRequestHandler):
@@ -76,15 +114,28 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                 path = str(asset.get("path") or "")
                 if not path.startswith("snapshots/"): continue
                 timeframe = str(slot.get("timeframe"))
+                points = [point for point in slot.get("points") or [] if isinstance(point, dict)]
+                mini_points = points[-20:]
+                latest = _number(mini_points[-1].get("close")) if mini_points else None
+                previous = _number(mini_points[-2].get("close")) if len(mini_points) > 1 else None
+                change = latest - previous if latest is not None and previous is not None else None
+                kind = str(slot.get("kind") or "price")
                 slots[timeframe] = {
                     "label": TIMEFRAME_LABELS.get(timeframe, timeframe),
                     "text": self._statement(analysis, timeframe, "当前该周期分析不可用。"),
                     "image_url": "/snapshots/" + path.removeprefix("snapshots/"),
                     "unit": slot.get("unit"),
+                    "kind": kind,
+                    "mini_points": mini_points,
+                    "latest_value": latest,
+                    "change": change,
+                    "change_pct": (change / previous * 100) if kind == "price" and change is not None and previous else None,
+                    "last_candle": _last_candle(mini_points, kind),
                 }
             position = analysis.get("position") if isinstance(analysis.get("position"), dict) else {}
             structure = analysis.get("structure") if isinstance(analysis.get("structure"), dict) else {}
             odds = analysis.get("odds") if isinstance(analysis.get("odds"), dict) else {}
+            weekly_mini = slots.get("weekly") or {}
             assets.append({
                 "asset_key": key,
                 "display_name": DISPLAY_NAMES.get(key, key),
@@ -93,6 +144,9 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                 "position": POSITION.get(str(position.get("state")), "不可用"),
                 "structure": STRUCTURE.get(str(structure.get("state")), "未知"),
                 "odds": ODDS.get(str(odds.get("state")), "未形成"),
+                "trend": _trend_marker(structure),
+                "position_state": str(position.get("state") or "unavailable"),
+                "mini_chart": weekly_mini,
                 "weekly": self._statement(analysis, "weekly", "当前分析不可用。"),
                 "daily": self._statement(analysis, "daily", "当前分析不可用。"),
                 "four_hour": self._statement(analysis, "four_hour", "当前4小时上下文不可用。"),

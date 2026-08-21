@@ -31,6 +31,8 @@ def main() -> int:
                 page.goto(base + "/", wait_until="networkidle")
                 page.wait_for_selector("#app:not([hidden])")
                 assert page.locator("[data-asset]").count() == 17
+                assert page.locator("canvas.mini-chart").count() == 17
+                assert page.locator("canvas.mini-chart").first.evaluate("canvas => canvas.width >= canvas.clientWidth * 2")
                 assert page.evaluate("Array.from(document.images).every(image => image.complete && image.naturalWidth > 0)")
                 assert page.evaluate("document.body.scrollWidth <= window.innerWidth")
                 page.locator('[data-asset="dxy"]').first.click()

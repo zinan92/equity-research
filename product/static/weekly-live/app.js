@@ -17,6 +17,47 @@ const short = (value, length = 68) => {
 };
 const chip = (value, tone = "") => `<span class="chip ${tone}">${esc(value)}</span>`;
 const assetByKey = (report) => Object.fromEntries(report.assets.map((asset) => [asset.asset_key, asset]));
+const formatValue = (value) => value == null ? "—" : new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(value);
+const formatChange = (slot) => {
+  if (slot?.change == null) return "—";
+  const sign = slot.change > 0 ? "+" : "";
+  if (slot.unit === "basis points") return `${sign}${slot.change.toFixed(1)}bp`;
+  if (slot.unit === "percent") return `${sign}${slot.change.toFixed(2)}`;
+  if (slot.change_pct != null) return `${sign}${slot.change_pct.toFixed(2)}%`;
+  return `${sign}${slot.change.toFixed(2)}`;
+};
+const positionMeter = (state) => `<span class="position-meter ${esc(state)}" aria-label="${esc(state)}"><i></i><i></i><i></i></span>`;
+
+function drawMiniChart(canvas, points) {
+  const rect = canvas.getBoundingClientRect();
+  const ratio = Math.max(2, window.devicePixelRatio || 1);
+  const width = Math.max(40, rect.width); const height = Math.max(32, rect.height);
+  canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
+  const ctx = canvas.getContext("2d"); ctx.scale(ratio, ratio); ctx.clearRect(0, 0, width, height);
+  if (!Array.isArray(points) || points.length < 2) return;
+  const values = points.flatMap((p) => [Number(p.low), Number(p.high)]).filter(Number.isFinite);
+  if (!values.length) return;
+  const min = Math.min(...values); const max = Math.max(...values); const span = max - min || 1;
+  const xPad = 5; const yPad = 5; const step = (width - xPad * 2) / points.length;
+  const y = (value) => height - yPad - ((value - min) / span) * (height - yPad * 2);
+  ctx.strokeStyle = "#eef2f4"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2); ctx.stroke();
+  const bodyWidth = Math.max(2, step * .58);
+  points.forEach((point, index) => {
+    const open = Number(point.open); const close = Number(point.close); const high = Number(point.high); const low = Number(point.low);
+    if (![open, close, high, low].every(Number.isFinite)) return;
+    const x = xPad + step * index + step / 2; const up = close >= open;
+    ctx.strokeStyle = up ? "#16875f" : "#d94b4b"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y(high)); ctx.lineTo(x, y(low)); ctx.stroke();
+    const top = y(Math.max(open, close)); const bottom = y(Math.min(open, close)); const bodyHeight = Math.max(1.5, bottom - top);
+    if (up) { ctx.fillStyle = "#fff"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); ctx.strokeRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); }
+    else { ctx.fillStyle = "#d94b4b"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); }
+  });
+  const ema = points.filter((point) => Number.isFinite(Number(point.ema50)));
+  if (ema.length > 1) { ctx.strokeStyle = "#6f91cf"; ctx.lineWidth = 1.2; ctx.beginPath(); ema.forEach((point, index) => { const pointIndex = points.indexOf(point); const x = xPad + step * pointIndex + step / 2; const yy = y(Number(point.ema50)); if (index === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy); }); ctx.stroke(); }
+}
+
+function paintMiniCharts() {
+  document.querySelectorAll("canvas.mini-chart").forEach((canvas) => drawMiniChart(canvas, JSON.parse(canvas.dataset.points || "[]")));
+}
 
 function renderSummary(report) {
   document.querySelector("#as-of").textContent = `数据截止 ${report.week_end}`;
@@ -42,17 +83,21 @@ function renderGroups(report) {
       const asset = byKey[key];
       const weekly = asset.slots.weekly;
       const tone = asset.analysis_status === "validated" ? "" : "warn";
+      const mini = asset.mini_chart || {};
       return `<button class="asset-row" type="button" data-asset="${esc(key)}" aria-label="打开${esc(asset.display_name)}单资产工作台">
         <div class="asset-name"><strong>${esc(asset.display_name)}</strong><small>${esc(key)}</small></div>
-        <div class="thumb"><img src="${esc(weekly.image_url)}" alt="${esc(asset.display_name)}周线" loading="lazy"></div>
-        <div>${chip(asset.position, "neutral")}</div><div>${chip(asset.structure, "neutral")}</div>
-        <div class="asset-summary">${esc(short(asset.synthesis || "当前多周期分析不可用。"))}</div>
+        <div class="mini-cell"><canvas class="mini-chart" data-points="${esc(JSON.stringify(mini.mini_points || []))}" aria-label="${esc(asset.display_name)}最近20根周线"></canvas><small class="last-candle ${esc((mini.last_candle || {}).tone || "")}">${esc((mini.last_candle || {}).label || "—")}</small></div>
+        <div class="latest-value"><b>${esc(formatValue(mini.latest_value))}</b><small>${esc(weekly.unit || "")}</small></div>
+        <div class="change ${mini.change > 0 ? "up" : mini.change < 0 ? "down" : "flat"}">${esc(formatChange(weekly))}</div>
+        <div class="position-cell">${positionMeter(asset.position_state)}${chip(asset.position, "neutral")}</div>
+        <div class="trend ${esc((asset.trend || {}).tone || "flat")}"><b>${esc((asset.trend || {}).marker || "→")}</b><span>${esc((asset.trend || {}).label || "分歧")}</span></div>
         <div class="row-status ${tone}">${esc(asset.status_label)}</div>
       </button>`;
     }).join("");
-    return `<section class="group" id="group-${esc(label)}"><header><h2>${esc(label)}</h2><span>${keys.length} 个资产</span></header>${rows}</section>`;
+    return `<section class="group" id="group-${esc(label)}"><header><h2>${esc(label)}</h2><span>${keys.length} 个资产</span></header><div class="table-head"><span>资产</span><span>K 线（周线）</span><span>最新价</span><span>周涨跌</span><span>位置</span><span>趋势</span><span>状态</span></div>${rows}</section>`;
   }).join("");
   document.querySelectorAll("[data-asset]").forEach((button) => button.addEventListener("click", () => showDetail(report, button.dataset.asset)));
+  requestAnimationFrame(() => requestAnimationFrame(paintMiniCharts));
 }
 
 function renderPeriod(asset, timeframe) {
