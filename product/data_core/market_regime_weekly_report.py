@@ -98,6 +98,49 @@ def _ranking_status_label(value: Any) -> str:
     return {"participate": "参与", "wait": "等待", "avoid": "回避", "unavailable": "不可用"}.get(str(value), str(value))
 
 
+def _display_name(asset_key: Any) -> str:
+    """Return a reader-safe label without leaking an internal registry key."""
+
+    return DISPLAY_NAMES.get(str(asset_key or ""), "未知资产")
+
+
+def _opportunity_projection(ranking: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Project ranking data into a truthful reader title and row order."""
+
+    rows = ranking.get("ordered_assets") if isinstance(ranking, Mapping) else None
+    if not isinstance(rows, list):
+        return {"title": "机会清单", "ordered": False, "rows": []}
+    original_rows = [row for row in rows if isinstance(row, Mapping)]
+    if not isinstance(ranking, Mapping) or ranking.get("generation_status") != "model_generated_unreviewed":
+        return {"title": "机会清单", "ordered": False, "rows": original_rows}
+    by_key: dict[str, Mapping[str, Any]] = {}
+    expected = set(WEEKLY_KEYS)
+    for row in original_rows:
+        key = str(row.get("asset_key") or "")
+        if key in by_key or key not in expected:
+            return {"title": "机会清单", "ordered": False, "rows": original_rows}
+        by_key[key] = row
+    if set(by_key) != expected or len(original_rows) != len(WEEKLY_KEYS):
+        return {"title": "机会清单", "ordered": False, "rows": original_rows}
+    ranked: list[Mapping[str, Any]] = []
+    unavailable: list[Mapping[str, Any]] = []
+    for key in WEEKLY_KEYS:
+        row = by_key[key]
+        status = str(row.get("status") or "")
+        if status == "unavailable":
+            if row.get("rank") is not None or row.get("evidence_ids"):
+                return {"title": "机会清单", "ordered": False, "rows": original_rows}
+            unavailable.append(row)
+            continue
+        if status not in {"participate", "wait", "avoid"} or not isinstance(row.get("rank"), int) or row["rank"] < 1:
+            return {"title": "机会清单", "ordered": False, "rows": original_rows}
+        ranked.append(row)
+    ranks = sorted(int(row["rank"]) for row in ranked)
+    if not ranked or ranks != list(range(1, len(ranked) + 1)):
+        return {"title": "机会清单", "ordered": False, "rows": original_rows}
+    return {"title": "机会排序", "ordered": True, "rows": sorted(ranked, key=lambda row: int(row["rank"])) + unavailable}
+
+
 def _deterministic_dimensions(analysis: Mapping[str, Any] | None) -> tuple[bool, Mapping[str, Any] | None, Mapping[str, Any] | None, Mapping[str, Any] | None]:
     if not isinstance(analysis, Mapping):
         return False, None, None, None
@@ -312,7 +355,7 @@ def build_weekly_report(
         chart_slots.extend(slots)
         cards.append({
             "asset_key": key,
-            "display_name": DISPLAY_NAMES[key],
+            "display_name": _display_name(key),
             "series_kind": series.get("series_kind"),
             "quality": series.get("quality", "unknown"),
             "analysis_status": analysis_status,
@@ -373,12 +416,13 @@ def attach_chart_snapshots(
 
 
 def render_weekly_markdown(report: Mapping[str, Any]) -> str:
+    opportunity = _opportunity_projection(report.get("ranking"))
     lines = [
         f"# 宏观 K 线周报｜{report.get('week_end')}",
         "",
         "> 模型生成、未经人工复核；仅限本地评估；不自动执行交易。",
         "",
-        f"周末日期：{report.get('week_end')} · 分析截止：{report.get('week_end')} · 先完成全部资产分析，再进行机会排序。",
+        f"周末日期：{report.get('week_end')} · 分析截止：{report.get('week_end')} · 先完成全部资产分析，再查看{opportunity['title']}。",
         "",
     ]
     for _, chapter, keys in CHAPTERS:
@@ -407,10 +451,10 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
             lines.extend([f"**多周期结论**：{(synthesis or {}).get('text', '当前分析不可用。')}", ""])
             implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
             lines.extend([f"**这意味着什么（机制解释）**：{(implication or {}).get('text', '当前机制解释不可用。')}", ""])
-    lines.extend(["## 本周机会排序", ""])
-    for row in (report.get("ranking") or {}).get("ordered_assets") or []:
-        key = str(row.get("asset_key") or "")
-        lines.append(f"- {DISPLAY_NAMES.get(key, key)}：{_ranking_status_label(row.get('status'))}")
+    lines.extend([f"## 本周{opportunity['title']}", ""])
+    for row in opportunity["rows"]:
+        prefix = f"{row.get('rank')}. " if opportunity["ordered"] and row.get("rank") is not None else ""
+        lines.append(f"- {prefix}{_display_name(row.get('asset_key'))}：{_ranking_status_label(row.get('status'))}")
     return "\n".join(lines) + "\n"
 
 
@@ -425,6 +469,7 @@ def _render_standard_kline_document(
     nav_parts: list[str],
     pane_parts: list[str],
     ranking_rows: str,
+    ranking_title: str = "机会排序",
 ) -> str:
     """Render the Weekly reader with the pinned standard-kline browser port."""
 
@@ -448,7 +493,14 @@ function mountPane(pane){if(!pane||pane.dataset.mounted==='true')return;pane.que
 function active(k){document.querySelectorAll('[data-pane]').forEach(x=>x.classList.toggle('active',x.dataset.pane===k));document.querySelectorAll('[data-asset-nav]').forEach(x=>x.classList.toggle('active',x.dataset.assetNav===k));mountPane(document.querySelector('[data-pane="'+k+'"]'));}
 document.querySelectorAll('[data-asset-nav]').forEach(button=>button.addEventListener('click',()=>active(button.dataset.assetNav)));const first=document.querySelector('[data-pane]')?.dataset.pane;if(first)active(first);
 """
-    return f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>WEEK_END {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看机会排序。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周机会排序</h2><p>排序位于全部资产之后；数据或分析不可用的资产保留其状态，不会被伪装成等待或回避。</p><ul>{ranking_rows}</ul></section><footer>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main><script type="application/json" id="report-data">{report_json}</script><script>{lightweight_charts_js}</script><script>{standard_kline_js}</script><script>{bootstrap}</script></body></html>"""
+    document = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>WEEK_END {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看机会排序。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周机会排序</h2><p>排序位于全部资产之后；数据或分析不可用的资产保留其状态，不会被伪装成等待或回避。</p><ul>{ranking_rows}</ul></section><footer>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main><script type="application/json" id="report-data">{report_json}</script><script>{lightweight_charts_js}</script><script>{standard_kline_js}</script><script>{bootstrap}</script></body></html>"""
+    if ranking_title != "机会排序":
+        document = document.replace("本周机会排序", f"本周{_escape(ranking_title)}")
+        document = document.replace(
+            "排序位于全部资产之后；数据或分析不可用的资产保留其状态，不会被伪装成等待或回避。",
+            "排序证据不可用或不完整；按资产清单展示，不宣称先后顺序。",
+        )
+    return document
 
 
 @_reader_html_labels
@@ -493,5 +545,9 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
             pane_parts.append(
                 f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(_status_label(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}{odds_block}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
             )
-    ranking_rows = "".join(f'<li><strong>{_escape(DISPLAY_NAMES.get(str(row.get("asset_key") or ""), str(row.get("asset_key") or "")))}</strong> · {_escape(_ranking_status_label(row.get("status")))}</li>' for row in (report.get("ranking") or {}).get("ordered_assets") or [])
-    return _render_standard_kline_document(report, nav_parts, pane_parts, ranking_rows)
+    opportunity = _opportunity_projection(report.get("ranking"))
+    ranking_rows = "".join(
+        f'<li><strong>{_escape((str(row.get("rank")) + ". ") if opportunity["ordered"] and row.get("rank") is not None else "")}{_escape(_display_name(row.get("asset_key")))}</strong> · {_escape(_ranking_status_label(row.get("status")))}</li>'
+        for row in opportunity["rows"]
+    )
+    return _render_standard_kline_document(report, nav_parts, pane_parts, ranking_rows, opportunity["title"])

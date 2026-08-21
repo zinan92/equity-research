@@ -190,6 +190,37 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertNotIn("WEEK_END", html)
         self.assertIn("单位：基点", html)
 
+    def test_opportunity_projection_renders_rank_order_and_display_names(self) -> None:
+        ranking = ranking_fixture()
+        ranking["ordered_assets"] = list(reversed(ranking["ordered_assets"]))
+        for index, row in enumerate(ranking["ordered_assets"], start=1):
+            row["rank"] = index
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
+        html_tail = render_weekly_html(report).split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
+        markdown_tail = render_weekly_markdown(report).split("## 本周机会排序", 1)[1]
+        self.assertLess(html_tail.index("白银"), html_tail.index("美元指数"))
+        self.assertLess(markdown_tail.index("白银"), markdown_tail.index("美元指数"))
+        self.assertNotIn("dxy", html_tail)
+        self.assertNotIn("us_dividend", markdown_tail)
+
+    def test_invalid_ranking_is_rendered_as_opportunity_list(self) -> None:
+        ranking = {"generation_status": "ranking_unavailable", "failure_code": "provider_error", "ordered_assets": []}
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
+        html = render_weekly_html(report)
+        markdown = render_weekly_markdown(report)
+        self.assertIn("本周机会清单", html)
+        self.assertIn("## 本周机会清单", markdown)
+        self.assertNotIn("本周机会排序", html)
+        self.assertNotIn("本周机会排序", markdown)
+
+    def test_unknown_ranking_key_uses_typed_display_label(self) -> None:
+        ranking = ranking_fixture()
+        ranking["ordered_assets"][0]["asset_key"] = "unexpected_key"
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
+        html_tail = render_weekly_html(report).split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
+        self.assertIn("未知资产", html_tail)
+        self.assertNotIn("unexpected_key", html_tail)
+
     def test_markdown_keeps_the_same_asset_count_and_disclosure(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         markdown = render_weekly_markdown(report)
