@@ -15,7 +15,7 @@ from data_core.market_regime_weekly_report import attach_chart_snapshots, build_
 from data_core.market_regime_weekly_report import render_weekly_html, render_weekly_markdown  # noqa: E402
 from data_core.market_regime_weekly_runtime import WeeklyReportStore, WeeklyRuntimeError  # noqa: E402
 from data_core.market_regime_weekly_source import WeeklySourceHistoryStore  # noqa: E402
-from data_core.market_regime_weekly_snapshots import PlaywrightWeeklyChartSnapshotPort  # noqa: E402
+from data_core.market_regime_weekly_snapshots import PlaywrightWeeklyChartSnapshotPort, SNAPSHOT_DEVICE_SCALE_FACTOR  # noqa: E402
 from test_market_regime_weekly_report import (  # noqa: E402
     analyses_fixture,
     candle_response_fixture,
@@ -25,6 +25,9 @@ from test_market_regime_weekly_report import (  # noqa: E402
 
 
 class WeeklyChartSnapshotTest(unittest.TestCase):
+    def test_snapshots_use_retina_scale_for_reader_images(self) -> None:
+        self.assertEqual(SNAPSHOT_DEVICE_SCALE_FACTOR, 2)
+
     def test_browser_snapshots_bind_renderer_input_and_report_readback(self) -> None:
         with tempfile.TemporaryDirectory(prefix="weekly-snapshot-test-") as temporary:
             root = Path(temporary)
