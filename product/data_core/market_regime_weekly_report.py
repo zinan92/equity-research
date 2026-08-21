@@ -459,8 +459,8 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
 
 
 def _reader_html_labels(renderer: Any) -> Any:
-    def wrapped(report: Mapping[str, Any]) -> str:
-        return renderer(report).replace("WEEK_END ", "周末日期 ")
+    def wrapped(report: Mapping[str, Any], *args: Any, **kwargs: Any) -> str:
+        return renderer(report, *args, **kwargs).replace("WEEK_END ", "周末日期 ")
     return wrapped
 
 
@@ -504,7 +504,7 @@ document.querySelectorAll('[data-asset-nav]').forEach(button=>button.addEventLis
 
 
 @_reader_html_labels
-def render_weekly_html(report: Mapping[str, Any]) -> str:
+def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
     report_json = _canonical(report).replace("</", "<\\/")
     nav_parts: list[str] = []
     pane_parts: list[str] = []
@@ -551,3 +551,70 @@ def render_weekly_html(report: Mapping[str, Any]) -> str:
         for row in opportunity["rows"]
     )
     return _render_standard_kline_document(report, nav_parts, pane_parts, ranking_rows, opportunity["title"])
+
+
+def _snapshot_href(snapshot: Mapping[str, Any] | None, snapshot_prefix: str) -> str | None:
+    if not isinstance(snapshot, Mapping) or not isinstance(snapshot.get("asset"), Mapping):
+        return None
+    path = str(snapshot["asset"].get("path") or "")
+    if not path.startswith("snapshots/"):
+        return None
+    filename = path.removeprefix("snapshots/")
+    prefix = snapshot_prefix.rstrip("/")
+    return f"{prefix}/{filename}" if prefix else filename
+
+
+@_reader_html_labels
+def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "snapshots/") -> str:
+    """Render the shareable static Weekly reader from immutable snapshots."""
+
+    opportunity = _opportunity_projection(report.get("ranking"))
+    nav_parts: list[str] = []
+    pane_parts: list[str] = []
+    for _, chapter, keys in CHAPTERS:
+        nav_parts.append(f'<h4>{_escape(chapter)}</h4>')
+        for key in keys:
+            card = next(item for item in report["cards"] if item["asset_key"] == key)
+            display_name = _display_name(card.get("asset_key"))
+            nav_parts.append(f'<a data-asset-nav="{_escape(key)}" href="#asset-{_escape(key)}">{_escape(display_name)}</a>')
+            analysis = card.get("analysis") if isinstance(card.get("analysis"), Mapping) else {}
+            rows: list[str] = []
+            for tf, label in (("weekly", "周线"), ("daily", "日线"), ("four_hour", "4小时")):
+                slot = next((item for item in card.get("chart_slots", []) if item.get("timeframe") == tf), None)
+                if not isinstance(slot, Mapping):
+                    continue
+                snapshot = slot.get("snapshot") if isinstance(slot.get("snapshot"), Mapping) else None
+                href = _snapshot_href(snapshot, snapshot_prefix)
+                snapshot_id = str(snapshot.get("snapshot_id") or "") if snapshot else ""
+                if href:
+                    chart = f'<img src="{_escape(href)}" alt="{_escape(display_name)}｜{label} K 线图" loading="lazy">'
+                else:
+                    chart = '<div class="chart-unavailable">当前图表快照不可用；保留数据状态，等待新的完整证据。</div>'
+                statement = analysis.get(tf)
+                text = statement.get("text") if isinstance(statement, Mapping) and statement.get("text") else "当前分析不可用；图表状态已保留。"
+                unit = _unit_label(slot.get("unit"))
+                snapshot_label = f' · 快照 {snapshot_id}' if snapshot_id else ""
+                rows.append(
+                    f'<figure class="timeframe" data-timeframe="{_escape(tf)}" data-snapshot-id="{_escape(snapshot_id)}"><div><b>{label}</b><div class="snapshot-frame">{chart}</div><figcaption>EMA50 · MACD(12,26,9){(" · 单位：" + _escape(unit)) if unit else ""}{snapshot_label}</figcaption></div><p>{_escape(text)}</p></figure>'
+                )
+            position = analysis.get("position")
+            structure = analysis.get("structure")
+            position_text = position.get("text", "位置：不可用。") if isinstance(position, Mapping) else "位置：不可用。"
+            structure_text = structure.get("text", "结构：不可用。") if isinstance(structure, Mapping) else "结构：不可用。"
+            odds_text = _odds_reader_text(analysis.get("odds") if isinstance(analysis, Mapping) else None)
+            synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
+            implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
+            pane_parts.append(
+                f'<section class="asset-pane" id="asset-{_escape(key)}" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><h2>{_escape(display_name)}</h2><small>{_escape(_status_label(card.get("analysis_status")))}</small></header>{"".join(rows)}<div class="summary-dimensions"><div><b>位置</b><p>{_escape(position_text)}</p></div><div><b>结构</b><p>{_escape(structure_text)}</p></div><div><b>赔率</b><p>{_escape(odds_text)}</p></div></div><div class="synthesis"><b>多周期结论</b><p>{_escape((synthesis or {}).get("text", "当前多周期分析不可用。") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。")}</p></div><div class="implication"><b>这意味着什么 · 机制解释</b><p>{_escape((implication or {}).get("text", "当前机制解释不可用。") if isinstance(implication, Mapping) else "当前机制解释不可用。")}</p></div></section>'
+            )
+    ranking_rows = "".join(
+        f'<li><strong>{_escape((str(row.get("rank")) + ". ") if opportunity["ordered"] and row.get("rank") is not None else "")}{_escape(_display_name(row.get("asset_key")))}</strong> · {_escape(_ranking_status_label(row.get("status")))}</li>'
+        for row in opportunity["rows"]
+    )
+    css = """
+:root{--ink:#17201b;--muted:#68736b;--faint:#8b958d;--line:#dedfd8;--paper:#fffefa;--canvas:#f1efe9;--green:#187b51;--navy:#3f586e;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--canvas);color:var(--ink);font-family:inherit}main{width:min(1240px,100%);margin:auto;background:var(--paper);min-height:100vh}.top{padding:20px 34px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}.top span{font-size:10px;border:1px solid var(--line);padding:5px 8px;color:var(--muted)}.hero{padding:44px 34px;border-bottom:1px solid var(--line);background:#f5f7f1}.hero h1{font-size:72px;font-weight:650;letter-spacing:-.035em;color:var(--navy);margin:14px 0}.hero p{color:var(--muted);line-height:1.7}.body{display:grid;grid-template-columns:190px minmax(0,1fr);gap:22px;padding:34px}nav{position:sticky;top:16px;align-self:start;border:1px solid var(--line);background:#fff;padding:14px}nav h4{font-size:9px;color:var(--green);margin:12px 0 4px}nav a{display:block;border-bottom:1px solid #f0f0eb;padding:7px 3px;color:var(--muted);text-decoration:none}nav a:hover{color:var(--green)}.asset-pane{scroll-margin-top:16px;border:1px solid var(--line);background:#fff;margin-bottom:18px;overflow:hidden}.asset-pane>header{display:flex;justify-content:space-between;padding:17px;border-bottom:1px solid var(--line)}.asset-pane h2{font-size:27px;font-weight:650;margin:0}.asset-pane header small{color:var(--faint)}.timeframe{display:flex;flex-direction:column;gap:12px;padding:16px;border-bottom:1px solid var(--line);margin:0}.timeframe b{display:block;color:var(--green);font-size:10px;letter-spacing:.12em;margin-bottom:7px}.snapshot-frame{width:100%;background:#fffefa;border:1px solid #eceee8;overflow:hidden}.snapshot-frame img{display:block;width:100%;height:auto}.chart-unavailable{min-height:180px;display:grid;place-items:center;padding:16px;text-align:center;color:#8a6425;background:#fff8ed;font-size:13px;line-height:1.6}.timeframe figcaption{display:block;margin-top:5px;color:var(--faint);font-size:10px;word-break:break-word}.timeframe p{font-size:17px;line-height:1.75;margin:0;overflow-wrap:anywhere}.summary-dimensions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 16px;background:#f7f9f5;border-bottom:1px solid var(--line)}.summary-dimensions>div{border-left:3px solid var(--green);padding-left:10px}.summary-dimensions b{font-size:10px;color:var(--green);letter-spacing:.1em}.summary-dimensions p{font-size:15px;line-height:1.55;margin:4px 0}.synthesis{padding:17px;background:#edf3ef}.synthesis b,.implication b{font-size:10px;color:var(--green);letter-spacing:.1em}.synthesis p,.implication p{font-size:18px;line-height:1.65;margin:6px 0}.implication{padding:17px;background:#f7f3ea;border-top:1px solid var(--line)}.implication b{color:#8a6425}.implication p{font-size:16px;color:#544932}.ranking{padding:34px;background:#f5f3ed}.ranking h2{font-size:30px}.ranking li{margin:8px 0}.ranking p{color:var(--muted)}footer{padding:25px 34px;color:var(--faint);font-size:10px}footer code{word-break:break-all}
+@media(max-width:760px){.top,.hero,.body,.ranking{padding:20px 18px}.top{display:block}.top span{display:inline-block;margin-top:8px}.hero h1{font-size:55px}.body{display:block}nav{position:static;display:flex;overflow:auto;gap:6px;margin-bottom:15px}nav h4{display:none}nav a{min-width:max-content;border:1px solid var(--line);padding:7px 9px}.summary-dimensions{grid-template-columns:1fr}.timeframe p{font-size:17px}}
+"""
+    description = "排序位于全部资产之后；数据或分析不可用的资产保留其状态。" if opportunity["ordered"] else "排序证据不可用或不完整；按资产清单展示，不宣称先后顺序。"
+    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看{_escape(opportunity["title"])}。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周{_escape(opportunity["title"])}</h2><p>{_escape(description)}</p><ul>{ranking_rows}</ul></section><footer>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main></body></html>'

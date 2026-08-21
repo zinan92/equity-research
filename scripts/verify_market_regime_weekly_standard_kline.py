@@ -14,7 +14,7 @@ PRODUCT = ROOT / "product"
 sys.path.insert(0, str(PRODUCT))
 sys.path.insert(0, str(ROOT / "product" / "tests"))
 
-from data_core.market_regime_weekly_report import render_weekly_html, build_weekly_report  # noqa: E402
+from data_core.market_regime_weekly_report import render_weekly_interactive_html, build_weekly_report  # noqa: E402
 from test_market_regime_weekly_report import (  # noqa: E402
     analyses_fixture,
     candle_response_fixture,
@@ -35,7 +35,7 @@ def main() -> None:
     )
     with tempfile.TemporaryDirectory(prefix="weekly-standard-kline-") as directory:
         html_path = Path(directory) / "report.html"
-        html_path.write_text(render_weekly_html(report), encoding="utf-8")
+        html_path.write_text(render_weekly_interactive_html(report), encoding="utf-8")
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch()
             try:

@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 from typing import Any, Mapping
 
-from .market_regime_weekly_report import render_weekly_html
+from .market_regime_weekly_report import render_weekly_interactive_html
 
 
 SNAPSHOT_SCHEMA_VERSION = "market-regime-weekly-chart-snapshot-v1"
@@ -99,7 +99,7 @@ class PlaywrightWeeklyChartSnapshotPort:
                 raise WeeklyChartSnapshotError(f"snapshot_candle_response_mismatch:{slot_id}")
         with tempfile.TemporaryDirectory(prefix="weekly-chart-snapshot-") as directory:
             html_path = Path(directory) / "reader.html"
-            html_path.write_text(render_weekly_html(report), encoding="utf-8")
+            html_path.write_text(render_weekly_interactive_html(report), encoding="utf-8")
             with sync_playwright() as playwright:
                 try:
                     browser = playwright.chromium.launch()
