@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>宏观 K 线周报 · Live prototype</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>#footer{padding:16px 32px;border-top:1px solid var(--line);color:var(--faint);font-size:11px;line-height:1.6}#footer code{word-break:break-all}.evidence-note{display:block;margin-top:18px;color:var(--faint);font-size:11px;word-break:break-all}</style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <strong>宏观 K 线周报</strong>
+          <small>真实 Weekly report · 前后端 live prototype</small>
+        </div>
+        <div class="top-meta"><span id="as-of">读取中</span><span id="coverage">读取中</span></div>
+      </header>
+
+      <div id="loading" class="state-panel loading" role="status">正在读取最新 Weekly report…</div>
+      <div id="error" class="state-panel error" role="alert" hidden></div>
+
+      <section id="app" hidden>
+        <section class="stance" aria-label="本周状态">
+          <div class="stance-state"><small>当前状态</small><b id="stance">等待</b></div>
+          <div class="stance-thesis"><small>本周核心判断</small><p id="thesis"></p></div>
+          <div><small>数据状态</small><strong id="source-status"></strong></div>
+          <div><small>分析覆盖</small><strong id="analysis-count"></strong></div>
+        </section>
+
+        <section class="overview-shell" id="overview">
+          <aside class="asset-index" aria-label="资产导航">
+            <small>资产导航</small>
+            <div id="group-nav"></div>
+            <p>点击任意资产进入单资产工作台。</p>
+          </aside>
+          <div class="overview-content">
+            <div class="section-heading">
+              <div><small>WEEKLY MACRO MAP</small><h1>市场全景</h1></div>
+              <div class="reader-note"><small>当前 live 口径</small><b>单资产证据已接入</b><span>跨资产资金迁移解释仍保持显式未接入。</span></div>
+            </div>
+            <div id="groups"></div>
+          </div>
+        </section>
+
+        <section id="detail" class="detail" hidden aria-live="polite"></section>
+      </section>
+
+      <footer id="footer" hidden></footer>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
