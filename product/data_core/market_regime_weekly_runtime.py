@@ -214,7 +214,7 @@ class WeeklyReportStore:
         week_end = str(report.get("week_end") or "unknown")
         html_relative = f"archive/{week_end}/{digest}.html"
         markdown_relative = f"archive/{week_end}/{digest}.md"
-        html_hash = _immutable_bytes(self.output_root / html_relative, render_weekly_html(report).encode("utf-8"))
+        html_hash = _immutable_bytes(self.output_root / html_relative, render_weekly_html(report, snapshot_prefix="../../snapshots/").encode("utf-8"))
         markdown_hash = _immutable_bytes(self.output_root / markdown_relative, render_weekly_markdown(report).encode("utf-8"))
         pointer = {
             "schema_version": RUNTIME_SCHEMA_VERSION,
@@ -228,7 +228,7 @@ class WeeklyReportStore:
             "action_eligible": False,
         }
         _atomic_bytes(self.runtime_root / "latest.json", _json_bytes(pointer))
-        _atomic_bytes(self.output_root / "latest.html", render_weekly_html(report).encode("utf-8"))
+        _atomic_bytes(self.output_root / "latest.html", render_weekly_html(report, snapshot_prefix="snapshots/").encode("utf-8"))
         _atomic_bytes(self.output_root / "latest.md", render_weekly_markdown(report).encode("utf-8"))
         self.latest()
         return pointer

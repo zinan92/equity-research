@@ -173,22 +173,46 @@ class WeeklyReportTest(unittest.TestCase):
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         html = render_weekly_html(report)
         self.assertEqual(html.count('data-asset-nav="'), 17)
-        self.assertEqual(html.count('data-chart="'), 39)
+        self.assertEqual(html.count("<img "), 0)
         self.assertNotIn("parameter_surface", html)
         self.assertNotIn("missing_inputs", html)
         self.assertLess(html.index("data-asset-nav"), html.index("本周机会排序"))
         self.assertIn("模型生成、未经人工复核", html)
-        self.assertIn("StandardKline.StandardKlineChart", html)
-        self.assertIn("setDatafeedResponse", html)
-        self.assertIn("standard-kline-mount", html)
-        self.assertNotIn("drawLine('ema50'", html)
-        self.assertIn("macd_histogram", html)
+        self.assertNotIn("StandardKline.StandardKlineChart", html)
+        self.assertNotIn("setDatafeedResponse", html)
+        self.assertNotIn("standard-kline-mount", html)
+        self.assertNotIn("lightweight-charts", html)
         self.assertIn("data-timeframes=", html)
         self.assertIn('data-summary-order="位置,结构,赔率,多周期结论,机制解释"', html)
         self.assertNotIn(">validated<", html)
         self.assertNotIn("· wait</li>", html)
         self.assertNotIn("WEEK_END", html)
         self.assertIn("单位：基点", html)
+
+    def test_static_reader_renders_snapshot_images_and_prefixes(self) -> None:
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
+        for slot in report["chart_slots"]:
+            token = slot["slot_id"].replace(":", "-")
+            slot["snapshot"] = {
+                "snapshot_id": f"market-regime-weekly-chart-snapshot:{token}",
+                "asset": {"path": f"snapshots/{token}.png", "sha256": "a" * 64},
+            }
+        for card in report["cards"]:
+            for slot in card["chart_slots"]:
+                token = slot["slot_id"].replace(":", "-")
+                slot["snapshot"] = {
+                    "snapshot_id": f"market-regime-weekly-chart-snapshot:{token}",
+                    "asset": {"path": f"snapshots/{token}.png", "sha256": "a" * 64},
+                }
+        html = render_weekly_html(report)
+        archive_html = render_weekly_html(report, snapshot_prefix="../../snapshots/")
+        self.assertEqual(html.count("<img "), 39)
+        self.assertIn('src="snapshots/dxy-weekly.png"', html)
+        self.assertIn('src="../../snapshots/dxy-weekly.png"', archive_html)
+        self.assertIn('alt="美元指数｜周线 K 线图"', html)
+        self.assertNotIn("data-chart=", html)
+        self.assertNotIn("lightweight-charts", html)
+        self.assertNotIn("StandardKlineChart", html)
 
     def test_opportunity_projection_renders_rank_order_and_display_names(self) -> None:
         ranking = ranking_fixture()

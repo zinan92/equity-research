@@ -53,7 +53,13 @@ class WeeklyChartSnapshotTest(unittest.TestCase):
             self.assertEqual(store.latest()["report_id"], pointer["report_id"])
             snapshot_slot = next(slot for slot in updated["chart_slots"] if isinstance(slot.get("snapshot"), dict))
             snapshot_id = snapshot_slot["snapshot"]["snapshot_id"]
-            self.assertIn(snapshot_id, render_weekly_html(updated))
+            static_html = render_weekly_html(updated)
+            archive_html = render_weekly_html(updated, snapshot_prefix="../../snapshots/")
+            self.assertIn(snapshot_id, static_html)
+            self.assertIn('<img ', static_html)
+            self.assertIn('src="snapshots/', static_html)
+            self.assertIn('src="../../snapshots/', archive_html)
+            self.assertNotIn("StandardKlineChart", static_html)
             self.assertIn(snapshot_id, render_weekly_markdown(updated))
             asset_path = root / "output" / snapshot_slot["snapshot"]["asset"]["path"]
             asset_path.write_bytes(b"tampered")
