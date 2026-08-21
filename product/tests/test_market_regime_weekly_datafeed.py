@@ -141,6 +141,47 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(response["attempted_sources"], ["tencent_kline", "sina_index"])
         self.assertEqual(response["selection_reason"], "explicit_fallback")
 
+    def test_unavailable_bridge_preserves_a_share_fallback_chain(self) -> None:
+        spec = WEEKLY_ASSET_REGISTRY["shanghai"]
+        fallback_identity = {
+            "provider": "sina_finance",
+            "provider_symbol": "sh000001",
+            "source_mode": "sina_index",
+            "requested_source": "tencent_kline",
+            "selected_source": "sina_index",
+            "attempted_sources": ["tencent_kline", "sina_index"],
+            "selection_reason": "explicit_fallback",
+        }
+        response = build_candle_response_from_weekly_series(
+            {
+                "cutoff_at": "2026-08-14T23:59:59Z",
+                "series": {
+                    "shanghai": {
+                        "status": "unavailable",
+                        "daily_status": "unavailable",
+                        "canonical_symbol": spec["canonical_symbol"],
+                        "series_kind": spec["series_kind"],
+                        "timezone": spec["timezone"],
+                        "unit": spec["unit"],
+                        "price_basis": spec["price_basis"],
+                        "data_kind": "real",
+                        "daily_reject_reason": "upstream_error",
+                        "daily_access_issues": ["tencent_kline: timeout"],
+                        "points": [],
+                        "daily_points": [],
+                        "source_identity": fallback_identity,
+                    }
+                },
+            },
+            "shanghai",
+            "daily",
+        )
+        self.assertEqual(response["status"], "unavailable")
+        self.assertEqual(response["requested_source"], "tencent_kline")
+        self.assertEqual(response["selected_source"], "sina_index")
+        self.assertEqual(response["attempted_sources"], ["tencent_kline", "sina_index"])
+        self.assertEqual(response["selection_reason"], "explicit_fallback")
+
     def test_all_registry_rows_have_explicit_request_mapping(self) -> None:
         for key, spec in WEEKLY_ASSET_REGISTRY.items():
             request = datafeed_request_for_asset(key, "daily")

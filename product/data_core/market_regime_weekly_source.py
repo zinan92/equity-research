@@ -535,7 +535,11 @@ def build_weekly_source_snapshot(
                     # not a missing provider response, so preserve the
                     # authoritative ready status while retaining the gap
                     # metadata for audit/display.
-                    "status": "complete" if enriched.get("weekly_status") == "ready" else external["status"],
+                    "status": (
+                        "unavailable"
+                        if not external["points"]
+                        else "complete" if enriched.get("weekly_status") == "ready" else external["status"]
+                    ),
                     "points": external["points"],
                     "weekly_bin_count": external["weekly_bin_count"],
                     "missing_week_ends": external["missing_week_ends"],
@@ -781,7 +785,7 @@ class WeeklySourceHistoryStore:
             raise WeeklySourceHistoryError("weekly_snapshot_schema_invalid")
         identity_core = {
             key: snapshot.get(key)
-            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs")
+            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs", "source_policy")
         }
         snapshot_id = f"market-regime-weekly-source:{_digest(identity_core)}"
         artifact = {"snapshot_id": snapshot_id, "identity_core": identity_core, **identity_core}
@@ -852,4 +856,4 @@ class WeeklySourceHistoryStore:
             raise WeeklySourceHistoryError("weekly_identity_mismatch")
         if receipt != {"schema_version": SCHEMA_VERSION, "event": "completed", "snapshot_id": snapshot_id, "artifact": artifact_ref}:
             raise WeeklySourceHistoryError("weekly_receipt_identity_mismatch")
-        return {**state, **{key: artifact.get(key) for key in ("week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs")}}
+        return {**state, **{key: artifact.get(key) for key in ("week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs", "source_policy")}}

@@ -244,13 +244,28 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn("本周机会清单", render_weekly_html(report))
         self.assertIn("## 本周机会清单", render_weekly_markdown(report))
 
-    def test_unknown_ranking_key_uses_typed_display_label(self) -> None:
+    def test_ranking_provider_failure_preserves_seventeen_availability_rows(self) -> None:
+        ranking = {"generation_status": "ranking_unavailable", "failure_code": "provider_error", "ordered_assets": []}
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
+        html = render_weekly_html(report)
+        ranking_section = html.split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
+        self.assertEqual(ranking_section.count("<li>"), 17)
+        self.assertIn("美元指数", ranking_section)
+
+    def test_report_binds_source_snapshot_id(self) -> None:
+        source = source_fixture()
+        source["snapshot_id"] = "market-regime-weekly-source:" + ("a" * 64)
+        report = build_weekly_report(source, analyses_fixture(), ranking_fixture())
+        self.assertEqual(report["source_snapshot_id"], source["snapshot_id"])
+        self.assertEqual(report["identity_core"]["source_snapshot_id"], source["snapshot_id"])
+
+    def test_unknown_ranking_key_falls_back_to_canonical_availability_list(self) -> None:
         ranking = ranking_fixture()
         ranking["ordered_assets"][0]["asset_key"] = "unexpected_key"
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
         html_tail = render_weekly_html(report).split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
-        self.assertIn("未知资产", html_tail)
         self.assertNotIn("unexpected_key", html_tail)
+        self.assertIn("美元指数", html_tail)
 
     def test_markdown_keeps_the_same_asset_count_and_disclosure(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())

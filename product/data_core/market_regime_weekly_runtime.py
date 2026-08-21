@@ -220,6 +220,7 @@ class WeeklyReportStore:
             "schema_version": RUNTIME_SCHEMA_VERSION,
             "report_id": report_id,
             "week_end": week_end,
+            "source_snapshot_id": report.get("source_snapshot_id"),
             "artifact": {"path": artifact_relative, "sha256": artifact_hash},
             "receipt": {"path": receipt_relative, "sha256": receipt_hash},
             "html": {"path": html_relative, "sha256": html_hash},
@@ -238,7 +239,7 @@ class WeeklyReportStore:
             pointer = json.loads((self.runtime_root / "latest.json").read_text(encoding="utf-8"))
         except (FileNotFoundError, json.JSONDecodeError) as exc:
             raise WeeklyRuntimeError("weekly_report_latest_unavailable") from exc
-        required = {"schema_version", "report_id", "week_end", "artifact", "receipt", "html", "markdown", "publication_eligible", "action_eligible"}
+        required = {"schema_version", "report_id", "week_end", "source_snapshot_id", "artifact", "receipt", "html", "markdown", "publication_eligible", "action_eligible"}
         if not isinstance(pointer, dict) or set(pointer) != required or pointer.get("schema_version") != RUNTIME_SCHEMA_VERSION:
             raise WeeklyRuntimeError("weekly_report_pointer_invalid")
         if pointer.get("publication_eligible") is not False or pointer.get("action_eligible") is not False:
@@ -277,6 +278,8 @@ class WeeklyReportStore:
             raise WeeklyRuntimeError("weekly_report_json_invalid") from exc
         if not isinstance(report, dict) or report.get("report_id") != report_id:
             raise WeeklyRuntimeError("weekly_report_artifact_identity_invalid")
+        if pointer.get("source_snapshot_id") != report.get("source_snapshot_id"):
+            raise WeeklyRuntimeError("weekly_report_source_snapshot_identity_mismatch")
         if report_id != f"{REPORT_ID_PREFIX}{_digest(report.get('identity_core'))}":
             raise WeeklyRuntimeError("weekly_report_artifact_identity_mismatch")
         expected_receipt = {"schema_version": RUNTIME_SCHEMA_VERSION, "event": "completed", "report_id": report_id, "artifact": {"path": artifact_relative, "sha256": pointer["artifact"]["sha256"]}}

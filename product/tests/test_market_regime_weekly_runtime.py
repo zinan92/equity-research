@@ -170,6 +170,9 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             self.assertEqual(phases, ["source", "asset_analysis", "ranking", "report", "publish"])
             replayed = WeeklyReportStore(root / "runtime", root / "output").latest()
             self.assertEqual(replayed["report_id"], report["report_id"])
+            self.assertTrue(report["source_snapshot_id"].startswith("market-regime-weekly-source:"))
+            pointer = json.loads((root / "runtime" / "latest.json").read_text())
+            self.assertEqual(pointer["source_snapshot_id"], report["source_snapshot_id"])
             self.assertTrue((root / "output" / "latest.html").is_file())
             self.assertTrue((root / "output" / "latest.md").is_file())
 
