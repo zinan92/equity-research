@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/styles.css" />
     <style>#footer{padding:16px 32px;border-top:1px solid var(--line);color:var(--faint);font-size:11px;line-height:1.6}#footer code{word-break:break-all}.evidence-note{display:block;margin-top:18px;color:var(--faint);font-size:11px;word-break:break-all}</style>
     <style>
-      .table-head{display:grid;grid-template-columns:150px 150px 90px 100px 150px 90px 70px;gap:10px;padding:8px 14px;background:#fff;color:var(--faint);font-size:11px;border-bottom:1px solid #edf1f3}
-      .asset-row{grid-template-columns:150px 150px 90px 100px 150px 90px 70px}
-      .mini-cell{display:flex;align-items:center;gap:8px;min-width:0}.mini-chart{display:block;width:170px;height:58px}.last-candle{display:block;font-size:10px;white-space:nowrap;color:var(--muted)}.last-candle.up{color:var(--green)}.last-candle.down{color:var(--red)}
+      .table-head{display:grid;grid-template-columns:150px 220px 100px 110px 160px 100px 70px;gap:10px;padding:8px 14px;background:#fff;color:var(--faint);font-size:11px;border-bottom:1px solid var(--line)}
+      .asset-row{grid-template-columns:150px 220px 100px 110px 160px 100px 70px}
+      .mini-cell{display:flex;align-items:center;gap:8px;min-width:0}.mini-chart{display:block;width:190px;height:70px}.last-candle{display:block;font-size:11px;font-weight:650;white-space:nowrap;color:var(--muted)}.last-candle.up{color:var(--green)}.last-candle.down{color:var(--red)}
       .latest-value b{display:block;font-size:13px;color:var(--navy)}.latest-value small{display:block;font-size:10px;color:var(--faint);margin-top:2px}.change{font-size:13px;font-weight:650}.change.up{color:var(--green)}.change.down{color:var(--red)}.change.flat{color:var(--muted)}
       .position-cell{display:flex;align-items:center;gap:8px}.position-meter{display:flex;flex-direction:column;width:8px;height:30px;gap:1px}.position-meter i{display:block;flex:1;background:#eef2f4;border-radius:1px}.position-meter.high i:nth-child(1){background:var(--red)}.position-meter.middle i:nth-child(2){background:var(--amber)}.position-meter.low i:nth-child(3){background:var(--green)}
       .trend{display:flex;align-items:center;gap:6px}.trend b{font-size:22px;line-height:1}.trend span{font-size:12px}.trend.up{color:var(--green)}.trend.down{color:var(--red)}.trend.flat{color:var(--muted)}
@@ -31,13 +31,6 @@
       <div id="error" class="state-panel error" role="alert" hidden></div>
 
       <section id="app" hidden>
-        <section class="stance" aria-label="本周状态">
-          <div class="stance-state"><small>当前状态</small><b id="stance">等待</b></div>
-          <div class="stance-thesis"><small>本周核心判断</small><p id="thesis"></p></div>
-          <div><small>数据状态</small><strong id="source-status"></strong></div>
-          <div><small>分析覆盖</small><strong id="analysis-count"></strong></div>
-        </section>
-
         <section class="overview-shell" id="overview">
           <aside class="asset-index" aria-label="资产导航">
             <small>资产导航</small>
