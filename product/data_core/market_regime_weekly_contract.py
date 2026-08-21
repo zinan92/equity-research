@@ -385,7 +385,14 @@ def build_candle_response_from_weekly_series(
                 "close": point.get("close"),
                 "volume": point.get("volume", 0),
             })
-    source_mode = str(identity.get("source_mode") or identity.get("source_id") or "weekly_authority")
+    expected_source = spec["source_id"].removeprefix("datafeed:")
+    source_mode = str(identity.get("source_mode") or identity.get("source_id") or expected_source)
+    requested_source = str(identity.get("requested_source") or expected_source)
+    selected_source = str(identity.get("selected_source") or source_mode)
+    attempted_sources = identity.get("attempted_sources")
+    if not isinstance(attempted_sources, list) or not all(isinstance(item, str) and item.strip() for item in attempted_sources):
+        attempted_sources = [selected_source]
+    selection_reason = str(identity.get("selection_reason") or "requested_or_default")
     quality_source = identity_source
     quality_flags = quality_source.get("quality_flags", series.get("quality_flags", []))
     if not isinstance(quality_flags, list):
@@ -410,10 +417,10 @@ def build_candle_response_from_weekly_series(
         "status": "ready",
         "provider": _source_identity_provider(identity),
         "source_mode": source_mode,
-        "requested_source": source_mode,
-        "selected_source": source_mode,
-        "selection_reason": str(identity.get("selection_reason") or "requested_or_default"),
-        "attempted_sources": list(identity.get("attempted_sources") or [source_mode]),
+        "requested_source": requested_source,
+        "selected_source": selected_source,
+        "selection_reason": selection_reason,
+        "attempted_sources": attempted_sources,
         "cache_policy": "bypass",
         "quality_policy": "strict",
         "fallback_policy": spec.get("fallback_policy", "none"),

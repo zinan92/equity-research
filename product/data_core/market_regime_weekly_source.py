@@ -407,6 +407,22 @@ def build_public_4h_context(
             }
         )
 
+    dropped_raw = aggregation.get("dropped_incomplete_buckets")
+    if dropped_raw is None:
+        dropped_buckets: list[str] = []
+        dropped_count = 0
+    elif isinstance(dropped_raw, int) and not isinstance(dropped_raw, bool) and dropped_raw >= 0:
+        # The canonical datafeed reports a count; older local aggregators
+        # reported the individual bucket timestamps. Preserve both forms
+        # without trying to manufacture timestamps from a count.
+        dropped_buckets = []
+        dropped_count = dropped_raw
+    elif isinstance(dropped_raw, list) and all(isinstance(item, str) and item.strip() for item in dropped_raw):
+        dropped_buckets = list(dropped_raw)
+        dropped_count = len(dropped_buckets)
+    else:
+        raise WeeklySourceHistoryError("four_hour_drop_metadata_invalid")
+
     return {
         "key": key,
         "canonical_symbol": registry["canonical_symbol"],
@@ -416,7 +432,8 @@ def build_public_4h_context(
         "status": "complete" if points else "unavailable",
         "cutoff_at": cutoff_utc.isoformat().replace("+00:00", "Z"),
         "points": points,
-        "dropped_incomplete_buckets": list(aggregation.get("dropped_incomplete_buckets") or []),
+        "dropped_incomplete_buckets": dropped_buckets,
+        "dropped_incomplete_bucket_count": dropped_count,
         "source_identity": series.get("source_identity"),
         "quality": series.get("quality"),
         "data_kind": series.get("data_kind"),
