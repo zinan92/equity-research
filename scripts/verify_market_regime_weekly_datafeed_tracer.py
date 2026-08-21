@@ -15,7 +15,7 @@ from pathlib import Path
 import sys
 
 
-PRODUCT = Path(__file__).resolve().parents[1]
+PRODUCT = Path(__file__).resolve().parents[1] / "product"
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_weekly_datafeed import WeeklyDatafeedClient  # noqa: E402

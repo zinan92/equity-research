@@ -19,7 +19,7 @@ from .market_regime_weekly_position_structure import POSITION_STATES, STRUCTURE_
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v7"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v13"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v14"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
@@ -587,7 +587,7 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
                 href = _snapshot_href(snapshot, snapshot_prefix)
                 snapshot_id = str(snapshot.get("snapshot_id") or "") if snapshot else ""
                 if href:
-                    chart = f'<img src="{_escape(href)}" alt="{_escape(display_name)}｜{label} K 线图" loading="lazy">'
+                    chart = f'<img src="{_escape(href)}" alt="{_escape(display_name)}｜{label} K 线图">'
                 else:
                     chart = '<div class="chart-unavailable">当前图表快照不可用；保留数据状态，等待新的完整证据。</div>'
                 statement = analysis.get(tf)
