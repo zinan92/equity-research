@@ -79,6 +79,21 @@
   errors and no horizontal overflow at 1440px/390px. Bitcoin remains typed
   source-unavailable and no fallback is introduced.
 
+## 2026-08-21 — Replace Weekly overview thumbnails with a 20-bar market map
+
+- **Decision:** Use the latest 20 weekly OHLC points from the real report to
+  draw high-DPI mini charts in the live overview. Up candles are hollow green,
+  down candles are filled red, EMA50 remains visible, and each row adds a
+  three-segment high/middle/low position meter plus `↗` / `→` / `↘` trend
+  semantics. The full snapshot remains available in the single-asset detail.
+- **Why:** Static screenshots were too small to distinguish candle body size or
+  the latest direction. The overview should answer “what is strongest,
+  weakest, or conflicted?” at a glance without hiding data behind a click.
+- **Evidence:** Issue #934 / PR #935; live API + browser acceptance passes with
+  17 mini charts at 2x backing resolution, 16/17 validated assets, no console
+  errors and no horizontal overflow at 1440px/390px. Bitcoin remains typed
+  source-unavailable.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
