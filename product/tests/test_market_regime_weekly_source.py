@@ -33,6 +33,26 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         )
         self.assertTrue(set(CONTEXT_4H_KEYS).issubset(WEEKLY_KEYS))
 
+    def test_missing_declared_4h_context_is_partial_not_complete(self) -> None:
+        source = {}
+        for index, key in enumerate(WEEKLY_KEYS):
+            series_kind = "spread" if key == "us2s10s" else ("rate_level" if key in {"us2y", "us10y"} else "price")
+            point = (
+                {"date": "2026-08-14", "value": 4.2 + index / 100}
+                if series_kind in {"rate_level", "spread"}
+                else {"date": "2026-08-14", "open": 100 + index, "high": 101 + index, "low": 99 + index, "close": 100.5 + index}
+            )
+            source[key] = {"series_kind": series_kind, "timezone": "UTC", "points": [point]}
+        snapshot = build_weekly_source_snapshot(
+            source,
+            week_end=date(2026, 8, 14),
+            week_count=1,
+            require_all=True,
+        )
+        self.assertEqual(snapshot["status"], "partial")
+        for key in CONTEXT_4H_KEYS:
+            self.assertNotIn("context_4h", snapshot["series"][key])
+
     def test_canonical_ready_weekly_response_accepts_exchange_holiday_gap(self) -> None:
         source = {
             "shanghai": {
@@ -454,6 +474,9 @@ class WeeklySourceAggregationTest(unittest.TestCase):
                 replayed = store.latest()
                 self.assertEqual(replayed["snapshot_id"], state["snapshot_id"])
                 self.assertEqual(replayed["series"]["gold"]["points"][0]["close"], 100.0)
+                self.assertEqual(store.load(state["snapshot_id"])["snapshot_id"], state["snapshot_id"])
+                with self.assertRaisesRegex(WeeklySourceHistoryError, "weekly_identity_invalid"):
+                    store.load("market-regime-weekly-source:not-a-digest")
 
     def test_store_binds_source_policy_into_snapshot_identity(self) -> None:
         import tempfile

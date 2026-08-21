@@ -593,9 +593,12 @@ def build_weekly_source_snapshot(
         item.get("daily_status") not in {None, "ready", "complete", "short_history"}
         for item in result.values()
     )
+    # Every declared 4H context asset must have an explicit context envelope.
+    # A missing envelope is an unavailable source, not an implicit success.
     context_incomplete = any(
-        isinstance(item.get("context_4h"), Mapping) and item["context_4h"].get("status") != "complete"
-        for item in result.values()
+        not isinstance(result.get(key, {}).get("context_4h"), Mapping)
+        or result[key]["context_4h"].get("status") != "complete"
+        for key in CONTEXT_4H_KEYS
     )
     return {
         "schema_version": SCHEMA_VERSION,
@@ -809,6 +812,47 @@ class WeeklySourceHistoryStore:
         _write_atomic(self.root / "latest.json", _json_bytes(state))
         self.latest()
         return state
+
+    def load(self, snapshot_id: str) -> dict[str, Any]:
+        """Verify and load one immutable source artifact by its canonical ID."""
+
+        prefix = "market-regime-weekly-source:"
+        if not isinstance(snapshot_id, str) or not snapshot_id.startswith(prefix):
+            raise WeeklySourceHistoryError("weekly_identity_invalid")
+        digest = snapshot_id.removeprefix(prefix)
+        if len(digest) != 64 or any(char not in "0123456789abcdef" for char in digest):
+            raise WeeklySourceHistoryError("weekly_identity_invalid")
+        artifact_relative = f"artifacts/{digest}.json"
+        receipt_relative = f"receipts/{digest}.json"
+        artifact_path = (self.root / artifact_relative).resolve()
+        receipt_path = (self.root / receipt_relative).resolve()
+        if self.root not in artifact_path.parents or self.root not in receipt_path.parents:
+            raise WeeklySourceHistoryError("weekly_reference_path_escape")
+        try:
+            artifact_bytes = artifact_path.read_bytes()
+            receipt_bytes = receipt_path.read_bytes()
+        except FileNotFoundError as exc:
+            raise WeeklySourceHistoryError("weekly_artifact_unavailable") from exc
+        import hashlib
+        try:
+            artifact = json.loads(artifact_bytes)
+            receipt = json.loads(receipt_bytes)
+        except json.JSONDecodeError as exc:
+            raise WeeklySourceHistoryError("weekly_artifact_json_invalid") from exc
+        if not isinstance(artifact, dict) or artifact.get("snapshot_id") != snapshot_id:
+            raise WeeklySourceHistoryError("weekly_artifact_identity_invalid")
+        identity_core = artifact.get("identity_core")
+        if not isinstance(identity_core, Mapping) or snapshot_id != f"{prefix}{_digest(identity_core)}":
+            raise WeeklySourceHistoryError("weekly_identity_mismatch")
+        artifact_ref = receipt.get("artifact") if isinstance(receipt, Mapping) else None
+        expected_receipt = {"schema_version": SCHEMA_VERSION, "event": "completed", "snapshot_id": snapshot_id, "artifact": artifact_ref}
+        if receipt != expected_receipt or not isinstance(artifact_ref, Mapping):
+            raise WeeklySourceHistoryError("weekly_receipt_identity_mismatch")
+        if receipt_bytes != _json_bytes(receipt):
+            raise WeeklySourceHistoryError("weekly_receipt_encoding_mismatch")
+        if artifact_ref.get("path") != artifact_relative or artifact_ref.get("sha256") != hashlib.sha256(artifact_bytes).hexdigest():
+            raise WeeklySourceHistoryError("weekly_receipt_artifact_mismatch")
+        return {key: artifact.get(key) for key in ("snapshot_id", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs", "source_policy")}
 
     def latest(self) -> dict[str, Any]:
         try:

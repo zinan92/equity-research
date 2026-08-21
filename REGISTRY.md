@@ -1,6 +1,6 @@
 # REGISTRY
 
-## 2026-08-21 · Weekly canonical datafeed integration and static reader (Issues #891/#892/#893/#894/#895/#896/#902 / PRs #897–#901, #903, #905)
+## 2026-08-21 · Weekly canonical datafeed integration and static reader (Issues #891/#892/#893/#894/#895/#896/#902/#907/#910 / PRs #897–#901, #903, #905, #908, #909)
 
 Now: `main` includes the canonical Weekly integration at the latest merged
 SHA. The Weekly seam is `canonical datafeed CandleResponse → immutable
@@ -20,7 +20,8 @@ browser-validation port. Reader projection uses canonical display names; a
 partial or unavailable opportunity output is titled `机会清单`, while
 `机会排序` requires a complete valid rank order.
 
-Real local report proof: `report_id=market-regime-weekly-report:0fd9baef7d4edadfc7686f2657ccb3e14d8b0bd3c8e2883ebce377202748d129`,
+Real local report proof: `report_id=market-regime-weekly-report:ee92b7cb1791c53b162603c2e48f306e3867253321ea8ff69ab1cd70fdcc57e3`,
+`source_snapshot_id=market-regime-weekly-source:bb189469537c1a92ac2652f596eb4b91c53f04fac2be50053089b85423d82a30`,
 `week_end=2026-08-14`, 17 assets, 39 chart snapshots, renderer
 `market-regime-weekly-report-renderer-v14`. Static reader acceptance passed at
 1280px and 390px with 39 images, zero scripts, zero interactive markers, zero
@@ -32,7 +33,7 @@ was substituted. A-share full-market holiday gaps remain visible as metadata
 but no longer turn an otherwise ready canonical weekly response into
 unavailable.
 
-Focused Weekly suite: 130/130. Full repository baseline: 1113 tests ran with
+Focused Weekly suite: 136/136. Full repository baseline: 1122 tests ran with
 one unrelated environment error because
 `/Users/wendy/Desktop/K线日报/SYSTEM-PROMPT-macro-analyst.md` is absent, plus
 one skipped test; no Weekly failure was observed. Finance Daily Newsletter,

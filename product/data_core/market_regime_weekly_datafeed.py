@@ -89,6 +89,7 @@ def _unavailable(
     reason: str,
     *,
     payload: Any = None,
+    request_evidence: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     response = build_unavailable_candle_response(asset_key, timeframe, reason[:180])
     spec = WEEKLY_ASSET_REGISTRY[asset_key]
@@ -140,6 +141,10 @@ def _unavailable(
         ),
         "response_sha256": _digest({"payload": payload, "reason": reason}),
     }
+    if isinstance(request_evidence, Mapping):
+        evidence = dict(request_evidence)
+        response["request_evidence"] = evidence
+        response["source_identity"]["request_evidence"] = evidence
     return validate_weekly_candle_response(response)
 
 
@@ -255,14 +260,18 @@ class WeeklyDatafeedClient:
             query.append(("end", end))
         url = f"{self.base_url}/api/candles/{request_spec['asset_class']}/{request_spec['ticker']}?{urlencode(query)}"
         request = Request(url, headers={"Accept": "application/json"}, method="GET")
+        raw_body = b""
         try:
             with self.opener(request, self.timeout) as response:
                 status = int(getattr(response, "status", getattr(response, "status_code", 200)))
-                payload = json.loads(response.read().decode("utf-8"))
+                raw_body = response.read()
+                payload = json.loads(raw_body.decode("utf-8"))
         except HTTPError as exc:
             payload: Any = {}
+            raw_body = b""
             try:
-                payload = json.loads(exc.read().decode("utf-8"))
+                raw_body = exc.read()
+                payload = json.loads(raw_body.decode("utf-8"))
             except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError):
                 payload = {}
             detail = payload.get("detail") if isinstance(payload, Mapping) else payload
@@ -274,9 +283,32 @@ class WeeklyDatafeedClient:
                 timeframe,
                 f"datafeed_http:{getattr(exc, 'code', 'error')}:{reason}",
                 payload=payload,
+                request_evidence={
+                    "url": url,
+                    "method": "GET",
+                    "status": int(getattr(exc, "code", 0) or 0),
+                    "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                },
             )
-        except (URLError, TimeoutError, OSError, ValueError, json.JSONDecodeError) as exc:
-            return _unavailable(asset_key, timeframe, f"datafeed_transport:{type(exc).__name__}")
+        except (URLError, TimeoutError, OSError) as exc:
+            return _unavailable(
+                asset_key,
+                timeframe,
+                f"datafeed_transport:{type(exc).__name__}",
+                request_evidence={"url": url, "method": "GET", "status": None, "error_type": type(exc).__name__},
+            )
+        except (UnicodeDecodeError, ValueError) as exc:
+            return _unavailable(
+                asset_key,
+                timeframe,
+                f"datafeed_response:{type(exc).__name__}",
+                request_evidence={
+                    "url": url,
+                    "method": "GET",
+                    "status": int(status),
+                    "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                },
+            )
         if status < 200 or status >= 300:
             detail = payload.get("detail") if isinstance(payload, Mapping) else payload
             if isinstance(detail, Mapping):
@@ -286,6 +318,12 @@ class WeeklyDatafeedClient:
                 timeframe,
                 f"datafeed_http:{status}:{detail or 'error'}",
                 payload=payload,
+                request_evidence={
+                    "url": url,
+                    "method": "GET",
+                    "status": status,
+                    "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                },
             )
         try:
             return self._convert_response(asset_key, timeframe, payload)
@@ -295,6 +333,12 @@ class WeeklyDatafeedClient:
                 timeframe,
                 f"datafeed_contract:{str(exc)}",
                 payload=payload,
+                request_evidence={
+                    "url": url,
+                    "method": "GET",
+                    "status": status,
+                    "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                },
             )
 
     def _convert_response(self, asset_key: str, timeframe: str, payload: Mapping[str, Any]) -> dict[str, Any]:

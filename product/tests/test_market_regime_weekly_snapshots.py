@@ -14,6 +14,7 @@ sys.path.insert(0, str(PRODUCT / "tests"))
 from data_core.market_regime_weekly_report import attach_chart_snapshots, build_weekly_report  # noqa: E402
 from data_core.market_regime_weekly_report import render_weekly_html, render_weekly_markdown  # noqa: E402
 from data_core.market_regime_weekly_runtime import WeeklyReportStore, WeeklyRuntimeError  # noqa: E402
+from data_core.market_regime_weekly_source import WeeklySourceHistoryStore  # noqa: E402
 from data_core.market_regime_weekly_snapshots import PlaywrightWeeklyChartSnapshotPort  # noqa: E402
 from test_market_regime_weekly_report import (  # noqa: E402
     analyses_fixture,
@@ -27,12 +28,15 @@ class WeeklyChartSnapshotTest(unittest.TestCase):
     def test_browser_snapshots_bind_renderer_input_and_report_readback(self) -> None:
         with tempfile.TemporaryDirectory(prefix="weekly-snapshot-test-") as temporary:
             root = Path(temporary)
+            source = source_fixture()
+            WeeklySourceHistoryStore(root / "runtime" / "source").publish(source)
+            source = WeeklySourceHistoryStore(root / "runtime" / "source").latest()
             candle_responses = {
                 "gold:weekly": candle_response_fixture("gold"),
                 "us2y:weekly": candle_response_fixture("us2y", series_kind="rate_level"),
             }
             report = build_weekly_report(
-                source_fixture(),
+                source,
                 analyses_fixture(),
                 ranking_fixture(),
                 candle_responses=candle_responses,
@@ -69,11 +73,14 @@ class WeeklyChartSnapshotTest(unittest.TestCase):
     def test_store_rejects_missing_or_cross_slot_snapshot_refs(self) -> None:
         with tempfile.TemporaryDirectory(prefix="weekly-snapshot-binding-") as temporary:
             root = Path(temporary)
+            source = source_fixture()
+            WeeklySourceHistoryStore(root / "runtime" / "source").publish(source)
+            source = WeeklySourceHistoryStore(root / "runtime" / "source").latest()
             responses = {
                 "gold:weekly": candle_response_fixture("gold"),
                 "us2y:weekly": candle_response_fixture("us2y", series_kind="rate_level"),
             }
-            report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture(), candle_responses=responses)
+            report = build_weekly_report(source, analyses_fixture(), ranking_fixture(), candle_responses=responses)
             port = PlaywrightWeeklyChartSnapshotPort(runtime_root=root / "runtime", output_root=root / "output")
             snapshots = port(report=report, candle_responses=responses)
             store = WeeklyReportStore(root / "runtime", root / "output")

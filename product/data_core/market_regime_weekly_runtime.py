@@ -45,6 +45,7 @@ from .market_regime_weekly_source import (
     CONTEXT_4H_KEYS,
     SCHEMA_VERSION as SOURCE_SCHEMA_VERSION,
     WEEKLY_KEYS,
+    WeeklySourceHistoryError,
     WeeklySourceHistoryStore,
 )
 
@@ -125,6 +126,7 @@ class WeeklyReportStore:
     def __init__(self, runtime_root: Path | str, output_root: Path | str) -> None:
         self.runtime_root = Path(runtime_root).expanduser().resolve()
         self.output_root = Path(output_root).expanduser().resolve()
+        self.source_store = WeeklySourceHistoryStore(self.runtime_root / "source")
 
     def _validate_snapshot_refs(self, report: Mapping[str, Any]) -> None:
         top_slots = {str(slot.get("slot_id")): slot for slot in report.get("chart_slots") or [] if isinstance(slot, Mapping) and slot.get("slot_id")}
@@ -198,6 +200,11 @@ class WeeklyReportStore:
             raise WeeklyRuntimeError("report_identity_mismatch")
         if not isinstance(boundary, Mapping) or boundary.get("publication_eligible") is not False:
             raise WeeklyRuntimeError("report_publication_boundary_invalid")
+        source_snapshot_id = report.get("source_snapshot_id")
+        try:
+            self.source_store.load(source_snapshot_id)
+        except (TypeError, WeeklySourceHistoryError) as exc:
+            raise WeeklyRuntimeError("weekly_source_snapshot_unavailable") from exc
         self._validate_snapshot_refs(report)
 
         digest = report_id.removeprefix(REPORT_ID_PREFIX)
@@ -280,6 +287,10 @@ class WeeklyReportStore:
             raise WeeklyRuntimeError("weekly_report_artifact_identity_invalid")
         if pointer.get("source_snapshot_id") != report.get("source_snapshot_id"):
             raise WeeklyRuntimeError("weekly_report_source_snapshot_identity_mismatch")
+        try:
+            self.source_store.load(report.get("source_snapshot_id"))
+        except (TypeError, WeeklySourceHistoryError) as exc:
+            raise WeeklyRuntimeError("weekly_source_snapshot_unavailable") from exc
         if report_id != f"{REPORT_ID_PREFIX}{_digest(report.get('identity_core'))}":
             raise WeeklyRuntimeError("weekly_report_artifact_identity_mismatch")
         expected_receipt = {"schema_version": RUNTIME_SCHEMA_VERSION, "event": "completed", "report_id": report_id, "artifact": {"path": artifact_relative, "sha256": pointer["artifact"]["sha256"]}}
