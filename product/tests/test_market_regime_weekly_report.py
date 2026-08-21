@@ -210,6 +210,8 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn('src="snapshots/dxy-weekly.png"', html)
         self.assertIn('src="../../snapshots/dxy-weekly.png"', archive_html)
         self.assertIn('alt="美元指数｜周线 K 线图"', html)
+        self.assertIn("width:min(100%,600px)", html)
+        self.assertIn("image-rendering:auto", html)
         self.assertNotIn("data-chart=", html)
         self.assertNotIn("lightweight-charts", html)
         self.assertNotIn("StandardKlineChart", html)

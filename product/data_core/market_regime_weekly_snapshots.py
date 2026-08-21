@@ -15,6 +15,7 @@ from .market_regime_weekly_report import render_weekly_interactive_html
 SNAPSHOT_SCHEMA_VERSION = "market-regime-weekly-chart-snapshot-v1"
 SNAPSHOT_ID_PREFIX = "market-regime-weekly-chart-snapshot:"
 SNAPSHOT_VIEWPORT = {"width": 1280, "height": 900}
+SNAPSHOT_DEVICE_SCALE_FACTOR = 2
 
 
 class WeeklyChartSnapshotError(RuntimeError):
@@ -66,6 +67,7 @@ def _snapshot_core(slot: Mapping[str, Any], report: Mapping[str, Any]) -> dict[s
         "reader_renderer_version": report.get("renderer_version"),
         "renderer_options": payload.get("renderer_options"),
         "viewport": dict(SNAPSHOT_VIEWPORT),
+        "device_scale_factor": SNAPSHOT_DEVICE_SCALE_FACTOR,
     }
 
 
@@ -106,7 +108,10 @@ class PlaywrightWeeklyChartSnapshotPort:
                 except Exception as exc:  # pragma: no cover - environment dependency
                     raise WeeklyChartSnapshotError("chromium_unavailable") from exc
                 try:
-                    page = browser.new_page(viewport=SNAPSHOT_VIEWPORT)
+                    page = browser.new_page(
+                        viewport=SNAPSHOT_VIEWPORT,
+                        device_scale_factor=SNAPSHOT_DEVICE_SCALE_FACTOR,
+                    )
                     browser_errors: list[str] = []
                     page.on("pageerror", lambda error: browser_errors.append(str(error)))
                     page.on("console", lambda message: browser_errors.append(message.text) if message.type == "error" else None)
@@ -185,5 +190,6 @@ __all__ = [
     "PlaywrightWeeklyChartSnapshotPort",
     "SNAPSHOT_ID_PREFIX",
     "SNAPSHOT_SCHEMA_VERSION",
+    "SNAPSHOT_DEVICE_SCALE_FACTOR",
     "WeeklyChartSnapshotError",
 ]
