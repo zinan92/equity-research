@@ -223,6 +223,33 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         self.assertEqual(context["raw_timeframe"], "1h")
         self.assertEqual(context["timeframe_origin"], "aggregated")
 
+    def test_public_4h_preserves_provider_drop_count(self) -> None:
+        context = build_public_4h_context(
+            {
+                "key": "gold",
+                "timezone": "UTC",
+                "raw_timeframe": "1h",
+                "timeframe_origin": "aggregated",
+                "aggregation": {
+                    "kind": "ohlc_resample",
+                    "rule": "fixed_4h",
+                    "input_timeframe": "1h",
+                    "bucket_timezone": "UTC",
+                    "anchor_hour": 0,
+                    "anchor_minute": 0,
+                    "dropped_incomplete_buckets": 12,
+                },
+                "points": [
+                    {"timestamp": "2026-08-14T16:00:00+00:00", "open": 100, "high": 104, "low": 99, "close": 103},
+                ],
+                "source_identity": {"provider": "yahoo_finance", "provider_symbol": "GC=F"},
+                "data_kind": "real",
+            },
+            cutoff_at=datetime(2026, 8, 14, 23, 59, tzinfo=timezone.utc),
+        )
+        self.assertEqual(context["dropped_incomplete_bucket_count"], 12)
+        self.assertEqual(context["dropped_incomplete_buckets"], [])
+
     def test_public_native_4h_requires_none_aggregation_kind_and_valid_timezone(self) -> None:
         base = {
             "key": "gold",

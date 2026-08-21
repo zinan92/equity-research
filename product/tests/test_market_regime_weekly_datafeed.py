@@ -10,7 +10,11 @@ import unittest
 PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
-from data_core.market_regime_weekly_contract import WEEKLY_ASSET_REGISTRY, build_weekly_candle_responses  # noqa: E402
+from data_core.market_regime_weekly_contract import (  # noqa: E402
+    WEEKLY_ASSET_REGISTRY,
+    build_candle_response_from_weekly_series,
+    build_weekly_candle_responses,
+)
 from data_core.market_regime_weekly_datafeed import (  # noqa: E402
     EXPECTED_PROVIDER_SYMBOLS,
     WeeklyDatafeedClient,
@@ -94,6 +98,47 @@ class FakeResponse:
 
 
 class WeeklyDatafeedTest(unittest.TestCase):
+    def test_a_share_fallback_metadata_survives_weekly_bridge(self) -> None:
+        spec = WEEKLY_ASSET_REGISTRY["shanghai"]
+        point = {"date": "2026-08-14", "open": 100, "high": 102, "low": 99, "close": 101, "volume": 10}
+        fallback_identity = {
+            "provider": "sina_finance",
+            "provider_symbol": "sh000001",
+            "source_mode": "sina_index",
+            "requested_source": "tencent_kline",
+            "selected_source": "sina_index",
+            "attempted_sources": ["tencent_kline", "sina_index"],
+            "selection_reason": "explicit_fallback",
+            "response_sha256": "a" * 64,
+        }
+        response = build_candle_response_from_weekly_series(
+            {
+                "cutoff_at": "2026-08-14T23:59:59Z",
+                "series": {
+                    "shanghai": {
+                        "status": "complete",
+                        "daily_status": "ready",
+                        "canonical_symbol": spec["canonical_symbol"],
+                        "series_kind": spec["series_kind"],
+                        "timezone": spec["timezone"],
+                        "unit": spec["unit"],
+                        "price_basis": spec["price_basis"],
+                        "data_kind": "real",
+                        "quality": "fresh",
+                        "points": [point],
+                        "daily_points": [point],
+                        "source_identity": fallback_identity,
+                    }
+                },
+            },
+            "shanghai",
+            "daily",
+        )
+        self.assertEqual(response["requested_source"], "tencent_kline")
+        self.assertEqual(response["selected_source"], "sina_index")
+        self.assertEqual(response["attempted_sources"], ["tencent_kline", "sina_index"])
+        self.assertEqual(response["selection_reason"], "explicit_fallback")
+
     def test_all_registry_rows_have_explicit_request_mapping(self) -> None:
         for key, spec in WEEKLY_ASSET_REGISTRY.items():
             request = datafeed_request_for_asset(key, "daily")
@@ -154,6 +199,9 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["selected_source"], "sina_index")
         self.assertEqual(result["selection_reason"], "explicit_fallback")
         self.assertEqual(result["attempted_sources"], ["tencent_kline", "sina_index"])
+        self.assertEqual(result["source_identity"]["requested_source"], "tencent_kline")
+        self.assertEqual(result["source_identity"]["selected_source"], "sina_index")
+        self.assertEqual(result["source_identity"]["attempted_sources"], ["tencent_kline", "sina_index"])
 
     def test_default_urlopen_receives_timeout_as_a_keyword(self) -> None:
         calls = []
