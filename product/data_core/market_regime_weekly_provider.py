@@ -51,6 +51,7 @@ class DeepSeekWeeklyAssetProvider:
         no_four_hour = "four_hour" not in (request.get("timeframes") or {})
         prompt = ASSET_SYSTEM_PROMPT
         prompt += "\n所有 text 字段必须使用简体中文；只能保留资产官方符号或名称 Nasdaq、Bitcoin、Nikkei、KOSPI、SCHD、OHLC，不能写英文句子。"
+        prompt += "\n资产名称中的数字（例如标普500、科创50、日经225、2年期、10年期、2s10s）可以保留；除此之外不要输出价格、收益率、百分比或其他数字观测。"
         if no_four_hour:
             prompt += "\n本次请求没有 four_hour。输出 JSON 中绝对不能有 four_hour 字段，任何文字也不能出现 4H、4小时或小时级走势；只讨论周线和日线。"
         output: Mapping[str, Any] = {}

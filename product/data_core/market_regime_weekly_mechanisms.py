@@ -46,16 +46,34 @@ def mechanism_for_asset(key: str) -> dict[str, Any]:
 _APPROVED_SYMBOLS = frozenset({"DXY", "VIX", "WTI", "Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "MACD", "EMA", "ETF", "OHLC", "S", "P"})
 _QUALIFIER_TOKENS = ("通常", "一般", "往往", "可能", "常见", "若", "当", "取决于", "未必", "不一定")
 _COUNTER_CASE_TOKENS = ("但", "不过", "然而", "反例", "未必", "不一定", "取决于", "区别在于", "若", "并非绝对", "不是绝对")
-_FORBIDDEN_THEORY_RE = re.compile(r"实时|当前(?:价格|收盘|走势|市场|黄金|美元|白银|油价|指数|资产)|当前.{0,8}(?:上涨|下跌|走强|走弱|位于|收于|高于|低于|是|为)|本周|今天|眼下|正在|已经|本报告|本期|现价|收盘|最新|最近|(?<!不)一定|必然|必定|肯定|必将|毫无例外|预测准确率|保证收益")
+_FORBIDDEN_THEORY_RE = re.compile(
+    r"实时|当前(?:价格|收盘|走势|市场|黄金|美元|白银|油价|指数|资产)|"
+    r"当前.{0,8}(?:上涨|下跌|走强|走弱|位于|收于|高于|低于|是|为)|本周|今天|眼下|正在|已经|"
+    r"本报告|本期|现价|收盘|最新|最近|(?<![不非是未])一定|"
+    r"(?<![不非是未])必然|(?<![不非是未])必定|(?<![不非是未])肯定|"
+    r"(?<![不非是未])必将|毫无例外|预测准确率|保证收益"
+)
+
+_NUMERIC_ASSET_LABELS = {
+    "us2y": ("2Y", "2 年期", "2年期"),
+    "us10y": ("10Y", "10 年期", "10年期"),
+    "us2s10s": ("2s10s", "2S10S", "2年10年", "2年期10年期"),
+    "sp500": ("标普 500", "标普500", "S&P 500", "S&P500"),
+    "star50": ("科创 50", "科创50"),
+    "nikkei": ("日经 225", "日经225", "Nikkei 225"),
+}
 
 
-def _validate_theory_text(text: str) -> None:
+def _validate_theory_text(text: str, *, asset_key: str | None = None) -> None:
     words = re.findall(r"[A-Za-z]{2,}", text)
     if any(word not in _APPROVED_SYMBOLS for word in words):
         raise ValueError("theory_language_not_chinese")
     if _FORBIDDEN_THEORY_RE.search(text):
         raise ValueError("theory_current_or_certain_claim")
-    numeric_free = re.sub(r"2s10s|10Y|2Y", "", text)
+    numeric_free = text
+    for label in sorted(_NUMERIC_ASSET_LABELS.get(asset_key or "", ()), key=len, reverse=True):
+        numeric_free = numeric_free.replace(label, "")
+    numeric_free = re.sub(r"2s10s|10Y|2Y", "", numeric_free, flags=re.IGNORECASE)
     if re.search(r"\d|%|％", numeric_free):
         raise ValueError("theory_numeric_observation")
     if not any(token in text for token in _QUALIFIER_TOKENS):
@@ -69,7 +87,9 @@ def validate_theoretical_statement(output: Mapping[str, Any], allowed_mechanism_
         raise ValueError("theory_statement_invalid")
     if output.get("claim_type") != "theoretical_mechanism":
         raise ValueError("theory_claim_type_invalid")
-    _validate_theory_text(output["text"])
+    mechanism_id = next(iter(allowed_mechanism_ids), "")
+    asset_key = mechanism_id.split(":")[1] if mechanism_id.startswith("mechanism:") and ":" in mechanism_id else None
+    _validate_theory_text(output["text"], asset_key=asset_key)
     evidence_ids = output.get("evidence_ids")
     if not isinstance(evidence_ids, list) or not evidence_ids:
         raise ValueError("mechanism_evidence_required")

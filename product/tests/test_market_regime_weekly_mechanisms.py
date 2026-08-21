@@ -73,6 +73,20 @@ class WeeklyMechanismTest(unittest.TestCase):
         value = {"text": "当前环境下，黄金通常受实际利率与避险需求驱动，但现金需求可能使传导暂时失效。", "evidence_ids": [mechanism_id], "claim_type": "theoretical_mechanism"}
         self.assertEqual(validate_theoretical_statement(value, {mechanism_id}), value)
 
+    def test_negated_certainty_and_asset_label_numbers_are_allowed(self) -> None:
+        cases = (
+            ("dxy", "美元走强通常收紧非美元资产的金融条件，但该传导并非必然成立。"),
+            ("sp500", "标普500通常受盈利增长、利率和风险偏好驱动，但上涨不必然代表广泛风险偏好。"),
+            ("star50", "科创50通常受科技盈利、政策与国内流动性驱动，但产业政策可能改变传导。"),
+            ("nikkei", "日经225通常受全球周期与日元因素影响，但国内盈利改善可能改变结果。"),
+            ("us10y", "美国10年期国债收益率通常受长期通胀预期与期限溢价驱动，但收益率与股票不必然反向。"),
+        )
+        for key, text in cases:
+            with self.subTest(key=key):
+                allowed = set(mechanism_for_asset(key)["mechanism_ids"])
+                value = {"text": text, "evidence_ids": [next(iter(allowed))], "claim_type": "theoretical_mechanism"}
+                self.assertEqual(validate_theoretical_statement(value, allowed), value)
+
 
 if __name__ == "__main__":
     unittest.main()
