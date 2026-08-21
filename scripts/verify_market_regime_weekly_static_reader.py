@@ -39,7 +39,9 @@ def main() -> int:
                 assert page.locator("text=本周机会排序").count() + page.locator("text=本周机会清单").count() == 1
                 page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 page.wait_for_timeout(150)
-                images_loaded = page.evaluate("Array.from(document.images).every(image => image.complete)")
+                images_loaded = page.evaluate(
+                    "Array.from(document.images).every(image => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0)"
+                )
                 assert images_loaded, (width, "snapshot image not loaded")
                 overflow = page.evaluate("({body: document.body.scrollWidth, viewport: window.innerWidth})")
                 assert overflow["body"] <= overflow["viewport"], (width, overflow)

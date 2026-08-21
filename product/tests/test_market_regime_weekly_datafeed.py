@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import io
 import json
 import sys
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
+from urllib.error import HTTPError
 import unittest
 
 
@@ -259,6 +261,35 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["source_identity"]["provider_symbol"], "sh000001")
         self.assertTrue(result["source_identity"]["response_sha256"])
 
+    def test_http_error_preserves_safe_upstream_rejection_metadata(self) -> None:
+        payload = {
+            "detail": {
+                "error": "upstream_error",
+                "reject_reason": "rate_limited",
+                "provider": "binance_spot",
+                "source_mode": "binance_spot_public",
+                "provider_symbol": "BTCUSDT",
+                "attempted_sources": ["binance_spot_public"],
+                "access_issues": ["binance_spot_public: rate_limited"],
+            }
+        }
+
+        def opener(_request, _timeout):
+            raise HTTPError(
+                "http://datafeed.test",
+                429,
+                "rate limited",
+                {},
+                io.BytesIO(json.dumps(payload).encode()),
+            )
+
+        result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("bitcoin", "daily")
+        self.assertEqual(result["status"], "unavailable")
+        self.assertIn("rate_limited", result["reject_reason"])
+        self.assertEqual(result["provider"], "binance_spot")
+        self.assertEqual(result["source_identity"]["provider_symbol"], "BTCUSDT")
+        self.assertEqual(result["access_issues"], ["binance_spot_public: rate_limited"])
+
     def test_malformed_success_payload_is_typed_unavailable(self) -> None:
         def opener(_request, _timeout):
             return FakeResponse({"unexpected": []})
@@ -403,12 +434,13 @@ class WeeklyDatafeedTest(unittest.TestCase):
 
         snapshot = load_datafeed_weekly_source_snapshot(FakeClient(), week_end="2026-08-14", cutoff_at="2026-08-14T23:59:59Z")
         self.assertEqual(set(snapshot["series"]), set(WEEKLY_ASSET_REGISTRY))
+        self.assertEqual(snapshot["status"], "partial")
         self.assertEqual(snapshot["series"]["gold"]["daily_status"], "unavailable")
-        self.assertEqual(snapshot["series"]["gold"]["status"], "short_history")
+        self.assertEqual(snapshot["series"]["gold"]["status"], "complete")
         self.assertEqual(snapshot["series"]["gold"]["points"], [{"date": "2026-08-14", "open": 100.0, "high": 102.0, "low": 99.0, "close": 101.0, "volume": 0.0}])
         responses = build_weekly_candle_responses(snapshot)
         self.assertEqual(responses["gold:daily"]["status"], "unavailable")
-        self.assertEqual(responses["gold:weekly"]["status"], "unavailable")
+        self.assertEqual(responses["gold:weekly"]["status"], "ready")
         self.assertEqual(snapshot["data_kind"], "real")
         self.assertTrue(all((key, "weekly") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "daily") in calls for key in WEEKLY_ASSET_REGISTRY))

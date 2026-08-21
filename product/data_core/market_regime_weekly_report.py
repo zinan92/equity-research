@@ -136,7 +136,7 @@ def _opportunity_projection(ranking: Mapping[str, Any] | None) -> dict[str, Any]
             return {"title": "机会清单", "ordered": False, "rows": original_rows}
         ranked.append(row)
     ranks = sorted(int(row["rank"]) for row in ranked)
-    if not ranked or ranks != list(range(1, len(ranked) + 1)):
+    if unavailable or not ranked or ranks != list(range(1, len(ranked) + 1)):
         return {"title": "机会清单", "ordered": False, "rows": original_rows}
     return {"title": "机会排序", "ordered": True, "rows": sorted(ranked, key=lambda row: int(row["rank"])) + unavailable}
 

@@ -237,6 +237,13 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertNotIn("本周机会排序", html)
         self.assertNotIn("本周机会排序", markdown)
 
+    def test_partial_ranking_with_unavailable_assets_is_not_called_a_ranking(self) -> None:
+        ranking = ranking_fixture()
+        ranking["ordered_assets"][0].update({"status": "unavailable", "rank": None, "evidence_ids": []})
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
+        self.assertIn("本周机会清单", render_weekly_html(report))
+        self.assertIn("## 本周机会清单", render_weekly_markdown(report))
+
     def test_unknown_ranking_key_uses_typed_display_label(self) -> None:
         ranking = ranking_fixture()
         ranking["ordered_assets"][0]["asset_key"] = "unexpected_key"
