@@ -60,6 +60,14 @@ def ranking_fixture() -> dict:
 def candle_response_fixture(asset_key: str, *, series_kind: str | None = None) -> dict:
     spec = WEEKLY_ASSET_REGISTRY[asset_key]
     kind = series_kind or spec["series_kind"]
+    primary_source = spec["source_id"].removeprefix("datafeed:")
+    fallback_sources = list(spec.get("fallback_sources", []))
+    provider_symbols = {
+        "us2y": "2 Yr",
+        "us10y": "10 Yr",
+        "us2s10s": "10 Yr-2 Yr",
+    }
+    provider_symbol = provider_symbols.get(asset_key, spec["canonical_symbol"])
     value = 4.2 if kind in {"rate_level", "spread"} else 100.0
     row = {"timestamp": "2026-08-14T00:00:00Z", "open": value, "high": value, "low": value, "close": value, "volume": 0}
     if kind in {"rate_level", "spread"}:
@@ -77,12 +85,16 @@ def candle_response_fixture(asset_key: str, *, series_kind: str | None = None) -
         "price_basis": spec["price_basis"],
         "status": "ready",
         "provider": "test_provider",
-        "source_mode": "test_source",
-        "requested_source": "test_source",
-        "selected_source": "test_source",
+        "provider_symbol": provider_symbol,
+        "source_mode": primary_source,
+        "requested_source": primary_source,
+        "selected_source": primary_source,
+        "selection_reason": "requested_or_default",
+        "attempted_sources": [primary_source],
         "cache_policy": "bypass",
         "quality_policy": "strict",
-        "fallback_policy": "none",
+        "fallback_policy": spec.get("fallback_policy", "none"),
+        "fallback_sources": fallback_sources,
         "quality_flags": [],
         "is_synthetic": False,
         "served_from": "upstream",
@@ -91,7 +103,12 @@ def candle_response_fixture(asset_key: str, *, series_kind: str | None = None) -
         "age_seconds": 0,
         "max_age_seconds": 90,
         "execution_venue": False,
-        "source_identity": {"provider": "test_provider", "run_id": f"run-{asset_key}"},
+        "source_identity": {
+            "provider": "test_provider",
+            "provider_symbol": provider_symbol,
+            "source_mode": primary_source,
+            "run_id": f"run-{asset_key}",
+        },
         "access_issues": [],
         "bars": [row],
     }
