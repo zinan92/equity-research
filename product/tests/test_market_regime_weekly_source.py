@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
+import json
 import sys
 from pathlib import Path
 import unittest
@@ -64,6 +65,34 @@ class WeeklySourceAggregationTest(unittest.TestCase):
         self.assertEqual(series["weekly_bin_count"], 2)
         self.assertEqual(series["weekly_gap_count"], 1)
         self.assertEqual(series["missing_week_ends"], ["2026-08-07"])
+
+    def test_ready_weekly_response_with_zero_cutoff_bars_is_unavailable(self) -> None:
+        source = {
+            "shanghai": {
+                "key": "shanghai",
+                "canonical_symbol": "000001.SH",
+                "series_kind": "price",
+                "timezone": "Asia/Shanghai",
+                "unit": "index points",
+                "price_basis": "provider_unadjusted_index_level",
+                "quality": "fresh",
+                "data_kind": "real",
+                "points": [{"date": "2026-08-10", "open": 100, "high": 101, "low": 99, "close": 100}],
+                "weekly_status": "ready",
+                "weekly_source_identity": {"provider": "tencent_finance", "source_mode": "tencent_kline"},
+                "weekly_data_kind": "real",
+            }
+        }
+        snapshot = build_weekly_source_snapshot(
+            source,
+            week_end=date(2026, 8, 14),
+            week_count=3,
+            weekly_points_by_key={"shanghai": [{"date": "2026-08-21", "open": 101, "high": 102, "low": 100, "close": 101}]},
+        )
+        series = snapshot["series"]["shanghai"]
+        self.assertEqual(series["status"], "unavailable")
+        self.assertEqual(series["weekly_bin_count"], 0)
+        self.assertEqual(series["points"], [])
 
     def test_weekly_price_ohlc_uses_first_open_extremes_and_last_close(self) -> None:
         points = [
@@ -425,6 +454,30 @@ class WeeklySourceAggregationTest(unittest.TestCase):
                 replayed = store.latest()
                 self.assertEqual(replayed["snapshot_id"], state["snapshot_id"])
                 self.assertEqual(replayed["series"]["gold"]["points"][0]["close"], 100.0)
+
+    def test_store_binds_source_policy_into_snapshot_identity(self) -> None:
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as temporary:
+            snapshot = build_weekly_source_snapshot(
+                {
+                    "gold": {
+                        "series_kind": "price",
+                        "timezone": "America/New_York",
+                        "points": [{"date": "2026-08-14", "open": 100, "high": 101, "low": 99, "close": 100}],
+                        "data_kind": "real",
+                    }
+                },
+                week_end=date(2026, 8, 14),
+                week_count=1,
+            )
+            snapshot["source_policy"] = {"cache_policy": "bypass", "quality": "strict", "fallback_policy": "none"}
+            store = WeeklySourceHistoryStore(Path(temporary))
+            state = store.publish(snapshot)
+            replayed = store.latest()
+            self.assertEqual(replayed["source_policy"], snapshot["source_policy"])
+            artifact = json.loads((Path(temporary) / state["artifact"]["path"]).read_text())
+            self.assertEqual(artifact["identity_core"]["source_policy"], snapshot["source_policy"])
 
     def test_store_rejects_artifact_hash_tamper(self) -> None:
         import tempfile

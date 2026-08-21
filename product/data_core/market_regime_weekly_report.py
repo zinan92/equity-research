@@ -104,24 +104,48 @@ def _display_name(asset_key: Any) -> str:
     return DISPLAY_NAMES.get(str(asset_key or ""), "未知资产")
 
 
-def _opportunity_projection(ranking: Mapping[str, Any] | None) -> dict[str, Any]:
+def _opportunity_projection(
+    ranking: Mapping[str, Any] | None,
+    cards: Any = None,
+) -> dict[str, Any]:
     """Project ranking data into a truthful reader title and row order."""
+
+    fallback_rows: list[dict[str, Any]] = []
+    if isinstance(cards, list):
+        by_key = {str(card.get("asset_key")): card for card in cards if isinstance(card, Mapping)}
+        if set(by_key) == set(WEEKLY_KEYS):
+            for key in WEEKLY_KEYS:
+                card = by_key[key]
+                analysis = card.get("analysis") if isinstance(card.get("analysis"), Mapping) else {}
+                state = analysis.get("opportunity_state") if card.get("analysis_status") == "validated" else None
+                fallback_rows.append(
+                    {
+                        "asset_key": key,
+                        "status": state if state in {"participate", "wait", "avoid"} else "unavailable",
+                        "rank": None,
+                        "text": "数据不可用" if state not in {"participate", "wait", "avoid"} else "",
+                        "evidence_ids": [],
+                    }
+                )
+
+    def unordered(rows: list[Mapping[str, Any]]) -> dict[str, Any]:
+        return {"title": "机会清单", "ordered": False, "rows": fallback_rows or rows}
 
     rows = ranking.get("ordered_assets") if isinstance(ranking, Mapping) else None
     if not isinstance(rows, list):
-        return {"title": "机会清单", "ordered": False, "rows": []}
+        return unordered([])
     original_rows = [row for row in rows if isinstance(row, Mapping)]
     if not isinstance(ranking, Mapping) or ranking.get("generation_status") != "model_generated_unreviewed":
-        return {"title": "机会清单", "ordered": False, "rows": original_rows}
+        return unordered(original_rows)
     by_key: dict[str, Mapping[str, Any]] = {}
     expected = set(WEEKLY_KEYS)
     for row in original_rows:
         key = str(row.get("asset_key") or "")
         if key in by_key or key not in expected:
-            return {"title": "机会清单", "ordered": False, "rows": original_rows}
+            return unordered(original_rows)
         by_key[key] = row
     if set(by_key) != expected or len(original_rows) != len(WEEKLY_KEYS):
-        return {"title": "机会清单", "ordered": False, "rows": original_rows}
+        return unordered(original_rows)
     ranked: list[Mapping[str, Any]] = []
     unavailable: list[Mapping[str, Any]] = []
     for key in WEEKLY_KEYS:
@@ -129,15 +153,15 @@ def _opportunity_projection(ranking: Mapping[str, Any] | None) -> dict[str, Any]
         status = str(row.get("status") or "")
         if status == "unavailable":
             if row.get("rank") is not None or row.get("evidence_ids"):
-                return {"title": "机会清单", "ordered": False, "rows": original_rows}
+                return unordered(original_rows)
             unavailable.append(row)
             continue
         if status not in {"participate", "wait", "avoid"} or not isinstance(row.get("rank"), int) or row["rank"] < 1:
-            return {"title": "机会清单", "ordered": False, "rows": original_rows}
+            return unordered(original_rows)
         ranked.append(row)
     ranks = sorted(int(row["rank"]) for row in ranked)
     if unavailable or not ranked or ranks != list(range(1, len(ranked) + 1)):
-        return {"title": "机会清单", "ordered": False, "rows": original_rows}
+        return unordered(original_rows)
     return {"title": "机会排序", "ordered": True, "rows": sorted(ranked, key=lambda row: int(row["rank"])) + unavailable}
 
 
@@ -367,6 +391,7 @@ def build_weekly_report(
         "renderer_version": RENDERER_VERSION,
         "week_end": source_snapshot.get("week_end"),
         "cutoff_at": source_snapshot.get("cutoff_at"),
+        "source_snapshot_id": source_snapshot.get("snapshot_id"),
         "source_status": source_snapshot.get("status"),
         "cards": cards,
         "chart_slots": chart_slots,
@@ -408,7 +433,7 @@ def attach_chart_snapshots(
         for slot in card.get("chart_slots") or []:
             if isinstance(slot, Mapping) and slot.get("slot_id") in snapshots:
                 slot["snapshot"] = json.loads(_canonical(snapshots[slot["slot_id"]]))
-    for key in ("schema_version", "renderer_version", "week_end", "cutoff_at", "source_status", "cards", "chart_slots", "ranking", "truth_boundary"):
+    for key in ("schema_version", "renderer_version", "week_end", "cutoff_at", "source_snapshot_id", "source_status", "cards", "chart_slots", "ranking", "truth_boundary"):
         result[key] = core[key]
     result["identity_core"] = core
     result["report_id"] = f"{REPORT_ID_PREFIX}{_digest(core)}"
@@ -416,7 +441,7 @@ def attach_chart_snapshots(
 
 
 def render_weekly_markdown(report: Mapping[str, Any]) -> str:
-    opportunity = _opportunity_projection(report.get("ranking"))
+    opportunity = _opportunity_projection(report.get("ranking"), report.get("cards"))
     lines = [
         f"# 宏观 K 线周报｜{report.get('week_end')}",
         "",
@@ -545,7 +570,7 @@ def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
             pane_parts.append(
                 f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(_status_label(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}{odds_block}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
             )
-    opportunity = _opportunity_projection(report.get("ranking"))
+    opportunity = _opportunity_projection(report.get("ranking"), report.get("cards"))
     ranking_rows = "".join(
         f'<li><strong>{_escape((str(row.get("rank")) + ". ") if opportunity["ordered"] and row.get("rank") is not None else "")}{_escape(_display_name(row.get("asset_key")))}</strong> · {_escape(_ranking_status_label(row.get("status")))}</li>'
         for row in opportunity["rows"]
@@ -568,7 +593,7 @@ def _snapshot_href(snapshot: Mapping[str, Any] | None, snapshot_prefix: str) -> 
 def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "snapshots/") -> str:
     """Render the shareable static Weekly reader from immutable snapshots."""
 
-    opportunity = _opportunity_projection(report.get("ranking"))
+    opportunity = _opportunity_projection(report.get("ranking"), report.get("cards"))
     nav_parts: list[str] = []
     pane_parts: list[str] = []
     for _, chapter, keys in CHAPTERS:

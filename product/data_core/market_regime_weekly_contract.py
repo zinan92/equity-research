@@ -338,6 +338,14 @@ def build_candle_response_from_weekly_series(
         blocked = build_unavailable_candle_response(asset_key, timeframe, "cached_source_forbidden")
         blocked.update({"source_identity": dict(identity), "served_from": "cache"})
         return validate_weekly_candle_response(blocked)
+    expected_source = spec["source_id"].removeprefix("datafeed:")
+    source_mode = str(identity.get("source_mode") or identity.get("source_id") or expected_source)
+    requested_source = str(identity.get("requested_source") or expected_source)
+    selected_source = str(identity.get("selected_source") or source_mode)
+    attempted_sources = identity.get("attempted_sources")
+    if not isinstance(attempted_sources, list) or not all(isinstance(item, str) and item.strip() for item in attempted_sources):
+        attempted_sources = [selected_source]
+    selection_reason = str(identity.get("selection_reason") or "requested_or_default")
     if series_status != "complete" or not points:
         failure_reason = (
             identity_source.get("reject_reason")
@@ -356,8 +364,10 @@ def build_candle_response_from_weekly_series(
             {
                 "provider": _source_identity_provider(identity) if identity else "",
                 "source_mode": str(identity.get("source_mode") or "weekly_authority"),
-                "requested_source": str(identity.get("source_mode") or "weekly_authority"),
-                "selected_source": str(identity.get("source_mode") or "weekly_authority"),
+                "requested_source": requested_source,
+                "selected_source": selected_source,
+                "selection_reason": selection_reason,
+                "attempted_sources": attempted_sources,
                 "served_from": "upstream",
                 "source_identity": dict(identity),
                 "access_issues": failure_issues or [str(failure_reason)],
@@ -385,14 +395,6 @@ def build_candle_response_from_weekly_series(
                 "close": point.get("close"),
                 "volume": point.get("volume", 0),
             })
-    expected_source = spec["source_id"].removeprefix("datafeed:")
-    source_mode = str(identity.get("source_mode") or identity.get("source_id") or expected_source)
-    requested_source = str(identity.get("requested_source") or expected_source)
-    selected_source = str(identity.get("selected_source") or source_mode)
-    attempted_sources = identity.get("attempted_sources")
-    if not isinstance(attempted_sources, list) or not all(isinstance(item, str) and item.strip() for item in attempted_sources):
-        attempted_sources = [selected_source]
-    selection_reason = str(identity.get("selection_reason") or "requested_or_default")
     quality_source = identity_source
     quality_flags = quality_source.get("quality_flags", series.get("quality_flags", []))
     if not isinstance(quality_flags, list):
@@ -457,13 +459,23 @@ def build_weekly_candle_responses(source_snapshot: Mapping[str, Any]) -> dict[st
                 identity_source = context if isinstance(context, Mapping) else series
                 identity = identity_source.get("source_identity") if isinstance(identity_source.get("source_identity"), Mapping) else {}
                 reason = str(identity_source.get("reject_reason") or f"candle_contract_invalid:{str(exc)}")
+                spec = WEEKLY_ASSET_REGISTRY[asset_key]
+                expected_source = spec["source_id"].removeprefix("datafeed:")
+                source_mode = str(identity.get("source_mode") or identity.get("source_id") or expected_source)
+                requested_source = str(identity.get("requested_source") or expected_source)
+                selected_source = str(identity.get("selected_source") or source_mode)
+                attempted_sources = identity.get("attempted_sources")
+                if not isinstance(attempted_sources, list) or not all(isinstance(item, str) and item.strip() for item in attempted_sources):
+                    attempted_sources = [selected_source]
                 blocked = build_unavailable_candle_response(asset_key, timeframe, reason)
                 blocked.update(
                     {
                         "provider": _source_identity_provider(identity) if identity else "",
-                        "source_mode": str(identity.get("source_mode") or "weekly_authority"),
-                        "requested_source": str(identity.get("source_mode") or "weekly_authority"),
-                        "selected_source": str(identity.get("source_mode") or "weekly_authority"),
+                        "source_mode": source_mode,
+                        "requested_source": requested_source,
+                        "selected_source": selected_source,
+                        "selection_reason": str(identity.get("selection_reason") or "requested_or_default"),
+                        "attempted_sources": attempted_sources,
                         "served_from": str(identity_source.get("served_from") or "upstream"),
                         "source_identity": dict(identity),
                         "access_issues": list(identity_source.get("access_issues") or [reason]),
