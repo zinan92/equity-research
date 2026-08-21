@@ -63,6 +63,22 @@
   Static reader and Standard K-line browser acceptance pass at 1280px/390px;
   focused Weekly suite: 138/138.
 
+## 2026-08-21 — Connect the selected web mockup to the real Weekly report
+
+- **Decision:** Keep the production static reader unchanged, and add a local
+  live prototype whose backend reads the latest immutable Weekly artifact on
+  every API request. The frontend renders overview groups and a clickable
+  single-asset workbench from that API, while snapshot PNGs are served through
+  a path-confined endpoint.
+- **Why:** The visual mockup needed to prove the real data seam before we
+  change the production web or mini-program renderers. No report data is
+  hardcoded in the live frontend.
+- **Evidence:** Issue #930 / PR #931; local preview `http://127.0.0.1:8907/`.
+  API + browser acceptance passes with 16/17 validated assets, 17 asset rows,
+  working overview-to-DXY detail navigation, all images loaded, no console
+  errors and no horizontal overflow at 1440px/390px. Bitcoin remains typed
+  source-unavailable and no fallback is introduced.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
