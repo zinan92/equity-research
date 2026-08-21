@@ -49,6 +49,20 @@
   with 16 validated assets and only Bitcoin source-unavailable. Focused Weekly
   suite: 137/137.
 
+## 2026-08-21 — Sharpen and constrain Weekly chart snapshots
+
+- **Decision:** Capture standard-kline images at a bound 2x device scale
+  factor, bind that factor into snapshot identity, and cap desktop reader
+  display width at 600px while keeping narrow screens fluid.
+- **Why:** The prior three-column capture produced roughly 287px logical-width
+  images that the static reader stretched to 600–700px, making charts both too
+  large and blurry.
+- **Evidence:** Issue #924 / PR #925; 39 new snapshots were regenerated under
+  report
+  `market-regime-weekly-report:f4221605f3ad02e7ef5f314b08eab8b4885c5f5d33dd94a1189caaf859eea6fd`.
+  Static reader and Standard K-line browser acceptance pass at 1280px/390px;
+  focused Weekly suite: 138/138.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
