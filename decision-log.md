@@ -1,5 +1,35 @@
 # Decision Log
 
+## 2026-08-21 — Cut Weekly over to canonical datafeed and static snapshot reader
+
+- **Decision:** Use the canonical datafeed CandleResponse as the only Weekly
+  market-data boundary. Freeze 17 assets and 39 slots, preserve explicit
+  Tencent-to-Sina A-share fallback, let datafeed own declared 4H transforms,
+  and let Weekly validate/bind them without double aggregation. Keep
+  standard-kline/Playwright as the internal snapshot generator, but publish a
+  static image-only HTML reader. Use one canonical display-name projection and
+  call the opportunity section `机会排序` only for a complete valid rank order;
+  otherwise call it `机会清单`.
+- **Why:** The reader must be lightweight and shareable while every chart,
+  number, source selection and interpretation remains tied to one immutable
+  evidence chain. Interactive rendering, raw registry keys and partial ranking
+  claims were causing avoidable product confusion.
+- **Evidence:** Issues #891–#907; merged PRs #897–#901, #903, #905 and #908;
+  135 focused Weekly tests pass; the full repository baseline ran 1121 tests
+  with one unrelated missing Desktop prompt error and one skipped test. The
+  final real report is
+  `market-regime-weekly-report:ee92b7cb1791c53b162603c2e48f306e3867253321ea8ff69ab1cd70fdcc57e3`
+  with 17 assets, 39 snapshots, source snapshot identity and static-reader
+  browser acceptance at 1280px/390px.
+- **Gotchas:** The final source snapshot is partial only because canonical
+  datafeed issue `zinan92/datafeed#25` cannot provide valid Bitcoin daily/4H
+  bars for the historical cutoff; no cache or fallback was used. A-share full
+  exchange-holiday gaps remain visible as metadata but do not invalidate ready
+  weekly data. Historical PRs were authored by the active `zinan92` account
+  rather than the repository's preferred bot identity; commits were not
+  rewritten. Finance Daily Newsletter, Daily runtime, publication eligibility,
+  broker access and automatic execution remain unchanged.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
