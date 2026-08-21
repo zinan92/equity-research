@@ -38,6 +38,8 @@ def main() -> int:
                 page.locator('[data-asset="dxy"]').first.click()
                 page.wait_for_selector("#detail:not([hidden])")
                 assert page.locator("#detail .period").count() == 3
+                assert page.locator("#detail canvas.detail-chart").count() == 3
+                assert page.locator("#detail canvas.detail-chart").first.evaluate("canvas => canvas.width >= canvas.clientWidth * 2")
                 assert not errors, errors
                 page.close()
         finally:
