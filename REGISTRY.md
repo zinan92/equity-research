@@ -1,5 +1,49 @@
 # REGISTRY
 
+## 2026-08-21 · Weekly canonical datafeed integration and static reader (Issues #891/#892/#893/#894/#895/#896/#902 / PRs #897–#903)
+
+Now: `main` includes the canonical Weekly integration at the latest merged
+SHA. The Weekly seam is `canonical datafeed CandleResponse → immutable
+17-asset/39-slot snapshot → standard-kline snapshot image → deterministic
+Position/Structure/Odds and LLM projection → static reader`. All 17 assets keep
+daily and weekly slots; only DXY, Bitcoin, WTI, gold and silver have 4H
+context. The canonical datafeed owns the declared 4H transform: Bitcoin is
+native 4H, while the four Yahoo context assets carry explicit 1H-to-4H
+metadata. Weekly validates and preserves this metadata and never aggregates a
+transformed response again.
+
+The reader-facing HTML is now static: it references immutable PNG snapshot
+assets, contains no lightweight-charts/StandardKlineChart script or interactive
+mount, and supports the correct latest/archive snapshot prefixes. Internal
+Playwright rendering remains available only as the snapshot-generation and
+browser-validation port. Reader projection uses canonical display names; a
+partial or unavailable opportunity output is titled `机会清单`, while
+`机会排序` requires a complete valid rank order.
+
+Real local report proof: `report_id=market-regime-weekly-report:0fd9baef7d4edadfc7686f2657ccb3e14d8b0bd3c8e2883ebce377202748d129`,
+`week_end=2026-08-14`, 17 assets, 39 chart snapshots, renderer
+`market-regime-weekly-report-renderer-v14`. Static reader acceptance passed at
+1280px and 390px with 39 images, zero scripts, zero interactive markers, zero
+overflow and zero console errors. Standard-kline internal browser acceptance
+also passed at both viewports. The source snapshot is honestly `partial` in
+this run because the upstream Binance source did not provide valid Bitcoin
+daily/4H bars for the historical cutoff; no stale cache or alternate source
+was substituted. A-share full-market holiday gaps remain visible as metadata
+but no longer turn an otherwise ready canonical weekly response into
+unavailable.
+
+Focused Weekly suite: 130/130. Full repository baseline: 1113 tests ran with
+one unrelated environment error because
+`/Users/wendy/Desktop/K线日报/SYSTEM-PROMPT-macro-analyst.md` is absent, plus
+one skipped test; no Weekly failure was observed. Finance Daily Newsletter,
+Daily K-line runtime, broker state, publication eligibility and automatic
+execution remain unchanged.
+
+Next: resolve the upstream Bitcoin historical-cutoff availability in the
+canonical datafeed or choose a future valid completed cutoff; do not weaken
+strict/no-fallback semantics to force 39/39. Keep the static reader and the
+source/reason metadata as the current Weekly contract.
+
 ## 2026-08-20 · Typed datafeed 4H/1D/1W contract, explicit A-share fallback, and 39-cell acceptance (Issues #881/#19/#21/#885/#888)
 
 Now: Weekly `main` is merged at SHA `82b9c676a3bbc2ccd3c655ac096a115db9bf58ea`.
