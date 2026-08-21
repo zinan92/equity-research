@@ -40,19 +40,19 @@ function drawMiniChart(canvas, points) {
   const min = Math.min(...values); const max = Math.max(...values); const span = max - min || 1;
   const xPad = 5; const yPad = 5; const step = (width - xPad * 2) / points.length;
   const y = (value) => height - yPad - ((value - min) / span) * (height - yPad * 2);
-  ctx.strokeStyle = "#eef2f4"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2); ctx.stroke();
+  ctx.strokeStyle = "#d9e2e8"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2); ctx.stroke();
   const bodyWidth = Math.max(2, step * .58);
   points.forEach((point, index) => {
     const open = Number(point.open); const close = Number(point.close); const high = Number(point.high); const low = Number(point.low);
     if (![open, close, high, low].every(Number.isFinite)) return;
     const x = xPad + step * index + step / 2; const up = close >= open;
-    ctx.strokeStyle = up ? "#16875f" : "#d94b4b"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y(high)); ctx.lineTo(x, y(low)); ctx.stroke();
+    ctx.strokeStyle = up ? "#078b62" : "#d73f3f"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y(high)); ctx.lineTo(x, y(low)); ctx.stroke();
     const top = y(Math.max(open, close)); const bottom = y(Math.min(open, close)); const bodyHeight = Math.max(1.5, bottom - top);
     if (up) { ctx.fillStyle = "#fff"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); ctx.strokeRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); }
-    else { ctx.fillStyle = "#d94b4b"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); }
+    else { ctx.fillStyle = "#d73f3f"; ctx.fillRect(x - bodyWidth / 2, top, bodyWidth, bodyHeight); }
   });
   const ema = points.filter((point) => Number.isFinite(Number(point.ema50)));
-  if (ema.length > 1) { ctx.strokeStyle = "#6f91cf"; ctx.lineWidth = 1.2; ctx.beginPath(); ema.forEach((point, index) => { const pointIndex = points.indexOf(point); const x = xPad + step * pointIndex + step / 2; const yy = y(Number(point.ema50)); if (index === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy); }); ctx.stroke(); }
+  if (ema.length > 1) { ctx.strokeStyle = "#3b6ec8"; ctx.lineWidth = 1.8; ctx.beginPath(); ema.forEach((point, index) => { const pointIndex = points.indexOf(point); const x = xPad + step * pointIndex + step / 2; const yy = y(Number(point.ema50)); if (index === 0) ctx.moveTo(x, yy); else ctx.lineTo(x, yy); }); ctx.stroke(); }
 }
 
 function paintMiniCharts() {
@@ -62,12 +62,6 @@ function paintMiniCharts() {
 function renderSummary(report) {
   document.querySelector("#as-of").textContent = `数据截止 ${report.week_end}`;
   document.querySelector("#coverage").textContent = `分析覆盖 ${report.analysis_validated}/${report.assets.length}`;
-  document.querySelector("#source-status").textContent = report.source_status === "complete" ? "完整" : "部分可用";
-  document.querySelector("#analysis-count").textContent = `${report.analysis_validated} / ${report.assets.length}`;
-  document.querySelector("#stance").textContent = report.source_status === "complete" && report.analysis_validated === report.assets.length ? "待确认" : "等待";
-  document.querySelector("#thesis").textContent = report.analysis_validated === report.assets.length
-    ? "所有资产分析已通过验证，先比较位置与结构，再进入单资产工作台。"
-    : `当前有 ${report.unavailable_assets.length} 个资产缺少完整证据，已验证资产仍可独立阅读，不把缺失数据伪装成方向。`;
   document.querySelector("#footer").innerHTML = `真实 report：<code>${esc(report.report_id)}</code> · source：<code>${esc(report.source_snapshot_id)}</code>`;
   document.querySelector("#footer").hidden = false;
 }
