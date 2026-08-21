@@ -94,6 +94,20 @@
   errors and no horizontal overflow at 1440px/390px. Bitcoin remains typed
   source-unavailable.
 
+## 2026-08-21 — Remove redundant banner and sharpen the market map
+
+- **Decision:** Remove the large overview stance banner so the market table
+  begins in the first viewport. Increase mini-chart allocation and contrast;
+  keep the EMA50 line but remove the EMA50 text label. Preserve the 2x canvas
+  backing resolution, hollow-green up candles, red down candles, position meter
+  and trend arrows.
+- **Why:** The user’s attention should land on the asset comparison itself.
+  The old banner consumed space, while a faint small chart made candle bodies
+  and recent direction hard to read.
+- **Evidence:** Issue #938 / PR #939; live acceptance remains green at
+  1440px/390px with 16/17 validated assets, 17 mini charts, no console errors
+  and working asset detail navigation.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
