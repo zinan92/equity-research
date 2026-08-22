@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>宏观 K 线周报 · Live prototype</title>
+    <title>宏观 K 线周报</title>
     <link rel="stylesheet" href="/styles.css" />
     <style>#footer{padding:16px 32px;border-top:1px solid var(--line);color:var(--faint);font-size:11px;line-height:1.6}#footer code{word-break:break-all}.evidence-note{display:block;margin-top:18px;color:var(--faint);font-size:11px;word-break:break-all}</style>
     <style>
@@ -16,6 +16,7 @@
       @media(max-width:900px){.table-head{display:none}.asset-row{grid-template-columns:130px 125px 1fr 64px}.asset-row>.change,.asset-row>.position-cell{display:none}.mini-chart{width:120px;height:50px}.mini-cell{gap:4px}.last-candle{font-size:9px}.latest-value small{display:none}}
       @media(max-width:600px){.asset-row{grid-template-columns:110px 105px 1fr 55px}.mini-chart{width:105px;height:46px}.trend{justify-content:end}.trend b{font-size:20px}.trend span{display:none}}
       .period-chart canvas{display:block;width:100%;height:100%}.period-result{font-size:12px;font-weight:650;white-space:nowrap}.period-result.bullish{color:var(--green)}.period-result.bearish{color:var(--red)}.period-result.neutral{color:var(--amber)}.period-result.unavailable{color:var(--faint)}.period-conclusion{font-weight:650!important}.period-conclusion.bullish{color:var(--green)!important}.period-conclusion.bearish{color:var(--red)!important}.period-conclusion.neutral{color:var(--amber)!important}.period-conclusion.unavailable{color:var(--faint)!important}.combined-interpretation{padding:24px 30px;border-bottom:1px solid var(--line)}.combined-interpretation h3{font-size:20px;margin:6px 0 14px;color:var(--navy)}.combined-interpretation p{font-size:15px;color:var(--muted);line-height:1.7}.combined-interpretation strong{display:block;margin-top:15px;color:var(--green);font-size:14px}.combined-interpretation .evidence-note{display:block;margin-top:18px;color:var(--faint);font-size:11px;word-break:break-all}.unavailable-row{background:#fbfcfd}.mini-empty{display:grid;place-items:center;width:190px;height:70px;color:var(--faint);font-size:20px}
+      .metric-strip{grid-template-columns:repeat(3,1fr)}
     </style>
   </head>
   <body>
@@ -23,12 +24,12 @@
       <header class="topbar">
         <div>
           <strong>宏观 K 线周报</strong>
-          <small>真实 Weekly report · 前后端 live prototype · <span id="sample-label">读取中</span></small>
+          <small>宏观命令中心 · <span id="sample-label">读取中</span></small>
         </div>
         <div class="top-meta"><span id="as-of">读取中</span><span id="coverage">读取中</span></div>
       </header>
 
-      <div id="loading" class="state-panel loading" role="status">正在读取最新 Weekly report…</div>
+      <div id="loading" class="state-panel loading" role="status">正在载入本周数据…</div>
       <div id="error" class="state-panel error" role="alert" hidden></div>
 
       <section id="app" hidden>
@@ -40,8 +41,7 @@
           </aside>
           <div class="overview-content">
             <div class="section-heading">
-              <div><small>WEEKLY MACRO MAP</small><h1>市场全景</h1></div>
-              <div class="reader-note"><small>当前 live 口径</small><b>单资产证据已接入</b><span>跨资产资金迁移解释仍保持显式未接入。</span></div>
+              <div><small>本周市场</small><h1>市场全景</h1></div>
             </div>
             <div id="groups"></div>
           </div>

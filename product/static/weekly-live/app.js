@@ -101,9 +101,9 @@ function paintDetailCharts() {
 
 function renderSummary(report) {
   document.querySelector("#as-of").textContent = `数据截止 ${report.week_end}`;
-  document.querySelector("#coverage").textContent = `分析覆盖 ${report.analysis_validated}/${report.assets.length}`;
+  document.querySelector("#coverage").textContent = `可用资产 ${report.analysis_validated}/${report.assets.length}`;
   document.querySelector("#sample-label").textContent = report.sample_label || "历史样本";
-  document.querySelector("#footer").innerHTML = `真实 report：<code>${esc(report.report_id)}</code> · source：<code>${esc(report.source_snapshot_id)}</code>`;
+  document.querySelector("#footer").textContent = `本页展示截至 ${report.week_end} 的历史样本数据。`;
   document.querySelector("#footer").hidden = false;
 }
 
@@ -125,7 +125,7 @@ function renderGroups(report) {
       const positionMarkup = unavailable ? `<span class="chip neutral">—</span>` : `${positionMeter(asset.position_state)}${chip(asset.position, "neutral")}`;
       const trendMarkup = unavailable ? `<span class="trend flat"><b>→</b><span>—</span></span>` : `<div class="trend ${esc((asset.trend || {}).tone || "flat")}"><b>${esc((asset.trend || {}).marker || "→")}</b><span>${esc((asset.trend || {}).label || "分歧")}</span></div>`;
       return `<button class="asset-row ${unavailable ? "unavailable-row" : ""}" type="button" data-asset="${esc(key)}" aria-label="打开${esc(asset.display_name)}单资产工作台">
-        <div class="asset-name"><strong>${esc(asset.display_name)}</strong><small>${esc(key)}</small></div>
+        <div class="asset-name"><strong>${esc(asset.display_name)}</strong></div>
         <div class="mini-cell">${miniMarkup}</div>
         <div class="latest-value">${valueMarkup}</div>
         <div class="change ${mini.change > 0 ? "up" : mini.change < 0 ? "down" : "flat"}">${unavailable ? "—" : esc(formatChange(weekly))}</div>
@@ -133,7 +133,7 @@ function renderGroups(report) {
         <div class="trend-cell">${trendMarkup}</div>
       </button>`;
     }).join("");
-    return `<section class="group" id="group-${esc(label)}"><header><h2>${esc(label)}</h2><span>${keys.length} 个资产</span></header><div class="table-head"><span>资产</span><span>K 线（周线）</span><span>最新价</span><span>周涨跌</span><span>位置</span><span>趋势</span><span>状态</span></div>${rows}</section>`;
+    return `<section class="group" id="group-${esc(label)}"><header><h2>${esc(label)}</h2><span>${keys.length} 个资产</span></header><div class="table-head"><span>资产</span><span>K 线（周线）</span><span>最新价</span><span>周涨跌</span><span>位置</span><span>趋势</span></div>${rows}</section>`;
   }).join("");
   document.querySelectorAll("[data-asset]").forEach((button) => button.addEventListener("click", () => showDetail(report, button.dataset.asset)));
   requestAnimationFrame(() => requestAnimationFrame(paintMiniCharts));
@@ -152,7 +152,7 @@ function showDetail(report, key) {
   if (!asset) return;
   const detail = document.querySelector("#detail");
   detail.hidden = false;
-  detail.innerHTML = `<header class="detail-header"><div><small>宏观 K 线周报 · 单资产工作台 · ${esc(report.sample_label || "历史样本")}</small><h2>${esc(asset.display_name)} <em>(${esc(key.toUpperCase())})</em></h2><p>截至 ${esc(report.week_end)}（周五收盘） · ${esc(asset.status_label)}</p></div><button class="back-button" type="button" id="back-to-overview">返回市场全景</button></header><section class="metric-strip"><div><small>位置</small><strong>${esc(asset.position)}</strong></div><div><small>结构</small><strong>${esc(asset.structure)}</strong></div><div><small>赔率</small><strong>${esc(asset.odds)}</strong></div><div><small>来源状态</small><strong>${esc(asset.status_label)}</strong></div></section><section class="period-grid">${["weekly", "daily", "four_hour"].map((timeframe) => renderPeriod(asset, timeframe)).join("")}</section><section class="combined-interpretation"><small>多周期结论 · 这意味着什么</small><h3>从 K 线判断方向，再翻译成市场语言</h3><p>${esc(asset.synthesis || "当前多周期分析不可用。")}</p><strong>工作判断：先看关键位，再决定是否扩大方向。</strong><p>${esc(asset.theoretical_implication || "当前机制解释不可用。")}</p><span class="evidence-note">证据绑定：${esc(report.source_snapshot_id)} · 截止 ${esc(report.week_end)}</span></section><div class="detail-footer">数据来自最新不可变 Weekly report；缺失状态不会被旧数据或隐式 fallback 替代。</div>`;
+  detail.innerHTML = `<header class="detail-header"><div><small>宏观 K 线周报 · ${esc(report.sample_label || "历史样本")}</small><h2>${esc(asset.display_name)}</h2><p>截至 ${esc(report.week_end)}（周五收盘）</p></div><button class="back-button" type="button" id="back-to-overview">返回市场全景</button></header><section class="metric-strip"><div><small>位置</small><strong>${esc(asset.position)}</strong></div><div><small>结构</small><strong>${esc(asset.structure)}</strong></div><div><small>赔率</small><strong>${esc(asset.odds)}</strong></div></section><section class="period-grid">${["weekly", "daily", "four_hour"].map((timeframe) => renderPeriod(asset, timeframe)).join("")}</section><section class="combined-interpretation"><small>综合结论与市场含义</small><h3>这组 K 线告诉我们什么</h3><p>${esc(asset.synthesis || "当前多周期分析不可用。")}</p><p>${esc(asset.theoretical_implication || "当前机制解释不可用。")}</p><span class="evidence-note">数据截止 ${esc(report.week_end)} · 历史样本</span></section><div class="detail-footer">本页内容用于研究参考，不构成投资建议。</div>`;
   document.querySelector("#back-to-overview").addEventListener("click", () => { detail.hidden = true; document.querySelector("#overview").scrollIntoView({ behavior: "smooth" }); });
   requestAnimationFrame(() => requestAnimationFrame(paintDetailCharts));
   detail.scrollIntoView({ behavior: "smooth", block: "start" });
