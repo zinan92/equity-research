@@ -31,7 +31,7 @@ def main() -> int:
                 page.goto(base + "/", wait_until="networkidle")
                 page.wait_for_selector("#app:not([hidden])")
                 assert page.locator("[data-asset]").count() == 17
-                assert page.locator("canvas.mini-chart").count() == 17
+                assert page.locator("canvas.mini-chart").count() == payload["analysis_validated"]
                 assert page.locator("canvas.mini-chart").first.evaluate("canvas => canvas.width >= canvas.clientWidth * 2")
                 assert page.evaluate("Array.from(document.images).every(image => image.complete && image.naturalWidth > 0)")
                 assert page.evaluate("document.body.scrollWidth <= window.innerWidth")
@@ -40,6 +40,8 @@ def main() -> int:
                 assert page.locator("#detail .period").count() == 3
                 assert page.locator("#detail canvas.detail-chart").count() == 3
                 assert page.locator("#detail canvas.detail-chart").first.evaluate("canvas => canvas.width >= canvas.clientWidth * 2")
+                assert page.locator("#detail .period-result").count() == 3
+                assert page.locator("#detail .combined-interpretation").count() == 1
                 assert not errors, errors
                 page.close()
         finally:

@@ -65,6 +65,36 @@ def _trend_marker(structure: dict) -> dict[str, str]:
     return {"marker": "→", "label": "分歧", "tone": "flat"}
 
 
+def _period_metric(analysis: dict, timeframe: str, points: list[dict]) -> dict[str, object]:
+    if not points:
+        return {"score": None, "conclusion": "不可用", "tone": "unavailable", "state": "unavailable", "bias": ""}
+    position_root = analysis.get("position") if isinstance(analysis.get("position"), dict) else {}
+    structure_root = analysis.get("structure") if isinstance(analysis.get("structure"), dict) else {}
+    positions = position_root.get("timeframes") if isinstance(position_root.get("timeframes"), dict) else {}
+    structures = structure_root.get("timeframes") if isinstance(structure_root.get("timeframes"), dict) else {}
+    position = positions.get(timeframe) if isinstance(positions.get(timeframe), dict) else position_root
+    structure = structures.get(timeframe) if isinstance(structures.get(timeframe), dict) else structure_root
+    bias = str(structure.get("bias") or "")
+    state = str(structure.get("state") or "")
+    score = 50.0
+    if bias == "bullish": score += 15
+    elif bias == "bearish": score -= 15
+    if state == "continuation": score += 10 if bias == "bullish" else -10 if bias == "bearish" else 0
+    elif state == "weakening": score += 5 if bias == "bearish" else -5 if bias == "bullish" else 0
+    elif state == "reversal": score += 8 if bias == "bullish" else -8 if bias == "bearish" else 0
+    percentile = _number(position.get("percentile")) if isinstance(position, dict) else None
+    if percentile is not None: score += (percentile - .5) * 8
+    if points:
+        histogram = _number(points[-1].get("macd_histogram"))
+        if histogram is not None: score += 5 if histogram > 0 else -5 if histogram < 0 else 0
+    score = max(0.0, min(100.0, score))
+    if score > 60: conclusion, tone = "多趋势", "bullish"
+    elif score > 50: conclusion, tone = "偏多", "bullish"
+    elif score >= 40: conclusion, tone = "震荡", "neutral"
+    else: conclusion, tone = "空趋势", "bearish"
+    return {"score": round(score), "conclusion": conclusion, "tone": tone, "state": state, "bias": bias}
+
+
 class WeeklyLiveHandler(BaseHTTPRequestHandler):
     static_root: Path
     runtime_root: Path
@@ -115,7 +145,7 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                 if not path.startswith("snapshots/"): continue
                 timeframe = str(slot.get("timeframe"))
                 points = [point for point in slot.get("points") or [] if isinstance(point, dict)]
-                mini_points = points[-20:]
+                mini_points = points[-40:]
                 latest = _number(mini_points[-1].get("close")) if mini_points else None
                 previous = _number(mini_points[-2].get("close")) if len(mini_points) > 1 else None
                 change = latest - previous if latest is not None and previous is not None else None
@@ -132,6 +162,7 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                     "change": change,
                     "change_pct": (change / previous * 100) if kind == "price" and change is not None and previous else None,
                     "last_candle": _last_candle(mini_points, kind),
+                    "metric": _period_metric(analysis, timeframe, points),
                 }
             position = analysis.get("position") if isinstance(analysis.get("position"), dict) else {}
             structure = analysis.get("structure") if isinstance(analysis.get("structure"), dict) else {}
@@ -161,6 +192,7 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
             "source_snapshot_id": report.get("source_snapshot_id"),
             "week_end": report.get("week_end"),
             "cutoff_at": report.get("cutoff_at"),
+            "sample_label": "历史样本（非今日最新）",
             "source_status": report.get("source_status"),
             "analysis_validated": validated,
             "unavailable_assets": unavailable,
