@@ -136,6 +136,20 @@
   with 16/17 validated assets, 40-bar overview context, per-period scores,
   axes, merged interpretation, no console errors and no horizontal overflow.
 
+## 2026-08-22 — Keep backend provenance out of the reader-facing UI
+
+- **Decision:** Keep source identity, report IDs, fallback policy and detailed
+  provenance in the API/artifacts, but remove them from visible overview and
+  detail copy. The reader shows only market-facing fields: sample date,
+  assets, prices, position, structure, score, chart and market meaning.
+- **Why:** Users need to understand the market, not the implementation. The
+  backend remains auditable without making the page read like an operations
+  console.
+- **Evidence:** Issue #950 / PR #951; DOM QA found zero visible hits for live
+  prototype, source snapshot, evidence binding, fallback, verified/status ops
+  copy, raw report IDs and generic work-judgment text. Live API/browser
+  acceptance remains green at 1440px/390px.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
