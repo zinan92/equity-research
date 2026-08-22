@@ -121,6 +121,21 @@
   canvases per asset, 2x backing resolution, no console errors and no
   horizontal overflow at 1440px/390px. Bitcoin remains explicitly unavailable.
 
+## 2026-08-22 — Make the live sample readable as a scored market map
+
+- **Decision:** Keep the current frozen report explicitly labeled as a
+  historical sample ending 2026-08-14. Use 40 weekly bars in the overview,
+  remove the “已验证” row column, and leave unavailable rows empty. In detail,
+  score each available timeframe from 0–100 with `多趋势` above 60, `震荡` in
+  the 40–60 band, and `空趋势` below 40; render those conclusions with semantic
+  color, add price/MACD axes, and merge conclusion plus mechanism explanation.
+- **Why:** The reader should see candle direction and multi-period bias before
+  reading the prose. It must not imply that a historical sample is today’s
+  latest data.
+- **Evidence:** Issue #946 / PR #947; live acceptance passes at 1440px/390px
+  with 16/17 validated assets, 40-bar overview context, per-period scores,
+  axes, merged interpretation, no console errors and no horizontal overflow.
+
 ## 2026-08-19 — Bind Weekly chart context to deterministic EMA/MACD features
 
 - **Decision:** Add cutoff-bound EMA50 and MACD(12,26,9) feature projections to
