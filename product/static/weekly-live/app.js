@@ -97,7 +97,7 @@ function drawDetailChart(canvas, points) {
   [max, (max + min) / 2, min].forEach((value) => { ctx.fillText(formatValue(value), width - 4, Math.max(12, Math.min(priceHeight - 2, y(value) + 3))); });
   [macdAbs, 0, -macdAbs].forEach((value) => { ctx.fillText(formatValue(value), width - 4, Math.max(macdTop + 10, Math.min(macdTop + macdHeight - 2, my(value) + 3))); });
   ctx.textAlign = "center";
-  [0, .25, .5, .75, 1].forEach((fraction) => { const index = Math.min(points.length - 1, Math.round((points.length - 1) * fraction)); const stamp = String(points[index]?.timestamp || "").slice(5, 10); const x = xPad + step * index + step / 2; ctx.fillText(stamp, x, height - 4); });
+  [0, .25, .5, .75, 1].forEach((fraction) => { const index = Math.min(points.length - 1, Math.round((points.length - 1) * fraction)); const stamp = String(points[index]?.timestamp || points[index]?.date || "").slice(5, 10); const x = xPad + step * index + step / 2; ctx.fillText(stamp, x, height - 4); });
 }
 
 function paintDetailCharts() {
@@ -149,7 +149,8 @@ function renderPeriod(asset, timeframe) {
   if (!slot) return "";
   const metric = slot.metric || { score: null, conclusion: "不可用", tone: "unavailable" };
   const result = metric.score == null ? "不可用" : `${metric.conclusion} · ${metric.score}分`;
-  return `<article class="period"><header><div><b>${TIMEFRAME_LABELS[timeframe]}</b><small>${esc(short(slot.text || "当前该周期分析不可用。", 34))}</small></div><span class="period-result ${esc(metric.tone || "unavailable")}">${esc(result)}</span></header><div class="period-chart"><canvas class="detail-chart" data-points="${esc(JSON.stringify(slot.chart_points || []))}" aria-label="${esc(asset.display_name)} ${TIMEFRAME_LABELS[timeframe]} OHLC 与 MACD"></canvas></div><p class="period-conclusion ${esc(metric.tone || "unavailable")}">${esc(metric.score == null ? "当前该周期分析不可用。" : `结论：${metric.conclusion}，${metric.score}分。`)}</p><p>${esc(slot.text || "当前该周期分析不可用。")}</p></article>`;
+  const provisional = slot.provisional_candle ? " · 本周进行中 · Close=最新价" : "";
+  return `<article class="period"><header><div><b>${TIMEFRAME_LABELS[timeframe]}${esc(provisional)}</b><small>${esc(short(slot.text || "当前该周期分析不可用。", 34))}</small></div><span class="period-result ${esc(metric.tone || "unavailable")}">${esc(result)}</span></header><div class="period-chart"><canvas class="detail-chart" data-points="${esc(JSON.stringify(slot.chart_points || []))}" aria-label="${esc(asset.display_name)} ${TIMEFRAME_LABELS[timeframe]} OHLC 与 MACD"></canvas></div><p class="period-conclusion ${esc(metric.tone || "unavailable")}">${esc(metric.score == null ? "当前该周期分析不可用。" : `结论：${metric.conclusion}，${metric.score}分。`)}</p><p>${esc(slot.text || "当前该周期分析不可用。")}</p></article>`;
 }
 
 function showDetail(report, key) {

@@ -58,7 +58,11 @@ def standard_kline_options_for_response(response: Mapping[str, Any]) -> dict[str
     return options
 
 
-def build_standard_kline_payload(response: Mapping[str, Any]) -> dict[str, Any]:
+def build_standard_kline_payload(
+    response: Mapping[str, Any],
+    *,
+    provisional_bar: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     """Project one validated Weekly CandleResponse into standard-kline input.
 
     The source envelope remains the authority.  For a rate/spread response the
@@ -68,6 +72,10 @@ def build_standard_kline_payload(response: Mapping[str, Any]) -> dict[str, Any]:
 
     validated = validate_weekly_candle_response(response)
     bars = [dict(item) for item in validated.get("bars") or []]
+    if provisional_bar is not None:
+        if provisional_bar.get("close_status") != "provisional" or provisional_bar.get("is_partial") is not True:
+            raise WeeklyCandleContractError("provisional_bar_metadata_invalid")
+        bars.append(dict(provisional_bar))
     payload = {
         "schema_version": validated["schema_version"],
         "status": validated["status"],
@@ -94,7 +102,9 @@ def build_standard_kline_payload(response: Mapping[str, Any]) -> dict[str, Any]:
         "reject_reason": validated.get("reject_reason"),
         "source_identity": dict(validated.get("source_identity") or {}),
         "candle_response_hash": _digest(validated),
+        "provisional_candle_hash": _digest(provisional_bar) if provisional_bar is not None else None,
         "candles": bars,
+        "provisional_candle": provisional_bar is not None,
         "renderer": STANDARD_KLINE_RENDERER,
         "renderer_version": STANDARD_KLINE_VERSION,
         "renderer_options": standard_kline_options_for_response(validated),

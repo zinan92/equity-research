@@ -14,7 +14,7 @@ from urllib.parse import unquote, urlparse
 
 DISPLAY_NAMES = {
     "dxy": "美元 ETF（UUP）", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
-    "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）", "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "比特币永续（BTCUSDT）", "ethereum": "以太坊永续（ETHUSDT）", "hype": "HYPE 永续（HYPE）",
+    "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）", "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "BTC 永续（Hyperliquid）", "ethereum": "ETH 永续（Hyperliquid）", "hype": "HYPE 永续（Hyperliquid）",
     "shanghai": "上证指数", "star50": "科创 50", "china_dividend": "上证红利", "nikkei": "Nikkei 225", "kospi": "KOSPI",
     "wti": "WTI 原油期货（CL=F）", "gold": "黄金期货（GC=F）", "silver": "白银期货（SI=F）",
 }
@@ -145,7 +145,11 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                 if not path.startswith("snapshots/"): continue
                 timeframe = str(slot.get("timeframe"))
                 points = [point for point in slot.get("points") or [] if isinstance(point, dict)]
-                mini_points = points[-40:]
+                provisional = slot.get("provisional_candle") if isinstance(slot.get("provisional_candle"), dict) else None
+                chart_points = points[-80:]
+                if timeframe == "weekly" and provisional:
+                    chart_points = [*chart_points, provisional]
+                mini_points = chart_points[-40:]
                 latest = _number(mini_points[-1].get("close")) if mini_points else None
                 previous = _number(mini_points[-2].get("close")) if len(mini_points) > 1 else None
                 change = latest - previous if latest is not None and previous is not None else None
@@ -157,7 +161,8 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
                     "unit": slot.get("unit"),
                     "kind": kind,
                     "mini_points": mini_points,
-                    "chart_points": points[-80:],
+                    "chart_points": chart_points,
+                    "provisional_candle": provisional,
                     "latest_value": latest,
                     "change": change,
                     "change_pct": (change / previous * 100) if kind == "price" and change is not None and previous else None,

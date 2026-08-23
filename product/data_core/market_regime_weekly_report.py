@@ -210,9 +210,10 @@ def _chart_slot(
     cutoff_at: Any = None,
 ) -> dict[str, Any]:
     standard_kline = None
+    provisional_bar = series.get("current_week") if timeframe == "weekly" else None
     if isinstance(candle_response, Mapping):
         try:
-            standard_kline = build_standard_kline_payload(candle_response)
+            standard_kline = build_standard_kline_payload(candle_response, provisional_bar=provisional_bar)
             points = list(candle_response.get("bars") or [])
             feature_source = {
                 "key": key,
@@ -272,6 +273,7 @@ def _chart_slot(
         "high": feature.get("high"),
         "low": feature.get("low"),
         "standard_kline": standard_kline,
+        "provisional_candle": dict(provisional_bar) if isinstance(provisional_bar, Mapping) else None,
         "renderer": standard_kline.get("renderer") if isinstance(standard_kline, Mapping) else None,
         "renderer_options": standard_kline.get("renderer_options") if isinstance(standard_kline, Mapping) else standard_kline_options_for_response({"series_kind": (candle_response or series).get("series_kind")}),
     }
@@ -571,8 +573,9 @@ def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
                 snapshot = slot.get("snapshot") if isinstance(slot, Mapping) else None
                 snapshot_id = _escape(snapshot.get("snapshot_id")) if isinstance(snapshot, Mapping) and snapshot.get("snapshot_id") else ""
                 snapshot_attr = f' data-snapshot-id="{snapshot_id}"' if snapshot_id else ""
+                provisional_label = " · 本周进行中 · Close=最新价" if isinstance(slot.get("provisional_candle"), Mapping) else ""
                 rows.append(
-                    f'<article class="timeframe"><div><b>{label}</b><div class="standard-kline-mount" data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"{snapshot_attr}></div><small class="chart-legend">EMA50 · MACD(12,26,9){(" · 单位：" + _escape(_unit_label(slot.get("unit")))) if slot.get("unit") else ""}{(" · 快照 " + snapshot_id) if snapshot_id else ""}</small></div><p>{_escape(text)}</p></article>'
+                    f'<article class="timeframe"><div><b>{label}</b><div class="standard-kline-mount" data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"{snapshot_attr}></div><small class="chart-legend">EMA50 · MACD(12,26,9){(" · 单位：" + _escape(_unit_label(slot.get("unit")))) if slot.get("unit") else ""}{provisional_label}{(" · 快照 " + snapshot_id) if snapshot_id else ""}</small></div><p>{_escape(text)}</p></article>'
                 )
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             summary = (synthesis or {}).get("text") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。"
@@ -640,8 +643,9 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
                 text = statement.get("text") if isinstance(statement, Mapping) and statement.get("text") else "当前分析不可用；图表状态已保留。"
                 unit = _unit_label(slot.get("unit"))
                 snapshot_label = f' · 快照 {snapshot_id}' if snapshot_id else ""
+                provisional_label = " · 本周进行中 · Close=最新价" if isinstance(slot.get("provisional_candle"), Mapping) else ""
                 rows.append(
-                    f'<figure class="timeframe" data-timeframe="{_escape(tf)}" data-snapshot-id="{_escape(snapshot_id)}"><div><b>{label}</b><div class="snapshot-frame">{chart}</div><figcaption>EMA50 · MACD(12,26,9){(" · 单位：" + _escape(unit)) if unit else ""}{snapshot_label}</figcaption></div><p>{_escape(text)}</p></figure>'
+                    f'<figure class="timeframe" data-timeframe="{_escape(tf)}" data-snapshot-id="{_escape(snapshot_id)}"><div><b>{label}</b><div class="snapshot-frame">{chart}</div><figcaption>EMA50 · MACD(12,26,9){(" · 单位：" + _escape(unit)) if unit else ""}{provisional_label}{snapshot_label}</figcaption></div><p>{_escape(text)}</p></figure>'
                 )
             position = analysis.get("position")
             structure = analysis.get("structure")

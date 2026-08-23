@@ -33,8 +33,8 @@ ASSET_TICKERS = {
     "nasdaq": "QQQ",
     "us_dividend": "SCHD",
     "vix": "^VIX",
-    "bitcoin": "BTCUSDT",
-    "ethereum": "ETHUSDT",
+    "bitcoin": "BTC",
+    "ethereum": "ETH",
     "hype": "HYPE",
     "shanghai": "sh000001",
     "star50": "sh000688",
@@ -488,6 +488,7 @@ def load_datafeed_weekly_source_snapshot(
     *,
     week_end: str,
     cutoff_at: str,
+    live_as_of: str | datetime | None = None,
 ) -> dict[str, Any]:
     """Fetch the full Weekly registry through datafeed and build legacy source shape."""
 
@@ -495,6 +496,17 @@ def load_datafeed_weekly_source_snapshot(
     start = (date.fromisoformat(week_end) - timedelta(days=900)).isoformat()
     series: dict[str, dict[str, Any]] = {}
     weekly_points_by_key: dict[str, list[Mapping[str, Any]] | None] = {}
+    live_timestamp = (
+        live_as_of
+        if isinstance(live_as_of, datetime)
+        else datetime.fromisoformat(str(live_as_of).replace("Z", "+00:00"))
+        if live_as_of
+        else None
+    )
+    if live_timestamp is not None and live_timestamp.tzinfo is None:
+        raise ValueError("live_as_of_requires_timezone")
+    if live_timestamp is not None:
+        live_timestamp = live_timestamp.astimezone(timezone.utc)
     for asset_key, spec in WEEKLY_ASSET_REGISTRY.items():
         # Pull the current upstream window only for continuous contracts, then
         # let the single Weekly AS_OF cutoff discard bars after week_end.
@@ -503,7 +515,6 @@ def load_datafeed_weekly_source_snapshot(
         # series into an unavailable current request.
         continuous_source = spec["source_id"] in {
             "datafeed:yahoo_finance_futures",
-            "datafeed:binance_usdm_futures_research",
             "datafeed:hyperliquid_perpetual_public",
         }
         request_end = None if continuous_source else end
@@ -536,6 +547,8 @@ def load_datafeed_weekly_source_snapshot(
             "weekly_data_kind": weekly.get("data_kind") or daily_data_kind,
             "points": _bar_for_source(daily, spec["series_kind"]),
         }
+        if continuous_source and live_timestamp is not None:
+            item["partial_points"] = _bar_for_source(daily, spec["series_kind"])
         weekly_points_by_key[asset_key] = _bar_for_source(weekly, spec["series_kind"]) if weekly.get("status") == "ready" else None
         if isinstance(weekly.get("source_identity"), Mapping) and weekly["source_identity"].get("response_sha256"):
             item["source_identity"]["weekly_response_sha256"] = weekly["source_identity"]["response_sha256"]
@@ -560,6 +573,11 @@ def load_datafeed_weekly_source_snapshot(
             item["hourly_quality"] = _quality_for_source(hourly)
             item["hourly_data_kind"] = hourly.get("data_kind") or item["data_kind"]
             item["source_identity"] = {**item["source_identity"], "hourly_response_sha256": hourly.get("source_identity", {}).get("response_sha256")}
+            if continuous_source and live_timestamp is not None and hourly.get("status") == "ready":
+                item["partial_points"] = [
+                    {"timestamp": row["timestamp"], "open": row["open"], "high": row["high"], "low": row["low"], "close": row["close"], "volume": row.get("volume", 0)}
+                    for row in hourly.get("bars") or []
+                ]
         series[asset_key] = item
     snapshot = build_weekly_source_snapshot(
         series,
@@ -568,6 +586,7 @@ def load_datafeed_weekly_source_snapshot(
         week_count=156,
         require_all=True,
         weekly_points_by_key=weekly_points_by_key,
+        live_as_of=live_timestamp,
     )
     snapshot["data_kind"] = "real"
     snapshot["source_policy"] = {
