@@ -885,7 +885,7 @@ class WeeklySourceHistoryStore:
             raise WeeklySourceHistoryError("weekly_snapshot_schema_invalid")
         identity_core = {
             key: snapshot.get(key)
-            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs", "source_policy")
+            for key in ("schema_version", "registry_version", "week_end", "cutoff_at", "live_as_of", "status", "missing_series", "series", "data_kind", "quality", "authority_inputs", "source_policy")
         }
         snapshot_id = f"market-regime-weekly-source:{_digest(identity_core)}"
         artifact = {"snapshot_id": snapshot_id, "identity_core": identity_core, **identity_core}
