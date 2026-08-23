@@ -65,13 +65,13 @@ def ready_response(*, asset_key: str = "sp500", timeframe: str = "daily") -> dic
 
 
 class WeeklyCandleContractTest(unittest.TestCase):
-    def test_registry_has_exact_17_assets_and_timeframe_policy(self) -> None:
-        self.assertEqual(len(WEEKLY_ASSET_REGISTRY), 17)
-        self.assertEqual(WEEKLY_ASSET_REGISTRY_VERSION, "market-regime-weekly-asset-registry-v1")
+    def test_registry_has_exact_19_assets_and_timeframe_policy(self) -> None:
+        self.assertEqual(len(WEEKLY_ASSET_REGISTRY), 19)
+        self.assertEqual(WEEKLY_ASSET_REGISTRY_VERSION, "market-regime-weekly-tradeable-asset-registry-v2")
         cash_or_rate = {"us2y", "us10y", "us2s10s", "sp500", "nasdaq", "us_dividend", "vix", "shanghai", "star50", "china_dividend", "nikkei", "kospi"}
         for key in cash_or_rate:
             self.assertNotIn("four_hour", WEEKLY_ASSET_REGISTRY[key]["allowed_timeframes"])
-        for key in ("dxy", "bitcoin", "wti", "gold", "silver"):
+        for key in ("bitcoin", "ethereum", "hype", "wti", "gold", "silver"):
             self.assertIn("four_hour", WEEKLY_ASSET_REGISTRY[key]["allowed_timeframes"])
 
     def test_valid_price_response_is_accepted_and_preserves_trust_fields(self) -> None:
@@ -263,11 +263,11 @@ class WeeklyCandleContractTest(unittest.TestCase):
         self.assertEqual(response["status"], "unavailable")
         self.assertEqual(response["reject_reason"], "cached_source_forbidden")
 
-    def test_current_weekly_source_bridge_has_39_typed_responses(self) -> None:
+    def test_current_weekly_source_bridge_has_44_typed_responses(self) -> None:
         from product.tests.test_market_regime_weekly_runtime import source_fixture
 
         responses = build_weekly_candle_responses(source_fixture(data_kind="fixture"))
-        self.assertEqual(len(responses), 39)
+        self.assertEqual(len(responses), 44)
         self.assertEqual(responses["gold:weekly"]["status"], "blocked")
         self.assertTrue(responses["gold:weekly"]["is_synthetic"])
 

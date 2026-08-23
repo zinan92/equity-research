@@ -117,8 +117,8 @@ def candle_response_fixture(asset_key: str, *, series_kind: str | None = None) -
 class WeeklyReportTest(unittest.TestCase):
     def test_build_produces_fixed_b_workbench_slots(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
-        self.assertEqual(len(report["cards"]), 17)
-        self.assertEqual(len(report["chart_slots"]), 39)
+        self.assertEqual(len(report["cards"]), 19)
+        self.assertEqual(len(report["chart_slots"]), 44)
         self.assertEqual(report["cards"][0]["asset_key"], "dxy")
         self.assertEqual(report["cards"][-1]["asset_key"], "silver")
 
@@ -172,7 +172,7 @@ class WeeklyReportTest(unittest.TestCase):
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         html = render_weekly_html(report)
-        self.assertEqual(html.count('data-asset-nav="'), 17)
+        self.assertEqual(html.count('data-asset-nav="'), 19)
         self.assertEqual(html.count("<img "), 0)
         self.assertNotIn("parameter_surface", html)
         self.assertNotIn("missing_inputs", html)
@@ -206,10 +206,10 @@ class WeeklyReportTest(unittest.TestCase):
                 }
         html = render_weekly_html(report)
         archive_html = render_weekly_html(report, snapshot_prefix="../../snapshots/")
-        self.assertEqual(html.count("<img "), 39)
+        self.assertEqual(html.count("<img "), 44)
         self.assertIn('src="snapshots/dxy-weekly.png"', html)
         self.assertIn('src="../../snapshots/dxy-weekly.png"', archive_html)
-        self.assertIn('alt="美元指数｜周线 K 线图"', html)
+        self.assertIn('alt="美元 ETF（UUP）｜周线 K 线图"', html)
         self.assertIn("width:min(100%,600px)", html)
         self.assertIn("image-rendering:auto", html)
         self.assertNotIn("data-chart=", html)
@@ -224,8 +224,8 @@ class WeeklyReportTest(unittest.TestCase):
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
         html_tail = render_weekly_html(report).split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
         markdown_tail = render_weekly_markdown(report).split("## 本周机会排序", 1)[1]
-        self.assertLess(html_tail.index("白银"), html_tail.index("美元指数"))
-        self.assertLess(markdown_tail.index("白银"), markdown_tail.index("美元指数"))
+        self.assertLess(html_tail.index("白银"), html_tail.index("美元 ETF（UUP）"))
+        self.assertLess(markdown_tail.index("白银"), markdown_tail.index("美元 ETF（UUP）"))
         self.assertNotIn("dxy", html_tail)
         self.assertNotIn("us_dividend", markdown_tail)
 
@@ -251,8 +251,8 @@ class WeeklyReportTest(unittest.TestCase):
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
         html = render_weekly_html(report)
         ranking_section = html.split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
-        self.assertEqual(ranking_section.count("<li>"), 17)
-        self.assertIn("美元指数", ranking_section)
+        self.assertEqual(ranking_section.count("<li>"), 19)
+        self.assertIn("美元 ETF（UUP）", ranking_section)
 
     def test_report_binds_source_snapshot_id(self) -> None:
         source = source_fixture()
@@ -267,16 +267,16 @@ class WeeklyReportTest(unittest.TestCase):
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking)
         html_tail = render_weekly_html(report).split('<section class="ranking">', 1)[1].split('</section>', 1)[0]
         self.assertNotIn("unexpected_key", html_tail)
-        self.assertIn("美元指数", html_tail)
+        self.assertIn("美元 ETF（UUP）", html_tail)
 
     def test_markdown_keeps_the_same_asset_count_and_disclosure(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         markdown = render_weekly_markdown(report)
-        self.assertEqual(markdown.count("### "), 17)
+        self.assertEqual(markdown.count("### "), 19)
         self.assertIn("周末日期：2026-08-14", markdown)
         self.assertNotIn("Context", markdown)
         self.assertIn("本周机会排序", markdown)
-        self.assertIn("美元指数：等待", markdown)
+        self.assertIn("美元 ETF（UUP）：等待", markdown)
         self.assertIn("本地评估", markdown)
 
     def test_missing_analysis_keeps_card_but_marks_unavailable(self) -> None:
@@ -286,7 +286,7 @@ class WeeklyReportTest(unittest.TestCase):
         gold = next(item for item in report["cards"] if item["asset_key"] == "gold")
         self.assertEqual(gold["analysis_status"], "analysis_unavailable")
         self.assertEqual(gold["analysis"]["summary"]["order"], ["position", "structure", "odds", "synthesis", "theoretical_implication"])
-        self.assertEqual(len(report["chart_slots"]), 39)
+        self.assertEqual(len(report["chart_slots"]), 44)
 
     def test_validated_analysis_without_position_structure_is_not_published_as_validated(self) -> None:
         analyses = analyses_fixture()

@@ -18,12 +18,13 @@ from .market_regime_weekly_standard_kline import build_standard_kline_payload, s
 from .market_regime_weekly_position_structure import POSITION_STATES, STRUCTURE_STATES
 
 
-SCHEMA_VERSION = "market-regime-weekly-report-v7"
-RENDERER_VERSION = "market-regime-weekly-report-renderer-v14"
+SCHEMA_VERSION = "market-regime-weekly-report-v8-tradeable-assets"
+RENDERER_VERSION = "market-regime-weekly-report-renderer-v15"
 REPORT_ID_PREFIX = "market-regime-weekly-report:"
 CHAPTERS = (
     ("money_price", "钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
-    ("risk_assets", "风险资产", ("sp500", "nasdaq", "us_dividend", "vix", "bitcoin")),
+    ("risk_assets", "风险资产", ("sp500", "nasdaq", "us_dividend", "vix")),
+    ("crypto", "加密资产永续", ("bitcoin", "ethereum", "hype")),
     ("asia_a_share", "亚洲与 A 股", ("shanghai", "star50", "china_dividend", "nikkei", "kospi")),
     ("real_assets", "实物资产", ("wti", "gold", "silver")),
 )
@@ -102,6 +103,17 @@ def _display_name(asset_key: Any) -> str:
     """Return a reader-safe label without leaking an internal registry key."""
 
     return DISPLAY_NAMES.get(str(asset_key or ""), "未知资产")
+
+
+def _instrument_caption(card: Mapping[str, Any]) -> str:
+    instrument = card.get("instrument") if isinstance(card, Mapping) else None
+    if not isinstance(instrument, Mapping):
+        return ""
+    ticker = str(instrument.get("ticker") or "").strip()
+    instrument_type = str(instrument.get("instrument_type") or "").strip()
+    venue = str(instrument.get("venue") or "").strip()
+    parts = [part for part in (ticker, instrument_type, venue) if part]
+    return " · ".join(parts)
 
 
 def _opportunity_projection(
@@ -380,6 +392,12 @@ def build_weekly_report(
         cards.append({
             "asset_key": key,
             "display_name": _display_name(key),
+            "instrument": {
+                "ticker": CANONICAL_REGISTRY[key].get("canonical_symbol"),
+                "instrument_type": CANONICAL_REGISTRY[key].get("instrument_type"),
+                "venue": CANONICAL_REGISTRY[key].get("venue"),
+                "tradable": bool(CANONICAL_REGISTRY[key].get("instrument_type")),
+            },
             "series_kind": series.get("series_kind"),
             "quality": series.get("quality", "unknown"),
             "analysis_status": analysis_status,
@@ -455,7 +473,8 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
         for key in keys:
             card = next(item for item in report["cards"] if item["asset_key"] == key)
             analysis = card["analysis"]
-            lines.extend([f"### {card['display_name']}", ""])
+            caption = _instrument_caption(card)
+            lines.extend([f"### {card['display_name']}", f"标的：{caption}" if caption else "", ""])
             position = analysis.get("position") if isinstance(analysis, Mapping) else None
             structure = analysis.get("structure") if isinstance(analysis, Mapping) else None
             if isinstance(position, Mapping) or isinstance(structure, Mapping):
@@ -537,6 +556,7 @@ def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
         nav_parts.append(f'<h4>{_escape(chapter)}</h4>')
         for key in keys:
             card = next(item for item in report["cards"] if item["asset_key"] == key)
+            caption = _instrument_caption(card)
             nav_parts.append(f'<button data-asset-nav="{_escape(key)}">{_escape(card["display_name"])}</button>')
             analysis = card["analysis"]
             rows = []
@@ -568,7 +588,7 @@ def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
             odds = analysis.get("odds") if isinstance(analysis, Mapping) else None
             odds_block = f'<div class="odds-summary" style="grid-column:1/-1;padding:14px 16px;background:#fff8ed;border-bottom:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">赔率</b><p style="font-size:15px;line-height:1.6;margin:5px 0;color:#544932">{_escape(_odds_reader_text(odds))}</p></div>'
             pane_parts.append(
-                f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><h2>{_escape(card["display_name"])}</h2><small>{_escape(_status_label(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}{odds_block}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
+                f'<section class="asset-pane" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><div><h2>{_escape(card["display_name"])}</h2>{f"<small>标的：{_escape(caption)}</small>" if caption else ""}</div><small>{_escape(_status_label(card["analysis_status"]))}</small></header>{"".join(rows)}{dimensions}{odds_block}<div class="synthesis"><b>多周期结论</b><p>{_escape(summary)}</p></div><div class="implication" style="grid-column:1/-1;padding:17px;background:#f7f3ea;border-top:1px solid #dedfd8"><b style="font-size:10px;color:#8a6425;letter-spacing:.1em">这意味着什么 · 机制解释</b><p style="font-size:16px;line-height:1.7;margin:6px 0;color:#544932">{_escape(implication_text)}</p></div></section>'
             )
     opportunity = _opportunity_projection(report.get("ranking"), report.get("cards"))
     ranking_rows = "".join(
@@ -601,6 +621,7 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
         for key in keys:
             card = next(item for item in report["cards"] if item["asset_key"] == key)
             display_name = _display_name(card.get("asset_key"))
+            caption = _instrument_caption(card)
             nav_parts.append(f'<a data-asset-nav="{_escape(key)}" href="#asset-{_escape(key)}">{_escape(display_name)}</a>')
             analysis = card.get("analysis") if isinstance(card.get("analysis"), Mapping) else {}
             rows: list[str] = []
@@ -630,7 +651,7 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
             implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
             pane_parts.append(
-                f'<section class="asset-pane" id="asset-{_escape(key)}" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><h2>{_escape(display_name)}</h2><small>{_escape(_status_label(card.get("analysis_status")))}</small></header>{"".join(rows)}<div class="summary-dimensions"><div><b>位置</b><p>{_escape(position_text)}</p></div><div><b>结构</b><p>{_escape(structure_text)}</p></div><div><b>赔率</b><p>{_escape(odds_text)}</p></div></div><div class="synthesis"><b>多周期结论</b><p>{_escape((synthesis or {}).get("text", "当前多周期分析不可用。") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。")}</p></div><div class="implication"><b>这意味着什么 · 机制解释</b><p>{_escape((implication or {}).get("text", "当前机制解释不可用。") if isinstance(implication, Mapping) else "当前机制解释不可用。")}</p></div></section>'
+                f'<section class="asset-pane" id="asset-{_escape(key)}" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><div><h2>{_escape(display_name)}</h2>{f"<small>标的：{_escape(caption)}</small>" if caption else ""}</div><small>{_escape(_status_label(card.get("analysis_status")))}</small></header>{"".join(rows)}<div class="summary-dimensions"><div><b>位置</b><p>{_escape(position_text)}</p></div><div><b>结构</b><p>{_escape(structure_text)}</p></div><div><b>赔率</b><p>{_escape(odds_text)}</p></div></div><div class="synthesis"><b>多周期结论</b><p>{_escape((synthesis or {}).get("text", "当前多周期分析不可用。") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。")}</p></div><div class="implication"><b>这意味着什么 · 机制解释</b><p>{_escape((implication or {}).get("text", "当前机制解释不可用。") if isinstance(implication, Mapping) else "当前机制解释不可用。")}</p></div></section>'
             )
     ranking_rows = "".join(
         f'<li><strong>{_escape((str(row.get("rank")) + ". ") if opportunity["ordered"] and row.get("rank") is not None else "")}{_escape(_display_name(row.get("asset_key")))}</strong> · {_escape(_ranking_status_label(row.get("status")))}</li>'

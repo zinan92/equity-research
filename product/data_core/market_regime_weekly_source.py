@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 
 
 SCHEMA_VERSION = "market-regime-weekly-source-history-v1"
-REGISTRY_VERSION = "market-regime-weekly-registry-v1"
+REGISTRY_VERSION = "market-regime-weekly-tradeable-registry-v2"
 
 WEEKLY_KEYS = (
     "dxy",
@@ -30,6 +30,8 @@ WEEKLY_KEYS = (
     "us_dividend",
     "vix",
     "bitcoin",
+    "ethereum",
+    "hype",
     "shanghai",
     "star50",
     "china_dividend",
@@ -39,13 +41,16 @@ WEEKLY_KEYS = (
     "gold",
     "silver",
 )
-CONTEXT_4H_KEYS = ("dxy", "bitcoin", "wti", "gold", "silver")
+# Cash-market instruments (ETFs and listed equities) stay on daily/weekly
+# context. Four-hour context is reserved for the continuous futures/perpetual
+# instruments where that timeframe is part of the tradeable contract.
+CONTEXT_4H_KEYS = ("bitcoin", "ethereum", "hype", "wti", "gold", "silver")
 RATE_KEYS = ("us2y", "us10y", "us2s10s")
 DISPLAY_NAMES = {
-    "dxy": "美元指数", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
-    "sp500": "S&P 500", "nasdaq": "Nasdaq Composite", "us_dividend": "美股红利 ETF", "vix": "VIX", "bitcoin": "Bitcoin",
+    "dxy": "美元 ETF（UUP）", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
+    "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）", "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "比特币永续（BTCUSDT）", "ethereum": "以太坊永续（ETHUSDT）", "hype": "HYPE 永续（HYPE）",
     "shanghai": "上证指数", "star50": "科创 50", "china_dividend": "上证红利", "nikkei": "Nikkei 225", "kospi": "KOSPI",
-    "wti": "WTI 原油", "gold": "黄金", "silver": "白银",
+    "wti": "WTI 原油期货（CL=F）", "gold": "黄金期货（GC=F）", "silver": "白银期货（SI=F）",
 }
 
 
@@ -54,23 +59,25 @@ class WeeklySourceHistoryError(ValueError):
 
 
 CANONICAL_REGISTRY: dict[str, dict[str, Any]] = {
-    "dxy": {"canonical_symbol": "DX-Y.NYB", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level", "anchor_hour": 20, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "dxy": {"canonical_symbol": "UUP", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price", "instrument_type": "ETF", "venue": "Yahoo Finance", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
     "us2y": {"canonical_symbol": "Treasury:2 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
     "us10y": {"canonical_symbol": "Treasury:10 Yr", "series_kind": "rate_level", "timezone": "America/New_York", "unit": "percent", "price_basis": "official_treasury_par_yield"},
     "us2s10s": {"canonical_symbol": "Treasury:10 Yr-Treasury:2 Yr", "series_kind": "spread", "timezone": "America/New_York", "unit": "basis points", "price_basis": "derived_same_date_official_treasury"},
-    "sp500": {"canonical_symbol": "^GSPC", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
-    "nasdaq": {"canonical_symbol": "^IXIC", "series_kind": "price", "timezone": "America/New_York", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
-    "us_dividend": {"canonical_symbol": "SCHD", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price"},
+    "sp500": {"canonical_symbol": "SPY", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price", "instrument_type": "ETF", "venue": "NYSE Arca"},
+    "nasdaq": {"canonical_symbol": "QQQ", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price", "instrument_type": "ETF", "venue": "Nasdaq"},
+    "us_dividend": {"canonical_symbol": "SCHD", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price", "instrument_type": "ETF", "venue": "NYSE Arca"},
     "vix": {"canonical_symbol": "^VIX", "series_kind": "price", "timezone": "America/Chicago", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
-    "bitcoin": {"canonical_symbol": "BTC-USD", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_unadjusted_trade_price", "anchor_hour": 0},
+    "bitcoin": {"canonical_symbol": "BTCUSDT", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_perpetual_futures", "instrument_type": "USDⓈ-M 永续", "venue": "Binance Futures", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "ethereum": {"canonical_symbol": "ETHUSDT", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_perpetual_futures", "instrument_type": "USDⓈ-M 永续", "venue": "Binance Futures", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "hype": {"canonical_symbol": "HYPE", "series_kind": "price", "timezone": "UTC", "unit": "USD/token", "price_basis": "provider_perpetual_futures", "instrument_type": "USDC 永续", "venue": "Hyperliquid", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
     "shanghai": {"canonical_symbol": "000001.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "star50": {"canonical_symbol": "000688.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "china_dividend": {"canonical_symbol": "000015.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "nikkei": {"canonical_symbol": "^N225", "series_kind": "price", "timezone": "Asia/Tokyo", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "kospi": {"canonical_symbol": "^KS11", "series_kind": "price", "timezone": "Asia/Seoul", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
-    "wti": {"canonical_symbol": "CL=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/barrel", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
-    "gold": {"canonical_symbol": "GC=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
-    "silver": {"canonical_symbol": "SI=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "wti": {"canonical_symbol": "CL=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/barrel", "price_basis": "provider_continuous_front_month_unadjusted", "instrument_type": "连续期货", "venue": "Yahoo Finance", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "gold": {"canonical_symbol": "GC=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "instrument_type": "连续期货", "venue": "Yahoo Finance", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "silver": {"canonical_symbol": "SI=F", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/troy ounce", "price_basis": "provider_continuous_front_month_unadjusted", "instrument_type": "连续期货", "venue": "Yahoo Finance", "anchor_hour": 18, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
 }
 
 

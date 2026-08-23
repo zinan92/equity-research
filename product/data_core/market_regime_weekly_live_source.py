@@ -29,13 +29,12 @@ from .market_regime_weekly_source import (
 
 
 YF_DAILY_SYMBOLS = {
-    "sp500": "^GSPC",
-    "nasdaq": "^IXIC",
+    "sp500": "SPY",
+    "nasdaq": "QQQ",
     "us_dividend": "SCHD",
 }
 YF_CONTEXT_SYMBOLS = {
-    "dxy": "DX-Y.NYB",
-    "bitcoin": "BTC-USD",
+    "dxy": "UUP",
     "wti": "CL=F",
     "gold": "GC=F",
     "silver": "SI=F",

@@ -1,4 +1,4 @@
-"""Canonical Weekly CandleResponse and 17-asset registry contract.
+"""Canonical Weekly CandleResponse and tradeable-asset registry contract.
 
 This module is the narrow boundary between a future datafeed adapter and the
 existing Weekly runtime.  It intentionally validates envelopes without making
@@ -16,7 +16,7 @@ from .market_regime_weekly_source import CANONICAL_REGISTRY as SOURCE_REGISTRY, 
 
 CANDLE_RESPONSE_SCHEMA_VERSION = "kline-candles-v1"
 WEEKLY_CANDLE_CONTRACT_VERSION = "market-regime-weekly-candle-contract-v1"
-WEEKLY_ASSET_REGISTRY_VERSION = "market-regime-weekly-asset-registry-v1"
+WEEKLY_ASSET_REGISTRY_VERSION = "market-regime-weekly-tradeable-asset-registry-v2"
 WEEKLY_TIMEFRAMES = ("daily", "weekly")
 CONTEXT_4H_KEYS = SOURCE_CONTEXT_4H_KEYS
 _STATUSES = frozenset({"ready", "unavailable", "blocked"})
@@ -30,15 +30,17 @@ class WeeklyCandleContractError(ValueError):
 
 
 _DATAFEED_METADATA = {
-    "dxy": ("index", "datafeed:yahoo_finance_index", "dxy_index_not_broad_dollar"),
+    "dxy": ("etf", "datafeed:yahoo_finance_etf", "usd_etf"),
     "us2y": ("macro", "datafeed:treasury_official_csv", "treasury_yield_not_bond_price"),
     "us10y": ("macro", "datafeed:treasury_official_csv", "treasury_yield_not_bond_price"),
     "us2s10s": ("macro", "datafeed:treasury_official_csv_derived", "treasury_curve_spread_not_bond_price"),
-    "sp500": ("index", "datafeed:yahoo_finance_index", "price_index"),
-    "nasdaq": ("index", "datafeed:yahoo_finance_index", "price_index"),
+    "sp500": ("etf", "datafeed:yahoo_finance_etf", "price_etf"),
+    "nasdaq": ("etf", "datafeed:yahoo_finance_etf", "price_etf"),
     "us_dividend": ("etf", "datafeed:yahoo_finance_etf", "price_etf"),
     "vix": ("index", "datafeed:yahoo_finance_index", "price_index"),
-    "bitcoin": ("crypto", "datafeed:binance_spot_public", "price_crypto"),
+    "bitcoin": ("crypto", "datafeed:binance_usdm_futures_research", "price_crypto_perpetual"),
+    "ethereum": ("crypto", "datafeed:binance_usdm_futures_research", "price_crypto_perpetual"),
+    "hype": ("crypto", "datafeed:hyperliquid_perpetual_public", "price_crypto_perpetual"),
     "shanghai": ("index", "datafeed:tencent_kline", "price_index"),
     "star50": ("index", "datafeed:tencent_kline", "price_index"),
     "china_dividend": ("index", "datafeed:tencent_kline", "price_index"),

@@ -206,7 +206,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
 
         def opener(request, timeout):
             calls.append(request.full_url)
-            return FakeResponse(candle_response("sp500", ticker="^GSPC"))
+            return FakeResponse(candle_response("sp500", ticker="SPY"))
 
         client = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener)
         result = client.fetch("sp500", "daily", start="2025-01-01", end="2026-08-15")
@@ -254,7 +254,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
 
         def fake_urlopen(request, **kwargs):
             calls.append(kwargs)
-            return Response(candle_response("sp500", ticker="^GSPC"))
+            return Response(candle_response("sp500", ticker="SPY"))
 
         import data_core.market_regime_weekly_datafeed as module
         original = module.urlopen
@@ -364,7 +364,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
 
     def test_wrong_upstream_semantic_identity_is_not_relabelled(self) -> None:
         def opener(_request, _timeout):
-            payload = candle_response("sp500", ticker="^GSPC")
+            payload = candle_response("sp500", ticker="SPY")
             payload.update({"canonical_symbol": "WRONG", "unit": "bogus", "semantic_role": "wrong"})
             return FakeResponse(payload)
 
@@ -377,7 +377,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
             return FakeResponse(
                 four_hour_response(
                     "bitcoin",
-                    ticker="BTC",
+                    ticker="BTCUSDT",
                     raw_timeframe="4h",
                     timeframe_origin="native",
                     aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -390,7 +390,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["timeframe_origin"], "native")
         self.assertEqual(result["aggregation"]["rule"], "native_passthrough")
         self.assertEqual(len(result["bars"]), 2)
-        self.assertEqual(result["source_identity"]["provider_symbol"], "BTC")
+        self.assertEqual(result["source_identity"]["provider_symbol"], "BTCUSDT")
 
     def test_aggregated_4h_response_requires_and_preserves_1h_metadata(self) -> None:
         def opener(_request, _timeout):
@@ -422,7 +422,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
             return FakeResponse(
                 four_hour_response(
                     "bitcoin",
-                    ticker="BTC",
+                    ticker="BTCUSDT",
                     raw_timeframe="1h",
                     timeframe_origin="native",
                     aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -437,7 +437,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         def opener(_request, _timeout):
             payload = four_hour_response(
                 "bitcoin",
-                ticker="BTC",
+                ticker="BTCUSDT",
                 raw_timeframe="4h",
                 timeframe_origin="native",
                 aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -454,7 +454,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         def opener(_request, _timeout):
             payload = four_hour_response(
                 "bitcoin",
-                ticker="BTC",
+                ticker="BTCUSDT",
                 raw_timeframe="4h",
                 timeframe_origin="native",
                 aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -492,13 +492,13 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(snapshot["data_kind"], "real")
         self.assertTrue(all((key, "weekly") in calls for key in WEEKLY_ASSET_REGISTRY))
         self.assertTrue(all((key, "daily") in calls for key in WEEKLY_ASSET_REGISTRY))
-        self.assertTrue(all((key, "four_hour") in calls for key in ("dxy", "bitcoin", "wti", "gold", "silver")))
+        self.assertTrue(all((key, "four_hour") in calls for key in ("bitcoin", "ethereum", "hype", "wti", "gold", "silver")))
 
     def test_native_btc_4h_survives_fetch_loader_snapshot_without_double_aggregation(self) -> None:
         class NativeClient:
             def fetch(self, asset_key, timeframe, **_kwargs):
                 spec = WEEKLY_ASSET_REGISTRY[asset_key]
-                identity = {"provider": "binance_spot", "source_mode": "binance_spot_public", "provider_symbol": "BTCUSDT" if asset_key == "bitcoin" else asset_key}
+                identity = {"provider": "binance_usdm_futures", "source_mode": "binance_usdm_futures_research", "provider_symbol": "BTCUSDT" if asset_key == "bitcoin" else asset_key}
                 if timeframe == "four_hour":
                     return {
                         "status": "ready",

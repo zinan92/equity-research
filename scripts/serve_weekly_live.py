@@ -13,10 +13,10 @@ from urllib.parse import unquote, urlparse
 
 
 DISPLAY_NAMES = {
-    "dxy": "美元指数", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
-    "sp500": "S&P 500", "nasdaq": "Nasdaq Composite", "us_dividend": "美股红利 ETF", "vix": "VIX", "bitcoin": "Bitcoin",
+    "dxy": "美元 ETF（UUP）", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
+    "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）", "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "比特币永续（BTCUSDT）", "ethereum": "以太坊永续（ETHUSDT）", "hype": "HYPE 永续（HYPE）",
     "shanghai": "上证指数", "star50": "科创 50", "china_dividend": "上证红利", "nikkei": "Nikkei 225", "kospi": "KOSPI",
-    "wti": "WTI 原油", "gold": "黄金", "silver": "白银",
+    "wti": "WTI 原油期货（CL=F）", "gold": "黄金期货（GC=F）", "silver": "白银期货（SI=F）",
 }
 TIMEFRAME_LABELS = {"weekly": "周线", "daily": "日线", "four_hour": "4小时"}
 POSITION = {"high": "高位", "middle": "中位", "low": "低位", "unavailable": "不可用"}
@@ -171,6 +171,7 @@ class WeeklyLiveHandler(BaseHTTPRequestHandler):
             assets.append({
                 "asset_key": key,
                 "display_name": DISPLAY_NAMES.get(key, key),
+                "instrument": dict(card.get("instrument") or {}),
                 "analysis_status": card.get("analysis_status"),
                 "status_label": status,
                 "position": POSITION.get(str(position.get("state")), "不可用"),

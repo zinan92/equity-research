@@ -19,17 +19,18 @@ from typing import Any, Mapping
 
 CHAPTERS = (
     ("钱的价格", ("dxy", "us2y", "us10y", "us2s10s")),
-    ("风险资产", ("sp500", "nasdaq", "us_dividend", "vix", "bitcoin")),
+    ("风险资产", ("sp500", "nasdaq", "us_dividend", "vix")),
+    ("加密资产永续", ("bitcoin", "ethereum", "hype")),
     ("亚洲与 A 股", ("shanghai", "star50", "china_dividend", "nikkei", "kospi")),
     ("实物资产", ("wti", "gold", "silver")),
 )
 DISPLAY_NAMES = {
     "dxy": "美元指数", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y",
-    "us2s10s": "美国国债 2s10s", "sp500": "S&P 500", "nasdaq": "Nasdaq Composite",
-    "us_dividend": "美股红利 ETF", "vix": "VIX", "bitcoin": "Bitcoin",
+    "us2s10s": "美国国债 2s10s", "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）",
+    "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "比特币永续（BTCUSDT）", "ethereum": "以太坊永续（ETHUSDT）", "hype": "HYPE 永续（HYPE）",
     "shanghai": "上证指数", "star50": "科创 50", "china_dividend": "上证红利",
-    "nikkei": "Nikkei 225", "kospi": "KOSPI", "wti": "WTI 原油",
-    "gold": "黄金", "silver": "白银",
+    "nikkei": "Nikkei 225", "kospi": "KOSPI", "wti": "WTI 原油期货（CL=F）",
+    "gold": "黄金期货（GC=F）", "silver": "白银期货（SI=F）",
 }
 TIMEFRAME_LABELS = {"weekly": "周线", "daily": "日线", "four_hour": "4小时"}
 TIMEFRAME_ORDER = ("weekly", "daily", "four_hour")

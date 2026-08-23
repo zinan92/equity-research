@@ -25,15 +25,17 @@ from .market_regime_weekly_source import build_weekly_source_snapshot
 
 TIMEFRAME_TO_DATAFEED = {"daily": "1d", "weekly": "1w", "four_hour": "4h"}
 ASSET_TICKERS = {
-    "dxy": "DX-Y.NYB",
+    "dxy": "UUP",
     "us2y": "DGS2",
     "us10y": "DGS10",
     "us2s10s": "T10Y2Y",
-    "sp500": "^GSPC",
-    "nasdaq": "^IXIC",
+    "sp500": "SPY",
+    "nasdaq": "QQQ",
     "us_dividend": "SCHD",
     "vix": "^VIX",
-    "bitcoin": "BTC",
+    "bitcoin": "BTCUSDT",
+    "ethereum": "ETHUSDT",
+    "hype": "HYPE",
     "shanghai": "sh000001",
     "star50": "sh000688",
     "china_dividend": "sh000015",
@@ -494,8 +496,19 @@ def load_datafeed_weekly_source_snapshot(
     series: dict[str, dict[str, Any]] = {}
     weekly_points_by_key: dict[str, list[Mapping[str, Any]] | None] = {}
     for asset_key, spec in WEEKLY_ASSET_REGISTRY.items():
-        daily = client.fetch(asset_key, "daily", start=start, end=end, limit=1000)
-        weekly = client.fetch(asset_key, "weekly", start=(date.fromisoformat(week_end) - timedelta(days=365 * 4)).isoformat(), end=end, limit=300)
+        # Pull the current upstream window only for continuous contracts, then
+        # let the single Weekly AS_OF cutoff discard bars after week_end.
+        # Session-based sources (Treasury, ETFs, A-share indices) retain the
+        # historical end bound so a weekend does not turn an official daily
+        # series into an unavailable current request.
+        continuous_source = spec["source_id"] in {
+            "datafeed:yahoo_finance_futures",
+            "datafeed:binance_usdm_futures_research",
+            "datafeed:hyperliquid_perpetual_public",
+        }
+        request_end = None if continuous_source else end
+        daily = client.fetch(asset_key, "daily", start=start, end=request_end, limit=1000)
+        weekly = client.fetch(asset_key, "weekly", start=(date.fromisoformat(week_end) - timedelta(days=365 * 4)).isoformat(), end=request_end, limit=300)
         source_identity = daily.get("source_identity") if isinstance(daily.get("source_identity"), Mapping) else {}
         legacy_kind = spec["series_kind"]
         daily_data_kind = daily.get("data_kind") or "real"
@@ -527,7 +540,12 @@ def load_datafeed_weekly_source_snapshot(
         if isinstance(weekly.get("source_identity"), Mapping) and weekly["source_identity"].get("response_sha256"):
             item["source_identity"]["weekly_response_sha256"] = weekly["source_identity"]["response_sha256"]
         if "four_hour" in spec["allowed_timeframes"]:
-            hourly = client.fetch(asset_key, "four_hour", start=(date.fromisoformat(week_end) - timedelta(days=60)).isoformat(), end=end, limit=1000)
+            # Continuous futures/perpetual sources must be fetched from the
+            # current upstream window so strict freshness can be evaluated.
+            # The Weekly source compiler then applies its single cutoff_at and
+            # discards any bars after AS_OF; an older end bound would make a
+            # valid 4H source look stale and would not be an honest fallback.
+            hourly = client.fetch(asset_key, "four_hour", start=(date.fromisoformat(week_end) - timedelta(days=60)).isoformat(), end=None if continuous_source else end, limit=1000)
             item["hourly_points"] = [
                 {"timestamp": row["timestamp"], "open": row["open"], "high": row["high"], "low": row["low"], "close": row["close"], "volume": row.get("volume", 0)}
                 for row in hourly.get("bars") or []

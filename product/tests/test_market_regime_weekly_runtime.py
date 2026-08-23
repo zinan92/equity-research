@@ -158,15 +158,15 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             result = runtime.run_once(now=datetime(2026, 8, 17, 0, 20, tzinfo=timezone.utc))
             report = result["report"]
             self.assertEqual(report["week_end"], "2026-08-14")
-            self.assertEqual(len(report["cards"]), 17)
-            self.assertEqual(len(report["chart_slots"]), 39)
+            self.assertEqual(len(report["cards"]), 19)
+            self.assertEqual(len(report["chart_slots"]), 44)
             responses = build_weekly_candle_responses(result["source"])
-            self.assertEqual(len(responses), 39)
+            self.assertEqual(len(responses), 44)
             self.assertEqual(responses["gold:weekly"]["status"], "ready")
             gold_analysis = result["analyses"]["gold"]
             self.assertTrue(any(str(item).startswith("feature:") for item in gold_analysis["position"]["evidence_ids"]))
             self.assertTrue(any(str(item).startswith("candle-response:") for item in gold_analysis["weekly"]["evidence_ids"]))
-            self.assertEqual(len(result["candle_responses"]), 39)
+            self.assertEqual(len(result["candle_responses"]), 44)
             self.assertEqual(phases, ["source", "asset_analysis", "ranking", "report", "publish"])
             replayed = WeeklyReportStore(root / "runtime", root / "output").latest()
             self.assertEqual(replayed["report_id"], report["report_id"])
@@ -199,7 +199,7 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             self.assertEqual(gold["analysis"]["deterministic_status"], "validated")
             self.assertEqual(gold["analysis"]["summary"]["order"], ["position", "structure", "odds", "synthesis", "theoretical_implication"])
             self.assertIn("当前多周期分析不可用", gold["analysis"]["synthesis"]["text"])
-            self.assertEqual(len(report["chart_slots"]), 39)
+            self.assertEqual(len(report["chart_slots"]), 44)
 
     def test_missing_asset_provider_still_publishes_deterministic_dimensions(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -265,7 +265,7 @@ class WeeklyMacroRuntimeTest(unittest.TestCase):
             result = runtime.run_once(now=datetime(2026, 8, 17, tzinfo=timezone.utc))
             self.assertEqual(result["analyses"]["gold"]["generation_status"], "analysis_unavailable")
             self.assertEqual(result["analyses"]["gold"]["failure_code"], "source_feature_invalid")
-            self.assertEqual(len(result["report"]["chart_slots"]), 39)
+            self.assertEqual(len(result["report"]["chart_slots"]), 44)
 
     def test_fixture_source_is_rejected_in_real_mode(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

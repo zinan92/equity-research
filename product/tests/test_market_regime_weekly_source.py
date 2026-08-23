@@ -26,10 +26,10 @@ from data_core.market_regime_weekly_source import (  # noqa: E402
 
 class WeeklySourceAggregationTest(unittest.TestCase):
     def test_registry_has_the_fixed_17_series_and_five_context_series(self) -> None:
-        self.assertEqual(len(WEEKLY_KEYS), 17)
+        self.assertEqual(len(WEEKLY_KEYS), 19)
         self.assertEqual(
             CONTEXT_4H_KEYS,
-            ("dxy", "bitcoin", "wti", "gold", "silver"),
+            ("bitcoin", "ethereum", "hype", "wti", "gold", "silver"),
         )
         self.assertTrue(set(CONTEXT_4H_KEYS).issubset(WEEKLY_KEYS))
 
@@ -348,7 +348,7 @@ class WeeklySourceAggregationTest(unittest.TestCase):
             build_public_4h_context(base, cutoff_at=datetime(2026, 8, 15, tzinfo=timezone.utc))
 
     def test_weekly_target_current_monday_bar_is_not_promoted(self) -> None:
-        current_monday = date.today() - timedelta(days=date.today().weekday())
+        current_monday = date.today() - timedelta(days=date.today().weekday()) + timedelta(days=7)
         result = aggregate_weekly_series(
             {
                 "key": "gold",
