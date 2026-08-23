@@ -311,11 +311,11 @@ class WeeklyDatafeedTest(unittest.TestCase):
             "detail": {
                 "error": "upstream_error",
                 "reject_reason": "rate_limited",
-                "provider": "binance_spot",
-                "source_mode": "binance_spot_public",
-                "provider_symbol": "BTCUSDT",
-                "attempted_sources": ["binance_spot_public"],
-                "access_issues": ["binance_spot_public: rate_limited"],
+                "provider": "hyperliquid",
+                "source_mode": "hyperliquid_perpetual_public",
+                "provider_symbol": "BTC",
+                "attempted_sources": ["hyperliquid_perpetual_public"],
+                "access_issues": ["hyperliquid_perpetual_public: rate_limited"],
             }
         }
 
@@ -331,9 +331,9 @@ class WeeklyDatafeedTest(unittest.TestCase):
         result = WeeklyDatafeedClient(base_url="http://datafeed.test", opener=opener).fetch("bitcoin", "daily")
         self.assertEqual(result["status"], "unavailable")
         self.assertIn("rate_limited", result["reject_reason"])
-        self.assertEqual(result["provider"], "binance_spot")
-        self.assertEqual(result["source_identity"]["provider_symbol"], "BTCUSDT")
-        self.assertEqual(result["access_issues"], ["binance_spot_public: rate_limited"])
+        self.assertEqual(result["provider"], "hyperliquid")
+        self.assertEqual(result["source_identity"]["provider_symbol"], "BTC")
+        self.assertEqual(result["access_issues"], ["hyperliquid_perpetual_public: rate_limited"])
         self.assertEqual(result["request_evidence"]["method"], "GET")
         self.assertEqual(result["request_evidence"]["status"], 429)
         self.assertRegex(result["request_evidence"]["response_body_sha256"], r"^[0-9a-f]{64}$")
@@ -377,7 +377,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
             return FakeResponse(
                 four_hour_response(
                     "bitcoin",
-                    ticker="BTCUSDT",
+                    ticker="BTC",
                     raw_timeframe="4h",
                     timeframe_origin="native",
                     aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -390,7 +390,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertEqual(result["timeframe_origin"], "native")
         self.assertEqual(result["aggregation"]["rule"], "native_passthrough")
         self.assertEqual(len(result["bars"]), 2)
-        self.assertEqual(result["source_identity"]["provider_symbol"], "BTCUSDT")
+        self.assertEqual(result["source_identity"]["provider_symbol"], "BTC")
 
     def test_aggregated_4h_response_requires_and_preserves_1h_metadata(self) -> None:
         def opener(_request, _timeout):
@@ -422,7 +422,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
             return FakeResponse(
                 four_hour_response(
                     "bitcoin",
-                    ticker="BTCUSDT",
+                    ticker="BTC",
                     raw_timeframe="1h",
                     timeframe_origin="native",
                     aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -437,7 +437,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         def opener(_request, _timeout):
             payload = four_hour_response(
                 "bitcoin",
-                ticker="BTCUSDT",
+                ticker="BTC",
                 raw_timeframe="4h",
                 timeframe_origin="native",
                 aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -454,7 +454,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         def opener(_request, _timeout):
             payload = four_hour_response(
                 "bitcoin",
-                ticker="BTCUSDT",
+                ticker="BTC",
                 raw_timeframe="4h",
                 timeframe_origin="native",
                 aggregation={"kind": "none", "rule": "native_passthrough"},
@@ -498,7 +498,7 @@ class WeeklyDatafeedTest(unittest.TestCase):
         class NativeClient:
             def fetch(self, asset_key, timeframe, **_kwargs):
                 spec = WEEKLY_ASSET_REGISTRY[asset_key]
-                identity = {"provider": "binance_usdm_futures", "source_mode": "binance_usdm_futures_research", "provider_symbol": "BTCUSDT" if asset_key == "bitcoin" else asset_key}
+                identity = {"provider": "hyperliquid", "source_mode": "hyperliquid_perpetual_public", "provider_symbol": "BTC" if asset_key == "bitcoin" else asset_key}
                 if timeframe == "four_hour":
                     return {
                         "status": "ready",
@@ -531,14 +531,14 @@ class WeeklyDatafeedTest(unittest.TestCase):
         context = snapshot["series"]["bitcoin"]["context_4h"]
         self.assertEqual(context["status"], "complete")
         self.assertEqual(len(context["points"]), 2)
-        self.assertEqual(context["source_identity"]["provider_symbol"], "BTCUSDT")
+        self.assertEqual(context["source_identity"]["provider_symbol"], "BTC")
         self.assertEqual(context["points"][0]["volume"], 10.0)
         response = build_weekly_candle_responses(snapshot)["bitcoin:four_hour"]
         self.assertEqual(response["status"], "ready")
         self.assertEqual(response["cache_policy"], "bypass")
         self.assertEqual(response["quality_policy"], "strict")
         self.assertEqual(response["served_from"], "upstream")
-        self.assertEqual(response["source_identity"]["provider_symbol"], "BTCUSDT")
+        self.assertEqual(response["source_identity"]["provider_symbol"], "BTC")
 
     def test_weekly_unavailable_does_not_fall_back_to_daily_aggregation(self) -> None:
         class WeeklyFailureClient:

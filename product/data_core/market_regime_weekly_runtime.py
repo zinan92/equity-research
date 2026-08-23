@@ -464,7 +464,11 @@ class WeeklyMacroRuntime:
         phase = "source"
         try:
             self._phase(phase)
-            raw_source = self.source_loader(week_end=frozen_week_end, cutoff_at=cutoff_at)
+            raw_source = self.source_loader(
+                week_end=frozen_week_end,
+                cutoff_at=cutoff_at,
+                live_as_of=current,
+            )
             if not isinstance(raw_source, Mapping) or raw_source.get("schema_version") != SOURCE_SCHEMA_VERSION:
                 raise WeeklyRuntimeError("source_schema_invalid")
             if not self.allow_fixture:

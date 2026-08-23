@@ -58,10 +58,11 @@ def main() -> int:
         return 2
 
     datafeed_client = WeeklyDatafeedClient(base_url=args.datafeed_url)
-    source_loader = lambda *, week_end, cutoff_at: load_datafeed_weekly_source_snapshot(
+    source_loader = lambda *, week_end, cutoff_at, live_as_of=None: load_datafeed_weekly_source_snapshot(
         datafeed_client,
         week_end=week_end.isoformat(),
         cutoff_at=cutoff_at.isoformat().replace("+00:00", "Z"),
+        live_as_of=live_as_of,
     )
     runtime = WeeklyMacroRuntime(
         source_loader=source_loader,

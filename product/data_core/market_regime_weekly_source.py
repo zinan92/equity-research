@@ -48,7 +48,7 @@ CONTEXT_4H_KEYS = ("bitcoin", "ethereum", "hype", "wti", "gold", "silver")
 RATE_KEYS = ("us2y", "us10y", "us2s10s")
 DISPLAY_NAMES = {
     "dxy": "美元 ETF（UUP）", "us2y": "美国国债 2Y", "us10y": "美国国债 10Y", "us2s10s": "美国国债 2s10s",
-    "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）", "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "比特币永续（BTCUSDT）", "ethereum": "以太坊永续（ETHUSDT）", "hype": "HYPE 永续（HYPE）",
+    "sp500": "标普 500 ETF（SPY）", "nasdaq": "纳斯达克 100 ETF（QQQ）", "us_dividend": "美股红利 ETF（SCHD）", "vix": "VIX", "bitcoin": "BTC 永续（Hyperliquid）", "ethereum": "ETH 永续（Hyperliquid）", "hype": "HYPE 永续（Hyperliquid）",
     "shanghai": "上证指数", "star50": "科创 50", "china_dividend": "上证红利", "nikkei": "Nikkei 225", "kospi": "KOSPI",
     "wti": "WTI 原油期货（CL=F）", "gold": "黄金期货（GC=F）", "silver": "白银期货（SI=F）",
 }
@@ -67,8 +67,8 @@ CANONICAL_REGISTRY: dict[str, dict[str, Any]] = {
     "nasdaq": {"canonical_symbol": "QQQ", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price", "instrument_type": "ETF", "venue": "Nasdaq"},
     "us_dividend": {"canonical_symbol": "SCHD", "series_kind": "price", "timezone": "America/New_York", "unit": "USD/share", "price_basis": "provider_unadjusted_trade_price", "instrument_type": "ETF", "venue": "NYSE Arca"},
     "vix": {"canonical_symbol": "^VIX", "series_kind": "price", "timezone": "America/Chicago", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
-    "bitcoin": {"canonical_symbol": "BTCUSDT", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_perpetual_futures", "instrument_type": "USDⓈ-M 永续", "venue": "Binance Futures", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
-    "ethereum": {"canonical_symbol": "ETHUSDT", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_perpetual_futures", "instrument_type": "USDⓈ-M 永续", "venue": "Binance Futures", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "bitcoin": {"canonical_symbol": "BTC", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_perpetual_futures", "instrument_type": "USDC 永续", "venue": "Hyperliquid", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
+    "ethereum": {"canonical_symbol": "ETH", "series_kind": "price", "timezone": "UTC", "unit": "USD/coin", "price_basis": "provider_perpetual_futures", "instrument_type": "USDC 永续", "venue": "Hyperliquid", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
     "hype": {"canonical_symbol": "HYPE", "series_kind": "price", "timezone": "UTC", "unit": "USD/token", "price_basis": "provider_perpetual_futures", "instrument_type": "USDC 永续", "venue": "Hyperliquid", "anchor_hour": 0, "four_hour_bucket_timezone": "UTC", "four_hour_anchor_hour": 0, "four_hour_anchor_minute": 0},
     "shanghai": {"canonical_symbol": "000001.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
     "star50": {"canonical_symbol": "000688.SH", "series_kind": "price", "timezone": "Asia/Shanghai", "unit": "index points", "price_basis": "provider_unadjusted_index_level"},
@@ -126,6 +126,80 @@ def _merge_source_identity(item: Mapping[str, Any], *extra_keys: str, fallback_r
     if "run_id" not in identity and fallback_run_id:
         identity["run_id"] = fallback_run_id
     return identity
+
+
+def _live_as_of(value: Any) -> datetime | None:
+    if value is None:
+        return None
+    try:
+        if isinstance(value, datetime):
+            parsed = value
+        else:
+            parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError) as exc:
+        raise WeeklySourceHistoryError("live_as_of_invalid") from exc
+    if parsed.tzinfo is None:
+        raise WeeklySourceHistoryError("live_as_of_requires_timezone")
+    return parsed.astimezone(timezone.utc)
+
+
+def build_provisional_weekly_bar(
+    points: list[Mapping[str, Any]],
+    *,
+    live_as_of: datetime,
+    week_start: date | None = None,
+) -> dict[str, Any] | None:
+    """Build an explicitly provisional current-week OHLC bar.
+
+    This bar is a reader/chart context only. Completed-week aggregation and
+    all historical features continue to use confirmed Friday bars.
+    """
+
+    as_of = _live_as_of(live_as_of)
+    if as_of is None:
+        raise WeeklySourceHistoryError("live_as_of_missing")
+    start = week_start or (as_of.date() - timedelta(days=as_of.weekday()))
+    selected: list[Mapping[str, Any]] = []
+    for raw in points:
+        if not isinstance(raw, Mapping):
+            continue
+        stamp_value = raw.get("timestamp") or raw.get("date")
+        try:
+            if isinstance(stamp_value, str) and len(stamp_value) == 10:
+                stamp = datetime.combine(date.fromisoformat(stamp_value), time.min, tzinfo=timezone.utc)
+            else:
+                stamp = _parse_timestamp(stamp_value)
+        except WeeklySourceHistoryError:
+            continue
+        if start <= stamp.date() <= as_of.date() and stamp <= as_of:
+            selected.append(raw)
+    if not selected:
+        return None
+    selected.sort(key=lambda row: str(row.get("timestamp") or row.get("date") or ""))
+    try:
+        opens = [float(row["open"]) for row in selected]
+        highs = [float(row["high"]) for row in selected]
+        lows = [float(row["low"]) for row in selected]
+        closes = [float(row["close"]) for row in selected]
+        volumes = [float(row.get("volume", 0) or 0) for row in selected]
+    except (KeyError, TypeError, ValueError) as exc:
+        raise WeeklySourceHistoryError("provisional_ohlc_invalid") from exc
+    if not all(math.isfinite(value) for value in (*opens, *highs, *lows, *closes, *volumes)):
+        raise WeeklySourceHistoryError("provisional_ohlc_non_finite")
+    return {
+        "date": start.isoformat(),
+        "timestamp": start.isoformat(),
+        "period_start": start.isoformat(),
+        "as_of": as_of.isoformat().replace("+00:00", "Z"),
+        "open": opens[0],
+        "high": max(highs),
+        "low": min(lows),
+        "close": closes[-1],
+        "volume": sum(volumes),
+        "close_status": "provisional",
+        "close_source": "latest_upstream_close",
+        "is_partial": True,
+    }
 
 
 def aggregate_weekly_series(
@@ -490,6 +564,7 @@ def build_weekly_source_snapshot(
     week_count: int = 156,
     require_all: bool = False,
     weekly_points_by_key: Mapping[str, list[Mapping[str, Any]] | None] | None = None,
+    live_as_of: datetime | None = None,
 ) -> dict[str, Any]:
     """Build the typed timeframe snapshot consumed by later compiler stories."""
 
@@ -559,6 +634,13 @@ def build_weekly_source_snapshot(
                     "weekly_fresh": enriched.get("weekly_fresh"),
                     "weekly_data_kind": enriched.get("weekly_data_kind", enriched.get("data_kind")),
                 })
+        if live_as_of is not None and enriched.get("partial_points"):
+            partial = build_provisional_weekly_bar(
+                list(enriched.get("partial_points") or []),
+                live_as_of=live_as_of,
+            )
+            if partial is not None:
+                weekly["current_week"] = partial
         if key in CONTEXT_4H_KEYS and enriched.get("hourly_points") is not None:
             cutoff = cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)
             hourly_input = {
@@ -612,6 +694,7 @@ def build_weekly_source_snapshot(
         "registry_version": REGISTRY_VERSION,
         "week_end": week_end.isoformat(),
         "cutoff_at": (cutoff_at or datetime.combine(week_end, time(23, 59, 59), tzinfo=timezone.utc)).astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "live_as_of": live_as_of.astimezone(timezone.utc).isoformat().replace("+00:00", "Z") if live_as_of else None,
         "status": "complete" if not missing and all(status == "complete" for status in statuses) and not daily_incomplete and not context_incomplete else "partial",
         "missing_series": missing,
         "series": result,

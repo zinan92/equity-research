@@ -19,12 +19,31 @@ from data_core.market_regime_weekly_source import (  # noqa: E402
     aggregate_4h_series,
     aggregate_weekly_series,
     build_public_4h_context,
+    build_provisional_weekly_bar,
     build_weekly_source_snapshot,
     build_weekly_source_snapshot_from_authorities,
 )
 
 
 class WeeklySourceAggregationTest(unittest.TestCase):
+    def test_provisional_weekly_bar_uses_latest_close_and_is_explicit(self) -> None:
+        bar = build_provisional_weekly_bar(
+            [
+                {"date": "2026-08-17", "open": 100, "high": 105, "low": 99, "close": 104, "volume": 10},
+                {"date": "2026-08-18", "open": 104, "high": 108, "low": 103, "close": 107, "volume": 12},
+                {"date": "2026-08-23", "open": 107, "high": 110, "low": 106, "close": 109, "volume": 5},
+            ],
+            live_as_of=datetime(2026, 8, 23, 12, tzinfo=timezone.utc),
+        )
+        self.assertEqual(bar["period_start"], "2026-08-17")
+        self.assertEqual(bar["open"], 100.0)
+        self.assertEqual(bar["high"], 110.0)
+        self.assertEqual(bar["low"], 99.0)
+        self.assertEqual(bar["close"], 109.0)
+        self.assertEqual(bar["close_status"], "provisional")
+        self.assertEqual(bar["close_source"], "latest_upstream_close")
+        self.assertTrue(bar["is_partial"])
+
     def test_registry_has_the_fixed_17_series_and_five_context_series(self) -> None:
         self.assertEqual(len(WEEKLY_KEYS), 19)
         self.assertEqual(
