@@ -160,7 +160,7 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         request = build_asset_analysis_request(asset_snapshot(with_4h=False))
         gold = compile_asset_analysis(request, lambda _: valid_output(request))
         vector = build_terminal_vector({"gold": gold})
-        self.assertEqual(len(vector), 17)
+        self.assertEqual(len(vector), 19)
         self.assertEqual(vector[0]["asset_key"], "dxy")
         self.assertEqual(vector[-1]["asset_key"], "silver")
         gold_slot = next(item for item in vector if item["asset_key"] == "gold")

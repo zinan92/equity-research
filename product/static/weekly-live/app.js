@@ -1,6 +1,7 @@
 const GROUPS = [
   ["钱的价格", ["dxy", "us2y", "us10y", "us2s10s"]],
-  ["风险资产", ["sp500", "nasdaq", "us_dividend", "vix", "bitcoin"]],
+  ["风险资产", ["sp500", "nasdaq", "us_dividend", "vix"]],
+  ["加密资产永续", ["bitcoin", "ethereum", "hype"]],
   ["亚洲与 A 股", ["shanghai", "star50", "china_dividend", "nikkei", "kospi"]],
   ["实物资产", ["wti", "gold", "silver"]],
 ];
@@ -17,6 +18,10 @@ const short = (value, length = 68) => {
 };
 const chip = (value, tone = "") => `<span class="chip ${tone}">${esc(value)}</span>`;
 const assetByKey = (report) => Object.fromEntries(report.assets.map((asset) => [asset.asset_key, asset]));
+const instrumentCaption = (asset) => {
+  const instrument = asset?.instrument || {};
+  return [instrument.ticker, instrument.instrument_type, instrument.venue].filter(Boolean).join(" · ");
+};
 const formatValue = (value) => value == null ? "—" : new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(value);
 const formatChange = (slot) => {
   if (slot?.change == null) return "—";
@@ -152,7 +157,7 @@ function showDetail(report, key) {
   if (!asset) return;
   const detail = document.querySelector("#detail");
   detail.hidden = false;
-  detail.innerHTML = `<header class="detail-header"><div><small>宏观 K 线周报 · ${esc(report.sample_label || "历史样本")}</small><h2>${esc(asset.display_name)}</h2><p>截至 ${esc(report.week_end)}（周五收盘）</p></div><button class="back-button" type="button" id="back-to-overview">返回市场全景</button></header><section class="metric-strip"><div><small>位置</small><strong>${esc(asset.position)}</strong></div><div><small>结构</small><strong>${esc(asset.structure)}</strong></div><div><small>赔率</small><strong>${esc(asset.odds)}</strong></div></section><section class="period-grid">${["weekly", "daily", "four_hour"].map((timeframe) => renderPeriod(asset, timeframe)).join("")}</section><section class="combined-interpretation"><small>综合结论与市场含义</small><h3>这组 K 线告诉我们什么</h3><p>${esc(asset.synthesis || "当前多周期分析不可用。")}</p><p>${esc(asset.theoretical_implication || "当前机制解释不可用。")}</p><span class="evidence-note">数据截止 ${esc(report.week_end)} · 历史样本</span></section><div class="detail-footer">本页内容用于研究参考，不构成投资建议。</div>`;
+  detail.innerHTML = `<header class="detail-header"><div><small>宏观 K 线周报 · ${esc(report.sample_label || "历史样本")}</small><h2>${esc(asset.display_name)}</h2><p>${esc(instrumentCaption(asset))}</p><p>截至 ${esc(report.week_end)}（周五收盘）</p></div><button class="back-button" type="button" id="back-to-overview">返回市场全景</button></header><section class="metric-strip"><div><small>位置</small><strong>${esc(asset.position)}</strong></div><div><small>结构</small><strong>${esc(asset.structure)}</strong></div><div><small>赔率</small><strong>${esc(asset.odds)}</strong></div></section><section class="period-grid">${["weekly", "daily", "four_hour"].map((timeframe) => renderPeriod(asset, timeframe)).join("")}</section><section class="combined-interpretation"><small>综合结论与市场含义</small><h3>这组 K 线告诉我们什么</h3><p>${esc(asset.synthesis || "当前多周期分析不可用。")}</p><p>${esc(asset.theoretical_implication || "当前机制解释不可用。")}</p><span class="evidence-note">数据截止 ${esc(report.week_end)} · 历史样本</span></section><div class="detail-footer">本页内容用于研究参考，不构成投资建议。</div>`;
   document.querySelector("#back-to-overview").addEventListener("click", () => { detail.hidden = true; document.querySelector("#overview").scrollIntoView({ behavior: "smooth" }); });
   requestAnimationFrame(() => requestAnimationFrame(paintDetailCharts));
   detail.scrollIntoView({ behavior: "smooth", block: "start" });

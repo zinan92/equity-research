@@ -21,15 +21,15 @@ ASSET_SYSTEM_PROMPT = """你是宏观 K 线周报的单资产分析师。你只�
 """
 
 
-RANKING_SYSTEM_PROMPT = """你是宏观 K 线周报的末尾排序编辑。输入只包含 17 个资产已经完成的独立分析，不能读取原始 OHLC，不能新增外部事实，也不能把排序提前影响资产分析。
+RANKING_SYSTEM_PROMPT = """你是宏观 K 线周报的末尾排序编辑。输入只包含 19 个资产已经完成的独立分析，不能读取原始 OHLC，不能新增外部事实，也不能把排序提前影响资产分析。
 
-请输出 17 个资产的完整顺序；analysis_unavailable 必须原样保留为 unavailable 且不占排名。important_changes 最多三项，每项引用输入中的 analysis_id 或 evidence_ids。只返回合法 JSON：
+请输出 19 个资产的完整顺序；analysis_unavailable 必须原样保留为 unavailable 且不占排名。important_changes 最多三项，每项引用输入中的 analysis_id 或 evidence_ids。只返回合法 JSON：
 {"generation_status":"model_generated_unreviewed","important_changes":[{"text":"string","evidence_ids":["..."]}],"ordered_assets":[{"asset_key":"string","status":"participate|wait|avoid|unavailable","rank":1,"text":"string","evidence_ids":["..."]}]}
 禁止输出个人仓位、订单或收益预测。
 """
 
 
-ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF"})
+ALLOWED_LATIN_WORDS = frozenset({"Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "SCHD", "SPY", "QQQ", "UUP", "BTCUSDT", "ETHUSDT", "HYPE", "GC", "CL", "SI", "USDT", "USDC", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF"})
 
 
 def _has_forbidden_english(value: Mapping[str, Any]) -> bool:

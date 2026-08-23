@@ -64,7 +64,7 @@ class WeeklyRankingTest(unittest.TestCase):
     def test_request_contains_the_ordered_terminal_vector_only(self) -> None:
         request = build_ranking_request(vector(unavailable="gold"))
         self.assertEqual(request["asset_keys"], list(WEEKLY_KEYS))
-        self.assertEqual(len(request["slots"]), 17)
+        self.assertEqual(len(request["slots"]), 19)
         self.assertEqual(next(item for item in request["slots"] if item["asset_key"] == "gold")["status"], "analysis_unavailable")
         self.assertNotIn("open", repr(request))
 
@@ -73,7 +73,7 @@ class WeeklyRankingTest(unittest.TestCase):
         output = validate_ranking_output(valid_output(request), request)
         gold = next(item for item in output["ordered_assets"] if item["asset_key"] == "gold")
         self.assertEqual(gold["status"], "unavailable")
-        self.assertEqual(len(output["ordered_assets"]), 17)
+        self.assertEqual(len(output["ordered_assets"]), 19)
 
     def test_unknown_citation_fails_closed(self) -> None:
         request = build_ranking_request(vector())
