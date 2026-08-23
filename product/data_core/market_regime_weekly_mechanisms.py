@@ -45,7 +45,7 @@ def mechanism_for_asset(key: str) -> dict[str, Any]:
     }
 
 
-_APPROVED_SYMBOLS = frozenset({"DXY", "VIX", "WTI", "Nasdaq", "Bitcoin", "Nikkei", "KOSPI", "MACD", "EMA", "ETF", "OHLC", "S", "P"})
+_APPROVED_SYMBOLS = frozenset({"DXY", "VIX", "WTI", "Nasdaq", "Bitcoin", "Ethereum", "Nikkei", "KOSPI", "MACD", "EMA", "ETF", "OHLC", "SPY", "QQQ", "UUP", "BTC", "BTCUSDT", "ETH", "ETHUSDT", "HYPE", "GC", "CL", "SI", "USDT", "USDC", "Binance", "Hyperliquid", "S", "P"})
 _QUALIFIER_TOKENS = ("通常", "一般", "往往", "可能", "常见", "若", "当", "取决于", "未必", "不一定")
 _COUNTER_CASE_TOKENS = ("但", "不过", "然而", "反例", "未必", "不一定", "取决于", "区别在于", "若", "并非绝对", "不是绝对")
 _FORBIDDEN_THEORY_RE = re.compile(
