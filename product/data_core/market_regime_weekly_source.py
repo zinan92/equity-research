@@ -148,6 +148,7 @@ def build_provisional_weekly_bar(
     *,
     live_as_of: datetime,
     week_start: date | None = None,
+    completed_week_end: date | None = None,
 ) -> dict[str, Any] | None:
     """Build an explicitly provisional current-week OHLC bar.
 
@@ -176,6 +177,11 @@ def build_provisional_weekly_bar(
     if not selected:
         return None
     selected.sort(key=lambda row: str(row.get("timestamp") or row.get("date") or ""))
+    if completed_week_end is not None:
+        latest_value = selected[-1].get("timestamp") or selected[-1].get("date")
+        latest_date = _parse_timestamp(latest_value).date() if isinstance(latest_value, str) and len(latest_value) > 10 else _parse_date(latest_value)
+        if latest_date <= completed_week_end:
+            return None
     try:
         opens = [float(row["open"]) for row in selected]
         highs = [float(row["high"]) for row in selected]
@@ -638,6 +644,7 @@ def build_weekly_source_snapshot(
             partial = build_provisional_weekly_bar(
                 list(enriched.get("partial_points") or []),
                 live_as_of=live_as_of,
+                completed_week_end=week_end,
             )
             if partial is not None:
                 weekly["current_week"] = partial
