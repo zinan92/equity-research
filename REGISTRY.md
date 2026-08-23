@@ -1950,3 +1950,20 @@ reader files are `/Users/wendy/Desktop/宏观K线周报/latest.html` and
 
 Next: add a bounded same-source retry for transient Hyperliquid 502s and rerun
 the next ordinary Weekly cycle; do not add silent spot/index fallback.
+## 2026-08-23 · Unified crypto source and provisional weekly candle (Issue #958 / PR #959; datafeed Issue #37 / PR #38)
+
+Now: BTC, ETH and HYPE Weekly requests use one explicit
+`hyperliquid_perpetual_public` source with the same Hyperliquid/USDC perpetual
+identity. The Weekly source keeps the last completed Friday bar and adds a
+separate `current_week` bar for continuous assets. Its latest price is labeled
+`close_status=provisional`; it is rendered in the standard-kline snapshot but
+does not enter confirmed-week features, odds, ranking or historical statistics.
+
+Evidence: AS_OF `2026-08-21` real run has 19 assets and 44 slots; the current
+artifact is `market-regime-weekly-report:135b4ce71122ce61d0f6d5ca2bc0d8f722344bdd91154fbee5594f36ab5813ee`.
+BTC/ETH/HYPE each expose a current-week bar beginning `2026-08-17` with
+`Close=latest_upstream_close`; SPY/UUP remain at their latest completed
+`2026-08-21` session. Live reader/API is served at `http://127.0.0.1:8907/`.
+
+Next: keep the same-source Hyperliquid path under ordinary-cycle observation;
+do not add spot or cross-venue fallback.
