@@ -1931,3 +1931,22 @@ Next: future five-company batches must run
 `python3 scripts/verify_editorial_v4_p3.py` after generation/revalidation;
 never interpret a raw QA blocker count as the filtered final status, and never
 use this editorial pass as Tier/action/publication approval.
+## 2026-08-23 · Weekly tradeable-instrument universe (Issue #954 / PR #955; datafeed Issues #27/#29/#31/#33/#35 / PRs #28/#30/#32/#34/#36)
+
+Now: Weekly main uses explicit tradable identities for the requested universe:
+SPY, QQQ, SCHD, UUP, CL=F, GC=F, SI=F, BTCUSDT, ETHUSDT and Hyperliquid HYPE.
+The report projection carries ticker, venue and contract type; cash/ETF rows are
+daily/weekly, while continuous futures/perpetual rows also carry native 4H.
+The canonical datafeed is `/Users/wendy/datafeed-runtime`, currently served at
+`http://127.0.0.1:8100` build `b335c86`. HYPE is an explicit Hyperliquid
+perpetual source; BTC/ETH are explicit Binance USD-M research futures sources.
+
+Evidence: real AS_OF `2026-08-21` source artifact has 19 assets and 44 timeframe
+slots with `source_status=complete`; latest reader artifact is
+`market-regime-weekly-report:54963a1ba41c7cc58cee5eb104488bdc6bd667a5bad6d2494bfbc780653b644d`
+under `~/Library/Application Support/ParkWeeklyMacroKline/runtime/` and the
+reader files are `/Users/wendy/Desktop/宏观K线周报/latest.html` and
+`latest.md`. Publication and automatic execution remain disabled.
+
+Next: add a bounded same-source retry for transient Hyperliquid 502s and rerun
+the next ordinary Weekly cycle; do not add silent spot/index fallback.
