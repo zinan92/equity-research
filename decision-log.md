@@ -1,5 +1,18 @@
 # Decision Log
 
+## 2026-08-25 — Bind Daily thesis numeric claims to compact feature summaries
+
+- **Decision:** Pass only bounded current/high/low/last-feature and
+  deterministic summary numbers from ready periods into the cross-asset thesis
+  validator. Numeric thesis prose must match those values within tolerance;
+  mechanism prose remains non-numeric.
+- **Why:** The LLM was producing valid evidence-cited EMA/MACD/position values,
+  but the thesis validator had no numeric candidates and rejected the complete
+  explanation.
+- **Evidence:** Issue #980; Daily thesis 6/6, analysis 8/8 and source 4/4.
+- **Gotchas:** Raw OHLC is not added to the thesis prompt; unavailable-period
+  errors remain separate from market measurements.
+
 ## 2026-08-25 — Preserve deterministic asset readout when LLM prose is unavailable
 
 - **Decision:** Keep code-owned Position/Structure and coverage in the Daily
