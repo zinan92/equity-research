@@ -15,6 +15,7 @@ from data_core.market_regime_daily_thesis import (  # noqa: E402
     build_daily_thesis_request,
     compile_daily_thesis,
     render_daily_markdown,
+    _local_report_date,
     validate_daily_thesis,
 )
 from product.tests.test_market_regime_daily_analysis import _provider, _source_bundle  # noqa: E402
@@ -44,6 +45,10 @@ def _thesis_provider(request):
 
 
 class DailyThesisTests(unittest.TestCase):
+    def test_report_date_uses_shanghai_calendar(self) -> None:
+        self.assertEqual(_local_report_date("2026-08-24T15:59:59Z"), "2026-08-24")
+        self.assertEqual(_local_report_date("2026-08-24T16:00:00Z"), "2026-08-25")
+
     def test_request_contains_only_asset_analysis_and_evidence(self) -> None:
         bundle = _analysis_bundle()
         request = build_daily_thesis_request(bundle)
