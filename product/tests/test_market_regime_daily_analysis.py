@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import copy
+import hashlib
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +18,7 @@ from data_core.market_regime_daily_analysis import (  # noqa: E402
     build_daily_analysis_bundle,
     build_daily_asset_request,
     compile_daily_asset_analysis,
+    validate_daily_asset_analysis,
 )
 from data_core.market_regime_daily_source import DAILY_TIMEFRAMES, build_daily_source_bundle  # noqa: E402
 from data_core.market_regime_daily_snapshots import build_daily_standard_kline_payload  # noqa: E402
@@ -48,7 +52,29 @@ def _source_bundle() -> dict:
                 "is_provisional": False,
             }
         assets.append({"asset_key": key, "display_name": key, "instrument": instrument, "slots": slots})
-    return {"schema_version": "market-regime-daily-source-bundle-v1", "source_status": "ready", "bundle_id": "market-regime-daily-source:test", "cutoff_at": "2026-08-31T00:00:00Z", "assets": assets}
+    canonical = lambda value: json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    identity_core = {
+        "schema_version": "market-regime-daily-source-bundle-v1",
+        "registry_version": "market-regime-daily-tradeable-registry-v1",
+        "generated_at": "2026-08-31T00:00:00Z",
+        "cutoff_at": "2026-08-31T00:00:00Z",
+        "assets_sha256": hashlib.sha256(canonical(assets).encode()).hexdigest(),
+        "slot_hashes": [],
+    }
+    bundle_id = "market-regime-daily-source:" + hashlib.sha256(canonical(identity_core).encode()).hexdigest()
+    return {
+        "schema_version": "market-regime-daily-source-bundle-v1",
+        "registry_version": "market-regime-daily-tradeable-registry-v1",
+        "source_status": "ready",
+        "data_kind": "real",
+        "bundle_id": bundle_id,
+        "generated_at": "2026-08-31T00:00:00Z",
+        "cutoff_at": "2026-08-31T00:00:00Z",
+        "assets": assets,
+        "identity_core": identity_core,
+        "source_policy": {"cache_policy": "bypass", "quality_policy": "strict"},
+        "coverage": {"total_slots": 57, "ready_slots": 57, "unavailable_slots": 0, "fraction": 1.0, "requested_timeframes": list(DAILY_TIMEFRAMES)},
+    }
 
 
 def _provider(request):
@@ -89,6 +115,22 @@ class DailyAnalysisTests(unittest.TestCase):
         result = compile_daily_asset_analysis(request, provider=None)
         self.assertEqual(result["generation_status"], "analysis_unavailable")
         self.assertEqual(result["failure_code"], "provider_unavailable")
+
+    def test_unavailable_period_must_be_disclosed_and_cannot_be_neutralized(self) -> None:
+        asset = copy.deepcopy(_source_bundle()["assets"][0])
+        asset["slots"]["thirty_minute"].update({"status": "unavailable", "bars": [], "reason_code": "timeframe_not_supported"})
+        request = build_daily_asset_request(asset, cutoff_at="2026-08-31T00:00:00Z")
+        output = _provider(request)
+        output["thirty_minute"] = {"text": "30分钟横盘。", "evidence_ids": [request["timeframes"]["thirty_minute"]["evidence_ids"][0]]}
+        with self.assertRaises(DailyAnalysisError):
+            validate_daily_asset_analysis(output, request)
+
+    def test_mechanism_id_cannot_cite_a_current_period_statement(self) -> None:
+        request = build_daily_asset_request(_source_bundle()["assets"][0], cutoff_at="2026-08-31T00:00:00Z")
+        output = _provider(request)
+        output["daily"]["evidence_ids"] = [request["mechanism"]["mechanism_ids"][0]]
+        with self.assertRaises(DailyAnalysisError):
+            validate_daily_asset_analysis(output, request)
 
     def test_standard_kline_payload_keeps_static_renderer_contract(self) -> None:
         asset = _source_bundle()["assets"][0]

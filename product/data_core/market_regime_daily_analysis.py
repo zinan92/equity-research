@@ -7,13 +7,14 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import os
 import tempfile
 from typing import Any, Callable, Mapping
 
-from .market_regime_daily_source import DAILY_TIMEFRAMES, SCHEMA_VERSION as SOURCE_SCHEMA
-from .market_regime_weekly_features import build_timeframe_features
+from .market_regime_daily_source import DAILY_TIMEFRAMES, SCHEMA_VERSION as SOURCE_SCHEMA, validate_daily_source_bundle
+from .market_regime_weekly_features import WeeklyFeatureError, build_timeframe_features
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
-from .market_regime_weekly_position_structure import build_position_structure
+from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
 from .market_regime_weekly_source import DISPLAY_NAMES, WEEKLY_KEYS
 
 
@@ -41,9 +42,48 @@ def _digest(value: Any) -> str:
     return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
 
 
+def _immutable_bytes(path: Path, payload: bytes) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    digest = hashlib.sha256(payload).hexdigest()
+    if path.exists():
+        if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+            raise DailyAnalysisError("analysis_artifact_immutable_conflict")
+        return digest
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.link(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+    return digest
+
+
+def _atomic_bytes(path: Path, payload: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
 def _has_forbidden_english(text: str) -> bool:
     words = re.findall(r"[A-Za-z]{4,}", text)
     return any(word not in ALLOWED_LATIN_WORDS for word in words)
+
+
+def _has_numeric_observation(text: str) -> bool:
+    numeric_free = text.replace("4小时", "").replace("30分钟", "").replace("2s10s", "").replace("2Y", "").replace("10Y", "")
+    return bool(re.search(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?\s*(?:%|％|bp|基点)?", numeric_free))
 
 
 def _source_evidence_id(asset_key: str, timeframe: str, slot: Mapping[str, Any]) -> str:
@@ -71,16 +111,19 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
         if not isinstance(slot, Mapping):
             raise DailyAnalysisError(f"slot_invalid:{key}:{timeframe}")
         evidence_id = _source_evidence_id(key, timeframe, slot)
+        source_identity = slot.get("source_identity")
+        if not isinstance(source_identity, Mapping) or not str(source_identity.get("response_sha256") or ""):
+            raise DailyAnalysisError(f"source_identity_missing:{key}:{timeframe}")
         series = {
             "key": key,
             "series_kind": instrument.get("series_kind"),
             "unit": instrument.get("unit"),
-            "source_identity": slot.get("source_identity") or {"evidence_id": evidence_id},
+            "source_identity": source_identity,
             "points": slot.get("bars") or [],
         }
         try:
             features = build_timeframe_features(series, timeframe=timeframe, cutoff_at=cutoff_at)
-        except Exception as exc:
+        except WeeklyFeatureError as exc:
             features = {
                 "schema_version": "market-regime-weekly-features-v1",
                 "key": key,
@@ -141,6 +184,8 @@ def _validate_statement(value: Any, *, known_ids: set[str], field: str) -> dict[
         raise DailyAnalysisError(f"evidence_ids_invalid:{field}")
     if _has_forbidden_english(value["text"]):
         raise DailyAnalysisError(f"analysis_language_not_chinese:{field}")
+    if _has_numeric_observation(value["text"]):
+        raise DailyAnalysisError(f"analysis_numeric_observation:{field}")
     return {"text": value["text"].strip(), "evidence_ids": list(evidence_ids)}
 
 
@@ -157,7 +202,7 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
     frames = request.get("timeframes")
     if not isinstance(frames, Mapping) or set(frames) != set(DAILY_TIMEFRAMES):
         raise DailyAnalysisError("analysis_request_timeframes_invalid")
-    known_ids = {
+    fact_ids = {
         str(evidence_id)
         for frame in frames.values()
         if isinstance(frame, Mapping)
@@ -169,10 +214,18 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
     mechanism_ids = {str(item) for item in mechanism.get("mechanism_ids") or []}
     if not mechanism_ids:
         raise DailyAnalysisError("analysis_mechanism_ids_missing")
-    known_ids |= mechanism_ids
+    known_ids = set(fact_ids)
     result: dict[str, Any] = {"asset_key": request["asset_key"], "generation_status": generation_status}
     for timeframe in DAILY_TIMEFRAMES:
-        result[timeframe] = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe)
+        frame = frames[timeframe]
+        statement = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe)
+        if frame.get("status") != "ready":
+            source_id = (frame.get("evidence_ids") or [None])[0]
+            if source_id not in statement["evidence_ids"]:
+                raise DailyAnalysisError(f"unavailable_evidence_missing:{timeframe}")
+            if not any(token in statement["text"] for token in ("不可用", "无可用", "证据不足", "未提供", "未获取")):
+                raise DailyAnalysisError(f"unavailable_disclosure_missing:{timeframe}")
+        result[timeframe] = statement
     result["synthesis"] = _validate_statement(output.get("synthesis"), known_ids=known_ids, field="synthesis")
     try:
         result["market_meaning"] = validate_theoretical_statement(output.get("market_meaning"), mechanism_ids)
@@ -206,21 +259,36 @@ def _terminal_failure(request: Mapping[str, Any], failure_code: str, determinist
     }
 
 
+def _safe_provider_receipt(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        return {"provider": "injected", "receipt_hash": _digest(str(value))}
+    allowed = ("provider", "model", "request_hash", "prompt_hash", "prompt_version", "generation_status", "attempt_count", "output_hash")
+    safe = {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
+    safe["receipt_hash"] = _digest(safe)
+    return safe
+
+
 def compile_daily_asset_analysis(
     request: Mapping[str, Any],
-    provider: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None,
+    provider: Callable[[Mapping[str, Any]], Any] | None,
 ) -> dict[str, Any]:
     """Compile deterministic dimensions and one bounded model explanation."""
 
     request_hash = _digest(request)
     try:
         deterministic = build_position_structure(request)
-    except Exception:
+    except WeeklyPositionStructureError:
         deterministic = {"position": {"state": "unknown"}, "structure": {"state": "unknown"}}
     if provider is None:
         return _terminal_failure(request, "provider_unavailable", deterministic)
+    provider_receipt: dict[str, Any] = {"provider": "injected"}
     try:
-        raw = provider(request)
+        raw_result = provider(request)
+        if isinstance(raw_result, tuple) and len(raw_result) == 2:
+            raw, receipt = raw_result
+            provider_receipt = _safe_provider_receipt(receipt)
+        else:
+            raw = raw_result
         output = validate_daily_asset_analysis(raw, request)
     except DailyAnalysisError as exc:
         return _terminal_failure(request, str(exc), deterministic)
@@ -232,6 +300,7 @@ def compile_daily_asset_analysis(
         "request_hash": request_hash,
         **output,
         "deterministic": deterministic,
+        "provider_receipt": provider_receipt,
     }
     core = {"schema_version": SCHEMA_VERSION, "asset_key": request["asset_key"], "request_hash": request_hash, "output": output}
     return {
@@ -260,10 +329,10 @@ class DeepSeekDailyAssetProvider:
         self.key_file = Path(key_file).expanduser().resolve()
         self.model = model
 
-    def __call__(self, request: Mapping[str, Any]) -> Mapping[str, Any]:
+    def __call__(self, request: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
         from deepseek_writer import call_structured_deepseek
 
-        output, _receipt = call_structured_deepseek(
+        output, receipt = call_structured_deepseek(
             system_prompt=DAILY_ASSET_SYSTEM_PROMPT,
             request_object=request,
             key_file=self.key_file,
@@ -273,18 +342,19 @@ class DeepSeekDailyAssetProvider:
             temperature=0.1,
             thinking_type="disabled",
         )
-        return output
+        return output, receipt
 
 
 def build_daily_analysis_bundle(
     source_bundle: Mapping[str, Any],
     *,
-    provider_factory: Callable[[Mapping[str, Any]], Callable[[Mapping[str, Any]], Mapping[str, Any]] | None] | None = None,
+    provider_factory: Callable[[Mapping[str, Any]], Callable[[Mapping[str, Any]], Any] | None] | None = None,
     cutoff_at: str | None = None,
     snapshot_port: Any | None = None,
 ) -> dict[str, Any]:
     """Compile 19 isolated asset analyses from one source bundle."""
 
+    source_bundle = validate_daily_source_bundle(source_bundle)
     if source_bundle.get("schema_version") != SOURCE_SCHEMA or source_bundle.get("source_status") == "unavailable":
         raise DailyAnalysisError("source_bundle_unavailable")
     generated_at = cutoff_at or str(source_bundle.get("cutoff_at") or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"))
@@ -348,18 +418,14 @@ class DailyAnalysisStore:
         payload = (_canonical(value) + "\n").encode("utf-8")
         self.artifacts.mkdir(parents=True, exist_ok=True)
         artifact = self.artifacts / f"{digest}.json"
-        if artifact.exists() and artifact.read_bytes() != payload:
-            raise DailyAnalysisError("analysis_artifact_immutable_conflict")
-        if not artifact.exists():
-            artifact.write_bytes(payload)
+        artifact_hash = _immutable_bytes(artifact, payload)
         pointer = {
             "schema_version": SCHEMA_VERSION,
             "bundle_id": bundle_id,
-            "artifact": {"path": f"artifacts/{digest}.json", "sha256": hashlib.sha256(payload).hexdigest()},
+            "artifact": {"path": f"artifacts/{digest}.json", "sha256": artifact_hash},
             "published_at": value.get("cutoff_at"),
         }
-        self.latest_path.parent.mkdir(parents=True, exist_ok=True)
-        self.latest_path.write_text(_canonical(pointer) + "\n", encoding="utf-8")
+        _atomic_bytes(self.latest_path, (_canonical(pointer) + "\n").encode("utf-8"))
         return pointer
 
     def latest(self) -> dict[str, Any]:

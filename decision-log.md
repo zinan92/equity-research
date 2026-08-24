@@ -13,7 +13,7 @@
   say?” and “what does that mean?” before a later cross-asset thesis can be
   trusted. Reusing the Weekly primitives keeps indicator semantics stable while
   a new Daily schema prevents old 17-series artifacts from entering the track.
-- **Evidence:** Issue #965. Focused Daily analysis tests pass 5/5, Daily source
+- **Evidence:** Issue #965. Focused Daily analysis tests pass 7/7, Daily source
   regression passes 4/4, Weekly feature/position regression passes 14/14, and
   a real source→analysis smoke produced 19 asset analysis objects with typed
   partial status and no source fallback.

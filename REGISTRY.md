@@ -8,7 +8,7 @@ Position/Structure facts, evidence-bound model fields for per-period readings,
 “综合结论与市场含义”, and immutable standard-kline snapshot references for
 ready slots. Unavailable periods remain typed and visible.
 
-Evidence: focused Daily analysis 5/5, Daily source 4/4, Weekly feature/position
+Evidence: focused Daily analysis 7/7, Daily source 4/4, Weekly feature/position
 14/14, static PNG smoke for three slots, and real source→analysis smoke with 19
 asset objects. The cross-asset Daily thesis, Obsidian archive and 08:20
 scheduler remain next.

@@ -185,6 +185,8 @@ class DailyChartSnapshotPort:
                         receipt_relative = f"chart_snapshots/receipts/{snapshot_digest}.json"
                         receipt_bytes = (_canonical(receipt) + "\n").encode("utf-8")
                         receipt_hash = _immutable_bytes(self.runtime_root / receipt_relative, receipt_bytes)
+                        if json.loads((self.runtime_root / receipt_relative).read_text(encoding="utf-8")).get("receipt_hash") != receipt["receipt_hash"]:
+                            raise DailySnapshotError(f"snapshot_receipt_readback_invalid:{slot_id}")
                         results[slot_id] = {
                             "schema_version": SCHEMA_VERSION,
                             "snapshot_id": snapshot_id,
