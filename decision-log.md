@@ -1,5 +1,23 @@
 # Decision Log
 
+## 2026-08-25 — Compile and archive the Daily cross-asset thesis
+
+- **Decision:** Add a separate Daily thesis compiler that reads only the
+  immutable 19-asset analysis bundle. It writes a reader-facing Chinese
+  conclusion, world model, watchpoints, market-level actions and falsifiers,
+  then archives Markdown under `007_kline daily newsletter` while keeping
+  Weekly and Finance Newsletter outputs untouched.
+- **Why:** The Daily track needs one comparable morning conclusion after each
+  asset has been read, but the two existing newsletter tracks must remain
+  independent experiments. A provider failure must produce an explicit unknown
+  thesis, never yesterday's prose or a template pretending to be today's view.
+- **Evidence:** Issue #966. Focused thesis tests pass 4/4; a real
+  source→analysis→thesis delivery smoke produced dated HTML/Markdown and a separate archive
+  file with `thesis_unavailable` explicitly disclosed when no LLM was supplied.
+- **Gotchas:** The first delivery is text-first; static chart files remain
+  content-addressed in the analysis bundle. Same-date reruns use a digest
+  suffix instead of overwriting a different archived edition.
+
 ## 2026-08-25 — Add isolated Daily per-asset analysis and static snapshots
 
 - **Decision:** Consume the Daily 19×3 source bundle as the only input to an

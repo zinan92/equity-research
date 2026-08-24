@@ -1,5 +1,20 @@
 # REGISTRY
 
+## 2026-08-25 · Daily thesis compilation and Obsidian Markdown delivery (Issue #966)
+
+Now: the Daily analysis bundle can be compiled into a separate cross-asset
+thesis with headline posture, what happened, world model, leadership/capital
+migration, watchpoints, actions and falsifiers. Dated Markdown is archived in
+`007_kline daily newsletter`; HTML/Markdown latest aliases are separate from
+Weekly and Finance Newsletter outputs. Provider failure remains an explicit
+`thesis_unavailable` surface.
+
+Evidence: focused thesis tests 4/4 and a real source→analysis→delivery smoke
+passed in a temporary runtime. The 08:20 scheduler cutover and current-key
+LLM acceptance remain next.
+
+Next: merge #966, then implement #967 scheduler/status and a real morning run.
+
 ## 2026-08-25 · Daily per-asset analysis and static snapshots (Issue #965)
 
 Now: the Daily source bundle from #964 is projected into 19 isolated asset
