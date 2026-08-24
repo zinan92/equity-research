@@ -48,7 +48,7 @@ def main() -> int:
         output_root=args.output_root.expanduser().resolve(),
         archive_root=args.archive_root.expanduser().resolve(),
     ).publish(thesis, analysis)
-    print(json.dumps({"state": "completed", "generation_status": thesis.get("generation_status"), "failure_code": thesis.get("failure_code"), "delivery_id": receipt["delivery_id"], "archive_path": receipt["archive_path"]}, ensure_ascii=False, indent=2))
+    print(json.dumps({"state": "completed", "generation_status": thesis.get("generation_status"), "failure_code": thesis.get("failure_code"), "delivery_id": receipt["delivery_id"], "archive_path": receipt["archive"]["path"]}, ensure_ascii=False, indent=2))
     return 0
 
 
