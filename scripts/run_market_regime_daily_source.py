@@ -68,12 +68,21 @@ def main() -> int:
         return 0
 
     client = DailyDatafeedClient(base_url=args.datafeed_url, timeout=args.timeout)
+    health = client.health()
     bundle = build_daily_source_bundle(client, limit=args.limit, max_workers=args.workers)
     pointer = store.publish(bundle)
+    slot_http_status: dict[str, int] = {}
+    for asset in bundle["assets"]:
+        for slot in asset["slots"].values():
+            status = slot.get("request_evidence", {}).get("status")
+            key = str(status) if status is not None else "transport_or_unknown"
+            slot_http_status[key] = slot_http_status.get(key, 0) + 1
     print(
         json.dumps(
             {
                 "state": "completed",
+                "service_health": health,
+                "slot_http_status_counts": slot_http_status,
                 "bundle_id": bundle["bundle_id"],
                 "source_status": bundle["source_status"],
                 "coverage": bundle["coverage"],

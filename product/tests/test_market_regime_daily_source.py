@@ -14,6 +14,7 @@ sys.path.insert(0, str(PRODUCT))
 from data_core.market_regime_daily_source import (  # noqa: E402
     DAILY_TIMEFRAMES,
     DailyDatafeedClient,
+    DailySourceError,
     DailySourceStore,
     build_daily_source_bundle,
     daily_request_for_asset,
@@ -87,6 +88,7 @@ class _Opener:
             "timeframe_origin": "native",
             "aggregation": {"kind": "none", "rule": "native_passthrough"},
         }
+        provider_symbol = {"DGS2": "2 Yr", "DGS10": "10 Yr", "T10Y2Y": "10 Yr-2 Yr"}.get(ticker, ticker)
         return _Response(
             {
                 "ticker": ticker,
@@ -95,7 +97,7 @@ class _Opener:
                 "count": 1,
                 **transform,
                 "provider": "fake_provider",
-                "provider_symbol": ticker,
+                "provider_symbol": provider_symbol,
                 "source_mode": requested_source,
                 "requested_source": requested_source,
                 "selected_source": requested_source,
@@ -108,7 +110,7 @@ class _Opener:
                 "is_synthetic": False,
                 "fresh": True,
                 "latest_timestamp": stamp,
-                "source_identity": {"provider_symbol": ticker},
+                "source_identity": {"provider_symbol": provider_symbol},
                 "candles": [bar],
             }
         )
@@ -152,6 +154,7 @@ class DailySourceTests(unittest.TestCase):
         self.assertEqual(gold["slots"]["thirty_minute"]["status"], "unavailable")
         self.assertEqual(gold["slots"]["thirty_minute"]["bars"], [])
         self.assertIn("unsupported", gold["slots"]["thirty_minute"]["reject_reason"])
+        self.assertIn("response_body_sha256", gold["slots"]["thirty_minute"]["request_evidence"])
         self.assertEqual(bundle["source_status"], "partial")
         self.assertEqual(bundle["coverage"]["unavailable_slots"], 1)
 
@@ -170,6 +173,11 @@ class DailySourceTests(unittest.TestCase):
             self.assertEqual(pointer["bundle_id"], bundle["bundle_id"])
             self.assertEqual(loaded["bundle_id"], bundle["bundle_id"])
             self.assertTrue((Path(directory) / pointer["artifact"]["path"]).is_file())
+            mutated = dict(bundle)
+            mutated["assets"] = [*bundle["assets"]]
+            mutated["assets"][0] = {**mutated["assets"][0], "display_name": "tampered"}
+            with self.assertRaises(DailySourceError):
+                store.publish(mutated)
 
 
 if __name__ == "__main__":

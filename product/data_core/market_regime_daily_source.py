@@ -28,11 +28,12 @@ from .market_regime_weekly_datafeed import (
     EXPLICIT_FALLBACK_SOURCES,
     EXPECTED_PROVIDER_SYMBOLS,
 )
-from .market_regime_weekly_source import DISPLAY_NAMES, REGISTRY_VERSION, WEEKLY_KEYS
+from .market_regime_weekly_source import DISPLAY_NAMES, WEEKLY_KEYS
 
 
 SCHEMA_VERSION = "market-regime-daily-source-bundle-v1"
 SOURCE_ID_PREFIX = "market-regime-daily-source:"
+DAILY_REGISTRY_VERSION = "market-regime-daily-tradeable-registry-v1"
 DAILY_TIMEFRAMES = ("daily", "four_hour", "thirty_minute")
 TIMEFRAME_TO_DATAFEED = {
     "daily": "1d",
@@ -178,15 +179,26 @@ def _unavailable(
     payload: Any = None,
     status: int | None = None,
     request_evidence: Mapping[str, Any] | None = None,
+    raw_body: bytes | None = None,
 ) -> dict[str, Any]:
     meta = _metadata(payload)
-    raw_hash = hashlib.sha256(
+    payload_hash = hashlib.sha256(
         json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str).encode("utf-8")
     ).hexdigest()
+    response_hash = hashlib.sha256(raw_body).hexdigest() if raw_body is not None else payload_hash
     evidence = dict(request_evidence or {})
     if status is not None:
         evidence.setdefault("status", status)
-    evidence.setdefault("response_body_sha256", raw_hash)
+    evidence.setdefault("payload_sha256", payload_hash)
+    if raw_body is not None:
+        evidence.setdefault("response_body_sha256", response_hash)
+    transform = {}
+    if meta.get("raw_timeframe") is not None:
+        transform["raw_timeframe"] = meta.get("raw_timeframe")
+    if meta.get("timeframe_origin") is not None:
+        transform["timeframe_origin"] = meta.get("timeframe_origin")
+    if isinstance(meta.get("aggregation"), Mapping):
+        transform["aggregation"] = dict(meta["aggregation"])
     return {
         "asset_key": request["asset_key"],
         "display_name": DISPLAY_NAMES.get(request["asset_key"], request["asset_key"]),
@@ -209,13 +221,38 @@ def _unavailable(
         "served_from": meta.get("served_from") or "upstream",
         "is_synthetic": False,
         "fresh": meta.get("fresh"),
+        "completion_state": "unavailable",
+        "is_provisional": False,
         "quality_flags": _string_list(meta.get("quality_flags")),
         "access_issues": _string_list(meta.get("access_issues")) or [reason],
         "reason_code": reason[:180],
         "reject_reason": reason[:240],
         "request_evidence": evidence,
-        "source_identity": _source_identity(meta, response_hash=raw_hash, request=request),
+        "source_identity": _source_identity(meta, response_hash=response_hash, request=request),
+        **transform,
     }
+
+
+def _completion_state(
+    request: Mapping[str, Any],
+    bars: list[Mapping[str, Any]],
+    meta: Mapping[str, Any],
+    *,
+    cutoff: datetime,
+) -> str:
+    declared = str(meta.get("completion_state") or meta.get("bar_completion") or "").strip().lower()
+    if declared in {"complete", "provisional", "unknown"}:
+        return declared
+    if bool(meta.get("is_partial")) or bool(meta.get("provisional")):
+        return "provisional"
+    # Daily sources expose completed session bars.  Intraday sources may end
+    # on an open bucket; infer only that bounded state from the requested
+    # interval and preserve the result explicitly for downstream consumers.
+    if request["timeframe"] == "daily":
+        return "complete"
+    last, _ = _timestamp(bars[-1].get("timestamp"), field="completion_timestamp")
+    seconds = {"four_hour": 4 * 3600, "thirty_minute": 30 * 60}[request["timeframe"]]
+    return "complete" if last.timestamp() + seconds <= cutoff.timestamp() else "provisional"
 
 
 def _validate_transform(request: Mapping[str, Any], meta: Mapping[str, Any]) -> dict[str, Any]:
@@ -310,6 +347,44 @@ class DailyDatafeedClient:
             f"{urlencode(query)}"
         )
 
+    def health(self) -> dict[str, Any]:
+        """Probe service health separately from the candle request matrix."""
+
+        url = f"{self.base_url}/api/health"
+        request = Request(url, headers={"Accept": "application/json"}, method="GET")
+        raw_body = b""
+        status: int | None = None
+        try:
+            with self.opener(request, self.timeout) as response:
+                status = int(getattr(response, "status", getattr(response, "status_code", 200)))
+                raw_body = response.read()
+            payload = json.loads(raw_body.decode("utf-8"))
+            return {
+                "url": url,
+                "status": status,
+                "service_status": payload.get("status") if isinstance(payload, Mapping) else None,
+                "build_sha": payload.get("build_sha") if isinstance(payload, Mapping) else None,
+                "registry": payload.get("registry") if isinstance(payload, Mapping) else None,
+                "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+            }
+        except HTTPError as exc:
+            raw_body = exc.read() if hasattr(exc, "read") else b""
+            return {
+                "url": url,
+                "status": int(getattr(exc, "code", 0) or 0),
+                "service_status": None,
+                "error": f"http:{exc}",
+                "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+            }
+        except (OSError, TimeoutError, UnicodeDecodeError, ValueError) as exc:
+            return {
+                "url": url,
+                "status": status,
+                "service_status": None,
+                "error": f"{type(exc).__name__}:{exc}",
+                "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+            }
+
     def fetch(
         self,
         asset_key: str,
@@ -345,6 +420,7 @@ class DailyDatafeedClient:
                 payload=payload,
                 status=status,
                 request_evidence={"url": url, "method": "GET", "status": status},
+                raw_body=raw_body,
             )
         except (URLError, TimeoutError, OSError) as exc:
             return _unavailable(
@@ -362,6 +438,7 @@ class DailyDatafeedClient:
                     "status": status,
                     "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
                 },
+                raw_body=raw_body,
             )
         if status is None or status < 200 or status >= 300:
             return _unavailable(
@@ -370,6 +447,7 @@ class DailyDatafeedClient:
                 payload=payload,
                 status=status,
                 request_evidence={"url": url, "method": "GET", "status": status},
+                raw_body=raw_body,
             )
         try:
             return self._convert(request, payload, cutoff=cutoff, raw_body=raw_body, url=url, status=status)
@@ -385,6 +463,7 @@ class DailyDatafeedClient:
                     "status": status,
                     "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
                 },
+                raw_body=raw_body,
             )
 
     def _convert(
@@ -402,6 +481,8 @@ class DailyDatafeedClient:
         meta = _metadata(payload)
         if meta.get("ticker") not in {request["ticker"], request["provider_symbol"]}:
             raise DailySourceError("ticker_mismatch")
+        if meta.get("provider_symbol") != request["provider_symbol"]:
+            raise DailySourceError("provider_symbol_mismatch")
         if meta.get("asset_class") != request["asset_class"]:
             raise DailySourceError("asset_class_mismatch")
         if meta.get("timeframe") != request["datafeed_timeframe"]:
@@ -427,6 +508,9 @@ class DailyDatafeedClient:
             raise DailySourceError("non_upstream_or_synthetic")
         if meta.get("fresh") is False:
             raise DailySourceError("stale_response")
+        for field in ("canonical_symbol", "series_kind", "unit", "price_basis", "semantic_role"):
+            if field in meta and meta.get(field) != request[field]:
+                raise DailySourceError(f"{field}_mismatch")
         if meta.get("reject_reason"):
             raise DailySourceError(str(meta["reject_reason"]))
         candles = meta.get("candles")
@@ -450,6 +534,7 @@ class DailyDatafeedClient:
                 raise DailySourceError("latest_timestamp_mismatch")
         response_hash = hashlib.sha256(raw_body).hexdigest()
         identity = _source_identity(meta, response_hash=response_hash, request=request)
+        completion_state = _completion_state(request, bars, meta, cutoff=cutoff)
         identity.update(
             {
                 "requested_timeframe": request["timeframe"],
@@ -480,6 +565,8 @@ class DailyDatafeedClient:
             "served_from": "upstream",
             "is_synthetic": False,
             "fresh": meta.get("fresh"),
+            "completion_state": completion_state,
+            "is_provisional": completion_state == "provisional",
             "age_seconds": meta.get("age_seconds"),
             "max_age_seconds": meta.get("max_age_seconds"),
             "quality_flags": _string_list(meta.get("quality_flags")),
@@ -584,9 +671,10 @@ def build_daily_source_bundle(
     total = len(WEEKLY_KEYS) * len(DAILY_TIMEFRAMES)
     identity_core = {
         "schema_version": SCHEMA_VERSION,
-        "registry_version": REGISTRY_VERSION,
+        "registry_version": DAILY_REGISTRY_VERSION,
         "generated_at": cutoff_at,
         "cutoff_at": cutoff_at,
+        "assets_sha256": _digest(assets),
         "slot_hashes": [
             {
                 "asset_key": asset["asset_key"],
@@ -602,7 +690,7 @@ def build_daily_source_bundle(
     return {
         "bundle_id": bundle_id,
         "schema_version": SCHEMA_VERSION,
-        "registry_version": REGISTRY_VERSION,
+        "registry_version": DAILY_REGISTRY_VERSION,
         "generated_at": cutoff_at,
         "cutoff_at": cutoff_at,
         "data_kind": "real" if ready_count else "unavailable",
@@ -636,12 +724,15 @@ class DailySourceStore:
 
     def publish(self, bundle: Mapping[str, Any]) -> dict[str, Any]:
         value = dict(bundle)
+        _validate_bundle_shape(value)
         bundle_id = str(value.get("bundle_id") or "")
         if not bundle_id.startswith(SOURCE_ID_PREFIX):
             raise DailySourceError("bundle_id_invalid")
         digest = bundle_id.removeprefix(SOURCE_ID_PREFIX)
         if digest != _digest(value.get("identity_core")):
             raise DailySourceError("bundle_identity_mismatch")
+        if value["identity_core"].get("assets_sha256") != _digest(value.get("assets")):
+            raise DailySourceError("bundle_assets_hash_invalid")
         payload = _json_bytes(value)
         artifact_path = self.artifacts / f"{digest}.json"
         artifact_hash = _immutable_bytes(artifact_path, payload)
@@ -666,11 +757,14 @@ class DailySourceStore:
             ref = pointer.get("artifact") or {}
             if ref.get("path") != f"artifacts/{digest}.json":
                 raise DailySourceError("source_pointer_path_invalid")
-            artifact_path = self.root / ref["path"]
+            artifact_path = (self.root / ref["path"]).resolve()
+            if self.root.resolve() not in artifact_path.parents:
+                raise DailySourceError("source_pointer_path_escape")
             artifact_bytes = artifact_path.read_bytes()
             if ref.get("sha256") != hashlib.sha256(artifact_bytes).hexdigest():
                 raise DailySourceError("source_pointer_hash_invalid")
             artifact = json.loads(artifact_bytes.decode("utf-8"))
+            _validate_bundle_shape(artifact)
             if artifact.get("bundle_id") != bundle_id:
                 raise DailySourceError("source_artifact_identity_invalid")
             if _digest(artifact.get("identity_core")) != digest:
@@ -682,8 +776,32 @@ class DailySourceStore:
             raise DailySourceError("source_latest_json_invalid") from exc
 
 
+def _validate_bundle_shape(bundle: Mapping[str, Any]) -> None:
+    if bundle.get("schema_version") != SCHEMA_VERSION:
+        raise DailySourceError("bundle_schema_invalid")
+    if bundle.get("registry_version") != DAILY_REGISTRY_VERSION:
+        raise DailySourceError("bundle_registry_invalid")
+    assets = bundle.get("assets")
+    if not isinstance(assets, list) or [item.get("asset_key") for item in assets if isinstance(item, Mapping)] != list(WEEKLY_KEYS):
+        raise DailySourceError("bundle_asset_universe_invalid")
+    expected_slots = set(DAILY_TIMEFRAMES)
+    for asset in assets:
+        if not isinstance(asset, Mapping) or set(asset.get("slots") or {}) != expected_slots:
+            raise DailySourceError("bundle_slot_shape_invalid")
+        for slot in (asset.get("slots") or {}).values():
+            if not isinstance(slot, Mapping):
+                raise DailySourceError("bundle_slot_invalid")
+            status = slot.get("status")
+            bars = slot.get("bars")
+            if status not in {"ready", "unavailable"}:
+                raise DailySourceError("bundle_slot_status_invalid")
+            if (status == "ready" and not isinstance(bars, list)) or (status == "unavailable" and bars):
+                raise DailySourceError("bundle_slot_bars_status_invalid")
+
+
 __all__ = [
     "DAILY_TIMEFRAMES",
+    "DAILY_REGISTRY_VERSION",
     "DailyDatafeedClient",
     "DailySourceError",
     "DailySourceStore",
