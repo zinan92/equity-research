@@ -1,5 +1,20 @@
 # Decision Log
 
+## 2026-08-25 — Preserve deterministic asset readout when LLM prose is unavailable
+
+- **Decision:** Keep code-owned Position/Structure and coverage in the Daily
+  asset section when an isolated LLM response fails. Label it as deterministic
+  readout, never as model interpretation, and expose it to the thesis compiler
+  with ready-period evidence boundaries.
+- **Why:** A failed model call must not erase valid K-line facts or force the
+  whole edition to an empty page; it also must not become a silent prose
+  fallback.
+- **Evidence:** Issue #976; Daily analysis 8/8, thesis 6/6, source 4/4 and
+  runtime 3/3 tests pass.
+- **Gotchas:** The cross-asset thesis still remains unavailable if its own LLM
+  contract fails; deterministic readout is explicitly not a substitute for
+  the requested LLM world model.
+
 ## 2026-08-25 — Separate source error codes from market observations
 
 - **Decision:** Unavailable-period prose may disclose HTTP/error codes and
