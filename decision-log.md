@@ -1,5 +1,17 @@
 # Decision Log
 
+## 2026-08-25 — Separate source error codes from market observations
+
+- **Decision:** Unavailable-period prose may disclose HTTP/error codes and
+  period labels; ready-period prices and returns remain bound to feature
+  evidence. No numeric evidence check is removed.
+- **Why:** The first real stable run correctly rejected valid text such as
+  “数据源返回 502” and “50 周期均线” as if they were unbound prices.
+- **Evidence:** Issue #974; 8 Daily analysis tests pass, including a ready
+  period with unbound `9999` rejection.
+- **Gotchas:** Error-code numbers are status metadata, not market observations;
+  they remain inside an explicitly unavailable statement only.
+
 ## 2026-08-25 — Use Asia/Shanghai local date for Daily archive identity
 
 - **Decision:** Keep all source/cutoff timestamps in UTC for provenance, but

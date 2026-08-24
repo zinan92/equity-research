@@ -1,5 +1,14 @@
 # REGISTRY
 
+## 2026-08-25 · Daily numeric-boundary hotfix (Issue #974)
+
+Now: unavailable source/error codes and period labels no longer block valid
+Daily asset explanations; ready-period numeric claims remain feature-bound.
+
+Evidence: Daily analysis 8/8 and adjacent Daily/Weekly focused tests pass.
+
+Next: merge the hotfix and rerun the stable Daily runtime.
+
 ## 2026-08-25 · Daily archive local-date hotfix (Issue #972)
 
 Now: new Daily editions use Asia/Shanghai calendar date for Markdown frontmatter,
