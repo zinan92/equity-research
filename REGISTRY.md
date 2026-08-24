@@ -9,7 +9,7 @@ migration, watchpoints, actions and falsifiers. Dated Markdown is archived in
 Weekly and Finance Newsletter outputs. Provider failure remains an explicit
 `thesis_unavailable` surface.
 
-Evidence: focused thesis tests 4/4 and a real source→analysis→delivery smoke
+Evidence: focused thesis tests 5/5 and a real source→analysis→delivery smoke
 passed in a temporary runtime. The 08:20 scheduler cutover and current-key
 LLM acceptance remain next.
 

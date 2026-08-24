@@ -216,6 +216,16 @@ def _statement(value: Any, *, known_ids: set[str], field: str) -> dict[str, Any]
     return {"text": text, "evidence_ids": [str(item) for item in ids]}
 
 
+def _migration_statement(value: Any, *, known_ids: set[str]) -> dict[str, Any]:
+    result = _statement(value, known_ids=known_ids, field="capital_migration")
+    text = result["text"]
+    if not any(token in text for token in ("可能", "推断", "更像", "通常", "若", "未必", "反映", "暗示")):
+        raise DailyThesisError("thesis_capital_migration_qualifier_missing")
+    if re.search(r"直接资金流|资金(?:正在|已经|已|明确|明显)(?:流入|流出|转入|转出)|资金净(?:流入|流出)", text):
+        raise DailyThesisError("thesis_capital_migration_overclaim")
+    return result
+
+
 def _mechanism_statement(value: Any, *, mechanism_ids: set[str], field: str) -> dict[str, Any]:
     if not isinstance(value, Mapping) or not isinstance(value.get("text"), str) or not value["text"].strip():
         raise DailyThesisError(f"thesis_mechanism_invalid:{field}")
@@ -246,7 +256,7 @@ def validate_daily_thesis(output: Mapping[str, Any], request: Mapping[str, Any])
         "world_model": _statement(output.get("world_model"), known_ids=known_ids, field="world_model"),
         "leadership": _statement(output.get("leadership"), known_ids=known_ids, field="leadership"),
         "laggards": _statement(output.get("laggards"), known_ids=known_ids, field="laggards"),
-        "capital_migration": _statement(output.get("capital_migration"), known_ids=known_ids, field="capital_migration"),
+        "capital_migration": _migration_statement(output.get("capital_migration"), known_ids=known_ids),
         "theoretical_mechanism": _mechanism_statement(output.get("theoretical_mechanism"), mechanism_ids=mechanism_ids, field="theoretical_mechanism"),
     }
     for field, minimum, maximum in (("watchpoints", 2, 8), ("actions", 1, 8), ("falsifiers", 1, 5)):
@@ -259,7 +269,7 @@ def validate_daily_thesis(output: Mapping[str, Any], request: Mapping[str, Any])
 
 DAILY_THESIS_SYSTEM_PROMPT = """你是 Global Market K-line Daily 的跨资产主理人。只读取请求中的 19 个资产单资产分析和证据 ID，不读取 Finance Daily Newsletter，不调用新闻或外部知识，不补造数字。
 
-请把各资产综合成一份当天的市场判断：headline、what_happened、world_model、leadership、laggards、capital_migration、theoretical_mechanism、watchpoints、actions、falsifiers。current observations 必须引用可用资产的 fact_evidence_ids；不可用周期不能支撑当前判断。theoretical_mechanism 只能引用 mechanism_ids。可以提出有条件的交易建议，但不得给个人仓位、订单或自动执行。资本迁移是对价格相对关系的推断，不是直接资金流测量。所有文字使用简体中文，除官方资产符号外不要写英文句子或数字。
+请把各资产综合成一份当天的市场判断：headline、what_happened、world_model、leadership、laggards、capital_migration、theoretical_mechanism、watchpoints、actions、falsifiers。current observations 必须引用可用资产的 fact_evidence_ids；不可用周期不能支撑当前判断。theoretical_mechanism 只能引用 mechanism_ids。capital_migration 必须使用“可能、推断、更像、通常、反映、暗示”等合格推断语言，不能声称资金正在/已经/明确流入或流出。可以提出有条件的交易建议，但不得给个人仓位、订单或自动执行。资本迁移是对价格相对关系的推断，不是直接资金流测量。所有文字使用简体中文，除官方资产符号外不要写英文句子或数字。
 
 只返回合法 JSON：{"generation_status":"model_generated_unreviewed","posture":"attack|wait|defense|no_view","headline":{"text":"...","evidence_ids":["..."]},"what_happened":{"text":"...","evidence_ids":["..."]},"world_model":{"text":"...","evidence_ids":["..."]},"leadership":{"text":"...","evidence_ids":["..."]},"laggards":{"text":"...","evidence_ids":["..."]},"capital_migration":{"text":"...","evidence_ids":["..."]},"theoretical_mechanism":{"text":"...","evidence_ids":["mechanism:..."],"claim_type":"theoretical_mechanism"},"watchpoints":[{"text":"...","evidence_ids":["..."]}],"actions":[{"text":"...","evidence_ids":["..."]}],"falsifiers":[{"text":"...","evidence_ids":["..."]}]}"""
 
@@ -410,7 +420,12 @@ class DailyThesisDeliveryStore:
         _atomic_bytes(archive_path, markdown.encode("utf-8"))
         _atomic_bytes(self.output_root / "latest.md", markdown.encode("utf-8"))
         _atomic_bytes(self.output_root / "latest.html", html_text.encode("utf-8"))
-        receipt = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "cutoff_at": archive_date, "markdown": md_ref, "html": html_ref, "archive_path": str(archive_path), "generation_status": thesis.get("generation_status")}
+        archive_hash = hashlib.sha256(archive_path.read_bytes()).hexdigest()
+        aliases = {
+            "markdown": {"path": "latest.md", "sha256": hashlib.sha256((self.output_root / "latest.md").read_bytes()).hexdigest()},
+            "html": {"path": "latest.html", "sha256": hashlib.sha256((self.output_root / "latest.html").read_bytes()).hexdigest()},
+        }
+        receipt = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "identity_core": core, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "cutoff_at": archive_date, "markdown": md_ref, "html": html_ref, "archive": {"path": str(archive_path), "sha256": archive_hash}, "aliases": aliases, "generation_status": thesis.get("generation_status")}
         receipt_bytes = (_canonical(receipt) + "\n").encode("utf-8")
         receipt_ref = {"path": f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", "sha256": _immutable_bytes(self.runtime_root / "delivery" / f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", receipt_bytes)}
         state = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "receipt": receipt_ref}
@@ -436,6 +451,11 @@ class DailyThesisDeliveryStore:
             receipt = json.loads(receipt_bytes.decode("utf-8"))
             if receipt.get("delivery_id") != delivery_id:
                 raise DailyThesisError("delivery_receipt_identity_invalid")
+            receipt_core = receipt.get("identity_core")
+            if not isinstance(receipt_core, Mapping) or _digest(receipt_core) != delivery_id.removeprefix(DELIVERY_ID_PREFIX):
+                raise DailyThesisError("delivery_receipt_core_invalid")
+            if receipt.get("thesis_id") != receipt_core.get("thesis_id") or receipt.get("analysis_bundle_id") != receipt_core.get("analysis_bundle_id"):
+                raise DailyThesisError("delivery_receipt_binding_invalid")
             for field in ("markdown", "html"):
                 reference = receipt.get(field) or {}
                 artifact_path = (self.runtime_root / "delivery" / str(reference.get("path") or "")).resolve()
@@ -444,6 +464,14 @@ class DailyThesisDeliveryStore:
                 artifact_bytes = artifact_path.read_bytes()
                 if reference.get("sha256") != hashlib.sha256(artifact_bytes).hexdigest():
                     raise DailyThesisError(f"delivery_{field}_hash_invalid")
+            archive = receipt.get("archive") or {}
+            archive_path = Path(str(archive.get("path") or "")).expanduser().resolve()
+            if self.archive_root.resolve() not in archive_path.parents or archive.get("sha256") != hashlib.sha256(archive_path.read_bytes()).hexdigest():
+                raise DailyThesisError("delivery_archive_invalid")
+            for alias in (receipt.get("aliases") or {}).values():
+                alias_path = (self.output_root / str(alias.get("path") or "")).resolve()
+                if self.output_root.resolve() not in alias_path.parents or alias.get("sha256") != hashlib.sha256(alias_path.read_bytes()).hexdigest():
+                    raise DailyThesisError("delivery_alias_invalid")
             return receipt
         except FileNotFoundError as exc:
             raise DailyThesisError("delivery_latest_unavailable") from exc

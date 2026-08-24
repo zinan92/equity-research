@@ -64,6 +64,15 @@ class DailyThesisTests(unittest.TestCase):
         markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
         self.assertIn("综合 thesis 不可用", markdown)
 
+    def test_direct_money_flow_claim_is_rejected(self) -> None:
+        bundle = _analysis_bundle()
+        def bad_provider(request):
+            result = _thesis_provider(request)
+            result["capital_migration"] = {"text": "资金正在流入黄金。", "evidence_ids": request["evidence_ids"][:1]}
+            return result
+        thesis = compile_daily_thesis(bundle, bad_provider)
+        self.assertEqual(thesis["generation_status"], "thesis_unavailable")
+
     def test_delivery_archives_markdown_without_overwriting_weekly(self) -> None:
         bundle = _analysis_bundle()
         thesis = compile_daily_thesis(bundle, _thesis_provider)
@@ -76,7 +85,7 @@ class DailyThesisTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             receipt = DailyThesisDeliveryStore(runtime_root=root / "runtime", output_root=root / "output", archive_root=root / "archive").publish(thesis, bundle)
-            self.assertTrue(Path(receipt["archive_path"]).is_file())
+            self.assertTrue(Path(receipt["archive"]["path"]).is_file())
             self.assertTrue((root / "output" / "latest.md").is_file())
             self.assertTrue((root / "output" / "latest.html").is_file())
             latest = DailyThesisDeliveryStore(runtime_root=root / "runtime", output_root=root / "output", archive_root=root / "archive").latest()

@@ -11,7 +11,7 @@
   asset has been read, but the two existing newsletter tracks must remain
   independent experiments. A provider failure must produce an explicit unknown
   thesis, never yesterday's prose or a template pretending to be today's view.
-- **Evidence:** Issue #966. Focused thesis tests pass 4/4; a real
+- **Evidence:** Issue #966. Focused thesis tests pass 5/5; a real
   source→analysis→thesis delivery smoke produced dated HTML/Markdown and a separate archive
   file with `thesis_unavailable` explicitly disclosed when no LLM was supplied.
 - **Gotchas:** The first delivery is text-first; static chart files remain
