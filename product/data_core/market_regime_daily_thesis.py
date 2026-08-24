@@ -15,8 +15,6 @@ from typing import Any, Callable, Mapping
 from .market_regime_daily_analysis import (
     DAILY_TIMEFRAMES,
     SCHEMA_VERSION as ANALYSIS_SCHEMA,
-    _digest as analysis_digest,
-    validate_daily_source_bundle,
 )
 from .market_regime_daily_source import WEEKLY_KEYS
 
@@ -146,10 +144,24 @@ def _evidence_ids(analysis_bundle: Mapping[str, Any]) -> set[str]:
 def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, Any]:
     bundle = validate_daily_analysis_bundle(analysis_bundle)
     assets: list[dict[str, Any]] = []
+    fact_evidence_ids: set[str] = set()
+    unavailable_evidence_ids: set[str] = set()
+    mechanism_ids: set[str] = set()
     for asset in bundle["assets"]:
         analysis = asset.get("analysis") or {}
         output = analysis.get("output") or {}
         request = asset.get("request") or {}
+        for timeframe, frame in (request.get("timeframes") or {}).items():
+            if not isinstance(frame, Mapping):
+                continue
+            ids = {str(item) for item in frame.get("evidence_ids") or []}
+            if frame.get("status") == "ready":
+                fact_evidence_ids.update(ids)
+            else:
+                unavailable_evidence_ids.update(ids)
+        mechanism = request.get("mechanism")
+        if isinstance(mechanism, Mapping):
+            mechanism_ids.update(str(item) for item in mechanism.get("mechanism_ids") or [])
         assets.append(
             {
                 "asset_key": asset["asset_key"],
@@ -177,6 +189,9 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
         "analysis_bundle_id": bundle["bundle_id"],
         "cutoff_at": bundle.get("cutoff_at"),
         "assets": assets,
+        "fact_evidence_ids": sorted(fact_evidence_ids),
+        "unavailable_evidence_ids": sorted(unavailable_evidence_ids),
+        "mechanism_ids": sorted(mechanism_ids),
         "truth_boundary": {
             "finance_newsletter_input": False,
             "observations_are_evidence_bound": True,
@@ -196,6 +211,20 @@ def _statement(value: Any, *, known_ids: set[str], field: str) -> dict[str, Any]
     text = value["text"].strip()
     if _has_forbidden_english(text) or _has_numeric_observation(text):
         raise DailyThesisError(f"thesis_language_or_numeric_invalid:{field}")
+    if re.search(r"直接资金流|资金净流入|真实资金流|资金已流入|资金已流出|个人持仓|仓位比例|满仓|半仓|自动执行|经纪订单|下单", text):
+        raise DailyThesisError(f"thesis_boundary_invalid:{field}")
+    return {"text": text, "evidence_ids": [str(item) for item in ids]}
+
+
+def _mechanism_statement(value: Any, *, mechanism_ids: set[str], field: str) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or not isinstance(value.get("text"), str) or not value["text"].strip():
+        raise DailyThesisError(f"thesis_mechanism_invalid:{field}")
+    ids = value.get("evidence_ids")
+    if not isinstance(ids, list) or not ids or any(str(item) not in mechanism_ids for item in ids):
+        raise DailyThesisError(f"thesis_mechanism_evidence_invalid:{field}")
+    text = value["text"].strip()
+    if _has_forbidden_english(text) or _has_numeric_observation(text) or not any(token in text for token in ("通常", "可能", "若", "取决于", "未必", "不一定")):
+        raise DailyThesisError(f"thesis_mechanism_language_invalid:{field}")
     return {"text": text, "evidence_ids": [str(item) for item in ids]}
 
 
@@ -205,10 +234,10 @@ def validate_daily_thesis(output: Mapping[str, Any], request: Mapping[str, Any])
     posture = str(output.get("posture") or "")
     if posture not in POSTURES:
         raise DailyThesisError("thesis_posture_invalid")
-    known_ids = _evidence_ids({"assets": request.get("assets") or []})
-    # The request is a projection, so retain all evidence IDs from the source
-    # analysis objects in a dedicated field for validation.
-    known_ids.update(str(item) for item in request.get("evidence_ids") or [])
+    known_ids = {str(item) for item in request.get("fact_evidence_ids") or []}
+    if not known_ids:
+        known_ids.update(str(item) for item in request.get("evidence_ids") or [])
+    mechanism_ids = {str(item) for item in request.get("mechanism_ids") or []}
     result = {
         "generation_status": "model_generated_unreviewed",
         "posture": posture,
@@ -216,7 +245,9 @@ def validate_daily_thesis(output: Mapping[str, Any], request: Mapping[str, Any])
         "what_happened": _statement(output.get("what_happened"), known_ids=known_ids, field="what_happened"),
         "world_model": _statement(output.get("world_model"), known_ids=known_ids, field="world_model"),
         "leadership": _statement(output.get("leadership"), known_ids=known_ids, field="leadership"),
+        "laggards": _statement(output.get("laggards"), known_ids=known_ids, field="laggards"),
         "capital_migration": _statement(output.get("capital_migration"), known_ids=known_ids, field="capital_migration"),
+        "theoretical_mechanism": _mechanism_statement(output.get("theoretical_mechanism"), mechanism_ids=mechanism_ids, field="theoretical_mechanism"),
     }
     for field, minimum, maximum in (("watchpoints", 2, 8), ("actions", 1, 8), ("falsifiers", 1, 5)):
         rows = output.get(field)
@@ -228,9 +259,9 @@ def validate_daily_thesis(output: Mapping[str, Any], request: Mapping[str, Any])
 
 DAILY_THESIS_SYSTEM_PROMPT = """你是 Global Market K-line Daily 的跨资产主理人。只读取请求中的 19 个资产单资产分析和证据 ID，不读取 Finance Daily Newsletter，不调用新闻或外部知识，不补造数字。
 
-请把各资产综合成一份当天的市场判断：headline、what_happened、world_model、leadership、capital_migration、watchpoints、actions、falsifiers。current observations 必须引用资产分析 evidence_ids；可以提出有条件的交易建议，但不得给个人仓位、订单或自动执行。资本迁移是对价格相对关系的推断，不是直接资金流测量。所有文字使用简体中文，除官方资产符号外不要写英文句子或数字。
+请把各资产综合成一份当天的市场判断：headline、what_happened、world_model、leadership、laggards、capital_migration、theoretical_mechanism、watchpoints、actions、falsifiers。current observations 必须引用可用资产的 fact_evidence_ids；不可用周期不能支撑当前判断。theoretical_mechanism 只能引用 mechanism_ids。可以提出有条件的交易建议，但不得给个人仓位、订单或自动执行。资本迁移是对价格相对关系的推断，不是直接资金流测量。所有文字使用简体中文，除官方资产符号外不要写英文句子或数字。
 
-只返回合法 JSON：{"generation_status":"model_generated_unreviewed","posture":"attack|wait|defense|no_view","headline":{"text":"...","evidence_ids":["..."]},"what_happened":{"text":"...","evidence_ids":["..."]},"world_model":{"text":"...","evidence_ids":["..."]},"leadership":{"text":"...","evidence_ids":["..."]},"capital_migration":{"text":"...","evidence_ids":["..."]},"watchpoints":[{"text":"...","evidence_ids":["..."]}],"actions":[{"text":"...","evidence_ids":["..."]}],"falsifiers":[{"text":"...","evidence_ids":["..."]}]}"""
+只返回合法 JSON：{"generation_status":"model_generated_unreviewed","posture":"attack|wait|defense|no_view","headline":{"text":"...","evidence_ids":["..."]},"what_happened":{"text":"...","evidence_ids":["..."]},"world_model":{"text":"...","evidence_ids":["..."]},"leadership":{"text":"...","evidence_ids":["..."]},"laggards":{"text":"...","evidence_ids":["..."]},"capital_migration":{"text":"...","evidence_ids":["..."]},"theoretical_mechanism":{"text":"...","evidence_ids":["mechanism:..."],"claim_type":"theoretical_mechanism"},"watchpoints":[{"text":"...","evidence_ids":["..."]}],"actions":[{"text":"...","evidence_ids":["..."]}],"falsifiers":[{"text":"...","evidence_ids":["..."]}]}"""
 
 
 class DeepSeekDailyThesisProvider:
@@ -299,7 +330,7 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
     if thesis.get("generation_status") != "model_generated_unreviewed":
         lines.extend(["当前综合 thesis 不可用。", "", "本日报保留各资产数据状态，但没有把旧结论或模板判断当作今天的新结论。", ""])
     else:
-        lines.extend([f"**{POSTURE_LABELS.get(thesis['posture'], thesis['posture'])}** · {thesis['headline']['text']}", "", thesis["what_happened"]["text"], "", "## 世界模型", "", thesis["world_model"]["text"], "", "## 盘面领导与资金迁移", "", thesis["leadership"]["text"], "", thesis["capital_migration"]["text"], "", "## 接下来观察", ""])
+        lines.extend([f"**{POSTURE_LABELS.get(thesis['posture'], thesis['posture'])}** · {thesis['headline']['text']}", "", thesis["what_happened"]["text"], "", "## 世界模型", "", thesis["world_model"]["text"], "", "## 盘面领导与落后", "", thesis["leadership"]["text"], "", thesis["laggards"]["text"], "", "## 资金迁移（价格关系推断）", "", thesis["capital_migration"]["text"], "", "## 理论机制", "", thesis["theoretical_mechanism"]["text"], "", "## 接下来观察", ""])
         lines.extend([f"{index}. {row['text']}" for index, row in enumerate(thesis["watchpoints"], 1)])
         lines.extend(["", "## 操作框架", ""])
         lines.extend([f"- {row['text']}" for row in thesis["actions"]])
@@ -346,10 +377,27 @@ class DailyThesisDeliveryStore:
         analysis_bundle = validate_daily_analysis_bundle(analysis_bundle)
         if not str(thesis.get("thesis_id") or "").startswith(THESIS_ID_PREFIX):
             raise DailyThesisError("thesis_identity_invalid")
-        markdown = render_daily_markdown({**thesis, "cutoff_at": analysis_bundle.get("cutoff_at")}, analysis_bundle)
-        html_text = render_daily_html(markdown)
         thesis_id = str(thesis["thesis_id"])
         digest = thesis_id.removeprefix(THESIS_ID_PREFIX)
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise DailyThesisError("thesis_identity_invalid")
+        identity_core = thesis.get("identity_core")
+        if not isinstance(identity_core, Mapping) or _digest(identity_core) != digest:
+            raise DailyThesisError("thesis_identity_mismatch")
+        if identity_core.get("analysis_bundle_id") != analysis_bundle.get("bundle_id"):
+            raise DailyThesisError("thesis_analysis_binding_invalid")
+        if thesis.get("generation_status") == "model_generated_unreviewed":
+            request = thesis.get("request")
+            output = thesis.get("output")
+            if not isinstance(request, Mapping) or not isinstance(output, Mapping):
+                raise DailyThesisError("thesis_output_binding_invalid")
+            if request.get("analysis_bundle_id") != analysis_bundle.get("bundle_id"):
+                raise DailyThesisError("thesis_request_analysis_binding_invalid")
+            validate_daily_thesis(output, request)
+        elif thesis.get("generation_status") != "thesis_unavailable" or not thesis.get("failure_code"):
+            raise DailyThesisError("thesis_generation_status_invalid")
+        markdown = render_daily_markdown({**thesis, "cutoff_at": analysis_bundle.get("cutoff_at")}, analysis_bundle)
+        html_text = render_daily_html(markdown)
         core = {"schema_version": SCHEMA_VERSION, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "markdown_sha256": hashlib.sha256(markdown.encode()).hexdigest(), "html_sha256": hashlib.sha256(html_text.encode()).hexdigest(), "cutoff_at": analysis_bundle.get("cutoff_at")}
         delivery_id = f"{DELIVERY_ID_PREFIX}{_digest(core)}"
         artifact_dir = self.runtime_root / "delivery" / "artifacts"
@@ -367,7 +415,40 @@ class DailyThesisDeliveryStore:
         receipt_ref = {"path": f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", "sha256": _immutable_bytes(self.runtime_root / "delivery" / f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", receipt_bytes)}
         state = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "receipt": receipt_ref}
         _atomic_bytes(self.runtime_root / "delivery" / "latest.json", (_canonical(state) + "\n").encode("utf-8"))
+        readback = self.latest()
+        if readback.get("delivery_id") != delivery_id:
+            raise DailyThesisError("delivery_readback_identity_mismatch")
         return {**receipt, "delivery_id": delivery_id, "receipt": receipt_ref}
+
+    def latest(self) -> dict[str, Any]:
+        try:
+            state = json.loads((self.runtime_root / "delivery" / "latest.json").read_text(encoding="utf-8"))
+            delivery_id = str(state.get("delivery_id") or "")
+            if state.get("schema_version") != SCHEMA_VERSION or not delivery_id.startswith(DELIVERY_ID_PREFIX):
+                raise DailyThesisError("delivery_state_invalid")
+            receipt_ref = state.get("receipt") or {}
+            receipt_path = (self.runtime_root / "delivery" / str(receipt_ref.get("path") or "")).resolve()
+            if self.runtime_root.resolve() not in receipt_path.parents:
+                raise DailyThesisError("delivery_receipt_path_escape")
+            receipt_bytes = receipt_path.read_bytes()
+            if receipt_ref.get("sha256") != hashlib.sha256(receipt_bytes).hexdigest():
+                raise DailyThesisError("delivery_receipt_hash_invalid")
+            receipt = json.loads(receipt_bytes.decode("utf-8"))
+            if receipt.get("delivery_id") != delivery_id:
+                raise DailyThesisError("delivery_receipt_identity_invalid")
+            for field in ("markdown", "html"):
+                reference = receipt.get(field) or {}
+                artifact_path = (self.runtime_root / "delivery" / str(reference.get("path") or "")).resolve()
+                if self.runtime_root.resolve() not in artifact_path.parents:
+                    raise DailyThesisError("delivery_artifact_path_escape")
+                artifact_bytes = artifact_path.read_bytes()
+                if reference.get("sha256") != hashlib.sha256(artifact_bytes).hexdigest():
+                    raise DailyThesisError(f"delivery_{field}_hash_invalid")
+            return receipt
+        except FileNotFoundError as exc:
+            raise DailyThesisError("delivery_latest_unavailable") from exc
+        except json.JSONDecodeError as exc:
+            raise DailyThesisError("delivery_latest_json_invalid") from exc
 
 
 __all__ = [
