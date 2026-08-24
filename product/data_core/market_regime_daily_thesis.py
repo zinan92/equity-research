@@ -166,6 +166,7 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
             {
                 "asset_key": asset["asset_key"],
                 "display_name": asset.get("display_name", asset["asset_key"]),
+                "analysis_id": analysis.get("analysis_id"),
                 "generation_status": analysis.get("generation_status"),
                 "failure_code": analysis.get("failure_code"),
                 "position": (output.get("deterministic") or {}).get("position"),
@@ -184,6 +185,8 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
                 },
             }
         )
+        if any(status == "ready" for status in (assets[-1].get("coverage") or {}).values()) and analysis.get("analysis_id"):
+            fact_evidence_ids.add(str(analysis["analysis_id"]))
     return {
         "schema_version": SCHEMA_VERSION,
         "analysis_bundle_id": bundle["bundle_id"],
@@ -289,7 +292,7 @@ class DeepSeekDailyThesisProvider:
             request_object=request,
             key_file=self.key_file,
             model=self.model,
-            max_tokens=5000,
+            max_tokens=9000,
             reasoning_effort="low",
             temperature=0.1,
             thinking_type="disabled",

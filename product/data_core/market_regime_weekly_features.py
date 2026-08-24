@@ -192,6 +192,11 @@ def build_timeframe_features(
             "macd_signal": _round(signal[index]),
             "macd_histogram": _round(None if macd_values[index] is None or signal[index] is None else macd_values[index] - signal[index]),
         })
+        for period in (5, 20, 60):
+            if index >= period and values[index - period] != 0:
+                projected[f"return_{period}d_pct"] = _round((values[index] / values[index - period] - 1.0) * 100.0)
+            else:
+                projected[f"return_{period}d_pct"] = None
         feature_points.append(projected)
 
     chart_values = [
