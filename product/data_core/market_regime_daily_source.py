@@ -724,7 +724,7 @@ class DailySourceStore:
 
     def publish(self, bundle: Mapping[str, Any]) -> dict[str, Any]:
         value = dict(bundle)
-        _validate_bundle_shape(value)
+        validate_daily_source_bundle(value)
         bundle_id = str(value.get("bundle_id") or "")
         if not bundle_id.startswith(SOURCE_ID_PREFIX):
             raise DailySourceError("bundle_id_invalid")
@@ -764,7 +764,7 @@ class DailySourceStore:
             if ref.get("sha256") != hashlib.sha256(artifact_bytes).hexdigest():
                 raise DailySourceError("source_pointer_hash_invalid")
             artifact = json.loads(artifact_bytes.decode("utf-8"))
-            _validate_bundle_shape(artifact)
+            validate_daily_source_bundle(artifact)
             if artifact.get("bundle_id") != bundle_id:
                 raise DailySourceError("source_artifact_identity_invalid")
             if _digest(artifact.get("identity_core")) != digest:
@@ -799,6 +799,37 @@ def _validate_bundle_shape(bundle: Mapping[str, Any]) -> None:
                 raise DailySourceError("bundle_slot_bars_status_invalid")
 
 
+def validate_daily_source_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate identity, policy and slot shape before downstream analysis."""
+
+    _validate_bundle_shape(bundle)
+    value = dict(bundle)
+    bundle_id = str(value.get("bundle_id") or "")
+    digest = bundle_id.removeprefix(SOURCE_ID_PREFIX)
+    if not bundle_id.startswith(SOURCE_ID_PREFIX) or len(digest) != 64:
+        raise DailySourceError("bundle_identity_invalid")
+    identity_core = value.get("identity_core")
+    if not isinstance(identity_core, Mapping) or _digest(identity_core) != digest:
+        raise DailySourceError("bundle_identity_mismatch")
+    if identity_core.get("assets_sha256") != _digest(value.get("assets")):
+        raise DailySourceError("bundle_assets_hash_invalid")
+    if value.get("data_kind") not in {"real", "unavailable"}:
+        raise DailySourceError("bundle_data_kind_invalid")
+    if value.get("source_status") not in {"ready", "partial", "unavailable"}:
+        raise DailySourceError("bundle_source_status_invalid")
+    policy = value.get("source_policy")
+    if not isinstance(policy, Mapping) or policy.get("cache_policy") != "bypass" or policy.get("quality_policy") != "strict":
+        raise DailySourceError("bundle_source_policy_invalid")
+    coverage = value.get("coverage")
+    if not isinstance(coverage, Mapping) or coverage.get("total_slots") is None or int(coverage["total_slots"]) != len(WEEKLY_KEYS) * len(DAILY_TIMEFRAMES):
+        raise DailySourceError("bundle_coverage_invalid")
+    ready = sum(1 for asset in value["assets"] for slot in (asset["slots"] or {}).values() if slot.get("status") == "ready")
+    unavailable = sum(1 for asset in value["assets"] for slot in (asset["slots"] or {}).values() if slot.get("status") == "unavailable")
+    if coverage.get("ready_slots") is None or coverage.get("unavailable_slots") is None or int(coverage["ready_slots"]) != ready or int(coverage["unavailable_slots"]) != unavailable:
+        raise DailySourceError("bundle_coverage_counts_invalid")
+    return value
+
+
 __all__ = [
     "DAILY_TIMEFRAMES",
     "DAILY_REGISTRY_VERSION",
@@ -808,4 +839,5 @@ __all__ = [
     "SCHEMA_VERSION",
     "build_daily_source_bundle",
     "daily_request_for_asset",
+    "validate_daily_source_bundle",
 ]

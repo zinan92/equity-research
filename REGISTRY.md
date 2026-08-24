@@ -1,5 +1,21 @@
 # REGISTRY
 
+## 2026-08-25 · Daily per-asset analysis and static snapshots (Issue #965)
+
+Now: the Daily source bundle from #964 is projected into 19 isolated asset
+analysis objects. Each object carries daily/4H/30-minute features,
+Position/Structure facts, evidence-bound model fields for per-period readings,
+“综合结论与市场含义”, and immutable standard-kline snapshot references for
+ready slots. Unavailable periods remain typed and visible.
+
+Evidence: focused Daily analysis 7/7, Daily source 4/4, Weekly feature/position
+14/14, static PNG smoke for three slots, and real source→analysis smoke with 19
+asset objects. The cross-asset Daily thesis, Obsidian archive and 08:20
+scheduler remain next.
+
+Next: merge the #965 PR, then implement #966 thesis compilation and Markdown
+delivery. Do not enable the Daily scheduler before #967 acceptance.
+
 ## 2026-08-25 · Daily K-line source bundle (Issue #964 / PR #968)
 
 Now: the first Daily vertical slice is implemented on branch
