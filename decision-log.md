@@ -1,5 +1,26 @@
 # Decision Log
 
+## 2026-08-25 — Cut Daily K-line runtime over to the canonical morning scheduler
+
+- **Decision:** Orchestrate source → per-asset analysis/snapshots → cross-asset
+  thesis → Markdown/HTML delivery in one lock-protected Daily runtime. Keep a
+  secret-free status file with source/analysis/thesis/delivery identities and
+  datafeed health. Rewire only the existing K-line Daily LaunchAgent to 08:20;
+  Weekly and Finance Newsletter schedulers remain untouched.
+- **Why:** The three independent slices are useful only if they produce one
+  observable morning edition and a diagnosable failure state. A lock and typed
+  failure status prevent concurrent runs or silent stale promotion.
+- **Evidence:** Issue #967. Injected runtime tests pass; a real canonical
+  57-slot source → 19-asset analysis → Daily delivery smoke completed with
+  `source_status=partial`, explicit `thesis_unavailable` under no-LLM mode,
+  immutable archive and status readback.
+- **Gotchas:** The plist targets the stable local install path
+  `/Users/wendy/Library/Application Support/ParkKlineDaily/app`; the install
+  step must verify that checkout before loading launchd. The current DeepSeek
+  key is outside the repository; missing/failed model calls remain a typed
+  unknown, and a failed run replaces latest aliases with an unavailable surface
+  rather than leaving yesterday's report looking current.
+
 ## 2026-08-25 — Compile and archive the Daily cross-asset thesis
 
 - **Decision:** Add a separate Daily thesis compiler that reads only the

@@ -1,5 +1,21 @@
 # REGISTRY
 
+## 2026-08-25 · Daily runtime and 08:20 scheduler (Issue #967)
+
+Now: the Daily K-line pipeline has one lock-protected runtime entrypoint with
+source, analysis, thesis, delivery and status phases. It reports datafeed
+health separately from the 57-slot result, writes dated Markdown to
+`007_kline daily newsletter`, and preserves explicit partial/unknown states.
+The LaunchAgent template is ready for the existing K-line Daily label; Weekly
+8907 and Finance Newsletter schedulers are unchanged.
+
+Evidence: runtime focused tests and a real temporary source→analysis→delivery
+smoke pass; no stale promotion or automatic execution. The final machine
+cutover and current-key acceptance are recorded in the closing evidence.
+
+Next: merge #967, install the plist with a backup, run one attended current
+edition, then verify the 08:20 state and archive path.
+
 ## 2026-08-25 · Daily thesis compilation and Obsidian Markdown delivery (Issue #966)
 
 Now: the Daily analysis bundle can be compiled into a separate cross-asset

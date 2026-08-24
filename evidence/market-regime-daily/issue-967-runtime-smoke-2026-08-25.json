@@ -1,0 +1,29 @@
+{
+  "schema_version": "market-regime-daily-runtime-acceptance-v1",
+  "issue": 967,
+  "captured_at": "2026-08-25",
+  "mode": "real_data_no_llm_no_snapshots_smoke",
+  "service_health": {
+    "url": "http://127.0.0.1:8100/api/health",
+    "status": 200,
+    "service_status": "ok",
+    "response_body_sha256": "977b587d2e32dc88e9ef8566aac3d7ac03705deae7a670c376096ad1d9f104e6"
+  },
+  "source_bundle_id": "market-regime-daily-source:9f5cbd105a28cdff6297144f60dd067defe601c86df2d58ec76606410625b378",
+  "source_status": "partial",
+  "analysis_bundle_id": "market-regime-daily-analysis:68ab9c6df7c62cb3dc215df5ea04ebd68d4cab66a0b5e1dd0cd6afa664dd627f",
+  "analysis_status": "partial",
+  "thesis_id": "market-regime-daily-thesis:a45de5e4f55c3cb2e15e90446e815cba8b0fa47e228a83948f61b544ae7c8b04",
+  "thesis_status": "thesis_unavailable",
+  "delivery_id": "market-regime-daily-delivery:2874432a71ff2e806f00a4f380e5fd19d119b5746b12fa742489e0427e640d5a",
+  "status_id": "daily-status:4bb78185e0f7a2a3eecb687b1c06605b2ca4ffbaaad2a7d6b45e58e2cfcb9018",
+  "archive_filename": "2026-08-24-kline-daily-newsletter.md",
+  "safety": {
+    "finance_newsletter_input": false,
+    "stale_promotion": false,
+    "silent_fallback": false,
+    "automatic_execution": false
+  },
+  "weekly_health": "not_modified",
+  "finance_newsletter": "not_modified"
+}

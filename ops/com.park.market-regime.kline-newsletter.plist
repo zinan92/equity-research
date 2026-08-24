@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.park.market-regime.kline-newsletter</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Library/Frameworks/Python.framework/Versions/3.13/bin/python3.13</string>
+    <string>/Users/wendy/Library/Application Support/ParkKlineDaily/app/scripts/run_market_regime_daily.py</string>
+    <string>--runtime-root</string>
+    <string>/Users/wendy/Library/Application Support/ParkKlineDaily/runtime</string>
+    <string>--output-root</string>
+    <string>/Users/wendy/Desktop/K线日报</string>
+    <string>--archive-root</string>
+    <string>/Users/wendy/park-hands/007_kline daily newsletter</string>
+    <string>--key-file</string>
+    <string>/Users/wendy/park-hands/_secrets/deepseek-key</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/wendy/Library/Application Support/ParkKlineDaily/app</string>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>20</integer>
+  </dict>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/Users/wendy/Library/Application Support/ParkKlineDaily/runtime/logs/launchd.stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/wendy/Library/Application Support/ParkKlineDaily/runtime/logs/launchd.stderr.log</string>
+</dict>
+</plist>
