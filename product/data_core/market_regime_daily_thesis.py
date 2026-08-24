@@ -93,6 +93,7 @@ def _has_forbidden_english(text: str) -> bool:
 
 def _numeric_tokens(text: str) -> list[float]:
     numeric_free = text.replace("4小时", "").replace("30分钟", "").replace("2s10s", "").replace("2Y", "").replace("10Y", "")
+    numeric_free = numeric_free.replace("标普500", "标普").replace("标普 500", "标普").replace("科创50", "科创").replace("科创 50", "科创").replace("日经225", "日经").replace("日经 225", "日经")
     numeric_free = re.sub(r"\d+\s*(?:日|天|小时|分钟|周期|年期|个资产|个市场|个周期)", "", numeric_free)
     values: list[float] = []
     for match in re.finditer(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?", numeric_free):
