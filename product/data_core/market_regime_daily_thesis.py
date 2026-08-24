@@ -265,7 +265,13 @@ def _statement(value: Any, *, known_ids: set[str], field: str, numeric_values: l
     if _has_forbidden_english(text):
         raise DailyThesisError(f"thesis_language_or_numeric_invalid:{field}")
     tokens = _numeric_tokens(text)
-    if any(not any(abs(token - candidate) <= max(0.051, abs(candidate) * 0.0005) for candidate in numeric_values) for token in tokens):
+    def matches(token: float) -> bool:
+        for candidate in numeric_values:
+            tolerance = max(0.051, abs(candidate) * 0.0005)
+            if abs(token - candidate) <= tolerance or (abs(candidate) <= 1 and abs(token - candidate * 100) <= max(0.051, abs(candidate * 100) * 0.0005)):
+                return True
+        return False
+    if any(not matches(token) for token in tokens):
         raise DailyThesisError(f"thesis_numeric_observation_unbound:{field}")
     if re.search(r"直接资金流|资金净流入|真实资金流|资金已流入|资金已流出|个人持仓|仓位比例|满仓|半仓|自动执行|经纪订单|下单", text):
         raise DailyThesisError(f"thesis_boundary_invalid:{field}")
