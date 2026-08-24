@@ -1,0 +1,40 @@
+{
+  "schema_version": "market-regime-daily-cutover-evidence-v1",
+  "issue": 990,
+  "captured_at": "2026-08-25",
+  "stable_app": {
+    "path": "/Users/wendy/Library/Application Support/ParkKlineDaily/app",
+    "main_commit": "94934b2",
+    "launch_agent": "com.park.market-regime.kline-newsletter",
+    "schedule": "08:20 Asia/Shanghai",
+    "loaded_working_directory": "/Users/wendy/Library/Application Support/ParkKlineDaily/app",
+    "previous_plist_backup": "/Users/wendy/Library/LaunchAgents/com.park.market-regime.kline-newsletter.plist.pre-daily-cutover-20260825"
+  },
+  "runtime": {
+    "report_date": "2026-08-25",
+    "source_status": "partial",
+    "analysis_status": "partial",
+    "thesis_status": "model_generated_unreviewed",
+    "source_bundle_id": "market-regime-daily-source:ffbe236ccc2297f0853cc1b4b34832617098d5bb7353c16a75d07edb5a2f5a85",
+    "analysis_bundle_id": "market-regime-daily-analysis:d2075e36e40b18e88ed8c5bdd70a01fc68b2061d68fdc12fc830109d1c3c9c3e",
+    "delivery_id": "market-regime-daily-delivery:843928bee546e1f82e3a5dec1b8b7f339e5daf79b5ed07d80c4dcfd3b05f64ee",
+    "archive_path": "/Users/wendy/park-hands/007_kline daily newsletter/2026-08-25-kline-daily-newsletter-9fea21b16c19.md"
+  },
+  "datafeed_health": {
+    "status": 200,
+    "service_status": "ok",
+    "runtime_root": "/Users/wendy/datafeed-runtime",
+    "build_sha": "37987ad",
+    "registry": "weekly-macro-phase1-source-registry-v1",
+    "identity_status": "declared",
+    "response_body_sha256": "977b587d2e32dc88e9ef8566aac3d7ac03705deae7a670c376096ad1d9f104e6"
+  },
+  "safety": {
+    "finance_newsletter_input": false,
+    "stale_promotion": false,
+    "silent_fallback": false,
+    "automatic_execution": false,
+    "weekly_8907_modified": false,
+    "finance_newsletter_modified": false
+  }
+}

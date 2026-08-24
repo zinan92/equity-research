@@ -1,5 +1,25 @@
 # REGISTRY
 
+## 2026-08-25 · Daily K-line stable runtime cutover complete (Issue #990)
+
+Now: stable app checkout is
+`/Users/wendy/Library/Application Support/ParkKlineDaily/app` at main; the
+existing `com.park.market-regime.kline-newsletter` LaunchAgent is loaded with
+the 08:20 schedule and points to that checkout. Runtime state is completed for
+the Beijing date 2026-08-25. The Daily Markdown is archived under
+`007_kline daily newsletter`; Weekly 8907 and Finance Newsletter remain
+unchanged.
+
+Real acceptance: source is partial by declared provider capability, analysis is
+partial with unavailable periods explicit, and the latest thesis is
+`model_generated_unreviewed`. Datafeed health is HTTP 200 with runtime root
+`/Users/wendy/datafeed-runtime`, build `37987ad` and registry
+`weekly-macro-phase1-source-registry-v1`. Secret-free cutover evidence is in
+`evidence/market-regime-daily/issue-990-cutover-2026-08-25.json`.
+
+Next: let the next unattended 08:20 run arrive; compare this Daily K-line
+edition independently with Finance Daily. Do not merge the tracks.
+
 ## 2026-08-25 · Daily thesis numeric evidence binding (Issue #980)
 
 Now: cross-asset thesis validation receives bounded numeric summaries from

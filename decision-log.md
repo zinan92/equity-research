@@ -1,5 +1,23 @@
 # Decision Log
 
+## 2026-08-25 — Stable Daily K-line cutover and first successful thesis
+
+- **Decision:** Install main at the stable ParkKlineDaily app path, load the
+  08:20 LaunchAgent with a preserved pre-cutover plist backup, and retain the
+  current Daily edition as the only reader-facing latest surface. The Daily
+  track remains independent from Weekly and Finance Newsletter.
+- **Why:** A worktree path is not a durable scheduler target. The stable
+  checkout plus status/receipt chain makes the morning run repeatable and
+  diagnosable.
+- **Evidence:** `issue-990-cutover-2026-08-25.json`; current archive
+  `2026-08-25-kline-daily-newsletter-9fea21b16c19.md` has a validated
+  `model_generated_unreviewed` thesis; datafeed health and status identities
+  match the same run.
+- **Gotchas:** The previous plist is preserved at
+  `/Users/wendy/Library/LaunchAgents/com.park.market-regime.kline-newsletter.plist.pre-daily-cutover-20260825`.
+  Some intraday slots remain unavailable by source contract and remain visible
+  as such.
+
 ## 2026-08-25 — Bind Daily thesis numeric claims to compact feature summaries
 
 - **Decision:** Pass only bounded current/high/low/last-feature and
