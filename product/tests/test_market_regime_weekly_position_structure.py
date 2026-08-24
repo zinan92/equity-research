@@ -59,6 +59,14 @@ class WeeklyPositionStructureTest(unittest.TestCase):
         self.assertEqual(result["structure"]["bias"], "mixed")
         self.assertEqual(len(result["structure"]["evidence_ids"]), 4)
 
+    def test_unavailable_period_is_not_claimed_as_agreement(self) -> None:
+        daily = frame("gold", points(start=100, step=1), "daily", "gold:d")
+        unavailable = frame("gold", points(start=100, step=1, count=1), "four_hour", "gold:4h")
+        unavailable["status"] = "unavailable"
+        result = build_position_structure({"asset_key": "gold", "timeframes": {"daily": daily, "four_hour": unavailable}})
+        self.assertIn("可用周期显示", result["structure"]["text"])
+        self.assertNotIn("各周期均显示", result["structure"]["text"])
+
     def test_missing_timeframes_are_unknown_not_inferred(self) -> None:
         result = build_position_structure({"asset_key": "gold", "timeframes": {}})
         self.assertEqual(result["position"]["state"], "unknown")

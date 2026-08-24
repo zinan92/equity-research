@@ -131,18 +131,21 @@ def build_position_structure(request: Mapping[str, Any]) -> dict[str, Any]:
         position = {**position_source, "timeframes": position_by_timeframe}
 
     structures = list(structure_by_timeframe.values())
+    usable_structures = [row for row in structures if row.get("state") not in {"unknown"}]
     evidence_ids = sorted({item for row in structures for item in row.get("evidence_ids", [])})
-    biases = {row.get("bias") for row in structures if row.get("bias") not in {"unknown", "neutral"}}
-    states = {row.get("state") for row in structures if row.get("state") != "unknown"}
-    if not structures or not states:
+    biases = {row.get("bias") for row in usable_structures if row.get("bias") not in {"unknown", "neutral"}}
+    states = {row.get("state") for row in usable_structures if row.get("state") != "unknown"}
+    if not usable_structures or not states:
         state, bias, text = "unknown", "unknown", "结构：不可用。"
     elif len(biases) > 1:
         state, bias, text = "mixed", "mixed", "结构：不同周期存在分歧，需要等待确认。"
-    elif len(structures) == 1:
-        state, bias, text = structures[0]["state"], structures[0]["bias"], structures[0]["text"]
+    elif len(usable_structures) == 1:
+        state, bias = usable_structures[0]["state"], usable_structures[0]["bias"]
+        text = usable_structures[0]["text"] if len(structures) == 1 else f"结构：可用周期显示{ {'continuation': '趋势延续', 'weakening': '趋势减弱', 'reversal': '趋势反转', 'range': '区间震荡'}.get(state, '方向不明')}，方向{ {'bullish': '偏多', 'bearish': '偏空', 'neutral': '中性'}.get(bias, '不明')}。"
     elif len(states) == 1:
         state, bias = next(iter(states)), next(iter(biases), "neutral")
-        text = f"结构：各周期均显示{ {'continuation': '趋势延续', 'weakening': '趋势减弱', 'reversal': '趋势反转', 'range': '区间震荡'}.get(state, '方向不明')}，方向{ {'bullish': '偏多', 'bearish': '偏空', 'neutral': '中性'}.get(bias, '不明')}。"
+        qualifier = "各周期均显示" if len(usable_structures) == len(structures) else "可用周期显示"
+        text = f"结构：{qualifier}{ {'continuation': '趋势延续', 'weakening': '趋势减弱', 'reversal': '趋势反转', 'range': '区间震荡'}.get(state, '方向不明')}，方向{ {'bullish': '偏多', 'bearish': '偏空', 'neutral': '中性'}.get(bias, '不明')}。"
     else:
         state, bias, text = "mixed", "mixed", "结构：不同周期状态不完全一致，需要等待确认。"
     structure = {"state": state, "bias": bias, "evidence_ids": evidence_ids, "timeframes": structure_by_timeframe, "text": text}
