@@ -1,5 +1,18 @@
 # Decision Log
 
+## 2026-08-25 — Use Asia/Shanghai local date for Daily archive identity
+
+- **Decision:** Keep all source/cutoff timestamps in UTC for provenance, but
+  derive the reader-facing report date, archive filename and status date from
+  the Asia/Shanghai calendar.
+- **Why:** The 08:20 Beijing edition is already after UTC midnight; using the
+  UTC date labels the morning report as yesterday and makes the archive appear
+  stale.
+- **Evidence:** Issue #972; boundary tests cover 15:59:59Z and 16:00:00Z,
+  and runtime status/readback now reports the Beijing date.
+- **Gotchas:** The previously produced UTC-labelled artifact is preserved; the
+  fix only changes new aliases/archive names.
+
 ## 2026-08-25 — Cut Daily K-line runtime over to the canonical morning scheduler
 
 - **Decision:** Orchestrate source → per-asset analysis/snapshots → cross-asset

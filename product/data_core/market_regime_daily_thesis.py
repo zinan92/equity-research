@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import tempfile
 from typing import Any, Callable, Mapping
+from zoneinfo import ZoneInfo
 
 from .market_regime_daily_analysis import (
     DAILY_TIMEFRAMES,
@@ -42,6 +43,13 @@ def _canonical(value: Any) -> str:
 
 def _digest(value: Any) -> str:
     return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
+def _local_report_date(value: Any) -> str:
+    parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(ZoneInfo("Asia/Shanghai")).date().isoformat()
 
 
 def _atomic_bytes(path: Path, payload: bytes) -> None:
@@ -338,7 +346,8 @@ def _coverage(asset: Mapping[str, Any]) -> str:
 def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[str, Any]) -> str:
     thesis = delivery.get("output") or {}
     cutoff = str(delivery.get("cutoff_at") or analysis_bundle.get("cutoff_at") or "")
-    lines = ["---", "title: 宏观 K 线日报", f"date: {cutoff[:10]}", "report_type: kline-daily-newsletter", f"generation_status: {delivery.get('generation_status')}", "---", "", f"# 宏观 K 线日报｜{cutoff[:10]}", "", "> 只基于跨资产 K 线：日线看方向，4 小时看上下文，30 分钟看短线节奏。", ""]
+    report_date = _local_report_date(cutoff)
+    lines = ["---", "title: 宏观 K 线日报", f"date: {report_date}", "report_type: kline-daily-newsletter", f"generation_status: {delivery.get('generation_status')}", "---", "", f"# 宏观 K 线日报｜{report_date}", "", "> 只基于跨资产 K 线：日线看方向，4 小时看上下文，30 分钟看短线节奏。", ""]
     lines.extend(["## 今日结论", ""])
     if thesis.get("generation_status") != "model_generated_unreviewed":
         lines.extend(["当前综合 thesis 不可用。", "", "本日报保留各资产数据状态，但没有把旧结论或模板判断当作今天的新结论。", ""])
@@ -416,7 +425,7 @@ class DailyThesisDeliveryStore:
         artifact_dir = self.runtime_root / "delivery" / "artifacts"
         md_ref = {"path": f"artifacts/{digest}.md", "sha256": _immutable_bytes(artifact_dir / f"{digest}.md", markdown.encode("utf-8"))}
         html_ref = {"path": f"artifacts/{digest}.html", "sha256": _immutable_bytes(artifact_dir / f"{digest}.html", html_text.encode("utf-8"))}
-        archive_date = str(analysis_bundle.get("cutoff_at") or "")[:10]
+        archive_date = _local_report_date(analysis_bundle.get("cutoff_at"))
         archive_path = self.archive_root / f"{archive_date}-kline-daily-newsletter.md"
         if archive_path.exists() and archive_path.read_bytes() != markdown.encode("utf-8"):
             archive_path = self.archive_root / f"{archive_date}-kline-daily-newsletter-{digest[:12]}.md"
@@ -497,4 +506,5 @@ __all__ = [
     "render_daily_markdown",
     "validate_daily_analysis_bundle",
     "validate_daily_thesis",
+    "_local_report_date",
 ]

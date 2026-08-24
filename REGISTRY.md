@@ -1,5 +1,16 @@
 # REGISTRY
 
+## 2026-08-25 · Daily archive local-date hotfix (Issue #972)
+
+Now: new Daily editions use Asia/Shanghai calendar date for Markdown frontmatter,
+H1, status and archive filename while preserving UTC cutoff/source timestamps.
+Previous UTC-labelled artifacts remain untouched.
+
+Evidence: local-date boundary tests and runtime status readback pass.
+
+Next: merge #972, rerun the stable 08:20 entrypoint and confirm the new archive
+under `007_kline daily newsletter` uses the Beijing date.
+
 ## 2026-08-25 · Daily runtime and 08:20 scheduler (Issue #967)
 
 Now: the Daily K-line pipeline has one lock-protected runtime entrypoint with

@@ -33,9 +33,10 @@ class DailyRuntimeTests(unittest.TestCase):
                 analysis_builder=lambda _source: analysis,
                 thesis_builder=lambda current_analysis: compile_daily_thesis(current_analysis, _thesis_provider),
             )
-            result = runtime.run_once(now=datetime(2026, 8, 25, tzinfo=timezone.utc))
+            result = runtime.run_once(now=datetime(2026, 8, 24, 16, 0, tzinfo=timezone.utc))
             self.assertEqual(result["state"], "completed")
             self.assertEqual(runtime.status()["state"], "completed")
+            self.assertEqual(runtime.status()["report_date"], "2026-08-25")
 
     def test_status_is_idle_before_first_run(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

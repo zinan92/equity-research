@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import tempfile
 from typing import Any, Callable, Mapping
+from zoneinfo import ZoneInfo
 
 from .market_regime_daily_analysis import (
     DailyAnalysisError,
@@ -42,6 +43,13 @@ def _canonical(value: Any) -> str:
 
 def _digest(value: Any) -> str:
     return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
+def _local_report_date(value: Any) -> str:
+    parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(ZoneInfo("Asia/Shanghai")).date().isoformat()
 
 
 def _atomic_bytes(path: Path, payload: bytes) -> None:
@@ -80,7 +88,7 @@ class DailyRuntimeStatusStore:
             "schema_version": STATUS_SCHEMA_VERSION,
             "state": "completed",
             "completed_at": at,
-            "report_date": at[:10],
+            "report_date": _local_report_date(at),
             "source_bundle_id": source.get("bundle_id"),
             "analysis_bundle_id": analysis.get("bundle_id"),
             "thesis_id": thesis.get("thesis_id"),
@@ -96,7 +104,7 @@ class DailyRuntimeStatusStore:
             "status_id": f"daily-status:{_digest(core)}",
             "last_success": {
                 "at": at,
-                "report_date": at[:10],
+                "report_date": _local_report_date(at),
                 "source_bundle_id": source.get("bundle_id"),
                 "analysis_bundle_id": analysis.get("bundle_id"),
                 "thesis_id": thesis.get("thesis_id"),
@@ -184,7 +192,7 @@ class DailyKlineRuntime:
         return DeepSeekDailyThesisProvider(self.key_file)
 
     def _publish_unavailable_surface(self, *, at: str, phase: str, code: str) -> str:
-        report_date = at[:10]
+        report_date = _local_report_date(at)
         markdown = "\n".join(
             [
                 "---",
