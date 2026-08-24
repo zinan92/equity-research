@@ -10,8 +10,9 @@ Weekly and Finance Newsletter outputs. Provider failure remains an explicit
 `thesis_unavailable` surface.
 
 Evidence: focused thesis tests 5/5 and a real source→analysis→delivery smoke
-passed in a temporary runtime. The 08:20 scheduler cutover and current-key
-LLM acceptance remain next.
+passed in a temporary runtime; the secret-free receipt is in
+`evidence/market-regime-daily/issue-966-real-2026-08-25.json`. The 08:20
+scheduler cutover and current-key LLM acceptance remain next.
 
 Next: merge #966, then implement #967 scheduler/status and a real morning run.
 

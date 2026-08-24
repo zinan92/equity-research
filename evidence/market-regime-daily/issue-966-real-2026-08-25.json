@@ -1,0 +1,39 @@
+{
+  "schema_version": "market-regime-daily-real-acceptance-v1",
+  "issue": 966,
+  "captured_at": "2026-08-25",
+  "provider_mode": "no_llm_smoke",
+  "source_bundle_id": "market-regime-daily-source:5f3a51f9b0dfcc27d5876bcf01a8f3a210a9e25eb4575e00ac29926e4789ff2a",
+  "source_cutoff_at": "2026-08-24T17:07:52Z",
+  "source_status": "partial",
+  "source_coverage": {
+    "total_slots": 57,
+    "ready_slots": 26,
+    "unavailable_slots": 31,
+    "fraction": 0.4561,
+    "requested_timeframes": ["daily", "four_hour", "thirty_minute"]
+  },
+  "analysis_bundle_id": "market-regime-daily-analysis:f7fd4c9614164f3a4d67a35321ded8f2997bb74a9cd6e6ac81471cc820935253",
+  "analysis_status": "partial",
+  "asset_count": 19,
+  "delivery_id": "market-regime-daily-delivery:2d3b059dfd592e0b54cf56fb593459969489f5b14a0d40020205d226007d99aa",
+  "thesis_generation_status": "thesis_unavailable",
+  "thesis_failure_code": "provider_unavailable",
+  "archive_filename": "2026-08-24-kline-daily-newsletter.md",
+  "safety": {
+    "finance_newsletter_input": false,
+    "stale_promotion": false,
+    "silent_fallback": false,
+    "synthetic_candles": false,
+    "automatic_execution": false
+  },
+  "validation": {
+    "daily_thesis_tests": 5,
+    "daily_analysis_tests": 7,
+    "daily_source_tests": 4,
+    "weekly_regression_tests": 47,
+    "full_baseline_tests": 1141,
+    "full_baseline_known_environment_error": "missing /Users/wendy/Desktop/K线日报/SYSTEM-PROMPT-macro-analyst.md",
+    "full_baseline_skipped": 1
+  }
+}

@@ -14,6 +14,8 @@
 - **Evidence:** Issue #966. Focused thesis tests pass 5/5; a real
   source→analysis→thesis delivery smoke produced dated HTML/Markdown and a separate archive
   file with `thesis_unavailable` explicitly disclosed when no LLM was supplied.
+  The secret-free receipt is recorded in
+  `evidence/market-regime-daily/issue-966-real-2026-08-25.json`.
 - **Gotchas:** The first delivery is text-first; static chart files remain
   content-addressed in the analysis bundle. Same-date reruns use a digest
   suffix instead of overwriting a different archived edition.
