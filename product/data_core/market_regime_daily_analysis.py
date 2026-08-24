@@ -288,6 +288,7 @@ def _terminal_failure(request: Mapping[str, Any], failure_code: str, determinist
         "analysis_id": f"{ANALYSIS_ID_PREFIX}{_digest(core)}",
         "identity_core": core,
         "output_hash": _digest(output),
+        "output": output,
         **output,
     }
 

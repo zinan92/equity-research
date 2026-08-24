@@ -1,5 +1,15 @@
 # REGISTRY
 
+## 2026-08-25 · Deterministic Daily asset readout (Issue #976)
+
+Now: LLM-failed asset cards retain code-owned Position/Structure/coverage and
+label that layer separately from model prose. No stale narrative or data
+fallback is introduced.
+
+Evidence: Daily analysis 8/8, thesis 6/6, source 4/4 and runtime 3/3.
+
+Next: merge #976 and refresh the stable Daily archive.
+
 ## 2026-08-25 · Daily numeric-boundary hotfix (Issue #974)
 
 Now: unavailable source/error codes and period labels no longer block valid

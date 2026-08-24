@@ -366,7 +366,16 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
         lines.extend([f"### {asset.get('display_name', asset.get('asset_key'))}", ""])
         lines.append(f"数据覆盖：{_coverage(asset.get('request') or {})}")
         if analysis.get("generation_status") != "model_generated_unreviewed":
-            lines.extend(["", "单资产分析不可用；保留 K 线数据状态，未使用旧分析。", ""])
+            deterministic = output.get("deterministic") if isinstance(output, Mapping) else None
+            lines.extend(["", "LLM 单资产解释不可用；以下仅展示代码验证的 K 线读数，未使用旧分析。"])
+            if isinstance(deterministic, Mapping):
+                position = deterministic.get("position") or {}
+                structure = deterministic.get("structure") or {}
+                if isinstance(position, Mapping) and position.get("text"):
+                    lines.append(f"- **位置读数**：{position['text']}")
+                if isinstance(structure, Mapping) and structure.get("text"):
+                    lines.append(f"- **结构读数**：{structure['text']}")
+            lines.append("")
             continue
         for timeframe, label in (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟")):
             statement = output.get(timeframe)

@@ -115,6 +115,8 @@ class DailyAnalysisTests(unittest.TestCase):
         result = compile_daily_asset_analysis(request, provider=None)
         self.assertEqual(result["generation_status"], "analysis_unavailable")
         self.assertEqual(result["failure_code"], "provider_unavailable")
+        self.assertIn("output", result)
+        self.assertIn("deterministic", result["output"])
 
     def test_unavailable_period_must_be_disclosed_and_cannot_be_neutralized(self) -> None:
         asset = copy.deepcopy(_source_bundle()["assets"][0])
