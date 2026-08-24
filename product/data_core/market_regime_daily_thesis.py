@@ -441,6 +441,10 @@ class DailyThesisDeliveryStore:
     def latest(self) -> dict[str, Any]:
         try:
             state = json.loads((self.runtime_root / "delivery" / "latest.json").read_text(encoding="utf-8"))
+            if state.get("state") == "unavailable":
+                if not str(state.get("failure_code") or "") or not str(state.get("delivery_id") or "").startswith(DELIVERY_ID_PREFIX):
+                    raise DailyThesisError("delivery_unavailable_state_invalid")
+                return state
             delivery_id = str(state.get("delivery_id") or "")
             if state.get("schema_version") != SCHEMA_VERSION or not delivery_id.startswith(DELIVERY_ID_PREFIX):
                 raise DailyThesisError("delivery_state_invalid")

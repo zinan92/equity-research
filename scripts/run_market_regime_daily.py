@@ -55,7 +55,9 @@ def main() -> int:
     except DailyRuntimeError as exc:
         print(json.dumps({"state": "failed", "error": str(exc), "status": runtime.status()}, ensure_ascii=False, indent=2))
         return 2
-    print(json.dumps({"state": "completed", "service_health": result.get("service_health"), "source_status": result["source"].get("source_status"), "analysis_status": result["analysis"].get("analysis_status"), "thesis_status": result["thesis"].get("generation_status"), "delivery_id": result["delivery"].get("delivery_id"), "archive": result["delivery"].get("archive")}, ensure_ascii=False, indent=2))
+    delivery = result["delivery"]
+    archive = delivery.get("archive") or ({"path": delivery.get("archive_path")} if delivery.get("archive_path") else None)
+    print(json.dumps({"state": "completed", "service_health": result.get("service_health"), "source_status": result["source"].get("source_status"), "analysis_status": result["analysis"].get("analysis_status"), "thesis_status": result["thesis"].get("generation_status"), "delivery_id": delivery.get("delivery_id"), "archive": archive}, ensure_ascii=False, indent=2))
     return 0
 
 

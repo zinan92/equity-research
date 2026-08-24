@@ -105,7 +105,7 @@ class DailyRuntimeStatusStore:
                 "analysis_status": analysis.get("analysis_status"),
                 "thesis_status": thesis.get("generation_status"),
                 "datafeed_health": dict(service_health or {}),
-                "archive_path": (delivery.get("archive") or {}).get("path"),
+                "archive_path": (delivery.get("archive") or {}).get("path") or delivery.get("archive_path"),
             },
             "last_failure": None,
             "publication_eligible": False,
@@ -126,6 +126,10 @@ class DailyRuntimeStatusStore:
             "analysis_bundle_id": None,
             "thesis_id": None,
             "delivery_id": None,
+            "archive_path": None,
+            "source_status": None,
+            "analysis_status": None,
+            "thesis_status": None,
             "datafeed_health": None,
             "unavailable_archive_path": archive_path,
             "last_failure": {"at": at, "phase": phase, "code": code[:200]},
@@ -209,6 +213,18 @@ class DailyKlineRuntime:
         if archive_path.exists() and archive_path.read_bytes() != markdown.encode("utf-8"):
             archive_path = self.archive_root / f"{report_date}-kline-daily-newsletter-unavailable-{_digest(code)[:12]}.md"
         _atomic_bytes(archive_path, markdown.encode("utf-8"))
+        unavailable_id = f"market-regime-daily-delivery:{_digest({'date': report_date, 'phase': phase, 'code': code, 'archive_path': str(archive_path)})}"
+        _atomic_bytes(
+            self.runtime_root / "delivery" / "latest.json",
+            (_canonical({
+                "schema_version": "market-regime-daily-thesis-v1",
+                "state": "unavailable",
+                "delivery_id": unavailable_id,
+                "report_date": report_date,
+                "archive_path": str(archive_path),
+                "failure_code": code,
+            }) + "\n").encode("utf-8"),
+        )
         return str(archive_path)
 
     def run_once(self, *, now: datetime | None = None) -> dict[str, Any]:

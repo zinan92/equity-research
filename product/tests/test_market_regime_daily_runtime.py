@@ -10,6 +10,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_daily_runtime import DailyKlineRuntime, DailyRuntimeError  # noqa: E402
+from data_core.market_regime_daily_thesis import DailyThesisDeliveryStore  # noqa: E402
 from product.tests.test_market_regime_daily_analysis import _source_bundle  # noqa: E402
 from product.tests.test_market_regime_daily_thesis import _analysis_bundle, _thesis_provider  # noqa: E402
 from data_core.market_regime_daily_thesis import compile_daily_thesis  # noqa: E402
@@ -62,6 +63,7 @@ class DailyRuntimeTests(unittest.TestCase):
             self.assertEqual(status["state"], "failed")
             self.assertIsNone(status.get("source_bundle_id"))
             self.assertEqual(status["last_failure"]["phase"], "source_refresh")
+            self.assertEqual(DailyThesisDeliveryStore(runtime_root=root / "runtime", output_root=root / "output", archive_root=root / "archive").latest()["state"], "unavailable")
 
 
 if __name__ == "__main__":
