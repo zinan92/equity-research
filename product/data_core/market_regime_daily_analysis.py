@@ -81,9 +81,42 @@ def _has_forbidden_english(text: str) -> bool:
     return any(word not in ALLOWED_LATIN_WORDS for word in words)
 
 
-def _has_numeric_observation(text: str) -> bool:
+def _numeric_tokens(text: str) -> list[float]:
     numeric_free = text.replace("4小时", "").replace("30分钟", "").replace("2s10s", "").replace("2Y", "").replace("10Y", "")
-    return bool(re.search(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?\s*(?:%|％|bp|基点)?", numeric_free))
+    numeric_free = re.sub(r"\d+\s*(?:日|天|小时|分钟)", "", numeric_free)
+    values: list[float] = []
+    for match in re.finditer(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?", numeric_free):
+        try:
+            values.append(float(match.group(0)))
+        except ValueError:
+            continue
+    return values
+
+
+def _numbers_for_evidence(text: str, evidence_ids: list[str], request: Mapping[str, Any]) -> None:
+    tokens = _numeric_tokens(text)
+    if not tokens:
+        return
+    candidates: list[float] = []
+    for frame in (request.get("timeframes") or {}).values():
+        if not isinstance(frame, Mapping) or not set(evidence_ids).intersection(str(item) for item in frame.get("evidence_ids") or []):
+            continue
+        def walk(value: Any) -> None:
+            if isinstance(value, bool):
+                return
+            if isinstance(value, (int, float)):
+                if value == value and abs(float(value)) != float("inf"):
+                    candidates.append(float(value))
+            elif isinstance(value, Mapping):
+                for child in value.values():
+                    walk(child)
+            elif isinstance(value, list):
+                for child in value:
+                    walk(child)
+        walk(frame.get("points") or [])
+        walk(frame.get("features") or {})
+    if any(not any(abs(token - candidate) <= max(0.051, abs(candidate) * 0.0005) for candidate in candidates) for token in tokens):
+        raise DailyAnalysisError("analysis_numeric_observation_unbound")
 
 
 def _source_evidence_id(asset_key: str, timeframe: str, slot: Mapping[str, Any]) -> str:
@@ -176,7 +209,7 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
     }
 
 
-def _validate_statement(value: Any, *, known_ids: set[str], field: str) -> dict[str, Any]:
+def _validate_statement(value: Any, *, known_ids: set[str], field: str, request: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(value, Mapping) or not isinstance(value.get("text"), str) or not value["text"].strip():
         raise DailyAnalysisError(f"statement_invalid:{field}")
     evidence_ids = value.get("evidence_ids")
@@ -184,8 +217,7 @@ def _validate_statement(value: Any, *, known_ids: set[str], field: str) -> dict[
         raise DailyAnalysisError(f"evidence_ids_invalid:{field}")
     if _has_forbidden_english(value["text"]):
         raise DailyAnalysisError(f"analysis_language_not_chinese:{field}")
-    if _has_numeric_observation(value["text"]):
-        raise DailyAnalysisError(f"analysis_numeric_observation:{field}")
+    _numbers_for_evidence(value["text"], [str(item) for item in evidence_ids], request)
     return {"text": value["text"].strip(), "evidence_ids": list(evidence_ids)}
 
 
@@ -218,7 +250,7 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
     result: dict[str, Any] = {"asset_key": request["asset_key"], "generation_status": generation_status}
     for timeframe in DAILY_TIMEFRAMES:
         frame = frames[timeframe]
-        statement = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe)
+        statement = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe, request=request)
         if frame.get("status") != "ready":
             source_id = (frame.get("evidence_ids") or [None])[0]
             if source_id not in statement["evidence_ids"]:
@@ -226,14 +258,14 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
             if not any(token in statement["text"] for token in ("不可用", "无可用", "证据不足", "未提供", "未获取")):
                 raise DailyAnalysisError(f"unavailable_disclosure_missing:{timeframe}")
         result[timeframe] = statement
-    result["synthesis"] = _validate_statement(output.get("synthesis"), known_ids=known_ids, field="synthesis")
+    result["synthesis"] = _validate_statement(output.get("synthesis"), known_ids=known_ids, field="synthesis", request=request)
     try:
         result["market_meaning"] = validate_theoretical_statement(output.get("market_meaning"), mechanism_ids)
     except ValueError as exc:
         raise DailyAnalysisError(str(exc)) from exc
-    result["confirmation"] = _validate_statement(output.get("confirmation"), known_ids=known_ids, field="confirmation")
-    result["invalidation"] = _validate_statement(output.get("invalidation"), known_ids=known_ids, field="invalidation")
-    result["rationale"] = _validate_statement(output.get("rationale"), known_ids=known_ids, field="rationale")
+    result["confirmation"] = _validate_statement(output.get("confirmation"), known_ids=known_ids, field="confirmation", request=request)
+    result["invalidation"] = _validate_statement(output.get("invalidation"), known_ids=known_ids, field="invalidation", request=request)
+    result["rationale"] = _validate_statement(output.get("rationale"), known_ids=known_ids, field="rationale", request=request)
     opportunity = str(output.get("opportunity_state") or "")
     if opportunity not in {"participate", "wait", "avoid"}:
         raise DailyAnalysisError("opportunity_state_invalid")
@@ -315,7 +347,7 @@ DAILY_ASSET_SYSTEM_PROMPT = """你是 Global Market K-line Daily 的单资产分
 
 请分别解释 daily、four_hour、thirty_minute 三个周期；某周期不可用时明确说证据不可用，不能把它当作横盘。然后输出一个综合结论与一个静态机制解释。机制解释必须使用请求中的 mechanism 目录，说明常见驱动、通常后果和反例；它不是当前事实，也不是实时因果归因。
 
-所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。只返回合法 JSON，字段严格为：
+所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。如需数字，必须能在所引用的 feature:* 证据中找到；否则删掉数字，不要猜测。只返回合法 JSON，字段严格为：
 {"asset_key":"string","generation_status":"model_generated_unreviewed","daily":{"text":"简体中文","evidence_ids":["..."]},"four_hour":{"text":"简体中文","evidence_ids":["..."]},"thirty_minute":{"text":"简体中文","evidence_ids":["..."]},"synthesis":{"text":"简体中文","evidence_ids":["..."]},"market_meaning":{"text":"简体中文","evidence_ids":["mechanism:..."],"claim_type":"theoretical_mechanism"},"confirmation":{"text":"简体中文","evidence_ids":["..."]},"invalidation":{"text":"简体中文","evidence_ids":["..."]},"rationale":{"text":"简体中文","evidence_ids":["..."]},"opportunity_state":"participate|wait|avoid"}
 禁止输出个人仓位、订单、保证收益或自动执行。"""
 
@@ -331,18 +363,24 @@ class DeepSeekDailyAssetProvider:
 
     def __call__(self, request: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
         from deepseek_writer import call_structured_deepseek
-
-        output, receipt = call_structured_deepseek(
-            system_prompt=DAILY_ASSET_SYSTEM_PROMPT,
-            request_object=request,
-            key_file=self.key_file,
-            model=self.model,
-            max_tokens=3000,
-            reasoning_effort="low",
-            temperature=0.1,
-            thinking_type="disabled",
-        )
-        return output, receipt
+        prompt = DAILY_ASSET_SYSTEM_PROMPT
+        last: tuple[Mapping[str, Any], Mapping[str, Any]] | None = None
+        for attempt in range(2):
+            output, receipt = call_structured_deepseek(
+                system_prompt=prompt,
+                request_object=request,
+                key_file=self.key_file,
+                model=self.model,
+                max_tokens=3500,
+                reasoning_effort="low",
+                temperature=0.1,
+                thinking_type="disabled",
+            )
+            last = (output, receipt)
+            if attempt == 0:
+                prompt += "\n请再次自检：事实字段只能引用可用周期的 evidence_ids；若数字无法由 feature:* 证据直接支持，请删除数字；所有 text 必须是简体中文。"
+        assert last is not None
+        return last
 
 
 def build_daily_analysis_bundle(
