@@ -91,9 +91,50 @@ def _has_forbidden_english(text: str) -> bool:
     return any(word not in ALLOWED_LATIN_WORDS for word in words)
 
 
-def _has_numeric_observation(text: str) -> bool:
+def _numeric_tokens(text: str) -> list[float]:
     numeric_free = text.replace("4小时", "").replace("30分钟", "").replace("2s10s", "").replace("2Y", "").replace("10Y", "")
-    return bool(re.search(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?\s*(?:%|％|bp|基点)?", numeric_free))
+    numeric_free = re.sub(r"\d+\s*(?:日|天|小时|分钟|周期|年期|个资产|个市场|个周期)", "", numeric_free)
+    values: list[float] = []
+    for match in re.finditer(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?", numeric_free):
+        try:
+            values.append(float(match.group(0)))
+        except ValueError:
+            continue
+    return values
+
+
+def _has_numeric_observation(text: str) -> bool:
+    return bool(_numeric_tokens(text))
+
+
+def _summary_numeric_values(analysis_bundle: Mapping[str, Any]) -> list[float]:
+    values: list[float] = []
+    def walk(value: Any) -> None:
+        if isinstance(value, bool):
+            return
+        if isinstance(value, (int, float)) and value == value and abs(float(value)) != float("inf"):
+            values.append(float(value))
+        elif isinstance(value, Mapping):
+            for child in value.values():
+                walk(child)
+        elif isinstance(value, list):
+            for child in value:
+                walk(child)
+    for asset in analysis_bundle.get("assets") or []:
+        request = asset.get("request") if isinstance(asset, Mapping) else None
+        if not isinstance(request, Mapping):
+            continue
+        for frame in (request.get("timeframes") or {}).values():
+            if not isinstance(frame, Mapping) or frame.get("status") != "ready":
+                continue
+            features = frame.get("features") or {}
+            walk(features.get("current"))
+            walk(features.get("high"))
+            walk(features.get("low"))
+            points = features.get("points") or []
+            walk(points[-3:])
+        walk((asset.get("analysis") or {}).get("output", {}).get("deterministic") if isinstance(asset.get("analysis"), Mapping) else None)
+    return values
 
 
 def _safe_receipt(value: Any) -> dict[str, Any]:
@@ -203,6 +244,7 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
         "fact_evidence_ids": sorted(fact_evidence_ids),
         "unavailable_evidence_ids": sorted(unavailable_evidence_ids),
         "mechanism_ids": sorted(mechanism_ids),
+        "numeric_values": _summary_numeric_values(bundle),
         "truth_boundary": {
             "finance_newsletter_input": False,
             "observations_are_evidence_bound": True,
@@ -213,22 +255,25 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
     }
 
 
-def _statement(value: Any, *, known_ids: set[str], field: str) -> dict[str, Any]:
+def _statement(value: Any, *, known_ids: set[str], field: str, numeric_values: list[float]) -> dict[str, Any]:
     if not isinstance(value, Mapping) or not isinstance(value.get("text"), str) or not value["text"].strip():
         raise DailyThesisError(f"thesis_statement_invalid:{field}")
     ids = value.get("evidence_ids")
     if not isinstance(ids, list) or not ids or any(str(item) not in known_ids for item in ids):
         raise DailyThesisError(f"thesis_evidence_invalid:{field}")
     text = value["text"].strip()
-    if _has_forbidden_english(text) or _has_numeric_observation(text):
+    if _has_forbidden_english(text):
         raise DailyThesisError(f"thesis_language_or_numeric_invalid:{field}")
+    tokens = _numeric_tokens(text)
+    if any(not any(abs(token - candidate) <= max(0.051, abs(candidate) * 0.0005) for candidate in numeric_values) for token in tokens):
+        raise DailyThesisError(f"thesis_numeric_observation_unbound:{field}")
     if re.search(r"直接资金流|资金净流入|真实资金流|资金已流入|资金已流出|个人持仓|仓位比例|满仓|半仓|自动执行|经纪订单|下单", text):
         raise DailyThesisError(f"thesis_boundary_invalid:{field}")
     return {"text": text, "evidence_ids": [str(item) for item in ids]}
 
 
-def _migration_statement(value: Any, *, known_ids: set[str]) -> dict[str, Any]:
-    result = _statement(value, known_ids=known_ids, field="capital_migration")
+def _migration_statement(value: Any, *, known_ids: set[str], numeric_values: list[float]) -> dict[str, Any]:
+    result = _statement(value, known_ids=known_ids, field="capital_migration", numeric_values=numeric_values)
     text = result["text"]
     if not any(token in text for token in ("可能", "推断", "更像", "通常", "若", "未必", "反映", "暗示")):
         raise DailyThesisError("thesis_capital_migration_qualifier_missing")
@@ -259,22 +304,23 @@ def validate_daily_thesis(output: Mapping[str, Any], request: Mapping[str, Any])
     if not known_ids:
         known_ids.update(str(item) for item in request.get("evidence_ids") or [])
     mechanism_ids = {str(item) for item in request.get("mechanism_ids") or []}
+    numeric_values = [float(item) for item in request.get("numeric_values") or []]
     result = {
         "generation_status": "model_generated_unreviewed",
         "posture": posture,
-        "headline": _statement(output.get("headline"), known_ids=known_ids, field="headline"),
-        "what_happened": _statement(output.get("what_happened"), known_ids=known_ids, field="what_happened"),
-        "world_model": _statement(output.get("world_model"), known_ids=known_ids, field="world_model"),
-        "leadership": _statement(output.get("leadership"), known_ids=known_ids, field="leadership"),
-        "laggards": _statement(output.get("laggards"), known_ids=known_ids, field="laggards"),
-        "capital_migration": _migration_statement(output.get("capital_migration"), known_ids=known_ids),
+        "headline": _statement(output.get("headline"), known_ids=known_ids, field="headline", numeric_values=numeric_values),
+        "what_happened": _statement(output.get("what_happened"), known_ids=known_ids, field="what_happened", numeric_values=numeric_values),
+        "world_model": _statement(output.get("world_model"), known_ids=known_ids, field="world_model", numeric_values=numeric_values),
+        "leadership": _statement(output.get("leadership"), known_ids=known_ids, field="leadership", numeric_values=numeric_values),
+        "laggards": _statement(output.get("laggards"), known_ids=known_ids, field="laggards", numeric_values=numeric_values),
+        "capital_migration": _migration_statement(output.get("capital_migration"), known_ids=known_ids, numeric_values=numeric_values),
         "theoretical_mechanism": _mechanism_statement(output.get("theoretical_mechanism"), mechanism_ids=mechanism_ids, field="theoretical_mechanism"),
     }
     for field, minimum, maximum in (("watchpoints", 2, 8), ("actions", 1, 8), ("falsifiers", 1, 5)):
         rows = output.get(field)
         if not isinstance(rows, list) or not minimum <= len(rows) <= maximum:
             raise DailyThesisError(f"thesis_{field}_shape_invalid")
-        result[field] = [_statement(row, known_ids=known_ids, field=f"{field}_{index}") for index, row in enumerate(rows)]
+        result[field] = [_statement(row, known_ids=known_ids, field=f"{field}_{index}", numeric_values=numeric_values) for index, row in enumerate(rows)]
     return result
 
 

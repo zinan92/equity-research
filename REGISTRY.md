@@ -1,5 +1,15 @@
 # REGISTRY
 
+## 2026-08-25 · Daily thesis numeric evidence binding (Issue #980)
+
+Now: cross-asset thesis validation receives bounded numeric summaries from
+ready-period features, so valid model levels/returns can pass without allowing
+unbound numbers.
+
+Evidence: Daily thesis 6/6, analysis 8/8, source 4/4.
+
+Next: merge #980 and rerun stable thesis delivery.
+
 ## 2026-08-25 · Deterministic Daily asset readout (Issue #976)
 
 Now: LLM-failed asset cards retain code-owned Position/Structure/coverage and
