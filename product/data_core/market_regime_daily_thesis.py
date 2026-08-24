@@ -347,18 +347,27 @@ class DeepSeekDailyThesisProvider:
 
     def __call__(self, request: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
         from deepseek_writer import call_structured_deepseek
-
-        output, receipt = call_structured_deepseek(
-            system_prompt=DAILY_THESIS_SYSTEM_PROMPT,
-            request_object=request,
-            key_file=self.key_file,
-            model=self.model,
-            max_tokens=9000,
-            reasoning_effort="low",
-            temperature=0.1,
-            thinking_type="disabled",
-        )
-        return output, receipt
+        prompt = DAILY_THESIS_SYSTEM_PROMPT
+        last: tuple[Mapping[str, Any], Mapping[str, Any]] | None = None
+        for _attempt in range(3):
+            output, receipt = call_structured_deepseek(
+                system_prompt=prompt,
+                request_object=request,
+                key_file=self.key_file,
+                model=self.model,
+                max_tokens=9000,
+                reasoning_effort="low",
+                temperature=0.1,
+                thinking_type="disabled",
+            )
+            last = (output, receipt)
+            try:
+                validate_daily_thesis(output, request)
+                return output, receipt
+            except DailyThesisError as exc:
+                prompt += f"\n上一版未通过本地验证（{str(exc)[:160]}）。只修正这个字段：current facts 引用 fact_evidence_ids，理论只引用 mechanism_ids，数字必须来自 numeric_values，所有文字保持简体中文。"
+        assert last is not None
+        return last
 
 
 def compile_daily_thesis(

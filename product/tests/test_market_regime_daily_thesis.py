@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 import sys
 
 PRODUCT = Path(__file__).resolve().parents[1]
@@ -15,6 +16,7 @@ from data_core.market_regime_daily_thesis import (  # noqa: E402
     build_daily_thesis_request,
     compile_daily_thesis,
     render_daily_markdown,
+    DeepSeekDailyThesisProvider,
     _local_report_date,
     validate_daily_thesis,
 )
@@ -55,6 +57,19 @@ class DailyThesisTests(unittest.TestCase):
         self.assertEqual(len(request["assets"]), 19)
         self.assertNotIn("finance_newsletter", request)
         self.assertTrue(request.get("truth_boundary", {}).get("finance_newsletter_input") is False)
+
+    def test_deepseek_provider_retries_with_validator_feedback(self) -> None:
+        bundle = _analysis_bundle()
+        request = build_daily_thesis_request(bundle)
+        from data_core.market_regime_daily_thesis import _evidence_ids
+        request["evidence_ids"] = sorted(_evidence_ids(bundle))
+        valid = _thesis_provider(request)
+        invalid = dict(valid)
+        invalid["headline"] = {"text": "坏输出", "evidence_ids": []}
+        with patch("deepseek_writer.call_structured_deepseek", side_effect=[(invalid, {"provider": "test"}), (valid, {"provider": "test"})]) as call:
+            output, _receipt = DeepSeekDailyThesisProvider("/tmp/unused-key")(request)
+        self.assertEqual(output["generation_status"], "model_generated_unreviewed")
+        self.assertEqual(call.call_count, 2)
 
     def test_compiles_and_validates_cross_asset_thesis(self) -> None:
         bundle = _analysis_bundle()
