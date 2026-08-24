@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import fcntl
 import hashlib
+import html
 import json
 import os
 from pathlib import Path
@@ -79,6 +80,7 @@ class DailyRuntimeStatusStore:
             "schema_version": STATUS_SCHEMA_VERSION,
             "state": "completed",
             "completed_at": at,
+            "report_date": at[:10],
             "source_bundle_id": source.get("bundle_id"),
             "analysis_bundle_id": analysis.get("bundle_id"),
             "thesis_id": thesis.get("thesis_id"),
@@ -87,12 +89,14 @@ class DailyRuntimeStatusStore:
             "analysis_status": analysis.get("analysis_status"),
             "thesis_status": thesis.get("generation_status"),
             "datafeed_health": dict(service_health or {}),
+            "archive_path": (delivery.get("archive") or {}).get("path"),
         }
         value = {
             **core,
             "status_id": f"daily-status:{_digest(core)}",
             "last_success": {
                 "at": at,
+                "report_date": at[:10],
                 "source_bundle_id": source.get("bundle_id"),
                 "analysis_bundle_id": analysis.get("bundle_id"),
                 "thesis_id": thesis.get("thesis_id"),
@@ -101,6 +105,7 @@ class DailyRuntimeStatusStore:
                 "analysis_status": analysis.get("analysis_status"),
                 "thesis_status": thesis.get("generation_status"),
                 "datafeed_health": dict(service_health or {}),
+                "archive_path": (delivery.get("archive") or {}).get("path"),
             },
             "last_failure": None,
             "publication_eligible": False,
@@ -109,12 +114,20 @@ class DailyRuntimeStatusStore:
         _atomic_bytes(self.path, (_canonical(value) + "\n").encode("utf-8"))
         return value
 
-    def failure(self, *, at: str, phase: str, code: str) -> dict[str, Any]:
+    def failure(self, *, at: str, phase: str, code: str, archive_path: str | None = None) -> dict[str, Any]:
         prior = self.latest()
         value = {
             **prior,
             "schema_version": STATUS_SCHEMA_VERSION,
             "state": "failed",
+            "completed_at": None,
+            "report_date": at[:10],
+            "source_bundle_id": None,
+            "analysis_bundle_id": None,
+            "thesis_id": None,
+            "delivery_id": None,
+            "datafeed_health": None,
+            "unavailable_archive_path": archive_path,
             "last_failure": {"at": at, "phase": phase, "code": code[:200]},
             "publication_eligible": False,
             "automatic_execution_eligible": False,
@@ -166,6 +179,38 @@ class DailyKlineRuntime:
             return None
         return DeepSeekDailyThesisProvider(self.key_file)
 
+    def _publish_unavailable_surface(self, *, at: str, phase: str, code: str) -> str:
+        report_date = at[:10]
+        markdown = "\n".join(
+            [
+                "---",
+                "title: 宏观 K 线日报",
+                f"date: {report_date}",
+                "generation_status: unavailable",
+                "---",
+                "",
+                f"# 宏观 K 线日报｜{report_date}",
+                "",
+                "## 今日状态",
+                "",
+                "当前日报不可用，未使用上一版内容冒充今天的结论。",
+                "",
+                f"运行阶段：{phase}",
+                f"失败原因：{code}",
+                "",
+                "数据源或分析恢复后，下一次运行会生成新的日报。",
+                "",
+            ]
+        )
+        html_text = f"<!doctype html><html lang='zh-CN'><meta charset='utf-8'><title>宏观 K 线日报｜{html.escape(report_date)}</title><body><pre>{html.escape(markdown)}</pre></body></html>"
+        _atomic_bytes(self.output_root / "latest.md", markdown.encode("utf-8"))
+        _atomic_bytes(self.output_root / "latest.html", html_text.encode("utf-8"))
+        archive_path = self.archive_root / f"{report_date}-kline-daily-newsletter-unavailable.md"
+        if archive_path.exists() and archive_path.read_bytes() != markdown.encode("utf-8"):
+            archive_path = self.archive_root / f"{report_date}-kline-daily-newsletter-unavailable-{_digest(code)[:12]}.md"
+        _atomic_bytes(archive_path, markdown.encode("utf-8"))
+        return str(archive_path)
+
     def run_once(self, *, now: datetime | None = None) -> dict[str, Any]:
         current = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0)
         cutoff = current.isoformat().replace("+00:00", "Z")
@@ -176,6 +221,7 @@ class DailyKlineRuntime:
             try:
                 fcntl.flock(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError as exc:
+                self.status_store.failure(at=cutoff, phase="lock", code="run_lock_busy")
                 raise DailyRuntimeError("run_lock_busy") from exc
             try:
                 client = DailyDatafeedClient(base_url=self.datafeed_url)
@@ -183,6 +229,7 @@ class DailyKlineRuntime:
                 source_store = DailySourceStore(self.runtime_root / "source")
                 source = dict(self.source_builder(client) if self.source_builder else build_daily_source_bundle(client, generated_at=current))
                 source_store.publish(source)
+                source = source_store.latest()
 
                 phase = "analysis_compile"
                 analysis_store = DailyAnalysisStore(self.runtime_root / "analysis")
@@ -192,6 +239,7 @@ class DailyKlineRuntime:
                     snapshot_port = None if self.no_snapshots else DailyChartSnapshotPort(runtime_root=self.runtime_root, output_root=self.output_root)
                     analysis = build_daily_analysis_bundle(source, provider_factory=self._asset_provider_factory(), cutoff_at=cutoff, snapshot_port=snapshot_port)
                 analysis_store.publish(analysis)
+                analysis = analysis_store.latest()
 
                 phase = "thesis_compile"
                 thesis = dict(self.thesis_builder(analysis) if self.thesis_builder else compile_daily_thesis(analysis, self._thesis_provider()))
@@ -201,11 +249,13 @@ class DailyKlineRuntime:
                 return {"schema_version": SCHEMA_VERSION, "state": "completed", "service_health": service_health, "source": source, "analysis": analysis, "thesis": thesis, "delivery": delivery, "status": status}
             except (DailySourceError, DailyAnalysisError, DailyThesisError, DailyRuntimeError) as exc:
                 code = str(exc)[:200] or type(exc).__name__
-                status = self.status_store.failure(at=cutoff, phase=phase, code=code)
+                archive_path = self._publish_unavailable_surface(at=cutoff, phase=phase, code=code)
+                self.status_store.failure(at=cutoff, phase=phase, code=code, archive_path=archive_path)
                 raise DailyRuntimeError(code) from exc
             except Exception as exc:
                 code = f"{type(exc).__name__}:{exc}"[:200]
-                status = self.status_store.failure(at=cutoff, phase=phase, code=code)
+                archive_path = self._publish_unavailable_surface(at=cutoff, phase=phase, code=code)
+                self.status_store.failure(at=cutoff, phase=phase, code=code, archive_path=archive_path)
                 raise DailyRuntimeError(code) from exc
 
 

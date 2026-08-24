@@ -14,9 +14,12 @@
   57-slot source → 19-asset analysis → Daily delivery smoke completed with
   `source_status=partial`, explicit `thesis_unavailable` under no-LLM mode,
   immutable archive and status readback.
-- **Gotchas:** The scheduler points at the retained local 967 runtime
-  worktree until a later stable-runtime migration. The current DeepSeek key is
-  outside the repository; missing/failed model calls remain a typed unknown.
+- **Gotchas:** The plist targets the stable local install path
+  `/Users/wendy/Library/Application Support/ParkKlineDaily/app`; the install
+  step must verify that checkout before loading launchd. The current DeepSeek
+  key is outside the repository; missing/failed model calls remain a typed
+  unknown, and a failed run replaces latest aliases with an unavailable surface
+  rather than leaving yesterday's report looking current.
 
 ## 2026-08-25 — Compile and archive the Daily cross-asset thesis
 

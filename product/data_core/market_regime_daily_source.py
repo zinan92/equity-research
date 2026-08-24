@@ -359,12 +359,15 @@ class DailyDatafeedClient:
                 status = int(getattr(response, "status", getattr(response, "status_code", 200)))
                 raw_body = response.read()
             payload = json.loads(raw_body.decode("utf-8"))
+            runtime = payload.get("runtime") if isinstance(payload, Mapping) and isinstance(payload.get("runtime"), Mapping) else {}
             return {
                 "url": url,
                 "status": status,
                 "service_status": payload.get("status") if isinstance(payload, Mapping) else None,
-                "build_sha": payload.get("build_sha") if isinstance(payload, Mapping) else None,
-                "registry": payload.get("registry") if isinstance(payload, Mapping) else None,
+                "runtime_root": runtime.get("runtime_root"),
+                "build_sha": runtime.get("build_sha") or (payload.get("build_sha") if isinstance(payload, Mapping) else None),
+                "registry": runtime.get("registry_version") or (payload.get("registry") if isinstance(payload, Mapping) else None),
+                "identity_status": runtime.get("identity_status"),
                 "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
             }
         except HTTPError as exc:
