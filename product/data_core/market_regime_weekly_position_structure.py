@@ -8,7 +8,7 @@ from typing import Any, Mapping
 SCHEMA_VERSION = "market-regime-weekly-position-structure-v1"
 POSITION_STATES = frozenset({"low", "middle", "high", "unavailable", "unknown"})
 STRUCTURE_STATES = frozenset({"continuation", "weakening", "reversal", "range", "mixed", "unknown"})
-TIMEFRAME_LABELS = {"weekly": "周线", "daily": "日线", "four_hour": "4小时"}
+TIMEFRAME_LABELS = {"weekly": "周线", "daily": "日线", "four_hour": "4小时", "thirty_minute": "30分钟"}
 
 
 class WeeklyPositionStructureError(ValueError):
@@ -123,7 +123,7 @@ def build_position_structure(request: Mapping[str, Any]) -> dict[str, Any]:
         position_by_timeframe[str(timeframe)] = _position_for_frame(frame, evidence_ids)
         structure_by_timeframe[str(timeframe)] = _structure_for_frame(frame, evidence_ids)
 
-    usable_positions = [row for row in (position_by_timeframe.get("weekly"), position_by_timeframe.get("daily"), position_by_timeframe.get("four_hour")) if isinstance(row, Mapping) and row.get("state") not in {"unavailable", "unknown"}]
+    usable_positions = [row for row in (position_by_timeframe.get("weekly"), position_by_timeframe.get("daily"), position_by_timeframe.get("four_hour"), position_by_timeframe.get("thirty_minute")) if isinstance(row, Mapping) and row.get("state") not in {"unavailable", "unknown"}]
     position_source = usable_positions[0] if usable_positions else next(iter(position_by_timeframe.values()), None)
     if position_source is None:
         position = {"state": "unknown", "percentile": None, "timeframe": None, "window": 0, "sample_count": 0, "evidence_ids": [], "timeframes": {}, "text": "位置：不可用。"}

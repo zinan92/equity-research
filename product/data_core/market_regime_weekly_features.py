@@ -117,7 +117,7 @@ def build_timeframe_features(
     """Project one immutable timeframe into chart-ready technical context."""
 
     key = str(series.get("key") or "")
-    if not key or timeframe not in {"weekly", "daily", "four_hour"}:
+    if not key or timeframe not in {"weekly", "daily", "four_hour", "thirty_minute"}:
         raise WeeklyFeatureError("feature_identity_invalid")
     source_identity = series.get("source_identity")
     if not isinstance(source_identity, Mapping) or not _has_provenance(source_identity):

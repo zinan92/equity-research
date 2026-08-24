@@ -1,5 +1,27 @@
 # Decision Log
 
+## 2026-08-25 — Add isolated Daily per-asset analysis and static snapshots
+
+- **Decision:** Consume the Daily 19×3 source bundle as the only input to an
+  isolated per-asset compiler. Extend the deterministic EMA/MACD and
+  Position/Structure primitives to the 30-minute period, then ask a bounded LLM
+  to write three period readings, a combined conclusion and a separately
+  labelled mechanism explanation. Available slots use the pinned
+  standard-kline renderer for immutable PNG snapshots; unavailable slots stay
+  visible and do not become neutral prose.
+- **Why:** The Daily newsletter needs to answer both “what does each K-line
+  say?” and “what does that mean?” before a later cross-asset thesis can be
+  trusted. Reusing the Weekly primitives keeps indicator semantics stable while
+  a new Daily schema prevents old 17-series artifacts from entering the track.
+- **Evidence:** Issue #965. Focused Daily analysis tests pass 5/5, Daily source
+  regression passes 4/4, Weekly feature/position regression passes 14/14, and
+  a real source→analysis smoke produced 19 asset analysis objects with typed
+  partial status and no source fallback.
+- **Gotchas:** Static snapshots are generated only for ready slots; missing
+  Playwright/Chromium is a hard snapshot failure, not a blank placeholder.
+  The LLM provider is bounded and evidence-cited; a missing key produces a
+  typed analysis-unavailable artifact rather than stale prose.
+
 ## 2026-08-25 — Establish an independent Daily K-line source bundle
 
 - **Decision:** Build the Daily K-line track on the current 19-asset Weekly
