@@ -132,6 +132,13 @@ class DailyAnalysisTests(unittest.TestCase):
         with self.assertRaises(DailyAnalysisError):
             validate_daily_asset_analysis(output, request)
 
+    def test_ready_period_rejects_unbound_numeric_observation(self) -> None:
+        request = build_daily_asset_request(_source_bundle()["assets"][0], cutoff_at="2026-08-31T00:00:00Z")
+        output = _provider(request)
+        output["daily"]["text"] = "日线价格收于9999，趋势延续。"
+        with self.assertRaises(DailyAnalysisError):
+            validate_daily_asset_analysis(output, request)
+
     def test_standard_kline_payload_keeps_static_renderer_contract(self) -> None:
         asset = _source_bundle()["assets"][0]
         payload = build_daily_standard_kline_payload(asset, "daily")

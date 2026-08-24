@@ -83,7 +83,7 @@ def _has_forbidden_english(text: str) -> bool:
 
 def _numeric_tokens(text: str) -> list[float]:
     numeric_free = text.replace("4小时", "").replace("30分钟", "").replace("2s10s", "").replace("2Y", "").replace("10Y", "")
-    numeric_free = re.sub(r"\d+\s*(?:日|天|小时|分钟)", "", numeric_free)
+    numeric_free = re.sub(r"\d+\s*(?:日|天|小时|分钟|周期)", "", numeric_free)
     values: list[float] = []
     for match in re.finditer(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?", numeric_free):
         try:
@@ -209,7 +209,7 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
     }
 
 
-def _validate_statement(value: Any, *, known_ids: set[str], field: str, request: Mapping[str, Any]) -> dict[str, Any]:
+def _validate_statement(value: Any, *, known_ids: set[str], field: str, request: Mapping[str, Any], allow_numeric_unbound: bool = False) -> dict[str, Any]:
     if not isinstance(value, Mapping) or not isinstance(value.get("text"), str) or not value["text"].strip():
         raise DailyAnalysisError(f"statement_invalid:{field}")
     evidence_ids = value.get("evidence_ids")
@@ -217,7 +217,8 @@ def _validate_statement(value: Any, *, known_ids: set[str], field: str, request:
         raise DailyAnalysisError(f"evidence_ids_invalid:{field}")
     if _has_forbidden_english(value["text"]):
         raise DailyAnalysisError(f"analysis_language_not_chinese:{field}")
-    _numbers_for_evidence(value["text"], [str(item) for item in evidence_ids], request)
+    if not allow_numeric_unbound:
+        _numbers_for_evidence(value["text"], [str(item) for item in evidence_ids], request)
     return {"text": value["text"].strip(), "evidence_ids": list(evidence_ids)}
 
 
@@ -250,7 +251,7 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
     result: dict[str, Any] = {"asset_key": request["asset_key"], "generation_status": generation_status}
     for timeframe in DAILY_TIMEFRAMES:
         frame = frames[timeframe]
-        statement = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe, request=request)
+        statement = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe, request=request, allow_numeric_unbound=frame.get("status") != "ready")
         if frame.get("status") != "ready":
             source_id = (frame.get("evidence_ids") or [None])[0]
             if source_id not in statement["evidence_ids"]:
