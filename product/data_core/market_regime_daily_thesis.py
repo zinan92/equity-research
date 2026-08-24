@@ -269,7 +269,7 @@ def _statement(value: Any, *, known_ids: set[str], field: str, numeric_values: l
     def matches(token: float) -> bool:
         for candidate in numeric_values:
             tolerance = max(0.051, abs(candidate) * 0.0005)
-            if abs(token - candidate) <= tolerance or (abs(candidate) <= 1 and abs(token - candidate * 100) <= max(0.051, abs(candidate * 100) * 0.0005)):
+            if abs(token - candidate) <= tolerance or (abs(candidate) <= 1 and abs(token - candidate * 100) <= 2.0):
                 return True
         return False
     if any(not matches(token) for token in tokens):
