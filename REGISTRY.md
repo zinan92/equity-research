@@ -1,5 +1,23 @@
 # REGISTRY
 
+## 2026-08-25 · Daily K-line source bundle (Issue #964 / PR #968)
+
+Now: the first Daily vertical slice is implemented on branch
+`codex/issue-964-daily-source` and is awaiting merge. It attempts the current
+19-asset universe across daily, 4H and 30-minute slots through the canonical
+datafeed, preserves source/transform/freshness/completion evidence, and writes
+content-addressed source artifacts with a verified latest pointer. Unsupported
+or failed slots remain unavailable; no old Daily runtime, cache or silent
+fallback is used.
+
+Evidence: 4 focused Daily source tests, 62 Weekly regression tests, diff check
+and gitleaks pass. A real 57-slot smoke produced a partial bundle, which is
+expected because current provider capability is asset-specific. The Daily
+analysis, thesis/archive delivery and 08:20 cutover remain next.
+
+Next: merge PR #968, then implement #965 per-asset analysis and static
+snapshots. Do not enable the Daily scheduler until #967 acceptance.
+
 ## 2026-08-21 · Weekly canonical datafeed integration and static reader (Issues #891/#892/#893/#894/#895/#896/#902/#907/#910/#912/#914/#916/#920/#922/#924/#926/#930/#932/#934/#936/#938/#940/#942/#944/#946/#948/#950/#952 / PRs #897–#901, #903, #905, #908, #909, #911, #913, #915, #917, #921, #925, #931, #935, #939, #943, #947, #951)
 
 Now: `main` includes the canonical Weekly integration at the latest merged

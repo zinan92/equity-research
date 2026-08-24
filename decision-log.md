@@ -1,5 +1,26 @@
 # Decision Log
 
+## 2026-08-25 — Establish an independent Daily K-line source bundle
+
+- **Decision:** Build the Daily K-line track on the current 19-asset Weekly
+  registry and canonical datafeed HTTP boundary, attempting daily, 4H and
+  30-minute slots for every asset. Preserve unsupported/failed slots as typed
+  unavailable results and never promote cache, prior reports or undeclared
+  sources. Keep the Daily track independent from Weekly and Finance Daily.
+- **Why:** The historical Daily checkout has a broken Git worktree pointer and
+  is coupled to a legacy 17-series Market Regime evidence path. The new Daily
+  product needs a replayable source seam before adding per-asset prose and a
+  market thesis, while the current datafeed does not offer every intraday
+  timeframe for every asset.
+- **Evidence:** Issue #963, implementation Issue #964 / PR #968. Focused Daily
+  source tests pass 4/4; Weekly contract/datafeed/source regression tests pass
+  62/62. A real 57-slot smoke produced a partial bundle with explicit HTTP
+  unsupported/upstream/transport states and no stale promotion.
+- **Gotchas:** A generic `30m` API enum is not universal provider coverage.
+  Daily registry identity is intentionally separate from Weekly identity. The
+  08:20 scheduler and old ParkKlineNewsletter checkout remain untouched until
+  the later thesis/delivery and acceptance tickets pass.
+
 ## 2026-08-21 — Cut Weekly over to canonical datafeed and static snapshot reader
 
 - **Decision:** Use the canonical datafeed CandleResponse as the only Weekly
