@@ -132,6 +132,10 @@ class DailyThesisTests(unittest.TestCase):
             archive_snapshot = root / "archive" / "snapshots" / "dxy.png"
             self.assertEqual(archive_snapshot.read_bytes(), output_snapshot.read_bytes())
             self.assertEqual(receipt["archive"]["sha256"], hashlib.sha256(Path(receipt["archive"]["path"]).read_bytes()).hexdigest())
+            self.assertTrue(Path(receipt["article_archive"]["path"]).is_file())
+            article = json.loads((root / "output" / "latest.article.json").read_text(encoding="utf-8"))
+            self.assertEqual(article["schema_version"], "market-regime-reader-article-v1")
+            self.assertEqual(receipt["article"]["sha256"], hashlib.sha256((root / "runtime" / "delivery" / receipt["article"]["path"]).read_bytes()).hexdigest())
             latest_html = (root / "output" / "latest.html").read_text(encoding="utf-8")
             self.assertIn('class="asset-pane reader-asset"', latest_html)
             self.assertIn('src="snapshots/dxy.png"', latest_html)

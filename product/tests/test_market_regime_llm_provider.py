@@ -42,8 +42,13 @@ class LlmProviderTests(unittest.TestCase):
         self.assertIn("--sandbox", command)
         self.assertIn("read-only", command)
         self.assertIn("--skip-git-repo-check", command)
+        for feature in ("shell_tool", "browser_use", "browser_use_external", "computer_use", "apps", "unified_exec"):
+            self.assertEqual(command[command.index("--disable", command.index(feature) - 2) + 1], feature)
         self.assertIn("--json", command)
+        self.assertNotIn("--search", command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
+        self.assertEqual(receipt["tool_policy"], "none")
+        self.assertEqual(receipt["network_policy"], "no_external_tools")
 
     def test_fallback_keeps_primary_success_and_does_not_call_codex(self) -> None:
         fallback_calls: list[object] = []

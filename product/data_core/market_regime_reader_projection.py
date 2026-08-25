@@ -62,6 +62,17 @@ def _instrument_caption(instrument: Mapping[str, Any] | None) -> str:
     return " · ".join(seen)
 
 
+def _observation_time(periods: list[Mapping[str, Any]]) -> str:
+    """Return the latest declared observation timestamp for the asset header."""
+
+    values = sorted(
+        str(period.get("latest_timestamp") or "").strip()
+        for period in periods
+        if str(period.get("latest_timestamp") or "").strip()
+    )
+    return values[-1] if values else ""
+
+
 def _position_structure(analysis: Mapping[str, Any]) -> tuple[Mapping[str, Any] | None, Mapping[str, Any] | None]:
     output = _analysis_output(analysis)
     deterministic = output.get("deterministic") if isinstance(output.get("deterministic"), Mapping) else {}
@@ -105,6 +116,7 @@ def project_daily_asset(asset: Mapping[str, Any]) -> dict[str, Any]:
         "asset_key": asset.get("asset_key"),
         "display_name": asset.get("display_name") or asset.get("asset_key"),
         "instrument_caption": _instrument_caption(asset.get("instrument") if isinstance(asset.get("instrument"), Mapping) else None),
+        "observation_time": _observation_time(periods),
         "analysis_status": "validated" if analysis.get("generation_status") == "model_generated_unreviewed" else "analysis_unavailable",
         "periods": periods,
         "position": position,
@@ -151,6 +163,7 @@ def project_weekly_card(card: Mapping[str, Any]) -> dict[str, Any]:
         "asset_key": card.get("asset_key"),
         "display_name": card.get("display_name") or card.get("asset_key"),
         "instrument_caption": _instrument_caption(instrument),
+        "observation_time": _observation_time(periods),
         "analysis_status": card.get("analysis_status") or "analysis_unavailable",
         "periods": periods,
         "position": analysis.get("position"),
@@ -172,6 +185,11 @@ def render_reader_asset_markdown(projection: Mapping[str, Any], *, snapshot_pref
     caption = str(projection.get("instrument_caption") or "").strip()
     if caption:
         lines.append(f"标的：{caption}")
+    observation_time = str(projection.get("observation_time") or "").strip()
+    if observation_time:
+        lines.append(f"观察时点：{observation_time}")
+    if projection.get("analysis_status") == "analysis_unavailable":
+        lines.append("状态：模型解释不可用；以下保留代码读数。")
     lines.append("")
     for period in projection.get("periods") or []:
         if not isinstance(period, Mapping):
@@ -180,7 +198,8 @@ def render_reader_asset_markdown(projection: Mapping[str, Any], *, snapshot_pref
         if href:
             lines.extend([f"![{projection.get('display_name')}｜{period.get('label')} K 线图]({href})", ""])
         elif period.get("status") != "ready":
-            lines.extend([f"图表暂缺：{period.get('text')}", ""])
+            lines.extend([f"**{period.get('label')}**：图表暂缺；{period.get('text')}", ""])
+            continue
         lines.extend([f"**{period.get('label')}**：{period.get('text')}", ""])
     position = projection.get("position")
     structure = projection.get("structure")
@@ -205,6 +224,7 @@ def render_reader_asset_html(projection: Mapping[str, Any], *, snapshot_prefix: 
 
     display_name = html.escape(str(projection.get("display_name") or projection.get("asset_key") or "资产"))
     caption = html.escape(str(projection.get("instrument_caption") or ""))
+    observation_time = html.escape(str(projection.get("observation_time") or ""))
     periods: list[str] = []
     for period in projection.get("periods") or []:
         if not isinstance(period, Mapping):
@@ -228,13 +248,82 @@ def render_reader_asset_html(projection: Mapping[str, Any], *, snapshot_prefix: 
     meaning = html.escape(_summary_text(projection.get("market_meaning"), "当前机制解释不可用。"))
     asset_key = html.escape(str(projection.get("asset_key") or ""), quote=True)
     status_label = {"validated": "已验证", "analysis_unavailable": "分析不可用"}.get(str(projection.get("analysis_status")), "状态待确认")
+    header_meta = " · ".join(item for item in (f"标的：{caption}" if caption else "", f"观察时点：{observation_time}" if observation_time else "") if item)
     return (
         f'<section class="asset-pane reader-asset" id="asset-{asset_key}" data-pane="{asset_key}" data-asset-key="{asset_key}" data-timeframes="{len(periods)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释">'
-        f'<header><div><h2>{display_name}</h2>{f"<small>标的：{caption}</small>" if caption else ""}</div><small>{status_label}</small></header>'
+        f'<header><div><h2>{display_name}</h2>{f"<small>{header_meta}</small>" if header_meta else ""}</div><small>{status_label}</small></header>'
         f'{"".join(periods)}'
         f'<div class="summary-dimensions"><div><b>位置</b><p>{position}</p></div><div><b>结构</b><p>{structure}</p></div><div><b>赔率</b><p>{odds}</p></div></div>'
         f'<div class="synthesis"><b>综合结论与市场含义</b><p>{synthesis}</p><p>{meaning}</p></div></section>'
     )
+
+
+def render_reader_article(
+    projections: list[Mapping[str, Any]],
+    *,
+    title: str,
+    cutoff_at: str | None = None,
+    snapshot_prefix: str = "snapshots/",
+) -> dict[str, Any]:
+    """Render the shared semantic order as a Mini Program article payload.
+
+    The payload is intentionally transport-neutral: ``blocks`` preserve the
+    exact asset → period image → period text → summary order, while ``media``
+    lists the immutable image attachments a Mini Program publisher can upload.
+    It does not publish or call a Mini Program API.
+    """
+
+    blocks: list[dict[str, Any]] = []
+    media: list[dict[str, str]] = []
+    seen_media: set[str] = set()
+    for projection in projections:
+        asset_key = str(projection.get("asset_key") or "")
+        display_name = str(projection.get("display_name") or asset_key or "资产")
+        blocks.append(
+            {
+                "type": "asset_heading",
+                "asset_key": asset_key,
+                "display_name": display_name,
+                "instrument_caption": str(projection.get("instrument_caption") or ""),
+                "observation_time": str(projection.get("observation_time") or ""),
+                "analysis_status": str(projection.get("analysis_status") or ""),
+            }
+        )
+        for period in projection.get("periods") or []:
+            if not isinstance(period, Mapping):
+                continue
+            label = str(period.get("label") or "")
+            href = _snapshot_path(period.get("snapshot"), snapshot_prefix)
+            if href:
+                snapshot = period.get("snapshot") if isinstance(period.get("snapshot"), Mapping) else {}
+                asset = snapshot.get("asset") if isinstance(snapshot, Mapping) and isinstance(snapshot.get("asset"), Mapping) else {}
+                alt = f"{display_name}｜{label} K 线图"
+                blocks.append({"type": "image", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "path": href, "alt": alt})
+                if href not in seen_media:
+                    media.append({"path": href, "alt": alt, "sha256": str(asset.get("sha256") or "")})
+                    seen_media.add(href)
+            elif period.get("status") != "ready":
+                blocks.append({"type": "period_text", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "text": f"图表暂缺；{period.get('text') or '本周期数据暂缺；未将其视为横盘。'}", "status": "unavailable"})
+                continue
+            blocks.append({"type": "period_text", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "text": str(period.get("text") or ""), "status": str(period.get("status") or "")})
+        blocks.append(
+            {
+                "type": "asset_summary",
+                "asset_key": asset_key,
+                "position": _text(projection.get("position"), "位置：不可用。"),
+                "structure": _text(projection.get("structure"), "结构：不可用。"),
+                "odds": _text(projection.get("odds"), "赔率尚未形成。"),
+                "synthesis": _summary_text(projection.get("synthesis"), "当前多周期分析不可用。"),
+                "market_meaning": _summary_text(projection.get("market_meaning"), "当前机制解释不可用。"),
+            }
+        )
+    return {
+        "schema_version": "market-regime-reader-article-v1",
+        "title": title,
+        "cutoff_at": cutoff_at,
+        "blocks": blocks,
+        "media": media,
+    }
 
 
 __all__ = [
@@ -244,4 +333,5 @@ __all__ = [
     "project_weekly_card",
     "render_reader_asset_html",
     "render_reader_asset_markdown",
+    "render_reader_article",
 ]

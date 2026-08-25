@@ -1,5 +1,25 @@
 # Decision Log
 
+## 2026-08-26 — Complete shared reader surfaces and audited Daily fallback
+
+- **Decision:** Keep Daily and Weekly on one semantic reader projection and emit
+  HTML, Markdown and a transport-neutral Mini Program article payload. Preserve
+  static PNG attachments and the same asset → period image → period text →
+  summary order on all three surfaces.
+- **Why:** The reader contract promises one recognizable report across Web,
+  Obsidian and the Mini Program; a snapshot ID or an HTML-only implementation
+  is not a reader surface.
+- **Evidence:** Issues #1001–#1005; merged PRs #1006–#1019; latest article
+  artifact `/Users/wendy/Desktop/K线日报/latest.article.json`; latest real
+  Daily run completed under 20 minutes with a Codex-backed thesis and 16/19
+  validated asset explanations.
+- **Gotchas:** The article payload is a local projection plus attachment list;
+  it does not publish to a Mini Program API. KOSPI remained unavailable in the
+  latest run because the source rejected a non-finite Yahoo OHLC value; no
+  stale or undeclared source was substituted. The final Sonnet review receipt
+  is stored under `/Users/wendy/.codex/cc-receipts/2026-08-25/` and its P1/P2/P3
+  findings are being closed in follow-up tickets.
+
 ## 2026-08-25 — Stable Daily K-line cutover and first successful thesis
 
 - **Decision:** Install main at the stable ParkKlineDaily app path, load the

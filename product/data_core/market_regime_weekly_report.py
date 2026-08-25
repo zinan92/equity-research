@@ -16,7 +16,7 @@ from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DI
 from .market_regime_weekly_contract import WeeklyCandleContractError
 from .market_regime_weekly_standard_kline import build_standard_kline_payload, standard_kline_options_for_response
 from .market_regime_weekly_position_structure import POSITION_STATES, STRUCTURE_STATES
-from .market_regime_reader_projection import project_weekly_card, render_reader_asset_html, render_reader_asset_markdown
+from .market_regime_reader_projection import project_weekly_card, render_reader_asset_html, render_reader_asset_markdown, render_reader_article
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v8-tradeable-assets"
@@ -663,3 +663,19 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
         status_lines.append("模型失败披露：DeepSeek 与 Codex CLI 均未生成机会排序解释。")
     footer_status = "<br>".join(_escape(line) for line in status_lines)
     return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看{_escape(opportunity["title"])}。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周{_escape(opportunity["title"])}</h2><p>{_escape(description)}</p><ul>{ranking_rows}</ul></section><footer><div>来源与状态</div>{footer_status}<br>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main></body></html>'
+
+
+def render_weekly_article(report: Mapping[str, Any], *, snapshot_prefix: str = "snapshots/") -> dict[str, Any]:
+    """Render Weekly cards as the shared Mini Program article payload."""
+
+    projections = [
+        project_weekly_card(card)
+        for card in report.get("cards") or []
+        if isinstance(card, Mapping)
+    ]
+    return render_reader_article(
+        projections,
+        title="宏观 K 线周报",
+        cutoff_at=str(report.get("week_end") or ""),
+        snapshot_prefix=snapshot_prefix,
+    )

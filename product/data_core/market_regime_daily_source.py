@@ -730,6 +730,8 @@ def build_daily_source_bundle(
                 "asset_key": asset_key,
                 "display_name": DISPLAY_NAMES.get(asset_key, asset_key),
                 "instrument": {
+                    "ticker": ASSET_TICKERS[asset_key],
+                    "provider_symbol": EXPECTED_PROVIDER_SYMBOLS.get(asset_key, ASSET_TICKERS[asset_key]),
                     "canonical_symbol": spec["canonical_symbol"],
                     "asset_class": spec["asset_class"],
                     "series_kind": spec["series_kind"],
