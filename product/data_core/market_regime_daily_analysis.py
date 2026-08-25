@@ -11,14 +11,19 @@ import os
 import tempfile
 from typing import Any, Callable, Mapping
 
-from .market_regime_daily_source import DAILY_TIMEFRAMES, SCHEMA_VERSION as SOURCE_SCHEMA, validate_daily_source_bundle
+from .market_regime_daily_source import (
+    DAILY_TIMEFRAMES,
+    DAILY_TIMEFRAMES_BY_ASSET,
+    SCHEMA_VERSION as SOURCE_SCHEMA,
+    validate_daily_source_bundle,
+)
 from .market_regime_weekly_features import WeeklyFeatureError, build_timeframe_features
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
 from .market_regime_weekly_source import DISPLAY_NAMES, WEEKLY_KEYS
 
 
-SCHEMA_VERSION = "market-regime-daily-asset-analysis-v1"
+SCHEMA_VERSION = "market-regime-daily-asset-analysis-v2"
 ANALYSIS_ID_PREFIX = "market-regime-daily-asset-analysis:"
 BUNDLE_ID_PREFIX = "market-regime-daily-analysis:"
 ALLOWED_LATIN_WORDS = frozenset(
@@ -136,10 +141,11 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
     if not isinstance(instrument, Mapping):
         raise DailyAnalysisError(f"instrument_missing:{key}")
     raw_slots = asset.get("slots")
-    if not isinstance(raw_slots, Mapping) or set(raw_slots) != set(DAILY_TIMEFRAMES):
+    allowed_timeframes = DAILY_TIMEFRAMES_BY_ASSET.get(key, ())
+    if not isinstance(raw_slots, Mapping) or set(raw_slots) != set(allowed_timeframes):
         raise DailyAnalysisError(f"timeframe_slots_invalid:{key}")
     timeframes: dict[str, dict[str, Any]] = {}
-    for timeframe in DAILY_TIMEFRAMES:
+    for timeframe in allowed_timeframes:
         slot = raw_slots[timeframe]
         if not isinstance(slot, Mapping):
             raise DailyAnalysisError(f"slot_invalid:{key}:{timeframe}")
@@ -233,7 +239,8 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
     if generation_status != "model_generated_unreviewed":
         raise DailyAnalysisError("analysis_generation_status_invalid")
     frames = request.get("timeframes")
-    if not isinstance(frames, Mapping) or set(frames) != set(DAILY_TIMEFRAMES):
+    expected_timeframes = set(DAILY_TIMEFRAMES_BY_ASSET.get(str(request.get("asset_key") or ""), ()))
+    if not isinstance(frames, Mapping) or set(frames) != expected_timeframes:
         raise DailyAnalysisError("analysis_request_timeframes_invalid")
     fact_ids = {
         str(evidence_id)
@@ -249,7 +256,7 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
         raise DailyAnalysisError("analysis_mechanism_ids_missing")
     known_ids = set(fact_ids)
     result: dict[str, Any] = {"asset_key": request["asset_key"], "generation_status": generation_status}
-    for timeframe in DAILY_TIMEFRAMES:
+    for timeframe in (item for item in DAILY_TIMEFRAMES if item in frames):
         frame = frames[timeframe]
         statement = _validate_statement(output.get(timeframe), known_ids=known_ids, field=timeframe, request=request, allow_numeric_unbound=frame.get("status") != "ready")
         if frame.get("status") != "ready":
@@ -347,10 +354,9 @@ def compile_daily_asset_analysis(
 
 DAILY_ASSET_SYSTEM_PROMPT = """你是 Global Market K-line Daily 的单资产分析师。只读取请求中的冻结 K 线和代码特征，不读取新闻或外部知识，不补造数字。
 
-请分别解释 daily、four_hour、thirty_minute 三个周期；某周期不可用时明确说证据不可用，不能把它当作横盘。然后输出一个综合结论与一个静态机制解释。机制解释必须使用请求中的 mechanism 目录，说明常见驱动、通常后果和反例；它不是当前事实，也不是实时因果归因。
+请只解释 request.timeframes 中实际提供的周期；不要为未出现在 request.timeframes 中的周期补写字段或内容。某个已请求周期不可用时明确说证据不可用，不能把它当作横盘。然后输出一个综合结论与一个静态机制解释。机制解释必须使用请求中的 mechanism 目录，说明常见驱动、通常后果和反例；它不是当前事实，也不是实时因果归因。
 
-所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。如需数字，必须能在所引用的 feature:* 证据中找到；否则删掉数字，不要猜测。只返回合法 JSON，字段严格为：
-{"asset_key":"string","generation_status":"model_generated_unreviewed","daily":{"text":"简体中文","evidence_ids":["..."]},"four_hour":{"text":"简体中文","evidence_ids":["..."]},"thirty_minute":{"text":"简体中文","evidence_ids":["..."]},"synthesis":{"text":"简体中文","evidence_ids":["..."]},"market_meaning":{"text":"简体中文","evidence_ids":["mechanism:..."],"claim_type":"theoretical_mechanism"},"confirmation":{"text":"简体中文","evidence_ids":["..."]},"invalidation":{"text":"简体中文","evidence_ids":["..."]},"rationale":{"text":"简体中文","evidence_ids":["..."]},"opportunity_state":"participate|wait|avoid"}
+所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。如需数字，必须能在所引用的 feature:* 证据中找到；否则删掉数字，不要猜测。只返回合法 JSON。顶层字段必须包含 asset_key、generation_status、synthesis、market_meaning、confirmation、invalidation、rationale、opportunity_state；另外，只为 request.timeframes 中实际存在的周期输出同名字段（例如 daily、four_hour、thirty_minute），不要输出其它周期字段。每个周期字段形如 {"text":"简体中文","evidence_ids":["..."]}。
 禁止输出个人仓位、订单、保证收益或自动执行。"""
 
 
@@ -417,7 +423,7 @@ def build_daily_analysis_bundle(
     for item in analyses:
         item["snapshots"] = {
             timeframe: snapshots.get(f"{item['asset_key']}:{timeframe}")
-            for timeframe in DAILY_TIMEFRAMES
+            for timeframe in (item["request"].get("timeframes") or {})
             if f"{item['asset_key']}:{timeframe}" in snapshots
         }
     identity_core = {
@@ -496,6 +502,7 @@ class DailyAnalysisStore:
 __all__ = [
     "DAILY_ASSET_SYSTEM_PROMPT",
     "DAILY_TIMEFRAMES",
+    "DAILY_TIMEFRAMES_BY_ASSET",
     "DailyAnalysisError",
     "DailyAnalysisStore",
     "DeepSeekDailyAssetProvider",

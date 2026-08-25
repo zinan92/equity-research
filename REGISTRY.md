@@ -1,5 +1,26 @@
 # REGISTRY
 
+## 2026-08-25 · Daily capability-aware timeframe matrix (Issue #992 / datafeed #39)
+
+Now: the Daily source contract is versioned to `v2` and requests only periods
+declared for each instrument. All 19 assets keep a real daily slot. Cash
+indices/ETFs, Treasury yields and the derived curve keep daily-only semantics;
+WTI, gold and silver keep daily/4H/30-minute context; BTC, ETH and HYPE use
+the same Hyperliquid perpetual source for daily/4H/30-minute context. An
+unrequested period is no longer rendered as a predictable `timeframe_not_supported`
+failure. A requested upstream failure remains unavailable with its evidence.
+
+The canonical datafeed now runs at `a1a717c` and declares native Hyperliquid
+30-minute candles for BTC/ETH/HYPE. Strict bypass live probes returned
+`raw_timeframe=30m`, `timeframe_origin=native`, `fresh=true`, and
+`is_synthetic=false` for all three symbols. The Daily app's expected source
+matrix is 31 slots (19 daily + 6 crypto context + 6 commodity context), before
+any real upstream failures are counted.
+
+Next: run the stable Daily entrypoint once with the current key, verify the
+31-slot source coverage and thesis/delivery receipts, then let the 08:20
+LaunchAgent continue. Weekly 8907 and Finance Daily remain separate.
+
 ## 2026-08-25 · Daily K-line stable runtime cutover complete (Issue #990)
 
 Now: stable app checkout is

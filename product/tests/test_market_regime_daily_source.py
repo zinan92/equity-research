@@ -13,6 +13,7 @@ sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_daily_source import (  # noqa: E402
     DAILY_TIMEFRAMES,
+    DAILY_TIMEFRAMES_BY_ASSET,
     DailyDatafeedClient,
     DailySourceError,
     DailySourceStore,
@@ -118,14 +119,14 @@ class _Opener:
 
 class DailySourceTests(unittest.TestCase):
     def test_request_policy_is_strict_and_only_a_share_has_explicit_fallback(self) -> None:
-        ashare = daily_request_for_asset("shanghai", "thirty_minute")
+        ashare = daily_request_for_asset("shanghai", "daily")
         self.assertEqual(ashare["fallback_policy"], "explicit")
         self.assertEqual(ashare["fallback_sources"], ["sina_index"])
         other = daily_request_for_asset("gold", "thirty_minute")
         self.assertEqual(other["fallback_policy"], "none")
         self.assertEqual(other["fallback_sources"], [])
 
-    def test_bundle_attempts_all_19_assets_and_three_timeframes(self) -> None:
+    def test_bundle_attempts_each_asset_capability_matrix(self) -> None:
         opener = _Opener()
         client = DailyDatafeedClient(opener=opener, timeout=1)
         bundle = build_daily_source_bundle(
@@ -135,10 +136,11 @@ class DailySourceTests(unittest.TestCase):
             max_workers=2,
         )
         self.assertEqual(len(bundle["assets"]), len(WEEKLY_KEYS))
-        self.assertEqual(bundle["coverage"]["total_slots"], len(WEEKLY_KEYS) * len(DAILY_TIMEFRAMES))
-        self.assertEqual(len(opener.calls), len(WEEKLY_KEYS) * len(DAILY_TIMEFRAMES))
+        expected_total = sum(len(DAILY_TIMEFRAMES_BY_ASSET[key]) for key in WEEKLY_KEYS)
+        self.assertEqual(bundle["coverage"]["total_slots"], expected_total)
+        self.assertEqual(len(opener.calls), expected_total)
         for asset in bundle["assets"]:
-            self.assertEqual(set(asset["slots"]), set(DAILY_TIMEFRAMES))
+            self.assertEqual(set(asset["slots"]), set(DAILY_TIMEFRAMES_BY_ASSET[asset["asset_key"]]))
             self.assertTrue(all(slot["status"] == "ready" for slot in asset["slots"].values()))
 
     def test_unavailable_slot_is_explicit_and_does_not_block_bundle(self) -> None:

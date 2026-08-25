@@ -20,7 +20,7 @@ from .market_regime_daily_analysis import (
 from .market_regime_daily_source import WEEKLY_KEYS
 
 
-SCHEMA_VERSION = "market-regime-daily-thesis-v1"
+SCHEMA_VERSION = "market-regime-daily-thesis-v2"
 THESIS_ID_PREFIX = "market-regime-daily-thesis:"
 DELIVERY_ID_PREFIX = "market-regime-daily-delivery:"
 POSTURES = {"attack", "wait", "defense", "no_view"}
@@ -223,7 +223,7 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
                 "structure": (output.get("deterministic") or {}).get("structure"),
                 "timeframes": {
                     timeframe: output.get(timeframe)
-                    for timeframe in DAILY_TIMEFRAMES
+                    for timeframe in (item for item in DAILY_TIMEFRAMES if item in (request.get("timeframes") or {}))
                     if output.get(timeframe) is not None
                 },
                 "synthesis": output.get("synthesis"),
@@ -231,7 +231,7 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
                 "opportunity_state": output.get("opportunity_state"),
                 "coverage": {
                     timeframe: (request.get("timeframes") or {}).get(timeframe, {}).get("status")
-                    for timeframe in DAILY_TIMEFRAMES
+                    for timeframe in (item for item in DAILY_TIMEFRAMES if item in (request.get("timeframes") or {}))
                 },
             }
         )
@@ -402,14 +402,19 @@ def _coverage(asset: Mapping[str, Any]) -> str:
         timeframe: (frame.get("status") if isinstance(frame, Mapping) else None)
         for timeframe, frame in (asset.get("timeframes") or {}).items()
     }
-    return " · ".join(f"{label}：{'可用' if statuses.get(tf) == 'ready' else '不可用'}" for tf, label in (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟")))
+    labels = (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟"))
+    return " · ".join(
+        f"{label}：{'可用' if statuses.get(tf) == 'ready' else '不可用'}"
+        for tf, label in labels
+        if tf in statuses
+    ) or "无已声明周期"
 
 
 def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[str, Any]) -> str:
     thesis = delivery.get("output") or {}
     cutoff = str(delivery.get("cutoff_at") or analysis_bundle.get("cutoff_at") or "")
     report_date = _local_report_date(cutoff)
-    lines = ["---", "title: 宏观 K 线日报", f"date: {report_date}", "report_type: kline-daily-newsletter", f"generation_status: {delivery.get('generation_status')}", "---", "", f"# 宏观 K 线日报｜{report_date}", "", "> 只基于跨资产 K 线：日线看方向，4 小时看上下文，30 分钟看短线节奏。", ""]
+    lines = ["---", "title: 宏观 K 线日报", f"date: {report_date}", "report_type: kline-daily-newsletter", f"generation_status: {delivery.get('generation_status')}", "---", "", f"# 宏观 K 线日报｜{report_date}", "", "> 只基于跨资产 K 线：日线看方向；资产有明确盘中源时，再用 4 小时或 30 分钟看上下文。未列出的周期不是失败，而是不在该资产的源能力合同内。", ""]
     lines.extend(["## 今日结论", ""])
     if thesis.get("generation_status") != "model_generated_unreviewed":
         lines.extend(["当前综合 thesis 不可用。", "", "本日报保留各资产数据状态，但没有把旧结论或模板判断当作今天的新结论。", ""])
@@ -439,7 +444,10 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
                     lines.append(f"- **结构读数**：{structure['text']}")
             lines.append("")
             continue
+        requested_timeframes = (asset.get("request") or {}).get("timeframes") or {}
         for timeframe, label in (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟")):
+            if timeframe not in requested_timeframes:
+                continue
             statement = output.get(timeframe)
             if isinstance(statement, Mapping):
                 lines.extend([f"- **{label}**：{statement['text']}"])
@@ -448,7 +456,7 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
         if isinstance(output.get("market_meaning"), Mapping):
             lines.extend([f"- **市场含义**：{output['market_meaning']['text']}"])
         lines.append("")
-    lines.extend(["## 数据边界", "", f"- 数据截至：{cutoff}", "- 本日报不读取 Finance Daily Newsletter。", "- 不可用周期保留为不可用，不代表横盘或没有变化。", "- 内容仅供研究参考；不连接经纪账户，不自动执行交易。", ""])
+    lines.extend(["## 数据边界", "", f"- 数据截至：{cutoff}", "- 本日报不读取 Finance Daily Newsletter。", "- 已请求但抓取失败的周期保留为不可用，不代表横盘或没有变化；未列出的周期表示该资产当前没有纳入该周期请求。", "- 内容仅供研究参考；不连接经纪账户，不自动执行交易。", ""])
     return "\n".join(lines)
 
 

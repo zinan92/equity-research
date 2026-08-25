@@ -20,7 +20,7 @@ from data_core.market_regime_daily_analysis import (  # noqa: E402
     compile_daily_asset_analysis,
     validate_daily_asset_analysis,
 )
-from data_core.market_regime_daily_source import DAILY_TIMEFRAMES, build_daily_source_bundle  # noqa: E402
+from data_core.market_regime_daily_source import DAILY_TIMEFRAMES, DAILY_TIMEFRAMES_BY_ASSET, build_daily_source_bundle  # noqa: E402
 from data_core.market_regime_daily_snapshots import build_daily_standard_kline_payload  # noqa: E402
 from data_core.market_regime_weekly_source import WEEKLY_KEYS  # noqa: E402
 
@@ -37,7 +37,7 @@ def _source_bundle() -> dict:
             "semantic_role": "price_etf",
         }
         slots = {}
-        for timeframe in DAILY_TIMEFRAMES:
+        for timeframe in DAILY_TIMEFRAMES_BY_ASSET[key]:
             points = []
             for offset in range(60):
                 value = 100 + index + offset
@@ -54,8 +54,8 @@ def _source_bundle() -> dict:
         assets.append({"asset_key": key, "display_name": key, "instrument": instrument, "slots": slots})
     canonical = lambda value: json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     identity_core = {
-        "schema_version": "market-regime-daily-source-bundle-v1",
-        "registry_version": "market-regime-daily-tradeable-registry-v1",
+        "schema_version": "market-regime-daily-source-bundle-v2",
+        "registry_version": "market-regime-daily-tradeable-registry-v2",
         "generated_at": "2026-08-31T00:00:00Z",
         "cutoff_at": "2026-08-31T00:00:00Z",
         "assets_sha256": hashlib.sha256(canonical(assets).encode()).hexdigest(),
@@ -63,8 +63,8 @@ def _source_bundle() -> dict:
     }
     bundle_id = "market-regime-daily-source:" + hashlib.sha256(canonical(identity_core).encode()).hexdigest()
     return {
-        "schema_version": "market-regime-daily-source-bundle-v1",
-        "registry_version": "market-regime-daily-tradeable-registry-v1",
+        "schema_version": "market-regime-daily-source-bundle-v2",
+        "registry_version": "market-regime-daily-tradeable-registry-v2",
         "source_status": "ready",
         "data_kind": "real",
         "bundle_id": bundle_id,
@@ -73,7 +73,14 @@ def _source_bundle() -> dict:
         "assets": assets,
         "identity_core": identity_core,
         "source_policy": {"cache_policy": "bypass", "quality_policy": "strict"},
-        "coverage": {"total_slots": 57, "ready_slots": 57, "unavailable_slots": 0, "fraction": 1.0, "requested_timeframes": list(DAILY_TIMEFRAMES)},
+        "coverage": {
+            "total_slots": sum(len(DAILY_TIMEFRAMES_BY_ASSET[item]) for item in WEEKLY_KEYS),
+            "ready_slots": sum(len(DAILY_TIMEFRAMES_BY_ASSET[item]) for item in WEEKLY_KEYS),
+            "unavailable_slots": 0,
+            "fraction": 1.0,
+            "requested_timeframes": list(DAILY_TIMEFRAMES),
+            "timeframes_by_asset": {item: list(DAILY_TIMEFRAMES_BY_ASSET[item]) for item in WEEKLY_KEYS},
+        },
     }
 
 
@@ -100,7 +107,7 @@ class DailyAnalysisTests(unittest.TestCase):
     def test_request_contains_three_features_and_completion_metadata(self) -> None:
         asset = _source_bundle()["assets"][0]
         request = build_daily_asset_request(asset, cutoff_at="2026-08-31T00:00:00Z")
-        self.assertEqual(set(request["timeframes"]), set(DAILY_TIMEFRAMES))
+        self.assertEqual(set(request["timeframes"]), set(DAILY_TIMEFRAMES_BY_ASSET["dxy"]))
         self.assertTrue(all(frame["features"]["feature_identity"] for frame in request["timeframes"].values()))
         self.assertTrue(all(frame["completion_state"] == "complete" for frame in request["timeframes"].values()))
 
@@ -120,10 +127,10 @@ class DailyAnalysisTests(unittest.TestCase):
 
     def test_unavailable_period_must_be_disclosed_and_cannot_be_neutralized(self) -> None:
         asset = copy.deepcopy(_source_bundle()["assets"][0])
-        asset["slots"]["thirty_minute"].update({"status": "unavailable", "bars": [], "reason_code": "timeframe_not_supported"})
+        asset["slots"]["daily"].update({"status": "unavailable", "bars": [], "reason_code": "upstream_error"})
         request = build_daily_asset_request(asset, cutoff_at="2026-08-31T00:00:00Z")
         output = _provider(request)
-        output["thirty_minute"] = {"text": "30分钟横盘。", "evidence_ids": [request["timeframes"]["thirty_minute"]["evidence_ids"][0]]}
+        output["daily"] = {"text": "日线横盘。", "evidence_ids": [request["timeframes"]["daily"]["evidence_ids"][0]]}
         with self.assertRaises(DailyAnalysisError):
             validate_daily_asset_analysis(output, request)
 
