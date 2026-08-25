@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -451,6 +452,7 @@ def build_daily_analysis_bundle(
     provider_factory: Callable[[Mapping[str, Any]], Callable[[Mapping[str, Any]], Any] | None] | None = None,
     cutoff_at: str | None = None,
     snapshot_port: Any | None = None,
+    max_workers: int = 4,
 ) -> dict[str, Any]:
     """Compile 19 isolated asset analyses from one source bundle."""
 
@@ -458,19 +460,23 @@ def build_daily_analysis_bundle(
     if source_bundle.get("schema_version") != SOURCE_SCHEMA or source_bundle.get("source_status") == "unavailable":
         raise DailyAnalysisError("source_bundle_unavailable")
     generated_at = cutoff_at or str(source_bundle.get("cutoff_at") or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"))
-    analyses: list[dict[str, Any]] = []
-    for asset in source_bundle.get("assets") or []:
+    assets = list(source_bundle.get("assets") or [])
+
+    def compile_one(asset: Mapping[str, Any]) -> dict[str, Any]:
         request = build_daily_asset_request(asset, cutoff_at=generated_at)
         provider = provider_factory(request) if provider_factory is not None else None
         artifact = compile_daily_asset_analysis(request, provider)
-        analyses.append(
-            {
-                "asset_key": request["asset_key"],
-                "display_name": request["display_name"],
-                "request": request,
-                "analysis": artifact,
-            }
-        )
+        return {
+            "asset_key": request["asset_key"],
+            "display_name": request["display_name"],
+            "request": request,
+            "analysis": artifact,
+        }
+
+    worker_count = max(1, min(int(max_workers), len(assets)))
+    with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="daily-analysis") as pool:
+        futures = [pool.submit(compile_one, asset) for asset in assets]
+        analyses = [future.result() for future in futures]
     if [item.get("asset_key") for item in analyses] != list(WEEKLY_KEYS):
         raise DailyAnalysisError("analysis_asset_universe_invalid")
     snapshots = snapshot_port.render(source_bundle) if snapshot_port is not None else {}
