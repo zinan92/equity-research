@@ -1,5 +1,47 @@
 # REGISTRY
 
+## 2026-08-26 · Daily reader/fallback implementation complete; live acceptance evidence
+
+Now: the authoritative Daily K-line app is
+`/Users/wendy/Library/Application Support/ParkKlineDaily/app` at `main`.
+Issues #1001–#1005 are implemented and merged through PRs #1006–#1019:
+Daily static snapshot reader projection, OPS-only status footer, the shared
+Daily/Weekly reader seam, audited DeepSeek→Codex CLI fallback, and the
+lock-protected 08:20 runtime deadline. The canonical datafeed remains
+`http://127.0.0.1:8100` at build `a1a717c`; the app health endpoint is
+`http://127.0.0.1:8907/api/health`.
+
+Latest real run (2026-08-26 Beijing edition) completed under the 20-minute
+budget with `source_status=partial`, `analysis_status=partial`, and
+`thesis_status=model_generated_unreviewed`. It produced 16/19 Codex-backed
+asset explanations, 3 explicit code-owned readouts, and a Codex-backed
+cross-asset thesis. Data coverage was 30/31 declared slots; the sole source
+gap was KOSPI daily, rejected because Yahoo returned a non-finite OHLC value
+for `^KS11` on the in-progress session. No old cache, alternate undeclared
+source, stale thesis, or automatic execution was used.
+
+Reader outputs:
+- `/Users/wendy/Desktop/K线日报/latest.md`
+- `/Users/wendy/Desktop/K线日报/latest.html`
+- `/Users/wendy/park-hands/007_kline daily newsletter/2026-08-26-kline-daily-newsletter.md`
+
+The LaunchAgent `com.park.market-regime.kline-newsletter` is loaded at 08:20;
+the latest observed launchd exit code is 0. The report footer explicitly
+names any asset where DeepSeek and Codex CLI both failed, and keeps source
+identity, provider receipt, cutoff, and snapshot hashes in the runtime receipt.
+
+Validation: affected focused suite 87 passed; full repository suite 1851
+passed, 2 skipped, with 3 unrelated pre-existing environment/content failures:
+the absent `/Users/wendy/Desktop/K线日报/SYSTEM-PROMPT-macro-analyst.md`, and
+the deep-analysis assertions for missing Playwright prefetch text in
+`AGENTS.md` and missing `install-hermes.sh` text in `README.md`.
+
+Next: run the mandated read-only Claude Sonnet review against Issue #999,
+tickets #1001–#1005, ADR 0001, the spec, focused/full test receipts and the
+latest real Daily artifacts. If Sonnet finds actionable issues, repair each on
+a new issue branch/PR and repeat review, up to the agreed three passes. Keep
+Finance Daily Newsletter and Weekly 8907 as separate tracks.
+
 ## 2026-08-25 · Daily capability-aware timeframe matrix (Issue #992 / datafeed #39)
 
 Now: the Daily source contract is versioned to `v2` and requests only periods
