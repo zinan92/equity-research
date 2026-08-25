@@ -227,8 +227,9 @@ class DailyKlineRuntime:
         primary = DeepSeekDailyAssetProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
         return lambda _request: ValidatedFallbackProvider(
             primary=primary,
-            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT, timeout_provider=self._remaining_runtime_seconds),
+            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT, timeout=180.0, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_asset_analysis,
+            fallback_attempts=1,
         )
 
     def _thesis_provider(self):
@@ -237,8 +238,9 @@ class DailyKlineRuntime:
         primary = DeepSeekDailyThesisProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
         return ValidatedFallbackProvider(
             primary=primary,
-            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, timeout_provider=self._remaining_runtime_seconds),
+            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, timeout=360.0, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_thesis,
+            fallback_attempts=1,
         )
 
     def _remaining_runtime_seconds(self) -> float:
