@@ -21,6 +21,7 @@ from .market_regime_weekly_features import WeeklyFeatureError, build_timeframe_f
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
 from .market_regime_weekly_source import DISPLAY_NAMES, WEEKLY_KEYS
+from .market_regime_llm_provider import ProviderFallbackError
 
 
 SCHEMA_VERSION = "market-regime-daily-asset-analysis-v2"
@@ -281,7 +282,13 @@ def validate_daily_asset_analysis(output: Mapping[str, Any], request: Mapping[st
     return result
 
 
-def _terminal_failure(request: Mapping[str, Any], failure_code: str, deterministic: Mapping[str, Any]) -> dict[str, Any]:
+def _terminal_failure(
+    request: Mapping[str, Any],
+    failure_code: str,
+    deterministic: Mapping[str, Any],
+    *,
+    provider_status: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     output = {
         "schema_version": SCHEMA_VERSION,
         "asset_key": request["asset_key"],
@@ -290,6 +297,8 @@ def _terminal_failure(request: Mapping[str, Any], failure_code: str, determinist
         "failure_code": failure_code,
         "deterministic": dict(deterministic),
     }
+    if provider_status:
+        output["provider_status"] = dict(provider_status)
     core = {"schema_version": SCHEMA_VERSION, "asset_key": request["asset_key"], "request_hash": output["request_hash"], "output": output}
     return {
         "analysis_id": f"{ANALYSIS_ID_PREFIX}{_digest(core)}",
@@ -303,7 +312,22 @@ def _terminal_failure(request: Mapping[str, Any], failure_code: str, determinist
 def _safe_provider_receipt(value: Any) -> dict[str, Any]:
     if not isinstance(value, Mapping):
         return {"provider": "injected", "receipt_hash": _digest(str(value))}
-    allowed = ("provider", "model", "request_hash", "prompt_hash", "prompt_version", "generation_status", "attempt_count", "output_hash")
+    allowed = (
+        "provider",
+        "model",
+        "cli_version",
+        "request_hash",
+        "prompt_hash",
+        "prompt_version",
+        "generation_status",
+        "attempt_count",
+        "output_hash",
+        "fallback_used",
+        "fallback_reason",
+        "primary_provider",
+        "primary_failure",
+        "validation_result",
+    )
     safe = {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
     safe["receipt_hash"] = _digest(safe)
     return safe
@@ -331,6 +355,19 @@ def compile_daily_asset_analysis(
         else:
             raw = raw_result
         output = validate_daily_asset_analysis(raw, request)
+    except ProviderFallbackError as exc:
+        return _terminal_failure(
+            request,
+            exc.code,
+            deterministic,
+            provider_status={
+                "primary_provider": "DeepSeek",
+                "primary_failure": exc.primary_failure,
+                "fallback_provider": "Codex CLI",
+                "fallback_failure": exc.fallback_failure,
+                "both_failed": True,
+            },
+        )
     except DailyAnalysisError as exc:
         return _terminal_failure(request, str(exc), deterministic)
     except Exception as exc:

@@ -11,6 +11,7 @@ from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, WE
 from .market_regime_weekly_position_structure import WeeklyPositionStructureError, build_position_structure
 from .market_regime_weekly_mechanisms import mechanism_for_asset, validate_theoretical_statement
 from .market_regime_weekly_odds import WeeklyOddsError, build_odds, validate_odds
+from .market_regime_llm_provider import ProviderFallbackError
 
 
 SCHEMA_VERSION = "market-regime-weekly-asset-analysis-v4"
@@ -30,6 +31,25 @@ def _canonical(value: Any) -> str:
 
 def _digest(value: Any) -> str:
     return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
+def _safe_provider_receipt(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        return {}
+    allowed = (
+        "provider",
+        "model",
+        "cli_version",
+        "attempt_count",
+        "fallback_used",
+        "fallback_reason",
+        "primary_provider",
+        "primary_failure",
+        "request_hash",
+        "output_hash",
+        "validation_result",
+    )
+    return {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
 
 
 def build_asset_analysis_request(asset_snapshot: Mapping[str, Any]) -> dict[str, Any]:
@@ -195,7 +215,7 @@ def compile_asset_analysis(
             "failure_code": "derived_feature_invalid",
         }
 
-    def terminal_failure(failure_code: str) -> dict[str, Any]:
+    def terminal_failure(failure_code: str, provider_status: Mapping[str, Any] | None = None) -> dict[str, Any]:
         output = {
             "schema_version": SCHEMA_VERSION,
             "asset_key": key,
@@ -205,6 +225,8 @@ def compile_asset_analysis(
             "deterministic_status": "validated",
             **deterministic,
         }
+        if provider_status:
+            output["provider_status"] = dict(provider_status)
         core = {"schema_version": SCHEMA_VERSION, "asset_key": key, "request_hash": request_hash, "generation_status": output["generation_status"], "output": output}
         output_hash = _digest(output)
         return {
@@ -218,9 +240,26 @@ def compile_asset_analysis(
 
     if provider is None:
         return terminal_failure("provider_unavailable")
+    provider_receipt: dict[str, Any] = {}
     try:
-        raw = provider(request)
+        raw_result = provider(request)
+        if isinstance(raw_result, tuple) and len(raw_result) == 2:
+            raw, receipt = raw_result
+            provider_receipt = _safe_provider_receipt(receipt)
+        else:
+            raw = raw_result
         output = validate_asset_analysis(raw, request)
+    except ProviderFallbackError as exc:
+        return terminal_failure(
+            exc.code,
+            {
+                "primary_provider": "DeepSeek",
+                "primary_failure": exc.primary_failure,
+                "fallback_provider": "Codex CLI",
+                "fallback_failure": exc.fallback_failure,
+                "both_failed": True,
+            },
+        )
     except (WeeklyAssetAnalysisError, WeeklyPositionStructureError):
         return terminal_failure("output_schema_invalid")
     except Exception:
@@ -240,6 +279,7 @@ def compile_asset_analysis(
         "asset_key": key,
         "request_hash": request_hash,
         "output_hash": output_hash,
+        "provider": provider_receipt,
     }
     return {
         "analysis_id": f"{ANALYSIS_ID_PREFIX}{_digest(core)}",

@@ -13,6 +13,7 @@ PRODUCT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_daily_analysis import build_daily_analysis_bundle  # noqa: E402
+from data_core.market_regime_llm_provider import ProviderFallbackError  # noqa: E402
 from data_core.market_regime_daily_thesis import (  # noqa: E402
     DailyThesisDeliveryStore,
     DailyThesisError,
@@ -78,6 +79,28 @@ class DailyThesisTests(unittest.TestCase):
         self.assertNotIn("数据覆盖：", body)
         self.assertIn("数据源状态", footer)
         self.assertIn("单资产解释", footer)
+
+    def test_dual_provider_failure_is_explicitly_disclosed(self) -> None:
+        bundle = copy.deepcopy(_analysis_bundle())
+        first = bundle["assets"][0]["analysis"]
+        first["generation_status"] = "analysis_unavailable"
+        first["output"] = {
+            "generation_status": "analysis_unavailable",
+            "deterministic": first["deterministic"],
+            "provider_status": {
+                "both_failed": True,
+                "primary_failure": "http_402",
+                "fallback_failure": "timeout",
+            },
+        }
+        canonical = lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        identity_core = {**bundle["identity_core"], "assets_sha256": hashlib.sha256(canonical(bundle["assets"]).encode()).hexdigest()}
+        bundle["identity_core"] = identity_core
+        bundle["bundle_id"] = "market-regime-daily-analysis:" + hashlib.sha256(canonical(identity_core).encode()).hexdigest()
+        thesis = compile_daily_thesis(bundle, None)
+        markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
+        self.assertIn("DeepSeek 与 Codex CLI 均未生成解释", markdown)
+        self.assertIn("单资产模型失败披露", markdown)
 
     def test_daily_markdown_places_snapshot_before_period_explanation(self) -> None:
         bundle = _with_daily_snapshot(_analysis_bundle())
@@ -149,6 +172,16 @@ class DailyThesisTests(unittest.TestCase):
         thesis = compile_daily_thesis(bundle, None)
         markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
         self.assertIn("本期综合解释尚未生成", markdown)
+
+    def test_both_provider_failure_is_typed_with_provider_status(self) -> None:
+        bundle = _analysis_bundle()
+        thesis = compile_daily_thesis(
+            bundle,
+            lambda _request: (_ for _ in ()).throw(ProviderFallbackError("http_402", "timeout")),
+        )
+        self.assertEqual(thesis["generation_status"], "thesis_unavailable")
+        self.assertEqual(thesis["failure_code"], "both_providers_failed")
+        self.assertEqual(thesis["provider_status"]["fallback_failure"], "timeout")
 
     def test_direct_money_flow_claim_is_rejected(self) -> None:
         bundle = _analysis_bundle()
