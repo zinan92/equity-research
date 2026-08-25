@@ -1,10 +1,11 @@
 """Canonical Daily K-line source bundle.
 
 This module is the first seam of the Daily K-line Newsletter.  It attempts
-the current Weekly universe at daily, four-hour and thirty-minute intervals
-through the canonical datafeed HTTP service.  A failed or unsupported slot is
-preserved as an explicit unavailable result; no cache, prior report or
-undeclared source is promoted.
+the current Weekly universe at the periods each instrument's source contract
+actually declares through the canonical datafeed HTTP service.  A failed
+requested slot is preserved as an explicit unavailable result; an inapplicable
+period is not requested and therefore is not counted as a data failure.  No
+cache, prior report or undeclared source is promoted.
 """
 
 from __future__ import annotations
@@ -31,9 +32,9 @@ from .market_regime_weekly_datafeed import (
 from .market_regime_weekly_source import DISPLAY_NAMES, WEEKLY_KEYS
 
 
-SCHEMA_VERSION = "market-regime-daily-source-bundle-v1"
+SCHEMA_VERSION = "market-regime-daily-source-bundle-v2"
 SOURCE_ID_PREFIX = "market-regime-daily-source:"
-DAILY_REGISTRY_VERSION = "market-regime-daily-tradeable-registry-v1"
+DAILY_REGISTRY_VERSION = "market-regime-daily-tradeable-registry-v2"
 DAILY_TIMEFRAMES = ("daily", "four_hour", "thirty_minute")
 TIMEFRAME_TO_DATAFEED = {
     "daily": "1d",
@@ -41,6 +42,35 @@ TIMEFRAME_TO_DATAFEED = {
     "thirty_minute": "30m",
 }
 DEFAULT_LIMIT = 300
+
+# The Daily product is not a matrix of three blind requests per asset.  Cash
+# indices/ETFs and official Treasury levels are EOD instruments in the
+# canonical source registry, so intraday requests for them only manufacture a
+# wall of predictable ``timeframe_not_supported`` errors.  Continuous futures
+# and crypto perpetuals expose the intraday context that the Daily report is
+# meant to read.  Keep this contract explicit and versioned in code so a new
+# provider capability must be deliberately opted in.
+DAILY_TIMEFRAMES_BY_ASSET = {
+    "dxy": ("daily",),
+    "us2y": ("daily",),
+    "us10y": ("daily",),
+    "us2s10s": ("daily",),
+    "sp500": ("daily",),
+    "nasdaq": ("daily",),
+    "us_dividend": ("daily",),
+    "vix": ("daily",),
+    "bitcoin": ("daily", "four_hour", "thirty_minute"),
+    "ethereum": ("daily", "four_hour", "thirty_minute"),
+    "hype": ("daily", "four_hour", "thirty_minute"),
+    "shanghai": ("daily",),
+    "star50": ("daily",),
+    "china_dividend": ("daily",),
+    "nikkei": ("daily",),
+    "kospi": ("daily",),
+    "wti": ("daily", "four_hour", "thirty_minute"),
+    "gold": ("daily", "four_hour", "thirty_minute"),
+    "silver": ("daily", "four_hour", "thirty_minute"),
+}
 
 
 class DailySourceError(RuntimeError):
@@ -94,6 +124,9 @@ def _request_spec(asset_key: str, timeframe: str) -> dict[str, Any]:
         raise DailySourceError("asset_key_unknown")
     if timeframe not in DAILY_TIMEFRAMES:
         raise DailySourceError("daily_timeframe_unknown")
+    allowed_timeframes = DAILY_TIMEFRAMES_BY_ASSET.get(asset_key)
+    if not allowed_timeframes or timeframe not in allowed_timeframes:
+        raise DailySourceError(f"daily_timeframe_not_allowed:{asset_key}:{timeframe}")
     spec = WEEKLY_ASSET_REGISTRY[asset_key]
     source = str(spec["source_id"]).removeprefix("datafeed:")
     return {
@@ -620,14 +653,18 @@ def build_daily_source_bundle(
     limit: int = DEFAULT_LIMIT,
     max_workers: int = 4,
 ) -> dict[str, Any]:
-    """Fetch all 19×3 slots and return a content-addressable bundle."""
+    """Fetch each asset's declared Daily periods and return a bundle."""
 
     generated = (generated_at or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0)
     cutoff_at = generated.isoformat().replace("+00:00", "Z")
     slots_by_asset: dict[str, dict[str, dict[str, Any]]] = {
         asset_key: {} for asset_key in WEEKLY_KEYS
     }
-    requests = [(asset_key, timeframe) for asset_key in WEEKLY_KEYS for timeframe in DAILY_TIMEFRAMES]
+    requests = [
+        (asset_key, timeframe)
+        for asset_key in WEEKLY_KEYS
+        for timeframe in DAILY_TIMEFRAMES_BY_ASSET[asset_key]
+    ]
     worker_count = max(1, min(int(max_workers), len(requests)))
     with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="daily-kline") as pool:
         futures = {
@@ -648,7 +685,7 @@ def build_daily_source_bundle(
     for asset_key in WEEKLY_KEYS:
         slots = {
             timeframe: slots_by_asset[asset_key][timeframe]
-            for timeframe in DAILY_TIMEFRAMES
+            for timeframe in DAILY_TIMEFRAMES_BY_ASSET[asset_key]
         }
         for slot in slots.values():
             if slot["status"] == "ready":
@@ -671,7 +708,7 @@ def build_daily_source_bundle(
                 "slots": slots,
             }
         )
-    total = len(WEEKLY_KEYS) * len(DAILY_TIMEFRAMES)
+    total = sum(len(DAILY_TIMEFRAMES_BY_ASSET[key]) for key in WEEKLY_KEYS)
     identity_core = {
         "schema_version": SCHEMA_VERSION,
         "registry_version": DAILY_REGISTRY_VERSION,
@@ -704,6 +741,9 @@ def build_daily_source_bundle(
             "unavailable_slots": unavailable_count,
             "fraction": round(ready_count / total, 4) if total else 0.0,
             "requested_timeframes": list(DAILY_TIMEFRAMES),
+            "timeframes_by_asset": {
+                key: list(DAILY_TIMEFRAMES_BY_ASSET[key]) for key in WEEKLY_KEYS
+            },
         },
         "source_policy": {
             "base_url": client.base_url,
@@ -787,9 +827,12 @@ def _validate_bundle_shape(bundle: Mapping[str, Any]) -> None:
     assets = bundle.get("assets")
     if not isinstance(assets, list) or [item.get("asset_key") for item in assets if isinstance(item, Mapping)] != list(WEEKLY_KEYS):
         raise DailySourceError("bundle_asset_universe_invalid")
-    expected_slots = set(DAILY_TIMEFRAMES)
     for asset in assets:
-        if not isinstance(asset, Mapping) or set(asset.get("slots") or {}) != expected_slots:
+        if not isinstance(asset, Mapping):
+            raise DailySourceError("bundle_asset_invalid")
+        key = str(asset.get("asset_key") or "")
+        expected_slots = set(DAILY_TIMEFRAMES_BY_ASSET.get(key, ()))
+        if not expected_slots or set(asset.get("slots") or {}) != expected_slots:
             raise DailySourceError("bundle_slot_shape_invalid")
         for slot in (asset.get("slots") or {}).values():
             if not isinstance(slot, Mapping):
@@ -824,7 +867,8 @@ def validate_daily_source_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(policy, Mapping) or policy.get("cache_policy") != "bypass" or policy.get("quality_policy") != "strict":
         raise DailySourceError("bundle_source_policy_invalid")
     coverage = value.get("coverage")
-    if not isinstance(coverage, Mapping) or coverage.get("total_slots") is None or int(coverage["total_slots"]) != len(WEEKLY_KEYS) * len(DAILY_TIMEFRAMES):
+    expected_total = sum(len(DAILY_TIMEFRAMES_BY_ASSET[key]) for key in WEEKLY_KEYS)
+    if not isinstance(coverage, Mapping) or coverage.get("total_slots") is None or int(coverage["total_slots"]) != expected_total:
         raise DailySourceError("bundle_coverage_invalid")
     ready = sum(1 for asset in value["assets"] for slot in (asset["slots"] or {}).values() if slot.get("status") == "ready")
     unavailable = sum(1 for asset in value["assets"] for slot in (asset["slots"] or {}).values() if slot.get("status") == "unavailable")
@@ -836,6 +880,7 @@ def validate_daily_source_bundle(bundle: Mapping[str, Any]) -> dict[str, Any]:
 __all__ = [
     "DAILY_TIMEFRAMES",
     "DAILY_REGISTRY_VERSION",
+    "DAILY_TIMEFRAMES_BY_ASSET",
     "DailyDatafeedClient",
     "DailySourceError",
     "DailySourceStore",

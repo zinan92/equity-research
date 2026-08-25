@@ -225,7 +225,7 @@ class DailyKlineRuntime:
         _atomic_bytes(
             self.runtime_root / "delivery" / "latest.json",
             (_canonical({
-                "schema_version": "market-regime-daily-thesis-v1",
+                "schema_version": "market-regime-daily-thesis-v2",
                 "state": "unavailable",
                 "delivery_id": unavailable_id,
                 "report_date": report_date,
