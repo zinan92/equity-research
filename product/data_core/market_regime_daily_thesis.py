@@ -18,6 +18,7 @@ from .market_regime_daily_analysis import (
     DAILY_TIMEFRAMES,
     SCHEMA_VERSION as ANALYSIS_SCHEMA,
 )
+from .market_regime_reader_projection import project_daily_asset, render_reader_asset_html, render_reader_asset_markdown
 from .market_regime_daily_source import WEEKLY_KEYS
 
 
@@ -492,52 +493,14 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
         lines.append("")
     lines.extend(["## 每个资产的综合结论与市场含义", ""])
     for asset in analysis_bundle.get("assets") or []:
-        analysis = asset.get("analysis") or {}
-        output = _analysis_output(analysis)
-        lines.extend([f"### {asset.get('display_name', asset.get('asset_key'))}", ""])
-        requested_timeframes = (asset.get("request") or {}).get("timeframes") or {}
-        labels = (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟"))
-        if analysis.get("generation_status") != "model_generated_unreviewed":
-            deterministic = output.get("deterministic") if isinstance(output, Mapping) else None
-            lines.extend(["", "LLM 单资产解释不可用；以下仅展示代码验证的 K 线读数，未使用旧分析。"])
-            for timeframe, label in labels:
-                if timeframe not in requested_timeframes:
-                    continue
-                image = _snapshot_markdown(asset, timeframe, label)
-                if image:
-                    lines.extend(["", image])
-                statement = output.get(timeframe) if isinstance(output, Mapping) else None
-                if isinstance(statement, Mapping) and statement.get("text"):
-                    lines.append(f"- **{label}**：{statement['text']}")
-            if isinstance(deterministic, Mapping):
-                position = deterministic.get("position") or {}
-                structure = deterministic.get("structure") or {}
-                if isinstance(position, Mapping) and position.get("text"):
-                    lines.append(f"- **位置读数**：{position['text']}")
-                if isinstance(structure, Mapping) and structure.get("text"):
-                    lines.append(f"- **结构读数**：{structure['text']}")
-            lines.append("")
-            continue
-        for timeframe, label in labels:
-            if timeframe not in requested_timeframes:
-                continue
-            statement = output.get(timeframe)
-            if isinstance(statement, Mapping):
-                image = _snapshot_markdown(asset, timeframe, label)
-                if image:
-                    lines.extend(["", image])
-                lines.extend([f"- **{label}**：{statement['text']}"])
-        if isinstance(output.get("synthesis"), Mapping):
-            lines.extend([f"- **综合结论**：{output['synthesis']['text']}"])
-        if isinstance(output.get("market_meaning"), Mapping):
-            lines.extend([f"- **市场含义**：{output['market_meaning']['text']}"])
+        lines.append(render_reader_asset_markdown(project_daily_asset(asset)))
         lines.append("")
     lines.extend(["## 数据边界", "", "- 已请求但抓取失败的周期保留为不可用，不代表横盘或没有变化；未列出的周期表示该资产当前没有纳入该周期请求。", ""])
     lines.extend(_daily_status_footer(delivery, analysis_bundle, cutoff))
     return "\n".join(lines)
 
 
-def render_daily_html(markdown: str, *, title: str = "宏观 K 线日报") -> str:
+def _render_daily_text_html(markdown: str) -> str:
     rendered_lines: list[str] = []
     for line in markdown.splitlines():
         match = _IMAGE_MARKDOWN_RE.fullmatch(line.strip())
@@ -548,8 +511,30 @@ def render_daily_html(markdown: str, *, title: str = "宏观 K 线日报") -> st
             )
         else:
             rendered_lines.append(html.escape(line))
-    body = "<br>".join(rendered_lines)
-    return f"<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>body{{margin:0;background:#f4f6f2;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}}main{{max-width:900px;margin:0 auto;background:#fffefa;min-height:100vh;padding:36px 28px;box-sizing:border-box}}.content{{font-size:16px;line-height:1.8;white-space:normal}}.daily-period-chart{{margin:18px 0 8px;padding:0;border:1px solid #e2e5df;background:#fffefa}}.daily-period-chart img{{display:block;width:100%;height:auto}}.daily-period-chart figcaption{{padding:6px 10px;color:#7b857e;font-size:11px;line-height:1.4}}@media(max-width:600px){{main{{padding:22px 16px}}.content{{font-size:15px}}.daily-period-chart{{margin-inline:-4px}}}}</style></head><body><main><div class='content'>{body}</div></main></body></html>"
+    return "<br>".join(rendered_lines)
+
+
+def render_daily_html(
+    markdown: str,
+    *,
+    title: str = "宏观 K 线日报",
+    reader_assets: list[Mapping[str, Any]] | None = None,
+) -> str:
+    if reader_assets:
+        marker = "## 每个资产的综合结论与市场含义"
+        footer_marker = "## 数据边界"
+        start = markdown.find(marker)
+        end = markdown.find(footer_marker, start + len(marker)) if start >= 0 else -1
+        if start >= 0 and end >= 0:
+            body = _render_daily_text_html(markdown[:start])
+            body += "".join(render_reader_asset_html(asset) for asset in reader_assets)
+            body += _render_daily_text_html(markdown[end:])
+        else:
+            body = _render_daily_text_html(markdown)
+    else:
+        body = _render_daily_text_html(markdown)
+    css = "body{margin:0;background:#f4f6f2;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}main{max-width:1100px;margin:0 auto;background:#fffefa;min-height:100vh;padding:36px 28px;box-sizing:border-box}.content{font-size:16px;line-height:1.8;white-space:normal}.daily-period-chart{margin:18px 0 8px;padding:0;border:1px solid #e2e5df;background:#fffefa}.daily-period-chart img{display:block;width:100%;height:auto}.daily-period-chart figcaption{padding:6px 10px;color:#7b857e;font-size:11px;line-height:1.4}.reader-asset{margin:18px 0;border:1px solid #dedfd8;background:#fff}.reader-asset>header{display:flex;justify-content:space-between;padding:17px;border-bottom:1px solid #dedfd8}.reader-asset h2{font-size:27px;margin:0}.reader-asset .timeframe{display:flex;flex-direction:column;gap:12px;padding:16px;border-bottom:1px solid #dedfd8;margin:0}.reader-asset .timeframe b{display:block;color:#187b51;font-size:10px;letter-spacing:.1em;margin-bottom:7px}.reader-asset .snapshot-frame{width:100%;background:#fffefa;border:1px solid #eceee8;overflow:hidden}.reader-asset .snapshot-frame img{display:block;width:100%;height:auto}.reader-asset .chart-unavailable{min-height:150px;display:grid;place-items:center;padding:16px;text-align:center;color:#8a6425;background:#fff8ed}.reader-asset .timeframe p{font-size:17px;line-height:1.75;margin:0}.reader-asset .summary-dimensions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 16px;background:#f7f9f5;border-bottom:1px solid #dedfd8}.reader-asset .summary-dimensions>div{border-left:3px solid #187b51;padding-left:10px}.reader-asset .summary-dimensions b{font-size:10px;color:#187b51;letter-spacing:.1em}.reader-asset .summary-dimensions p{font-size:15px;line-height:1.55;margin:4px 0}.reader-asset .synthesis{padding:17px;background:#edf3ef}.reader-asset .synthesis b{font-size:10px;color:#187b51;letter-spacing:.1em}.reader-asset .synthesis p{font-size:18px;line-height:1.65;margin:6px 0}@media(max-width:600px){main{padding:22px 16px}.content{font-size:15px}.daily-period-chart{margin-inline:-4px}.reader-asset .summary-dimensions{grid-template-columns:1fr}.reader-asset .timeframe p{font-size:16px}}";
+    return f"<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>{css}</style></head><body><main><div class='content'>{body}</div></main></body></html>"
 
 
 class DailyThesisDeliveryStore:
@@ -612,7 +597,8 @@ class DailyThesisDeliveryStore:
             raise DailyThesisError("thesis_generation_status_invalid")
         snapshot_assets = self._copy_snapshot_assets(analysis_bundle)
         markdown = render_daily_markdown({**thesis, "cutoff_at": analysis_bundle.get("cutoff_at")}, analysis_bundle)
-        html_text = render_daily_html(markdown)
+        reader_assets = [project_daily_asset(asset) for asset in analysis_bundle.get("assets") or []]
+        html_text = render_daily_html(markdown, reader_assets=reader_assets)
         core = {"schema_version": SCHEMA_VERSION, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "markdown_sha256": hashlib.sha256(markdown.encode()).hexdigest(), "html_sha256": hashlib.sha256(html_text.encode()).hexdigest(), "snapshot_assets": snapshot_assets, "cutoff_at": analysis_bundle.get("cutoff_at")}
         delivery_id = f"{DELIVERY_ID_PREFIX}{_digest(core)}"
         artifact_dir = self.runtime_root / "delivery" / "artifacts"

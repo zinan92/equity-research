@@ -84,7 +84,7 @@ class DailyThesisTests(unittest.TestCase):
         thesis = compile_daily_thesis(bundle, _thesis_provider)
         markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
         image_index = markdown.index("![dxy｜日线 K 线图](snapshots/dxy.png)")
-        text_index = markdown.index("- **日线**：", image_index)
+        text_index = markdown.index("**日线**：", image_index)
         self.assertLess(image_index, text_index)
 
     def test_daily_html_renders_snapshot_image_element(self) -> None:
@@ -109,6 +109,9 @@ class DailyThesisTests(unittest.TestCase):
             archive_snapshot = root / "archive" / "snapshots" / "dxy.png"
             self.assertEqual(archive_snapshot.read_bytes(), output_snapshot.read_bytes())
             self.assertEqual(receipt["archive"]["sha256"], hashlib.sha256(Path(receipt["archive"]["path"]).read_bytes()).hexdigest())
+            latest_html = (root / "output" / "latest.html").read_text(encoding="utf-8")
+            self.assertIn('class="asset-pane reader-asset"', latest_html)
+            self.assertIn('src="snapshots/dxy.png"', latest_html)
 
     def test_report_date_uses_shanghai_calendar(self) -> None:
         self.assertEqual(_local_report_date("2026-08-24T15:59:59Z"), "2026-08-24")

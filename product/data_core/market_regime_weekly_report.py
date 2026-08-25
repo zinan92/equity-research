@@ -16,6 +16,7 @@ from .market_regime_weekly_source import CANONICAL_REGISTRY, CONTEXT_4H_KEYS, DI
 from .market_regime_weekly_contract import WeeklyCandleContractError
 from .market_regime_weekly_standard_kline import build_standard_kline_payload, standard_kline_options_for_response
 from .market_regime_weekly_position_structure import POSITION_STATES, STRUCTURE_STATES
+from .market_regime_reader_projection import project_weekly_card, render_reader_asset_html, render_reader_asset_markdown
 
 
 SCHEMA_VERSION = "market-regime-weekly-report-v8-tradeable-assets"
@@ -474,29 +475,8 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
         lines.extend([f"## {chapter}", ""])
         for key in keys:
             card = next(item for item in report["cards"] if item["asset_key"] == key)
-            analysis = card["analysis"]
-            caption = _instrument_caption(card)
-            lines.extend([f"### {card['display_name']}", f"标的：{caption}" if caption else "", ""])
-            position = analysis.get("position") if isinstance(analysis, Mapping) else None
-            structure = analysis.get("structure") if isinstance(analysis, Mapping) else None
-            if isinstance(position, Mapping) or isinstance(structure, Mapping):
-                lines.extend([f"**位置**：{(position or {}).get('text', '不可用。') if isinstance(position, Mapping) else '不可用。'}", f"**结构**：{(structure or {}).get('text', '不可用。') if isinstance(structure, Mapping) else '不可用。'}", ""])
-            odds = analysis.get("odds") if isinstance(analysis, Mapping) else None
-            lines.extend([f"**赔率**：{_odds_reader_text(odds)}", ""])
-            for tf, label in (("weekly", "周线"), ("daily", "日线"), ("four_hour", "4小时")):
-                statement = analysis.get(tf) if isinstance(analysis, Mapping) else None
-                if statement:
-                    lines.extend([f"**{label}**：{statement.get('text')}", ""])
-                elif tf == "four_hour" and key in CONTEXT_4H_KEYS:
-                    lines.extend(["**4小时**：当前4小时上下文不可用。", ""])
-                slot = next((item for item in card.get("chart_slots", []) if item.get("timeframe") == tf), None)
-                snapshot = slot.get("snapshot") if isinstance(slot, Mapping) else None
-                if isinstance(snapshot, Mapping) and snapshot.get("snapshot_id"):
-                    lines.extend([f"图表快照：`{snapshot.get('snapshot_id')}`", ""])
-            synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
-            lines.extend([f"**多周期结论**：{(synthesis or {}).get('text', '当前分析不可用。')}", ""])
-            implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
-            lines.extend([f"**这意味着什么（机制解释）**：{(implication or {}).get('text', '当前机制解释不可用。')}", ""])
+            lines.append(render_reader_asset_markdown(project_weekly_card(card)))
+            lines.append("")
     lines.extend([f"## 本周{opportunity['title']}", ""])
     for row in opportunity["rows"]:
         prefix = f"{row.get('rank')}. " if opportunity["ordered"] and row.get("rank") is not None else ""
@@ -624,39 +604,8 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
         for key in keys:
             card = next(item for item in report["cards"] if item["asset_key"] == key)
             display_name = _display_name(card.get("asset_key"))
-            caption = _instrument_caption(card)
             nav_parts.append(f'<a data-asset-nav="{_escape(key)}" href="#asset-{_escape(key)}">{_escape(display_name)}</a>')
-            analysis = card.get("analysis") if isinstance(card.get("analysis"), Mapping) else {}
-            rows: list[str] = []
-            for tf, label in (("weekly", "周线"), ("daily", "日线"), ("four_hour", "4小时")):
-                slot = next((item for item in card.get("chart_slots", []) if item.get("timeframe") == tf), None)
-                if not isinstance(slot, Mapping):
-                    continue
-                snapshot = slot.get("snapshot") if isinstance(slot.get("snapshot"), Mapping) else None
-                href = _snapshot_href(snapshot, snapshot_prefix)
-                snapshot_id = str(snapshot.get("snapshot_id") or "") if snapshot else ""
-                if href:
-                    chart = f'<img src="{_escape(href)}" alt="{_escape(display_name)}｜{label} K 线图">'
-                else:
-                    chart = '<div class="chart-unavailable">当前图表快照不可用；保留数据状态，等待新的完整证据。</div>'
-                statement = analysis.get(tf)
-                text = statement.get("text") if isinstance(statement, Mapping) and statement.get("text") else "当前分析不可用；图表状态已保留。"
-                unit = _unit_label(slot.get("unit"))
-                snapshot_label = f' · 快照 {snapshot_id}' if snapshot_id else ""
-                provisional_label = " · 本周进行中 · Close=最新价" if isinstance(slot.get("provisional_candle"), Mapping) else ""
-                rows.append(
-                    f'<figure class="timeframe" data-timeframe="{_escape(tf)}" data-snapshot-id="{_escape(snapshot_id)}"><div><b>{label}</b><div class="snapshot-frame">{chart}</div><figcaption>EMA50 · MACD(12,26,9){(" · 单位：" + _escape(unit)) if unit else ""}{provisional_label}{snapshot_label}</figcaption></div><p>{_escape(text)}</p></figure>'
-                )
-            position = analysis.get("position")
-            structure = analysis.get("structure")
-            position_text = position.get("text", "位置：不可用。") if isinstance(position, Mapping) else "位置：不可用。"
-            structure_text = structure.get("text", "结构：不可用。") if isinstance(structure, Mapping) else "结构：不可用。"
-            odds_text = _odds_reader_text(analysis.get("odds") if isinstance(analysis, Mapping) else None)
-            synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
-            implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
-            pane_parts.append(
-                f'<section class="asset-pane" id="asset-{_escape(key)}" data-pane="{_escape(key)}" data-timeframes="{len(rows)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释"><header><div><h2>{_escape(display_name)}</h2>{f"<small>标的：{_escape(caption)}</small>" if caption else ""}</div><small>{_escape(_status_label(card.get("analysis_status")))}</small></header>{"".join(rows)}<div class="summary-dimensions"><div><b>位置</b><p>{_escape(position_text)}</p></div><div><b>结构</b><p>{_escape(structure_text)}</p></div><div><b>赔率</b><p>{_escape(odds_text)}</p></div></div><div class="synthesis"><b>多周期结论</b><p>{_escape((synthesis or {}).get("text", "当前多周期分析不可用。") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。")}</p></div><div class="implication"><b>这意味着什么 · 机制解释</b><p>{_escape((implication or {}).get("text", "当前机制解释不可用。") if isinstance(implication, Mapping) else "当前机制解释不可用。")}</p></div></section>'
-            )
+            pane_parts.append(render_reader_asset_html(project_weekly_card(card), snapshot_prefix=snapshot_prefix))
     ranking_rows = "".join(
         f'<li><strong>{_escape((str(row.get("rank")) + ". ") if opportunity["ordered"] and row.get("rank") is not None else "")}{_escape(_display_name(row.get("asset_key")))}</strong> · {_escape(_ranking_status_label(row.get("status")))}</li>'
         for row in opportunity["rows"]
