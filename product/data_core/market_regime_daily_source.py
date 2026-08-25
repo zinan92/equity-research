@@ -42,6 +42,7 @@ TIMEFRAME_TO_DATAFEED = {
     "thirty_minute": "30m",
 }
 DEFAULT_LIMIT = 300
+TRANSIENT_RETRY_LIMIT = 2
 
 # The Daily product is not a matrix of three blind requests per asset.  Cash
 # indices/ETFs and official Treasury levels are EOD instruments in the
@@ -665,10 +666,41 @@ def build_daily_source_bundle(
         for asset_key in WEEKLY_KEYS
         for timeframe in DAILY_TIMEFRAMES_BY_ASSET[asset_key]
     ]
+
+    def fetch_slot(asset_key: str, timeframe: str) -> dict[str, Any]:
+        """Retry only transient failures against the exact same source."""
+
+        slot = client.fetch(asset_key, timeframe, limit=limit, cutoff_at=generated)
+        for attempt in range(1, TRANSIENT_RETRY_LIMIT + 1):
+            if slot.get("status") == "ready":
+                break
+            reason = str(slot.get("reason_code") or "")
+            if not (
+                reason.startswith("datafeed_http_502:")
+                or reason.startswith("datafeed_http_503:")
+                or reason.startswith("datafeed_http_504:")
+                or reason.startswith("datafeed_transport:")
+            ):
+                break
+            retry = client.fetch(asset_key, timeframe, limit=limit, cutoff_at=generated)
+            evidence = dict(retry.get("request_evidence") or {})
+            evidence.update(
+                {
+                    "retry_attempts": attempt,
+                    "retry_same_source": True,
+                    "initial_reason_code": reason,
+                }
+            )
+            retry["request_evidence"] = evidence
+            retry["retry_attempts"] = attempt
+            retry["retry_same_source"] = True
+            slot = retry
+        return slot
+
     worker_count = max(1, min(int(max_workers), len(requests)))
     with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="daily-kline") as pool:
         futures = {
-            pool.submit(client.fetch, asset_key, timeframe, limit=limit, cutoff_at=generated): (asset_key, timeframe)
+            pool.submit(fetch_slot, asset_key, timeframe): (asset_key, timeframe)
             for asset_key, timeframe in requests
         }
         for future in as_completed(futures):

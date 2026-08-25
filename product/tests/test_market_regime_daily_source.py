@@ -117,7 +117,68 @@ class _Opener:
         )
 
 
+class _ErrorOnceOpener(_Opener):
+    def __init__(self, status: int) -> None:
+        super().__init__()
+        self.error_status = status
+        self.failed = False
+
+    def __call__(self, request, timeout: float) -> _Response:
+        if not self.failed:
+            self.failed = True
+            parsed = urlparse(request.full_url)
+            query = parse_qs(parsed.query)
+            asset_class, ticker = parsed.path.rsplit("/", 2)[-2:]
+            requested_source = query["source"][0]
+            self.calls.append((ticker, query["timeframe"][0], query))
+            return _Response(
+                {
+                    "error": "upstream_error",
+                    "detail": "temporary upstream failure",
+                    "ticker": ticker,
+                    "asset_class": asset_class,
+                    "timeframe": query["timeframe"][0],
+                    "requested_source": requested_source,
+                    "selected_source": requested_source,
+                    "attempted_sources": [requested_source],
+                    "cache_policy": "bypass",
+                    "quality_policy": "strict",
+                    "fallback_policy": query["fallback_policy"][0],
+                    "source_identity": {"provider_symbol": ticker},
+                },
+                status=self.error_status,
+            )
+        return super().__call__(request, timeout)
+
+
 class DailySourceTests(unittest.TestCase):
+    def test_transient_error_retries_same_source_and_records_attempt(self) -> None:
+        opener = _ErrorOnceOpener(502)
+        bundle = build_daily_source_bundle(
+            DailyDatafeedClient(opener=opener, timeout=1),
+            generated_at=datetime(2026, 8, 24, 13, 0, tzinfo=timezone.utc),
+            limit=3,
+            max_workers=1,
+        )
+        retry_slots = [slot for asset in bundle["assets"] for slot in asset["slots"].values() if slot.get("retry_attempts")]
+        self.assertTrue(retry_slots)
+        self.assertTrue(all(slot["status"] == "ready" for asset in bundle["assets"] for slot in asset["slots"].values()))
+        self.assertEqual(retry_slots[0]["retry_attempts"], 1)
+        self.assertTrue(retry_slots[0]["retry_same_source"])
+        self.assertTrue(retry_slots[0]["request_evidence"]["retry_same_source"])
+
+    def test_non_transient_error_is_not_retried(self) -> None:
+        opener = _ErrorOnceOpener(400)
+        bundle = build_daily_source_bundle(
+            DailyDatafeedClient(opener=opener, timeout=1),
+            generated_at=datetime(2026, 8, 24, 13, 0, tzinfo=timezone.utc),
+            limit=3,
+            max_workers=1,
+        )
+        first_slot = bundle["assets"][0]["slots"]["daily"]
+        self.assertEqual(first_slot["status"], "unavailable")
+        self.assertEqual(sum(1 for ticker, timeframe, _query in opener.calls if ticker == "UUP" and timeframe == "1d"), 1)
+
     def test_request_policy_is_strict_and_only_a_share_has_explicit_fallback(self) -> None:
         ashare = daily_request_for_asset("shanghai", "daily")
         self.assertEqual(ashare["fallback_policy"], "explicit")
