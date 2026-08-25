@@ -240,7 +240,7 @@ class DailyKlineRuntime:
             primary=primary,
             fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, timeout=360.0, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_thesis,
-            fallback_attempts=1,
+            fallback_attempts=2,
         )
 
     def _remaining_runtime_seconds(self) -> float:
