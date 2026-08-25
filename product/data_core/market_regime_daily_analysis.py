@@ -356,7 +356,15 @@ DAILY_ASSET_SYSTEM_PROMPT = """你是 Global Market K-line Daily 的单资产分
 
 请只解释 request.timeframes 中实际提供的周期；不要为未出现在 request.timeframes 中的周期补写字段或内容。某个已请求周期不可用时明确说证据不可用，不能把它当作横盘。然后输出一个综合结论与一个静态机制解释。机制解释必须使用请求中的 mechanism 目录，说明常见驱动、通常后果和反例；它不是当前事实，也不是实时因果归因。
 
-所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。如需数字，必须能在所引用的 feature:* 证据中找到；否则删掉数字，不要猜测。只返回合法 JSON。顶层字段必须包含 asset_key、generation_status、synthesis、market_meaning、confirmation、invalidation、rationale、opportunity_state；另外，只为 request.timeframes 中实际存在的周期输出同名字段（例如 daily、four_hour、thirty_minute），不要输出其它周期字段。每个周期字段形如 {"text":"简体中文","evidence_ids":["..."]}。
+所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。如需数字，必须能在所引用的 feature:* 证据中找到；否则删掉数字，不要猜测。
+
+只返回合法 JSON，且严格遵守以下格式：
+- `generation_status` 必须逐字为 `model_generated_unreviewed`，不能写 `complete`、`success` 或其它状态。
+- `daily`、`four_hour`、`thirty_minute`（仅输出 request.timeframes 中实际存在的字段）必须是对象 `{\"text\":\"简体中文\",\"evidence_ids\":[\"请求中的证据 ID\"]}`，绝不能是纯字符串。
+- `synthesis`、`confirmation`、`invalidation`、`rationale` 也必须是同样的 `{text,evidence_ids}` 对象，不能是纯字符串。
+- `market_meaning` 必须是 `{\"text\":\"简体中文\",\"evidence_ids\":[\"mechanism:...\"],\"claim_type\":\"theoretical_mechanism\"}` 对象。
+- `opportunity_state` 必须逐字使用英文枚举 `participate`、`wait` 或 `avoid` 之一，不能写中文或其它词。
+- 顶层必须包含 `asset_key`、`generation_status`、`synthesis`、`market_meaning`、`confirmation`、`invalidation`、`rationale`、`opportunity_state`；不要输出其它周期字段。
 禁止输出个人仓位、订单、保证收益或自动执行。"""
 
 
@@ -373,7 +381,7 @@ class DeepSeekDailyAssetProvider:
         from deepseek_writer import call_structured_deepseek
         prompt = DAILY_ASSET_SYSTEM_PROMPT
         last: tuple[Mapping[str, Any], Mapping[str, Any]] | None = None
-        for attempt in range(2):
+        for attempt in range(3):
             output, receipt = call_structured_deepseek(
                 system_prompt=prompt,
                 request_object=request,
@@ -385,10 +393,19 @@ class DeepSeekDailyAssetProvider:
                 thinking_type="disabled",
             )
             last = (output, receipt)
-            if attempt == 0:
-                prompt += "\n请再次自检：事实字段只能引用可用周期的 evidence_ids；若数字无法由 feature:* 证据直接支持，请删除数字；所有 text 必须是简体中文。"
+            try:
+                validate_daily_asset_analysis(output, request)
+                return output, {**receipt, "attempt_count": attempt + 1}
+            except DailyAnalysisError as exc:
+                prompt += (
+                    f"\n上一版输出未通过本地验证：{str(exc)[:240]}。"
+                    "请只修复该协议错误；generation_status 必须为 model_generated_unreviewed；"
+                    "所有叙事字段必须是带 text 和 evidence_ids 的 JSON 对象，不能是字符串；"
+                    "数字只能来自引用的 feature:* 证据；opportunity_state 只能是 participate、wait、avoid 三个英文枚举。"
+                )
         assert last is not None
-        return last
+        output, receipt = last
+        return output, {**receipt, "attempt_count": 3}
 
 
 def build_daily_analysis_bundle(
