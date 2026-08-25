@@ -31,7 +31,7 @@ BUNDLE_ID_PREFIX = "market-regime-daily-analysis:"
 ALLOWED_LATIN_WORDS = frozenset(
     {
         "Nasdaq", "Bitcoin", "Ethereum", "Nikkei", "KOSPI", "SCHD", "SPY", "QQQ", "UUP",
-        "BTC", "ETH", "HYPE", "GC", "CL", "SI", "USDT", "USDC", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF",
+        "BTC", "ETH", "HYPE", "GC", "CL", "SI", "USDT", "USDC", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF", "Treasury",
     }
 )
 _TIMEFRAME_LABELS = {"daily": "日线", "four_hour": "4小时", "thirty_minute": "30分钟"}
