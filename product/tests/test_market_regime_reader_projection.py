@@ -140,6 +140,21 @@ class ReaderProjectionTests(unittest.TestCase):
         self.assertIn('src="snapshots/dxy-daily.png"', html)
         self.assertLess(html.index("<img "), html.index("位置：高位。"))
         self.assertIn("当前分析不可用", html)
+        self.assertNotIn("已验证", html)
+        self.assertIn("模型解释不可用", html)
+
+    def test_article_projection_rejects_snapshot_without_sha256(self) -> None:
+        projection = project_daily_asset(
+            {
+                "asset_key": "dxy",
+                "display_name": "美元 ETF（UUP）",
+                "request": {"timeframes": {"daily": {"status": "ready"}}},
+                "analysis": {"generation_status": "model_generated_unreviewed"},
+                "snapshots": {"daily": {"asset": {"path": "snapshots/dxy.png"}}},
+            }
+        )
+        with self.assertRaisesRegex(ValueError, "article_snapshot_sha256_missing"):
+            render_reader_article([projection], title="日报")
 
 
 if __name__ == "__main__":

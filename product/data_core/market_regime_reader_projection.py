@@ -247,7 +247,7 @@ def render_reader_asset_html(projection: Mapping[str, Any], *, snapshot_prefix: 
     synthesis = html.escape(_summary_text(projection.get("synthesis"), "当前多周期分析不可用。"))
     meaning = html.escape(_summary_text(projection.get("market_meaning"), "当前机制解释不可用。"))
     asset_key = html.escape(str(projection.get("asset_key") or ""), quote=True)
-    status_label = {"validated": "已验证", "analysis_unavailable": "分析不可用"}.get(str(projection.get("analysis_status")), "状态待确认")
+    status_label = {"validated": "模型生成 · 未人工复核", "analysis_unavailable": "模型解释不可用"}.get(str(projection.get("analysis_status")), "状态待确认")
     header_meta = " · ".join(item for item in (f"标的：{caption}" if caption else "", f"观察时点：{observation_time}" if observation_time else "") if item)
     return (
         f'<section class="asset-pane reader-asset" id="asset-{asset_key}" data-pane="{asset_key}" data-asset-key="{asset_key}" data-timeframes="{len(periods)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释">'
@@ -297,10 +297,13 @@ def render_reader_article(
             if href:
                 snapshot = period.get("snapshot") if isinstance(period.get("snapshot"), Mapping) else {}
                 asset = snapshot.get("asset") if isinstance(snapshot, Mapping) and isinstance(snapshot.get("asset"), Mapping) else {}
+                digest = str(asset.get("sha256") or "")
+                if not re.fullmatch(r"[0-9a-f]{64}", digest):
+                    raise ValueError("article_snapshot_sha256_missing")
                 alt = f"{display_name}｜{label} K 线图"
                 blocks.append({"type": "image", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "path": href, "alt": alt})
                 if href not in seen_media:
-                    media.append({"path": href, "alt": alt, "sha256": str(asset.get("sha256") or "")})
+                    media.append({"path": href, "alt": alt, "sha256": digest})
                     seen_media.add(href)
             elif period.get("status") != "ready":
                 blocks.append({"type": "period_text", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "text": f"图表暂缺；{period.get('text') or '本周期数据暂缺；未将其视为横盘。'}", "status": "unavailable"})
