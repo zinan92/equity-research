@@ -216,8 +216,10 @@ def render_reader_asset_html(projection: Mapping[str, Any], *, snapshot_prefix: 
             chart = f'<div class="chart-unavailable">{html.escape(str(period.get("text") or "本周期数据暂缺。"))}</div>'
         unit = UNIT_LABELS.get(str(period.get("unit") or ""), str(period.get("unit") or ""))
         unit_label = f" · 单位：{html.escape(unit)}" if unit else ""
+        snapshot_id = str((period.get("snapshot") or {}).get("snapshot_id") or "") if isinstance(period.get("snapshot"), Mapping) else ""
+        snapshot_label = f" · 快照 {html.escape(snapshot_id)}" if snapshot_id else ""
         periods.append(
-            f'<figure class="timeframe" data-timeframe="{html.escape(str(period.get("timeframe") or ""), quote=True)}"><div><b>{html.escape(str(period.get("label") or ""))}</b><div class="snapshot-frame">{chart}</div><figcaption>EMA50 · MACD(12,26,9){unit_label}</figcaption></div><p>{html.escape(str(period.get("text") or ""))}</p></figure>'
+            f'<figure class="timeframe" data-timeframe="{html.escape(str(period.get("timeframe") or ""), quote=True)}"><div><b>{html.escape(str(period.get("label") or ""))}</b><div class="snapshot-frame">{chart}</div><figcaption>EMA50 · MACD(12,26,9){unit_label}{snapshot_label}</figcaption></div><p>{html.escape(str(period.get("text") or ""))}</p></figure>'
         )
     position = html.escape(_text(projection.get("position"), "位置：不可用。"))
     structure = html.escape(_text(projection.get("structure"), "结构：不可用。"))

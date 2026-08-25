@@ -67,7 +67,7 @@ class WeeklyChartSnapshotTest(unittest.TestCase):
             self.assertIn('src="snapshots/', static_html)
             self.assertIn('src="../../snapshots/', archive_html)
             self.assertNotIn("StandardKlineChart", static_html)
-            self.assertIn(snapshot_id, render_weekly_markdown(updated))
+            self.assertIn(snapshot["asset"]["path"], render_weekly_markdown(updated))
             asset_path = root / "output" / snapshot_slot["snapshot"]["asset"]["path"]
             asset_path.write_bytes(b"tampered")
             with self.assertRaisesRegex(WeeklyRuntimeError, "weekly_chart_snapshot_hash_mismatch"):
