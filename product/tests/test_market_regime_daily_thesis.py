@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+import copy
+import hashlib
+import json
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -27,6 +30,25 @@ def _analysis_bundle() -> dict:
     return build_daily_analysis_bundle(_source_bundle(), provider_factory=lambda _request: _provider)
 
 
+def _with_daily_snapshot(bundle: dict) -> dict:
+    """Attach one independently hashed snapshot reference to the fixture bundle."""
+
+    value = copy.deepcopy(bundle)
+    image = b"verified-png-fixture"
+    value["assets"][0]["snapshots"] = {
+        "daily": {
+            "schema_version": "market-regime-daily-chart-snapshot-v1",
+            "snapshot_id": "market-regime-daily-chart-snapshot:fixture",
+            "asset": {"path": "snapshots/dxy.png", "sha256": hashlib.sha256(image).hexdigest()},
+        }
+    }
+    canonical = lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    identity_core = {**value["identity_core"], "assets_sha256": hashlib.sha256(canonical(value["assets"]).encode()).hexdigest()}
+    value["identity_core"] = identity_core
+    value["bundle_id"] = "market-regime-daily-analysis:" + hashlib.sha256(canonical(identity_core).encode()).hexdigest()
+    return value
+
+
 def _thesis_provider(request):
     evidence = request["evidence_ids"][:2]
     statement = lambda text: {"text": text, "evidence_ids": evidence}
@@ -47,6 +69,37 @@ def _thesis_provider(request):
 
 
 class DailyThesisTests(unittest.TestCase):
+    def test_daily_markdown_places_snapshot_before_period_explanation(self) -> None:
+        bundle = _with_daily_snapshot(_analysis_bundle())
+        thesis = compile_daily_thesis(bundle, _thesis_provider)
+        markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
+        image_index = markdown.index("![dxy｜日线 K 线图](snapshots/dxy.png)")
+        text_index = markdown.index("- **日线**：", image_index)
+        self.assertLess(image_index, text_index)
+
+    def test_daily_html_renders_snapshot_image_element(self) -> None:
+        from data_core.market_regime_daily_thesis import render_daily_html
+
+        bundle = _with_daily_snapshot(_analysis_bundle())
+        thesis = compile_daily_thesis(bundle, _thesis_provider)
+        markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
+        html_text = render_daily_html(markdown)
+        self.assertIn('<img src="snapshots/dxy.png"', html_text)
+
+    def test_delivery_copies_snapshot_into_markdown_archive(self) -> None:
+        bundle = _with_daily_snapshot(_analysis_bundle())
+        thesis = compile_daily_thesis(bundle, _thesis_provider)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            output_snapshot = root / "output" / "snapshots" / "dxy.png"
+            output_snapshot.parent.mkdir(parents=True)
+            output_snapshot.write_bytes(b"verified-png-fixture")
+            store = DailyThesisDeliveryStore(runtime_root=root / "runtime", output_root=root / "output", archive_root=root / "archive")
+            receipt = store.publish(thesis, bundle)
+            archive_snapshot = root / "archive" / "snapshots" / "dxy.png"
+            self.assertEqual(archive_snapshot.read_bytes(), output_snapshot.read_bytes())
+            self.assertEqual(receipt["archive"]["sha256"], hashlib.sha256(Path(receipt["archive"]["path"]).read_bytes()).hexdigest())
+
     def test_report_date_uses_shanghai_calendar(self) -> None:
         self.assertEqual(_local_report_date("2026-08-24T15:59:59Z"), "2026-08-24")
         self.assertEqual(_local_report_date("2026-08-24T16:00:00Z"), "2026-08-25")
