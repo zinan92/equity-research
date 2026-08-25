@@ -1,5 +1,27 @@
 # Decision Log
 
+## 2026-08-26 — Sonnet review closure and remaining Weekly parity ticket
+
+- **Decision:** Accept the Daily Web, Obsidian and local Mini Program article
+  payload as reader-facing surfaces after the second Sonnet review returned
+  `PASS with non-blocking follow-ups`. Keep Weekly article runtime wiring
+  separate in Issue #1025 rather than claiming an artifact that is not yet
+  produced.
+- **Why:** The Daily contract is now evidenced by real images, 31/31 source
+  slots, 17/19 model explanations, a Codex-backed thesis, and a receipt-bound
+  article payload. The remaining Weekly gap is an additive delivery seam, not
+  a reason to weaken Daily source/provider boundaries.
+- **Evidence:** Sonnet receipts
+  `20260825T165533Z_754d112a-a9d4-42ea-b91b-c20b8d448497.json` and
+  `20260825T172926Z_cf3b10aa-1487-4754-ad50-3da125cb4104.json`; merged PRs
+  #1022, #1024 and #1026; final article
+  `/Users/wendy/Desktop/K线日报/latest.article.json`; final archive
+  `/Users/wendy/park-hands/007_kline daily newsletter/2026-08-26-kline-daily-newsletter-bd1ac36236fe.article.json`.
+- **Gotchas:** `model_generated_unreviewed` is not human verification and is
+  rendered accordingly. Two assets may remain deterministic-only when both
+  providers fail; the footer names them. No Mini Program API call, public
+  deployment, stale data, implicit provider switch or order execution occurs.
+
 ## 2026-08-26 — Complete shared reader surfaces and audited Daily fallback
 
 - **Decision:** Keep Daily and Weekly on one semantic reader projection and emit
