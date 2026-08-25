@@ -9,7 +9,9 @@ import html
 import json
 import os
 from pathlib import Path
+import signal
 import tempfile
+import threading
 from typing import Any, Callable, Mapping
 from zoneinfo import ZoneInfo
 
@@ -40,6 +42,28 @@ STATUS_SCHEMA_VERSION = "market-regime-daily-runtime-status-v1"
 
 class DailyRuntimeError(RuntimeError):
     """A public Daily runtime phase failed."""
+
+
+class _RuntimeDeadline:
+    def __init__(self, seconds: float) -> None:
+        self.seconds = float(seconds)
+        self.previous_handler: Any = None
+
+    def __enter__(self) -> "_RuntimeDeadline":
+        if self.seconds <= 0:
+            raise DailyRuntimeError("runtime_timeout")
+        if threading.current_thread() is threading.main_thread() and hasattr(signal, "setitimer"):
+            def handler(_signum: int, _frame: Any) -> None:
+                raise DailyRuntimeError("runtime_timeout")
+
+            self.previous_handler = signal.signal(signal.SIGALRM, handler)
+            signal.setitimer(signal.ITIMER_REAL, self.seconds)
+        return self
+
+    def __exit__(self, _exc_type: Any, _exc_value: Any, _traceback: Any) -> None:
+        if self.previous_handler is not None:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, self.previous_handler)
 
 
 def _canonical(value: Any) -> str:
@@ -164,6 +188,7 @@ class DailyKlineRuntime:
         archive_root: Path | str,
         key_file: Path | str | None,
         datafeed_url: str = "http://127.0.0.1:8100",
+        max_runtime_seconds: float = 20 * 60,
         no_llm: bool = False,
         no_snapshots: bool = False,
         source_builder: Callable[[DailyDatafeedClient], Mapping[str, Any]] | None = None,
@@ -175,6 +200,7 @@ class DailyKlineRuntime:
         self.archive_root = Path(archive_root).expanduser().resolve()
         self.key_file = Path(key_file).expanduser().resolve() if key_file else None
         self.datafeed_url = datafeed_url
+        self.max_runtime_seconds = float(max_runtime_seconds)
         self.no_llm = no_llm
         self.no_snapshots = no_snapshots
         self.source_builder = source_builder
@@ -262,29 +288,30 @@ class DailyKlineRuntime:
                 self.status_store.failure(at=cutoff, phase="lock", code="run_lock_busy")
                 raise DailyRuntimeError("run_lock_busy") from exc
             try:
-                client = DailyDatafeedClient(base_url=self.datafeed_url)
-                service_health = client.health()
-                source_store = DailySourceStore(self.runtime_root / "source")
-                source = dict(self.source_builder(client) if self.source_builder else build_daily_source_bundle(client, generated_at=current))
-                source_store.publish(source)
-                source = source_store.latest()
+                with _RuntimeDeadline(self.max_runtime_seconds):
+                    client = DailyDatafeedClient(base_url=self.datafeed_url)
+                    service_health = client.health()
+                    source_store = DailySourceStore(self.runtime_root / "source")
+                    source = dict(self.source_builder(client) if self.source_builder else build_daily_source_bundle(client, generated_at=current))
+                    source_store.publish(source)
+                    source = source_store.latest()
 
-                phase = "analysis_compile"
-                analysis_store = DailyAnalysisStore(self.runtime_root / "analysis")
-                if self.analysis_builder:
-                    analysis = dict(self.analysis_builder(source))
-                else:
-                    snapshot_port = None if self.no_snapshots else DailyChartSnapshotPort(runtime_root=self.runtime_root, output_root=self.output_root)
-                    analysis = build_daily_analysis_bundle(source, provider_factory=self._asset_provider_factory(), cutoff_at=cutoff, snapshot_port=snapshot_port)
-                analysis_store.publish(analysis)
-                analysis = analysis_store.latest()
+                    phase = "analysis_compile"
+                    analysis_store = DailyAnalysisStore(self.runtime_root / "analysis")
+                    if self.analysis_builder:
+                        analysis = dict(self.analysis_builder(source))
+                    else:
+                        snapshot_port = None if self.no_snapshots else DailyChartSnapshotPort(runtime_root=self.runtime_root, output_root=self.output_root)
+                        analysis = build_daily_analysis_bundle(source, provider_factory=self._asset_provider_factory(), cutoff_at=cutoff, snapshot_port=snapshot_port)
+                    analysis_store.publish(analysis)
+                    analysis = analysis_store.latest()
 
-                phase = "thesis_compile"
-                thesis = dict(self.thesis_builder(analysis) if self.thesis_builder else compile_daily_thesis(analysis, self._thesis_provider()))
-                phase = "delivery_publish"
-                delivery = DailyThesisDeliveryStore(runtime_root=self.runtime_root, output_root=self.output_root, archive_root=self.archive_root).publish(thesis, analysis)
-                status = self.status_store.success(at=cutoff, source=source, analysis=analysis, thesis=thesis, delivery=delivery, service_health=service_health)
-                return {"schema_version": SCHEMA_VERSION, "state": "completed", "service_health": service_health, "source": source, "analysis": analysis, "thesis": thesis, "delivery": delivery, "status": status}
+                    phase = "thesis_compile"
+                    thesis = dict(self.thesis_builder(analysis) if self.thesis_builder else compile_daily_thesis(analysis, self._thesis_provider()))
+                    phase = "delivery_publish"
+                    delivery = DailyThesisDeliveryStore(runtime_root=self.runtime_root, output_root=self.output_root, archive_root=self.archive_root).publish(thesis, analysis)
+                    status = self.status_store.success(at=cutoff, source=source, analysis=analysis, thesis=thesis, delivery=delivery, service_health=service_health)
+                    return {"schema_version": SCHEMA_VERSION, "state": "completed", "service_health": service_health, "source": source, "analysis": analysis, "thesis": thesis, "delivery": delivery, "status": status}
             except (DailySourceError, DailyAnalysisError, DailyThesisError, DailyRuntimeError) as exc:
                 code = str(exc)[:200] or type(exc).__name__
                 archive_path = self._publish_unavailable_surface(at=cutoff, phase=phase, code=code)

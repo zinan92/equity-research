@@ -34,6 +34,7 @@ def main() -> int:
     parser.add_argument("--archive-root", type=Path, default=archive_default)
     parser.add_argument("--key-file", type=Path, default=key_default)
     parser.add_argument("--datafeed-url", default=datafeed_default)
+    parser.add_argument("--max-runtime-seconds", type=float, default=20 * 60)
     parser.add_argument("--no-llm", action="store_true")
     parser.add_argument("--no-snapshots", action="store_true")
     parser.add_argument("--status", action="store_true")
@@ -44,6 +45,7 @@ def main() -> int:
         archive_root=args.archive_root,
         key_file=args.key_file,
         datafeed_url=args.datafeed_url,
+        max_runtime_seconds=args.max_runtime_seconds,
         no_llm=args.no_llm,
         no_snapshots=args.no_snapshots,
     )

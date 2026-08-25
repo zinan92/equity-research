@@ -66,6 +66,23 @@ class DailyRuntimeTests(unittest.TestCase):
             self.assertEqual(status["last_failure"]["phase"], "source_refresh")
             self.assertEqual(DailyThesisDeliveryStore(runtime_root=root / "runtime", output_root=root / "output", archive_root=root / "archive").latest()["state"], "unavailable")
 
+    def test_runtime_budget_timeout_publishes_unavailable_surface(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            runtime = DailyKlineRuntime(
+                runtime_root=root / "runtime",
+                output_root=root / "output",
+                archive_root=root / "archive",
+                key_file=None,
+                no_llm=True,
+                no_snapshots=True,
+                max_runtime_seconds=0,
+            )
+            with self.assertRaisesRegex(DailyRuntimeError, "runtime_timeout"):
+                runtime.run_once(now=datetime(2026, 8, 25, tzinfo=timezone.utc))
+            self.assertEqual(runtime.status()["last_failure"]["code"], "runtime_timeout")
+            self.assertIn("当前日报不可用", (root / "output" / "latest.md").read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()
