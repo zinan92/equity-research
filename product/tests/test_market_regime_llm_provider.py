@@ -42,6 +42,7 @@ class LlmProviderTests(unittest.TestCase):
         self.assertIn("--sandbox", command)
         self.assertIn("read-only", command)
         self.assertIn("--skip-git-repo-check", command)
+        self.assertIn("--json", command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
 
     def test_fallback_keeps_primary_success_and_does_not_call_codex(self) -> None:
