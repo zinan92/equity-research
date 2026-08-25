@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import tempfile
 from typing import Any, Callable, Mapping
 from zoneinfo import ZoneInfo
@@ -410,6 +411,31 @@ def _coverage(asset: Mapping[str, Any]) -> str:
     ) or "无已声明周期"
 
 
+_SNAPSHOT_PATH_RE = re.compile(r"^snapshots/[A-Za-z0-9._-]+\.png$")
+_IMAGE_MARKDOWN_RE = re.compile(r"^!\[([^\]]*)\]\((snapshots/[A-Za-z0-9._-]+\.png)\)$")
+
+
+def _snapshot_path(snapshot: Any) -> str | None:
+    if not isinstance(snapshot, Mapping) or not isinstance(snapshot.get("asset"), Mapping):
+        return None
+    path = str(snapshot["asset"].get("path") or "")
+    return path if _SNAPSHOT_PATH_RE.fullmatch(path) else None
+
+
+def _snapshot_markdown(asset: Mapping[str, Any], timeframe: str, label: str) -> str | None:
+    snapshots = asset.get("snapshots") if isinstance(asset.get("snapshots"), Mapping) else {}
+    path = _snapshot_path(snapshots.get(timeframe))
+    if not path:
+        return None
+    display_name = str(asset.get("display_name") or asset.get("asset_key") or "资产")
+    return f"![{display_name}｜{label} K 线图]({path})"
+
+
+def _analysis_output(analysis: Mapping[str, Any]) -> Mapping[str, Any]:
+    nested = analysis.get("output")
+    return nested if isinstance(nested, Mapping) else analysis
+
+
 def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[str, Any]) -> str:
     thesis = delivery.get("output") or {}
     cutoff = str(delivery.get("cutoff_at") or analysis_bundle.get("cutoff_at") or "")
@@ -429,12 +455,23 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
     lines.extend(["## 每个资产的综合结论与市场含义", ""])
     for asset in analysis_bundle.get("assets") or []:
         analysis = asset.get("analysis") or {}
-        output = analysis.get("output") or {}
+        output = _analysis_output(analysis)
         lines.extend([f"### {asset.get('display_name', asset.get('asset_key'))}", ""])
         lines.append(f"数据覆盖：{_coverage(asset.get('request') or {})}")
+        requested_timeframes = (asset.get("request") or {}).get("timeframes") or {}
+        labels = (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟"))
         if analysis.get("generation_status") != "model_generated_unreviewed":
             deterministic = output.get("deterministic") if isinstance(output, Mapping) else None
             lines.extend(["", "LLM 单资产解释不可用；以下仅展示代码验证的 K 线读数，未使用旧分析。"])
+            for timeframe, label in labels:
+                if timeframe not in requested_timeframes:
+                    continue
+                image = _snapshot_markdown(asset, timeframe, label)
+                if image:
+                    lines.extend(["", image])
+                statement = output.get(timeframe) if isinstance(output, Mapping) else None
+                if isinstance(statement, Mapping) and statement.get("text"):
+                    lines.append(f"- **{label}**：{statement['text']}")
             if isinstance(deterministic, Mapping):
                 position = deterministic.get("position") or {}
                 structure = deterministic.get("structure") or {}
@@ -444,12 +481,14 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
                     lines.append(f"- **结构读数**：{structure['text']}")
             lines.append("")
             continue
-        requested_timeframes = (asset.get("request") or {}).get("timeframes") or {}
-        for timeframe, label in (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟")):
+        for timeframe, label in labels:
             if timeframe not in requested_timeframes:
                 continue
             statement = output.get(timeframe)
             if isinstance(statement, Mapping):
+                image = _snapshot_markdown(asset, timeframe, label)
+                if image:
+                    lines.extend(["", image])
                 lines.extend([f"- **{label}**：{statement['text']}"])
         if isinstance(output.get("synthesis"), Mapping):
             lines.extend([f"- **综合结论**：{output['synthesis']['text']}"])
@@ -461,9 +500,18 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
 
 
 def render_daily_html(markdown: str, *, title: str = "宏观 K 线日报") -> str:
-    escaped = html.escape(markdown)
-    body = "<br>".join(escaped.splitlines())
-    return f"<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>body{{margin:0;background:#f4f6f2;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}}main{{max-width:900px;margin:0 auto;background:#fffefa;min-height:100vh;padding:36px 28px;box-sizing:border-box}}.content{{font-size:16px;line-height:1.8;white-space:normal}}@media(max-width:600px){{main{{padding:22px 16px}}.content{{font-size:15px}}}}</style></head><body><main><div class='content'>{body}</div></main></body></html>"
+    rendered_lines: list[str] = []
+    for line in markdown.splitlines():
+        match = _IMAGE_MARKDOWN_RE.fullmatch(line.strip())
+        if match:
+            alt, path = match.groups()
+            rendered_lines.append(
+                f"<figure class='daily-period-chart'><img src=\"{html.escape(path, quote=True)}\" alt=\"{html.escape(alt, quote=True)}\"><figcaption>{html.escape(alt)}</figcaption></figure>"
+            )
+        else:
+            rendered_lines.append(html.escape(line))
+    body = "<br>".join(rendered_lines)
+    return f"<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>body{{margin:0;background:#f4f6f2;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}}main{{max-width:900px;margin:0 auto;background:#fffefa;min-height:100vh;padding:36px 28px;box-sizing:border-box}}.content{{font-size:16px;line-height:1.8;white-space:normal}}.daily-period-chart{{margin:18px 0 8px;padding:0;border:1px solid #e2e5df;background:#fffefa}}.daily-period-chart img{{display:block;width:100%;height:auto}}.daily-period-chart figcaption{{padding:6px 10px;color:#7b857e;font-size:11px;line-height:1.4}}@media(max-width:600px){{main{{padding:22px 16px}}.content{{font-size:15px}}.daily-period-chart{{margin-inline:-4px}}}}</style></head><body><main><div class='content'>{body}</div></main></body></html>"
 
 
 class DailyThesisDeliveryStore:
@@ -473,6 +521,33 @@ class DailyThesisDeliveryStore:
         self.runtime_root = Path(runtime_root).expanduser().resolve()
         self.output_root = Path(output_root).expanduser().resolve()
         self.archive_root = Path(archive_root).expanduser().resolve()
+
+    def _copy_snapshot_assets(self, analysis_bundle: Mapping[str, Any]) -> list[dict[str, str]]:
+        copied: list[dict[str, str]] = []
+        seen: set[str] = set()
+        for asset in analysis_bundle.get("assets") or []:
+            snapshots = asset.get("snapshots") if isinstance(asset, Mapping) and isinstance(asset.get("snapshots"), Mapping) else {}
+            for snapshot in snapshots.values():
+                path = _snapshot_path(snapshot)
+                if not path or path in seen:
+                    continue
+                seen.add(path)
+                source = self.output_root / path
+                target = self.archive_root / path
+                if not source.is_file():
+                    raise DailyThesisError(f"snapshot_source_missing:{path}")
+                payload = source.read_bytes()
+                expected = str((snapshot.get("asset") or {}).get("sha256") or "") if isinstance(snapshot, Mapping) else ""
+                actual = hashlib.sha256(payload).hexdigest()
+                if expected and expected != actual:
+                    raise DailyThesisError(f"snapshot_hash_mismatch:{path}")
+                target.parent.mkdir(parents=True, exist_ok=True)
+                if target.exists() and target.read_bytes() != payload:
+                    raise DailyThesisError(f"snapshot_archive_conflict:{path}")
+                if not target.exists():
+                    shutil.copyfile(source, target)
+                copied.append({"path": path, "sha256": actual})
+        return copied
 
     def publish(self, thesis: Mapping[str, Any], analysis_bundle: Mapping[str, Any]) -> dict[str, Any]:
         analysis_bundle = validate_daily_analysis_bundle(analysis_bundle)
@@ -497,9 +572,10 @@ class DailyThesisDeliveryStore:
             validate_daily_thesis(output, request)
         elif thesis.get("generation_status") != "thesis_unavailable" or not thesis.get("failure_code"):
             raise DailyThesisError("thesis_generation_status_invalid")
+        snapshot_assets = self._copy_snapshot_assets(analysis_bundle)
         markdown = render_daily_markdown({**thesis, "cutoff_at": analysis_bundle.get("cutoff_at")}, analysis_bundle)
         html_text = render_daily_html(markdown)
-        core = {"schema_version": SCHEMA_VERSION, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "markdown_sha256": hashlib.sha256(markdown.encode()).hexdigest(), "html_sha256": hashlib.sha256(html_text.encode()).hexdigest(), "cutoff_at": analysis_bundle.get("cutoff_at")}
+        core = {"schema_version": SCHEMA_VERSION, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "markdown_sha256": hashlib.sha256(markdown.encode()).hexdigest(), "html_sha256": hashlib.sha256(html_text.encode()).hexdigest(), "snapshot_assets": snapshot_assets, "cutoff_at": analysis_bundle.get("cutoff_at")}
         delivery_id = f"{DELIVERY_ID_PREFIX}{_digest(core)}"
         artifact_dir = self.runtime_root / "delivery" / "artifacts"
         md_ref = {"path": f"artifacts/{digest}.md", "sha256": _immutable_bytes(artifact_dir / f"{digest}.md", markdown.encode("utf-8"))}
@@ -516,7 +592,7 @@ class DailyThesisDeliveryStore:
             "markdown": {"path": "latest.md", "sha256": hashlib.sha256((self.output_root / "latest.md").read_bytes()).hexdigest()},
             "html": {"path": "latest.html", "sha256": hashlib.sha256((self.output_root / "latest.html").read_bytes()).hexdigest()},
         }
-        receipt = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "identity_core": core, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "cutoff_at": archive_date, "markdown": md_ref, "html": html_ref, "archive": {"path": str(archive_path), "sha256": archive_hash}, "aliases": aliases, "generation_status": thesis.get("generation_status")}
+        receipt = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "identity_core": core, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "cutoff_at": archive_date, "markdown": md_ref, "html": html_ref, "snapshot_assets": snapshot_assets, "archive": {"path": str(archive_path), "sha256": archive_hash}, "aliases": aliases, "generation_status": thesis.get("generation_status")}
         receipt_bytes = (_canonical(receipt) + "\n").encode("utf-8")
         receipt_ref = {"path": f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", "sha256": _immutable_bytes(self.runtime_root / "delivery" / f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", receipt_bytes)}
         state = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "receipt": receipt_ref}
