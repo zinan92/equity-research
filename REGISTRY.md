@@ -26,9 +26,8 @@ The remaining non-blocking follow-up is #1025: wire the Weekly runtime to
 write its own `.article.json` pointer. The shared Weekly article projection
 and tests exist, but this build does not claim a Weekly Mini Program artifact
 until that ticket is implemented. Mini Program API publication remains out of
-scope. Focused closure suite: 83 passed; the last full suite before the
-truth-label-only patch was 1854 passed, 2 skipped and 3 unrelated baseline
-failures.
+scope. Focused closure suite: 83 passed; final full suite: 1855 passed,
+2 skipped and 3 unrelated baseline failures.
 
 ## 2026-08-26 · Daily reader/fallback implementation complete; live acceptance evidence
 
