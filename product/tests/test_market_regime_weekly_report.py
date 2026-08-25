@@ -164,10 +164,10 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn("summary-dimensions", html)
         self.assertIn("赔率尚未形成", html)
         self.assertIn("位置：高位。", html)
-        self.assertIn("这意味着什么 · 机制解释", html)
+        self.assertIn("综合结论与市场含义", html)
         self.assertIn("**位置**：位置：高位。", markdown)
         self.assertIn("**赔率**：赔率尚未形成", markdown)
-        self.assertIn("**这意味着什么（机制解释）**：通常由宏观驱动", markdown)
+        self.assertIn("**市场含义**：通常由宏观驱动", markdown)
 
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
