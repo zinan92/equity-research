@@ -69,6 +69,16 @@ def _thesis_provider(request):
 
 
 class DailyThesisTests(unittest.TestCase):
+    def test_daily_ops_metadata_is_confined_to_source_status_footer(self) -> None:
+        bundle = _with_daily_snapshot(_analysis_bundle())
+        thesis = compile_daily_thesis(bundle, _thesis_provider)
+        markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
+        body, footer = markdown.split("## 来源与状态", 1)
+        self.assertNotIn("generation_status:", markdown)
+        self.assertNotIn("数据覆盖：", body)
+        self.assertIn("数据源状态", footer)
+        self.assertIn("单资产解释", footer)
+
     def test_daily_markdown_places_snapshot_before_period_explanation(self) -> None:
         bundle = _with_daily_snapshot(_analysis_bundle())
         thesis = compile_daily_thesis(bundle, _thesis_provider)
@@ -135,7 +145,7 @@ class DailyThesisTests(unittest.TestCase):
         bundle = _analysis_bundle()
         thesis = compile_daily_thesis(bundle, None)
         markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
-        self.assertIn("综合 thesis 不可用", markdown)
+        self.assertIn("本期综合解释尚未生成", markdown)
 
     def test_direct_money_flow_claim_is_rejected(self) -> None:
         bundle = _analysis_bundle()
