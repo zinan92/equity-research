@@ -6,6 +6,7 @@ import hashlib
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 import sys
 
@@ -18,6 +19,7 @@ from data_core.market_regime_daily_analysis import (  # noqa: E402
     build_daily_analysis_bundle,
     build_daily_asset_request,
     compile_daily_asset_analysis,
+    DeepSeekDailyAssetProvider,
     validate_daily_asset_analysis,
 )
 from data_core.market_regime_daily_source import DAILY_TIMEFRAMES, DAILY_TIMEFRAMES_BY_ASSET, build_daily_source_bundle  # noqa: E402
@@ -104,6 +106,28 @@ def _provider(request):
 
 
 class DailyAnalysisTests(unittest.TestCase):
+    def test_deepseek_asset_provider_retries_old_shape_with_validator_feedback(self) -> None:
+        request = build_daily_asset_request(_source_bundle()["assets"][0], cutoff_at="2026-08-31T00:00:00Z")
+        evidence = request["timeframes"]["daily"]["evidence_ids"][:1]
+        mechanism = request["mechanism"]["mechanism_ids"][:1]
+        valid = {
+            "asset_key": request["asset_key"],
+            "generation_status": "model_generated_unreviewed",
+            "daily": {"text": "日线结构保持，等待关键位确认。", "evidence_ids": evidence},
+            "synthesis": {"text": "日线证据支持等待。", "evidence_ids": evidence},
+            "market_meaning": {"text": "通常反映风险偏好变化，但也可能由资产自身供需驱动。", "evidence_ids": mechanism, "claim_type": "theoretical_mechanism"},
+            "confirmation": {"text": "若结构继续保持，则得到确认。", "evidence_ids": evidence},
+            "invalidation": {"text": "若结构破坏，则当前解释失效。", "evidence_ids": evidence},
+            "rationale": {"text": "当前结论只基于冻结 K 线证据。", "evidence_ids": evidence},
+            "opportunity_state": "wait",
+        }
+        old_shape = {"asset_key": request["asset_key"], "generation_status": "complete", "daily": "旧格式字符串"}
+        with patch("deepseek_writer.call_structured_deepseek", side_effect=[(old_shape, {"provider": "test"}), (valid, {"provider": "test"})]) as call:
+            output, receipt = DeepSeekDailyAssetProvider("/tmp/unused-key")(request)
+        self.assertEqual(output["generation_status"], "model_generated_unreviewed")
+        self.assertEqual(receipt["attempt_count"], 2)
+        self.assertEqual(call.call_count, 2)
+
     def test_request_contains_three_features_and_completion_metadata(self) -> None:
         asset = _source_bundle()["assets"][0]
         request = build_daily_asset_request(asset, cutoff_at="2026-08-31T00:00:00Z")
