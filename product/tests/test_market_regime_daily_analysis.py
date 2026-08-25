@@ -20,6 +20,7 @@ from data_core.market_regime_daily_analysis import (  # noqa: E402
     build_daily_asset_request,
     compile_daily_asset_analysis,
     DeepSeekDailyAssetProvider,
+    _numeric_tokens,
     validate_daily_asset_analysis,
 )
 from data_core.market_regime_daily_source import DAILY_TIMEFRAMES, DAILY_TIMEFRAMES_BY_ASSET, build_daily_source_bundle  # noqa: E402
@@ -182,6 +183,9 @@ class DailyAnalysisTests(unittest.TestCase):
         output["daily"]["text"] = "日线价格收于9999，趋势延续。"
         with self.assertRaises(DailyAnalysisError):
             validate_daily_asset_analysis(output, request)
+
+    def test_numeric_tokens_ignore_dates_and_exchange_qualified_tickers(self) -> None:
+        self.assertEqual(_numeric_tokens("000015.SH 截至2026-08-24，8月14日收盘15.85"), [15.85])
 
     def test_standard_kline_payload_keeps_static_renderer_contract(self) -> None:
         asset = _source_bundle()["assets"][0]
