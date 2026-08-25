@@ -111,6 +111,7 @@ class CodexCliProvider:
         timeout: float = 900.0,
         runner: Callable[..., Any] | None = None,
         cli_version: str | None = None,
+        timeout_provider: Callable[[], float] | None = None,
     ) -> None:
         self.system_prompt = system_prompt
         self.model = model
@@ -118,6 +119,7 @@ class CodexCliProvider:
         self.timeout = timeout
         self.runner = runner or self._run
         self.cli_version = cli_version or "unknown"
+        self.timeout_provider = timeout_provider
 
     @staticmethod
     def _run(command: list[str], *, cwd: Path, timeout: float) -> Any:
@@ -151,8 +153,14 @@ class CodexCliProvider:
             if self.model:
                 command.extend(["--model", self.model])
             command.append(prompt)
+            timeout = self.timeout
+            if self.timeout_provider is not None:
+                remaining = float(self.timeout_provider())
+                if remaining <= 0:
+                    raise CodexCliError("runtime_timeout")
+                timeout = min(timeout, remaining)
             try:
-                completed = self.runner(command, cwd=root, timeout=self.timeout)
+                completed = self.runner(command, cwd=root, timeout=timeout)
             except Exception as exc:
                 raise CodexCliError(f"codex_runner:{type(exc).__name__}") from exc
             if int(getattr(completed, "returncode", 1) or 0) != 0:

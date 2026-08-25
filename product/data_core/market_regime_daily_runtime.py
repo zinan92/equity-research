@@ -12,6 +12,7 @@ from pathlib import Path
 import signal
 import tempfile
 import threading
+import time
 from typing import Any, Callable, Mapping
 from zoneinfo import ZoneInfo
 
@@ -48,10 +49,14 @@ class _RuntimeDeadline:
     def __init__(self, seconds: float) -> None:
         self.seconds = float(seconds)
         self.previous_handler: Any = None
+        self.started_at: float | None = None
+        self.deadline_at: float | None = None
 
     def __enter__(self) -> "_RuntimeDeadline":
         if self.seconds <= 0:
             raise DailyRuntimeError("runtime_timeout")
+        self.started_at = time.monotonic()
+        self.deadline_at = self.started_at + self.seconds
         if threading.current_thread() is threading.main_thread() and hasattr(signal, "setitimer"):
             def handler(_signum: int, _frame: Any) -> None:
                 raise DailyRuntimeError("runtime_timeout")
@@ -64,6 +69,11 @@ class _RuntimeDeadline:
         if self.previous_handler is not None:
             signal.setitimer(signal.ITIMER_REAL, 0)
             signal.signal(signal.SIGALRM, self.previous_handler)
+
+    def remaining(self) -> float:
+        if self.deadline_at is None:
+            return self.seconds
+        return self.deadline_at - time.monotonic()
 
 
 def _canonical(value: Any) -> str:
@@ -217,7 +227,7 @@ class DailyKlineRuntime:
         primary = DeepSeekDailyAssetProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
         return lambda _request: ValidatedFallbackProvider(
             primary=primary,
-            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT),
+            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_asset_analysis,
         )
 
@@ -227,9 +237,13 @@ class DailyKlineRuntime:
         primary = DeepSeekDailyThesisProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
         return ValidatedFallbackProvider(
             primary=primary,
-            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT),
+            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_thesis,
         )
+
+    def _remaining_runtime_seconds(self) -> float:
+        deadline = getattr(self, "_active_deadline", None)
+        return deadline.remaining() if deadline is not None else self.max_runtime_seconds
 
     def _publish_unavailable_surface(self, *, at: str, phase: str, code: str) -> str:
         report_date = _local_report_date(at)
@@ -288,7 +302,9 @@ class DailyKlineRuntime:
                 self.status_store.failure(at=cutoff, phase="lock", code="run_lock_busy")
                 raise DailyRuntimeError("run_lock_busy") from exc
             try:
-                with _RuntimeDeadline(self.max_runtime_seconds):
+                deadline = _RuntimeDeadline(self.max_runtime_seconds)
+                self._active_deadline = deadline
+                with deadline:
                     client = DailyDatafeedClient(base_url=self.datafeed_url)
                     service_health = client.health()
                     source_store = DailySourceStore(self.runtime_root / "source")
@@ -322,6 +338,8 @@ class DailyKlineRuntime:
                 archive_path = self._publish_unavailable_surface(at=cutoff, phase=phase, code=code)
                 self.status_store.failure(at=cutoff, phase=phase, code=code, archive_path=archive_path)
                 raise DailyRuntimeError(code) from exc
+            finally:
+                self._active_deadline = None
 
 
 __all__ = ["DailyKlineRuntime", "DailyRuntimeError", "DailyRuntimeStatusStore", "SCHEMA_VERSION", "STATUS_SCHEMA_VERSION"]
