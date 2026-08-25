@@ -17,9 +17,20 @@ The canonical datafeed now runs at `a1a717c` and declares native Hyperliquid
 matrix is 31 slots (19 daily + 6 crypto context + 6 commodity context), before
 any real upstream failures are counted.
 
-Next: run the stable Daily entrypoint once with the current key, verify the
-31-slot source coverage and thesis/delivery receipts, then let the 08:20
-LaunchAgent continue. Weekly 8907 and Finance Daily remain separate.
+Real run after the cutover: source `ready`, 31/31 slots, and the canonical
+datafeed health is HTTP 200 at build `a1a717c`. The latest delivery is honest:
+14/19 asset explanations are `model_generated_unreviewed`; five are typed
+`analysis_unavailable` after numeric-boundary validation, while their
+code-owned Position/Structure readings remain in the report. The global thesis
+is currently `thesis_unavailable` because the DeepSeek API returned HTTP 402
+`Insufficient Balance`; no old thesis was reused. Latest output is archived at
+`/Users/wendy/park-hands/007_kline daily newsletter/2026-08-25-kline-daily-newsletter-95b5457a0e94.md`
+and aliased at `/Users/wendy/Desktop/K线日报/latest.md` and `latest.html`.
+
+The provider-schema retry is Issue #994 and same-source transient retry is
+Issue #996. Once DeepSeek balance is restored, a thesis-only rerun can bind to
+the current analysis bundle without fetching old data. Weekly 8907 and Finance
+Daily remain separate.
 
 ## 2026-08-25 · Daily K-line stable runtime cutover complete (Issue #990)
 
