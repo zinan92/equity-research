@@ -17,6 +17,7 @@ from data_core.market_regime_weekly_asset_analysis import (  # noqa: E402
     validate_asset_analysis,
 )
 from data_core.market_regime_weekly_features import build_timeframe_features  # noqa: E402
+from data_core.market_regime_llm_provider import ProviderFallbackError  # noqa: E402
 
 
 def asset_snapshot(*, with_4h: bool = True) -> dict:
@@ -137,6 +138,15 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         self.assertIn("structure", artifact)
         self.assertIn("odds", artifact)
         self.assertTrue(artifact["analysis_id"].startswith("market-regime-weekly-asset-analysis:"))
+
+    def test_both_provider_failure_preserves_provider_status(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        artifact = compile_asset_analysis(
+            request,
+            lambda _: (_ for _ in ()).throw(ProviderFallbackError("http_402", "timeout")),
+        )
+        self.assertEqual(artifact["failure_code"], "both_providers_failed")
+        self.assertTrue(artifact["provider_status"]["both_failed"])
 
     def test_missing_provider_keeps_code_owned_dimensions(self) -> None:
         request = build_asset_analysis_request(asset_snapshot())

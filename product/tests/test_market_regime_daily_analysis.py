@@ -23,6 +23,7 @@ from data_core.market_regime_daily_analysis import (  # noqa: E402
     validate_daily_asset_analysis,
 )
 from data_core.market_regime_daily_source import DAILY_TIMEFRAMES, DAILY_TIMEFRAMES_BY_ASSET, build_daily_source_bundle  # noqa: E402
+from data_core.market_regime_llm_provider import ProviderFallbackError  # noqa: E402
 from data_core.market_regime_daily_snapshots import build_daily_standard_kline_payload  # noqa: E402
 from data_core.market_regime_weekly_source import WEEKLY_KEYS  # noqa: E402
 
@@ -148,6 +149,16 @@ class DailyAnalysisTests(unittest.TestCase):
         self.assertEqual(result["failure_code"], "provider_unavailable")
         self.assertIn("output", result)
         self.assertIn("deterministic", result["output"])
+
+    def test_both_provider_failure_is_typed_with_provider_status(self) -> None:
+        request = build_daily_asset_request(_source_bundle()["assets"][0], cutoff_at="2026-08-31T00:00:00Z")
+        result = compile_daily_asset_analysis(
+            request,
+            lambda _request: (_ for _ in ()).throw(ProviderFallbackError("http_402", "timeout")),
+        )
+        self.assertEqual(result["generation_status"], "analysis_unavailable")
+        self.assertEqual(result["failure_code"], "both_providers_failed")
+        self.assertEqual(result["output"]["provider_status"]["fallback_failure"], "timeout")
 
     def test_unavailable_period_must_be_disclosed_and_cannot_be_neutralized(self) -> None:
         asset = copy.deepcopy(_source_bundle()["assets"][0])

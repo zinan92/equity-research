@@ -18,6 +18,7 @@ from .market_regime_daily_analysis import (
     DAILY_TIMEFRAMES,
     SCHEMA_VERSION as ANALYSIS_SCHEMA,
 )
+from .market_regime_llm_provider import ProviderFallbackError
 from .market_regime_reader_projection import project_daily_asset, render_reader_asset_html, render_reader_asset_markdown
 from .market_regime_daily_source import WEEKLY_KEYS
 
@@ -143,7 +144,22 @@ def _summary_numeric_values(analysis_bundle: Mapping[str, Any]) -> list[float]:
 def _safe_receipt(value: Any) -> dict[str, Any]:
     if not isinstance(value, Mapping):
         return {"provider": "injected", "receipt_hash": _digest(str(value))}
-    allowed = ("provider", "model", "request_hash", "prompt_hash", "prompt_version", "generation_status", "attempt_count", "output_hash")
+    allowed = (
+        "provider",
+        "model",
+        "cli_version",
+        "request_hash",
+        "prompt_hash",
+        "prompt_version",
+        "generation_status",
+        "attempt_count",
+        "output_hash",
+        "fallback_used",
+        "fallback_reason",
+        "primary_provider",
+        "primary_failure",
+        "validation_result",
+    )
     safe = {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
     safe["receipt_hash"] = _digest(safe)
     return safe
@@ -391,6 +407,18 @@ def compile_daily_thesis(
             raw, receipt = raw_result, {"provider": "injected"}
         output = validate_daily_thesis(raw, request)
         output["provider_receipt"] = _safe_receipt(receipt)
+    except ProviderFallbackError as exc:
+        output = {
+            "generation_status": "thesis_unavailable",
+            "failure_code": exc.code,
+            "provider_status": {
+                "primary_provider": "DeepSeek",
+                "primary_failure": exc.primary_failure,
+                "fallback_provider": "Codex CLI",
+                "fallback_failure": exc.fallback_failure,
+                "both_failed": True,
+            },
+        }
     except DailyThesisError as exc:
         output = {"generation_status": "thesis_unavailable", "failure_code": str(exc)}
     except Exception as exc:
@@ -443,6 +471,7 @@ def _daily_status_footer(delivery: Mapping[str, Any], analysis_bundle: Mapping[s
     unavailable_slots = 0
     model_assets = 0
     deterministic_assets = 0
+    both_failed_assets: list[str] = []
     for asset in analysis_bundle.get("assets") or []:
         request = asset.get("request") if isinstance(asset, Mapping) else {}
         frames = request.get("timeframes") if isinstance(request, Mapping) else {}
@@ -457,9 +486,14 @@ def _daily_status_footer(delivery: Mapping[str, Any], analysis_bundle: Mapping[s
             model_assets += 1
         else:
             deterministic_assets += 1
+            output = analysis.get("output") if isinstance(analysis, Mapping) else None
+            provider_status = output.get("provider_status") if isinstance(output, Mapping) else None
+            if isinstance(provider_status, Mapping) and provider_status.get("both_failed"):
+                both_failed_assets.append(str(asset.get("display_name") or asset.get("asset_key") or "未知资产"))
     thesis_status = "已生成" if delivery.get("generation_status") == "model_generated_unreviewed" else "未生成"
     provider_receipt = delivery.get("provider_receipt") if isinstance(delivery.get("provider_receipt"), Mapping) else {}
     provider = str(provider_receipt.get("provider") or provider_receipt.get("model") or "未记录")
+    provider_status = delivery.get("provider_status") if isinstance(delivery.get("provider_status"), Mapping) else {}
     lines = [
         "## 来源与状态",
         "",
@@ -472,6 +506,13 @@ def _daily_status_footer(delivery: Mapping[str, Any], analysis_bundle: Mapping[s
         "- 内容仅供研究参考；不连接经纪账户，不自动执行交易。",
         "",
     ]
+    if provider_status.get("both_failed"):
+        lines.insert(
+            4,
+            f"- 模型失败披露：DeepSeek 与 Codex CLI 均未生成解释；主模型：{provider_status.get('primary_failure', '未知')}；备用模型：{provider_status.get('fallback_failure', '未知')}。",
+        )
+    if both_failed_assets:
+        lines.insert(5, f"- 单资产模型失败披露：{', '.join(both_failed_assets)} 的 DeepSeek 与 Codex CLI 均未生成解释。")
     return lines
 
 

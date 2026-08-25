@@ -19,9 +19,14 @@ sys.path.insert(0, str(PRODUCT))
 
 from data_core.market_regime_weekly_datafeed import WeeklyDatafeedClient, load_datafeed_weekly_source_snapshot  # noqa: E402
 from data_core.market_regime_weekly_provider import (  # noqa: E402
+    ASSET_SYSTEM_PROMPT,
     DeepSeekWeeklyAssetProvider,
     DeepSeekWeeklyRankingProvider,
+    RANKING_SYSTEM_PROMPT,
 )
+from data_core.market_regime_weekly_asset_analysis import validate_asset_analysis  # noqa: E402
+from data_core.market_regime_weekly_ranking import validate_ranking_output  # noqa: E402
+from data_core.market_regime_llm_provider import CodexCliProvider, ValidatedFallbackProvider  # noqa: E402
 from data_core.market_regime_weekly_runtime import WeeklyMacroRuntime, WeeklyRuntimeError  # noqa: E402
 from data_core.market_regime_weekly_snapshots import PlaywrightWeeklyChartSnapshotPort  # noqa: E402
 
@@ -50,13 +55,10 @@ def main() -> int:
     parser.add_argument("--output-root", type=Path, default=home / "Desktop" / "宏观K线周报")
     parser.add_argument("--key-file", type=Path, default=home / "park-hands" / "_secrets" / "deepseek-key")
     parser.add_argument("--model", default="deepseek-v4-flash")
+    parser.add_argument("--codex-model", default=None)
     args = parser.parse_args()
     now = _parse_datetime(args.now)
     week_end = _parse_date(args.week_end)
-    if not args.key_file.is_file():
-        print(json.dumps({"status": "blocked", "code": "deepseek_key_missing"}, ensure_ascii=False))
-        return 2
-
     datafeed_client = WeeklyDatafeedClient(base_url=args.datafeed_url)
     source_loader = lambda *, week_end, cutoff_at, live_as_of=None: load_datafeed_weekly_source_snapshot(
         datafeed_client,
@@ -64,10 +66,20 @@ def main() -> int:
         cutoff_at=cutoff_at.isoformat().replace("+00:00", "Z"),
         live_as_of=live_as_of,
     )
+    deepseek_asset = DeepSeekWeeklyAssetProvider(args.key_file, model=args.model) if args.key_file.is_file() else None
+    deepseek_ranking = DeepSeekWeeklyRankingProvider(args.key_file, model=args.model) if args.key_file.is_file() else None
     runtime = WeeklyMacroRuntime(
         source_loader=source_loader,
-        asset_provider=DeepSeekWeeklyAssetProvider(args.key_file, model=args.model),
-        ranking_provider=DeepSeekWeeklyRankingProvider(args.key_file, model=args.model),
+        asset_provider=ValidatedFallbackProvider(
+            primary=deepseek_asset,
+            fallback=CodexCliProvider(system_prompt=ASSET_SYSTEM_PROMPT, model=args.codex_model),
+            validator=validate_asset_analysis,
+        ),
+        ranking_provider=ValidatedFallbackProvider(
+            primary=deepseek_ranking,
+            fallback=CodexCliProvider(system_prompt=RANKING_SYSTEM_PROMPT, model=args.codex_model),
+            validator=validate_ranking_output,
+        ),
         runtime_root=args.runtime_root,
         output_root=args.output_root,
         chart_snapshot_port=PlaywrightWeeklyChartSnapshotPort(runtime_root=args.runtime_root, output_root=args.output_root),

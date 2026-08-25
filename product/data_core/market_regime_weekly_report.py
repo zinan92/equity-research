@@ -345,6 +345,7 @@ def build_weekly_report(
                 "opportunity_state": analysis.get("opportunity_state") if narrative_valid else None,
                 "rationale": analysis.get("rationale") if narrative_valid else None,
                 "theoretical_implication": theory,
+                "provider_status": analysis.get("provider_status") if isinstance(analysis, Mapping) else None,
                 "summary": {
                     "order": ["position", "structure", "odds", "synthesis", "theoretical_implication"],
                     "position": deterministic_position,
@@ -371,6 +372,7 @@ def build_weekly_report(
                 "odds": unavailable_odds,
                 "synthesis": unavailable_synthesis,
                 "theoretical_implication": unavailable_theory,
+                "provider_status": analysis.get("provider_status") if isinstance(analysis, Mapping) else None,
                 "summary": {
                     "order": ["position", "structure", "odds", "synthesis", "theoretical_implication"],
                     "position": unavailable_position,
@@ -481,6 +483,29 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
     for row in opportunity["rows"]:
         prefix = f"{row.get('rank')}. " if opportunity["ordered"] and row.get("rank") is not None else ""
         lines.append(f"- {prefix}{_display_name(row.get('asset_key'))}：{_ranking_status_label(row.get('status'))}")
+    lines.extend(["", "## 来源与状态", ""])
+    unavailable_assets = [
+        str(card.get("display_name") or card.get("asset_key"))
+        for card in report.get("cards") or []
+        if isinstance(card, Mapping) and card.get("analysis_status") != "validated"
+    ]
+    lines.append(f"- 单资产解释：{len(report.get('cards') or []) - len(unavailable_assets)} 个模型解释，{len(unavailable_assets)} 个代码读数。")
+    ranking_status = (report.get("ranking") or {}).get("generation_status") if isinstance(report.get("ranking"), Mapping) else None
+    lines.append(f"- 机会排序解释：{'已生成' if ranking_status == 'model_generated_unreviewed' else '未生成'}。")
+    dual_failures = [
+        name
+        for card in report.get("cards") or []
+        if isinstance(card, Mapping)
+        for name in [str(card.get("display_name") or card.get("asset_key"))]
+        if isinstance(card.get("analysis"), Mapping)
+        and isinstance(card["analysis"].get("provider_status"), Mapping)
+        and card["analysis"]["provider_status"].get("both_failed")
+    ]
+    if dual_failures:
+        lines.append(f"- 模型失败披露：{', '.join(dual_failures)} 的 DeepSeek 与 Codex CLI 均未生成解释。")
+    ranking_provider_status = (report.get("ranking") or {}).get("provider_status") if isinstance(report.get("ranking"), Mapping) else None
+    if isinstance(ranking_provider_status, Mapping) and ranking_provider_status.get("both_failed"):
+        lines.append("- 模型失败披露：DeepSeek 与 Codex CLI 均未生成机会排序解释。")
     return "\n".join(lines) + "\n"
 
 
@@ -618,4 +643,23 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
 .snapshot-frame img{image-rendering:auto}
 """
     description = "排序位于全部资产之后；数据或分析不可用的资产保留其状态。" if opportunity["ordered"] else "排序证据不可用或不完整；按资产清单展示，不宣称先后顺序。"
-    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看{_escape(opportunity["title"])}。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周{_escape(opportunity["title"])}</h2><p>{_escape(description)}</p><ul>{ranking_rows}</ul></section><footer>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main></body></html>'
+    cards = [card for card in report.get("cards") or [] if isinstance(card, Mapping)]
+    model_count = sum(1 for card in cards if card.get("analysis_status") == "validated")
+    ranking_status = (report.get("ranking") or {}).get("generation_status") if isinstance(report.get("ranking"), Mapping) else None
+    dual_failure_names = [
+        str(card.get("display_name") or card.get("asset_key"))
+        for card in cards
+        if isinstance(card.get("analysis"), Mapping)
+        and isinstance(card["analysis"].get("provider_status"), Mapping)
+        and card["analysis"]["provider_status"].get("both_failed")
+    ]
+    status_lines = [
+        f"单资产解释：{model_count}/{len(cards)} 个模型解释通过；机会排序解释：{'已生成' if ranking_status == 'model_generated_unreviewed' else '未生成'}。",
+    ]
+    if dual_failure_names:
+        status_lines.append(f"模型失败披露：{', '.join(dual_failure_names)} 的 DeepSeek 与 Codex CLI 均未生成解释。")
+    ranking_provider_status = (report.get("ranking") or {}).get("provider_status") if isinstance(report.get("ranking"), Mapping) else None
+    if isinstance(ranking_provider_status, Mapping) and ranking_provider_status.get("both_failed"):
+        status_lines.append("模型失败披露：DeepSeek 与 Codex CLI 均未生成机会排序解释。")
+    footer_status = "<br>".join(_escape(line) for line in status_lines)
+    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看{_escape(opportunity["title"])}。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周{_escape(opportunity["title"])}</h2><p>{_escape(description)}</p><ul>{ranking_rows}</ul></section><footer><div>来源与状态</div>{footer_status}<br>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main></body></html>'

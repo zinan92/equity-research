@@ -7,6 +7,7 @@ import json
 from typing import Any, Callable, Mapping
 
 from .market_regime_weekly_source import WEEKLY_KEYS
+from .market_regime_llm_provider import ProviderFallbackError
 
 
 SCHEMA_VERSION = "market-regime-weekly-ranking-v1"
@@ -24,6 +25,25 @@ def _canonical(value: Any) -> str:
 
 def _digest(value: Any) -> str:
     return hashlib.sha256(_canonical(value).encode("utf-8")).hexdigest()
+
+
+def _safe_provider_receipt(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping):
+        return {}
+    allowed = (
+        "provider",
+        "model",
+        "cli_version",
+        "attempt_count",
+        "fallback_used",
+        "fallback_reason",
+        "primary_provider",
+        "primary_failure",
+        "request_hash",
+        "output_hash",
+        "validation_result",
+    )
+    return {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
 
 
 def build_ranking_request(terminal_vector: list[Mapping[str, Any]]) -> dict[str, Any]:
@@ -150,8 +170,31 @@ def compile_ranking(
     provider: Callable[[Mapping[str, Any]], Mapping[str, Any]],
 ) -> dict[str, Any]:
     request_hash = _digest(request)
+    provider_receipt: dict[str, Any] = {}
     try:
-        output = validate_ranking_output(provider(request), request)
+        raw_result = provider(request)
+        if isinstance(raw_result, tuple) and len(raw_result) == 2:
+            raw, receipt = raw_result
+            provider_receipt = _safe_provider_receipt(receipt)
+        else:
+            raw = raw_result
+        output = validate_ranking_output(raw, request)
+    except ProviderFallbackError as exc:
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "request_hash": request_hash,
+            "generation_status": "ranking_unavailable",
+            "failure_code": exc.code,
+            "provider_status": {
+                "primary_provider": "DeepSeek",
+                "primary_failure": exc.primary_failure,
+                "fallback_provider": "Codex CLI",
+                "fallback_failure": exc.fallback_failure,
+                "both_failed": True,
+            },
+            "ordered_assets": [],
+            "important_changes": [],
+        }
     except WeeklyRankingError:
         return {"schema_version": SCHEMA_VERSION, "request_hash": request_hash, "generation_status": "ranking_unavailable", "failure_code": "output_schema_invalid"}
     except Exception:
@@ -167,5 +210,5 @@ def compile_ranking(
         "output_hash": output_hash,
         "important_changes": output["important_changes"],
         "ordered_assets": output["ordered_assets"],
-        "receipt": {"schema_version": SCHEMA_VERSION, "event": "completed", "ranking_id": ranking_id, "request_hash": request_hash, "output_hash": output_hash},
+        "receipt": {"schema_version": SCHEMA_VERSION, "event": "completed", "ranking_id": ranking_id, "request_hash": request_hash, "output_hash": output_hash, "provider": provider_receipt},
     }

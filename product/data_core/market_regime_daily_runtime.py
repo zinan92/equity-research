@@ -14,19 +14,24 @@ from typing import Any, Callable, Mapping
 from zoneinfo import ZoneInfo
 
 from .market_regime_daily_analysis import (
+    DAILY_ASSET_SYSTEM_PROMPT,
     DailyAnalysisError,
     DailyAnalysisStore,
     DeepSeekDailyAssetProvider,
+    validate_daily_asset_analysis,
     build_daily_analysis_bundle,
 )
 from .market_regime_daily_snapshots import DailyChartSnapshotPort
 from .market_regime_daily_source import DailyDatafeedClient, DailySourceError, DailySourceStore, build_daily_source_bundle
 from .market_regime_daily_thesis import (
+    DAILY_THESIS_SYSTEM_PROMPT,
     DailyThesisDeliveryStore,
     DeepSeekDailyThesisProvider,
     DailyThesisError,
     compile_daily_thesis,
+    validate_daily_thesis,
 )
+from .market_regime_llm_provider import CodexCliProvider, ValidatedFallbackProvider
 
 
 SCHEMA_VERSION = "market-regime-daily-runtime-v1"
@@ -181,15 +186,24 @@ class DailyKlineRuntime:
         return self.status_store.latest()
 
     def _asset_provider_factory(self):
-        if self.no_llm or self.key_file is None or not self.key_file.is_file():
+        if self.no_llm:
             return None
-        provider = DeepSeekDailyAssetProvider(self.key_file)
-        return lambda _request: provider
+        primary = DeepSeekDailyAssetProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
+        return lambda _request: ValidatedFallbackProvider(
+            primary=primary,
+            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT),
+            validator=validate_daily_asset_analysis,
+        )
 
     def _thesis_provider(self):
-        if self.no_llm or self.key_file is None or not self.key_file.is_file():
+        if self.no_llm:
             return None
-        return DeepSeekDailyThesisProvider(self.key_file)
+        primary = DeepSeekDailyThesisProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
+        return ValidatedFallbackProvider(
+            primary=primary,
+            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT),
+            validator=validate_daily_thesis,
+        )
 
     def _publish_unavailable_surface(self, *, at: str, phase: str, code: str) -> str:
         report_date = _local_report_date(at)

@@ -15,6 +15,7 @@ from data_core.market_regime_weekly_ranking import (  # noqa: E402
     validate_ranking_output,
 )
 from data_core.market_regime_weekly_source import WEEKLY_KEYS  # noqa: E402
+from data_core.market_regime_llm_provider import ProviderFallbackError  # noqa: E402
 
 
 def vector(*, unavailable: str | None = None) -> list[dict]:
@@ -94,6 +95,15 @@ class WeeklyRankingTest(unittest.TestCase):
         artifact = compile_ranking(request, lambda _: (_ for _ in ()).throw(RuntimeError("provider detail")))
         self.assertEqual(artifact["generation_status"], "ranking_unavailable")
         self.assertEqual(artifact["failure_code"], "provider_error")
+
+    def test_both_provider_failure_returns_provider_status(self) -> None:
+        request = build_ranking_request(vector())
+        artifact = compile_ranking(
+            request,
+            lambda _: (_ for _ in ()).throw(ProviderFallbackError("http_402", "timeout")),
+        )
+        self.assertEqual(artifact["failure_code"], "both_providers_failed")
+        self.assertTrue(artifact["provider_status"]["both_failed"])
 
     def test_compile_binds_request_identity_and_receipt(self) -> None:
         request = build_ranking_request(vector())
