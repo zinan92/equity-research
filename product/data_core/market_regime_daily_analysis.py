@@ -396,6 +396,8 @@ DAILY_ASSET_SYSTEM_PROMPT = """你是 Global Market K-line Daily 的单资产分
 
 所有当前判断都必须引用请求中的 evidence_ids；机制解释引用 mechanism:*。如需数字，必须能在所引用的 feature:* 证据中找到；否则删掉数字，不要猜测。
 
+market_meaning 是静态理论机制，不是免责声明段落：只写一般驱动、通常传导和反例。market_meaning 的文字中不要出现“当前、最新、收盘、实时、今天、本期、本报告、正在、已经”等事实时态词，也不要写“不是当前价格……”之类的免责声明；不要把任何当前行情数字放进该字段。
+
 只返回合法 JSON，且严格遵守以下格式：
 - `generation_status` 必须逐字为 `model_generated_unreviewed`，不能写 `complete`、`success` 或其它状态。
 - `daily`、`four_hour`、`thirty_minute`（仅输出 request.timeframes 中实际存在的字段）必须是对象 `{\"text\":\"简体中文\",\"evidence_ids\":[\"请求中的证据 ID\"]}`，绝不能是纯字符串。
