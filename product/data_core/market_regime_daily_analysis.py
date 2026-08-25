@@ -207,6 +207,7 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
         "source_schema_version": SOURCE_SCHEMA,
         "asset_key": key,
         "display_name": str(asset.get("display_name") or DISPLAY_NAMES.get(key, key)),
+        "instrument": dict(instrument),
         "canonical_symbol": instrument.get("canonical_symbol"),
         "series_kind": instrument.get("series_kind"),
         "unit": instrument.get("unit"),
@@ -335,6 +336,8 @@ def _safe_provider_receipt(value: Any) -> dict[str, Any]:
         "primary_provider",
         "primary_failure",
         "validation_result",
+        "tool_policy",
+        "network_policy",
     )
     safe = {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
     safe["receipt_hash"] = _digest(safe)
@@ -480,6 +483,7 @@ def build_daily_analysis_bundle(
         return {
             "asset_key": request["asset_key"],
             "display_name": request["display_name"],
+            "instrument": dict(request.get("instrument") or {}),
             "request": request,
             "analysis": artifact,
         }

@@ -19,7 +19,7 @@ from .market_regime_daily_analysis import (
     SCHEMA_VERSION as ANALYSIS_SCHEMA,
 )
 from .market_regime_llm_provider import ProviderFallbackError
-from .market_regime_reader_projection import project_daily_asset, render_reader_asset_html, render_reader_asset_markdown
+from .market_regime_reader_projection import project_daily_asset, render_reader_asset_html, render_reader_asset_markdown, render_reader_article
 from .market_regime_daily_source import WEEKLY_KEYS
 
 
@@ -159,6 +159,8 @@ def _safe_receipt(value: Any) -> dict[str, Any]:
         "primary_provider",
         "primary_failure",
         "validation_result",
+        "tool_policy",
+        "network_policy",
     )
     safe = {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
     safe["receipt_hash"] = _digest(safe)
@@ -640,24 +642,33 @@ class DailyThesisDeliveryStore:
         markdown = render_daily_markdown({**thesis, "cutoff_at": analysis_bundle.get("cutoff_at")}, analysis_bundle)
         reader_assets = [project_daily_asset(asset) for asset in analysis_bundle.get("assets") or []]
         html_text = render_daily_html(markdown, reader_assets=reader_assets)
-        core = {"schema_version": SCHEMA_VERSION, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "markdown_sha256": hashlib.sha256(markdown.encode()).hexdigest(), "html_sha256": hashlib.sha256(html_text.encode()).hexdigest(), "snapshot_assets": snapshot_assets, "cutoff_at": analysis_bundle.get("cutoff_at")}
+        article = render_reader_article(reader_assets, title="宏观 K 线日报", cutoff_at=analysis_bundle.get("cutoff_at"))
+        article_bytes = (_canonical(article) + "\n").encode("utf-8")
+        core = {"schema_version": SCHEMA_VERSION, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "markdown_sha256": hashlib.sha256(markdown.encode()).hexdigest(), "html_sha256": hashlib.sha256(html_text.encode()).hexdigest(), "article_sha256": hashlib.sha256(article_bytes).hexdigest(), "snapshot_assets": snapshot_assets, "cutoff_at": analysis_bundle.get("cutoff_at")}
         delivery_id = f"{DELIVERY_ID_PREFIX}{_digest(core)}"
         artifact_dir = self.runtime_root / "delivery" / "artifacts"
         md_ref = {"path": f"artifacts/{digest}.md", "sha256": _immutable_bytes(artifact_dir / f"{digest}.md", markdown.encode("utf-8"))}
         html_ref = {"path": f"artifacts/{digest}.html", "sha256": _immutable_bytes(artifact_dir / f"{digest}.html", html_text.encode("utf-8"))}
+        article_ref = {"path": f"artifacts/{digest}.article.json", "sha256": _immutable_bytes(artifact_dir / f"{digest}.article.json", article_bytes)}
         archive_date = _local_report_date(analysis_bundle.get("cutoff_at"))
         archive_path = self.archive_root / f"{archive_date}-kline-daily-newsletter.md"
         if archive_path.exists() and archive_path.read_bytes() != markdown.encode("utf-8"):
             archive_path = self.archive_root / f"{archive_date}-kline-daily-newsletter-{digest[:12]}.md"
         _atomic_bytes(archive_path, markdown.encode("utf-8"))
+        article_archive_path = self.archive_root / f"{archive_date}-kline-daily-newsletter.article.json"
+        if article_archive_path.exists() and article_archive_path.read_bytes() != article_bytes:
+            article_archive_path = self.archive_root / f"{archive_date}-kline-daily-newsletter-{digest[:12]}.article.json"
+        _atomic_bytes(article_archive_path, article_bytes)
         _atomic_bytes(self.output_root / "latest.md", markdown.encode("utf-8"))
         _atomic_bytes(self.output_root / "latest.html", html_text.encode("utf-8"))
+        _atomic_bytes(self.output_root / "latest.article.json", article_bytes)
         archive_hash = hashlib.sha256(archive_path.read_bytes()).hexdigest()
         aliases = {
             "markdown": {"path": "latest.md", "sha256": hashlib.sha256((self.output_root / "latest.md").read_bytes()).hexdigest()},
             "html": {"path": "latest.html", "sha256": hashlib.sha256((self.output_root / "latest.html").read_bytes()).hexdigest()},
+            "article": {"path": "latest.article.json", "sha256": hashlib.sha256((self.output_root / "latest.article.json").read_bytes()).hexdigest()},
         }
-        receipt = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "identity_core": core, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "cutoff_at": archive_date, "markdown": md_ref, "html": html_ref, "snapshot_assets": snapshot_assets, "archive": {"path": str(archive_path), "sha256": archive_hash}, "aliases": aliases, "generation_status": thesis.get("generation_status")}
+        receipt = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "identity_core": core, "thesis_id": thesis_id, "analysis_bundle_id": analysis_bundle.get("bundle_id"), "cutoff_at": archive_date, "markdown": md_ref, "html": html_ref, "article": article_ref, "snapshot_assets": snapshot_assets, "archive": {"path": str(archive_path), "sha256": archive_hash}, "article_archive": {"path": str(article_archive_path), "sha256": hashlib.sha256(article_archive_path.read_bytes()).hexdigest()}, "aliases": aliases, "generation_status": thesis.get("generation_status")}
         receipt_bytes = (_canonical(receipt) + "\n").encode("utf-8")
         receipt_ref = {"path": f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", "sha256": _immutable_bytes(self.runtime_root / "delivery" / f"receipts/{delivery_id.removeprefix(DELIVERY_ID_PREFIX)}.json", receipt_bytes)}
         state = {"schema_version": SCHEMA_VERSION, "delivery_id": delivery_id, "receipt": receipt_ref}
@@ -692,7 +703,7 @@ class DailyThesisDeliveryStore:
                 raise DailyThesisError("delivery_receipt_core_invalid")
             if receipt.get("thesis_id") != receipt_core.get("thesis_id") or receipt.get("analysis_bundle_id") != receipt_core.get("analysis_bundle_id"):
                 raise DailyThesisError("delivery_receipt_binding_invalid")
-            for field in ("markdown", "html"):
+            for field in ("markdown", "html", "article"):
                 reference = receipt.get(field) or {}
                 artifact_path = (self.runtime_root / "delivery" / str(reference.get("path") or "")).resolve()
                 if self.runtime_root.resolve() not in artifact_path.parents:
@@ -704,6 +715,10 @@ class DailyThesisDeliveryStore:
             archive_path = Path(str(archive.get("path") or "")).expanduser().resolve()
             if self.archive_root.resolve() not in archive_path.parents or archive.get("sha256") != hashlib.sha256(archive_path.read_bytes()).hexdigest():
                 raise DailyThesisError("delivery_archive_invalid")
+            article_archive = receipt.get("article_archive") or {}
+            article_archive_path = Path(str(article_archive.get("path") or "")).expanduser().resolve()
+            if self.archive_root.resolve() not in article_archive_path.parents or article_archive.get("sha256") != hashlib.sha256(article_archive_path.read_bytes()).hexdigest():
+                raise DailyThesisError("delivery_article_archive_invalid")
             for alias in (receipt.get("aliases") or {}).values():
                 alias_path = (self.output_root / str(alias.get("path") or "")).resolve()
                 if self.output_root.resolve() not in alias_path.parents or alias.get("sha256") != hashlib.sha256(alias_path.read_bytes()).hexdigest():

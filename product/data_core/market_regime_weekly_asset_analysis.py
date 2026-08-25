@@ -48,6 +48,8 @@ def _safe_provider_receipt(value: Any) -> dict[str, Any]:
         "request_hash",
         "output_hash",
         "validation_result",
+        "tool_policy",
+        "network_policy",
     )
     return {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
 

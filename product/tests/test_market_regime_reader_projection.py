@@ -11,6 +11,7 @@ from data_core.market_regime_reader_projection import (  # noqa: E402
     project_daily_asset,
     project_weekly_card,
     render_reader_asset_html,
+    render_reader_article,
     render_reader_asset_markdown,
 )
 
@@ -21,10 +22,11 @@ class ReaderProjectionTests(unittest.TestCase):
             {
                 "asset_key": "dxy",
                 "display_name": "美元 ETF（UUP）",
+                "instrument": {"ticker": "UUP", "canonical_symbol": "UUP", "instrument_type": "ETF", "venue": "Yahoo Finance"},
                 "request": {
                     "timeframes": {
-                        "daily": {"status": "ready"},
-                        "four_hour": {"status": "unavailable"},
+                        "daily": {"status": "ready", "latest_timestamp": "2026-08-25T20:00:00Z"},
+                        "four_hour": {"status": "unavailable", "latest_timestamp": None},
                     }
                 },
                 "analysis": {
@@ -80,6 +82,38 @@ class ReaderProjectionTests(unittest.TestCase):
             self.assertNotIn("数据覆盖：", rendered)
         self.assertIn("dxy-daily.png", daily_markdown)
         self.assertIn("dxy-weekly.png", weekly_markdown)
+        self.assertIn("标的：UUP · ETF · Yahoo Finance", daily_markdown)
+        self.assertIn("观察时点：2026-08-25T20:00:00Z", daily_markdown)
+
+    def test_article_projection_preserves_image_then_text_then_summary_order(self) -> None:
+        projection = project_daily_asset(
+            {
+                "asset_key": "dxy",
+                "display_name": "美元 ETF（UUP）",
+                "instrument": {"ticker": "UUP", "canonical_symbol": "UUP", "instrument_type": "ETF"},
+                "request": {"timeframes": {"daily": {"status": "ready", "latest_timestamp": "2026-08-25"}}},
+                "analysis": {"generation_status": "analysis_unavailable", "deterministic": {"position": {"text": "位置：高位。"}, "structure": {"text": "结构：偏空。"}}},
+                "snapshots": {"daily": {"snapshot_id": "snapshot:dxy:daily", "asset": {"path": "snapshots/dxy-daily.png", "sha256": "a" * 64}}},
+            }
+        )
+        article = render_reader_article([projection], title="宏观 K 线日报", cutoff_at="2026-08-25")
+        self.assertEqual(article["schema_version"], "market-regime-reader-article-v1")
+        self.assertEqual([block["type"] for block in article["blocks"]], ["asset_heading", "image", "period_text", "asset_summary"])
+        self.assertEqual(article["media"][0]["path"], "snapshots/dxy-daily.png")
+        self.assertEqual(article["media"][0]["sha256"], "a" * 64)
+
+    def test_markdown_unavailable_period_is_not_repeated(self) -> None:
+        projection = project_daily_asset(
+            {
+                "asset_key": "dxy",
+                "display_name": "美元 ETF（UUP）",
+                "request": {"timeframes": {"four_hour": {"status": "unavailable"}}},
+                "analysis": {"generation_status": "analysis_unavailable"},
+            }
+        )
+        markdown = render_reader_asset_markdown(projection)
+        self.assertEqual(markdown.count("本周期数据暂缺"), 1)
+        self.assertIn("状态：模型解释不可用", markdown)
 
     def test_shared_html_projection_renders_image_before_period_text(self) -> None:
         projection = project_daily_asset(

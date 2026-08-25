@@ -144,6 +144,18 @@ class CodexCliProvider:
                 "--sandbox",
                 "read-only",
                 "--skip-git-repo-check",
+                "--disable",
+                "shell_tool",
+                "--disable",
+                "browser_use",
+                "--disable",
+                "browser_use_external",
+                "--disable",
+                "computer_use",
+                "--disable",
+                "apps",
+                "--disable",
+                "unified_exec",
                 "--json",
                 "--output-last-message",
                 str(output_path),
@@ -174,6 +186,8 @@ class CodexCliProvider:
             "request_hash": request_hash,
             "output_hash": _digest(output),
             "attempt_count": 1,
+            "tool_policy": "none",
+            "network_policy": "no_external_tools",
         }
 
 

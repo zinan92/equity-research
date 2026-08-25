@@ -13,6 +13,7 @@ from data_core.market_regime_weekly_report import (  # noqa: E402
     build_weekly_report,
     render_weekly_html,
     render_weekly_markdown,
+    render_weekly_article,
 )
 from data_core.market_regime_weekly_features import FEATURE_SCHEMA_VERSION  # noqa: E402
 from data_core.market_regime_weekly_source import WEEKLY_KEYS  # noqa: E402
@@ -168,6 +169,14 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn("**位置**：位置：高位。", markdown)
         self.assertIn("**赔率**：赔率尚未形成", markdown)
         self.assertIn("**市场含义**：通常由宏观驱动", markdown)
+
+    def test_weekly_article_projection_uses_shared_semantic_blocks(self) -> None:
+        report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
+        article = render_weekly_article(report)
+        self.assertEqual(article["schema_version"], "market-regime-reader-article-v1")
+        self.assertEqual(article["title"], "宏观 K 线周报")
+        self.assertEqual(article["blocks"][0]["type"], "asset_heading")
+        self.assertIn("asset_summary", [block["type"] for block in article["blocks"]])
 
     def test_rendered_html_has_adjacent_analysis_no_ops_surface_and_b_order(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
