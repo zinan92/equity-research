@@ -1,5 +1,35 @@
 # REGISTRY
 
+## 2026-08-26 · Sonnet review closure and final reader artifact
+
+Now: the second read-only Claude review passed with non-blocking follow-ups.
+The first review receipt is
+`/Users/wendy/.codex/cc-receipts/2026-08-25/20260825T165533Z_754d112a-a9d4-42ea-b91b-c20b8d448497.json`; the second is
+`/Users/wendy/.codex/cc-receipts/2026-08-25/20260825T172926Z_cf3b10aa-1487-4754-ad50-3da125cb4104.json`.
+PR #1022 closes the P1/P2/P3 reader findings; PR #1024 hardens truth labels
+and article media hashes; PR #1026 keeps `model_generated_unreviewed` in the
+article projection instead of exposing `validated` as if it meant human
+verification.
+
+Final real run after the closure (Beijing edition 2026-08-26) completed under
+20 minutes with `source_status=ready` 31/31, `analysis_status=partial` 17/19
+model explanations plus 2 explicit deterministic readouts, and
+`thesis_status=model_generated_unreviewed` from Codex CLI. The local Mini
+Program payload is now real and content-addressed at
+`/Users/wendy/Desktop/K线日报/latest.article.json`, with 19 asset headings,
+31 period text blocks, 31 PNG media attachments and valid 64-hex media hashes;
+the dated archive `.article.json` is bound in the delivery receipt. Web and
+Obsidian remain at `latest.html`/`latest.md` and the dated archive under
+`/Users/wendy/park-hands/007_kline daily newsletter`.
+
+The remaining non-blocking follow-up is #1025: wire the Weekly runtime to
+write its own `.article.json` pointer. The shared Weekly article projection
+and tests exist, but this build does not claim a Weekly Mini Program artifact
+until that ticket is implemented. Mini Program API publication remains out of
+scope. Focused closure suite: 83 passed; the last full suite before the
+truth-label-only patch was 1854 passed, 2 skipped and 3 unrelated baseline
+failures.
+
 ## 2026-08-26 · Daily reader/fallback implementation complete; live acceptance evidence
 
 Now: the authoritative Daily K-line app is
