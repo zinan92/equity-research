@@ -436,14 +436,52 @@ def _analysis_output(analysis: Mapping[str, Any]) -> Mapping[str, Any]:
     return nested if isinstance(nested, Mapping) else analysis
 
 
+def _daily_status_footer(delivery: Mapping[str, Any], analysis_bundle: Mapping[str, Any], cutoff: str) -> list[str]:
+    total_slots = 0
+    ready_slots = 0
+    unavailable_slots = 0
+    model_assets = 0
+    deterministic_assets = 0
+    for asset in analysis_bundle.get("assets") or []:
+        request = asset.get("request") if isinstance(asset, Mapping) else {}
+        frames = request.get("timeframes") if isinstance(request, Mapping) else {}
+        for frame in frames.values() if isinstance(frames, Mapping) else []:
+            total_slots += 1
+            if isinstance(frame, Mapping) and frame.get("status") == "ready":
+                ready_slots += 1
+            else:
+                unavailable_slots += 1
+        analysis = asset.get("analysis") if isinstance(asset, Mapping) else {}
+        if isinstance(analysis, Mapping) and analysis.get("generation_status") == "model_generated_unreviewed":
+            model_assets += 1
+        else:
+            deterministic_assets += 1
+    thesis_status = "已生成" if delivery.get("generation_status") == "model_generated_unreviewed" else "未生成"
+    provider_receipt = delivery.get("provider_receipt") if isinstance(delivery.get("provider_receipt"), Mapping) else {}
+    provider = str(provider_receipt.get("provider") or provider_receipt.get("model") or "未记录")
+    lines = [
+        "## 来源与状态",
+        "",
+        f"- 数据源状态：本期 {ready_slots}/{total_slots} 个已声明周期就绪；暂缺 {unavailable_slots} 个。",
+        f"- 单资产解释：{model_assets} 个模型解释，{deterministic_assets} 个代码读数。",
+        f"- 综合解释：{thesis_status} · provider：{provider}。",
+        f"- 数据截至：{cutoff}",
+        "- 本日报不读取 Finance Daily Newsletter。",
+        "- 详细 source identity、evidence hash 和失败分类保留在运行回执中。",
+        "- 内容仅供研究参考；不连接经纪账户，不自动执行交易。",
+        "",
+    ]
+    return lines
+
+
 def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[str, Any]) -> str:
     thesis = delivery.get("output") or {}
     cutoff = str(delivery.get("cutoff_at") or analysis_bundle.get("cutoff_at") or "")
     report_date = _local_report_date(cutoff)
-    lines = ["---", "title: 宏观 K 线日报", f"date: {report_date}", "report_type: kline-daily-newsletter", f"generation_status: {delivery.get('generation_status')}", "---", "", f"# 宏观 K 线日报｜{report_date}", "", "> 只基于跨资产 K 线：日线看方向；资产有明确盘中源时，再用 4 小时或 30 分钟看上下文。未列出的周期不是失败，而是不在该资产的源能力合同内。", ""]
+    lines = ["---", "title: 宏观 K 线日报", f"date: {report_date}", "report_type: kline-daily-newsletter", "---", "", f"# 宏观 K 线日报｜{report_date}", "", "> 只基于跨资产 K 线：日线看方向；资产有明确盘中源时，再用 4 小时或 30 分钟看上下文。未列出的周期不是失败，而是不在该资产的源能力合同内。", ""]
     lines.extend(["## 今日结论", ""])
     if thesis.get("generation_status") != "model_generated_unreviewed":
-        lines.extend(["当前综合 thesis 不可用。", "", "本日报保留各资产数据状态，但没有把旧结论或模板判断当作今天的新结论。", ""])
+        lines.extend(["本期综合解释尚未生成。", "", "本日报保留本次真实图表和代码读数，没有把旧结论或模板判断当作今天的新结论。", ""])
     else:
         lines.extend([f"**{POSTURE_LABELS.get(thesis['posture'], thesis['posture'])}** · {thesis['headline']['text']}", "", thesis["what_happened"]["text"], "", "## 世界模型", "", thesis["world_model"]["text"], "", "## 盘面领导与落后", "", thesis["leadership"]["text"], "", thesis["laggards"]["text"], "", "## 资金迁移（价格关系推断）", "", thesis["capital_migration"]["text"], "", "## 理论机制", "", thesis["theoretical_mechanism"]["text"], "", "## 接下来观察", ""])
         lines.extend([f"{index}. {row['text']}" for index, row in enumerate(thesis["watchpoints"], 1)])
@@ -457,7 +495,6 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
         analysis = asset.get("analysis") or {}
         output = _analysis_output(analysis)
         lines.extend([f"### {asset.get('display_name', asset.get('asset_key'))}", ""])
-        lines.append(f"数据覆盖：{_coverage(asset.get('request') or {})}")
         requested_timeframes = (asset.get("request") or {}).get("timeframes") or {}
         labels = (("daily", "日线"), ("four_hour", "4小时"), ("thirty_minute", "30分钟"))
         if analysis.get("generation_status") != "model_generated_unreviewed":
@@ -495,7 +532,8 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
         if isinstance(output.get("market_meaning"), Mapping):
             lines.extend([f"- **市场含义**：{output['market_meaning']['text']}"])
         lines.append("")
-    lines.extend(["## 数据边界", "", f"- 数据截至：{cutoff}", "- 本日报不读取 Finance Daily Newsletter。", "- 已请求但抓取失败的周期保留为不可用，不代表横盘或没有变化；未列出的周期表示该资产当前没有纳入该周期请求。", "- 内容仅供研究参考；不连接经纪账户，不自动执行交易。", ""])
+    lines.extend(["## 数据边界", "", "- 已请求但抓取失败的周期保留为不可用，不代表横盘或没有变化；未列出的周期表示该资产当前没有纳入该周期请求。", ""])
+    lines.extend(_daily_status_footer(delivery, analysis_bundle, cutoff))
     return "\n".join(lines)
 
 
