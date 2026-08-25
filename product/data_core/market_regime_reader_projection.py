@@ -117,7 +117,7 @@ def project_daily_asset(asset: Mapping[str, Any]) -> dict[str, Any]:
         "display_name": asset.get("display_name") or asset.get("asset_key"),
         "instrument_caption": _instrument_caption(asset.get("instrument") if isinstance(asset.get("instrument"), Mapping) else None),
         "observation_time": _observation_time(periods),
-        "analysis_status": "validated" if analysis.get("generation_status") == "model_generated_unreviewed" else "analysis_unavailable",
+        "analysis_status": "model_generated_unreviewed" if analysis.get("generation_status") == "model_generated_unreviewed" else "analysis_unavailable",
         "periods": periods,
         "position": position,
         "structure": structure,
@@ -164,7 +164,7 @@ def project_weekly_card(card: Mapping[str, Any]) -> dict[str, Any]:
         "display_name": card.get("display_name") or card.get("asset_key"),
         "instrument_caption": _instrument_caption(instrument),
         "observation_time": _observation_time(periods),
-        "analysis_status": card.get("analysis_status") or "analysis_unavailable",
+        "analysis_status": "model_generated_unreviewed" if card.get("analysis_status") == "validated" else (card.get("analysis_status") or "analysis_unavailable"),
         "periods": periods,
         "position": analysis.get("position"),
         "structure": analysis.get("structure"),
@@ -247,7 +247,7 @@ def render_reader_asset_html(projection: Mapping[str, Any], *, snapshot_prefix: 
     synthesis = html.escape(_summary_text(projection.get("synthesis"), "当前多周期分析不可用。"))
     meaning = html.escape(_summary_text(projection.get("market_meaning"), "当前机制解释不可用。"))
     asset_key = html.escape(str(projection.get("asset_key") or ""), quote=True)
-    status_label = {"validated": "模型生成 · 未人工复核", "analysis_unavailable": "模型解释不可用"}.get(str(projection.get("analysis_status")), "状态待确认")
+    status_label = {"validated": "模型生成 · 未人工复核", "model_generated_unreviewed": "模型生成 · 未人工复核", "analysis_unavailable": "模型解释不可用"}.get(str(projection.get("analysis_status")), "状态待确认")
     header_meta = " · ".join(item for item in (f"标的：{caption}" if caption else "", f"观察时点：{observation_time}" if observation_time else "") if item)
     return (
         f'<section class="asset-pane reader-asset" id="asset-{asset_key}" data-pane="{asset_key}" data-asset-key="{asset_key}" data-timeframes="{len(periods)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释">'
