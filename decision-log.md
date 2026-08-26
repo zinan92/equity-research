@@ -1,5 +1,22 @@
 # Decision Log
 
+## 2026-08-26 — Repair launchd Codex resolution after morning failure
+
+- **Decision:** Resolve Codex through an explicit Homebrew/vendor binary path
+  for the 08:20 LaunchAgent rather than relying on the interactive shell PATH.
+  Keep DeepSeek as primary and preserve the same frozen-evidence fallback.
+- **Why:** The morning run had 31/31 ready data slots but every model layer
+  failed after DeepSeek HTTP 402 because launchd could not find `codex`. This
+  was an environment-resolution defect, not a market-data or chart defect.
+- **Evidence:** Issue #1029 / PR #1030 (`ce8011f`); launchd-equivalent minimal
+  PATH probe returned structured JSON; follow-up real run produced 18/19
+  asset explanations and a model-generated thesis. The 8907 QA control is
+  recorded separately in `docs/qa/market-regime-8907-control.md`.
+- **Gotchas:** A successful interactive terminal probe is insufficient for a
+  launchd job. The receipt now records the actual executable path. If one
+  asset still fails validation, the report names it and keeps its code-owned
+  reading rather than using old prose.
+
 ## 2026-08-26 — Sonnet review closure and remaining Weekly parity ticket
 
 - **Decision:** Accept the Daily Web, Obsidian and local Mini Program article
