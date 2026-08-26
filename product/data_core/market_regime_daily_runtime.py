@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import shutil
 import tempfile
 import threading
 import time
@@ -39,6 +40,19 @@ from .market_regime_llm_provider import CodexCliProvider, ValidatedFallbackProvi
 
 SCHEMA_VERSION = "market-regime-daily-runtime-v1"
 STATUS_SCHEMA_VERSION = "market-regime-daily-runtime-status-v1"
+
+
+def _codex_cli_executable() -> str:
+    """Resolve Codex for both interactive shells and launchd's minimal PATH."""
+
+    configured = os.getenv("PARK_CODEX_CLI")
+    candidates = [configured, shutil.which("codex"), "/opt/homebrew/bin/codex", "/usr/local/bin/codex"]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return str(Path(candidate).resolve())
+    # Preserve a typed provider error if the installation is absent; do not
+    # silently substitute another model or fabricate a response.
+    return "codex"
 
 
 class DailyRuntimeError(RuntimeError):
@@ -227,7 +241,7 @@ class DailyKlineRuntime:
         primary = DeepSeekDailyAssetProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
         return lambda _request: ValidatedFallbackProvider(
             primary=primary,
-            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT, timeout=180.0, timeout_provider=self._remaining_runtime_seconds),
+            fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT, executable=_codex_cli_executable(), timeout=180.0, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_asset_analysis,
             fallback_attempts=1,
         )
@@ -238,7 +252,7 @@ class DailyKlineRuntime:
         primary = DeepSeekDailyThesisProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
         return ValidatedFallbackProvider(
             primary=primary,
-            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, timeout=360.0, timeout_provider=self._remaining_runtime_seconds),
+            fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, executable=_codex_cli_executable(), timeout=360.0, timeout_provider=self._remaining_runtime_seconds),
             validator=validate_daily_thesis,
             fallback_attempts=2,
         )

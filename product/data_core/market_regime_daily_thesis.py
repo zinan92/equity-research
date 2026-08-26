@@ -161,6 +161,7 @@ def _safe_receipt(value: Any) -> dict[str, Any]:
         "validation_result",
         "tool_policy",
         "network_policy",
+        "executable",
     )
     safe = {key: value[key] for key in allowed if key in value and isinstance(value[key], (str, int, float, bool, type(None)))}
     safe["receipt_hash"] = _digest(safe)
