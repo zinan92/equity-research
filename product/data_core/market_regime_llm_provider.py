@@ -188,6 +188,7 @@ class CodexCliProvider:
             "attempt_count": 1,
             "tool_policy": "none",
             "network_policy": "no_external_tools",
+            "executable": self.executable,
         }
 
 
