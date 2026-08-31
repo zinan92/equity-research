@@ -6,6 +6,7 @@ from datetime import date, datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
+from time import sleep
 from typing import Any, Callable, Mapping
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -55,6 +56,7 @@ EXPLICIT_FALLBACK_SOURCES = {
     "star50": ("sina_index",),
     "china_dividend": ("sina_index",),
 }
+_TRANSIENT_HTTP_STATUSES = frozenset({502, 503, 504})
 
 
 def _digest(value: Any) -> str:
@@ -232,10 +234,11 @@ def _validate_public_4h_metadata(
 class WeeklyDatafeedClient:
     """A strict datafeed client with only declared A-share fallback sources."""
 
-    def __init__(self, *, base_url: str = "http://127.0.0.1:8100", timeout: float = 45.0, opener: Callable[..., Any] | None = None) -> None:
+    def __init__(self, *, base_url: str = "http://127.0.0.1:8100", timeout: float = 45.0, opener: Callable[..., Any] | None = None, transient_retries: int = 1) -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self.opener = opener or (lambda request, timeout: urlopen(request, timeout=timeout))
+        self.transient_retries = max(0, int(transient_retries))
 
     def fetch(
         self,
@@ -245,6 +248,7 @@ class WeeklyDatafeedClient:
         start: str | None = None,
         end: str | None = None,
         limit: int = 600,
+        _attempt: int = 0,
     ) -> dict[str, Any]:
         request_spec = datafeed_request_for_asset(asset_key, timeframe)
         query: list[tuple[str, str]] = [
@@ -280,6 +284,16 @@ class WeeklyDatafeedClient:
             if isinstance(detail, Mapping):
                 detail = detail.get("reject_reason") or detail.get("error") or detail.get("detail")
             reason = str(detail or exc.reason or "http_error")
+            if int(getattr(exc, "code", 0) or 0) in _TRANSIENT_HTTP_STATUSES and _attempt < self.transient_retries:
+                sleep(0.25)
+                return self.fetch(
+                    asset_key,
+                    timeframe,
+                    start=start,
+                    end=end,
+                    limit=limit,
+                    _attempt=_attempt + 1,
+                )
             return _unavailable(
                 asset_key,
                 timeframe,
@@ -290,14 +304,25 @@ class WeeklyDatafeedClient:
                     "method": "GET",
                     "status": int(getattr(exc, "code", 0) or 0),
                     "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                    "attempt_count": _attempt + 1,
                 },
             )
         except (URLError, TimeoutError, OSError) as exc:
+            if _attempt < self.transient_retries:
+                sleep(0.25)
+                return self.fetch(
+                    asset_key,
+                    timeframe,
+                    start=start,
+                    end=end,
+                    limit=limit,
+                    _attempt=_attempt + 1,
+                )
             return _unavailable(
                 asset_key,
                 timeframe,
                 f"datafeed_transport:{type(exc).__name__}",
-                request_evidence={"url": url, "method": "GET", "status": None, "error_type": type(exc).__name__},
+                request_evidence={"url": url, "method": "GET", "status": None, "error_type": type(exc).__name__, "attempt_count": _attempt + 1},
             )
         except (UnicodeDecodeError, ValueError) as exc:
             return _unavailable(
@@ -309,12 +334,23 @@ class WeeklyDatafeedClient:
                     "method": "GET",
                     "status": int(status),
                     "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                    "attempt_count": _attempt + 1,
                 },
             )
         if status < 200 or status >= 300:
             detail = payload.get("detail") if isinstance(payload, Mapping) else payload
             if isinstance(detail, Mapping):
                 detail = detail.get("reject_reason") or detail.get("error") or detail.get("detail")
+            if status in _TRANSIENT_HTTP_STATUSES and _attempt < self.transient_retries:
+                sleep(0.25)
+                return self.fetch(
+                    asset_key,
+                    timeframe,
+                    start=start,
+                    end=end,
+                    limit=limit,
+                    _attempt=_attempt + 1,
+                )
             return _unavailable(
                 asset_key,
                 timeframe,
@@ -325,10 +361,23 @@ class WeeklyDatafeedClient:
                     "method": "GET",
                     "status": status,
                     "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                    "attempt_count": _attempt + 1,
                 },
             )
         try:
-            return self._convert_response(asset_key, timeframe, payload)
+            result = self._convert_response(asset_key, timeframe, payload)
+            result["request_evidence"] = {
+                "url": url,
+                "method": "GET",
+                "status": status,
+                "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                "attempt_count": _attempt + 1,
+            }
+            result["source_identity"] = {
+                **dict(result.get("source_identity") or {}),
+                "request_attempt_count": _attempt + 1,
+            }
+            return result
         except (WeeklyCandleContractError, TypeError, ValueError) as exc:
             return _unavailable(
                 asset_key,
@@ -340,6 +389,7 @@ class WeeklyDatafeedClient:
                     "method": "GET",
                     "status": status,
                     "response_body_sha256": hashlib.sha256(raw_body).hexdigest(),
+                    "attempt_count": _attempt + 1,
                 },
             )
 

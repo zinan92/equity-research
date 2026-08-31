@@ -280,6 +280,61 @@ def _chart_slot(
     }
 
 
+def _chart_coverage(chart_slots: list[Mapping[str, Any]]) -> dict[str, Any]:
+    """Summarize real chart availability without counting model prose."""
+
+    by_timeframe: dict[str, dict[str, int]] = {}
+    missing_items: list[dict[str, str]] = []
+    ready = 0
+    for slot in chart_slots:
+        timeframe = str(slot.get("timeframe") or "unknown")
+        bucket = by_timeframe.setdefault(timeframe, {"expected": 0, "ready": 0, "missing": 0})
+        bucket["expected"] += 1
+        if slot.get("status") == "complete":
+            bucket["ready"] += 1
+            ready += 1
+            continue
+        bucket["missing"] += 1
+        feature = slot.get("feature") if isinstance(slot.get("feature"), Mapping) else {}
+        missing_items.append(
+            {
+                "asset_key": str(slot.get("asset_key") or ""),
+                "timeframe": timeframe,
+                "reason": str(feature.get("failure_code") or slot.get("status") or "unavailable"),
+            }
+        )
+    expected = len(chart_slots)
+    return {
+        "expected": expected,
+        "ready": ready,
+        "missing": expected - ready,
+        "ratio": round(ready / expected, 2) if expected else 1.0,
+        "by_timeframe": by_timeframe,
+        "missing_items": missing_items,
+        "definition": "仅统计真实标准 K 线图表槽位；不把模型解释可用性计入图表覆盖率。",
+    }
+
+
+def _chart_coverage_label(coverage: Mapping[str, Any] | None) -> str:
+    if not isinstance(coverage, Mapping):
+        return "图表覆盖：未提供。"
+    expected = int(coverage.get("expected") or 0)
+    ready = int(coverage.get("ready") or 0)
+    missing = int(coverage.get("missing") or 0)
+    by_timeframe = coverage.get("by_timeframe")
+    detail = ""
+    if isinstance(by_timeframe, Mapping):
+        parts = []
+        labels = {"weekly": "周线", "daily": "日线", "four_hour": "4 小时"}
+        for key in ("weekly", "daily", "four_hour"):
+            item = by_timeframe.get(key)
+            if isinstance(item, Mapping):
+                parts.append(f"{labels[key]} {int(item.get('ready') or 0)}/{int(item.get('expected') or 0)}")
+        if parts:
+            detail = "（" + " · ".join(parts) + "）"
+    return f"图表覆盖：{ready}/{expected}，缺失 {missing} {detail}".strip()
+
+
 def build_weekly_report(
     source_snapshot: Mapping[str, Any],
     analyses: Mapping[str, Mapping[str, Any]],
@@ -409,6 +464,7 @@ def build_weekly_report(
             "analysis": analysis_view,
             "chart_slots": slots,
         })
+    chart_coverage = _chart_coverage(chart_slots)
     core = {
         "schema_version": SCHEMA_VERSION,
         "renderer_version": RENDERER_VERSION,
@@ -418,6 +474,7 @@ def build_weekly_report(
         "source_status": source_snapshot.get("status"),
         "cards": cards,
         "chart_slots": chart_slots,
+        "chart_coverage": chart_coverage,
         "ranking": ranking,
         "truth_boundary": {
             "track": "weekly_macro_kline",
@@ -456,7 +513,7 @@ def attach_chart_snapshots(
         for slot in card.get("chart_slots") or []:
             if isinstance(slot, Mapping) and slot.get("slot_id") in snapshots:
                 slot["snapshot"] = json.loads(_canonical(snapshots[slot["slot_id"]]))
-    for key in ("schema_version", "renderer_version", "week_end", "cutoff_at", "source_snapshot_id", "source_status", "cards", "chart_slots", "ranking", "truth_boundary"):
+    for key in ("schema_version", "renderer_version", "week_end", "cutoff_at", "source_snapshot_id", "source_status", "cards", "chart_slots", "chart_coverage", "ranking", "truth_boundary"):
         result[key] = core[key]
     result["identity_core"] = core
     result["report_id"] = f"{REPORT_ID_PREFIX}{_digest(core)}"
@@ -471,6 +528,7 @@ def render_weekly_markdown(report: Mapping[str, Any]) -> str:
         "> 模型生成、未经人工复核；仅限本地评估；不自动执行交易。",
         "",
         f"周末日期：{report.get('week_end')} · 分析截止：{report.get('week_end')} · 先完成全部资产分析，再查看{opportunity['title']}。",
+        _chart_coverage_label(report.get("chart_coverage")),
         "",
     ]
     for _, chapter, keys in CHAPTERS:
@@ -544,7 +602,7 @@ function mountPane(pane){if(!pane||pane.dataset.mounted==='true')return;pane.que
 function active(k){document.querySelectorAll('[data-pane]').forEach(x=>x.classList.toggle('active',x.dataset.pane===k));document.querySelectorAll('[data-asset-nav]').forEach(x=>x.classList.toggle('active',x.dataset.assetNav===k));mountPane(document.querySelector('[data-pane="'+k+'"]'));}
 document.querySelectorAll('[data-asset-nav]').forEach(button=>button.addEventListener('click',()=>active(button.dataset.assetNav)));const first=document.querySelector('[data-pane]')?.dataset.pane;if(first)active(first);
 """
-    document = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>WEEK_END {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看机会排序。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周机会排序</h2><p>排序位于全部资产之后；数据或分析不可用的资产保留其状态，不会被伪装成等待或回避。</p><ul>{ranking_rows}</ul></section><footer>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main><script type="application/json" id="report-data">{report_json}</script><script>{lightweight_charts_js}</script><script>{standard_kline_js}</script><script>{bootstrap}</script></body></html>"""
+    document = f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · {_escape(_chart_coverage_label(report.get("chart_coverage")))} · 先逐一阅读全部资产，再看机会排序。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周机会排序</h2><p>排序位于全部资产之后；数据或分析不可用的资产保留其状态，不会被伪装成等待或回避。</p><ul>{ranking_rows}</ul></section><footer>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main><script type="application/json" id="report-data">{report_json}</script><script>{lightweight_charts_js}</script><script>{standard_kline_js}</script><script>{bootstrap}</script></body></html>"""
     if ranking_title != "机会排序":
         document = document.replace("本周机会排序", f"本周{_escape(ranking_title)}")
         document = document.replace(
@@ -654,6 +712,7 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
         and card["analysis"]["provider_status"].get("both_failed")
     ]
     status_lines = [
+        _chart_coverage_label(report.get("chart_coverage")),
         f"单资产解释：{model_count}/{len(cards)} 个模型解释通过；机会排序解释：{'已生成' if ranking_status == 'model_generated_unreviewed' else '未生成'}。",
     ]
     if dual_failure_names:
@@ -662,7 +721,7 @@ def render_weekly_html(report: Mapping[str, Any], *, snapshot_prefix: str = "sna
     if isinstance(ranking_provider_status, Mapping) and ranking_provider_status.get("both_failed"):
         status_lines.append("模型失败披露：DeepSeek 与 Codex CLI 均未生成机会排序解释。")
     footer_status = "<br>".join(_escape(line) for line in status_lines)
-    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · 先逐一阅读全部资产，再看{_escape(opportunity["title"])}。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周{_escape(opportunity["title"])}</h2><p>{_escape(description)}</p><ul>{ranking_rows}</ul></section><footer><div>来源与状态</div>{footer_status}<br>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main></body></html>'
+    return f'<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>宏观 K 线周报｜{_escape(report.get("week_end"))}</title><style>{css}</style></head><body><main><header class="top"><b>宏观 K 线周报</b><span>模型生成、未经人工复核 · 本地评估 · 无自动执行</span></header><section class="hero"><h1>本周宏观图谱</h1><p>周末日期 {_escape(report.get("week_end"))} · {_escape(_chart_coverage_label(report.get("chart_coverage")))} · 先逐一阅读全部资产，再看{_escape(opportunity["title"])}。</p></section><section class="body"><nav>{"".join(nav_parts)}</nav><div>{"".join(pane_parts)}</div></section><section class="ranking"><h2>本周{_escape(opportunity["title"])}</h2><p>{_escape(description)}</p><ul>{ranking_rows}</ul></section><footer><div>来源与状态</div>{footer_status}<br>模型生成、未经人工复核；仅限本地评估；不读取 Finance Daily Newsletter；不连接经纪账户或执行交易。<code>{_escape(report.get("report_id"))}</code></footer></main></body></html>'
 
 
 def render_weekly_article(report: Mapping[str, Any], *, snapshot_prefix: str = "snapshots/") -> dict[str, Any]:

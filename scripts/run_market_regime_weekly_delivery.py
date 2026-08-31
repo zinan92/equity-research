@@ -136,6 +136,7 @@ def run_and_deliver(
         "markdown": str(markdown_path),
         "archive": str(archive_path),
         "feishu": receipt,
+        "chart_coverage": report.get("chart_coverage"),
         "chart_slots": len(report.get("chart_slots") or []),
         "chart_snapshots": sum(1 for slot in report.get("chart_slots") or [] if isinstance(slot, dict) and isinstance(slot.get("snapshot"), dict)),
         "assets": len(report.get("cards") or []),
