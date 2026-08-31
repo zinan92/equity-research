@@ -1,5 +1,27 @@
 # REGISTRY
 
+## 2026-08-31 · Reader-facing explanation validation recovery (Issue #1042 / PR #1043)
+
+Now: the Weekly explanation boundary accepts evidence-bound consumer research
+language, including current/week context and conditional outlooks. It rejects
+internal OPS metadata such as provider, fallback, schema, validation, request
+hash and evidence-ID fields in reader prose; mechanism citation and output
+schema checks remain enforced. Reader fallbacks now say when a chart exists but
+its text interpretation is unavailable, instead of calling the chart data
+missing.
+
+Real rerun for week end 2026-08-28 after the fix: **19/19 asset explanations
+validated**, **44/44 chart snapshots ready** (weekly 19/19, daily 19/19, 4H
+6/6), and the ranking explanation was generated. The fresh reader artifacts are
+`/Users/wendy/Desktop/宏观K线周报/latest.html` and
+`/Users/wendy/Desktop/宏观K线周报/latest.md`; the report id is
+`market-regime-weekly-report:7ea8c0723090612296c8525459188ba4627e34fe091a9f7de5155c200eafe0d1`.
+
+Next: keep the DeepSeek → Codex CLI fallback and its explicit failure
+disclosure; restore DeepSeek quota when desired, then let the next scheduled
+Weekly run produce a normal provider receipt. Do not use old model prose as a
+fallback.
+
 ## 2026-08-31 · Feishu rich image reader
 
 Now: Weekly delivery uses the installed official `lark-cli` bot identity to
