@@ -17,7 +17,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUNTIME_ROOT = Path.home() / "Library" / "Application Support" / "ParkWeeklyMacroKline" / "runtime"
 DEFAULT_OUTPUT_ROOT = Path.home() / "Desktop" / "宏观K线周报"
 DEFAULT_ARCHIVE_ROOT = Path.home() / "park-hands" / "008_finance weekly newsletter"
-DEFAULT_ENV_FILE = Path("/Users/wendy/work/trading-co/park-intel-production/.env")
+DEFAULT_ENV_FILE = Path(
+    "/Users/wendy/Library/Application Support/ParkWeeklyMacroKline/kline-feishu.env"
+)
 DEFAULT_KEY_FILE = Path.home() / "park-hands" / "_secrets" / "deepseek-key"
 
 
