@@ -1,5 +1,16 @@
 # REGISTRY
 
+## 2026-08-31 · Feishu rich image reader
+
+Now: Weekly delivery uses the installed official `lark-cli` bot identity to
+upload the current standard-kline PNGs and sends a reader-facing rich post to
+the dedicated Weekly webhook. The latest real send for week end 2026-08-28
+uploaded 44 images and sent 6 posts; the receipt records
+`mode=lark_cli_rich_post` and `status=sent`. The plain-text sender remains an
+explicit diagnostic mode only; it is not the scheduler default. No local
+Markdown image syntax, snapshot paths, Finance Daily webhook, or credentials
+are sent to readers.
+
 ## 2026-08-31 · Independent Weekly K-line delivery and coverage recovery
 
 Now: the canonical Weekly K-line app is
