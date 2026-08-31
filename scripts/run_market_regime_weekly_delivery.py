@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+from typing import Mapping
 
 
 PRODUCT = Path(__file__).resolve().parents[1] / "product"
@@ -20,11 +21,16 @@ from data_core.market_regime_weekly_feishu import (  # noqa: E402
     WeeklyFeishuDeliveryError,
     send_weekly_markdown,
 )
+from data_core.market_regime_weekly_feishu_cli import (  # noqa: E402
+    DEFAULT_WEEKLY_ENV_FILE,
+    WeeklyFeishuCliError,
+    send_weekly_rich_posts,
+)
 from data_core.market_regime_weekly_runtime import WeeklyRuntimeError  # noqa: E402
 from run_market_regime_weekly import run_weekly_runtime  # noqa: E402
 
 
-DELIVERY_SCHEMA_VERSION = "market-regime-weekly-feishu-delivery-v1"
+DELIVERY_SCHEMA_VERSION = "market-regime-weekly-feishu-delivery-v2"
 DELIVERY_ID_PREFIX = "market-regime-weekly-feishu-delivery:"
 
 
@@ -55,11 +61,14 @@ def _write_delivery_receipt(runtime_root: Path, delivery: dict[str, object]) -> 
         "week_end": delivery["week_end"],
         "report_id": delivery["report_id"],
         "content_sha256": delivery["content_sha256"],
-        "chunk_count": delivery["chunk_count"],
+        "chunk_count": delivery.get("chunk_count", delivery.get("post_count", 0)),
         "sent_at": delivery["sent_at"],
     }
     if delivery.get("error_code"):
         core["error_code"] = delivery["error_code"]
+    for field in ("mode", "post_count", "image_count"):
+        if delivery.get(field) is not None:
+            core[field] = delivery[field]
     delivery_id = f"{DELIVERY_ID_PREFIX}{_digest(core)}"
     receipt = {**core, "delivery_id": delivery_id, "status": delivery["status"]}
     digest = delivery_id.removeprefix(DELIVERY_ID_PREFIX)
@@ -68,6 +77,41 @@ def _write_delivery_receipt(runtime_root: Path, delivery: dict[str, object]) -> 
     latest = {"schema_version": DELIVERY_SCHEMA_VERSION, "delivery_id": delivery_id, "receipt_path": str(receipt_path)}
     _atomic_json(runtime_root / "delivery" / "feishu" / "latest.json", latest)
     return receipt
+
+
+def _record_delivery_status(runtime_root: Path, receipt: Mapping[str, object]) -> None:
+    """Bind delivery outcome to the already-published runtime status."""
+
+    path = runtime_root / "status.json"
+    try:
+        status = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return
+    if not isinstance(status, dict) or not isinstance(status.get("last_success"), dict):
+        return
+    success = status["last_success"]
+    if success.get("report_id") != receipt.get("report_id"):
+        return
+    success.update(
+        {
+            "delivery_status": receipt.get("status"),
+            "delivery_id": receipt.get("delivery_id"),
+            "delivery_mode": receipt.get("mode"),
+            "delivery_post_count": receipt.get("post_count", receipt.get("chunk_count", 0)),
+            "delivery_image_count": receipt.get("image_count", 0),
+        }
+    )
+    if receipt.get("status") == "failed":
+        status["state"] = "failed"
+        status["last_failure"] = {
+            "at": receipt.get("sent_at"),
+            "code": receipt.get("error_code") or "feishu_delivery_failed",
+            "phase": "delivery",
+        }
+    else:
+        status["state"] = "idle"
+        status["last_failure"] = None
+    _atomic_json(path, status)
 
 
 def run_and_deliver(
@@ -82,6 +126,7 @@ def run_and_deliver(
     model: str,
     codex_model: str | None,
     feishu_env_file: Path,
+    feishu_mode: str = "rich",
 ) -> dict[str, object]:
     result = run_weekly_runtime(
         now=now,
@@ -106,15 +151,24 @@ def run_and_deliver(
     week_end_text = str(report.get("week_end") or "")
     report_id = str(report.get("report_id") or "")
     try:
-        delivery = send_weekly_markdown(
-            markdown,
-            week_end=week_end_text,
-            report_id=report_id,
-            output_root=output_root,
-            archive_path=archive_path,
-            env_file=feishu_env_file,
-        )
-    except WeeklyFeishuDeliveryError as exc:
+        if feishu_mode == "rich":
+            delivery = send_weekly_rich_posts(
+                report,
+                output_root=output_root,
+                env_file=feishu_env_file,
+            )
+        elif feishu_mode == "text":
+            delivery = send_weekly_markdown(
+                markdown,
+                week_end=week_end_text,
+                report_id=report_id,
+                output_root=output_root,
+                archive_path=archive_path,
+                env_file=feishu_env_file,
+            )
+        else:
+            raise WeeklyFeishuCliError("feishu_mode_invalid")
+    except (WeeklyFeishuDeliveryError, WeeklyFeishuCliError) as exc:
         failed = {
             "status": "failed",
             "week_end": week_end_text,
@@ -124,10 +178,12 @@ def run_and_deliver(
             "sent_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
             "error_code": str(exc)[:160],
         }
-        _write_delivery_receipt(runtime_root, failed)
+        failed_receipt = _write_delivery_receipt(runtime_root, failed)
+        _record_delivery_status(runtime_root, failed_receipt)
         raise
     delivery.update({"status": "sent", "sent_at": sent_at})
     receipt = _write_delivery_receipt(runtime_root, delivery)
+    _record_delivery_status(runtime_root, receipt)
     return {
         "status": "completed",
         "week_end": report.get("week_end"),
@@ -137,6 +193,9 @@ def run_and_deliver(
         "archive": str(archive_path),
         "feishu": receipt,
         "chart_coverage": report.get("chart_coverage"),
+        "feishu_mode": delivery.get("mode"),
+        "feishu_post_count": delivery.get("post_count", delivery.get("chunk_count", 0)),
+        "feishu_image_count": delivery.get("image_count", 0),
         "chart_slots": len(report.get("chart_slots") or []),
         "chart_snapshots": sum(1 for slot in report.get("chart_slots") or [] if isinstance(slot, dict) and isinstance(slot.get("snapshot"), dict)),
         "assets": len(report.get("cards") or []),
@@ -156,7 +215,8 @@ def main() -> int:
     parser.add_argument("--key-file", type=Path, default=home / "park-hands" / "_secrets" / "deepseek-key")
     parser.add_argument("--model", default="deepseek-v4-flash")
     parser.add_argument("--codex-model", default=None)
-    parser.add_argument("--feishu-env-file", type=Path, default=DEFAULT_ENV_FILE)
+    parser.add_argument("--feishu-env-file", type=Path, default=DEFAULT_WEEKLY_ENV_FILE)
+    parser.add_argument("--feishu-mode", choices=("rich", "text"), default="rich")
     args = parser.parse_args()
     now = datetime.fromisoformat(args.now.replace("Z", "+00:00")) if args.now else None
     if now is not None and now.tzinfo is None:
@@ -174,8 +234,9 @@ def main() -> int:
             model=args.model,
             codex_model=args.codex_model,
             feishu_env_file=args.feishu_env_file.expanduser().resolve(),
+            feishu_mode=args.feishu_mode,
         )
-    except (WeeklyRuntimeError, WeeklyFeishuDeliveryError) as exc:
+    except (WeeklyRuntimeError, WeeklyFeishuDeliveryError, WeeklyFeishuCliError) as exc:
         print(json.dumps({"status": "failed", "code": str(exc)}, ensure_ascii=False))
         return 1
     print(json.dumps(result, ensure_ascii=False))
