@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import tempfile
 from typing import Any, Callable, Mapping
@@ -24,6 +25,18 @@ class ProviderFallbackError(RuntimeError):
 
 class CodexCliError(RuntimeError):
     """Codex CLI could not return a structured result."""
+
+
+def _resolve_codex_executable(executable: str) -> str:
+    """Resolve Codex for launchd's minimal PATH as well as a shell."""
+
+    if executable != "codex":
+        return executable
+    candidates = [shutil.which("codex"), "/opt/homebrew/bin/codex", "/usr/local/bin/codex"]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return str(Path(candidate).resolve())
+    return executable
 
 
 def _canonical(value: Any) -> str:
@@ -115,7 +128,7 @@ class CodexCliProvider:
     ) -> None:
         self.system_prompt = system_prompt
         self.model = model
-        self.executable = executable
+        self.executable = _resolve_codex_executable(executable)
         self.timeout = timeout
         self.runner = runner or self._run
         self.cli_version = cli_version or "unknown"
