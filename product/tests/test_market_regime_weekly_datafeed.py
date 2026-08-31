@@ -276,6 +276,32 @@ class WeeklyDatafeedTest(unittest.TestCase):
         self.assertIn("upstream_error", result["reject_reason"])
         self.assertEqual(result["bars"], [])
 
+    def test_transient_http_failure_retries_same_source_once(self) -> None:
+        calls: list[str] = []
+
+        def opener(request, _timeout):
+            calls.append(request.full_url)
+            if len(calls) == 1:
+                raise HTTPError(
+                    request.full_url,
+                    502,
+                    "upstream unavailable",
+                    {},
+                    io.BytesIO(json.dumps({"detail": {"error": "upstream_error"}}).encode()),
+                )
+            return FakeResponse(candle_response("sp500", ticker="SPY"))
+
+        result = WeeklyDatafeedClient(
+            base_url="http://datafeed.test",
+            opener=opener,
+            transient_retries=1,
+        ).fetch("sp500", "daily")
+
+        self.assertEqual(result["status"], "ready")
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(result["request_evidence"]["attempt_count"], 2)
+        self.assertEqual(result["source_identity"]["request_attempt_count"], 2)
+
     def test_http_failure_preserves_source_identity_and_provider_symbol(self) -> None:
         def opener(_request, _timeout):
             return FakeResponse(

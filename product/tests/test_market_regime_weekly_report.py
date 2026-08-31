@@ -120,6 +120,9 @@ class WeeklyReportTest(unittest.TestCase):
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
         self.assertEqual(len(report["cards"]), 19)
         self.assertEqual(len(report["chart_slots"]), 44)
+        self.assertEqual(report["chart_coverage"]["expected"], 44)
+        self.assertEqual(report["chart_coverage"]["ready"], 0)
+        self.assertEqual(report["chart_coverage"]["missing"], 44)
         self.assertEqual(report["cards"][0]["asset_key"], "dxy")
         self.assertEqual(report["cards"][-1]["asset_key"], "silver")
 
@@ -169,6 +172,7 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn("**位置**：位置：高位。", markdown)
         self.assertIn("**赔率**：赔率尚未形成", markdown)
         self.assertIn("**市场含义**：通常由宏观驱动", markdown)
+        self.assertIn("图表覆盖：0/44", markdown)
 
     def test_weekly_article_projection_uses_shared_semantic_blocks(self) -> None:
         report = build_weekly_report(source_fixture(), analyses_fixture(), ranking_fixture())
