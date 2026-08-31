@@ -1,5 +1,29 @@
 # REGISTRY
 
+## 2026-08-31 · Independent Weekly K-line delivery and coverage recovery
+
+Now: the canonical Weekly K-line app is
+`/Users/wendy/Library/Application Support/ParkKlineDaily/app` at `main`.
+Its LaunchAgent is `com.park.market-regime.kline-weekly`, scheduled for Monday
+08:20, and uses the separate external credential file
+`/Users/wendy/Library/Application Support/ParkWeeklyMacroKline/kline-feishu.env`.
+Finance Daily keeps its own webhook configuration and is not read by this track.
+
+The canonical datafeed is `http://127.0.0.1:8100` at build `26dd2c5`.
+Yahoo latest-session NaN OHLC rows are repaired only through the same upstream
+source and recorded in provenance; no cache or silent source substitution is
+allowed. Weekly client retries one transient 502/503/504/transport failure
+against the same declared source and records the attempt count.
+
+Latest real Weekly run (week end 2026-08-28): **44/44 chart slots ready**
+(weekly 19/19, daily 19/19, 4H 6/6), source status complete, and the report was
+sent to the dedicated K-line Feishu channel. The report remains model-degraded:
+17/19 asset explanations explicitly record DeepSeek HTTP 402 plus Codex CLI
+validation failure; this is separate from chart/data coverage and is not hidden.
+Reader outputs are `/Users/wendy/Desktop/宏观K线周报/latest.md` and
+`latest.html`; the dated Markdown archive is under
+`/Users/wendy/park-hands/008_finance weekly newsletter`.
+
 ## 2026-08-26 · LaunchAgent Codex path fix and QA-control refresh
 
 Root cause of the morning “几乎全部不可用” edition: DeepSeek returned HTTP
