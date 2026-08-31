@@ -51,17 +51,30 @@ class WeeklyMechanismTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "theory_claim_type_invalid"):
             validate_theoretical_statement(invalid, {mechanism_id})
 
-    def test_theory_statement_rejects_current_certain_or_english_prose(self) -> None:
+    def test_theory_statement_allows_reader_facing_research_language(self) -> None:
         request = build_asset_analysis_request(asset_snapshot())
         mechanism_id = request["mechanism"]["mechanism_ids"][0]
-        for text, code in (
-            ("当前美元一定会上涨并实时压制比特币。", "theory_current_or_certain_claim"),
-            ("Current gold will definitely rise.", "theory_language_not_chinese"),
-            ("美元价格是100，通常会影响风险资产，但危机时可能例外。", "theory_numeric_observation"),
-            ("美元已经走强，通常会收紧条件，但也可能与股票同涨。", "theory_current_or_certain_claim"),
-            ("本报告显示美元走弱，通常会支持黄金，但现金需求可能例外。", "theory_current_or_certain_claim"),
+        texts = (
+            "当前美元一定会上涨并实时压制比特币。",
+            "Current gold will definitely rise.",
+            "美元价格是100，通常会影响风险资产，但危机时可能例外。",
+            "美元已经走强，通常会收紧条件，但也可能与股票同涨。",
+            "本周美元走弱，可能支持黄金；但现金需求也可能改变结果，不构成预测准确率声明。",
+        )
+        for text in texts:
+            with self.subTest(text=text):
+                value = {"text": text, "evidence_ids": [mechanism_id], "claim_type": "theoretical_mechanism"}
+                self.assertEqual(validate_theoretical_statement(value, {mechanism_id}), value)
+
+    def test_theory_statement_rejects_internal_ops_data(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        mechanism_id = request["mechanism"]["mechanism_ids"][0]
+        for text in (
+            "当前判断见 analysis_id 和 evidence_ids。",
+            "DeepSeek 失败后由 Codex CLI fallback。",
+            "provider_status=validation_error。",
         ):
-            with self.subTest(text=text), self.assertRaisesRegex(ValueError, code):
+            with self.subTest(text=text), self.assertRaisesRegex(ValueError, "theory_ops_data_leak"):
                 validate_theoretical_statement(
                     {"text": text, "evidence_ids": [mechanism_id], "claim_type": "theoretical_mechanism"},
                     {mechanism_id},

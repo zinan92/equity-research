@@ -103,6 +103,16 @@ class WeeklyAssetAnalysisTest(unittest.TestCase):
         with self.assertRaisesRegex(WeeklyAssetAnalysisError, "theory_claim_type_invalid"):
             validate_asset_analysis(output, request)
 
+    def test_reader_facing_codex_theory_with_current_language_is_accepted(self) -> None:
+        request = build_asset_analysis_request(asset_snapshot())
+        output = valid_output(request)
+        output["theoretical_implication"]["text"] = (
+            "本周黄金处于高位，当前价格行为更像是在避险需求与实际利率压力之间拉锯；"
+            "在美元继续走强的情形下，金价可能承压，但这种传导并非必然。"
+        )
+        validated = validate_asset_analysis(output, request)
+        self.assertEqual(validated["theoretical_implication"]["text"], output["theoretical_implication"]["text"])
+
     def test_model_cannot_supply_odds_levels(self) -> None:
         request = build_asset_analysis_request(asset_snapshot())
         output = valid_output(request)

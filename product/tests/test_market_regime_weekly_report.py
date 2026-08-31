@@ -310,10 +310,10 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(gold["analysis_status"], "analysis_unavailable")
         self.assertEqual(gold["analysis"]["failure_code"], "position_structure_missing")
 
-    def test_malformed_theory_is_not_published_as_validated(self) -> None:
+    def test_ops_leaking_theory_is_not_published_as_validated(self) -> None:
         analyses = analyses_fixture()
         analyses["gold"]["theoretical_implication"] = {
-            "text": "当前美元一定会上涨。",
+            "text": "当前判断见 provider_status=validation_error。",
             "evidence_ids": ["mechanism:gold:drivers"],
             "claim_type": "theoretical_mechanism",
         }

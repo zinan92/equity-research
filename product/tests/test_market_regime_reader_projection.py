@@ -112,8 +112,8 @@ class ReaderProjectionTests(unittest.TestCase):
             }
         )
         markdown = render_reader_asset_markdown(projection)
-        self.assertEqual(markdown.count("本周期数据暂缺"), 1)
-        self.assertIn("状态：模型解释不可用", markdown)
+        self.assertEqual(markdown.count("本周期图表暂缺"), 1)
+        self.assertIn("文字解读暂缺", markdown)
 
     def test_shared_html_projection_renders_image_before_period_text(self) -> None:
         projection = project_daily_asset(
@@ -139,9 +139,9 @@ class ReaderProjectionTests(unittest.TestCase):
         html = render_reader_asset_html(projection)
         self.assertIn('src="snapshots/dxy-daily.png"', html)
         self.assertLess(html.index("<img "), html.index("位置：高位。"))
-        self.assertIn("当前分析不可用", html)
+        self.assertIn("文字解读暂缺", html)
         self.assertNotIn("已验证", html)
-        self.assertIn("模型解释不可用", html)
+        self.assertNotIn("模型解释不可用", html)
 
     def test_article_projection_rejects_snapshot_without_sha256(self) -> None:
         projection = project_daily_asset(
