@@ -93,7 +93,7 @@ def _odds_reader_text(value: Mapping[str, Any] | None) -> str:
 
 
 def _status_label(value: Any) -> str:
-    return {"validated": "已验证", "analysis_unavailable": "分析不可用", "model_generated_unreviewed": "模型生成·未复核"}.get(str(value), str(value))
+    return {"validated": "文字解读", "analysis_unavailable": "文字解读暂缺", "model_generated_unreviewed": "文字解读"}.get(str(value), str(value))
 
 
 def _ranking_status_label(value: Any) -> str:
@@ -632,7 +632,7 @@ def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
                 statement = analysis.get(tf) if isinstance(analysis, Mapping) else None
                 text = (statement or {}).get("text") if isinstance(statement, Mapping) else None
                 if not text:
-                    text = "当前分析不可用；图表仍保留，等待新的完整证据。"
+                    text = "图表已生成；本周期文字解读暂缺。"
                 snapshot = slot.get("snapshot") if isinstance(slot, Mapping) else None
                 snapshot_id = _escape(snapshot.get("snapshot_id")) if isinstance(snapshot, Mapping) and snapshot.get("snapshot_id") else ""
                 snapshot_attr = f' data-snapshot-id="{snapshot_id}"' if snapshot_id else ""
@@ -641,9 +641,9 @@ def render_weekly_interactive_html(report: Mapping[str, Any]) -> str:
                     f'<article class="timeframe"><div><b>{label}</b><div class="standard-kline-mount" data-chart="{_escape(slot["slot_id"])}" data-kind="{_escape(slot["kind"])}"{snapshot_attr}></div><small class="chart-legend">EMA50 · MACD(12,26,9){(" · 单位：" + _escape(_unit_label(slot.get("unit")))) if slot.get("unit") else ""}{provisional_label}{(" · 快照 " + snapshot_id) if snapshot_id else ""}</small></div><p>{_escape(text)}</p></article>'
                 )
             synthesis = analysis.get("synthesis") if isinstance(analysis, Mapping) else None
-            summary = (synthesis or {}).get("text") if isinstance(synthesis, Mapping) else "当前多周期分析不可用。"
+            summary = (synthesis or {}).get("text") if isinstance(synthesis, Mapping) else "综合结论暂缺。"
             implication = analysis.get("theoretical_implication") if isinstance(analysis, Mapping) else None
-            implication_text = (implication or {}).get("text") if isinstance(implication, Mapping) else "当前机制解释不可用。"
+            implication_text = (implication or {}).get("text") if isinstance(implication, Mapping) else "市场含义暂缺。"
             position = analysis.get("position") if isinstance(analysis, Mapping) else None
             structure = analysis.get("structure") if isinstance(analysis, Mapping) else None
             dimensions = ""

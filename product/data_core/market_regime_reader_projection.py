@@ -103,7 +103,7 @@ def project_daily_asset(asset: Mapping[str, Any]) -> dict[str, Any]:
                 "status": status,
                 "text": _text(
                     statement,
-                    "当前分析不可用；图表状态已保留。" if status == "ready" else "本周期数据暂缺；未将其视为横盘。",
+                    "图表已生成；本周期文字解读暂缺。" if status == "ready" else "本周期图表暂缺；未将其视为横盘。",
                 ),
                 "snapshot": snapshots.get(timeframe),
                 "unit": frame.get("unit"),
@@ -150,7 +150,7 @@ def project_weekly_card(card: Mapping[str, Any]) -> dict[str, Any]:
                 "status": status,
                 "text": _text(
                     analysis.get(timeframe),
-                    "当前分析不可用；图表状态已保留。" if status == "ready" else "本周期数据暂缺；未将其视为横盘。",
+                    "图表已生成；本周期文字解读暂缺。" if status == "ready" else "本周期图表暂缺；未将其视为横盘。",
                 ),
                 "snapshot": slot.get("snapshot"),
                 "unit": slot.get("unit"),
@@ -189,7 +189,7 @@ def render_reader_asset_markdown(projection: Mapping[str, Any], *, snapshot_pref
     if observation_time:
         lines.append(f"观察时点：{observation_time}")
     if projection.get("analysis_status") == "analysis_unavailable":
-        lines.append("状态：模型解释不可用；以下保留代码读数。")
+        lines.append("文字解读暂缺；以下保留位置、结构与赔率读数。")
     lines.append("")
     for period in projection.get("periods") or []:
         if not isinstance(period, Mapping):
@@ -211,8 +211,8 @@ def render_reader_asset_markdown(projection: Mapping[str, Any], *, snapshot_pref
     lines.append(f"**赔率**：{_text(odds, '赔率尚未形成。')}")
     lines.extend(
         [
-            f"**综合结论**：{_summary_text(projection.get('synthesis'), '当前多周期分析不可用。')}",
-            f"**市场含义**：{_summary_text(projection.get('market_meaning'), '当前机制解释不可用。')}",
+            f"**综合结论**：{_summary_text(projection.get('synthesis'), '综合结论暂缺。')}",
+            f"**市场含义**：{_summary_text(projection.get('market_meaning'), '市场含义暂缺。')}",
             "",
         ]
     )
@@ -244,10 +244,10 @@ def render_reader_asset_html(projection: Mapping[str, Any], *, snapshot_prefix: 
     position = html.escape(_text(projection.get("position"), "位置：不可用。"))
     structure = html.escape(_text(projection.get("structure"), "结构：不可用。"))
     odds = html.escape(_text(projection.get("odds"), "赔率尚未形成。"))
-    synthesis = html.escape(_summary_text(projection.get("synthesis"), "当前多周期分析不可用。"))
-    meaning = html.escape(_summary_text(projection.get("market_meaning"), "当前机制解释不可用。"))
+    synthesis = html.escape(_summary_text(projection.get("synthesis"), "综合结论暂缺。"))
+    meaning = html.escape(_summary_text(projection.get("market_meaning"), "市场含义暂缺。"))
     asset_key = html.escape(str(projection.get("asset_key") or ""), quote=True)
-    status_label = {"validated": "模型生成 · 未人工复核", "model_generated_unreviewed": "模型生成 · 未人工复核", "analysis_unavailable": "模型解释不可用"}.get(str(projection.get("analysis_status")), "状态待确认")
+    status_label = {"validated": "文字解读", "model_generated_unreviewed": "文字解读", "analysis_unavailable": "文字解读暂缺"}.get(str(projection.get("analysis_status")), "状态待确认")
     header_meta = " · ".join(item for item in (f"标的：{caption}" if caption else "", f"观察时点：{observation_time}" if observation_time else "") if item)
     return (
         f'<section class="asset-pane reader-asset" id="asset-{asset_key}" data-pane="{asset_key}" data-asset-key="{asset_key}" data-timeframes="{len(periods)}" data-summary-order="位置,结构,赔率,多周期结论,机制解释">'
@@ -306,7 +306,7 @@ def render_reader_article(
                     media.append({"path": href, "alt": alt, "sha256": digest})
                     seen_media.add(href)
             elif period.get("status") != "ready":
-                blocks.append({"type": "period_text", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "text": f"图表暂缺；{period.get('text') or '本周期数据暂缺；未将其视为横盘。'}", "status": "unavailable"})
+                blocks.append({"type": "period_text", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "text": f"{period.get('text') or '本周期图表暂缺；未将其视为横盘。'}", "status": "unavailable"})
                 continue
             blocks.append({"type": "period_text", "asset_key": asset_key, "timeframe": period.get("timeframe"), "label": label, "text": str(period.get("text") or ""), "status": str(period.get("status") or "")})
         blocks.append(
@@ -316,8 +316,8 @@ def render_reader_article(
                 "position": _text(projection.get("position"), "位置：不可用。"),
                 "structure": _text(projection.get("structure"), "结构：不可用。"),
                 "odds": _text(projection.get("odds"), "赔率尚未形成。"),
-                "synthesis": _summary_text(projection.get("synthesis"), "当前多周期分析不可用。"),
-                "market_meaning": _summary_text(projection.get("market_meaning"), "当前机制解释不可用。"),
+                "synthesis": _summary_text(projection.get("synthesis"), "综合结论暂缺。"),
+                "market_meaning": _summary_text(projection.get("market_meaning"), "市场含义暂缺。"),
             }
         )
     return {
