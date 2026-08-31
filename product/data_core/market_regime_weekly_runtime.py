@@ -9,6 +9,7 @@ advances the reader-facing Weekly pointer.  A failed asset is typed as
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, time, timedelta, timezone
 import hashlib
 import json
@@ -436,6 +437,7 @@ class WeeklyMacroRuntime:
         allow_fixture: bool = False,
         phase_observer: Callable[[str], None] | None = None,
         chart_snapshot_port: Callable[..., Mapping[str, Mapping[str, Any]]] | None = None,
+        max_asset_workers: int = 4,
     ) -> None:
         self.source_loader = source_loader
         self.asset_provider = asset_provider
@@ -445,6 +447,7 @@ class WeeklyMacroRuntime:
         self.allow_fixture = allow_fixture
         self.phase_observer = phase_observer
         self.chart_snapshot_port = chart_snapshot_port
+        self.max_asset_workers = max(1, int(max_asset_workers))
         self.source_store = WeeklySourceHistoryStore(self.runtime_root / "source")
         self.report_store = WeeklyReportStore(self.runtime_root, self.output_root)
 
@@ -486,8 +489,7 @@ class WeeklyMacroRuntime:
 
             phase = "asset_analysis"
             self._phase(phase)
-            analyses: dict[str, dict[str, Any]] = {}
-            for key in WEEKLY_KEYS:
+            def compile_asset(key: str) -> tuple[str, dict[str, Any]]:
                 try:
                     snapshot = _asset_snapshot(
                         source,
@@ -495,20 +497,22 @@ class WeeklyMacroRuntime:
                         candle_responses=candle_responses if use_candle_responses else None,
                     )
                 except Exception:
-                    analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
-                    continue
+                    return key, {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
                 if snapshot is None:
-                    analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_unavailable"}
-                    continue
+                    return key, {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_unavailable"}
                 try:
                     request = build_asset_analysis_request(snapshot)
                 except Exception:
-                    analyses[key] = {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
-                    continue
+                    return key, {"asset_key": key, "generation_status": "analysis_unavailable", "failure_code": "source_feature_invalid"}
                 if self.asset_provider is None:
-                    analyses[key] = compile_asset_analysis(request, None)
-                else:
-                    analyses[key] = compile_asset_analysis(request, self.asset_provider)
+                    return key, compile_asset_analysis(request, None)
+                return key, compile_asset_analysis(request, self.asset_provider)
+
+            analyses: dict[str, dict[str, Any]] = {}
+            worker_count = min(self.max_asset_workers, len(WEEKLY_KEYS))
+            with ThreadPoolExecutor(max_workers=worker_count, thread_name_prefix="weekly-asset") as pool:
+                for key, analysis in pool.map(compile_asset, WEEKLY_KEYS):
+                    analyses[key] = analysis
 
             from .market_regime_weekly_asset_analysis import build_terminal_vector
 

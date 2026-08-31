@@ -44,6 +44,50 @@ def _parse_date(value: str | None) -> date | None:
     return date.fromisoformat(value) if value else None
 
 
+def build_weekly_runtime(*, datafeed_url: str, runtime_root: Path, output_root: Path, key_file: Path, model: str, codex_model: str | None):
+    """Build the independent Weekly K-line runtime used by CLI and delivery."""
+
+    datafeed_client = WeeklyDatafeedClient(base_url=datafeed_url)
+    source_loader = lambda *, week_end, cutoff_at, live_as_of=None: load_datafeed_weekly_source_snapshot(
+        datafeed_client,
+        week_end=week_end.isoformat(),
+        cutoff_at=cutoff_at.isoformat().replace("+00:00", "Z"),
+        live_as_of=live_as_of,
+    )
+    deepseek_asset = DeepSeekWeeklyAssetProvider(key_file, model=model) if key_file.is_file() else None
+    deepseek_ranking = DeepSeekWeeklyRankingProvider(key_file, model=model) if key_file.is_file() else None
+    return WeeklyMacroRuntime(
+        source_loader=source_loader,
+        asset_provider=ValidatedFallbackProvider(
+            primary=deepseek_asset,
+            fallback=CodexCliProvider(system_prompt=ASSET_SYSTEM_PROMPT, model=codex_model),
+            validator=validate_asset_analysis,
+            fallback_attempts=1,
+        ),
+        ranking_provider=ValidatedFallbackProvider(
+            primary=deepseek_ranking,
+            fallback=CodexCliProvider(system_prompt=RANKING_SYSTEM_PROMPT, model=codex_model),
+            validator=validate_ranking_output,
+            fallback_attempts=1,
+        ),
+        runtime_root=runtime_root,
+        output_root=output_root,
+        chart_snapshot_port=PlaywrightWeeklyChartSnapshotPort(runtime_root=runtime_root, output_root=output_root),
+    )
+
+
+def run_weekly_runtime(*, now: datetime | None = None, week_end: date | None = None, datafeed_url: str = "http://127.0.0.1:8100", runtime_root: Path, output_root: Path, key_file: Path, model: str = "deepseek-v4-flash", codex_model: str | None = None):
+    runtime = build_weekly_runtime(
+        datafeed_url=datafeed_url,
+        runtime_root=runtime_root,
+        output_root=output_root,
+        key_file=key_file,
+        model=model,
+        codex_model=codex_model,
+    )
+    return runtime.run_once(now=now, week_end=week_end)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run one real-data Weekly Macro K-line report")
     home = Path.home()
@@ -59,33 +103,17 @@ def main() -> int:
     args = parser.parse_args()
     now = _parse_datetime(args.now)
     week_end = _parse_date(args.week_end)
-    datafeed_client = WeeklyDatafeedClient(base_url=args.datafeed_url)
-    source_loader = lambda *, week_end, cutoff_at, live_as_of=None: load_datafeed_weekly_source_snapshot(
-        datafeed_client,
-        week_end=week_end.isoformat(),
-        cutoff_at=cutoff_at.isoformat().replace("+00:00", "Z"),
-        live_as_of=live_as_of,
-    )
-    deepseek_asset = DeepSeekWeeklyAssetProvider(args.key_file, model=args.model) if args.key_file.is_file() else None
-    deepseek_ranking = DeepSeekWeeklyRankingProvider(args.key_file, model=args.model) if args.key_file.is_file() else None
-    runtime = WeeklyMacroRuntime(
-        source_loader=source_loader,
-        asset_provider=ValidatedFallbackProvider(
-            primary=deepseek_asset,
-            fallback=CodexCliProvider(system_prompt=ASSET_SYSTEM_PROMPT, model=args.codex_model),
-            validator=validate_asset_analysis,
-        ),
-        ranking_provider=ValidatedFallbackProvider(
-            primary=deepseek_ranking,
-            fallback=CodexCliProvider(system_prompt=RANKING_SYSTEM_PROMPT, model=args.codex_model),
-            validator=validate_ranking_output,
-        ),
-        runtime_root=args.runtime_root,
-        output_root=args.output_root,
-        chart_snapshot_port=PlaywrightWeeklyChartSnapshotPort(runtime_root=args.runtime_root, output_root=args.output_root),
-    )
     try:
-        result = runtime.run_once(now=now, week_end=week_end)
+        result = run_weekly_runtime(
+            now=now,
+            week_end=week_end,
+            datafeed_url=args.datafeed_url,
+            runtime_root=args.runtime_root,
+            output_root=args.output_root,
+            key_file=args.key_file,
+            model=args.model,
+            codex_model=args.codex_model,
+        )
     except WeeklyRuntimeError as exc:
         print(json.dumps({"status": "failed", "code": str(exc)}, ensure_ascii=False))
         return 1
