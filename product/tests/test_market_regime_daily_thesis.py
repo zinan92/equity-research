@@ -20,10 +20,12 @@ from data_core.market_regime_daily_thesis import (  # noqa: E402
     build_daily_thesis_request,
     compile_daily_thesis,
     render_daily_markdown,
+    render_daily_html,
     DeepSeekDailyThesisProvider,
     _local_report_date,
     validate_daily_thesis,
 )
+from data_core.market_regime_reader_projection import project_daily_asset  # noqa: E402
 from product.tests.test_market_regime_daily_analysis import _provider, _source_bundle  # noqa: E402
 
 
@@ -47,6 +49,21 @@ def _with_daily_snapshot(bundle: dict) -> dict:
     identity_core = {**value["identity_core"], "assets_sha256": hashlib.sha256(canonical(value["assets"]).encode()).hexdigest()}
     value["identity_core"] = identity_core
     value["bundle_id"] = "market-regime-daily-analysis:" + hashlib.sha256(canonical(identity_core).encode()).hexdigest()
+    return value
+
+
+def _with_treasury_snapshots(bundle: dict) -> dict:
+    value = copy.deepcopy(bundle)
+    for asset in value["assets"]:
+        if asset.get("asset_key") in {"us2y", "us10y", "us2s10s"}:
+            key = asset["asset_key"]
+            asset["snapshots"] = {
+                "daily": {
+                    "schema_version": "market-regime-daily-chart-snapshot-v1",
+                    "snapshot_id": f"market-regime-daily-chart-snapshot:{key}",
+                    "asset": {"path": f"snapshots/{key}.png", "sha256": "b" * 64},
+                }
+            }
     return value
 
 
@@ -118,6 +135,22 @@ class DailyThesisTests(unittest.TestCase):
         markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
         html_text = render_daily_html(markdown)
         self.assertIn('<img src="snapshots/dxy.png"', html_text)
+
+    def test_treasury_daily_charts_are_grouped_without_indicator_labels(self) -> None:
+        bundle = _analysis_bundle()
+        thesis = compile_daily_thesis(bundle, _thesis_provider)
+        bundle = _with_treasury_snapshots(bundle)
+        markdown = render_daily_markdown({**thesis, "cutoff_at": bundle["cutoff_at"]}, bundle)
+        self.assertIn("## 共有 16 个资产的综合结论与市场含义", markdown)
+        self.assertIn("## 美国国债（日线并列）", markdown)
+        for key in ("us2y", "us10y", "us2s10s"):
+            self.assertIn(f"![{key}｜日线 K 线图]", markdown)
+        projections = [project_daily_asset(asset) for asset in bundle["assets"]]
+        html_text = render_daily_html(markdown, reader_assets=projections)
+        treasury = html_text.split("treasury-panel", 1)[1].split("treasury-note", 1)[0]
+        self.assertEqual(treasury.count("treasury-tile"), 3)
+        self.assertNotIn("EMA50", treasury)
+        self.assertNotIn("MACD", treasury)
 
     def test_delivery_copies_snapshot_into_markdown_archive(self) -> None:
         bundle = _with_daily_snapshot(_analysis_bundle())

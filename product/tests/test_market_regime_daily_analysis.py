@@ -195,6 +195,13 @@ class DailyAnalysisTests(unittest.TestCase):
         self.assertEqual(payload["renderer_options"]["indicators"]["ema"], [50])
         self.assertEqual(len(payload["candles"]), 60)
 
+    def test_treasury_daily_payload_has_no_technical_overlays(self) -> None:
+        asset = copy.deepcopy(next(item for item in _source_bundle()["assets"] if item["asset_key"] == "us2y"))
+        asset["instrument"]["series_kind"] = "rate_level"
+        payload = build_daily_standard_kline_payload(asset, "daily")
+        self.assertEqual(payload["render_mode"], "line")
+        self.assertEqual(payload["renderer_options"]["indicators"], {"ema": [], "macd": None})
+
     def test_analysis_store_readback_and_asset_hash(self) -> None:
         bundle = build_daily_analysis_bundle(_source_bundle(), provider_factory=lambda _request: _provider)
         with tempfile.TemporaryDirectory() as directory:

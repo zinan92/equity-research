@@ -21,6 +21,7 @@ SCHEMA_VERSION = "market-regime-daily-chart-snapshot-v1"
 SNAPSHOT_ID_PREFIX = "market-regime-daily-chart-snapshot:"
 VIEWPORT = {"width": 1280, "height": 900}
 DEVICE_SCALE_FACTOR = 2
+TREASURY_ASSET_KEYS = frozenset({"us2y", "us10y", "us2s10s"})
 
 
 class DailySnapshotError(RuntimeError):
@@ -66,9 +67,14 @@ def build_daily_standard_kline_payload(asset: Mapping[str, Any], timeframe: str)
     status = str(slot.get("status") or "unavailable")
     series_kind = str(instrument.get("series_kind") or "price")
     render_mode = "line" if series_kind in {"rate_level", "spread"} else "candles"
+    indicators = {**STANDARD_KLINE_OPTIONS["indicators"]}
+    if asset.get("asset_key") in TREASURY_ASSET_KEYS and timeframe == "daily":
+        # Rates are reviewed as a three-chart level panel. Technical overlays
+        # add noise to the cross-curve comparison, so keep the line clean.
+        indicators = {"ema": [], "macd": None}
     options = {
         **STANDARD_KLINE_OPTIONS,
-        "indicators": {**STANDARD_KLINE_OPTIONS["indicators"]},
+        "indicators": indicators,
         "renderMode": render_mode,
     }
     if render_mode == "line":
@@ -210,5 +216,6 @@ __all__ = [
     "DailySnapshotError",
     "SCHEMA_VERSION",
     "SNAPSHOT_ID_PREFIX",
+    "TREASURY_ASSET_KEYS",
     "build_daily_standard_kline_payload",
 ]
