@@ -1,5 +1,17 @@
 # REGISTRY
 
+## 2026-09-01 · Shared 16-asset comparison and Treasury daily panel (Issue #1046)
+
+Now: the Daily K-line reader presents the 16 assets shared with Human K-line
+Review as the main comparison set. The three Treasury series (2Y, 10Y and
+2s10s) remain real daily source slots but are rendered together in a separate
+three-column daily panel; their chart snapshots do not show EMA or MACD
+overlays. No source values, cutoff rules, or fallback policies changed.
+
+Next: keep the Human Review catalog and Daily comparison list aligned. Gold and
+silver contract identities remain an explicit follow-up because the two
+products still use different contract representations.
+
 ## 2026-08-31 · Reader-facing explanation validation recovery (Issue #1042 / PR #1043)
 
 Now: the Weekly explanation boundary accepts evidence-bound consumer research

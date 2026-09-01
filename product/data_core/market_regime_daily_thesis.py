@@ -21,6 +21,7 @@ from .market_regime_daily_analysis import (
 from .market_regime_llm_provider import ProviderFallbackError
 from .market_regime_reader_projection import project_daily_asset, render_reader_asset_html, render_reader_asset_markdown, render_reader_article
 from .market_regime_daily_source import WEEKLY_KEYS
+from .market_regime_daily_snapshots import TREASURY_ASSET_KEYS
 
 
 SCHEMA_VERSION = "market-regime-daily-thesis-v2"
@@ -34,6 +35,8 @@ ALLOWED_LATIN_WORDS = frozenset(
         "BTC", "ETH", "HYPE", "GC", "CL", "SI", "USDT", "USDC", "OHLC", "MACD", "EMA", "DXY", "VIX", "WTI", "ETF",
     }
 )
+TREASURY_ASSET_ORDER = ("us2y", "us10y", "us2s10s")
+COMPARISON_ASSET_KEYS = tuple(key for key in WEEKLY_KEYS if key not in TREASURY_ASSET_KEYS)
 
 
 class DailyThesisError(ValueError):
@@ -463,6 +466,72 @@ def _snapshot_markdown(asset: Mapping[str, Any], timeframe: str, label: str) -> 
     return f"![{display_name}｜{label} K 线图]({path})"
 
 
+def _treasury_asset_markdown(asset: Mapping[str, Any]) -> str:
+    """Render one Treasury daily tile for the grouped reader section."""
+
+    projection = project_daily_asset(asset)
+    lines = [f"### {projection.get('display_name') or projection.get('asset_key')}"]
+    caption = str(projection.get("instrument_caption") or "").strip()
+    if caption:
+        lines.append(f"标的：{caption}")
+    period = next((item for item in projection.get("periods") or [] if item.get("timeframe") == "daily"), None)
+    if period is None:
+        lines.append("日线图表暂缺。")
+        return "\n".join(lines)
+    image = _snapshot_markdown(asset, "daily", "日线")
+    if image:
+        lines.extend([image, ""])
+    lines.append(f"**日线**：{period.get('text') or '日线文字解读暂缺。'}")
+    meaning = projection.get("market_meaning")
+    if isinstance(meaning, Mapping) and str(meaning.get("text") or "").strip():
+        lines.append(f"**市场含义**：{meaning['text']}")
+    return "\n".join(lines)
+
+
+def _treasury_asset_html(projection: Mapping[str, Any]) -> str:
+    """Render one clean Treasury daily tile without technical overlays."""
+
+    display_name = html.escape(str(projection.get("display_name") or projection.get("asset_key") or "国债"))
+    period = next((item for item in projection.get("periods") or [] if item.get("timeframe") == "daily"), None)
+    if not isinstance(period, Mapping):
+        chart = '<div class="treasury-chart-unavailable">日线图表暂缺。</div>'
+        text = "日线文字解读暂缺。"
+        meaning = ""
+    else:
+        href = _snapshot_path(period.get("snapshot"))
+        chart = (
+            f'<img src="{html.escape(href, quote=True)}" alt="{display_name}｜日线 K 线图">'
+            if href
+            else '<div class="treasury-chart-unavailable">日线图表暂缺。</div>'
+        )
+        text = html.escape(str(period.get("text") or "日线文字解读暂缺。"))
+        market_meaning = projection.get("market_meaning")
+        meaning = (
+            f'<div class="treasury-meaning"><b>市场含义</b><p>{html.escape(str(market_meaning.get("text")))}</p></div>'
+            if isinstance(market_meaning, Mapping) and str(market_meaning.get("text") or "").strip()
+            else ""
+        )
+    return f'<article class="treasury-tile"><h3>{display_name}</h3><div class="treasury-chart">{chart}</div><p class="treasury-reading">{text}</p>{meaning}</article>'
+
+
+def _render_treasury_group_html(projections: list[Mapping[str, Any]]) -> str:
+    if not projections:
+        return ""
+    ordered = sorted(projections, key=lambda item: TREASURY_ASSET_ORDER.index(str(item.get("asset_key"))) if str(item.get("asset_key")) in TREASURY_ASSET_ORDER else len(TREASURY_ASSET_ORDER))
+    return (
+        '<section class="treasury-panel"><header><div><small>独立利率观察</small>'
+        '<h2>美国国债（日线并列）</h2></div><p>2Y · 10Y · 2s10s</p></header>'
+        f'<div class="treasury-grid">{"".join(_treasury_asset_html(item) for item in ordered)}</div>'
+        '<p class="treasury-note">三张曲线使用同一日报时间边界；此处只看利率水平，不叠加均线或技术指标。</p></section>'
+    )
+
+
+def _render_daily_reader_assets_html(projections: list[Mapping[str, Any]]) -> str:
+    treasury = [item for item in projections if str(item.get("asset_key")) in TREASURY_ASSET_KEYS]
+    comparison = [item for item in projections if str(item.get("asset_key")) not in TREASURY_ASSET_KEYS]
+    return "".join(render_reader_asset_html(item) for item in comparison) + _render_treasury_group_html(treasury)
+
+
 def _analysis_output(analysis: Mapping[str, Any]) -> Mapping[str, Any]:
     nested = analysis.get("output")
     return nested if isinstance(nested, Mapping) else analysis
@@ -535,10 +604,19 @@ def render_daily_markdown(delivery: Mapping[str, Any], analysis_bundle: Mapping[
         lines.extend(["", "## 失效条件", ""])
         lines.extend([f"- {row['text']}" for row in thesis["falsifiers"]])
         lines.append("")
-    lines.extend(["## 每个资产的综合结论与市场含义", ""])
+    lines.extend([f"## 共有 {len(COMPARISON_ASSET_KEYS)} 个资产的综合结论与市场含义", ""])
+    treasury_assets: list[Mapping[str, Any]] = []
     for asset in analysis_bundle.get("assets") or []:
+        if str(asset.get("asset_key")) in TREASURY_ASSET_KEYS:
+            treasury_assets.append(asset)
+            continue
         lines.append(render_reader_asset_markdown(project_daily_asset(asset)))
         lines.append("")
+    if treasury_assets:
+        lines.extend(["## 美国国债（日线并列）", "", "2Y、10Y、2s10s 放在一起观察；本区块不叠加均线或技术指标。", ""])
+        for asset in sorted(treasury_assets, key=lambda item: TREASURY_ASSET_ORDER.index(str(item.get("asset_key"))) if str(item.get("asset_key")) in TREASURY_ASSET_ORDER else len(TREASURY_ASSET_ORDER)):
+            lines.append(_treasury_asset_markdown(asset))
+            lines.append("")
     lines.extend(["## 数据边界", "", "- 已请求但抓取失败的周期保留为不可用，不代表横盘或没有变化；未列出的周期表示该资产当前没有纳入该周期请求。", ""])
     lines.extend(_daily_status_footer(delivery, analysis_bundle, cutoff))
     return "\n".join(lines)
@@ -565,19 +643,19 @@ def render_daily_html(
     reader_assets: list[Mapping[str, Any]] | None = None,
 ) -> str:
     if reader_assets:
-        marker = "## 每个资产的综合结论与市场含义"
+        marker = f"## 共有 {len(COMPARISON_ASSET_KEYS)} 个资产的综合结论与市场含义"
         footer_marker = "## 数据边界"
         start = markdown.find(marker)
         end = markdown.find(footer_marker, start + len(marker)) if start >= 0 else -1
         if start >= 0 and end >= 0:
             body = _render_daily_text_html(markdown[:start])
-            body += "".join(render_reader_asset_html(asset) for asset in reader_assets)
+            body += _render_daily_reader_assets_html(reader_assets)
             body += _render_daily_text_html(markdown[end:])
         else:
             body = _render_daily_text_html(markdown)
     else:
         body = _render_daily_text_html(markdown)
-    css = "body{margin:0;background:#f4f6f2;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}main{max-width:1100px;margin:0 auto;background:#fffefa;min-height:100vh;padding:36px 28px;box-sizing:border-box}.content{font-size:16px;line-height:1.8;white-space:normal}.daily-period-chart{margin:18px 0 8px;padding:0;border:1px solid #e2e5df;background:#fffefa}.daily-period-chart img{display:block;width:100%;height:auto}.daily-period-chart figcaption{padding:6px 10px;color:#7b857e;font-size:11px;line-height:1.4}.reader-asset{margin:18px 0;border:1px solid #dedfd8;background:#fff}.reader-asset>header{display:flex;justify-content:space-between;padding:17px;border-bottom:1px solid #dedfd8}.reader-asset h2{font-size:27px;margin:0}.reader-asset .timeframe{display:flex;flex-direction:column;gap:12px;padding:16px;border-bottom:1px solid #dedfd8;margin:0}.reader-asset .timeframe b{display:block;color:#187b51;font-size:10px;letter-spacing:.1em;margin-bottom:7px}.reader-asset .snapshot-frame{width:100%;background:#fffefa;border:1px solid #eceee8;overflow:hidden}.reader-asset .snapshot-frame img{display:block;width:100%;height:auto}.reader-asset .chart-unavailable{min-height:150px;display:grid;place-items:center;padding:16px;text-align:center;color:#8a6425;background:#fff8ed}.reader-asset .timeframe p{font-size:17px;line-height:1.75;margin:0}.reader-asset .summary-dimensions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 16px;background:#f7f9f5;border-bottom:1px solid #dedfd8}.reader-asset .summary-dimensions>div{border-left:3px solid #187b51;padding-left:10px}.reader-asset .summary-dimensions b{font-size:10px;color:#187b51;letter-spacing:.1em}.reader-asset .summary-dimensions p{font-size:15px;line-height:1.55;margin:4px 0}.reader-asset .synthesis{padding:17px;background:#edf3ef}.reader-asset .synthesis b{font-size:10px;color:#187b51;letter-spacing:.1em}.reader-asset .synthesis p{font-size:18px;line-height:1.65;margin:6px 0}@media(max-width:600px){main{padding:22px 16px}.content{font-size:15px}.daily-period-chart{margin-inline:-4px}.reader-asset .summary-dimensions{grid-template-columns:1fr}.reader-asset .timeframe p{font-size:16px}}";
+    css = "body{margin:0;background:#f4f6f2;color:#17201b;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}main{max-width:1100px;margin:0 auto;background:#fffefa;min-height:100vh;padding:36px 28px;box-sizing:border-box}.content{font-size:16px;line-height:1.8;white-space:normal}.daily-period-chart{margin:18px 0 8px;padding:0;border:1px solid #e2e5df;background:#fffefa}.daily-period-chart img{display:block;width:100%;height:auto}.daily-period-chart figcaption{padding:6px 10px;color:#7b857e;font-size:11px;line-height:1.4}.reader-asset{margin:18px 0;border:1px solid #dedfd8;background:#fff}.reader-asset>header{display:flex;justify-content:space-between;padding:17px;border-bottom:1px solid #dedfd8}.reader-asset h2{font-size:27px;margin:0}.reader-asset .timeframe{display:flex;flex-direction:column;gap:12px;padding:16px;border-bottom:1px solid #dedfd8;margin:0}.reader-asset .timeframe b{display:block;color:#187b51;font-size:10px;letter-spacing:.1em;margin-bottom:7px}.reader-asset .snapshot-frame{width:100%;background:#fffefa;border:1px solid #eceee8;overflow:hidden}.reader-asset .snapshot-frame img{display:block;width:100%;height:auto}.reader-asset .chart-unavailable{min-height:150px;display:grid;place-items:center;padding:16px;text-align:center;color:#8a6425;background:#fff8ed}.reader-asset .timeframe p{font-size:17px;line-height:1.75;margin:0}.reader-asset .summary-dimensions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 16px;background:#f7f9f5;border-bottom:1px solid #dedfd8}.reader-asset .summary-dimensions>div{border-left:3px solid #187b51;padding-left:10px}.reader-asset .summary-dimensions b{font-size:10px;color:#187b51;letter-spacing:.1em}.reader-asset .summary-dimensions p{font-size:15px;line-height:1.55;margin:4px 0}.reader-asset .synthesis{padding:17px;background:#edf3ef}.reader-asset .synthesis b{font-size:10px;color:#187b51;letter-spacing:.1em}.reader-asset .synthesis p{font-size:18px;line-height:1.65;margin:6px 0}.treasury-panel{margin:24px 0;border:1px solid #cfd8d1;background:#fbfcfa}.treasury-panel>header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:18px 20px;border-bottom:1px solid #dfe5df;background:#f1f6f1}.treasury-panel>header small{color:#187b51;font-size:11px;letter-spacing:.08em}.treasury-panel>header h2{font-size:25px;margin:2px 0 0}.treasury-panel>header p{margin:0;color:#68736b;font-size:12px}.treasury-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}.treasury-tile{min-width:0;padding:14px;border-right:1px solid #dfe5df}.treasury-tile:last-child{border-right:0}.treasury-tile h3{margin:0 0 10px;font-size:18px;color:#243f55}.treasury-chart{border:1px solid #e7ebe6;background:#fffefa;overflow:hidden}.treasury-chart img{display:block;width:100%;height:auto}.treasury-chart-unavailable{min-height:130px;display:grid;place-items:center;color:#8a6425;background:#fff8ed;font-size:13px}.treasury-reading{margin:10px 0 0;font-size:15px;line-height:1.7}.treasury-meaning{margin-top:10px;padding-top:9px;border-top:1px solid #e4e9e3}.treasury-meaning b{font-size:11px;color:#8a6425}.treasury-meaning p{margin:3px 0;font-size:14px;line-height:1.6}.treasury-note{margin:0;padding:12px 20px;border-top:1px solid #dfe5df;color:#68736b;font-size:12px}@media(max-width:600px){main{padding:22px 16px}.content{font-size:15px}.daily-period-chart{margin-inline:-4px}.reader-asset .summary-dimensions{grid-template-columns:1fr}.reader-asset .timeframe p{font-size:16px}.treasury-grid{grid-template-columns:1fr}.treasury-tile{border-right:0;border-bottom:1px solid #dfe5df}.treasury-tile:last-child{border-bottom:0}.treasury-panel>header{display:block}.treasury-panel>header p{margin-top:4px}}";
     return f"<!doctype html><html lang='zh-CN'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(title)}</title><style>{css}</style></head><body><main><div class='content'>{body}</div></main></body></html>"
 
 
