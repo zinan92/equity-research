@@ -1,5 +1,31 @@
 # REGISTRY
 
+## 2026-09-02 · Daily K-line Feishu rich delivery (Issue #1052)
+
+Now: the Daily K-line Newsletter is routed to its dedicated Feishu bot through
+the external credential file
+`/Users/wendy/Library/Application Support/ParkKlineDaily/daily-feishu.env`.
+The webhook value is intentionally kept outside the repository. The
+LaunchAgent `com.park.market-regime.kline-newsletter` runs
+`scripts/run_market_regime_daily_delivery.py` at 08:20; it uploads the current
+PNG snapshots with the installed `lark-cli` identity and sends reader-facing
+rich posts containing images and text.
+
+Real acceptance on 2026-09-02: **31 images uploaded and 7 rich posts sent**;
+the Feishu delivery receipt is
+`/Users/wendy/Library/Application Support/ParkKlineDaily/runtime/delivery/feishu/latest.json`
+with `status=sent`. The edition is bound to the real analysis bundle
+`market-regime-daily-analysis:975c61494fb76ad24c25df931a3e51e37ee450521e231427bc71681330bad090`.
+Its data source was ready and its per-asset analysis was partial; the
+cross-asset model thesis was unavailable for this send, so the message states
+that explicitly and does not reuse an older thesis.
+
+Finance Daily Newsletter and the Weekly K-line delivery keep their own
+webhooks, schedules, and artifacts; this change does not modify either track.
+
+Next: let the next unattended 08:20 run send a fresh Daily edition and inspect
+the Feishu receipt before treating the model thesis as available.
+
 ## 2026-09-01 · Shared 16-asset comparison and Treasury daily panel (Issue #1046)
 
 Now: the Daily K-line reader presents the 16 assets shared with Human K-line
