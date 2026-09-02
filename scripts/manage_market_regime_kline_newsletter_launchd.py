@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install, inspect, or remove the 08:20 Track 2 Newsletter LaunchAgent."""
+"""Install, inspect, or remove the 08:20 Daily K-line Newsletter LaunchAgent."""
 from __future__ import annotations
 
 import argparse
@@ -18,9 +18,9 @@ LABEL = "com.park.market-regime.kline-newsletter"
 def build_plist(
     *,
     app_root: Path,
-    daily_root: Path,
     runtime_root: Path,
     output_root: Path,
+    archive_root: Path,
     key_file: Path,
     feishu_env_file: Path,
     python: Path,
@@ -31,12 +31,12 @@ def build_plist(
         "ProgramArguments": [
             str(python),
             str(app_root / "scripts" / "run_market_regime_daily_delivery.py"),
-            "--daily-root",
-            str(daily_root),
             "--runtime-root",
             str(runtime_root),
             "--output-root",
             str(output_root),
+            "--archive-root",
+            str(archive_root),
             "--key-file",
             str(key_file),
             "--feishu-env-file",
@@ -48,7 +48,12 @@ def build_plist(
         "ProcessType": "Background",
         "StandardOutPath": str(logs / "stdout.log"),
         "StandardErrorPath": str(logs / "stderr.log"),
-        "EnvironmentVariables": {"PYTHONUNBUFFERED": "1"},
+        "EnvironmentVariables": {
+            "PYTHONUNBUFFERED": "1",
+            "HOME": str(Path.home()),
+            "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin",
+            "CODEX_HOME": str(Path.home() / ".codex"),
+        },
     }
 
 
@@ -62,16 +67,16 @@ def main() -> int:
     parser.add_argument("command", choices=("install", "status", "uninstall", "render"))
     parser.add_argument("--app-root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument(
-        "--daily-root",
-        type=Path,
-        default=home / "Library" / "Application Support" / "ParkMarketRegime" / "runtime",
-    )
-    parser.add_argument(
         "--runtime-root",
         type=Path,
-        default=home / "Library" / "Application Support" / "ParkKlineNewsletter" / "runtime",
+        default=home / "Library" / "Application Support" / "ParkKlineDaily" / "runtime",
     )
     parser.add_argument("--output-root", type=Path, default=home / "Desktop" / "K线日报")
+    parser.add_argument(
+        "--archive-root",
+        type=Path,
+        default=home / "park-hands" / "007_kline daily newsletter",
+    )
     parser.add_argument(
         "--key-file", type=Path, default=home / "park-hands" / "_secrets" / "deepseek-key"
     )
@@ -90,9 +95,9 @@ def main() -> int:
         name: value.expanduser().resolve()
         for name, value in {
             "app_root": args.app_root,
-            "daily_root": args.daily_root,
             "runtime_root": args.runtime_root,
             "output_root": args.output_root,
+            "archive_root": args.archive_root,
             "key_file": args.key_file,
             "feishu_env_file": args.feishu_env_file,
             "python": args.python,
@@ -113,8 +118,8 @@ def main() -> int:
         sys.stdout.buffer.write(encoded)
         return 0
     script = values["app_root"] / "scripts" / "run_market_regime_daily_delivery.py"
-    if not script.is_file() or not values["daily_root"].is_dir():
-        raise SystemExit("app script or daily runtime is unavailable")
+    if not script.is_file() or not values["runtime_root"].is_dir():
+        raise SystemExit("app script or Daily runtime is unavailable")
     if not values["feishu_env_file"].is_file():
         raise SystemExit("Daily Feishu env file is unavailable")
     values["runtime_root"].mkdir(parents=True, exist_ok=True)

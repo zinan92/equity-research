@@ -355,9 +355,9 @@ class KlineWorldRuntimeTests(unittest.TestCase):
     def test_existing_launchd_contract_remains_one_track2_job_at_0820(self) -> None:
         payload = build_plist(
             app_root=Path("/Applications/ParkKlineNewsletter/app"),
-            daily_root=Path("/Library/Application Support/ParkMarketRegime/runtime"),
-            runtime_root=Path("/Library/Application Support/ParkKlineNewsletter/runtime"),
+            runtime_root=Path("/Library/Application Support/ParkKlineDaily/runtime"),
             output_root=Path("/Desktop/K线日报"),
+            archive_root=Path("/park-hands/007_kline daily newsletter"),
             key_file=Path("/secrets/deepseek-key"),
             feishu_env_file=Path("/secrets/daily-feishu.env"),
             python=Path("/usr/bin/python3"),

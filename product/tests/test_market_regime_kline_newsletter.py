@@ -350,9 +350,9 @@ class KlineNewsletterTest(unittest.TestCase):
         root = Path("/Applications/ParkKlineNewsletter/app")
         payload = build_plist(
             app_root=root,
-            daily_root=Path("/Library/Application Support/ParkMarketRegime/runtime"),
-            runtime_root=Path("/Library/Application Support/ParkKlineNewsletter/runtime"),
+            runtime_root=Path("/Library/Application Support/ParkKlineDaily/runtime"),
             output_root=Path("/Desktop/K线日报"),
+            archive_root=Path("/park-hands/007_kline daily newsletter"),
             key_file=Path("/secrets/deepseek-key"),
             feishu_env_file=Path("/secrets/daily-feishu.env"),
             python=Path("/usr/bin/python3"),
