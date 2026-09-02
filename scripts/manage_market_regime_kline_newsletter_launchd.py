@@ -22,6 +22,7 @@ def build_plist(
     runtime_root: Path,
     output_root: Path,
     key_file: Path,
+    feishu_env_file: Path,
     python: Path,
 ) -> dict[str, Any]:
     logs = runtime_root / "logs"
@@ -29,7 +30,7 @@ def build_plist(
         "Label": LABEL,
         "ProgramArguments": [
             str(python),
-            str(app_root / "scripts" / "run_market_regime_kline_newsletter.py"),
+            str(app_root / "scripts" / "run_market_regime_daily_delivery.py"),
             "--daily-root",
             str(daily_root),
             "--runtime-root",
@@ -38,6 +39,8 @@ def build_plist(
             str(output_root),
             "--key-file",
             str(key_file),
+            "--feishu-env-file",
+            str(feishu_env_file),
         ],
         "WorkingDirectory": str(app_root),
         "StartCalendarInterval": {"Hour": 8, "Minute": 20},
@@ -72,6 +75,11 @@ def main() -> int:
     parser.add_argument(
         "--key-file", type=Path, default=home / "park-hands" / "_secrets" / "deepseek-key"
     )
+    parser.add_argument(
+        "--feishu-env-file",
+        type=Path,
+        default=home / "Library" / "Application Support" / "ParkKlineDaily" / "daily-feishu.env",
+    )
     parser.add_argument("--python", type=Path, default=Path(sys.executable))
     args = parser.parse_args()
     uid = os.getuid()
@@ -86,6 +94,7 @@ def main() -> int:
             "runtime_root": args.runtime_root,
             "output_root": args.output_root,
             "key_file": args.key_file,
+            "feishu_env_file": args.feishu_env_file,
             "python": args.python,
         }.items()
     }
@@ -103,9 +112,11 @@ def main() -> int:
     if args.command == "render":
         sys.stdout.buffer.write(encoded)
         return 0
-    script = values["app_root"] / "scripts" / "run_market_regime_kline_newsletter.py"
+    script = values["app_root"] / "scripts" / "run_market_regime_daily_delivery.py"
     if not script.is_file() or not values["daily_root"].is_dir():
         raise SystemExit("app script or daily runtime is unavailable")
+    if not values["feishu_env_file"].is_file():
+        raise SystemExit("Daily Feishu env file is unavailable")
     values["runtime_root"].mkdir(parents=True, exist_ok=True)
     (values["runtime_root"] / "logs").mkdir(parents=True, exist_ok=True)
     values["output_root"].mkdir(parents=True, exist_ok=True)
