@@ -359,6 +359,7 @@ class KlineWorldRuntimeTests(unittest.TestCase):
             runtime_root=Path("/Library/Application Support/ParkKlineNewsletter/runtime"),
             output_root=Path("/Desktop/K线日报"),
             key_file=Path("/secrets/deepseek-key"),
+            feishu_env_file=Path("/secrets/daily-feishu.env"),
             python=Path("/usr/bin/python3"),
         )
         encoded = plistlib.dumps(payload)
@@ -366,9 +367,10 @@ class KlineWorldRuntimeTests(unittest.TestCase):
         self.assertEqual(decoded["Label"], LABEL)
         self.assertEqual(decoded["StartCalendarInterval"], {"Hour": 8, "Minute": 20})
         self.assertEqual(
-            sum("run_market_regime_kline_newsletter.py" in value for value in decoded["ProgramArguments"]),
+            sum("run_market_regime_daily_delivery.py" in value for value in decoded["ProgramArguments"]),
             1,
         )
+        self.assertIn("--feishu-env-file", decoded["ProgramArguments"])
         self.assertNotIn("finance", encoded.decode().lower())
 
 

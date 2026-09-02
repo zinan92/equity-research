@@ -354,6 +354,7 @@ class KlineNewsletterTest(unittest.TestCase):
             runtime_root=Path("/Library/Application Support/ParkKlineNewsletter/runtime"),
             output_root=Path("/Desktop/K线日报"),
             key_file=Path("/secrets/deepseek-key"),
+            feishu_env_file=Path("/secrets/daily-feishu.env"),
             python=Path("/usr/bin/python3"),
         )
         encoded = plistlib.dumps(payload)
@@ -361,6 +362,8 @@ class KlineNewsletterTest(unittest.TestCase):
         self.assertEqual(decoded["Label"], LABEL)
         self.assertEqual(decoded["StartCalendarInterval"], {"Hour": 8, "Minute": 20})
         self.assertFalse(decoded["RunAtLoad"])
+        self.assertTrue(any("run_market_regime_daily_delivery.py" in value for value in decoded["ProgramArguments"]))
+        self.assertIn("--feishu-env-file", decoded["ProgramArguments"])
         self.assertNotIn("finance", encoded.decode().lower())
         self.assertNotIn("KeepAlive", decoded)
 
