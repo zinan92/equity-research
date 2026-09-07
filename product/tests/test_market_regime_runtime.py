@@ -264,6 +264,12 @@ class MarketRegimeRuntimeTest(unittest.TestCase):
                 result["material_change_receipt_id"],
                 bundle["material_change_receipt_id"],
             )
+            self.assertEqual(result["last_prune"]["deleted_count"], 0)
+            self.assertGreater(result["runtime_bytes"], 0)
+            self.assertTrue((root / "prune-receipt.json").exists())
+            status = runtime.status()
+            self.assertEqual(status["last_prune_at"], result["last_prune_at"])
+            self.assertGreater(status["runtime_bytes"], 0)
 
     def test_provider_backoff_is_bounded_and_recovery_resets_to_new_provider_age(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

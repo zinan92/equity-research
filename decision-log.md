@@ -4489,3 +4489,39 @@ cards, while the acceptance record explicitly says which explanations and
 ranking are unavailable. A later provider retry may produce a new content
 identity; it must not mutate this accepted artifact or reuse it as current
 without a fresh run.
+
+# 2026-09-07 · Market Regime runtime retention is lock-safe and symlink-aware
+
+## Decision
+
+Add a 14-day default retention planner for `intraday/{snapshots,normalized,raw}`
+and `api/artifacts`. It resolves the configured root, keeps objects reachable
+from the current pointers and recent run/event receipts, skips atomic-write
+temporary files, and rechecks file identity immediately before deletion. The
+intraday scheduler runs formal prune at the end of a successful cycle and
+writes `prune-receipt.json`; the standalone command is dry-run unless
+`--execute` is explicit.
+
+## Why
+
+The production runtime is symlinked to an external SSD and its immutable
+objects are written with same-directory temporary files and hard links. A
+retention implementation must therefore operate on the resolved root and must
+not infer that an unreferenced path is safe while a writer can still replace
+it. Keeping the latest and recent-run reference graph preserves the current
+API and history evidence boundary.
+
+## Evidence
+
+Focused retention and runtime tests pass 31/31. A live dry-run against the
+configured runtime resolved to `/Volumes/Phone SSD/park-runtime/ParkMarketRegime/runtime`;
+it planned 44,265 deletions totaling 10,868,709,236 bytes and performed zero
+deletions. Full details are in
+`docs/verification/issue-1056-runtime-retention-2026-09-07.md`.
+
+## Gotchas
+
+The owner must execute the first formal prune after merge; this branch does
+not delete from the 15 GB runtime. The default 14-day dry-run forecast leaves
+more than 3 GB on the observed runtime, so the post-merge owner run remains a
+separate acceptance check rather than being claimed here.
