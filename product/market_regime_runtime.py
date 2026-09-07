@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import errno
 import fcntl
 from hashlib import sha256
 import json
@@ -266,12 +267,36 @@ def _restore_optional_bytes(path: Path, payload: bytes | None) -> None:
     _write_bytes_atomic(path, payload)
 
 
+_LOCK_DEADLOCK_RETRIES = 5
+_LOCK_DEADLOCK_SLEEP_SECONDS = 0.5
+
+
+def _flock_nonblocking(descriptor: int) -> bool:
+    """Try a non-blocking exclusive flock. Returns True when acquired.
+
+    ``EAGAIN``/``EWOULDBLOCK`` mean another holder owns the lock. macOS
+    occasionally reports ``EDEADLK`` for the same situation; retry briefly and
+    then treat it as busy instead of crashing the whole run.
+    """
+    for attempt in range(_LOCK_DEADLOCK_RETRIES + 1):
+        try:
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            return True
+        except BlockingIOError:
+            return False
+        except OSError as exc:
+            if exc.errno not in (errno.EDEADLK, errno.EAGAIN, errno.EWOULDBLOCK):
+                raise
+            if exc.errno != errno.EDEADLK or attempt == _LOCK_DEADLOCK_RETRIES:
+                return False
+            time.sleep(_LOCK_DEADLOCK_SLEEP_SECONDS)
+    return False
+
+
 def _try_file_lock(path: Path) -> int | None:
     path.parent.mkdir(parents=True, exist_ok=True)
     descriptor = os.open(path, os.O_CREAT | os.O_RDWR, 0o600)
-    try:
-        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
+    if not _flock_nonblocking(descriptor):
         os.close(descriptor)
         return None
     return descriptor
@@ -287,9 +312,7 @@ def _file_lock_busy(path: Path) -> bool:
         descriptor = os.open(path, os.O_RDWR)
     except FileNotFoundError:
         return False
-    try:
-        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except BlockingIOError:
+    if not _flock_nonblocking(descriptor):
         os.close(descriptor)
         return True
     _unlock_file(descriptor)
