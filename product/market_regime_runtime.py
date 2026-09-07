@@ -1262,6 +1262,8 @@ class MarketRegimeIntradayRuntime:
         return _file_lock_busy(self.lock_path)
 
     def status(self) -> dict[str, Any]:
+        from market_regime_retention import runtime_bytes
+
         busy = self._lock_busy()
         try:
             stopped = self.stop_requested()
@@ -1273,6 +1275,7 @@ class MarketRegimeIntradayRuntime:
                 "busy": busy,
                 "stop_requested": False,
                 "interval_minutes": self.interval_minutes,
+                "runtime_bytes": runtime_bytes(self.root),
                 "detail": str(exc),
             }
         if payload is None:
@@ -1282,8 +1285,10 @@ class MarketRegimeIntradayRuntime:
                 "busy": busy,
                 "stop_requested": stopped,
                 "interval_minutes": self.interval_minutes,
+                "runtime_bytes": runtime_bytes(self.root),
             }
         result = {**payload, "busy": busy, "stop_requested": stopped}
+        result["runtime_bytes"] = runtime_bytes(self.root)
         if stopped and not busy:
             result["state"] = "stopped"
         elif payload.get("state") == "running" and not busy:
@@ -1380,6 +1385,8 @@ class MarketRegimeIntradayRuntime:
                 "bundle_id": previous.get("bundle_id"),
                 "intraday_quality": previous.get("intraday_quality"),
                 "overlay_relation": previous.get("overlay_relation"),
+                "last_prune_at": previous.get("last_prune_at"),
+                "runtime_bytes": previous.get("runtime_bytes"),
             }
             _write_atomic(self.status_path, running)
             overlay_pointer_before = _optional_bytes(self.overlay_pointer_path)
@@ -1426,8 +1433,13 @@ class MarketRegimeIntradayRuntime:
                     raise MarketRegimeRuntimeError(
                         "published result differs from verified latest API bundle"
                     )
-
                 finished = self.clock().astimezone(timezone.utc)
+                from market_regime_retention import MarketRegimeRetention
+
+                prune_result = MarketRegimeRetention(
+                    self.root, clock=lambda: finished
+                ).prune(dry_run=False)
+                _write_atomic(self.root / "prune-receipt.json", prune_result)
                 provider_failed = bool(provider_failure["detected"])
                 provider_streak = (
                     int(previous.get("provider_failure_streak") or 0) + 1
@@ -1469,6 +1481,12 @@ class MarketRegimeIntradayRuntime:
                     "bundle_id": bundle.get("bundle_id"),
                     "intraday_quality": intraday.get("quality"),
                     "overlay_relation": overlay.get("relation"),
+                    "last_prune_at": prune_result.get("completed_at"),
+                    "runtime_bytes": prune_result.get("runtime_bytes_after"),
+                    "last_prune": {
+                        "deleted_count": prune_result.get("deleted_count"),
+                        "deleted_bytes": prune_result.get("deleted_bytes"),
+                    },
                     "last_provider_failure": (
                         provider_failure
                         if provider_failed
