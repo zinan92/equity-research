@@ -1,5 +1,23 @@
 # Decision Log
 
+## 2026-09-08 — Redeploy Market Regime from a valid main checkout
+
+- **Decision:** Point the three Market Regime LaunchAgents at the valid
+  `app.redeploy-20260908` checkout at `origin/main` SHA `ca5d3dc`, and retain
+  the broken former app as `app.retired-20260908`. Keep the existing runtime
+  root and port unchanged.
+- **Why:** The former app's `.git` pointed to deleted worktree metadata, so
+  its revision and relationship to main were not auditable. A valid checkout
+  restores pullability and includes the #1058 retention code and #1054
+  EDEADLK lock retry.
+- **Evidence:** The pre-deploy `diff -rq` and deployment verification are
+  recorded in `docs/verification/issue-1057-redeploy-2026-09-08.md` and Issue
+  #1057 comments.
+- **Gotchas:** The first post-deploy intraday cycle entered retention scanning
+  with `busy=true` across roughly 81,519 files and remained in `publish` for
+  more than seven minutes; the runtime must not be restarted while busy. The
+  owner must review the retention dry-run and perform any formal prune.
+
 ## 2026-08-26 — Repair launchd Codex resolution after morning failure
 
 - **Decision:** Resolve Codex through an explicit Homebrew/vendor binary path
