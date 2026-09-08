@@ -1,99 +1,28 @@
 # REGISTRY
 
-## 2026-09-02 · Daily K-line Feishu rich delivery (Issue #1052)
+## 2026-09-08 · Current handoff snapshot (Issue #1062)
 
-Now: the Daily K-line Newsletter is routed to its dedicated Feishu bot through
-the external credential file
-`/Users/wendy/Library/Application Support/ParkKlineDaily/daily-feishu.env`.
-The webhook value is intentionally kept outside the repository. The
-LaunchAgent `com.park.market-regime.kline-newsletter` runs
-`scripts/run_market_regime_daily_delivery.py` at 08:20; it uploads the current
-PNG snapshots with the installed `lark-cli` identity and sends reader-facing
-rich posts containing images and text.
+As of **2026-09-08 09:12 Asia/Shanghai**, the Daily K-line edition generated
+successfully from the deployed `ParkKlineDaily` app at commit `cdec2a2`, which
+includes the merged EDEADLK retry fix from [PR #1055](https://github.com/zinan92/equity-research/pull/1055).
 
-Real acceptance on 2026-09-02: **31 images uploaded and 7 rich posts sent**;
-the Feishu delivery receipt is
-`/Users/wendy/Library/Application Support/ParkKlineDaily/runtime/delivery/feishu/latest.json`
-with `status=sent`. The edition is bound to the real analysis bundle
-`market-regime-daily-analysis:975c61494fb76ad24c25df931a3e51e37ee450521e231427bc71681330bad090`.
-Its data source was ready and its per-asset analysis was partial; the
-cross-asset model thesis was unavailable for this send, so the message states
-that explicitly and does not reuse an older thesis.
+The Market Regime app is currently rolled back to `app.retired-20260908` (old
+code) because the #1058 retention deployment left the intraday cycle stuck in
+`publish` for eight hours. The runtime root remains an external-SSD symlink;
+the redeploy checkout is retained. [PR #1059](https://github.com/zinan92/equity-research/pull/1059)
+records the redeploy evidence, and [PR #1061](https://github.com/zinan92/equity-research/pull/1061)
+contains the merged bounded-retention fix. Neither fact is treated as proof
+that the new retention path is live.
 
-Finance Daily Newsletter and the Weekly K-line delivery keep their own
-webhooks, schedules, and artifacts; this change does not modify either track.
+Playwright Chromium for `python3.13` is installed. Daily success, rollback
+state, runtime-root identity and browser prerequisite are owner-reported
+online facts in [issue #1062](https://github.com/zinan92/equity-research/issues/1062).
 
-Next: let the next unattended 08:20 run send a fresh Daily edition and inspect
-the Feishu receipt before treating the model thesis as available.
-
-## 2026-09-01 · Shared 16-asset comparison and Treasury daily panel (Issue #1046)
-
-Now: the Daily K-line reader presents the 16 assets shared with Human K-line
-Review as the main comparison set. The three Treasury series (2Y, 10Y and
-2s10s) remain real daily source slots but are rendered together in a separate
-three-column daily panel; their chart snapshots do not show EMA or MACD
-overlays. No source values, cutoff rules, or fallback policies changed.
-
-Next: keep the Human Review catalog and Daily comparison list aligned. Gold and
-silver contract identities remain an explicit follow-up because the two
-products still use different contract representations.
-
-## 2026-08-31 · Reader-facing explanation validation recovery (Issue #1042 / PR #1043)
-
-Now: the Weekly explanation boundary accepts evidence-bound consumer research
-language, including current/week context and conditional outlooks. It rejects
-internal OPS metadata such as provider, fallback, schema, validation, request
-hash and evidence-ID fields in reader prose; mechanism citation and output
-schema checks remain enforced. Reader fallbacks now say when a chart exists but
-its text interpretation is unavailable, instead of calling the chart data
-missing.
-
-Real rerun for week end 2026-08-28 after the fix: **19/19 asset explanations
-validated**, **44/44 chart snapshots ready** (weekly 19/19, daily 19/19, 4H
-6/6), and the ranking explanation was generated. The fresh reader artifacts are
-`/Users/wendy/Desktop/宏观K线周报/latest.html` and
-`/Users/wendy/Desktop/宏观K线周报/latest.md`; the report id is
-`market-regime-weekly-report:7ea8c0723090612296c8525459188ba4627e34fe091a9f7de5155c200eafe0d1`.
-
-Next: keep the DeepSeek → Codex CLI fallback and its explicit failure
-disclosure; restore DeepSeek quota when desired, then let the next scheduled
-Weekly run produce a normal provider receipt. Do not use old model prose as a
-fallback.
-
-## 2026-08-31 · Feishu rich image reader
-
-Now: Weekly delivery uses the installed official `lark-cli` bot identity to
-upload the current standard-kline PNGs and sends a reader-facing rich post to
-the dedicated Weekly webhook. The latest real send for week end 2026-08-28
-uploaded 44 images and sent 6 posts; the receipt records
-`mode=lark_cli_rich_post` and `status=sent`. The plain-text sender remains an
-explicit diagnostic mode only; it is not the scheduler default. No local
-Markdown image syntax, snapshot paths, Finance Daily webhook, or credentials
-are sent to readers.
-
-## 2026-08-31 · Independent Weekly K-line delivery and coverage recovery
-
-Now: the canonical Weekly K-line app is
-`/Users/wendy/Library/Application Support/ParkKlineDaily/app` at `main`.
-Its LaunchAgent is `com.park.market-regime.kline-weekly`, scheduled for Monday
-08:20, and uses the separate external credential file
-`/Users/wendy/Library/Application Support/ParkWeeklyMacroKline/kline-feishu.env`.
-Finance Daily keeps its own webhook configuration and is not read by this track.
-
-The canonical datafeed is `http://127.0.0.1:8100` at build `26dd2c5`.
-Yahoo latest-session NaN OHLC rows are repaired only through the same upstream
-source and recorded in provenance; no cache or silent source substitution is
-allowed. Weekly client retries one transient 502/503/504/transport failure
-against the same declared source and records the attempt count.
-
-Latest real Weekly run (week end 2026-08-28): **44/44 chart slots ready**
-(weekly 19/19, daily 19/19, 4H 6/6), source status complete, and the report was
-sent to the dedicated K-line Feishu channel. The report remains model-degraded:
-17/19 asset explanations explicitly record DeepSeek HTTP 402 plus Codex CLI
-validation failure; this is separate from chart/data coverage and is not hidden.
-Reader outputs are `/Users/wendy/Desktop/宏观K线周报/latest.md` and
-`latest.html`; the dated Markdown archive is under
-`/Users/wendy/park-hands/008_finance weekly newsletter`.
+Next: [#1062](https://github.com/zinan92/equity-research/issues/1062) is the
+remaining documentation-sync contract for this handoff. #1060 is closed by
+[PR #1061](https://github.com/zinan92/equity-research/pull/1061); it is not an
+open next step. No new deployment, retention enablement, runtime deletion or
+live/real-money path is authorized by this snapshot.
 
 ## 2026-08-26 · LaunchAgent Codex path fix and QA-control refresh
 
