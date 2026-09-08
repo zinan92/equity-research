@@ -4528,6 +4528,38 @@ ranking are unavailable. A later provider retry may produce a new content
 identity; it must not mutate this accepted artifact or reuse it as current
 without a fresh run.
 
+# 2026-09-08 · kline-regime-v1 is a deterministic research-only contract
+
+## Decision
+
+Add `kline-regime-v1` as a standalone, machine-readable classifier over fixed
+windows of closed 1d and 4h bars. It reads only the existing 8100 GET candle
+endpoint, uses no fallback or external call inside the formula, and permanently
+sets `action_eligible` to `false`.
+
+## Why
+
+M4-S1 requires a smallest demonstrable contract that can be consumed later by
+trading-system without coupling this story to execution, strategy, or risk
+paths. A versioned schema, input digest, explicit unavailable reason, and
+deterministic slope/ATR calculation make replay and later review inspectable.
+
+## Evidence
+
+Focused `test_kline_regime*` tests cover upward/downward trend, range,
+insufficient history, forming bars, repeated inputs, digest changes, schema
+strictness, and import boundaries. The CLI is a read-only GET client for
+`http://127.0.0.1:8100/api/candles/commodity/{ticker}` with strict quality and
+no fallback.
+
+## Gotchas
+
+`XAU` maps to the 8100 alias `GOLD`; the service currently returned no 1d GOLD
+bars during implementation, so the live CLI correctly emits `unavailable`
+with the upstream GET failure rather than substituting another venue or data.
+The implementation does not alter the ParkKlineDaily or ParkMarketRegime
+deployment directories.
+
 # 2026-09-07 · Market Regime runtime retention is lock-safe and symlink-aware
 
 ## Decision
