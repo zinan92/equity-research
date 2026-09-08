@@ -99,6 +99,7 @@ def main() -> int:
     parser.add_argument("--max-runtime-seconds", type=float, default=20 * 60)
     parser.add_argument("--no-llm", action="store_true")
     parser.add_argument("--no-snapshots", action="store_true")
+    parser.add_argument("--no-feishu", action="store_true", help="archive the edition but do not send Feishu rich posts")
     args = parser.parse_args()
     runtime = DailyKlineRuntime(
         runtime_root=args.runtime_root,
@@ -112,6 +113,12 @@ def main() -> int:
     )
     try:
         result = runtime.run_once()
+        if args.no_feishu:
+            skipped = {"status": "skipped", "reason": "no_feishu_flag", "report_date": datetime.now(timezone.utc).date().isoformat(), "analysis_bundle_id": result["analysis"].get("analysis_bundle_id") if isinstance(result.get("analysis"), dict) else None, "post_count": 0, "image_count": 0}
+            skipped["sent_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+            receipt = _write_receipt(args.runtime_root, skipped)
+            print(json.dumps({"state": "archived", "daily": result.get("status"), "delivery": receipt}, ensure_ascii=False, indent=2))
+            return 0
         delivery = send_daily_rich_posts(
             result["analysis"],
             result["thesis"],
