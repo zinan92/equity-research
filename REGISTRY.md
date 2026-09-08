@@ -1,5 +1,19 @@
 # REGISTRY
 
+## 2026-09-08 · `kline-regime-v1` 16-asset verification (Issue #1066)
+
+`kline-regime-v1` contract validation is implemented in
+`product/kline_regime/validate.py`. The read-only `--all` run queried the
+shared 16-asset watchlist from `http://127.0.0.1:8100` with
+`cache_policy=bypass`, `quality=strict`, and `fallback_policy=none`, and
+recorded the live sample at
+`docs/verification/kline-regime-v1-samples.md`. All 16 result rows pass the
+v1 JSON Schema. Four assets produced a regime (`BTC`, `CL=F`, `GC=F`, `SI=F`);
+the other 12 are explicit `unavailable` observations with their 8100 HTTP
+response bodies and reasons retained in the artifact. No alternate venue,
+synthetic bar, forming bar, dashboard, daily report, or live/real-money path
+was changed.
+
 ## 2026-09-08 · Current handoff snapshot (Issue #1062)
 
 As of **2026-09-08 09:12 Asia/Shanghai**, the Daily K-line edition generated
