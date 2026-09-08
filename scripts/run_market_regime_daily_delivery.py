@@ -100,6 +100,8 @@ def main() -> int:
     parser.add_argument("--no-llm", action="store_true")
     parser.add_argument("--no-snapshots", action="store_true")
     parser.add_argument("--no-feishu", action="store_true", help="archive the edition but do not send Feishu rich posts")
+    parser.add_argument("--primary-provider", choices=("deepseek", "codex"), default="deepseek",
+                        help="which model writes first; codex skips the DeepSeek attempt entirely")
     args = parser.parse_args()
     runtime = DailyKlineRuntime(
         runtime_root=args.runtime_root,
@@ -110,6 +112,7 @@ def main() -> int:
         max_runtime_seconds=args.max_runtime_seconds,
         no_llm=args.no_llm,
         no_snapshots=args.no_snapshots,
+        primary_provider=args.primary_provider,
     )
     try:
         result = runtime.run_once()

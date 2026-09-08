@@ -215,6 +215,7 @@ class DailyKlineRuntime:
         max_runtime_seconds: float = 20 * 60,
         no_llm: bool = False,
         no_snapshots: bool = False,
+        primary_provider: str = "deepseek",
         source_builder: Callable[[DailyDatafeedClient], Mapping[str, Any]] | None = None,
         analysis_builder: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
         thesis_builder: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None = None,
@@ -227,6 +228,9 @@ class DailyKlineRuntime:
         self.max_runtime_seconds = float(max_runtime_seconds)
         self.no_llm = no_llm
         self.no_snapshots = no_snapshots
+        # "codex" skips the DeepSeek primary entirely, so Codex CLI is the
+        # exercised path rather than a fallback that only runs after a failure.
+        self.primary_provider = (primary_provider or "deepseek").strip().lower()
         self.source_builder = source_builder
         self.analysis_builder = analysis_builder
         self.thesis_builder = thesis_builder
@@ -235,10 +239,18 @@ class DailyKlineRuntime:
     def status(self) -> dict[str, Any]:
         return self.status_store.latest()
 
+    def _deepseek_primary(self, provider_class):
+        """The DeepSeek primary, unless Codex CLI is the chosen primary."""
+        if self.primary_provider == "codex":
+            return None
+        if self.key_file is None or not self.key_file.is_file():
+            return None
+        return provider_class(self.key_file)
+
     def _asset_provider_factory(self):
         if self.no_llm:
             return None
-        primary = DeepSeekDailyAssetProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
+        primary = self._deepseek_primary(DeepSeekDailyAssetProvider)
         return lambda _request: ValidatedFallbackProvider(
             primary=primary,
             fallback=CodexCliProvider(system_prompt=DAILY_ASSET_SYSTEM_PROMPT, executable=_codex_cli_executable(), timeout=180.0, timeout_provider=self._remaining_runtime_seconds),
@@ -249,7 +261,7 @@ class DailyKlineRuntime:
     def _thesis_provider(self):
         if self.no_llm:
             return None
-        primary = DeepSeekDailyThesisProvider(self.key_file) if self.key_file is not None and self.key_file.is_file() else None
+        primary = self._deepseek_primary(DeepSeekDailyThesisProvider)
         return ValidatedFallbackProvider(
             primary=primary,
             fallback=CodexCliProvider(system_prompt=DAILY_THESIS_SYSTEM_PROMPT, executable=_codex_cli_executable(), timeout=360.0, timeout_provider=self._remaining_runtime_seconds),
