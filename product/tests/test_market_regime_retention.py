@@ -23,6 +23,28 @@ def write_json(root: Path, relative: str, payload: dict) -> None:
 
 
 class MarketRegimeRetentionTest(unittest.TestCase):
+    def test_prune_continues_with_candidate_budget(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for index in range(2501):
+                path = root / "api" / "artifacts" / f"old-{index}.json"
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"x")
+            first = MarketRegimeRetention(root, clock=lambda: NOW).prune(
+                dry_run=False, max_candidates=2000, max_seconds=30, measure_runtime=False
+            )
+            self.assertEqual(first["deleted_count"], 2000)
+            self.assertTrue(first["candidate_scan_truncated"])
+            second = MarketRegimeRetention(root, clock=lambda: NOW).prune(
+                dry_run=False, max_candidates=2000, max_seconds=30, measure_runtime=False
+            )
+            self.assertEqual(second["deleted_count"], 501)
+
+    def test_default_settings_keep_cycle_prune_disabled(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            from market_regime_retention import retention_settings
+            self.assertFalse(retention_settings(Path(directory))["enabled"])
+
     def test_resolved_root_reference_graph_and_temp_files(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / "ssd-runtime"

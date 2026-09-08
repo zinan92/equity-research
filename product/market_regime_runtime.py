@@ -1262,7 +1262,7 @@ class MarketRegimeIntradayRuntime:
         return _file_lock_busy(self.lock_path)
 
     def status(self) -> dict[str, Any]:
-        from market_regime_retention import runtime_bytes
+        from market_regime_retention import cached_runtime_bytes
 
         busy = self._lock_busy()
         try:
@@ -1275,7 +1275,7 @@ class MarketRegimeIntradayRuntime:
                 "busy": busy,
                 "stop_requested": False,
                 "interval_minutes": self.interval_minutes,
-                "runtime_bytes": runtime_bytes(self.root),
+                "runtime_bytes": cached_runtime_bytes(self.root),
                 "detail": str(exc),
             }
         if payload is None:
@@ -1285,10 +1285,10 @@ class MarketRegimeIntradayRuntime:
                 "busy": busy,
                 "stop_requested": stopped,
                 "interval_minutes": self.interval_minutes,
-                "runtime_bytes": runtime_bytes(self.root),
+                "runtime_bytes": cached_runtime_bytes(self.root),
             }
         result = {**payload, "busy": busy, "stop_requested": stopped}
-        result["runtime_bytes"] = runtime_bytes(self.root)
+        result["runtime_bytes"] = cached_runtime_bytes(self.root)
         if stopped and not busy:
             result["state"] = "stopped"
         elif payload.get("state") == "running" and not busy:
@@ -1387,6 +1387,7 @@ class MarketRegimeIntradayRuntime:
                 "overlay_relation": previous.get("overlay_relation"),
                 "last_prune_at": previous.get("last_prune_at"),
                 "runtime_bytes": previous.get("runtime_bytes"),
+                "stage_timings": {},
             }
             _write_atomic(self.status_path, running)
             overlay_pointer_before = _optional_bytes(self.overlay_pointer_path)
@@ -1423,6 +1424,7 @@ class MarketRegimeIntradayRuntime:
                     )
 
                 running = self._write_phase(running, "publish")
+                publish_started = time.monotonic()
                 structural = self.data_store_factory(self.root).latest()
                 analysis = self.analysis_store_factory(self.root).latest()
                 api_store = self.api_store_factory(self.root)
@@ -1433,13 +1435,53 @@ class MarketRegimeIntradayRuntime:
                     raise MarketRegimeRuntimeError(
                         "published result differs from verified latest API bundle"
                     )
-                finished = self.clock().astimezone(timezone.utc)
-                from market_regime_retention import MarketRegimeRetention
+                publish_files = sum(
+                    path.is_file()
+                    for path in (
+                        self.root / "api" / "latest.json",
+                        self.root / "api" / "artifacts" / f"{published['bundle_id'].split(':', 1)[1]}.json",
+                    )
+                )
+                running["stage_timings"]["publish"] = {
+                    "wall_seconds": round(time.monotonic() - publish_started, 6),
+                    "file_count": publish_files,
+                }
+                from market_regime_retention import MarketRegimeRetention, retention_settings
 
-                prune_result = MarketRegimeRetention(
-                    self.root, clock=lambda: finished
-                ).prune(dry_run=False)
-                _write_atomic(self.root / "prune-receipt.json", prune_result)
+                finished = self.clock().astimezone(timezone.utc)
+                settings = retention_settings(self.root)
+                prune_started = time.monotonic()
+                if settings["enabled"]:
+                    running = self._write_phase(running, "prune")
+                    prune_result = MarketRegimeRetention(
+                        self.root, clock=lambda: finished
+                    ).prune(
+                        dry_run=False,
+                        max_candidates=settings["max_candidates"],
+                        max_seconds=settings["max_seconds"],
+                        measure_runtime=False,
+                    )
+                    _write_atomic(self.root / "prune-receipt.json", prune_result)
+                    prune_files = prune_result.get("deleted_count", 0)
+                    running["stage_timings"]["prune"] = {
+                        "wall_seconds": round(time.monotonic() - prune_started, 6),
+                        "file_count": prune_files,
+                        "candidate_count": prune_result.get("planned_delete_count", 0),
+                        "bounded": True,
+                        "candidate_scan_truncated": prune_result.get("candidate_scan_truncated", False),
+                    }
+                else:
+                    prune_result = {
+                        "deleted_count": 0,
+                        "deleted_bytes": 0,
+                        "runtime_bytes_after": previous.get("runtime_bytes"),
+                    }
+                    running["stage_timings"]["prune"] = {
+                        "wall_seconds": round(time.monotonic() - prune_started, 6),
+                        "file_count": 0,
+                        "candidate_count": 0,
+                        "enabled": False,
+                    }
                 provider_failed = bool(provider_failure["detected"])
                 provider_streak = (
                     int(previous.get("provider_failure_streak") or 0) + 1
@@ -1483,6 +1525,7 @@ class MarketRegimeIntradayRuntime:
                     "overlay_relation": overlay.get("relation"),
                     "last_prune_at": prune_result.get("completed_at"),
                     "runtime_bytes": prune_result.get("runtime_bytes_after"),
+                    "stage_timings": running["stage_timings"],
                     "last_prune": {
                         "deleted_count": prune_result.get("deleted_count"),
                         "deleted_bytes": prune_result.get("deleted_bytes"),
