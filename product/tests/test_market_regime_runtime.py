@@ -233,6 +233,13 @@ class MarketRegimeRuntimeTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             prepared_root(root)
+            (root / "retention.json").write_text(
+                json.dumps({"enabled": True, "max_candidates": 2000, "max_seconds": 30}),
+                encoding="utf-8",
+            )
+            (root / "prune-receipt.json").write_text(
+                json.dumps({"runtime_bytes_after": 1000}), encoding="utf-8"
+            )
             start = datetime(2026, 8, 6, 8, 1, tzinfo=timezone.utc)
             finish = datetime(2026, 8, 6, 8, 2, tzinfo=timezone.utc)
             runtime = MarketRegimeIntradayRuntime(
@@ -249,7 +256,7 @@ class MarketRegimeRuntimeTest(unittest.TestCase):
             self.assertEqual(result["wait_seconds"], 900)
             self.assertEqual(
                 [call.args[1] for call in phase_writer.call_args_list],
-                ["verify_collected", "compile", "verify_compiled", "publish"],
+                ["verify_collected", "compile", "verify_compiled", "publish", "prune"],
             )
             bundle = MarketRegimeApiStore(root).latest()
             self.assertEqual(result["bundle_id"], bundle["bundle_id"])
@@ -270,6 +277,24 @@ class MarketRegimeRuntimeTest(unittest.TestCase):
             status = runtime.status()
             self.assertEqual(status["last_prune_at"], result["last_prune_at"])
             self.assertGreater(status["runtime_bytes"], 0)
+            with patch("market_regime_retention.runtime_bytes", side_effect=AssertionError("status walked runtime")):
+                self.assertEqual(runtime.status()["runtime_bytes"], 1000)
+            self.assertIn("publish", result["stage_timings"])
+            self.assertIn("prune", result["stage_timings"])
+
+    def test_intraday_cycle_does_not_prune_by_default(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepared_root(root)
+            start = datetime(2026, 8, 6, 8, 1, tzinfo=timezone.utc)
+            finish = datetime(2026, 8, 6, 8, 2, tzinfo=timezone.utc)
+            runtime = MarketRegimeIntradayRuntime(
+                root, clock=FixedClock(start, finish), intraday_store_factory=FrozenIntradayDataStore
+            )
+            result = runtime.cycle()
+            self.assertEqual(result["state"], "idle")
+            self.assertFalse((root / "prune-receipt.json").exists())
+            self.assertFalse(result["stage_timings"]["prune"]["enabled"])
 
     def test_provider_backoff_is_bounded_and_recovery_resets_to_new_provider_age(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

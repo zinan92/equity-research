@@ -1,5 +1,25 @@
 # Decision Log
 
+## 2026-09-08 — Bound Market Regime retention and remove status scan
+
+- **Decision:** Keep retention disabled by default and allow the owner to
+  enable it with runtime `retention.json` or the environment switch. Enabled
+  intraday prune uses a 2,000-candidate/30-second default budget, resumes from
+  the next cycle, records publish/prune wall time and file counts in the run
+  receipt, and reuses the previous prune byte count for `status()`.
+- **Why:** The reverted deployment spent hours in publish because status and
+  retention repeatedly traversed an SSD tree; deletion also rescanned all
+  candidates for every file. A single bounded candidate scan and cached byte
+  count keep the scheduler responsive while preserving the existing runtime
+  paths and pointer graph.
+- **Evidence:** Issue #1060 live read-only plan: 43,645 candidates, 8,329,868,910
+  bytes, 10.27s on the SSD runtime. Focused tests pass 34/34; full product
+  discovery passes. Runbook: `docs/runbooks/market-regime-retention-1060.md`.
+- **Gotchas:** `runtime_bytes_after` is a cached/estimated receipt value during
+  the bounded cycle, not a fresh full-tree measurement. The owner must run the
+  post-merge live acceptance and perform any cutover or rollback; this branch
+  does not touch LaunchAgents or delete the protected runtime.
+
 ## 2026-09-08 — Redeploy Market Regime from a valid main checkout
 
 - **Decision:** Point the three Market Regime LaunchAgents at the valid

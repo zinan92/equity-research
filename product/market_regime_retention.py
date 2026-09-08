@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import re
+import time
 from typing import Any, Iterable, Mapping
 
 
@@ -23,6 +24,8 @@ MANAGED_PREFIXES = (
     "api/artifacts/",
 )
 DEFAULT_RETENTION_DAYS = 14
+DEFAULT_MAX_CANDIDATES = 2000
+DEFAULT_MAX_SECONDS = 30.0
 _TEMP_FILE = re.compile(r"^\.[^/]+\..+$")
 _TIMESTAMP_FIELDS = ("completed_at", "generated_at", "started_at", "observed_at")
 
@@ -106,6 +109,47 @@ def runtime_bytes(root: Path | str) -> int:
     return total
 
 
+def retention_settings(root: Path | str) -> dict[str, Any]:
+    """Read the operator-owned switch and per-cycle safety budget."""
+    resolved = Path(root).expanduser().resolve()
+    payload = _json(resolved / "retention.json")
+    payload = payload if isinstance(payload, Mapping) else {}
+    raw_enabled = os.getenv("PARK_MARKET_REGIME_RETENTION_ENABLED")
+    enabled = bool(payload.get("enabled", False))
+    if raw_enabled is not None:
+        value = raw_enabled.strip().lower()
+        if value not in {"1", "true", "yes", "on", "0", "false", "no", "off"}:
+            raise MarketRegimeRetentionError(
+                "PARK_MARKET_REGIME_RETENTION_ENABLED must be true or false"
+            )
+        enabled = value in {"1", "true", "yes", "on"}
+    try:
+        max_candidates = int(payload.get("max_candidates", DEFAULT_MAX_CANDIDATES))
+        max_seconds = float(payload.get("max_seconds", DEFAULT_MAX_SECONDS))
+    except (TypeError, ValueError) as exc:
+        raise MarketRegimeRetentionError("retention budget is invalid") from exc
+    if max_candidates < 1 or max_seconds <= 0:
+        raise MarketRegimeRetentionError("retention budget must be positive")
+    return {
+        "enabled": enabled,
+        "max_candidates": max_candidates,
+        "max_seconds": max_seconds,
+    }
+
+
+def cached_runtime_bytes(root: Path | str) -> int | None:
+    """Return the last receipt's byte count without walking the runtime."""
+    resolved = Path(root).expanduser().resolve()
+    payload = _json(resolved / "prune-receipt.json")
+    if not isinstance(payload, Mapping):
+        return None
+    for key in ("runtime_bytes_after", "runtime_bytes_before"):
+        value = payload.get(key)
+        if isinstance(value, int) and value >= 0:
+            return value
+    return None
+
+
 class MarketRegimeRetention:
     def __init__(
         self,
@@ -119,6 +163,7 @@ class MarketRegimeRetention:
         self.root = Path(root).expanduser().resolve()
         self.retention_days = retention_days
         self.clock = clock
+        self._last_candidate_stats: dict[str, os.stat_result] = {}
 
     def _source_files(self) -> list[tuple[Path, Any]]:
         files: list[tuple[Path, Any]] = []
@@ -183,15 +228,22 @@ class MarketRegimeRetention:
             return parts[2]
         return None
 
-    def _candidates(self) -> list[tuple[Path, os.stat_result]]:
+    def _candidates(
+        self, *, max_candidates: int | None = None, max_seconds: float | None = None
+    ) -> tuple[list[tuple[Path, os.stat_result]], bool]:
         keep = self._keep_paths()
         recent_ids = self._recent_run_ids()
         candidates: list[tuple[Path, os.stat_result]] = []
+        deadline = time.monotonic() + max_seconds if max_seconds is not None else None
+        truncated = False
         for prefix in MANAGED_PREFIXES:
             directory = self.root / prefix
             if not directory.exists():
                 continue
             for path in directory.rglob("*"):
+                if deadline is not None and time.monotonic() >= deadline:
+                    truncated = True
+                    break
                 if not path.is_file() or path.is_symlink() or _TEMP_FILE.match(path.name):
                     continue
                 relative = _relative(path, self.root)
@@ -206,11 +258,27 @@ class MarketRegimeRetention:
                 except OSError:
                     continue
                 candidates.append((path, stat))
-        return candidates
+                if max_candidates is not None and len(candidates) >= max_candidates:
+                    truncated = True
+                    break
+            if truncated:
+                break
+        return candidates, truncated
 
-    def plan(self) -> dict[str, Any]:
+    def plan(
+        self,
+        *,
+        max_candidates: int | None = None,
+        max_seconds: float | None = None,
+        measure_runtime: bool = True,
+    ) -> dict[str, Any]:
         now = self.clock().astimezone(timezone.utc)
-        candidates = self._candidates()
+        candidates, truncated = self._candidates(
+            max_candidates=max_candidates, max_seconds=max_seconds
+        )
+        self._last_candidate_stats = {
+            _relative(path, self.root): stat for path, stat in candidates
+        }
         deletions = [
             {"path": _relative(path, self.root), "bytes": stat.st_size}
             for path, stat in candidates
@@ -223,11 +291,26 @@ class MarketRegimeRetention:
             "planned_delete_count": len(deletions),
             "planned_delete_bytes": sum(item["bytes"] for item in deletions),
             "deletions": deletions,
-            "runtime_bytes_before": runtime_bytes(self.root),
+            "candidate_scan_truncated": truncated,
+            "runtime_bytes_before": runtime_bytes(self.root) if measure_runtime else None,
         }
 
-    def prune(self, *, dry_run: bool = True) -> dict[str, Any]:
-        plan = self.plan()
+    def prune(
+        self,
+        *,
+        dry_run: bool = True,
+        max_candidates: int | None = None,
+        max_seconds: float | None = None,
+        measure_runtime: bool = True,
+    ) -> dict[str, Any]:
+        if not dry_run:
+            max_candidates = max_candidates or DEFAULT_MAX_CANDIDATES
+            max_seconds = max_seconds or DEFAULT_MAX_SECONDS
+        plan = self.plan(
+            max_candidates=max_candidates,
+            max_seconds=max_seconds,
+            measure_runtime=measure_runtime,
+        )
         if dry_run:
             return {**plan, "dry_run": True, "deleted_count": 0, "deleted_bytes": 0}
         deleted: list[dict[str, Any]] = []
@@ -235,7 +318,7 @@ class MarketRegimeRetention:
             path = self.root / item["path"]
             try:
                 current = path.stat()
-                original = next(item for candidate, item in self._candidates() if candidate == path)
+                original = self._last_candidate_stats[item["path"]]
                 if (current.st_ino, current.st_size, current.st_mtime_ns) != (
                     original.st_ino,
                     original.st_size,
@@ -246,13 +329,22 @@ class MarketRegimeRetention:
             except (FileNotFoundError, OSError, StopIteration):
                 continue
             deleted.append(item)
+        cached_before = (
+            plan["runtime_bytes_before"]
+            if plan["runtime_bytes_before"] is not None
+            else cached_runtime_bytes(self.root)
+        )
         result = {
             **plan,
             "dry_run": False,
             "deleted_count": len(deleted),
             "deleted_bytes": sum(item["bytes"] for item in deleted),
             "deleted": deleted,
-            "runtime_bytes_after": runtime_bytes(self.root),
+            "runtime_bytes_after": (
+                max(0, cached_before - sum(item["bytes"] for item in deleted))
+                if cached_before is not None
+                else None
+            ),
             "completed_at": self.clock().astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
         }
         return result
