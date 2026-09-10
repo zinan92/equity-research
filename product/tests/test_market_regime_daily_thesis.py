@@ -250,3 +250,43 @@ class DailyThesisTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+def test_thesis_request_reads_flat_stored_asset_analysis(monkeypatch):
+    """The stored asset analysis is flat (no "output" wrapper); the request must still see it."""
+    from data_core import market_regime_daily_thesis as thesis_mod
+    from data_core.market_regime_daily_thesis import build_daily_thesis_request
+
+    monkeypatch.setattr(thesis_mod, "validate_daily_analysis_bundle", lambda bundle: bundle)
+
+    bundle = {
+        "schema_version": "market-regime-daily-analysis-v1",
+        "bundle_id": "market-regime-daily-analysis:test",
+        "cutoff_at": "2026-09-10T00:00:00Z",
+        "analysis_status": "full",
+        "assets": [
+            {
+                "asset_key": "gold",
+                "display_name": "黄金",
+                "request": {
+                    "timeframes": {"daily": {"status": "ready", "evidence_ids": ["daily-source:gold:daily:x"]}},
+                    "mechanism": {"mechanism_ids": ["mechanism:gold:1"]},
+                },
+                "analysis": {
+                    "analysis_id": "market-regime-daily-asset-analysis:gold",
+                    "generation_status": "model_generated_unreviewed",
+                    "deterministic": {"position": "high", "structure": "trend"},
+                    "daily": {"text": "日线在二十日均线上方"},
+                    "synthesis": {"text": "偏强"},
+                    "market_meaning": {"text": "x"},
+                    "opportunity_state": "observe",
+                },
+            }
+        ],
+    }
+    request = build_daily_thesis_request(bundle)
+    asset = request["assets"][0]
+    assert asset["position"] == "high" and asset["structure"] == "trend"
+    assert asset["timeframes"]["daily"] == {"text": "日线在二十日均线上方"}
+    assert asset["synthesis"] == {"text": "偏强"}

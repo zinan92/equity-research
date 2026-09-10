@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 import shutil
+import os
 import subprocess
 import tempfile
 from typing import Any, Callable, Mapping
@@ -110,6 +111,19 @@ def _decode_json_text(text: str) -> Mapping[str, Any]:
     raise CodexCliError("codex_output_not_json")
 
 
+def _codex_reasoning_effort() -> str:
+    """Reasoning effort for every Codex call.
+
+    Codex's default effort turns the daily thesis request (19 assets, ~1,200
+    numeric values) into a 10+ minute call; the runtime allows 360s, so the
+    thesis was 'validation_error'/'timeout' three mornings in a row
+    (2026-09-08..10). At low effort the same request answers in well under a
+    minute and still passes the validator. Override with
+    PARK_KLINE_CODEX_REASONING_EFFORT.
+    """
+    return os.environ.get("PARK_KLINE_CODEX_REASONING_EFFORT", "").strip() or "low"
+
+
 class CodexCliProvider:
     """Run Codex CLI in an isolated read-only directory and return JSON."""
 
@@ -136,7 +150,8 @@ class CodexCliProvider:
 
     @staticmethod
     def _run(command: list[str], *, cwd: Path, timeout: float) -> Any:
-        return subprocess.run(command, cwd=str(cwd), capture_output=True, text=True, timeout=timeout, check=False)
+        # stdin must be closed: an inherited pipe makes `codex exec` wait forever.
+        return subprocess.run(command, cwd=str(cwd), capture_output=True, text=True, timeout=timeout, check=False, stdin=subprocess.DEVNULL)
 
     def __call__(self, request: Mapping[str, Any]) -> tuple[Mapping[str, Any], Mapping[str, Any]]:
         request_hash = _digest(request)
@@ -177,6 +192,7 @@ class CodexCliProvider:
             ]
             if self.model:
                 command.extend(["--model", self.model])
+            command.extend(["-c", f'model_reasoning_effort="{_codex_reasoning_effort()}"'])
             command.append(prompt)
             timeout = self.timeout
             if self.timeout_provider is not None:

@@ -223,7 +223,11 @@ def build_daily_thesis_request(analysis_bundle: Mapping[str, Any]) -> dict[str, 
     mechanism_ids: set[str] = set()
     for asset in bundle["assets"]:
         analysis = asset.get("analysis") or {}
-        output = analysis.get("output") or {}
+        # The stored asset analysis is flat (deterministic / daily / synthesis /
+        # … at top level); only an in-memory result carries them under "output".
+        # Reading "output" alone sent the model 19 empty assets and it rightly
+        # answered "可用单资产结论为空" (2026-09-08..10).
+        output = analysis.get("output") if isinstance(analysis.get("output"), Mapping) else analysis
         request = asset.get("request") or {}
         for timeframe, frame in (request.get("timeframes") or {}).items():
             if not isinstance(frame, Mapping):
