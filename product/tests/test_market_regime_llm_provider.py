@@ -50,6 +50,31 @@ class LlmProviderTests(unittest.TestCase):
         self.assertEqual(receipt["tool_policy"], "none")
         self.assertEqual(receipt["network_policy"], "no_external_tools")
 
+    def test_codex_cli_runs_at_low_reasoning_effort_unless_overridden(self) -> None:
+        import os
+
+        def make_runner(calls):
+            def runner(command, *, cwd, timeout):
+                calls.append(command)
+                Path(command[command.index("--output-last-message") + 1]).write_text("{}", encoding="utf-8")
+                return SimpleNamespace(returncode=0, stdout="", stderr="")
+            return runner
+
+        calls: list[list[str]] = []
+        os.environ.pop("PARK_KLINE_CODEX_REASONING_EFFORT", None)
+        CodexCliProvider(system_prompt="x", executable="codex", runner=make_runner(calls))({"asset_key": "dxy"})
+        self.assertEqual(calls[0][calls[0].index("-c") + 1], 'model_reasoning_effort="low"')
+        # the prompt stays the last positional argument
+        self.assertTrue(calls[0][-1].startswith("x"))
+
+        calls.clear()
+        os.environ["PARK_KLINE_CODEX_REASONING_EFFORT"] = "medium"
+        try:
+            CodexCliProvider(system_prompt="x", executable="codex", runner=make_runner(calls))({"asset_key": "dxy"})
+        finally:
+            os.environ.pop("PARK_KLINE_CODEX_REASONING_EFFORT", None)
+        self.assertEqual(calls[0][calls[0].index("-c") + 1], 'model_reasoning_effort="medium"')
+
     def test_fallback_keeps_primary_success_and_does_not_call_codex(self) -> None:
         fallback_calls: list[object] = []
 
