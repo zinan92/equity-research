@@ -131,3 +131,39 @@ class LlmProviderTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_codex_usage_is_logged_from_the_json_event_stream(tmp_path, monkeypatch):
+    from data_core import market_regime_llm_provider as provider_mod
+
+    log_path = tmp_path / "kline-daily.jsonl"
+    monkeypatch.setattr(provider_mod, "USAGE_LOG", log_path)
+
+    def runner(command, *, cwd, timeout):
+        Path(command[command.index("--output-last-message") + 1]).write_text("{}", encoding="utf-8")
+        stream = "\n".join([
+            json.dumps({"type": "turn.started"}),
+            json.dumps({"type": "turn.completed", "usage": {"input_tokens": 35447, "cached_input_tokens": 32640, "output_tokens": 16}}),
+        ])
+        return SimpleNamespace(returncode=0, stdout=stream, stderr="")
+
+    CodexCliProvider(system_prompt="x", executable="codex", runner=runner)({"asset_key": "dxy"})
+
+    lines = log_path.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == 1
+    row = json.loads(lines[0])
+    assert row["provider"] == "codex" and row["input_tokens"] == 35447 and row["cached_input_tokens"] == 32640 and row["output_tokens"] == 16
+
+
+def test_missing_usage_event_does_not_raise_or_log(tmp_path, monkeypatch):
+    from data_core import market_regime_llm_provider as provider_mod
+
+    log_path = tmp_path / "kline-daily.jsonl"
+    monkeypatch.setattr(provider_mod, "USAGE_LOG", log_path)
+
+    def runner(command, *, cwd, timeout):
+        Path(command[command.index("--output-last-message") + 1]).write_text("{}", encoding="utf-8")
+        return SimpleNamespace(returncode=0, stdout="not json at all", stderr="")
+
+    CodexCliProvider(system_prompt="x", executable="codex", runner=runner)({"asset_key": "dxy"})
+    assert not log_path.exists()
