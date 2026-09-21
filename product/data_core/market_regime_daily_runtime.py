@@ -317,6 +317,71 @@ class DailyKlineRuntime:
         )
         return str(archive_path)
 
+    # --- resume ----------------------------------------------------------
+    # Analysis (19 asset calls) and thesis (1 cross-asset call) are the only
+    # expensive phases; delivery is file writes. A run that died after them —
+    # chromium missing, a file lock, a timeout — used to recompute every asset
+    # against market data that had not changed. 2026-09-21: the 08:20 run
+    # finished all 19 assets and died in delivery_publish, and the 09:40 heal
+    # spent the same 1.75M tokens again. Reuse instead, keyed on the source
+    # bundle's data-only digest so a different trading session never resumes.
+
+    RESUME_SCHEMA = "market-regime-daily-resume-v1"
+
+    @property
+    def _resume_path(self) -> Path:
+        return self.runtime_root / "resume.json"
+
+    @staticmethod
+    def _source_fingerprint(source: Mapping[str, Any]) -> str:
+        identity = source.get("identity_core")
+        if not isinstance(identity, Mapping):
+            return ""
+        return str(identity.get("assets_sha256") or "")
+
+    def _resume_candidate(self, fingerprint: str) -> tuple[dict[str, Any], dict[str, Any]] | None:
+        """Today's stored analysis + thesis when the fresh source is identical."""
+        if not fingerprint:
+            return None
+        try:
+            receipt = json.loads(self._resume_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return None
+        if not isinstance(receipt, Mapping) or receipt.get("schema_version") != self.RESUME_SCHEMA:
+            return None
+        if str(receipt.get("source_assets_sha256") or "") != fingerprint:
+            return None
+        thesis = receipt.get("thesis")
+        if not isinstance(thesis, Mapping):
+            return None
+        try:
+            analysis = DailyAnalysisStore(self.runtime_root / "analysis").latest()
+        except Exception:  # noqa: BLE001 — an unreadable store just means no resume
+            return None
+        bundle_id = analysis.get("bundle_id")
+        if not bundle_id or bundle_id != receipt.get("analysis_bundle_id"):
+            return None
+        identity = thesis.get("identity_core")
+        if not isinstance(identity, Mapping) or identity.get("analysis_bundle_id") != bundle_id:
+            return None
+        return dict(analysis), dict(thesis)
+
+    def _write_resume(self, fingerprint: str, analysis: Mapping[str, Any], thesis: Mapping[str, Any], *, at: str) -> None:
+        if not fingerprint:
+            return
+        payload = {
+            "schema_version": self.RESUME_SCHEMA,
+            "source_assets_sha256": fingerprint,
+            "analysis_bundle_id": analysis.get("bundle_id"),
+            "thesis_id": thesis.get("thesis_id"),
+            "at": at,
+            "thesis": thesis,
+        }
+        try:
+            _atomic_bytes(self._resume_path, (json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n").encode("utf-8"))
+        except OSError:
+            pass  # a missing resume receipt only costs tokens, never correctness
+
     def run_once(self, *, now: datetime | None = None) -> dict[str, Any]:
         current = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).replace(microsecond=0)
         cutoff = current.isoformat().replace("+00:00", "Z")
@@ -340,22 +405,30 @@ class DailyKlineRuntime:
                     source_store.publish(source)
                     source = source_store.latest()
 
-                    phase = "analysis_compile"
-                    analysis_store = DailyAnalysisStore(self.runtime_root / "analysis")
-                    if self.analysis_builder:
-                        analysis = dict(self.analysis_builder(source))
+                    resume_used = False
+                    fingerprint = self._source_fingerprint(source)
+                    resumed = self._resume_candidate(fingerprint)
+                    if resumed is not None:
+                        analysis, thesis = resumed
+                        resume_used = True
                     else:
-                        snapshot_port = None if self.no_snapshots else DailyChartSnapshotPort(runtime_root=self.runtime_root, output_root=self.output_root)
-                        analysis = build_daily_analysis_bundle(source, provider_factory=self._asset_provider_factory(), cutoff_at=cutoff, snapshot_port=snapshot_port)
-                    analysis_store.publish(analysis)
-                    analysis = analysis_store.latest()
+                        phase = "analysis_compile"
+                        analysis_store = DailyAnalysisStore(self.runtime_root / "analysis")
+                        if self.analysis_builder:
+                            analysis = dict(self.analysis_builder(source))
+                        else:
+                            snapshot_port = None if self.no_snapshots else DailyChartSnapshotPort(runtime_root=self.runtime_root, output_root=self.output_root)
+                            analysis = build_daily_analysis_bundle(source, provider_factory=self._asset_provider_factory(), cutoff_at=cutoff, snapshot_port=snapshot_port)
+                        analysis_store.publish(analysis)
+                        analysis = analysis_store.latest()
 
-                    phase = "thesis_compile"
-                    thesis = dict(self.thesis_builder(analysis) if self.thesis_builder else compile_daily_thesis(analysis, self._thesis_provider()))
+                        phase = "thesis_compile"
+                        thesis = dict(self.thesis_builder(analysis) if self.thesis_builder else compile_daily_thesis(analysis, self._thesis_provider()))
+                        self._write_resume(fingerprint, analysis, thesis, at=cutoff)
                     phase = "delivery_publish"
                     delivery = DailyThesisDeliveryStore(runtime_root=self.runtime_root, output_root=self.output_root, archive_root=self.archive_root).publish(thesis, analysis)
                     status = self.status_store.success(at=cutoff, source=source, analysis=analysis, thesis=thesis, delivery=delivery, service_health=service_health)
-                    return {"schema_version": SCHEMA_VERSION, "state": "completed", "service_health": service_health, "source": source, "analysis": analysis, "thesis": thesis, "delivery": delivery, "status": status}
+                    return {"schema_version": SCHEMA_VERSION, "state": "completed", "resumed": resume_used, "service_health": service_health, "source": source, "analysis": analysis, "thesis": thesis, "delivery": delivery, "status": status}
             except (DailySourceError, DailyAnalysisError, DailyThesisError, DailyRuntimeError) as exc:
                 code = str(exc)[:200] or type(exc).__name__
                 archive_path = self._publish_unavailable_surface(at=cutoff, phase=phase, code=code)
