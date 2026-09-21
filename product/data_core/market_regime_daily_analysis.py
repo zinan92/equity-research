@@ -140,6 +140,43 @@ def _source_evidence_id(asset_key: str, timeframe: str, slot: Mapping[str, Any])
     return f"daily-source:{asset_key}:{timeframe}:{digest}"
 
 
+# Model input is ~97% raw numeric series and was shipped far wider than needed:
+# the same prices once as `points` and again inside `features.points`, and every
+# float at float64 noise precision (26.850000381469727 for a value whose real
+# precision is 26.85). Both of those are provably lossless to remove —
+# features.points keeps the OHLCV, and six significant digits is 5e-7 relative
+# error against the 5e-4 tolerance `_numbers_for_evidence` grounds prose with.
+#
+# Trimming the series is NOT lossless and defaults off. Measured 2026-09-21 on
+# bitcoin: current payload 3/3 valid, dedup+rounding 3/3, trimming to 120 bars
+# 2/3 — 120 intraday bars is only ~60 hours, so a level the model wants to cite
+# can fall outside the window. Re-run that comparison before raising it.
+FEATURE_POINT_LIMIT = int(os.environ.get("PARK_KLINE_FEATURE_POINTS", "0"))
+NUMBER_SIGNIFICANT_DIGITS = int(os.environ.get("PARK_KLINE_NUMBER_DIGITS", "6"))
+
+
+def _compact_number(value: Any) -> Any:
+    """Round a float to significant digits; leave everything else untouched."""
+    if isinstance(value, bool) or not isinstance(value, float):
+        return value
+    if value != value or value in (float("inf"), float("-inf")):
+        return value
+    return float(f"{value:.{NUMBER_SIGNIFICANT_DIGITS}g}")
+
+
+def _compact_points(points: Any, limit: int) -> list:
+    if not isinstance(points, list):
+        return points if isinstance(points, list) else []
+    tail = points[-limit:] if limit > 0 else points
+    compacted = []
+    for row in tail:
+        if isinstance(row, Mapping):
+            compacted.append({k: _compact_number(v) for k, v in row.items()})
+        else:
+            compacted.append(_compact_number(row))
+    return compacted
+
+
 def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None = None) -> dict[str, Any]:
     """Project one source-bundle asset into bounded per-asset model input."""
 
@@ -188,6 +225,11 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
             }
         feature_id = f"feature:{features['feature_identity']}"
         evidence_ids = [evidence_id, feature_id]
+        # `features.points` already carries OHLCV alongside the indicators, so the
+        # separate `points` copy only duplicated the same prices for the model
+        # and for _numbers_for_evidence's candidate set.
+        compact_features = dict(features)
+        compact_features["points"] = _compact_points(features.get("points"), FEATURE_POINT_LIMIT)
         timeframes[timeframe] = {
             "label": _TIMEFRAME_LABELS[timeframe],
             "status": slot.get("status", "unavailable"),
@@ -196,8 +238,7 @@ def build_daily_asset_request(asset: Mapping[str, Any], *, cutoff_at: str | None
             "is_provisional": bool(slot.get("is_provisional", False)),
             "latest_timestamp": slot.get("latest_timestamp"),
             "unit": instrument.get("unit"),
-            "points": list(slot.get("bars") or [])[-160:],
-            "features": features,
+            "features": compact_features,
             "evidence_ids": evidence_ids,
             "source_identity": dict(slot.get("source_identity") or {}),
         }

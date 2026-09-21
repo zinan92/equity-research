@@ -217,3 +217,28 @@ class DailyAnalysisTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_compact_number_drops_float64_noise_only():
+    from data_core.market_regime_daily_analysis import _compact_number
+
+    # the actual value seen in a 2026-09-21 request
+    assert _compact_number(26.850000381469727) == 26.85
+    # rounding error stays far inside _numbers_for_evidence's 5e-4 tolerance
+    for raw in (26.850000381469727, 81221.4375, 0.00010242871, -16.35223):
+        assert abs(_compact_number(raw) - raw) <= max(0.051, abs(raw) * 0.0005)
+    # non-floats pass through untouched
+    for value in (True, False, None, 3, "x", float("nan"), float("inf")):
+        out = _compact_number(value)
+        assert out is value or (isinstance(out, float) and out != out)
+
+
+def test_asset_request_drops_the_duplicate_price_copy_but_keeps_ohlcv():
+    """features.points already carries OHLCV; the separate points list was a copy."""
+    from data_core.market_regime_daily_analysis import _compact_points
+
+    rows = [{"close": 1.23456789, "volume": 10.0} for _ in range(300)]
+    kept = _compact_points(rows, 0)
+    assert len(kept) == 300 and kept[0]["close"] == 1.23457
+    assert len(_compact_points(rows, 120)) == 120
+    assert _compact_points(None, 0) == []
