@@ -51,6 +51,10 @@ TRANSIENT_RETRY_LIMIT = 2
 # and crypto perpetuals expose the intraday context that the Daily report is
 # meant to read.  Keep this contract explicit and versioned in code so a new
 # provider capability must be deliberately opted in.
+# 2026-09-22, Park: 「每一只股票的格式都一样，只看日线，不要整得这么复杂了。」
+# The reader surface (the morning brief) now draws one daily chart per asset, so
+# fetching and analysing 4h/30m for six of them produced text nobody reads and
+# tripled those assets' model payload.
 DAILY_TIMEFRAMES_BY_ASSET = {
     "dxy": ("daily",),
     "us2y": ("daily",),
@@ -60,17 +64,17 @@ DAILY_TIMEFRAMES_BY_ASSET = {
     "nasdaq": ("daily",),
     "us_dividend": ("daily",),
     "vix": ("daily",),
-    "bitcoin": ("daily", "four_hour", "thirty_minute"),
-    "ethereum": ("daily", "four_hour", "thirty_minute"),
-    "hype": ("daily", "four_hour", "thirty_minute"),
+    "bitcoin": ("daily",),
+    "ethereum": ("daily",),
+    "hype": ("daily",),
     "shanghai": ("daily",),
     "star50": ("daily",),
     "china_dividend": ("daily",),
     "nikkei": ("daily",),
     "kospi": ("daily",),
-    "wti": ("daily", "four_hour", "thirty_minute"),
-    "gold": ("daily", "four_hour", "thirty_minute"),
-    "silver": ("daily", "four_hour", "thirty_minute"),
+    "wti": ("daily",),
+    "gold": ("daily",),
+    "silver": ("daily",),
 }
 
 

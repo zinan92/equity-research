@@ -183,9 +183,12 @@ class DailySourceTests(unittest.TestCase):
         ashare = daily_request_for_asset("shanghai", "daily")
         self.assertEqual(ashare["fallback_policy"], "explicit")
         self.assertEqual(ashare["fallback_sources"], ["sina_index"])
-        other = daily_request_for_asset("gold", "thirty_minute")
+        other = daily_request_for_asset("gold", "daily")
         self.assertEqual(other["fallback_policy"], "none")
         self.assertEqual(other["fallback_sources"], [])
+        # every asset is daily-only since 2026-09-22; intraday is rejected, not silently empty
+        with self.assertRaises(DailySourceError):
+            daily_request_for_asset("gold", "thirty_minute")
 
     def test_bundle_attempts_each_asset_capability_matrix(self) -> None:
         opener = _Opener()
@@ -205,7 +208,7 @@ class DailySourceTests(unittest.TestCase):
             self.assertTrue(all(slot["status"] == "ready" for slot in asset["slots"].values()))
 
     def test_unavailable_slot_is_explicit_and_does_not_block_bundle(self) -> None:
-        opener = _Opener(unavailable={("GC=F", "30m")})
+        opener = _Opener(unavailable={("GC=F", "1d")})
         client = DailyDatafeedClient(opener=opener, timeout=1)
         bundle = build_daily_source_bundle(
             client,
@@ -214,10 +217,10 @@ class DailySourceTests(unittest.TestCase):
             max_workers=2,
         )
         gold = next(asset for asset in bundle["assets"] if asset["asset_key"] == "gold")
-        self.assertEqual(gold["slots"]["thirty_minute"]["status"], "unavailable")
-        self.assertEqual(gold["slots"]["thirty_minute"]["bars"], [])
-        self.assertIn("unsupported", gold["slots"]["thirty_minute"]["reject_reason"])
-        self.assertIn("response_body_sha256", gold["slots"]["thirty_minute"]["request_evidence"])
+        self.assertEqual(gold["slots"]["daily"]["status"], "unavailable")
+        self.assertEqual(gold["slots"]["daily"]["bars"], [])
+        self.assertIn("unsupported", gold["slots"]["daily"]["reject_reason"])
+        self.assertIn("response_body_sha256", gold["slots"]["daily"]["request_evidence"])
         self.assertEqual(bundle["source_status"], "partial")
         self.assertEqual(bundle["coverage"]["unavailable_slots"], 1)
 
