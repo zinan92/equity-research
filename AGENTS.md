@@ -68,10 +68,10 @@ contract.
 
 ## Workflow Rules
 
-Execution process is governed by one global manual and is not restated here:
-`~/work/park-operating-system/manual.md` (意图 → 合同 → 执行 → 合并 → 汇报).
+Execution process is governed by Park's single source of truth and is not
+restated here: `~/work/park-operating-system/PARK-OS.md` (「五、我怎么干活」).
 
-That manual is the authority for issue contracts, branch/PR shape, WIP limits,
+That file is the authority for issue contracts, branch/PR shape, WIP limits,
 merge gates, and completion obligations. Read it before starting work. A
 project-level copy of those rules will drift out of date, so this file carries
 only what is specific to this repo.
@@ -84,7 +84,7 @@ Project-local additions:
 
 ## Decision Log
 
-`decision-log.md` is a completion obligation under manual.md. This repo's entry
+`decision-log.md` is a completion obligation under PARK-OS.md. This repo's entry
 schema:
 
 - Decision
@@ -97,8 +97,7 @@ would otherwise be rediscovered later.
 
 ## Testing Policy
 
-manual.md sets test depth by S/M/L complexity self-assessment (S 专项测试,
-M 上下游测试, L 计划先审). This is how the scale maps onto this repo:
+This repo scales test depth to risk with an S/M/L self-assessment:
 
 - S — documentation-only or instruction-only changes (readback and diff-scope
   check); local UI or copy changes (targeted product tests, plus screenshot
