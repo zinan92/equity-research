@@ -68,13 +68,11 @@ contract.
 
 ## Workflow Rules
 
-Execution process is governed by Park's single source of truth and is not
-restated here: `~/work/park-operating-system/PARK-OS.md` (「五、我怎么干活」).
-
-That file is the authority for issue contracts, branch/PR shape, WIP limits,
-merge gates, and completion obligations. Read it before starting work. A
-project-level copy of those rules will drift out of date, so this file carries
-only what is specific to this repo.
+Read `~/work/park-operating-system/PARK-OS.md` before starting work: it is
+Park's single source of truth for who he is, how he judges, and what he wants.
+It deliberately carries no issue/PR/merge procedure; use judgement. This repo's
+completion obligation (`REGISTRY.md` + `decision-log.md`) comes from its
+「五、我怎么干活」. This file carries only what is specific to this repo.
 
 Project-local additions:
 
