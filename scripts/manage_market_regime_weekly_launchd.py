@@ -16,7 +16,7 @@ LABEL = "com.park.market-regime.kline-weekly"
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUNTIME_ROOT = Path.home() / "Library" / "Application Support" / "ParkWeeklyMacroKline" / "runtime"
 DEFAULT_OUTPUT_ROOT = Path.home() / "Desktop" / "宏观K线周报"
-DEFAULT_ARCHIVE_ROOT = Path.home() / "park-hands" / "008_finance weekly newsletter"
+DEFAULT_ARCHIVE_ROOT = Path.home() / "park-hands" / "007_kline daily newsletter"
 DEFAULT_ENV_FILE = Path(
     "/Users/wendy/Library/Application Support/ParkWeeklyMacroKline/kline-feishu.env"
 )

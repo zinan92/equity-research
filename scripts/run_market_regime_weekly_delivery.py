@@ -211,7 +211,7 @@ def main() -> int:
     parser.add_argument("--datafeed-url", default="http://127.0.0.1:8100")
     parser.add_argument("--runtime-root", type=Path, default=support / "ParkWeeklyMacroKline" / "runtime")
     parser.add_argument("--output-root", type=Path, default=home / "Desktop" / "宏观K线周报")
-    parser.add_argument("--archive-root", type=Path, default=home / "park-hands" / "008_finance weekly newsletter")
+    parser.add_argument("--archive-root", type=Path, default=home / "park-hands" / "007_kline daily newsletter")
     parser.add_argument("--key-file", type=Path, default=home / "park-hands" / "_secrets" / "deepseek-key")
     parser.add_argument("--model", default="deepseek-v4-flash")
     parser.add_argument("--codex-model", default=None)
