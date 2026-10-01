@@ -167,3 +167,17 @@ def test_missing_usage_event_does_not_raise_or_log(tmp_path, monkeypatch):
 
     CodexCliProvider(system_prompt="x", executable="codex", runner=runner)({"asset_key": "dxy"})
     assert not log_path.exists()
+
+
+def test_codex_model_is_pinned_not_left_to_global_config(monkeypatch):
+    monkeypatch.delenv("PARK_KLINE_CODEX_MODEL", raising=False)
+    calls = []
+
+    def runner(command, *, cwd, timeout):
+        calls.append(command)
+        Path(command[command.index("--output-last-message") + 1]).write_text("{}", encoding="utf-8")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    CodexCliProvider(system_prompt="x", executable="codex", runner=runner)({"asset_key": "dxy"})
+    command = calls[0]
+    assert command[command.index("--model") + 1] == "gpt-6-astra"

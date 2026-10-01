@@ -160,6 +160,16 @@ def _codex_reasoning_effort() -> str:
     return os.environ.get("PARK_KLINE_CODEX_REASONING_EFFORT", "").strip() or "low"
 
 
+def _codex_model() -> str:
+    """Pin the Codex model so the daily does not follow ~/.codex/config.toml.
+
+    On 2026-09-30 the global default became gpt-6.1-sol, which a ChatGPT
+    account cannot use; every Codex call failed and the 10-01 daily went out
+    with no thesis or asset text. Override with PARK_KLINE_CODEX_MODEL.
+    """
+    return os.environ.get("PARK_KLINE_CODEX_MODEL", "").strip() or "gpt-6-astra"
+
+
 class CodexCliProvider:
     """Run Codex CLI in an isolated read-only directory and return JSON."""
 
@@ -177,7 +187,7 @@ class CodexCliProvider:
         timeout_provider: Callable[[], float] | None = None,
     ) -> None:
         self.system_prompt = system_prompt
-        self.model = model
+        self.model = model or _codex_model()
         self.executable = _resolve_codex_executable(executable)
         self.timeout = timeout
         self.runner = runner or self._run
